@@ -1,0 +1,3951 @@
+// ❄️ 겨울방학 30일 프로그램 - 주간 학습 스케줄 관리 스크립트
+// 평일 3.5시간 + 주말 5시간 (주간 25시간) / 하루 3과목 학습
+
+let currentStudent = null;
+let currentSchedule = null;
+
+// ⏰ 평일/주말 학습 시간 (분 단위)
+const WEEKDAY_HOURS = 3.5; // 평일 3.5시간 (210분)
+const WEEKEND_HOURS = 5;   // 주간 학습 스케줄 관리 스크립트
+// 선행학습 프로그램 관리 스크립트
+
+let currentStudent = null;// 보고서 생성 스크립트
+
+let currentStudent = null;
+let reportData = null;// 교재 관리 스크립트
+// 수업 관리 스크립트
+// 학생 관리 스크립트
+
+let currentEditId = null;
+let deleteStudentId = null;
+// 대시보드 관리 스크립트
+
+let weeklyChart = null;
+let subjectChart = null;
+let selectedSchoolId = null;
+let allSchools = [];
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadSchools();
+    loadDashboardData();
+    initCharts();
+    
+    // 30초마다 자동 새로고침
+    setInterval(() => {
+        loadDashboardData();
+    }, 30000); // 30초
+});
+
+// 대시보드 데이터 로드
+async function loadDashboardData() {
+    try {
+        // 학생 데이터 로드
+        const studentsResponse = await fetch('tables/students?limit=100');
+        const studentsData = await studentsResponse.json();
+        let students = studentsData.data;
+        
+        // 학교별 필터링
+        if (selectedSchoolId) {
+            students = students.filter(s => s.school_id === selectedSchoolId);
+        }
+        
+        // 통계 업데이트
+        document.getElementById('totalStudents').textContent = students.length;
+        
+        // 오늘의 학습 목표 달성 현황 로드
+        await loadTodayGoalStatus(students);
+        
+        // 학생 테이블 업데이트
+        await updateStudentTable(students);
+        
+        // 주간 피드백 데이터 로드
+        await loadWeeklyFeedbackData(students);
+        
+        // 차트 데이터 로드
+        await loadChartData(students);
+        
+    } catch (error) {
+        console.error('대시보드 데이터 로드 오류:', error);
+    }
+}
+
+// 오늘의 학습 목표 달성 현황
+async function loadTodayGoalStatus(students) {
+    try {
+        const today = new Date().toISOString().split('T')[0];
+        const checksResponse = await fetch('tables/daily_checks?limit=1000');
+        const checksData = await checksResponse.json();
+        
+        // 오늘의 모든 체크 항목 필터링
+        const todayChecks = checksData.data.filter(c => c.date === today);
+        const todayCompleted = todayChecks.filter(c => c.completed);
+        
+        // 전체 목표 / 완료 수 표시
+        const totalGoal = todayChecks.length;
+        const completed = todayCompleted.length;
+        
+        document.getElementById('todayGoal').textContent = `${completed}/${totalGoal}`;
+        
+        // 전체 학습 시간 합계 (완료된 항목만)
+        const totalStudyTime = todayCompleted.reduce((sum, c) => sum + (c.actual_time || 0), 0);
+        const totalStudyHours = (totalStudyTime / 60).toFixed(1);
+        
+    } catch (error) {
+        console.error('오늘의 목표 로드 오류:', error);
+    }
+}
+
+// 학생 테이블 업데이트
+async function updateStudentTable(students) {
+    const tbody = document.getElementById('studentTableBody');
+    
+    if (students.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                    등록된 학생이 없습니다. <a href="students.html" class="text-indigo-600 hover:underline">학생을 추가</a>해주세요.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // 오늘의 학생별 학습 현황 데이터 먼저 로드
+    const today = new Date().toISOString().split('T')[0];
+    const checksResponse = await fetch('tables/daily_checks?limit=1000');
+    const checksData = await checksResponse.json();
+    
+    tbody.innerHTML = students.map(student => {
+        const avgScore = calculateAverageScore(student);
+        const levelBadge = getLevelBadge(student.level);
+        
+        // 오늘의 학생 학습 현황 계산
+        const studentTodayChecks = checksData.data.filter(c => 
+            c.student_id === student.id && c.date === today
+        );
+        const completedChecks = studentTodayChecks.filter(c => c.completed);
+        const todayProgress = studentTodayChecks.length > 0 
+            ? ((completedChecks.length / studentTodayChecks.length) * 100).toFixed(0)
+            : 0;
+        const todayStudyTime = completedChecks.reduce((sum, c) => sum + (c.actual_time || 0), 0);
+        
+        return `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="font-medium text-gray-900">${student.name}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                    ${student.grade}학년 ${student.class_num}반 ${student.student_num}번
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    ${levelBadge}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-900">
+                    ${avgScore.toFixed(1)}점
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div>
+                        <div class="text-sm font-semibold ${getTodayProgressColor(todayProgress)}">
+                            ${todayProgress}% (${completedChecks.length}/${studentTodayChecks.length})
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            ${todayStudyTime}분 학습
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="achievement-badge" id="achievement-${student.id}">로딩중...</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <a href="student-portal.html?id=${student.id}" class="text-indigo-600 hover:text-indigo-900 mr-3" target="_blank">
+                        <i class="fas fa-clipboard-check"></i> 포털
+                    </a>
+                    <a href="feedback.html?id=${student.id}" class="text-green-600 hover:text-green-900">
+                        <i class="fas fa-comment"></i> 피드백
+                    </a>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // 각 학생의 주간 달성률 로드
+    students.forEach(student => {
+        loadStudentWeeklyAchievement(student.id);
+    });
+}
+
+// 학생별 주간 달성률 로드
+async function loadStudentWeeklyAchievement(studentId) {
+    try {
+        const today = new Date();
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay()); // 이번 주 일요일
+        
+        const feedbackResponse = await fetch(`tables/weekly_feedback?limit=100`);
+        const feedbackData = await feedbackResponse.json();
+        
+        const studentFeedback = feedbackData.data.find(f => 
+            f.student_id === studentId && 
+            new Date(f.week_start) >= weekStart
+        );
+        
+        const achievementElement = document.getElementById(`achievement-${studentId}`);
+        if (achievementElement) {
+            if (studentFeedback) {
+                const achievement = studentFeedback.study_time_achievement || 0;
+                achievementElement.innerHTML = getAchievementBadge(achievement);
+            } else {
+                achievementElement.innerHTML = '<span class="text-gray-400">데이터 없음</span>';
+            }
+        }
+    } catch (error) {
+        console.error('주간 달성률 로드 오류:', error);
+    }
+}
+
+// 주간 피드백 데이터 로드
+async function loadWeeklyFeedbackData(students) {
+    try {
+        const feedbackResponse = await fetch('tables/weekly_feedback?limit=100');
+        const feedbackData = await feedbackResponse.json();
+        
+        // 이번 주 피드백 필터링
+        const today = new Date();
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        
+        const thisWeekFeedback = feedbackData.data.filter(f => 
+            new Date(f.week_start) >= weekStart
+        );
+        
+        // 평균 달성률 계산
+        if (thisWeekFeedback.length > 0) {
+            const avgAchievement = thisWeekFeedback.reduce((sum, f) => 
+                sum + (f.study_time_achievement || 0), 0
+            ) / thisWeekFeedback.length;
+            document.getElementById('avgAchievement').textContent = avgAchievement.toFixed(1) + '%';
+        }
+        
+        // 피드백 대기 수 계산
+        const pendingCount = students.length - thisWeekFeedback.length;
+        document.getElementById('pendingFeedback').textContent = pendingCount;
+        
+    } catch (error) {
+        console.error('주간 피드백 데이터 로드 오류:', error);
+    }
+}
+
+// 차트 데이터 로드
+async function loadChartData(students) {
+    try {
+        // 최근 4주간의 평균 달성률 데이터
+        const feedbackResponse = await fetch('tables/weekly_feedback?limit=100');
+        const feedbackData = await feedbackResponse.json();
+        
+        const weeklyData = processWeeklyData(feedbackData.data);
+        updateWeeklyChart(weeklyData);
+        
+        // 과목별 학습시간 데이터
+        const dailyResponse = await fetch('tables/daily_checks?limit=1000');
+        const dailyData = await dailyResponse.json();
+        
+        const subjectData = processSubjectData(dailyData.data);
+        updateSubjectChart(subjectData);
+        
+    } catch (error) {
+        console.error('차트 데이터 로드 오류:', error);
+    }
+}
+
+// 주간 데이터 처리
+function processWeeklyData(feedbackList) {
+    const weeks = {};
+    
+    feedbackList.forEach(feedback => {
+        const weekKey = feedback.week_start;
+        if (!weeks[weekKey]) {
+            weeks[weekKey] = {
+                achievements: [],
+                weekStart: weekKey
+            };
+        }
+        weeks[weekKey].achievements.push(feedback.study_time_achievement || 0);
+    });
+    
+    const sortedWeeks = Object.values(weeks)
+        .sort((a, b) => new Date(a.weekStart) - new Date(b.weekStart))
+        .slice(-4); // 최근 4주
+    
+    return sortedWeeks.map(week => ({
+        week: formatWeekLabel(week.weekStart),
+        achievement: week.achievements.reduce((a, b) => a + b, 0) / week.achievements.length
+    }));
+}
+
+// 과목별 데이터 처리
+function processSubjectData(dailyChecks) {
+    const subjects = {
+        '국어': 0,
+        '영어': 0,
+        '수학': 0,
+        '과학': 0,
+        '사회': 0
+    };
+    const counts = {
+        '국어': 0,
+        '영어': 0,
+        '수학': 0,
+        '과학': 0,
+        '사회': 0
+    };
+    
+    dailyChecks.forEach(check => {
+        if (check.actual_time && subjects.hasOwnProperty(check.subject)) {
+            subjects[check.subject] += check.actual_time;
+            counts[check.subject]++;
+        }
+    });
+    
+    return Object.keys(subjects).map(subject => ({
+        subject: subject,
+        avgTime: counts[subject] > 0 ? subjects[subject] / counts[subject] : 0
+    }));
+}
+
+// 차트 초기화
+function initCharts() {
+    // 주간 달성률 차트
+    const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+    weeklyChart = new Chart(weeklyCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '평균 달성률 (%)',
+                data: [],
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+    
+    // 과목별 학습시간 차트
+    const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+    subjectChart = new Chart(subjectCtx, {
+        type: 'bar',
+        data: {
+            labels: ['국어', '영어', '수학', '과학', '사회'],
+            datasets: [{
+                label: '평균 학습시간 (분)',
+                data: [],
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(168, 85, 247, 0.8)',
+                    'rgba(251, 146, 60, 0.8)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// 주간 차트 업데이트
+function updateWeeklyChart(data) {
+    if (weeklyChart && data.length > 0) {
+        weeklyChart.data.labels = data.map(d => d.week);
+        weeklyChart.data.datasets[0].data = data.map(d => d.achievement);
+        weeklyChart.update();
+    }
+}
+
+// 과목별 차트 업데이트
+function updateSubjectChart(data) {
+    if (subjectChart && data.length > 0) {
+        subjectChart.data.datasets[0].data = data.map(d => d.avgTime);
+        subjectChart.update();
+    }
+}
+
+// 유틸리티 함수들
+function calculateAverageScore(student) {
+    const scores = [
+        student.korean_score || 0,
+        student.english_score || 0,
+        student.math_score || 0,
+        student.science_score || 0,
+        student.social_score || 0
+    ];
+    const validScores = scores.filter(s => s > 0);
+    return validScores.length > 0 ? validScores.reduce((a, b) => a + b, 0) / validScores.length : 0;
+}
+
+function getLevelBadge(level) {
+    const badges = {
+        '기초': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800 border-2 border-green-300">🟢 기초</span>',
+        '중하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>',
+        '중상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 border-2 border-yellow-300">🟡 중상</span>',
+        '상급': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상급</span>',
+        // 기존 3단계 호환성
+        '상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상급</span>',
+        '중': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 border-2 border-yellow-300">🟡 중상</span>',
+        '하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>'
+    };
+    return badges[level] || '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">미정</span>';
+}
+
+function getAchievementBadge(achievement) {
+    if (achievement >= 90) {
+        return `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">${achievement.toFixed(1)}% 🌟</span>`;
+    } else if (achievement >= 70) {
+        return `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">${achievement.toFixed(1)}% 👍</span>`;
+    } else if (achievement >= 50) {
+        return `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">${achievement.toFixed(1)}% 💪</span>`;
+    } else {
+        return `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">${achievement.toFixed(1)}% ⚠️</span>`;
+    }
+}
+
+function formatWeekLabel(dateStr) {
+    const date = new Date(dateStr);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${month}/${day}주`;
+}
+
+function getTodayProgressColor(progress) {
+    if (progress >= 80) return 'text-green-600';
+    if (progress >= 50) return 'text-blue-600';
+    if (progress >= 30) return 'text-yellow-600';
+    if (progress > 0) return 'text-orange-600';
+    return 'text-gray-400';
+}
+
+// 학교 목록 로드
+async function loadSchools() {
+    try {
+        const response = await fetch('tables/schools?limit=100');
+        const data = await response.json();
+        
+        allSchools = data.data || [];
+        
+        // 학교 선택 드롭다운 채우기
+        const select = document.getElementById('schoolFilter');
+        if (select) {
+            select.innerHTML = '<option value="">전체 학교</option>';
+            allSchools.forEach(school => {
+                if (school.active !== false) {
+                    const option = document.createElement('option');
+                    option.value = school.id;
+                    option.textContent = school.school_name;
+                    select.appendChild(option);
+                }
+            });
+            
+            // 저장된 학교 선택 복원
+            const savedSchoolId = localStorage.getItem('selected_school_id');
+            if (savedSchoolId && allSchools.find(s => s.id === savedSchoolId)) {
+                select.value = savedSchoolId;
+                selectedSchoolId = savedSchoolId;
+            }
+        }
+        
+    } catch (error) {
+        console.error('학교 목록 로드 오류:', error);
+    }
+}
+
+// 학교별 필터링
+function filterBySchool() {
+    const select = document.getElementById('schoolFilter');
+    selectedSchoolId = select.value || null;
+    
+    // 선택 저장
+    if (selectedSchoolId) {
+        localStorage.setItem('selected_school_id', selectedSchoolId);
+    } else {
+        localStorage.removeItem('selected_school_id');
+    }
+    
+    // 대시보드 새로고침
+    loadDashboardData();
+}
+
+// ========================================
+// 빠른 학생 등록 기능 (NEW!)
+// ========================================
+
+// 페이지 로드 시 빠른 등록 폼 이벤트 설정
+document.addEventListener('DOMContentLoaded', function() {
+    const quickForm = document.getElementById('quickStudentForm');
+    if (quickForm) {
+        quickForm.addEventListener('submit', handleQuickStudentSubmit);
+        
+        // 점수 입력 시 자동 수준 판정
+        const scoreInputs = ['quickKorean', 'quickEnglish', 'quickMath', 'quickScience', 'quickSocial'];
+        scoreInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.addEventListener('input', autoCalculateLevelQuick);
+            }
+        });
+    }
+});
+
+// 빠른 등록 폼 제출
+async function handleQuickStudentSubmit(e) {
+    e.preventDefault();
+    
+    try {
+        // 자동 수준 판정
+        autoCalculateLevelQuick();
+        
+        const level = document.getElementById('quickLevel').value;
+        if (!level) {
+            alert('⚠️ 학습 수준을 판정하기 위해 최소 1개 과목의 EBS AI 진단평가 점수를 입력해주세요.');
+            return;
+        }
+        
+        const studentData = {
+            name: document.getElementById('quickName').value.trim(),
+            grade: parseInt(document.getElementById('quickGrade').value),
+            class_num: parseInt(document.getElementById('quickClass').value),
+            student_num: parseInt(document.getElementById('quickNumber').value),
+            korean_score: parseFloat(document.getElementById('quickKorean').value) || 0,
+            english_score: parseFloat(document.getElementById('quickEnglish').value) || 0,
+            math_score: parseFloat(document.getElementById('quickMath').value) || 0,
+            science_score: parseFloat(document.getElementById('quickScience').value) || 0,
+            social_score: parseFloat(document.getElementById('quickSocial').value) || 0,
+            level: level,
+            status: '활동중',
+            school_id: selectedSchoolId || null
+        };
+        
+        // 총점 계산
+        studentData.total_score = studentData.korean_score + studentData.english_score + 
+                                   studentData.math_score + studentData.science_score + 
+                                   studentData.social_score;
+        
+        // 학생 등록
+        const response = await fetch('tables/students', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(studentData)
+        });
+        
+        if (response.ok) {
+            const newStudent = await response.json();
+            
+            // 성공 메시지
+            showSuccessMessage(`✅ ${studentData.name} 학생이 성공적으로 등록되었습니다!`);
+            
+            // 폼 초기화
+            document.getElementById('quickStudentForm').reset();
+            document.getElementById('quickLevel').value = '';
+            document.getElementById('quickLevel').disabled = true;
+            document.getElementById('quickLevel').style.backgroundColor = '';
+            
+            // 대시보드 새로고침
+            setTimeout(() => {
+                loadDashboardData();
+            }, 1000);
+            
+            // 수준별 교재 자동 추천
+            await recommendMaterialsQuick(newStudent.id, studentData.level);
+        } else {
+            throw new Error('학생 등록 실패');
+        }
+        
+    } catch (error) {
+        console.error('빠른 등록 오류:', error);
+        alert('❌ 학생 등록에 실패했습니다. 다시 시도해주세요.');
+    }
+}
+
+// 자동 수준 계산 (빠른 등록용)
+function autoCalculateLevelQuick() {
+    const korean = parseFloat(document.getElementById('quickKorean').value) || 0;
+    const english = parseFloat(document.getElementById('quickEnglish').value) || 0;
+    const math = parseFloat(document.getElementById('quickMath').value) || 0;
+    const science = parseFloat(document.getElementById('quickScience').value) || 0;
+    const social = parseFloat(document.getElementById('quickSocial').value) || 0;
+    
+    const scores = [korean, english, math, science, social].filter(s => s > 0);
+    
+    if (scores.length === 0) {
+        document.getElementById('quickLevel').value = '';
+        document.getElementById('quickLevel').disabled = true;
+        document.getElementById('quickLevel').style.backgroundColor = '';
+        return;
+    }
+    
+    const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+    let level = '';
+    
+    // EBS AI 코스웨어 진단평가 점수 기반 수준 판정
+    if (avgScore >= 85) {
+        level = '상급'; // 85-100점
+    } else if (avgScore >= 70) {
+        level = '중상'; // 70-84점
+    } else if (avgScore >= 50) {
+        level = '중하'; // 50-69점
+    } else {
+        level = '기초'; // 0-49점
+    }
+    
+    const levelSelect = document.getElementById('quickLevel');
+    levelSelect.value = level;
+    levelSelect.disabled = false;
+    
+    // 시각적 피드백
+    const colors = {
+        '기초': '#dcfce7', // Green-100
+        '중하': '#dbeafe', // Blue-100
+        '중상': '#fef3c7', // Yellow-100
+        '상급': '#fee2e2'  // Red-100
+    };
+    levelSelect.style.backgroundColor = colors[level] || '#f3f4f6';
+    levelSelect.style.fontWeight = 'bold';
+}
+
+// 수준별 교재 자동 추천 (빠른 등록용)
+async function recommendMaterialsQuick(studentId, level) {
+    try {
+        const response = await fetch('tables/materials?limit=100');
+        const data = await response.json();
+        
+        const recommendedMaterials = data.data.filter(m => m.level === level);
+        
+        // 각 과목별로 1개씩 추천
+        const subjects = ['국어', '영어', '수학', '과학', '사회'];
+        
+        for (const subject of subjects) {
+            const materialForSubject = recommendedMaterials.find(m => m.subject === subject);
+            if (materialForSubject) {
+                await fetch('tables/student_materials', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        student_id: studentId,
+                        material_id: materialForSubject.id,
+                        assigned_date: new Date().toISOString().split('T')[0],
+                        status: '진행중',
+                        progress: 0
+                    })
+                });
+            }
+        }
+        
+    } catch (error) {
+        console.error('교재 추천 오류:', error);
+    }
+}
+
+// 성공 메시지 표시
+function showSuccessMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'fixed top-20 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-2xl z-50 animate-bounce';
+    messageDiv.innerHTML = `
+        <div class="flex items-center space-x-3">
+            <i class="fas fa-check-circle text-2xl"></i>
+            <span class="font-bold">${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(messageDiv);
+    
+    setTimeout(() => {
+        messageDiv.style.animation = 'fadeOut 0.5s';
+        setTimeout(() => messageDiv.remove(), 500);
+    }, 3000);
+}
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadSchools();
+    loadStudents();
+    setupFormHandler();
+});
+
+// 학교 목록 로드
+async function loadSchools() {
+    try {
+        const response = await fetch('tables/schools?limit=100');
+        const data = await response.json();
+        const schools = data.data || [];
+
+        // 등록 폼용
+        const schoolSelect = document.getElementById('schoolId');
+        schoolSelect.innerHTML = '<option value="">선택하세요</option>';
+        
+        // 필터용
+        const filterSelect = document.getElementById('filterSchool');
+        filterSelect.innerHTML = '<option value="">전체 학교</option>';
+
+        schools.forEach(school => {
+            const typeEmoji = {
+                'middle_school': '🏫',
+                'high_school': '🎓',
+                'individual': '👤',
+                'learning_center': '📖'
+            };
+            
+            const emoji = typeEmoji[school.school_type] || '📚';
+            
+            // 등록 폼
+            const option1 = document.createElement('option');
+            option1.value = school.id;
+            option1.textContent = `${emoji} ${school.school_name}`;
+            schoolSelect.appendChild(option1);
+            
+            // 필터
+            const option2 = document.createElement('option');
+            option2.value = school.id;
+            option2.textContent = `${emoji} ${school.school_name}`;
+            filterSelect.appendChild(option2);
+        });
+    } catch (error) {
+        console.error('학교 목록 로드 오류:', error);
+    }
+}
+
+let allStudents = []; // 전체 학생 데이터 저장
+
+// 필터 적용
+function applyFilters() {
+    const schoolFilter = document.getElementById('filterSchool').value;
+    const programFilter = document.getElementById('filterProgram').value;
+    const typeFilter = document.getElementById('filterStudentType').value;
+
+    let filtered = allStudents;
+
+    if (schoolFilter) {
+        filtered = filtered.filter(s => s.school_id === schoolFilter);
+    }
+    if (programFilter) {
+        filtered = filtered.filter(s => s.program_type === programFilter);
+    }
+    if (typeFilter) {
+        filtered = filtered.filter(s => s.student_type === typeFilter);
+    }
+
+    document.getElementById('filteredStudents').textContent = filtered.length;
+    displayStudents(filtered);
+}
+
+// 폼 이벤트 핸들러 설정
+function setupFormHandler() {
+    document.getElementById('studentForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        await saveStudent();
+    });
+    
+    // 점수 입력 시 자동 수준 판정
+    const scoreInputs = ['koreanScore', 'englishScore', 'mathScore', 'scienceScore', 'socialScore'];
+    scoreInputs.forEach(inputId => {
+        document.getElementById(inputId).addEventListener('input', autoCalculateLevel);
+    });
+}
+
+// 점수 평균 기반 자동 수준 판정
+function autoCalculateLevel() {
+    const korean = parseFloat(document.getElementById('koreanScore').value) || 0;
+    const english = parseFloat(document.getElementById('englishScore').value) || 0;
+    const math = parseFloat(document.getElementById('mathScore').value) || 0;
+    const science = parseFloat(document.getElementById('scienceScore').value) || 0;
+    const social = parseFloat(document.getElementById('socialScore').value) || 0;
+    
+    const scores = [korean, english, math, science, social].filter(s => s > 0);
+    
+    if (scores.length === 0) {
+        document.getElementById('level').value = '';
+        document.getElementById('level').selectedIndex = 0;
+        return;
+    }
+    
+    const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+    const levelSelect = document.getElementById('level');
+    
+    // EBS AI 코스웨어 진단평가 점수 기반 수준 판정
+    let level = '';
+    if (avgScore >= 85) {
+        level = '상급'; // 85-100점: 상급
+    } else if (avgScore >= 70) {
+        level = '중상'; // 70-84점: 중상
+    } else if (avgScore >= 50) {
+        level = '중하'; // 50-69점: 중하
+    } else {
+        level = '기초'; // 0-49점: 기초
+    }
+    
+    levelSelect.value = level;
+    levelSelect.disabled = false;
+    
+    // 시각적 피드백 (배경색 변경)
+    levelSelect.style.backgroundColor = getLevelColor(level);
+    levelSelect.style.fontWeight = 'bold';
+}
+
+// 수준별 색상 반환
+function getLevelColor(level) {
+    const colors = {
+        '기초': '#dcfce7', // Green-100
+        '중하': '#dbeafe', // Blue-100
+        '중상': '#fef3c7', // Yellow-100
+        '상급': '#fee2e2'  // Red-100
+    };
+    return colors[level] || '#f3f4f6';
+}
+
+// 학생 목록 로드
+async function loadStudents() {
+    try {
+        const response = await fetch('tables/students?limit=1000');
+        const data = await response.json();
+        allStudents = data.data || [];
+        document.getElementById('totalStudents').textContent = allStudents.length;
+        document.getElementById('filteredStudents').textContent = allStudents.length;
+        displayStudents(allStudents);
+    } catch (error) {
+        console.error('학생 목록 로드 오류:', error);
+        alert('학생 목록을 불러오는데 실패했습니다.');
+    }
+}
+
+// 학생 목록 표시
+function displayStudents(students) {
+    const tbody = document.getElementById('studentList');
+    
+    if (students.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" class="px-6 py-4 text-center text-gray-500">
+                    등록된 학생이 없습니다.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = students.map(student => {
+        const avgScore = calculateAverageScore(student);
+        const levelBadge = getLevelBadge(student.level);
+        
+        return `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${student.name}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                    ${student.grade}학년 ${student.class_num}반 ${student.student_num}번
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">${levelBadge}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${student.korean_score || '-'}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${student.english_score || '-'}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${student.math_score || '-'}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${student.science_score || '-'}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${student.social_score || '-'}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold">${avgScore.toFixed(1)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                    <button onclick="viewStudentDetail('${student.id}')" class="text-indigo-600 hover:text-indigo-900" title="상세보기">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button onclick="editStudent('${student.id}')" class="text-green-600 hover:text-green-900" title="수정">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="showDeleteModal('${student.id}')" class="text-red-600 hover:text-red-900" title="삭제">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button onclick="createStudyPlan('${student.id}')" class="text-blue-600 hover:text-blue-900" title="학습계획">
+                        <i class="fas fa-calendar-alt"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// 학생 저장
+async function saveStudent() {
+    try {
+        // 수준이 비어있으면 자동 계산
+        autoCalculateLevel();
+        
+        const levelValue = document.getElementById('level').value;
+        if (!levelValue) {
+            alert('EBS AI 코스웨어 진단평가 점수를 입력해주세요.');
+            return;
+        }
+        
+        const grade = parseInt(document.getElementById('grade').value);
+        const studentData = {
+            name: document.getElementById('name').value,
+            grade: grade,
+            class_num: parseInt(document.getElementById('classNum').value),
+            student_num: parseInt(document.getElementById('studentNum').value),
+            korean_score: parseFloat(document.getElementById('koreanScore').value) || 0,
+            english_score: parseFloat(document.getElementById('englishScore').value) || 0,
+            math_score: parseFloat(document.getElementById('mathScore').value) || 0,
+            science_score: parseFloat(document.getElementById('scienceScore').value) || 0,
+            social_score: parseFloat(document.getElementById('socialScore').value) || 0,
+            level: levelValue,
+            status: '활동중',
+            school_id: document.getElementById('schoolId').value,
+            program_type: document.getElementById('programType').value,
+            student_type: grade <= 3 ? 'middle' : 'high'
+        };
+        
+        // 총점 계산
+        studentData.total_score = studentData.korean_score + studentData.english_score + 
+                                   studentData.math_score + studentData.science_score + 
+                                   studentData.social_score;
+        
+        if (currentEditId) {
+            // 수정
+            const response = await fetch(`tables/students/${currentEditId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(studentData)
+            });
+            
+            if (response.ok) {
+                alert('학생 정보가 수정되었습니다.');
+                currentEditId = null;
+            }
+        } else {
+            // 신규 등록
+            const response = await fetch('tables/students', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(studentData)
+            });
+            
+            if (response.ok) {
+                const newStudent = await response.json();
+                alert('학생이 등록되었습니다.');
+                
+                // 학생 수준에 맞는 교재 자동 추천
+                await recommendMaterials(newStudent.id, studentData.level);
+            }
+        }
+        
+        resetForm();
+        loadStudents();
+        
+    } catch (error) {
+        console.error('학생 저장 오류:', error);
+        alert('학생 정보 저장에 실패했습니다.');
+    }
+}
+
+// 수준별 교재 자동 추천
+async function recommendMaterials(studentId, level) {
+    try {
+        // 해당 수준의 교재 가져오기
+        const response = await fetch('tables/materials?limit=100');
+        const data = await response.json();
+        
+        const recommendedMaterials = data.data.filter(m => m.level === level);
+        
+        // 각 과목별로 1개씩 추천
+        const subjects = ['국어', '영어', '수학', '과학', '사회'];
+        const assignments = [];
+        
+        for (const subject of subjects) {
+            const materialForSubject = recommendedMaterials.find(m => m.subject === subject);
+            if (materialForSubject) {
+                assignments.push({
+                    student_id: studentId,
+                    material_id: materialForSubject.id,
+                    assigned_date: new Date().toISOString().split('T')[0],
+                    status: '진행중',
+                    progress: 0
+                });
+            }
+        }
+        
+        // 추천 교재 배정
+        if (assignments.length > 0) {
+            await fetch('tables/student_materials', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(assignments[0])
+            });
+            
+            for (let i = 1; i < assignments.length; i++) {
+                await fetch('tables/student_materials', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(assignments[i])
+                });
+            }
+        }
+        
+    } catch (error) {
+        console.error('교재 추천 오류:', error);
+    }
+}
+
+// 학생 정보 수정
+async function editStudent(studentId) {
+    try {
+        const response = await fetch(`tables/students/${studentId}`);
+        const student = await response.json();
+        
+        document.getElementById('name').value = student.name;
+        document.getElementById('grade').value = student.grade;
+        document.getElementById('classNum').value = student.class_num;
+        document.getElementById('studentNum').value = student.student_num;
+        document.getElementById('koreanScore').value = student.korean_score || '';
+        document.getElementById('englishScore').value = student.english_score || '';
+        document.getElementById('mathScore').value = student.math_score || '';
+        document.getElementById('scienceScore').value = student.science_score || '';
+        document.getElementById('socialScore').value = student.social_score || '';
+        document.getElementById('level').value = student.level;
+        
+        currentEditId = studentId;
+        
+        // 폼으로 스크롤
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+    } catch (error) {
+        console.error('학생 정보 로드 오류:', error);
+        alert('학생 정보를 불러오는데 실패했습니다.');
+    }
+}
+
+// 학생 상세보기
+function viewStudentDetail(studentId) {
+    window.location.href = `student-detail.html?id=${studentId}`;
+}
+
+// 학습계획 생성
+function createStudyPlan(studentId) {
+    window.location.href = `study-plan.html?id=${studentId}`;
+}
+
+// 삭제 모달 표시
+function showDeleteModal(studentId) {
+    deleteStudentId = studentId;
+    document.getElementById('deleteModal').classList.remove('hidden');
+    
+    document.getElementById('confirmDeleteBtn').onclick = async function() {
+        await deleteStudent(deleteStudentId);
+        closeDeleteModal();
+    };
+}
+
+// 삭제 모달 닫기
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    deleteStudentId = null;
+}
+
+// 학생 삭제
+async function deleteStudent(studentId) {
+    try {
+        const response = await fetch(`tables/students/${studentId}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            alert('학생이 삭제되었습니다.');
+            loadStudents();
+        }
+    } catch (error) {
+        console.error('학생 삭제 오류:', error);
+        alert('학생 삭제에 실패했습니다.');
+    }
+}
+
+// 폼 초기화
+function resetForm() {
+    document.getElementById('studentForm').reset();
+    document.getElementById('level').disabled = true;
+    document.getElementById('level').style.backgroundColor = '';
+    currentEditId = null;
+}
+
+// 유틸리티 함수들
+function calculateAverageScore(student) {
+    const scores = [
+        student.korean_score || 0,
+        student.english_score || 0,
+        student.math_score || 0,
+        student.science_score || 0,
+        student.social_score || 0
+    ];
+    const validScores = scores.filter(s => s > 0);
+    return validScores.length > 0 ? validScores.reduce((a, b) => a + b, 0) / validScores.length : 0;
+}
+
+function getLevelBadge(level) {
+    const badges = {
+        '기초': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800 border-2 border-green-300">🟢 기초</span>',
+        '중하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>',
+        '중상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 border-2 border-yellow-300">🟡 중상</span>',
+        '상급': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상급</span>',
+        // 기존 3단계 호환성 유지
+        '상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상급</span>',
+        '중': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 border-2 border-yellow-300">🟡 중상</span>',
+        '하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>'
+    };
+    return badges[level] || '<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">미정</span>';
+}
+
+let currentEditId = null;
+let deleteLessonId = null;// 피드백 관리 스크립트
+
+let currentStudent = null;
+let weeklyData = null;
+let timeChart = null;
+let achievementChart = null;
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get('id');
+    
+    if (!studentId) {
+        alert('학생 ID가 필요합니다.');
+        location.href = 'students.html';
+        return;
+    }
+    
+    loadStudent(studentId);
+    setupForm();
+    initCharts();
+    setCurrentWeek();
+});
+
+// 현재 주 설정
+function setCurrentWeek() {
+    const today = new Date();
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - today.getDay()); // 이번 주 일요일
+    
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6); // 이번 주 토요일
+    
+    document.getElementById('weekStart').value = weekStart.toISOString().split('T')[0];
+    document.getElementById('weekEnd').value = weekEnd.toISOString().split('T')[0];
+}
+
+// 학생 정보 로드
+async function loadStudent(studentId) {
+    try {
+        const response = await fetch(`tables/students/${studentId}`);
+        currentStudent = await response.json();
+        
+        displayStudentInfo();
+        loadWeeklyData();
+        
+    } catch (error) {
+        console.error('학생 정보 로드 오류:', error);
+        alert('학생 정보를 불러오는데 실패했습니다.');
+    }
+}
+
+// 학생 정보 표시
+function displayStudentInfo() {
+    const avgScore = calculateAverageScore(currentStudent);
+    
+    document.getElementById('studentInfo').innerHTML = `
+        <div class="p-4 bg-indigo-50 rounded-lg">
+            <p class="text-sm text-gray-600">이름</p>
+            <p class="text-lg font-semibold">${currentStudent.name}</p>
+        </div>
+        <div class="p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-gray-600">학년/반/번호</p>
+            <p class="text-lg font-semibold">${currentStudent.grade}학년 ${currentStudent.class_num}반 ${currentStudent.student_num}번</p>
+        </div>
+        <div class="p-4 bg-green-50 rounded-lg">
+            <p class="text-sm text-gray-600">수준 / 평균 성적</p>
+            <p class="text-lg font-semibold">${currentStudent.level} / ${avgScore.toFixed(1)}점</p>
+        </div>
+    `;
+}
+
+// 주간 데이터 로드
+async function loadWeeklyData() {
+    try {
+        const weekStart = document.getElementById('weekStart').value;
+        const weekEnd = document.getElementById('weekEnd').value;
+        
+        if (!weekStart || !weekEnd) {
+            alert('주간 시작일과 종료일을 선택해주세요.');
+            return;
+        }
+        
+        // 해당 주의 일일 체크 데이터 로드
+        const response = await fetch('tables/daily_checks?limit=1000');
+        const data = await response.json();
+        
+        weeklyData = data.data.filter(check => {
+            return check.student_id === currentStudent.id &&
+                   check.date >= weekStart &&
+                   check.date <= weekEnd;
+        });
+        
+        if (weeklyData.length === 0) {
+            alert('해당 주간의 학습 데이터가 없습니다.');
+            return;
+        }
+        
+        // 데이터 분석 및 표시
+        analyzeWeeklyData();
+        updateCharts();
+        calculateAchievement();
+        
+        // 기존 피드백 확인
+        await checkExistingFeedback(weekStart, weekEnd);
+        
+    } catch (error) {
+        console.error('주간 데이터 로드 오류:', error);
+        alert('주간 데이터를 불러오는데 실패했습니다.');
+    }
+}
+
+// 주간 데이터 분석
+function analyzeWeeklyData() {
+    const subjects = ['국어', '영어', '수학', '과학', '사회'];
+    const stats = {};
+    
+    subjects.forEach(subject => {
+        const subjectData = weeklyData.filter(d => d.subject === subject);
+        const totalPlanned = subjectData.reduce((sum, d) => sum + (d.planned_time || 0), 0);
+        const totalActual = subjectData.reduce((sum, d) => sum + (d.actual_time || 0), 0);
+        const completed = subjectData.filter(d => d.completed).length;
+        
+        stats[subject] = {
+            planned: totalPlanned,
+            actual: totalActual,
+            achievement: totalPlanned > 0 ? (totalActual / totalPlanned * 100).toFixed(1) : 0,
+            completed: completed,
+            total: subjectData.length
+        };
+    });
+    
+    // 통계 표시
+    const statsContainer = document.getElementById('weeklyStats');
+    const totalPlanned = Object.values(stats).reduce((sum, s) => sum + s.planned, 0);
+    const totalActual = Object.values(stats).reduce((sum, s) => sum + s.actual, 0);
+    
+    statsContainer.innerHTML = `
+        <div class="p-3 bg-gray-50 rounded">
+            <p class="text-sm text-gray-600">전체 계획 시간</p>
+            <p class="text-xl font-bold text-indigo-600">${totalPlanned}분</p>
+        </div>
+        <div class="p-3 bg-gray-50 rounded">
+            <p class="text-sm text-gray-600">전체 실제 시간</p>
+            <p class="text-xl font-bold text-green-600">${totalActual}분</p>
+        </div>
+        <div class="p-3 bg-gray-50 rounded">
+            <p class="text-sm text-gray-600">시간 달성률</p>
+            <p class="text-xl font-bold ${totalActual >= totalPlanned ? 'text-green-600' : 'text-orange-600'}">
+                ${totalPlanned > 0 ? ((totalActual / totalPlanned) * 100).toFixed(1) : 0}%
+            </p>
+        </div>
+    `;
+    
+    // 과목별 진도 표시
+    const progressContainer = document.getElementById('subjectProgress');
+    progressContainer.innerHTML = subjects.map(subject => {
+        const stat = stats[subject];
+        const color = stat.achievement >= 80 ? 'green' : stat.achievement >= 60 ? 'yellow' : 'red';
+        return `
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                <span class="font-medium">${subject}</span>
+                <div class="text-right">
+                    <span class="text-sm text-${color}-600 font-semibold">${stat.achievement}%</span>
+                    <span class="text-xs text-gray-500 ml-2">(${stat.completed}/${stat.total})</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    return stats;
+}
+
+// 차트 업데이트
+function updateCharts() {
+    const subjects = ['국어', '영어', '수학', '과학', '사회'];
+    const dailyData = {};
+    
+    // 날짜별 데이터 집계
+    weeklyData.forEach(check => {
+        if (!dailyData[check.date]) {
+            dailyData[check.date] = { planned: 0, actual: 0 };
+        }
+        dailyData[check.date].planned += check.planned_time || 0;
+        dailyData[check.date].actual += check.actual_time || 0;
+    });
+    
+    const dates = Object.keys(dailyData).sort();
+    const plannedData = dates.map(date => dailyData[date].planned);
+    const actualData = dates.map(date => dailyData[date].actual);
+    
+    // 주간 학습시간 차트
+    timeChart.data.labels = dates.map(d => formatDate(d));
+    timeChart.data.datasets[0].data = plannedData;
+    timeChart.data.datasets[1].data = actualData;
+    timeChart.update();
+    
+    // 과목별 달성률 차트
+    const subjectAchievements = subjects.map(subject => {
+        const subjectData = weeklyData.filter(d => d.subject === subject);
+        const totalPlanned = subjectData.reduce((sum, d) => sum + (d.planned_time || 0), 0);
+        const totalActual = subjectData.reduce((sum, d) => sum + (d.actual_time || 0), 0);
+        return totalPlanned > 0 ? (totalActual / totalPlanned * 100) : 0;
+    });
+    
+    achievementChart.data.datasets[0].data = subjectAchievements;
+    achievementChart.update();
+}
+
+// 달성률 계산
+function calculateAchievement() {
+    const totalPlanned = weeklyData.reduce((sum, d) => sum + (d.planned_time || 0), 0);
+    const totalActual = weeklyData.reduce((sum, d) => sum + (d.actual_time || 0), 0);
+    
+    const achievement = totalPlanned > 0 ? (totalActual / totalPlanned * 100) : 0;
+    document.getElementById('achievement').value = achievement.toFixed(1);
+}
+
+// 기존 피드백 확인
+async function checkExistingFeedback(weekStart, weekEnd) {
+    try {
+        const response = await fetch('tables/weekly_feedback?limit=100');
+        const data = await response.json();
+        
+        const existing = data.data.find(f => 
+            f.student_id === currentStudent.id &&
+            f.week_start === weekStart &&
+            f.week_end === weekEnd
+        );
+        
+        if (existing) {
+            // 기존 피드백 데이터로 폼 채우기
+            document.getElementById('koreanProgress').value = existing.korean_progress || '';
+            document.getElementById('englishProgress').value = existing.english_progress || '';
+            document.getElementById('mathProgress').value = existing.math_progress || '';
+            document.getElementById('scienceProgress').value = existing.science_progress || '';
+            document.getElementById('socialProgress').value = existing.social_progress || '';
+            document.getElementById('improvementNotes').value = existing.improvement_notes || '';
+            document.getElementById('teacherComment').value = existing.teacher_comment || '';
+        }
+        
+    } catch (error) {
+        console.error('기존 피드백 확인 오류:', error);
+    }
+}
+
+// 폼 제출 설정
+function setupForm() {
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        await saveFeedback();
+    });
+}
+
+// 피드백 저장
+async function saveFeedback() {
+    try {
+        const weekStart = document.getElementById('weekStart').value;
+        const weekEnd = document.getElementById('weekEnd').value;
+        
+        const feedbackData = {
+            student_id: currentStudent.id,
+            week_start: weekStart,
+            week_end: weekEnd,
+            study_time_achievement: parseFloat(document.getElementById('achievement').value),
+            korean_progress: document.getElementById('koreanProgress').value,
+            english_progress: document.getElementById('englishProgress').value,
+            math_progress: document.getElementById('mathProgress').value,
+            science_progress: document.getElementById('scienceProgress').value,
+            social_progress: document.getElementById('socialProgress').value,
+            improvement_notes: document.getElementById('improvementNotes').value,
+            teacher_comment: document.getElementById('teacherComment').value
+        };
+        
+        // 기존 피드백 확인
+        const checkResponse = await fetch('tables/weekly_feedback?limit=100');
+        const checkData = await checkResponse.json();
+        const existing = checkData.data.find(f => 
+            f.student_id === currentStudent.id &&
+            f.week_start === weekStart &&
+            f.week_end === weekEnd
+        );
+        
+        let response;
+        if (existing) {
+            // 업데이트
+            response = await fetch(`tables/weekly_feedback/${existing.id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(feedbackData)
+            });
+        } else {
+            // 신규 생성
+            response = await fetch('tables/weekly_feedback', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(feedbackData)
+            });
+        }
+        
+        if (response.ok) {
+            alert('피드백이 저장되었습니다.');
+            location.href = 'index.html';
+        }
+        
+    } catch (error) {
+        console.error('피드백 저장 오류:', error);
+        alert('피드백 저장에 실패했습니다.');
+    }
+}
+
+// 차트 초기화
+function initCharts() {
+    // 주간 학습시간 차트
+    const timeCtx = document.getElementById('weeklyTimeChart').getContext('2d');
+    timeChart = new Chart(timeCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: '계획 시간',
+                    data: [],
+                    borderColor: 'rgb(99, 102, 241)',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: '실제 시간',
+                    data: [],
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '시간 (분)'
+                    }
+                }
+            }
+        }
+    });
+    
+    // 과목별 달성률 차트
+    const achievementCtx = document.getElementById('subjectAchievementChart').getContext('2d');
+    achievementChart = new Chart(achievementCtx, {
+        type: 'radar',
+        data: {
+            labels: ['국어', '영어', '수학', '과학', '사회'],
+            datasets: [{
+                label: '달성률 (%)',
+                data: [],
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                pointBackgroundColor: 'rgb(99, 102, 241)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(99, 102, 241)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 150,
+                    ticks: {
+                        stepSize: 30
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 유틸리티 함수들
+function calculateAverageScore(student) {
+    const scores = [
+        student.korean_score || 0,
+        student.english_score || 0,
+        student.math_score || 0,
+        student.science_score || 0,
+        student.social_score || 0
+    ];
+    const validScores = scores.filter(s => s > 0);
+    return validScores.length > 0 ? validScores.reduce((a, b) => a + b, 0) / validScores.length : 0;
+}
+
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getMonth()+1}/${date.getDate()}`;
+}
+
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadLessons();
+    setupFormHandler();
+    setTodayDate();
+});
+
+// 오늘 날짜 설정
+function setTodayDate() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = today;
+    document.getElementById('searchDate').value = today;
+}
+
+// 폼 이벤트 핸들러 설정
+function setupFormHandler() {
+    document.getElementById('lessonForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        await saveLesson();
+    });
+}
+
+// 수업 내용 목록 로드
+async function loadLessons() {
+    try {
+        const response = await fetch('tables/school_lessons?limit=500&sort=-date');
+        const data = await response.json();
+        
+        let lessons = data.data;
+        
+        // 필터 적용
+        const filterGrade = document.getElementById('filterGrade')?.value;
+        const filterSubject = document.getElementById('filterSubject')?.value;
+        
+        if (filterGrade) {
+            lessons = lessons.filter(l => l.grade == filterGrade);
+        }
+        if (filterSubject) {
+            lessons = lessons.filter(l => l.subject === filterSubject);
+        }
+        
+        displayLessons(lessons);
+    } catch (error) {
+        console.error('수업 목록 로드 오류:', error);
+        alert('수업 목록을 불러오는데 실패했습니다.');
+    }
+}
+
+// 수업 내용 표시
+function displayLessons(lessons) {
+    const container = document.getElementById('lessonsList');
+    
+    if (lessons.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+                등록된 수업 내용이 없습니다.
+            </div>
+        `;
+        return;
+    }
+    
+    const subjectColors = {
+        '국어': 'red',
+        '영어': 'blue',
+        '수학': 'green',
+        '과학': 'purple',
+        '사회': 'orange'
+    };
+    
+    const importanceBadges = {
+        '높음': '<span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">⭐ 높음</span>',
+        '보통': '<span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">보통</span>',
+        '낮음': '<span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">낮음</span>'
+    };
+    
+    container.innerHTML = lessons.map(lesson => {
+        const color = subjectColors[lesson.subject] || 'gray';
+        
+        return `
+            <div class="border-l-4 border-${color}-500 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <h3 class="text-lg font-semibold text-${color}-700">${lesson.subject}</h3>
+                            ${importanceBadges[lesson.importance]}
+                            <span class="text-sm text-gray-500">${lesson.grade}학년</span>
+                            <span class="text-sm text-gray-500">${formatDate(lesson.date)}</span>
+                        </div>
+                        ${lesson.chapter ? `<p class="text-sm text-gray-600 mb-2">📖 ${lesson.chapter}</p>` : ''}
+                        <p class="text-gray-700">${lesson.content}</p>
+                    </div>
+                    <div class="flex space-x-2 ml-4">
+                        <button onclick="editLesson('${lesson.id}')" class="text-green-600 hover:text-green-900" title="수정">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="showDeleteModal('${lesson.id}')" class="text-red-600 hover:text-red-900" title="삭제">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// 수업 내용 저장
+async function saveLesson() {
+    try {
+        const lessonData = {
+            date: document.getElementById('date').value,
+            grade: parseInt(document.getElementById('grade').value),
+            subject: document.getElementById('subject').value,
+            chapter: document.getElementById('chapter').value,
+            importance: document.getElementById('importance').value,
+            content: document.getElementById('content').value
+        };
+        
+        if (currentEditId) {
+            // 수정
+            const response = await fetch(`tables/school_lessons/${currentEditId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(lessonData)
+            });
+            
+            if (response.ok) {
+                alert('수업 내용이 수정되었습니다.');
+                currentEditId = null;
+            }
+        } else {
+            // 신규 등록
+            const response = await fetch('tables/school_lessons', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(lessonData)
+            });
+            
+            if (response.ok) {
+                alert('수업 내용이 등록되었습니다.');
+            }
+        }
+        
+        resetForm();
+        loadLessons();
+        
+    } catch (error) {
+        console.error('수업 내용 저장 오류:', error);
+        alert('수업 내용 저장에 실패했습니다.');
+    }
+}
+
+// 수업 내용 수정
+async function editLesson(lessonId) {
+    try {
+        const response = await fetch(`tables/school_lessons/${lessonId}`);
+        const lesson = await response.json();
+        
+        document.getElementById('date').value = lesson.date;
+        document.getElementById('grade').value = lesson.grade;
+        document.getElementById('subject').value = lesson.subject;
+        document.getElementById('chapter').value = lesson.chapter || '';
+        document.getElementById('importance').value = lesson.importance;
+        document.getElementById('content').value = lesson.content;
+        
+        currentEditId = lessonId;
+        
+        // 폼으로 스크롤
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+    } catch (error) {
+        console.error('수업 내용 로드 오류:', error);
+        alert('수업 내용을 불러오는데 실패했습니다.');
+    }
+}
+
+// 날짜별 검색
+async function searchByDate() {
+    const searchDate = document.getElementById('searchDate').value;
+    if (!searchDate) {
+        alert('날짜를 선택해주세요.');
+        return;
+    }
+    
+    try {
+        const response = await fetch('tables/school_lessons?limit=500');
+        const data = await response.json();
+        
+        const lessons = data.data.filter(l => l.date === searchDate);
+        displayLessons(lessons);
+        
+        if (lessons.length === 0) {
+            alert('해당 날짜의 수업 내용이 없습니다.');
+        }
+    } catch (error) {
+        console.error('검색 오류:', error);
+        alert('검색에 실패했습니다.');
+    }
+}
+
+// 삭제 모달 표시
+function showDeleteModal(lessonId) {
+    deleteLessonId = lessonId;
+    document.getElementById('deleteModal').classList.remove('hidden');
+    
+    document.getElementById('confirmDeleteBtn').onclick = async function() {
+        await deleteLesson(deleteLessonId);
+        closeDeleteModal();
+    };
+}
+
+// 삭제 모달 닫기
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    deleteLessonId = null;
+}
+
+// 수업 내용 삭제
+async function deleteLesson(lessonId) {
+    try {
+        const response = await fetch(`tables/school_lessons/${lessonId}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            alert('수업 내용이 삭제되었습니다.');
+            loadLessons();
+        }
+    } catch (error) {
+        console.error('수업 내용 삭제 오류:', error);
+        alert('수업 내용 삭제에 실패했습니다.');
+    }
+}
+
+// 폼 초기화
+function resetForm() {
+    document.getElementById('lessonForm').reset();
+    currentEditId = null;
+    setTodayDate();
+}
+
+// 유틸리티 함수
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+    return date.toLocaleDateString('ko-KR', options);
+}
+
+let allMaterials = [];
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadMaterials();
+});
+
+// 교재 목록 로드
+async function loadMaterials() {
+    try {
+        const response = await fetch('tables/materials?limit=500');
+        const data = await response.json();
+        
+        allMaterials = data.data;
+        
+        // 필터 적용
+        let filteredMaterials = allMaterials;
+        
+        const filterType = document.getElementById('filterType').value;
+        const filterSubject = document.getElementById('filterSubject').value;
+        const filterLevel = document.getElementById('filterLevel').value;
+        
+        if (filterType) {
+            filteredMaterials = filteredMaterials.filter(m => m.type === filterType);
+        }
+        if (filterSubject) {
+            filteredMaterials = filteredMaterials.filter(m => m.subject === filterSubject);
+        }
+        if (filterLevel) {
+            filteredMaterials = filteredMaterials.filter(m => m.level === filterLevel);
+        }
+        
+        displayMaterials(filteredMaterials);
+        
+    } catch (error) {
+        console.error('교재 목록 로드 오류:', error);
+        alert('교재 목록을 불러오는데 실패했습니다.');
+    }
+}
+
+// 교재 검색
+function searchMaterials() {
+    const searchText = document.getElementById('searchText').value.toLowerCase();
+    
+    let filteredMaterials = allMaterials;
+    
+    // 기존 필터 적용
+    const filterType = document.getElementById('filterType').value;
+    const filterSubject = document.getElementById('filterSubject').value;
+    const filterLevel = document.getElementById('filterLevel').value;
+    
+    if (filterType) {
+        filteredMaterials = filteredMaterials.filter(m => m.type === filterType);
+    }
+    if (filterSubject) {
+        filteredMaterials = filteredMaterials.filter(m => m.subject === filterSubject);
+    }
+    if (filterLevel) {
+        filteredMaterials = filteredMaterials.filter(m => m.level === filterLevel);
+    }
+    
+    // 검색어 적용
+    if (searchText) {
+        filteredMaterials = filteredMaterials.filter(m => 
+            m.title.toLowerCase().includes(searchText) ||
+            m.description.toLowerCase().includes(searchText)
+        );
+    }
+    
+    displayMaterials(filteredMaterials);
+}
+
+// 교재 목록 표시
+function displayMaterials(materials) {
+    const container = document.getElementById('materialsList');
+    document.getElementById('materialCount').textContent = materials.length;
+    
+    if (materials.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12 text-gray-500">
+                <i class="fas fa-search text-4xl mb-4"></i>
+                <p>조건에 맞는 교재가 없습니다.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const subjectColors = {
+        '국어': 'red',
+        '영어': 'blue',
+        '수학': 'green',
+        '과학': 'purple',
+        '사회': 'orange'
+    };
+    
+    const levelBadges = {
+        '상': '<span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">상</span>',
+        '중': '<span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">중</span>',
+        '하': '<span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">하</span>'
+    };
+    
+    container.innerHTML = materials.map(material => {
+        const color = subjectColors[material.subject] || 'gray';
+        const typeIcon = material.type === 'EBS강의' ? 
+            '<i class="fas fa-video text-red-500"></i>' : 
+            '<i class="fas fa-book text-blue-500"></i>';
+        
+        return `
+            <div class="border rounded-lg p-5 hover:shadow-lg transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex items-center space-x-2">
+                        ${typeIcon}
+                        <span class="text-xs px-2 py-1 bg-${color}-100 text-${color}-700 rounded-full font-semibold">
+                            ${material.subject}
+                        </span>
+                    </div>
+                    ${levelBadges[material.level]}
+                </div>
+                
+                <h3 class="text-lg font-bold text-gray-800 mb-2">${material.title}</h3>
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2">${material.description}</p>
+                
+                <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+                    <div class="text-xs text-gray-500">
+                        <i class="fas fa-building mr-1"></i>
+                        ${material.publisher}
+                    </div>
+                    ${material.url ? `
+                        <a href="${material.url}" target="_blank" 
+                            class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                            <i class="fas fa-external-link-alt mr-1"></i>바로가기
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+let studyTimeChart = null;
+let subjectChart = null;
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadStudentList();
+    initCharts();
+    setDefaultDates();
+});
+
+// 기본 날짜 설정 (3월 ~ 4월 중간고사)
+function setDefaultDates() {
+    const currentYear = new Date().getFullYear();
+    document.getElementById('startDate').value = `${currentYear}-03-01`;
+    document.getElementById('endDate').value = `${currentYear}-04-30`;
+}
+
+// 학생 목록 로드
+async function loadStudentList() {
+    try {
+        const response = await fetch('tables/students?limit=100');
+        const data = await response.json();
+        
+        const select = document.getElementById('studentSelect');
+        data.data.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.id;
+            option.textContent = `${student.name} (${student.grade}학년 ${student.class_num}반 ${student.student_num}번)`;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('학생 목록 로드 오류:', error);
+    }
+}
+
+// 보고서 생성
+async function generateReport() {
+    const studentId = document.getElementById('studentSelect').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    if (!studentId || !startDate || !endDate) {
+        return;
+    }
+    
+    try {
+        // 학생 정보 로드
+        const studentResponse = await fetch(`tables/students/${studentId}`);
+        currentStudent = await studentResponse.json();
+        
+        // 기간 내 학습 데이터 로드
+        const checksResponse = await fetch('tables/daily_checks?limit=2000');
+        const checksData = await checksResponse.json();
+        
+        const dailyChecks = checksData.data.filter(c => 
+            c.student_id === studentId &&
+            c.date >= startDate &&
+            c.date <= endDate
+        );
+        
+        // 피드백 데이터 로드
+        const feedbackResponse = await fetch('tables/weekly_feedback?limit=100');
+        const feedbackData = await feedbackResponse.json();
+        
+        const feedbacks = feedbackData.data.filter(f => 
+            f.student_id === studentId &&
+            f.week_start >= startDate &&
+            f.week_end <= endDate
+        ).sort((a, b) => new Date(b.week_start) - new Date(a.week_start));
+        
+        // 보고서 데이터 생성
+        reportData = {
+            student: currentStudent,
+            dailyChecks: dailyChecks,
+            feedbacks: feedbacks,
+            startDate: startDate,
+            endDate: endDate
+        };
+        
+        // 보고서 표시
+        displayReport();
+        
+    } catch (error) {
+        console.error('보고서 생성 오류:', error);
+        alert('보고서 생성에 실패했습니다.');
+    }
+}
+
+// 보고서 표시
+function displayReport() {
+    document.getElementById('emptyReport').classList.add('hidden');
+    document.getElementById('reportBody').classList.remove('hidden');
+    
+    // 기간 표시
+    document.getElementById('reportPeriod').textContent = 
+        `${reportData.startDate} ~ ${reportData.endDate}`;
+    
+    // 보고서 날짜
+    document.getElementById('reportDate').textContent = 
+        `작성일: ${new Date().toLocaleDateString('ko-KR')}`;
+    
+    // 학생 기본 정보
+    displayBasicInfo();
+    
+    // 학습 시간 통계
+    displayTimeStats();
+    
+    // 과목별 성취도
+    displaySubjectAchievement();
+    
+    // 피드백 이력
+    displayFeedbackHistory();
+    
+    // 종합 의견
+    displayComprehensiveOpinion();
+}
+
+// 학생 기본 정보 표시
+function displayBasicInfo() {
+    const avgScore = calculateAverageScore(currentStudent);
+    
+    document.getElementById('studentBasicInfo').innerHTML = `
+        <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600 mb-1">이름</p>
+            <p class="text-lg font-bold">${currentStudent.name}</p>
+        </div>
+        <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600 mb-1">학년/반/번호</p>
+            <p class="text-lg font-bold">${currentStudent.grade}학년 ${currentStudent.class_num}반 ${currentStudent.student_num}번</p>
+        </div>
+        <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600 mb-1">학습 수준</p>
+            <p class="text-lg font-bold">${currentStudent.level}</p>
+        </div>
+        <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600 mb-1">평균 성적</p>
+            <p class="text-lg font-bold">${avgScore.toFixed(1)}점</p>
+        </div>
+    `;
+}
+
+// 학습 시간 통계 표시
+function displayTimeStats() {
+    const totalPlanned = reportData.dailyChecks.reduce((sum, c) => sum + (c.planned_time || 0), 0);
+    const totalActual = reportData.dailyChecks.reduce((sum, c) => sum + (c.actual_time || 0), 0);
+    const completedCount = reportData.dailyChecks.filter(c => c.completed).length;
+    const totalDays = new Set(reportData.dailyChecks.map(c => c.date)).size;
+    const achievement = totalPlanned > 0 ? (totalActual / totalPlanned * 100) : 0;
+    
+    // 통계 정보
+    document.getElementById('timeStats').innerHTML = `
+        <div class="p-4 bg-indigo-50 rounded-lg">
+            <p class="text-sm text-gray-600">전체 계획 시간</p>
+            <p class="text-2xl font-bold text-indigo-600">${Math.round(totalPlanned / 60)}시간 ${totalPlanned % 60}분</p>
+        </div>
+        <div class="p-4 bg-green-50 rounded-lg">
+            <p class="text-sm text-gray-600">전체 실제 시간</p>
+            <p class="text-2xl font-bold text-green-600">${Math.round(totalActual / 60)}시간 ${totalActual % 60}분</p>
+        </div>
+        <div class="p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-gray-600">달성률</p>
+            <p class="text-2xl font-bold text-blue-600">${achievement.toFixed(1)}%</p>
+        </div>
+        <div class="p-4 bg-purple-50 rounded-lg">
+            <p class="text-sm text-gray-600">완료한 학습</p>
+            <p class="text-2xl font-bold text-purple-600">${completedCount}개</p>
+        </div>
+        <div class="p-4 bg-orange-50 rounded-lg">
+            <p class="text-sm text-gray-600">학습 일수</p>
+            <p class="text-2xl font-bold text-orange-600">${totalDays}일</p>
+        </div>
+        <div class="p-4 bg-pink-50 rounded-lg">
+            <p class="text-sm text-gray-600">일평균 학습시간</p>
+            <p class="text-2xl font-bold text-pink-600">${totalDays > 0 ? Math.round(totalActual / totalDays) : 0}분</p>
+        </div>
+    `;
+    
+    // 주별 학습시간 차트
+    const weeklyData = processWeeklyTimeData();
+    studyTimeChart.data.labels = weeklyData.labels;
+    studyTimeChart.data.datasets[0].data = weeklyData.planned;
+    studyTimeChart.data.datasets[1].data = weeklyData.actual;
+    studyTimeChart.update();
+}
+
+// 주별 학습시간 데이터 처리
+function processWeeklyTimeData() {
+    const weeks = {};
+    
+    reportData.dailyChecks.forEach(check => {
+        const date = new Date(check.date);
+        const weekStart = new Date(date);
+        weekStart.setDate(date.getDate() - date.getDay());
+        const weekKey = weekStart.toISOString().split('T')[0];
+        
+        if (!weeks[weekKey]) {
+            weeks[weekKey] = { planned: 0, actual: 0 };
+        }
+        weeks[weekKey].planned += check.planned_time || 0;
+        weeks[weekKey].actual += check.actual_time || 0;
+    });
+    
+    const sortedWeeks = Object.keys(weeks).sort();
+    return {
+        labels: sortedWeeks.map(w => formatWeekLabel(w)),
+        planned: sortedWeeks.map(w => weeks[w].planned),
+        actual: sortedWeeks.map(w => weeks[w].actual)
+    };
+}
+
+// 과목별 성취도 표시
+function displaySubjectAchievement() {
+    const subjects = ['국어', '영어', '수학', '과학', '사회'];
+    const subjectData = subjects.map(subject => {
+        const subjectChecks = reportData.dailyChecks.filter(c => c.subject === subject);
+        const totalPlanned = subjectChecks.reduce((sum, c) => sum + (c.planned_time || 0), 0);
+        const totalActual = subjectChecks.reduce((sum, c) => sum + (c.actual_time || 0), 0);
+        return totalPlanned > 0 ? (totalActual / totalPlanned * 100) : 0;
+    });
+    
+    subjectChart.data.datasets[0].data = subjectData;
+    subjectChart.update();
+}
+
+// 피드백 이력 표시
+function displayFeedbackHistory() {
+    const container = document.getElementById('feedbackHistory');
+    
+    if (reportData.feedbacks.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">피드백 기록이 없습니다.</p>';
+        return;
+    }
+    
+    container.innerHTML = reportData.feedbacks.map((feedback, index) => `
+        <div class="border-l-4 border-indigo-500 bg-gray-50 rounded-lg p-4">
+            <div class="flex justify-between items-start mb-2">
+                <h4 class="font-bold text-gray-800">
+                    ${index + 1}주차: ${formatWeekRange(feedback.week_start, feedback.week_end)}
+                </h4>
+                <span class="px-3 py-1 text-sm font-semibold rounded-full ${getAchievementClass(feedback.study_time_achievement)}">
+                    달성률 ${feedback.study_time_achievement.toFixed(1)}%
+                </span>
+            </div>
+            <div class="mb-2">
+                <p class="text-sm font-semibold text-gray-700 mb-1">선생님 코멘트:</p>
+                <p class="text-sm text-gray-600">${feedback.teacher_comment || '작성 안됨'}</p>
+            </div>
+            ${feedback.improvement_notes ? `
+                <div class="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                    <p class="text-sm font-semibold text-yellow-800 mb-1">💡 개선사항:</p>
+                    <p class="text-sm text-gray-700">${feedback.improvement_notes}</p>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+}
+
+// 종합 의견 표시
+function displayComprehensiveOpinion() {
+    const totalDays = new Set(reportData.dailyChecks.map(c => c.date)).size;
+    const totalActual = reportData.dailyChecks.reduce((sum, c) => sum + (c.actual_time || 0), 0);
+    const avgDailyTime = totalDays > 0 ? totalActual / totalDays : 0;
+    const avgAchievement = reportData.feedbacks.length > 0 ?
+        reportData.feedbacks.reduce((sum, f) => sum + f.study_time_achievement, 0) / reportData.feedbacks.length : 0;
+    
+    let opinion = '';
+    
+    if (avgAchievement >= 90) {
+        opinion = '매우 우수한 자기주도학습 성취율을 보이고 있습니다. 꾸준한 학습 태도와 높은 달성률을 유지하고 있어 칭찬할 만합니다.';
+    } else if (avgAchievement >= 70) {
+        opinion = '양호한 학습 태도를 보이고 있습니다. 목표 시간을 대체로 달성하고 있으며, 지속적인 노력이 필요합니다.';
+    } else if (avgAchievement >= 50) {
+        opinion = '학습 시간 관리에 개선이 필요합니다. 계획한 학습 시간을 완전히 달성하지 못하는 경우가 있어 동기부여와 시간 관리 지도가 필요합니다.';
+    } else {
+        opinion = '학습 시간 달성률이 낮은 편입니다. 학습 습관 형성과 지속적인 관심이 필요하며, 개별 상담을 통한 맞춤형 지도가 권장됩니다.';
+    }
+    
+    document.getElementById('comprehensiveOpinion').innerHTML = `
+        <div class="space-y-3">
+            <div>
+                <p class="font-semibold text-gray-800 mb-2">📊 학습 성과 요약</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                    <li>총 학습 일수: ${totalDays}일</li>
+                    <li>일평균 학습시간: ${Math.round(avgDailyTime)}분 (목표: 240분)</li>
+                    <li>평균 달성률: ${avgAchievement.toFixed(1)}%</li>
+                    <li>주간 피드백 횟수: ${reportData.feedbacks.length}회</li>
+                </ul>
+            </div>
+            <div>
+                <p class="font-semibold text-gray-800 mb-2">💭 종합 의견</p>
+                <p class="text-gray-700 leading-relaxed">${opinion}</p>
+            </div>
+            <div>
+                <p class="font-semibold text-gray-800 mb-2">✅ 향후 권장사항</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                    <li>매일 정해진 시간에 학습하는 습관 유지</li>
+                    <li>취약 과목에 대한 집중 학습 시간 확보</li>
+                    <li>주간 피드백을 참고하여 학습 방법 개선</li>
+                    <li>중간고사 대비 체계적인 복습 계획 수립</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// 인쇄
+function printReport() {
+    window.print();
+}
+
+// 차트 초기화
+function initCharts() {
+    // 주별 학습시간 차트
+    const timeCtx = document.getElementById('studyTimeChart').getContext('2d');
+    studyTimeChart = new Chart(timeCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: '계획 시간',
+                    data: [],
+                    borderColor: 'rgb(99, 102, 241)',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: '실제 시간',
+                    data: [],
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '시간 (분)' }
+                }
+            }
+        }
+    });
+    
+    // 과목별 성취도 차트
+    const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+    subjectChart = new Chart(subjectCtx, {
+        type: 'radar',
+        data: {
+            labels: ['국어', '영어', '수학', '과학', '사회'],
+            datasets: [{
+                label: '달성률 (%)',
+                data: [],
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                pointBackgroundColor: 'rgb(99, 102, 241)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 150,
+                    ticks: { stepSize: 30 }
+                }
+            }
+        }
+    });
+}
+
+// 유틸리티 함수들
+function calculateAverageScore(student) {
+    const scores = [
+        student.korean_score || 0,
+        student.english_score || 0,
+        student.math_score || 0,
+        student.science_score || 0,
+        student.social_score || 0
+    ];
+    const validScores = scores.filter(s => s > 0);
+    return validScores.length > 0 ? validScores.reduce((a, b) => a + b, 0) / validScores.length : 0;
+}
+
+function formatWeekLabel(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getMonth()+1}/${date.getDate()}`;
+}
+
+function formatWeekRange(start, end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return `${startDate.getMonth()+1}/${startDate.getDate()} ~ ${endDate.getMonth()+1}/${endDate.getDate()}`;
+}
+
+function getAchievementClass(achievement) {
+    if (achievement >= 90) return 'bg-green-100 text-green-700';
+    if (achievement >= 70) return 'bg-blue-100 text-blue-700';
+    if (achievement >= 50) return 'bg-yellow-100 text-yellow-700';
+    return 'bg-red-100 text-red-700';
+}
+
+let currentPlan = null;
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadStudentList();
+    initAdvancedMaterialsData();
+});
+
+// 학생 목록 로드
+async function loadStudentList() {
+    try {
+        const response = await fetch('tables/students?limit=100');
+        const data = await response.json();
+        
+        // 상위권 학생만 필터링 (평균 80점 이상)
+        const topStudents = data.data.filter(student => {
+            const avgScore = calculateAverageScore(student);
+            return avgScore >= 80;
+        });
+        
+        const select = document.getElementById('studentSelect');
+        const planSelect = document.getElementById('planStudentSelect');
+        
+        select.innerHTML = '<option value="">학생을 선택하세요</option>';
+        planSelect.innerHTML = '<option value="">선택하세요</option>';
+        
+        topStudents.forEach(student => {
+            const avgScore = calculateAverageScore(student);
+            const option = document.createElement('option');
+            option.value = student.id;
+            option.textContent = `${student.name} (${student.grade}학년 ${student.class_num}반) - 평균 ${avgScore.toFixed(1)}점`;
+            select.appendChild(option);
+            
+            const option2 = option.cloneNode(true);
+            planSelect.appendChild(option2);
+        });
+        
+        if (topStudents.length === 0) {
+            select.innerHTML = '<option value="">평균 80점 이상 학생이 없습니다</option>';
+        }
+        
+    } catch (error) {
+        console.error('학생 목록 로드 오류:', error);
+    }
+}
+
+// 평균 성적 계산
+function calculateAverageScore(student) {
+    const scores = [
+        student.korean_score || 0,
+        student.english_score || 0,
+        student.math_score || 0,
+        student.science_score || 0,
+        student.social_score || 0
+    ];
+    const validScores = scores.filter(s => s > 0);
+    return validScores.length > 0 ? validScores.reduce((a, b) => a + b, 0) / validScores.length : 0;
+}
+
+// 선행학습 계획 로드
+async function loadStudentAdvancedPlan() {
+    const studentId = document.getElementById('studentSelect').value;
+    if (!studentId) {
+        hideAllSections();
+        return;
+    }
+    
+    try {
+        // 학생 정보 로드
+        const studentResponse = await fetch(`tables/students/${studentId}`);
+        currentStudent = await studentResponse.json();
+        
+        // 선행학습 계획 로드
+        const planResponse = await fetch('tables/advanced_plans?limit=100');
+        const planData = await planResponse.json();
+        
+        currentPlan = planData.data.find(p => p.student_id === studentId);
+        
+        if (currentPlan) {
+            displayStudentInfo();
+            displayAdvancedTarget();
+            displaySubjectProgress();
+            displayMaterials();
+            displayWeeklyPlan();
+        } else {
+            displayStudentInfo();
+            alert('선행학습 계획이 없습니다. 새로 생성해주세요.');
+        }
+        
+    } catch (error) {
+        console.error('선행학습 계획 로드 오류:', error);
+    }
+}
+
+// 학생 정보 표시
+function displayStudentInfo() {
+    document.getElementById('studentInfoCard').classList.remove('hidden');
+    document.getElementById('studentName').textContent = currentStudent.name;
+    document.getElementById('studentInfo').textContent = 
+        `${currentStudent.grade}학년 ${currentStudent.class_num}반 - 평균 ${calculateAverageScore(currentStudent).toFixed(1)}점`;
+    
+    if (currentPlan) {
+        document.getElementById('advancedProgress').textContent = 
+            (currentPlan.overall_progress || 0).toFixed(0) + '%';
+    }
+}
+
+// 선행 목표 표시
+function displayAdvancedTarget() {
+    document.getElementById('advancedTargetCard').classList.remove('hidden');
+    
+    const rangeText = currentPlan.target_range === 'next_semester' ? 
+        '다음 학기' : '고등학교 1학년 1학기';
+    
+    document.getElementById('targetRange').textContent = rangeText;
+    document.getElementById('targetProgress').textContent = currentPlan.target_progress + '%';
+    document.getElementById('targetDuration').textContent = currentPlan.duration + '주';
+}
+
+// 과목별 진도 표시
+function displaySubjectProgress() {
+    document.getElementById('subjectProgressSection').classList.remove('hidden');
+    
+    const subjects = JSON.parse(currentPlan.subjects || '[]');
+    const container = document.getElementById('subjectProgressContainer');
+    
+    container.innerHTML = subjects.map(subject => {
+        const progress = currentPlan[`${subject}_progress`] || 0;
+        const color = getSubjectColor(subject);
+        
+        return `
+            <div class="border rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="font-semibold text-lg">${subject}</h4>
+                    <span class="text-${color}-600 font-bold">${progress}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="bg-${color}-500 h-3 rounded-full transition-all" style="width: ${progress}%"></div>
+                </div>
+                <div class="mt-2 text-sm text-gray-600">
+                    목표: ${currentPlan.target_progress}% | 
+                    ${progress >= currentPlan.target_progress ? '✓ 달성' : `${currentPlan.target_progress - progress}% 남음`}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// 추천 교재 표시
+function displayMaterials() {
+    document.getElementById('materialsSection').classList.remove('hidden');
+    
+    const targetRange = currentPlan.target_range;
+    const subjects = JSON.parse(currentPlan.subjects || '[]');
+    
+    const materials = getRecommendedMaterials(targetRange, subjects);
+    
+    const container = document.getElementById('materialsContainer');
+    container.innerHTML = materials.map(material => {
+        const typeIcon = material.type === 'EBS강의' ? 
+            '<i class="fas fa-video text-red-500"></i>' : 
+            '<i class="fas fa-book text-blue-500"></i>';
+        
+        return `
+            <div class="border rounded-lg p-6 hover:shadow-lg transition">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-2">
+                            ${typeIcon}
+                            <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded-full">${material.subject}</span>
+                        </div>
+                        <h4 class="font-bold text-lg">${material.title}</h4>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4">${material.description}</p>
+                <div class="space-y-2 mb-4">
+                    <div class="text-sm"><strong>대상:</strong> ${material.target}</div>
+                    <div class="text-sm"><strong>특징:</strong> ${material.features}</div>
+                    ${material.chapters ? `<div class="text-sm"><strong>주요 단원:</strong> ${material.chapters}</div>` : ''}
+                </div>
+                ${material.url ? `
+                    <a href="${material.url}" target="_blank" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm">
+                        <i class="fas fa-external-link-alt mr-2"></i>바로가기
+                    </a>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+// 주간 계획 표시
+async function displayWeeklyPlan() {
+    document.getElementById('weeklyPlanSection').classList.remove('hidden');
+    
+    try {
+        const response = await fetch('tables/advanced_weekly_plans?limit=100');
+        const data = await response.json();
+        
+        const plans = data.data
+            .filter(p => p.plan_id === currentPlan.id)
+            .sort((a, b) => a.week_number - b.week_number);
+        
+        const container = document.getElementById('weeklyPlanContainer');
+        
+        if (plans.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-calendar-plus text-4xl mb-4"></i>
+                    <p>아직 주간 계획이 없습니다. 계획을 추가해주세요.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = plans.map(plan => {
+            const completed = plan.completed || false;
+            const statusColor = completed ? 'green' : 'gray';
+            const statusIcon = completed ? 'fa-check-circle' : 'fa-circle';
+            
+            return `
+                <div class="border rounded-lg p-4 ${completed ? 'bg-green-50' : 'bg-white'}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <i class="fas ${statusIcon} text-${statusColor}-600"></i>
+                                <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded-full">${plan.subject}</span>
+                                <span class="font-semibold">${plan.week_number}주차</span>
+                            </div>
+                            <h4 class="font-bold mb-1">${plan.chapter}</h4>
+                            <p class="text-sm text-gray-600 mb-2">${plan.content}</p>
+                            <div class="text-xs text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>예상 시간: ${plan.estimated_hours}시간
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            ${!completed ? `
+                                <button onclick="completeWeeklyPlan('${plan.id}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
+                                    완료 체크
+                                </button>
+                            ` : `
+                                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold text-sm">
+                                    ✓ 완료
+                                </span>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('주간 계획 로드 오류:', error);
+    }
+}
+
+// 선행학습 계획 생성
+async function createAdvancedPlan() {
+    const studentId = document.getElementById('planStudentSelect').value;
+    const range = document.getElementById('planRange').value;
+    const targetProgress = parseInt(document.getElementById('planTargetProgress').value);
+    const duration = parseInt(document.getElementById('planDuration').value);
+    
+    const subjects = Array.from(document.querySelectorAll('.subject-check:checked'))
+        .map(cb => cb.value);
+    
+    if (!studentId || subjects.length === 0) {
+        alert('학생과 과목을 선택해주세요.');
+        return;
+    }
+    
+    try {
+        const plan = {
+            student_id: studentId,
+            target_range: range,
+            target_progress: targetProgress,
+            duration: duration,
+            subjects: JSON.stringify(subjects),
+            overall_progress: 0,
+            created_date: new Date().toISOString().split('T')[0]
+        };
+        
+        // 과목별 진도율 초기화
+        subjects.forEach(subject => {
+            plan[`${subject}_progress`] = 0;
+        });
+        
+        const response = await fetch('tables/advanced_plans', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(plan)
+        });
+        
+        if (response.ok) {
+            alert('선행학습 계획이 생성되었습니다!');
+            closeCreatePlanModal();
+            document.getElementById('studentSelect').value = studentId;
+            await loadStudentAdvancedPlan();
+        }
+        
+    } catch (error) {
+        console.error('계획 생성 오류:', error);
+        alert('계획 생성에 실패했습니다.');
+    }
+}
+
+// 주간 계획 추가
+async function addWeeklyPlan() {
+    if (!currentPlan) {
+        alert('선행학습 계획을 먼저 생성해주세요.');
+        return;
+    }
+    
+    const subject = document.getElementById('weeklySubject').value;
+    const chapter = document.getElementById('weeklyChapter').value;
+    const content = document.getElementById('weeklyContent').value;
+    const hours = parseInt(document.getElementById('weeklyHours').value);
+    
+    if (!chapter || !content) {
+        alert('모든 항목을 입력해주세요.');
+        return;
+    }
+    
+    try {
+        // 현재 주차 번호 계산
+        const plansResponse = await fetch('tables/advanced_weekly_plans?limit=100');
+        const plansData = await plansResponse.json();
+        const existingPlans = plansData.data.filter(p => p.plan_id === currentPlan.id);
+        const weekNumber = existingPlans.length + 1;
+        
+        const weeklyPlan = {
+            plan_id: currentPlan.id,
+            student_id: currentStudent.id,
+            week_number: weekNumber,
+            subject: subject,
+            chapter: chapter,
+            content: content,
+            estimated_hours: hours,
+            completed: false
+        };
+        
+        const response = await fetch('tables/advanced_weekly_plans', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(weeklyPlan)
+        });
+        
+        if (response.ok) {
+            alert('주간 계획이 추가되었습니다!');
+            closeAddWeeklyPlanModal();
+            await displayWeeklyPlan();
+        }
+        
+    } catch (error) {
+        console.error('주간 계획 추가 오류:', error);
+        alert('주간 계획 추가에 실패했습니다.');
+    }
+}
+
+// 주간 계획 완료 체크
+async function completeWeeklyPlan(planId) {
+    try {
+        const response = await fetch(`tables/advanced_weekly_plans/${planId}`);
+        const plan = await response.json();
+        
+        plan.completed = true;
+        plan.completed_date = new Date().toISOString().split('T')[0];
+        
+        const updateResponse = await fetch(`tables/advanced_weekly_plans/${planId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(plan)
+        });
+        
+        if (updateResponse.ok) {
+            // 과목별 진도율 업데이트
+            await updateSubjectProgress(plan.subject);
+            await displayWeeklyPlan();
+            await displaySubjectProgress();
+        }
+        
+    } catch (error) {
+        console.error('완료 체크 오류:', error);
+    }
+}
+
+// 과목별 진도율 업데이트
+async function updateSubjectProgress(subject) {
+    try {
+        // 해당 과목의 전체 계획과 완료된 계획 계산
+        const response = await fetch('tables/advanced_weekly_plans?limit=100');
+        const data = await response.json();
+        
+        const subjectPlans = data.data.filter(p => 
+            p.plan_id === currentPlan.id && p.subject === subject
+        );
+        const completedPlans = subjectPlans.filter(p => p.completed);
+        
+        const progress = subjectPlans.length > 0 ? 
+            (completedPlans.length / subjectPlans.length * 100).toFixed(0) : 0;
+        
+        // 전체 계획 업데이트
+        currentPlan[`${subject}_progress`] = parseInt(progress);
+        
+        // 전체 진도율 계산
+        const subjects = JSON.parse(currentPlan.subjects || '[]');
+        let totalProgress = 0;
+        subjects.forEach(s => {
+            totalProgress += currentPlan[`${s}_progress`] || 0;
+        });
+        currentPlan.overall_progress = (totalProgress / subjects.length).toFixed(0);
+        
+        await fetch(`tables/advanced_plans/${currentPlan.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(currentPlan)
+        });
+        
+        displayStudentInfo();
+        
+    } catch (error) {
+        console.error('진도율 업데이트 오류:', error);
+    }
+}
+
+// 모달 열기/닫기
+function openCreatePlanModal() {
+    document.getElementById('createPlanModal').classList.remove('hidden');
+}
+
+function closeCreatePlanModal() {
+    document.getElementById('createPlanModal').classList.add('hidden');
+}
+
+function openAddWeeklyPlanModal() {
+    if (!currentPlan) {
+        alert('선행학습 계획을 먼저 선택해주세요.');
+        return;
+    }
+    document.getElementById('addWeeklyPlanModal').classList.remove('hidden');
+}
+
+function closeAddWeeklyPlanModal() {
+    document.getElementById('addWeeklyPlanModal').classList.add('hidden');
+}
+
+// 모든 섹션 숨기기
+function hideAllSections() {
+    document.getElementById('studentInfoCard').classList.add('hidden');
+    document.getElementById('advancedTargetCard').classList.add('hidden');
+    document.getElementById('subjectProgressSection').classList.add('hidden');
+    document.getElementById('materialsSection').classList.add('hidden');
+    document.getElementById('weeklyPlanSection').classList.add('hidden');
+}
+
+// 과목 색상
+function getSubjectColor(subject) {
+    const colors = {
+        '수학': 'green',
+        '영어': 'blue',
+        '과학': 'purple',
+        '국어': 'red',
+        '사회': 'orange'
+    };
+    return colors[subject] || 'gray';
+}
+
+// 추천 교재 데이터 (선행학습용)
+function getRecommendedMaterials(targetRange, subjects) {
+    const materials = {
+        'next_semester': {
+            '수학': [
+                {
+                    type: '교재',
+                    subject: '수학',
+                    title: '신사고 쎈 수학 (다음 학기)',
+                    description: '개념부터 심화까지 단계별 학습',
+                    target: '중등 선행학습',
+                    features: '개념 정리, 유형별 문제, 심화 문제',
+                    chapters: '다항식, 방정식, 부등식, 함수'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '수학',
+                    title: 'EBS 중학 수학 선행 강의',
+                    description: '다음 학기 수학 개념 완벽 정리',
+                    target: '중등 선행학습',
+                    features: '개념 강의, 문제 풀이, 핵심 정리',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ],
+            '영어': [
+                {
+                    type: '교재',
+                    subject: '영어',
+                    title: '능률 보카 어원편',
+                    description: '어근으로 배우는 고급 어휘',
+                    target: '중등 선행학습',
+                    features: '어원 학습, 문맥 활용, 연습 문제',
+                    chapters: '접두사, 어근, 접미사'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '영어',
+                    title: 'EBS 중학 영어 독해',
+                    description: '다음 학기 독해 실력 향상',
+                    target: '중등 선행학습',
+                    features: '독해 전략, 지문 분석, 문제 풀이',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ],
+            '과학': [
+                {
+                    type: '교재',
+                    subject: '과학',
+                    title: '완자 과학 (다음 학기)',
+                    description: '탐구 중심 과학 학습서',
+                    target: '중등 선행학습',
+                    features: '개념 정리, 실험 이해, 서술형 대비',
+                    chapters: '화학 반응, 전기, 운동과 에너지'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '과학',
+                    title: 'EBS 중학 과학 개념',
+                    description: '과학 개념 완벽 마스터',
+                    target: '중등 선행학습',
+                    features: '개념 강의, 실험 영상, 문제 풀이',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ]
+        },
+        'high_1_1': {
+            '수학': [
+                {
+                    type: '교재',
+                    subject: '수학',
+                    title: '수학의 정석 (고등 수학 상)',
+                    description: '고등 수학의 기본서',
+                    target: '고1 선행학습',
+                    features: '체계적 개념, 단계별 문제, 심화 학습',
+                    chapters: '다항식, 방정식과 부등식, 도형의 방정식'
+                },
+                {
+                    type: '교재',
+                    subject: '수학',
+                    title: '개념원리 고등 수학 상',
+                    description: '쉬운 설명의 개념서',
+                    target: '고1 선행학습',
+                    features: '친절한 설명, 개념 정리, 기본 문제',
+                    chapters: '다항식의 연산, 방정식, 부등식, 도형'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '수학',
+                    title: 'EBS 고1 수학 개념 완성',
+                    description: '고등 수학의 기초를 다지는 강의',
+                    target: '고1 선행학습',
+                    features: '개념 강의, 문제 풀이, 심화 학습',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ],
+            '영어': [
+                {
+                    type: '교재',
+                    subject: '영어',
+                    title: '수능 어법 기본서',
+                    description: '고등 영어 어법의 기초',
+                    target: '고1 선행학습',
+                    features: '필수 어법 정리, 예문 분석, 연습 문제',
+                    chapters: '문장 구조, 동사, 준동사, 관계사'
+                },
+                {
+                    type: '교재',
+                    subject: '영어',
+                    title: '영어 독해 기본서',
+                    description: '고등 독해의 시작',
+                    target: '고1 선행학습',
+                    features: '독해 전략, 지문 분석, 어휘 학습',
+                    chapters: '주제 찾기, 요지 파악, 추론'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '영어',
+                    title: 'EBS 고1 영어 듣기',
+                    description: '고등 영어 듣기 완벽 대비',
+                    target: '고1 선행학습',
+                    features: '듣기 전략, 유형별 학습, 실전 문제',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ],
+            '과학': [
+                {
+                    type: '교재',
+                    subject: '과학',
+                    title: '완자 통합과학',
+                    description: '고1 통합과학의 정석',
+                    target: '고1 선행학습',
+                    features: '개념 정리, 탐구 활동, 서술형 대비',
+                    chapters: '물질과 규칙성, 시스템과 상호작용, 변화와 다양성'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '과학',
+                    title: 'EBS 통합과학 개념 완성',
+                    description: '고1 과학의 시작',
+                    target: '고1 선행학습',
+                    features: '개념 강의, 실험 이해, 문제 풀이',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ],
+            '국어': [
+                {
+                    type: '교재',
+                    subject: '국어',
+                    title: '고등 국어 문학 기본서',
+                    description: '문학 개념과 작품 분석',
+                    target: '고1 선행학습',
+                    features: '갈래별 정리, 작품 분석, 문제 풀이',
+                    chapters: '시, 소설, 수필, 극'
+                },
+                {
+                    type: 'EBS강의',
+                    subject: '국어',
+                    title: 'EBS 고1 국어 독서',
+                    description: '독서 영역 완벽 대비',
+                    target: '고1 선행학습',
+                    features: '독해 전략, 지문 분석, 문제 풀이',
+                    url: 'https://www.ebs.co.kr'
+                }
+            ]
+        }
+    };
+    
+    const result = [];
+    subjects.forEach(subject => {
+        if (materials[targetRange] && materials[targetRange][subject]) {
+            result.push(...materials[targetRange][subject]);
+        }
+    });
+    
+    return result;
+}
+
+// 초기 선행학습 교재 데이터 생성
+async function initAdvancedMaterialsData() {
+    // 이미 데이터가 있는지 확인
+    try {
+        const response = await fetch('tables/advanced_materials?limit=1');
+        const data = await response.json();
+        
+        if (data.data && data.data.length > 0) {
+            return; // 이미 데이터가 있으면 종료
+        }
+    } catch (error) {
+        // 테이블이 없을 수 있으므로 계속 진행
+    }
+}
+
+let currentStudent = null;
+let currentSchedule = null;
+
+// 평일/주말 학습 시간 (분 단위)
+const WEEKDAY_HOURS = 4; // 평일 4시간
+const WEEKEND_HOURS = 6; // 주말 6시간
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadStudentList();
+});
+
+// 학생 목록 로드
+async function loadStudentList() {
+    try {
+        const response = await fetch('tables/students?limit=100');
+        const data = await response.json();
+        
+        const select = document.getElementById('studentSelect');
+        select.innerHTML = '<option value="">학생을 선택하세요</option>';
+        
+        data.data.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.id;
+            option.textContent = `${student.name} (${student.grade}학년 ${student.class_num}반)`;
+            select.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('학생 목록 로드 오류:', error);
+    }
+}
+
+// 주간 스케줄 로드
+async function loadWeeklySchedule() {
+    const studentId = document.getElementById('studentSelect').value;
+    if (!studentId) {
+        hideSchedule();
+        return;
+    }
+    
+    try {
+        // 학생 정보 로드
+        const studentResponse = await fetch(`tables/students/${studentId}`);
+        currentStudent = await studentResponse.json();
+        
+        // 스케줄 로드
+        const scheduleResponse = await fetch('tables/weekly_schedules?limit=100');
+        const scheduleData = await scheduleResponse.json();
+        
+        currentSchedule = scheduleData.data.find(s => s.student_id === studentId);
+        
+        if (currentSchedule) {
+            displaySchedule();
+        } else {
+            // 스케줄이 없으면 자동 생성 제안
+            if (confirm('이 학생의 주간 스케줄이 없습니다. 자동으로 생성하시겠습니까?')) {
+                await generateAutoSchedule();
+            }
+        }
+        
+        showSchedule();
+        
+    } catch (error) {
+        console.error('스케줄 로드 오류:', error);
+    }
+}
+
+// 자동 스케줄 생성
+async function generateAutoSchedule() {
+    const studentId = document.getElementById('studentSelect').value;
+    if (!studentId) {
+        alert('학생을 먼저 선택해주세요.');
+        return;
+    }
+    
+    if (!currentStudent) {
+        const studentResponse = await fetch(`tables/students/${studentId}`);
+        currentStudent = await studentResponse.json();
+    }
+    
+    try {
+        // 이번 주 학교 수업 로드
+        const lessonsResponse = await fetch('tables/school_lessons?limit=100');
+        const lessonsData = await lessonsResponse.json();
+        
+        const thisWeekLessons = lessonsData.data.filter(l => 
+            l.grade === currentStudent.grade
+        );
+        
+        // 평일 스케줄 생성 (학교 수업 복습 + 주요 과목)
+        const weekdaySchedule = generateWeekdaySchedule(thisWeekLessons);
+        
+        // 주말 스케줄 생성 (주간 복습 + 문제풀이)
+        const weekendSchedule = generateWeekendSchedule();
+        
+        // 스케줄 데이터 준비
+        const scheduleData = {
+            student_id: studentId,
+            student_name: currentStudent.name,
+            student_grade: currentStudent.grade,
+            monday: JSON.stringify(weekdaySchedule.monday),
+            tuesday: JSON.stringify(weekdaySchedule.tuesday),
+            wednesday: JSON.stringify(weekdaySchedule.wednesday),
+            thursday: JSON.stringify(weekdaySchedule.thursday),
+            friday: JSON.stringify(weekdaySchedule.friday),
+            saturday: JSON.stringify(weekendSchedule.saturday),
+            sunday: JSON.stringify(weekendSchedule.sunday),
+            created_date: new Date().toISOString().split('T')[0]
+        };
+        
+        // 기존 스케줄이 있으면 업데이트, 없으면 새로 생성
+        let response;
+        if (currentSchedule) {
+            response = await fetch(`tables/weekly_schedules/${currentSchedule.id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({...currentSchedule, ...scheduleData})
+            });
+        } else {
+            response = await fetch('tables/weekly_schedules', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(scheduleData)
+            });
+        }
+        
+        if (response.ok) {
+            alert('주간 스케줄이 자동으로 생성되었습니다!');
+            await loadWeeklySchedule();
+        }
+        
+    } catch (error) {
+        console.error('스케줄 생성 오류:', error);
+        alert('스케줄 생성에 실패했습니다.');
+    }
+}
+
+// 평일 스케줄 생성 (4시간 = 240분)
+function generateWeekdaySchedule(lessons) {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    const schedule = {};
+    
+    days.forEach((day, index) => {
+        schedule[day] = [
+            {
+                time: '15:00-16:00',
+                duration: 60,
+                type: '학교수업 복습',
+                subject: '오늘 배운 내용',
+                content: '오늘 학교에서 배운 주요 과목 복습 (노트 정리, 이해 안 되는 부분 체크)',
+                importance: '높음'
+            },
+            {
+                time: '16:00-17:30',
+                duration: 90,
+                type: '주요과목 학습',
+                subject: getMainSubject(index),
+                content: '교재 개념 학습 및 기본 문제 풀이',
+                importance: '높음'
+            },
+            {
+                time: '17:30-18:00',
+                duration: 30,
+                type: '휴식',
+                subject: '저녁 식사',
+                content: '충분한 휴식과 식사',
+                importance: '보통'
+            },
+            {
+                time: '18:00-19:30',
+                duration: 90,
+                type: '주요과목 학습',
+                subject: getSecondarySubject(index),
+                content: '교재 문제 풀이 및 오답 정리',
+                importance: '높음'
+            }
+        ];
+    });
+    
+    return schedule;
+}
+
+// 주말 스케줄 생성 (6시간 = 360분)
+function generateWeekendSchedule() {
+    return {
+        saturday: [
+            {
+                time: '09:00-10:30',
+                duration: 90,
+                type: '주간 총복습',
+                subject: '국어+영어',
+                content: '이번 주 배운 국어, 영어 내용 전체 복습 및 핵심 정리',
+                importance: '높음'
+            },
+            {
+                time: '10:30-12:00',
+                duration: 90,
+                type: '주간 총복습',
+                subject: '수학',
+                content: '이번 주 배운 수학 내용 전체 복습 및 개념 재정리',
+                importance: '높음'
+            },
+            {
+                time: '12:00-13:00',
+                duration: 60,
+                type: '휴식',
+                subject: '점심 식사',
+                content: '충분한 휴식과 식사',
+                importance: '보통'
+            },
+            {
+                time: '13:00-15:00',
+                duration: 120,
+                type: '문제풀이',
+                subject: '수학 단원 문제',
+                content: '이번 주 배운 단원의 종합 문제 풀이 (교재, 문제집)',
+                importance: '높음'
+            },
+            {
+                time: '15:00-16:00',
+                duration: 60,
+                type: '오답정리',
+                subject: '주간 오답',
+                content: '이번 주 틀린 문제 다시 풀기 및 개념 보완',
+                importance: '높음'
+            }
+        ],
+        sunday: [
+            {
+                time: '09:00-10:30',
+                duration: 90,
+                type: '주간 총복습',
+                subject: '과학+사회',
+                content: '이번 주 배운 과학, 사회 내용 전체 복습 및 핵심 정리',
+                importance: '높음'
+            },
+            {
+                time: '10:30-12:00',
+                duration: 90,
+                type: '문제풀이',
+                subject: '영어 단원 문제',
+                content: '이번 주 배운 영어 단원의 종합 문제 풀이 (독해, 문법)',
+                importance: '높음'
+            },
+            {
+                time: '12:00-13:00',
+                duration: 60,
+                type: '휴식',
+                subject: '점심 식사',
+                content: '충분한 휴식과 식사',
+                importance: '보통'
+            },
+            {
+                time: '13:00-15:00',
+                duration: 120,
+                type: '문제풀이',
+                subject: '과학+사회 단원 문제',
+                content: '이번 주 배운 과학, 사회 단원의 종합 문제 풀이',
+                importance: '높음'
+            },
+            {
+                time: '15:00-16:00',
+                duration: 60,
+                type: '다음 주 예습',
+                subject: '다음 주 준비',
+                content: '다음 주에 배울 내용 미리 읽어보기 및 계획 수립',
+                importance: '보통'
+            }
+        ]
+    };
+}
+
+// 요일별 주요 과목 (순환)
+function getMainSubject(dayIndex) {
+    const subjects = ['수학', '영어', '수학', '영어', '수학'];
+    return subjects[dayIndex];
+}
+
+// 요일별 보조 과목 (순환)
+function getSecondarySubject(dayIndex) {
+    const subjects = ['국어', '과학', '국어', '사회', '과학'];
+    return subjects[dayIndex];
+}
+
+// 스케줄 표시
+function displaySchedule() {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+    days.forEach(day => {
+        const scheduleData = JSON.parse(currentSchedule[day] || '[]');
+        const container = document.getElementById(`${day}Schedule`);
+        
+        if (scheduleData.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 text-sm">스케줄이 없습니다.</p>';
+            return;
+        }
+        
+        container.innerHTML = scheduleData.map((item, index) => {
+            const typeColor = getTypeColor(item.type);
+            const totalMinutes = item.duration;
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            const durationText = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
+            
+            return `
+                <div class="bg-white rounded-lg p-4 border-l-4 border-${typeColor}-500 hover:shadow-md transition">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <span class="px-2 py-1 text-xs bg-${typeColor}-100 text-${typeColor}-700 rounded-full font-semibold">
+                                    ${item.type}
+                                </span>
+                                <span class="text-sm text-gray-600">${item.time}</span>
+                                <span class="text-sm font-semibold text-gray-700">${durationText}</span>
+                            </div>
+                            <h4 class="font-bold text-lg text-gray-900 mb-1">${item.subject}</h4>
+                            <p class="text-sm text-gray-600">${item.content}</p>
+                        </div>
+                        <div>
+                            ${item.importance === '높음' ? 
+                                '<span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">중요</span>' : 
+                                '<span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">보통</span>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    });
+}
+
+// 유형별 색상
+function getTypeColor(type) {
+    const colors = {
+        '학교수업 복습': 'blue',
+        '주요과목 학습': 'green',
+        '주간 총복습': 'purple',
+        '문제풀이': 'red',
+        '오답정리': 'orange',
+        '휴식': 'gray',
+        '다음 주 예습': 'indigo'
+    };
+    return colors[type] || 'gray';
+}
+
+// 스케줄 표시/숨김
+function showSchedule() {
+    document.getElementById('timeGuideCard').classList.remove('hidden');
+    document.getElementById('scheduleSection').classList.remove('hidden');
+}
+
+function hideSchedule() {
+    document.getElementById('timeGuideCard').classList.add('hidden');
+    document.getElementById('scheduleSection').classList.add('hidden');
+}
+
+// 요일별 스케줄 수정 (추후 구현)
+function editDaySchedule(day) {
+    alert(`${getDayKorean(day)} 스케줄 수정 기능은 곧 추가됩니다.`);
+}
+
+// 영어 요일 → 한글
+function getDayKorean(day) {
+    const days = {
+        'monday': '월요일',
+        'tuesday': '화요일',
+        'wednesday': '수요일',
+        'thursday': '목요일',
+        'friday': '금요일',
+        'saturday': '토요일',
+        'sunday': '일요일'
+    };
+    return days[day] || day;
+}
+// 주말 5시간 (300분)
+const WEEKDAY_MINUTES = 210;
+const WEEKEND_MINUTES = 300;
+
+// 📚 하루 3과목 학습 시스템
+const SUBJECTS_PER_DAY = 3;// 학교 선택 페이지 스크립트
+
+let schools = [];
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadSchools();
+    
+    // 폼 제출 이벤트
+    document.getElementById('addSchoolForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        addSchool();
+    });
+});
+
+// 학교 목록 로드
+async function loadSchools() {
+    try {
+        const response = await fetch('tables/schools?limit=100');
+        const data = await response.json();
+        
+        schools = data.data || [];
+        displaySchools();
+        
+    } catch (error) {
+        console.error('학교 목록 로드 오류:', error);
+    }
+}
+
+// 학교 목록 표시
+function displaySchools() {
+    const grid = document.getElementById('schoolsGrid');
+    const empty = document.getElementById('emptySchools');
+    
+    if (schools.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+    }
+    
+    grid.style.display = 'grid';
+    empty.style.display = 'none';
+    
+    grid.innerHTML = schools.map(school => `
+        <div class="glass-effect rounded-2xl shadow-xl p-6 school-card" onclick="selectSchool('${school.id}')">
+            <!-- 학교 아이콘 -->
+            <div class="w-16 h-16 bg-gradient-to-br ${getSchoolGradient(school.school_type)} rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fas ${school.school_type === '중학교' ? 'fa-school' : 'fa-graduation-cap'} text-white text-3xl"></i>
+            </div>
+            
+            <!-- 학교 정보 -->
+            <h3 class="text-xl font-bold text-gray-800 mb-2">${school.school_name}</h3>
+            
+            <div class="space-y-2 text-sm text-gray-600 mb-4">
+                <div class="flex items-center">
+                    <i class="fas fa-map-marker-alt w-5 text-purple-600"></i>
+                    <span>${school.location}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-user-tie w-5 text-indigo-600"></i>
+                    <span>${school.contact_teacher || '담당자 미정'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-calendar w-5 text-blue-600"></i>
+                    <span>${school.start_date ? formatDate(school.start_date) : '일정 미정'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-users w-5 text-green-600"></i>
+                    <span>${school.student_count || 0}명</span>
+                </div>
+            </div>
+            
+            <!-- 상태 배지 -->
+            <div class="flex items-center justify-between">
+                ${school.active !== false ? `
+                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                        <i class="fas fa-check-circle mr-1"></i>운영중
+                    </span>
+                ` : `
+                    <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
+                        <i class="fas fa-pause-circle mr-1"></i>중단
+                    </span>
+                `}
+                
+                <button onclick="editSchool('${school.id}'); event.stopPropagation();" 
+                    class="text-gray-500 hover:text-purple-600 transition">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 학교 선택
+function selectSchool(schoolId) {
+    // 선택한 학교 ID를 로컬 스토리지에 저장
+    localStorage.setItem('selected_school_id', schoolId);
+    
+    const school = schools.find(s => s.id === schoolId);
+    
+    // 성공 메시지 표시
+    showSuccessMessage(`${school.school_name}를 선택했습니다!`);
+    
+    // 대시보드로 이동
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1000);
+}
+
+// 학교 추가 모달 열기
+function showAddSchoolModal() {
+    document.getElementById('addSchoolModal').classList.remove('hidden');
+    
+    // 오늘 날짜를 기본값으로 설정
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('startDate').value = today;
+}
+
+// 학교 추가 모달 닫기
+function closeAddSchoolModal() {
+    document.getElementById('addSchoolModal').classList.add('hidden');
+    document.getElementById('addSchoolForm').reset();
+}
+
+// 학교 추가
+async function addSchool() {
+    const schoolName = document.getElementById('schoolName').value.trim();
+    const schoolType = document.getElementById('schoolType').value;
+    const location = document.getElementById('location').value.trim();
+    const contactTeacher = document.getElementById('contactTeacher').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const startDate = document.getElementById('startDate').value;
+    
+    if (!schoolName || !schoolType || !location || !startDate) {
+        alert('필수 항목을 모두 입력해주세요.');
+        return;
+    }
+    
+    try {
+        const schoolData = {
+            school_name: schoolName,
+            school_type: schoolType,
+            location: location,
+            contact_teacher: contactTeacher,
+            phone: phone,
+            start_date: startDate,
+            student_count: 0,
+            active: true
+        };
+        
+        const response = await fetch('tables/schools', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(schoolData)
+        });
+        
+        if (response.ok) {
+            showSuccessMessage('✅ 학교가 성공적으로 등록되었습니다!');
+            closeAddSchoolModal();
+            await loadSchools();
+        }
+    } catch (error) {
+        console.error('학교 추가 오류:', error);
+        alert('학교 등록에 실패했습니다.');
+    }
+}
+
+// 학교 편집
+function editSchool(schoolId) {
+    // TODO: 편집 기능 구현
+    alert('편집 기능은 곧 추가될 예정입니다.');
+}
+
+// 유틸리티 함수들
+function getSchoolGradient(type) {
+    return type === '중학교' 
+        ? 'from-blue-500 to-cyan-600' 
+        : 'from-purple-500 to-pink-600';
+}
+
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function showSuccessMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+    messageDiv.innerHTML = `
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-check-circle text-xl"></i>
+            <span class="font-semibold">${message}</span>
+        </div>
+    `;
+    document.body.appendChild(messageDiv);
+    
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 3000);
+}
+
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    loadStudentList();
+});
+
+// 학생 목록 로드 (이름으로 검색 가능)
+async function loadStudentList() {
+    try {
+        const response = await fetch('tables/students?limit=100');
+        const data = await response.json();
+        
+        // 전역 변수로 저장
+        window.allStudents = data.data;
+        
+    } catch (error) {
+        console.error('학생 목록 로드 오류:', error);
+    }
+}
+
+// 주간 스케줄 로드 (이름으로 검색)
+async function loadWeeklySchedule() {
+    const studentName = document.getElementById('studentSelect').value.trim();
+    if (!studentName) {
+        hideSchedule();
+        return;
+    }
+    
+    try {
+        // 학생 이름으로 검색
+        const studentResponse = await fetch('tables/students?limit=100');
+        const studentData = await studentResponse.json();
+        
+        currentStudent = studentData.data.find(s => s.name === studentName);
+        
+        if (!currentStudent) {
+            alert('해당 이름의 학생을 찾을 수 없습니다.');
+            return;
+        }
+        
+        // 스케줄 로드
+        const scheduleResponse = await fetch('tables/weekly_schedules?limit=100');
+        const scheduleData = await scheduleResponse.json();
+        
+        currentSchedule = scheduleData.data.find(s => s.student_id === currentStudent.id);
+        
+        if (currentSchedule) {
+            displaySchedule();
+        } else {
+            // 스케줄이 없으면 자동 생성 제안
+            if (confirm('이 학생의 주간 스케줄이 없습니다. 자동으로 생성하시겠습니까?')) {
+                await generateAutoSchedule();
+            }
+        }
+        
+        showSchedule();
+        
+    } catch (error) {
+        console.error('스케줄 로드 오류:', error);
+    }
+}
+
+// 🎯 자동 스케줄 생성 (3과목/일, 210분 평일, 300분 주말)
+async function generateAutoSchedule() {
+    const studentName = document.getElementById('studentSelect').value.trim();
+    if (!studentName) {
+        alert('학생 이름을 먼저 입력해주세요.');
+        return;
+    }
+    
+    if (!currentStudent) {
+        const studentResponse = await fetch('tables/students?limit=100');
+        const studentData = await studentResponse.json();
+        currentStudent = studentData.data.find(s => s.name === studentName);
+        
+        if (!currentStudent) {
+            alert('해당 이름의 학생을 찾을 수 없습니다.');
+            return;
+        }
+    }
+    
+    try {
+        // 평일 스케줄 생성 (3.5시간 = 210분, 3과목)
+        const weekdaySchedule = generateWeekdaySchedule();
+        
+        // 주말 스케줄 생성 (5시간 = 300분, 3과목)
+        const weekendSchedule = generateWeekendSchedule();
+        
+        // 스케줄 데이터 준비
+        const scheduleData = {
+            student_id: currentStudent.id,
+            student_name: currentStudent.name,
+            student_grade: currentStudent.grade,
+            monday: JSON.stringify(weekdaySchedule.monday),
+            tuesday: JSON.stringify(weekdaySchedule.tuesday),
+            wednesday: JSON.stringify(weekdaySchedule.wednesday),
+            thursday: JSON.stringify(weekdaySchedule.thursday),
+            friday: JSON.stringify(weekdaySchedule.friday),
+            saturday: JSON.stringify(weekendSchedule.saturday),
+            sunday: JSON.stringify(weekendSchedule.sunday),
+            created_date: new Date().toISOString().split('T')[0]
+        };
+        
+        // 기존 스케줄이 있으면 업데이트, 없으면 새로 생성
+        let response;
+        if (currentSchedule) {
+            response = await fetch(`tables/weekly_schedules/${currentSchedule.id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({...currentSchedule, ...scheduleData})
+            });
+        } else {
+            response = await fetch('tables/weekly_schedules', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(scheduleData)
+            });
+        }
+        
+        if (response.ok) {
+            alert('✅ 주간 스케줄이 자동으로 생성되었습니다!\n\n평일: 3.5시간 (3과목)\n주말: 5시간 (3과목)\n주간 총 학습 시간: 25시간');
+            await loadWeeklySchedule();
+        }
+        
+    } catch (error) {
+        console.error('스케줄 생성 오류:', error);
+        alert('스케줄 생성에 실패했습니다.');
+    }
+}
+
+// 📅 평일 스케줄 생성 (3.5시간 = 210분, 3과목)
+function generateWeekdaySchedule() {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    const schedule = {};
+    
+    // 과목 순환 (3과목/일)
+    const subjectRotation = [
+        ['수학', '영어', '국어'],   // 월: 수학 70분, 영어 70분, 국어 70분
+        ['수학', '과학', '영어'],   // 화: 수학 70분, 과학 70분, 영어 70분
+        ['수학', '영어', '사회'],   // 수: 수학 70분, 영어 70분, 사회 70분
+        ['수학', '국어', '과학'],   // 목: 수학 70분, 국어 70분, 과학 70분
+        ['수학', '영어', '복습']    // 금: 수학 70분, 영어 70분, 주간복습 70분
+    ];
+    
+    days.forEach((day, index) => {
+        const subjects = subjectRotation[index];
+        
+        schedule[day] = [
+            {
+                time: '15:00-16:10',
+                duration: 70,
+                type: '주요과목 학습',
+                subject: subjects[0],
+                content: getSubjectContent(subjects[0], 1),
+                importance: subjects[0] === '수학' ? '높음' : '보통'
+            },
+            {
+                time: '16:10-17:20',
+                duration: 70,
+                type: '주요과목 학습',
+                subject: subjects[1],
+                content: getSubjectContent(subjects[1], 2),
+                importance: subjects[1] === '영어' ? '높음' : '보통'
+            },
+            {
+                time: '17:20-18:30',
+                duration: 70,
+                type: subjects[2] === '복습' ? '주간 복습' : '주요과목 학습',
+                subject: subjects[2],
+                content: getSubjectContent(subjects[2], 3),
+                importance: subjects[2] === '복습' ? '높음' : '보통'
+            }
+        ];
+    });
+    
+    return schedule;
+}
+
+// 🏖️ 주말 스케줄 생성 (5시간 = 300분, 3과목)
+function generateWeekendSchedule() {
+    return {
+        saturday: [
+            {
+                time: '09:00-11:00',
+                duration: 120,
+                type: '주간 총복습',
+                subject: '수학',
+                content: '이번 주 배운 수학 전체 복습 및 문제 풀이',
+                importance: '높음'
+            },
+            {
+                time: '11:00-12:40',
+                duration: 100,
+                type: '주간 총복습',
+                subject: '영어',
+                content: '이번 주 배운 영어 전체 복습 (문법, 독해, 단어)',
+                importance: '높음'
+            },
+            {
+                time: '12:40-14:00',
+                duration: 80,
+                type: '문제풀이',
+                subject: '과학',
+                content: '과학 단원 문제 풀이 및 오답 정리',
+                importance: '보통'
+            }
+        ],
+        sunday: [
+            {
+                time: '09:00-11:00',
+                duration: 120,
+                type: '문제풀이',
+                subject: '수학',
+                content: '수학 심화 문제 풀이 및 오답 정리',
+                importance: '높음'
+            },
+            {
+                time: '11:00-12:40',
+                duration: 100,
+                type: '주간 총복습',
+                subject: '국어',
+                content: '국어 독해 복습 및 문법 정리',
+                importance: '보통'
+            },
+            {
+                time: '12:40-14:00',
+                duration: 80,
+                type: '다음 주 예습',
+                subject: '다음 주 준비',
+                content: '다음 주에 배울 내용 미리 읽어보기 및 계획 수립',
+                importance: '보통'
+            }
+        ]
+    };
+}
+
+// 과목별 학습 내용 생성
+function getSubjectContent(subject, sessionNumber) {
+    const contents = {
+        '수학': [
+            '교재 개념 학습 및 기본 문제 풀이',
+            '교재 문제 풀이 (심화 포함)',
+            '수학 단원 종합 문제 풀이'
+        ],
+        '영어': [
+            '영어 교재 Grammar 학습 및 연습',
+            '영어 독해 지문 학습 (3-5지문)',
+            '영어 단어 암기 및 복습'
+        ],
+        '국어': [
+            '국어 독해 지문 학습 (3-4지문)',
+            '국어 문법 개념 정리',
+            '국어 종합 복습'
+        ],
+        '과학': [
+            '과학 교재 개념 학습',
+            '과학 실험 정리 및 문제 풀이',
+            '과학 단원 복습'
+        ],
+        '사회': [
+            '사회 교재 개념 학습',
+            '사회 자료 분석 및 정리',
+            '사회 단원 복습'
+        ],
+        '복습': [
+            '이번 주 틀린 문제 다시 풀기',
+            '주간 전체 복습 (모든 과목)',
+            '주간 학습 마무리 및 점검'
+        ]
+    };
+    
+    return contents[subject] ? contents[subject][sessionNumber - 1] : `${subject} 학습`;
+}
+
+// 📊 스케줄 표시
+function displaySchedule() {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+    days.forEach(day => {
+        const scheduleData = JSON.parse(currentSchedule[day] || '[]');
+        const container = document.getElementById(`${day}Schedule`);
+        
+        if (scheduleData.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 text-sm">스케줄이 없습니다.</p>';
+            return;
+        }
+        
+        // 총 학습 시간 계산
+        const totalMinutes = scheduleData.reduce((sum, item) => sum + item.duration, 0);
+        const totalHours = (totalMinutes / 60).toFixed(1);
+        
+        container.innerHTML = scheduleData.map((item, index) => {
+            const typeColor = getTypeColor(item.type);
+            const hours = Math.floor(item.duration / 60);
+            const minutes = item.duration % 60;
+            const durationText = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
+            
+            return `
+                <div class="bg-white rounded-lg p-4 border-l-4 border-${typeColor}-500 hover:shadow-md transition mb-3">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <span class="px-2 py-1 text-xs bg-${typeColor}-100 text-${typeColor}-700 rounded-full font-semibold">
+                                    ${item.type}
+                                </span>
+                                <span class="text-sm text-gray-600">${item.time}</span>
+                                <span class="text-sm font-semibold text-gray-700">${durationText}</span>
+                            </div>
+                            <h4 class="font-bold text-lg text-gray-900 mb-1">${item.subject}</h4>
+                            <p class="text-sm text-gray-600">${item.content}</p>
+                        </div>
+                        <div>
+                            ${item.importance === '높음' ? 
+                                '<span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">중요</span>' : 
+                                '<span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">보통</span>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('') + `
+            <div class="mt-3 p-3 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-lg border-2 border-cyan-300">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-bold text-gray-700">총 학습 시간</span>
+                    <span class="text-lg font-black text-cyan-600">${totalHours}시간 (${scheduleData.length}과목)</span>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// 🎨 유형별 색상
+function getTypeColor(type) {
+    const colors = {
+        '학교수업 복습': 'blue',
+        '주요과목 학습': 'green',
+        '주간 총복습': 'purple',
+        '문제풀이': 'red',
+        '오답정리': 'orange',
+        '휴식': 'gray',
+        '다음 주 예습': 'indigo',
+        '주간 복습': 'orange'
+    };
+    return colors[type] || 'gray';
+}
+
+// 스케줄 표시/숨김
+function showSchedule() {
+    document.getElementById('timeGuideCard').classList.remove('hidden');
+    document.getElementById('scheduleSection').classList.remove('hidden');
+}
+
+function hideSchedule() {
+    document.getElementById('timeGuideCard').classList.add('hidden');
+    document.getElementById('scheduleSection').classList.add('hidden');
+}
+
+// 요일별 스케줄 수정 (추후 구현)
+function editDaySchedule(day) {
+    alert(`${getDayKorean(day)} 스케줄 수정 기능은 곧 추가됩니다.`);
+}
+
+// 영어 요일 → 한글
+function getDayKorean(day) {
+    const days = {
+        'monday': '월요일',
+        'tuesday': '화요일',
+        'wednesday': '수요일',
+        'thursday': '목요일',
+        'friday': '금요일',
+        'saturday': '토요일',
+        'sunday': '일요일'
+    };
+    return days[day] || day;
+}
+
+// 📌 학습 시간 통계 정보
+function getWeeklyStats() {
+    return {
+        weekdayHours: WEEKDAY_HOURS,
+        weekendHours: WEEKEND_HOURS,
+        totalWeeklyHours: (WEEKDAY_HOURS * 5) + (WEEKEND_HOURS * 2), // 25시간
+        subjectsPerDay: SUBJECTS_PER_DAY
+    };
+}
