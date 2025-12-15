@@ -343,6 +343,7 @@ https://da-um3481.github.io/da-um-jinro/winter-30days.html
 ## 🔗 참고 자료
 
 ### 📚 **시스템 문서**
+- [✨ **프로그램 운영 프로세스** (필독)](https://github.com/da-um3481/da-um-jinro/blob/main/PROGRAM-OPERATION-PROCESS.md) ⭐ NEW!
 - [EBS 맞춤형 학습 연구 보고서](https://github.com/da-um3481/da-um-jinro/blob/main/EBS-PERSONALIZED-LEARNING-RESEARCH.md)
 - [수준별 학습 가이드](https://github.com/da-um3481/da-um-jinro/blob/main/PERSONALIZED-LEARNING-GUIDE.md)
 - [구글 시트 연동 매뉴얼](https://github.com/da-um3481/da-um-jinro/blob/main/GOOGLE-SHEETS-SETUP.md)
@@ -383,6 +384,10 @@ https://da-um3481.github.io/da-um-jinro/winter-30days.html
 ---
 
 **📌 첨부 자료**
+- ✨ **[프로그램 운영 프로세스 (상세 가이드)](https://github.com/da-um3481/da-um-jinro/blob/main/PROGRAM-OPERATION-PROCESS.md)** ⭐ NEW!
+  - 7단계 운영 절차 완벽 안내
+  - 일일/주간/월간 체크리스트 제공
+  - 학부모 SMS 템플릿 포함
 - 프로그램 상세 설명서
 - 시스템 활용 매뉴얼
 - 학부모 동의서 양식
