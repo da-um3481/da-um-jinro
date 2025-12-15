@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 30일 - 피드백</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        body { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%); min-height: 100vh; }
+        @keyframes snowfall { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(110vh) translateX(100px); opacity: 0; } }
+        .snowflake { position: fixed; top: -10vh; color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; z-index: 1; pointer-events: none; animation: snowfall linear infinite; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+</head>
+<body>
+    <div id="snowflakes"></div>
+
+    <header class="glass-effect shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                    <div>
+                        <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">겨울방학 30일 - 피드백</h1>
+                        <p class="text-xs text-gray-600 font-medium">❄️ 주간 피드백 & 코멘트</p>
+                    </div>
+                </div>
+                <nav class="flex space-x-2">
+                    <a href="winter-index.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium"><i class="fas fa-home mr-2"></i>대시보드</a>
+                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium"><i class="fas fa-user-graduate mr-2"></i>학생포털</a>
+                    <a href="winter-feedback.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium"><i class="fas fa-comments mr-2"></i>피드백</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <!-- 학생 선택 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <i class="fas fa-user-circle mr-2 text-cyan-600"></i>학생 선택
+            </label>
+            <div class="flex space-x-3">
+                <input 
+                    type="text" 
+                    id="studentNameInput" 
+                    placeholder="학생 이름을 입력하세요 (예: 김민준)"
+                    class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
+                    onkeypress="if(event.key==='Enter') loadStudentFeedback()"
+                >
+                <button 
+                    onclick="loadStudentFeedback()"
+                    class="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                >
+                    <i class="fas fa-search mr-2"></i>조회
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">
+                <i class="fas fa-info-circle mr-1"></i>학생 이름을 입력하고 "조회" 버튼을 눌러주세요
+            </p>
+            <div id="selectedStudent" class="hidden mt-3 p-3 bg-cyan-50 rounded-lg border-2 border-cyan-300">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-user-check text-cyan-600"></i>
+                    <span class="font-bold text-gray-800">선택된 학생: <span id="studentNameDisplay"></span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 1 피드백 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-gray-800"><i class="fas fa-check-circle text-green-500 mr-2"></i>Week 1 피드백 (완료)</h2>
+                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm">완료</span>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-5 border-2 border-green-300">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white flex-shrink-0">
+                            <i class="fas fa-trophy text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-bold text-green-800 mb-2">✨ 훌륭한 첫 주!</div>
+                            <div class="text-gray-700 mb-3">목표했던 28시간을 완료하며 완벽한 출발을 했습니다. 특히 수학과 영어에 대한 집중도가 높았고, 매일 꾸준히 학습하는 습관을 잘 형성했습니다.</div>
+                            <div class="grid grid-cols-3 gap-3 text-sm">
+                                <div class="bg-white rounded-lg p-3">
+                                    <div class="text-green-600 font-bold mb-1">🎯 출석률</div>
+                                    <div class="text-2xl font-black">100%</div>
+                                </div>
+                                <div class="bg-white rounded-lg p-3">
+                                    <div class="text-blue-600 font-bold mb-1">📚 학습시간</div>
+                                    <div class="text-2xl font-black">28시간</div>
+                                </div>
+                                <div class="bg-white rounded-lg p-3">
+                                    <div class="text-purple-600 font-bold mb-1">📊 달성률</div>
+                                    <div class="text-2xl font-black">100%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-xl p-5 border-2 border-blue-200">
+                    <div class="font-bold text-blue-800 mb-2">💪 강점</div>
+                    <ul class="text-gray-700 space-y-2">
+                        <li>✅ 수학 개념원리 교재를 꾸준히 진행 (p.1-52 완료)</li>
+                        <li>✅ 영어 Grammar Zone 기초편 3과까지 완료</li>
+                        <li>✅ 매일 정해진 시간에 학습 시작 (습관 형성 성공)</li>
+                    </ul>
+                </div>
+
+                <div class="bg-yellow-50 rounded-xl p-5 border-2 border-yellow-200">
+                    <div class="font-bold text-yellow-800 mb-2">🎯 개선 포인트</div>
+                    <ul class="text-gray-700 space-y-2">
+                        <li>⚠️ 토요일 학습 시간이 다소 부족 (3.7시간)</li>
+                        <li>⚠️ 국어 독해 속도 향상 필요</li>
+                        <li>⚠️ 과학 실험 내용 정리가 부족</li>
+                    </ul>
+                </div>
+
+                <div class="bg-purple-50 rounded-xl p-5 border-2 border-purple-200">
+                    <div class="font-bold text-purple-800 mb-2">🎓 다음 주 목표</div>
+                    <ul class="text-gray-700 space-y-2">
+                        <li>📌 수학 오답 노트 작성 시작</li>
+                        <li>📌 영어 단어 암기 강화 (하루 20개)</li>
+                        <li>📌 국어 독해 시간 측정 연습</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 rounded-xl p-5">
+                    <div class="text-sm text-gray-600 mb-2">담당 컨설턴트: 정라미</div>
+                    <div class="text-sm text-gray-600">작성일: 2025-01-12</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Week 2 피드백 (예정) -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6 opacity-60">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-gray-800"><i class="fas fa-clock text-blue-500 mr-2"></i>Week 2 피드백</h2>
+                <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-bold text-sm">진행중</span>
+            </div>
+            <div class="text-center py-12">
+                <i class="fas fa-hourglass-half text-6xl text-gray-400 mb-4"></i>
+                <div class="text-lg font-bold text-gray-500">Week 2 완료 후 피드백이 제공됩니다</div>
+                <div class="text-sm text-gray-400 mt-2">예상 일자: 2025-01-19</div>
+            </div>
+        </div>
+
+        <!-- Week 3 피드백 (예정) -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6 opacity-60">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-gray-800"><i class="fas fa-lock text-gray-400 mr-2"></i>Week 3 피드백</h2>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full font-bold text-sm">대기중</span>
+            </div>
+            <div class="text-center py-12">
+                <i class="fas fa-lock text-6xl text-gray-400 mb-4"></i>
+                <div class="text-lg font-bold text-gray-500">Week 2 완료 후 잠금 해제</div>
+            </div>
+        </div>
+
+        <!-- Week 4 피드백 (예정) -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl opacity-60">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-gray-800"><i class="fas fa-lock text-gray-400 mr-2"></i>Week 4 피드백</h2>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full font-bold text-sm">대기중</span>
+            </div>
+            <div class="text-center py-12">
+                <i class="fas fa-lock text-6xl text-gray-400 mb-4"></i>
+                <div class="text-lg font-bold text-gray-500">Week 3 완료 후 잠금 해제</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 눈송이 생성
+        const snowflakesContainer = document.getElementById('snowflakes');
+        for (let i = 0; i < 15; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflakesContainer.appendChild(snowflake);
+        }
+
+        // 학생 피드백 조회
+        function loadStudentFeedback() {
+            const name = document.getElementById('studentNameInput').value.trim();
+            if (!name) {
+                alert('학생 이름을 입력해주세요.');
+                return;
+            }
+            
+            // 선택된 학생 표시
+            document.getElementById('selectedStudent').classList.remove('hidden');
+            document.getElementById('studentNameDisplay').textContent = name;
+            
+            // localStorage에 저장
+            localStorage.setItem('winter_selected_student', name);
+            
+            // 성공 메시지
+            showToast(`${name} 학생의 피드백을 조회합니다.`);
+        }
+
+        // 토스트 메시지
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 right-6 bg-white rounded-xl shadow-2xl p-4 flex items-center space-x-3 border-l-4 border-cyan-500 z-50';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle text-cyan-500 text-2xl"></i>
+                <span class="font-bold text-gray-800">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // 페이지 로드 시 저장된 학생 정보 불러오기
+        window.addEventListener('load', function() {
+            const savedStudent = localStorage.getItem('winter_selected_student');
+            if (savedStudent) {
+                document.getElementById('studentNameInput').value = savedStudent;
+                document.getElementById('selectedStudent').classList.remove('hidden');
+                document.getElementById('studentNameDisplay').textContent = savedStudent;
+            }
+        });
+    </script>
+</body>
+</html>
