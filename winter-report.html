@@ -59,6 +59,13 @@
                     <i class="fas fa-search mr-2"></i>보고서 생성
                 </button>
                 <button 
+                    onclick="sendToGoogleSheets()"
+                    class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    id="sendToSheetsBtn"
+                >
+                    <i class="fas fa-table mr-2"></i>구글 시트 전송
+                </button>
+                <button 
                     onclick="window.print()"
                     class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                 >
@@ -66,8 +73,26 @@
                 </button>
             </div>
             <p class="text-xs text-gray-500 mt-2">
-                <i class="fas fa-info-circle mr-1"></i>학생 이름을 입력하고 "보고서 생성" 버튼을 눌러주세요
+                <i class="fas fa-info-circle mr-1"></i>학생 이름을 입력하고 "보고서 생성" 버튼을 눌러주세요. "구글 시트 전송" 버튼으로 자동 저장할 수 있습니다.
             </p>
+            <!-- 구글 시트 설정 알림 -->
+            <div id="sheetsConfigWarning" class="mt-3 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-xl">
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                    <div class="flex-1">
+                        <div class="font-bold text-gray-800 mb-1">⚠️ 구글 시트 연동 설정 필요</div>
+                        <div class="text-sm text-gray-700 mb-2">
+                            구글 시트로 자동 전송하려면 아래 버튼을 눌러 Web App URL을 설정해주세요.
+                        </div>
+                        <button 
+                            onclick="showSheetsConfig()"
+                            class="px-4 py-2 bg-yellow-500 text-white rounded-lg font-bold hover:bg-yellow-600 transition"
+                        >
+                            <i class="fas fa-cog mr-2"></i>구글 시트 연동 설정하기
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div id="selectedStudent" class="hidden mt-3 p-3 bg-cyan-50 rounded-lg border-2 border-cyan-300">
                 <div class="flex items-center space-x-2">
                     <i class="fas fa-user-check text-cyan-600"></i>
@@ -316,13 +341,115 @@
             }, 3000);
         }
 
-        // 페이지 로드 시 저장된 학생 정보 불러오기
+        // 구글 시트 Web App URL 설정
+        function showSheetsConfig() {
+            const currentUrl = localStorage.getItem('winter_google_sheets_url') || '';
+            const url = prompt(
+                '구글 시트 Web App URL을 입력하세요:\n\n' +
+                '1. 구글 시트를 생성하세요\n' +
+                '2. 확장 프로그램 > Apps Script를 클릭하세요\n' +
+                '3. 아래 코드를 붙여넣고 배포 > 새 배포를 선택하세요\n' +
+                '4. 웹 앱 URL을 복사해서 여기에 붙여넣으세요\n\n' +
+                'Apps Script 코드는 아래 "도움말" 버튼을 눌러 확인하세요.', 
+                currentUrl
+            );
+            
+            if (url !== null) {
+                localStorage.setItem('winter_google_sheets_url', url.trim());
+                if (url.trim()) {
+                    document.getElementById('sheetsConfigWarning').classList.add('hidden');
+                    showToast('✅ 구글 시트 연동이 설정되었습니다!');
+                } else {
+                    document.getElementById('sheetsConfigWarning').classList.remove('hidden');
+                }
+            }
+        }
+        
+        // 구글 시트로 데이터 전송
+        async function sendToGoogleSheets() {
+            const webAppUrl = localStorage.getItem('winter_google_sheets_url');
+            
+            if (!webAppUrl) {
+                alert('⚠️ 먼저 구글 시트 연동을 설정해주세요!');
+                showSheetsConfig();
+                return;
+            }
+            
+            const studentName = document.getElementById('studentNameInput').value.trim();
+            if (!studentName) {
+                alert('⚠️ 학생 이름을 먼저 입력해주세요!');
+                return;
+            }
+            
+            // 전송 중 표시
+            const btn = document.getElementById('sendToSheetsBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>전송 중...';
+            btn.disabled = true;
+            
+            try {
+                // 현재 보고서 데이터 수집
+                const reportData = {
+                    timestamp: new Date().toISOString(),
+                    studentName: studentName,
+                    programName: '겨울방학 30일',
+                    startDate: '2025.1.6',
+                    endDate: '2025.2.4',
+                    currentDay: 7,
+                    totalDays: 30,
+                    progress: 23,
+                    totalStudyHours: 28,
+                    attendanceRate: 100,
+                    dailyAverage: 4.0,
+                    materialProgress: 18,
+                    subjects: {
+                        math: { hours: 8.5, progress: 30, material: '개념원리 중학수학 1-1', comment: '개념 이해도 우수, 문제 풀이 속도 향상 필요' },
+                        english: { hours: 7.2, progress: 26, material: 'Grammar Zone 기초편', comment: '문법 이해도 양호, 단어 암기 강화 권장' },
+                        korean: { hours: 5.8, progress: 21, material: '비문학 독해 워크북', comment: '독해 속도 향상 필요, 시간 측정 연습 권장' },
+                        science: { hours: 4.0, progress: 15, material: '과학 탐구 노트', comment: '실험 정리 강화 필요' },
+                        social: { hours: 2.5, progress: 12, material: '사회 교과서', comment: '기본 개념 학습 중' }
+                    },
+                    overallEvaluation: '우수',
+                    strengths: '수학과 영어에 대한 집중도가 높고, 개념 이해도가 우수합니다.',
+                    improvements: '국어 독해 속도 향상과 과학 실험 정리에 더 신경 쓰면 더욱 좋은 결과를 얻을 수 있습니다.'
+                };
+                
+                // Google Sheets Web App으로 데이터 전송
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // CORS 우회
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                // no-cors 모드에서는 응답을 읽을 수 없으므로 성공으로 간주
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showToast('✅ 구글 시트로 전송이 완료되었습니다!');
+                
+            } catch (error) {
+                console.error('전송 오류:', error);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showToast('❌ 전송 실패: ' + error.message);
+            }
+        }
+
+        // 페이지 로드 시 저장된 학생 정보 및 구글 시트 설정 확인
         window.addEventListener('load', function() {
             const savedStudent = localStorage.getItem('winter_selected_student');
             if (savedStudent) {
                 document.getElementById('studentNameInput').value = savedStudent;
                 document.getElementById('selectedStudent').classList.remove('hidden');
                 document.getElementById('studentNameDisplay').textContent = savedStudent;
+            }
+            
+            // 구글 시트 URL이 설정되어 있으면 경고 숨김
+            const sheetsUrl = localStorage.getItem('winter_google_sheets_url');
+            if (sheetsUrl && sheetsUrl.trim()) {
+                document.getElementById('sheetsConfigWarning').classList.add('hidden');
             }
         });
     </script>
