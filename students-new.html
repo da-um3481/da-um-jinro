@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👨‍🎓 학생 관리 - DA.UM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-user-graduate text-3xl text-indigo-600"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">학생 관리</h1>
+                        <p class="text-sm text-gray-600">DA.UM 학습관리 시스템</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <a href="schools-management-new.html" class="px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50">
+                        <i class="fas fa-school mr-2"></i>학교 관리
+                    </a>
+                    <button onclick="showAddStudentModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-plus mr-2"></i>학생 등록
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 필터 및 통계 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">학교 필터</label>
+                    <select id="filterSchool" onchange="filterStudents()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">전체 학교</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">프로그램 필터</label>
+                    <select id="filterProgram" onchange="filterStudents()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">전체 프로그램</option>
+                        <option value="winter_30days">❄️ 겨울방학 30일</option>
+                        <option value="regular_100days">📚 정규학기 100일</option>
+                        <option value="custom">✨ 맞춤형</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">학생 유형</label>
+                    <select id="filterType" onchange="filterStudents()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">전체</option>
+                        <option value="middle">중학생</option>
+                        <option value="high">고등학생</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">검색</label>
+                    <input type="text" id="searchInput" onkeyup="filterStudents()" placeholder="이름 검색..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="text-center p-4 bg-indigo-50 rounded-lg">
+                    <p class="text-sm text-gray-600">전체 학생</p>
+                    <p class="text-2xl font-bold text-indigo-600" id="totalStudents">0</p>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-gray-600">중학생</p>
+                    <p class="text-2xl font-bold text-blue-600" id="middleStudents">0</p>
+                </div>
+                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                    <p class="text-sm text-gray-600">고등학생</p>
+                    <p class="text-2xl font-bold text-purple-600" id="highStudents">0</p>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <p class="text-sm text-gray-600">평균 점수</p>
+                    <p class="text-2xl font-bold text-green-600" id="avgScore">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 학생 목록 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800">학생 목록</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">이름</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">학교</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">학년</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">프로그램</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">평균</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">수준</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">학부모 연락처</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody" class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="8" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-5xl mb-4 text-gray-300"></i>
+                                <p>등록된 학생이 없습니다.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- 학생 등록/수정 모달 -->
+    <div id="studentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800" id="modalTitle">학생 등록</h3>
+            </div>
+            <div class="p-6">
+                <form id="studentForm" class="space-y-4">
+                    <input type="hidden" id="studentId">
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">학교 선택 *</label>
+                            <select id="schoolId" required class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">선택하세요</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">프로그램 *</label>
+                            <select id="programType" required class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">선택하세요</option>
+                                <option value="winter_30days">❄️ 겨울방학 30일</option>
+                                <option value="regular_100days">📚 정규학기 100일</option>
+                                <option value="custom">✨ 맞춤형</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">이름 *</label>
+                            <input type="text" id="studentName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">학년 *</label>
+                            <select id="grade" required onchange="updateStudentType()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">선택</option>
+                                <option value="1">중1</option>
+                                <option value="2">중2</option>
+                                <option value="3">중3</option>
+                                <option value="4">고1</option>
+                                <option value="5">고2</option>
+                                <option value="6">고3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">반</label>
+                            <input type="number" id="classNum" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">번호</label>
+                            <input type="number" id="studentNum" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">EBS AI 코스웨어 진단평가 점수</label>
+                        <div class="grid grid-cols-5 gap-4">
+                            <div>
+                                <label class="text-xs text-gray-600">국어</label>
+                                <input type="number" id="koreanScore" min="0" max="100" onchange="calculateAverage()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-600">영어</label>
+                                <input type="number" id="englishScore" min="0" max="100" onchange="calculateAverage()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-600">수학</label>
+                                <input type="number" id="mathScore" min="0" max="100" onchange="calculateAverage()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-600">과학</label>
+                                <input type="number" id="scienceScore" min="0" max="100" onchange="calculateAverage()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-600">사회</label>
+                                <input type="number" id="socialScore" min="0" max="100" onchange="calculateAverage()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">평균 점수</label>
+                            <input type="text" id="average" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">학습 수준</label>
+                            <input type="text" id="level" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">학부모 연락처</label>
+                            <input type="tel" id="parentPhone" placeholder="010-1234-5678" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">취소</button>
+                <button onclick="saveStudent()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STUDENTS_KEY = 'daum_students';
+        const SCHOOLS_KEY = 'daum_schools';
+
+        function loadStudents() {
+            const data = localStorage.getItem(STUDENTS_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveStudents(students) {
+            localStorage.setItem(STUDENTS_KEY, JSON.stringify(students));
+        }
+
+        function loadSchools() {
+            const data = localStorage.getItem(SCHOOLS_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function loadSchoolOptions() {
+            const schools = loadSchools();
+            const schoolSelect = document.getElementById('schoolId');
+            const filterSelect = document.getElementById('filterSchool');
+            
+            schoolSelect.innerHTML = '<option value="">선택하세요</option>';
+            filterSelect.innerHTML = '<option value="">전체 학교</option>';
+            
+            schools.forEach(school => {
+                schoolSelect.innerHTML += `<option value="${school.id}">${school.schoolName}</option>`;
+                filterSelect.innerHTML += `<option value="${school.id}">${school.schoolName}</option>`;
+            });
+        }
+
+        function updateStudentType() {
+            const grade = parseInt(document.getElementById('grade').value);
+            // 1-3: 중학생, 4-6: 고등학생
+        }
+
+        function calculateAverage() {
+            const korean = parseFloat(document.getElementById('koreanScore').value) || 0;
+            const english = parseFloat(document.getElementById('englishScore').value) || 0;
+            const math = parseFloat(document.getElementById('mathScore').value) || 0;
+            const science = parseFloat(document.getElementById('scienceScore').value) || 0;
+            const social = parseFloat(document.getElementById('socialScore').value) || 0;
+
+            const scores = [korean, english, math, science, social].filter(s => s > 0);
+            const average = scores.length > 0 ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : 0;
+
+            document.getElementById('average').value = average;
+
+            // 학습 수준 판정
+            let level = '';
+            if (average >= 85) level = '🔴 상급';
+            else if (average >= 70) level = '🟡 중상';
+            else if (average >= 50) level = '🔵 중하';
+            else if (average > 0) level = '🟢 기초';
+
+            document.getElementById('level').value = level;
+        }
+
+        function updateStatistics() {
+            const students = loadStudents();
+            const filtered = filterStudentsList(students);
+
+            document.getElementById('totalStudents').textContent = filtered.length;
+            
+            const middle = filtered.filter(s => s.grade >= 1 && s.grade <= 3).length;
+            const high = filtered.filter(s => s.grade >= 4 && s.grade <= 6).length;
+            
+            document.getElementById('middleStudents').textContent = middle;
+            document.getElementById('highStudents').textContent = high;
+
+            const avgScore = filtered.length > 0 
+                ? (filtered.reduce((sum, s) => sum + (parseFloat(s.average) || 0), 0) / filtered.length).toFixed(1)
+                : 0;
+            document.getElementById('avgScore').textContent = avgScore;
+        }
+
+        function filterStudentsList(students) {
+            const schoolFilter = document.getElementById('filterSchool').value;
+            const programFilter = document.getElementById('filterProgram').value;
+            const typeFilter = document.getElementById('filterType').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            return students.filter(student => {
+                if (schoolFilter && student.schoolId !== schoolFilter) return false;
+                if (programFilter && student.programType !== programFilter) return false;
+                if (typeFilter === 'middle' && (student.grade < 1 || student.grade > 3)) return false;
+                if (typeFilter === 'high' && (student.grade < 4 || student.grade > 6)) return false;
+                if (searchTerm && !student.name.toLowerCase().includes(searchTerm)) return false;
+                return true;
+            });
+        }
+
+        function filterStudents() {
+            renderStudents();
+        }
+
+        function renderStudents() {
+            const students = loadStudents();
+            const filtered = filterStudentsList(students);
+            const schools = loadSchools();
+            const tbody = document.getElementById('studentsTableBody');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="px-6 py-8 text-center text-gray-500">
+                            <i class="fas fa-inbox text-5xl mb-4 text-gray-300"></i>
+                            <p>등록된 학생이 없습니다.</p>
+                        </td>
+                    </tr>
+                `;
+                updateStatistics();
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(student => {
+                const school = schools.find(s => s.id === student.schoolId);
+                const gradeLabels = {
+                    1: '중1', 2: '중2', 3: '중3',
+                    4: '고1', 5: '고2', 6: '고3'
+                };
+                const programLabels = {
+                    'winter_30days': '❄️ 겨울방학',
+                    'regular_100days': '📚 100일',
+                    'custom': '✨ 맞춤형'
+                };
+
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${student.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${school?.schoolName || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            ${gradeLabels[student.grade] || student.grade}
+                            ${student.classNum ? ` ${student.classNum}반` : ''}
+                            ${student.studentNum ? ` ${student.studentNum}번` : ''}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">${programLabels[student.programType] || student.programType}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${student.average || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">${student.level || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${student.parentPhone || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button onclick="editStudent('${student.id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateStatistics();
+        }
+
+        function showAddStudentModal() {
+            document.getElementById('modalTitle').textContent = '학생 등록';
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentId').value = '';
+            document.getElementById('studentModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('studentModal').classList.add('hidden');
+        }
+
+        function saveStudent() {
+            const form = document.getElementById('studentForm');
+            if (!form.checkValidity()) {
+                alert('필수 항목을 모두 입력해주세요.');
+                return;
+            }
+
+            const students = loadStudents();
+            const studentId = document.getElementById('studentId').value;
+            const grade = parseInt(document.getElementById('grade').value);
+
+            const studentData = {
+                id: studentId || 'student_' + Date.now(),
+                schoolId: document.getElementById('schoolId').value,
+                programType: document.getElementById('programType').value,
+                name: document.getElementById('studentName').value,
+                grade: grade,
+                studentType: grade <= 3 ? 'middle' : 'high',
+                classNum: document.getElementById('classNum').value,
+                studentNum: document.getElementById('studentNum').value,
+                koreanScore: document.getElementById('koreanScore').value,
+                englishScore: document.getElementById('englishScore').value,
+                mathScore: document.getElementById('mathScore').value,
+                scienceScore: document.getElementById('scienceScore').value,
+                socialScore: document.getElementById('socialScore').value,
+                average: document.getElementById('average').value,
+                level: document.getElementById('level').value,
+                parentPhone: document.getElementById('parentPhone').value,
+                createdAt: studentId ? students.find(s => s.id === studentId)?.createdAt : new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            if (studentId) {
+                const index = students.findIndex(s => s.id === studentId);
+                if (index !== -1) students[index] = studentData;
+            } else {
+                students.push(studentData);
+            }
+
+            saveStudents(students);
+            closeModal();
+            renderStudents();
+            alert('저장되었습니다.');
+        }
+
+        function editStudent(id) {
+            const students = loadStudents();
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById('modalTitle').textContent = '학생 수정';
+            document.getElementById('studentId').value = student.id;
+            document.getElementById('schoolId').value = student.schoolId;
+            document.getElementById('programType').value = student.programType;
+            document.getElementById('studentName').value = student.name;
+            document.getElementById('grade').value = student.grade;
+            document.getElementById('classNum').value = student.classNum;
+            document.getElementById('studentNum').value = student.studentNum;
+            document.getElementById('koreanScore').value = student.koreanScore;
+            document.getElementById('englishScore').value = student.englishScore;
+            document.getElementById('mathScore').value = student.mathScore;
+            document.getElementById('scienceScore').value = student.scienceScore;
+            document.getElementById('socialScore').value = student.socialScore;
+            document.getElementById('average').value = student.average;
+            document.getElementById('level').value = student.level;
+            document.getElementById('parentPhone').value = student.parentPhone;
+
+            document.getElementById('studentModal').classList.remove('hidden');
+        }
+
+        function deleteStudent(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+
+            let students = loadStudents();
+            students = students.filter(s => s.id !== id);
+            saveStudents(students);
+            renderStudents();
+            alert('삭제되었습니다.');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSchoolOptions();
+            renderStudents();
+        });
+    </script>
+</body>
+</html>
