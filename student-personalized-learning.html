@@ -398,8 +398,56 @@
         }
 
         function openEBSLecture(lectureName) {
-            alert(`🎓 EBS 강의: ${lectureName}\n\nEBS 사이트로 연결됩니다.\n(실제 환경에서는 강의 링크로 자동 이동)`);
-            // window.open('https://www.ebs.co.kr', '_blank');
+            // EBS 강의별 실제 링크 매핑
+            const lectureLinks = {
+                // 수학
+                'EBS 중학 프리미엄 수학 - 기본': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=MAT',
+                'EBS 만점왕 수학': 'https://www.ebs.co.kr/middle/course/courseList?courseType=MK&subjectCode=MAT',
+                'EBS AI 코스웨어 기초': 'https://www.ebssw.kr/onlineClass/courseware',
+                'EBS 중학 프리미엄 수학 - 실력': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=MAT',
+                'EBS 올림포스': 'https://www.ebs.co.kr/high/course/courseList?courseType=OL',
+                'EBS AI 코스웨어 표준': 'https://www.ebssw.kr/onlineClass/courseware',
+                'EBS 수능특강 수학': 'https://www.ebs.co.kr/high/course/courseList?courseType=ST',
+                'EBS 수능완성': 'https://www.ebs.co.kr/high/course/courseList?courseType=SC',
+                'EBS AI 코스웨어 심화': 'https://www.ebssw.kr/onlineClass/courseware',
+                
+                // 영어
+                'EBS 중학 프리미엄 영어 - 기본': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=ENG',
+                'EBS 만점왕 영어': 'https://www.ebs.co.kr/middle/course/courseList?courseType=MK&subjectCode=ENG',
+                'EBS 중학 프리미엄 영어 - 실력': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=ENG',
+                'EBS 올림포스 영어': 'https://www.ebs.co.kr/high/course/courseList?courseType=OL&subjectCode=ENG',
+                'EBS 수능특강 영어': 'https://www.ebs.co.kr/high/course/courseList?courseType=ST&subjectCode=ENG',
+                'EBS 수능완성 영어': 'https://www.ebs.co.kr/high/course/courseList?courseType=SC&subjectCode=ENG',
+                
+                // 국어
+                'EBS 중학 국어 - 기본': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=KOR',
+                'EBS 만점왕 국어': 'https://www.ebs.co.kr/middle/course/courseList?courseType=MK&subjectCode=KOR',
+                'EBS 올림포스 국어': 'https://www.ebs.co.kr/high/course/courseList?courseType=OL&subjectCode=KOR',
+                'EBS 고교특강 국어': 'https://www.ebs.co.kr/high/course/courseList?courseType=HT&subjectCode=KOR',
+                'EBS 수능특강 국어': 'https://www.ebs.co.kr/high/course/courseList?courseType=ST&subjectCode=KOR',
+                'EBS 수능완성 국어': 'https://www.ebs.co.kr/high/course/courseList?courseType=SC&subjectCode=KOR',
+                
+                // 과학
+                'EBS 중학 프리미엄 과학 - 기본': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=SCI',
+                'EBS 만점왕 과학': 'https://www.ebs.co.kr/middle/course/courseList?courseType=MK&subjectCode=SCI',
+                'EBS 중학 프리미엄 과학 - 실력': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=SCI',
+                'EBS 올림포스 과학': 'https://www.ebs.co.kr/high/course/courseList?courseType=OL&subjectCode=SCI',
+                'EBS 수능특강 과학': 'https://www.ebs.co.kr/high/course/courseList?courseType=ST&subjectCode=SCI',
+                'EBS 수능완성 과학': 'https://www.ebs.co.kr/high/course/courseList?courseType=SC&subjectCode=SCI',
+                
+                // 사회
+                'EBS 중학 프리미엄 사회 - 기본': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=SOC',
+                'EBS 만점왕 사회': 'https://www.ebs.co.kr/middle/course/courseList?courseType=MK&subjectCode=SOC',
+                'EBS 중학 프리미엄 사회 - 실력': 'https://www.ebs.co.kr/middle/course/courseList?courseType=PM&subjectCode=SOC',
+                'EBS 올림포스 사회': 'https://www.ebs.co.kr/high/course/courseList?courseType=OL&subjectCode=SOC',
+                'EBS 수능특강 사회탐구': 'https://www.ebs.co.kr/high/course/courseList?courseType=ST&subjectCode=SOC',
+                'EBS 수능완성 사회': 'https://www.ebs.co.kr/high/course/courseList?courseType=SC&subjectCode=SOC'
+            };
+            
+            const url = lectureLinks[lectureName] || 'https://www.ebs.co.kr';
+            
+            // 새 창에서 EBS 강의 페이지 열기
+            window.open(url, '_blank');
         }
 
         function displayWeeklyPlan(student) {
