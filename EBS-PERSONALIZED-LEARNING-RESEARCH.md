@@ -60,8 +60,8 @@ DA.UM 겨울방학 30일 프로그램의 **수준별 맞춤 학습 시스템**�
 
 ---
 
-### 2️⃣ EBS AI 코스웨어 (단추) (ai-plus.ebs.co.kr)
-**AI 기반 개인 맞춤형 학습 플랫폼**
+### 2️⃣ EBS AI 코스웨어 (단추) (https://ai-plus.ebs.co.kr/onestop/mid/main_mid.ebs)
+**AI 기반 개인 맞춤형 학습 플랫폼 - 딥러닝 알고리즘 활용**
 
 #### 🤖 핵심 기능
 
