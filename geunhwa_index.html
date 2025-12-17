@@ -104,49 +104,58 @@
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
             margin-bottom: 40px;
         }
         
         .feature-box {
             background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
             border-radius: 15px;
-            padding: 30px;
+            padding: 35px;
             border-left: 5px solid #7B1FA2;
             transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
         }
         
         .feature-box:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 20px rgba(123, 31, 162, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(123, 31, 162, 0.3);
         }
         
         .feature-box h3 {
             color: #7B1FA2;
-            font-size: 22px;
-            margin-bottom: 15px;
+            font-size: 24px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 700;
         }
         
         .feature-box p {
-            font-size: 16px;
+            font-size: 17px;
             line-height: 1.8;
             color: #666;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
         
         .feature-box ul {
             list-style: none;
             margin-top: 15px;
+            flex-grow: 1;
         }
         
         .feature-box ul li {
-            padding: 8px 0;
-            padding-left: 25px;
+            padding: 10px 0;
+            padding-left: 30px;
             position: relative;
             color: #555;
+            font-size: 16px;
+            line-height: 1.7;
         }
         
         .feature-box ul li:before {
@@ -155,6 +164,7 @@
             left: 0;
             color: #7B1FA2;
             font-weight: bold;
+            font-size: 18px;
         }
         
         .cards-grid {
@@ -315,6 +325,16 @@
             margin: 8px 0;
         }
         
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .feature-box {
+                min-height: 380px;
+            }
+        }
+        
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 48px;
@@ -323,6 +343,20 @@
             .header .program-title {
                 font-size: 22px;
                 padding: 12px 30px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .feature-box {
+                min-height: auto;
+                padding: 30px;
+            }
+            
+            .feature-box h3 {
+                font-size: 22px;
             }
             
             .cards-grid {
@@ -345,6 +379,14 @@
         @media (max-width: 480px) {
             .info-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .feature-box h3 {
+                font-size: 20px;
+            }
+            
+            .feature-box ul li {
+                font-size: 15px;
             }
         }
     </style>
