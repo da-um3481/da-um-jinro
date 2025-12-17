@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027-2029 고등학생 입시 및 학습관리 시스템</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 사이드바 네비게이션 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>학습관리<span>시스템</span></h2>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>대시보드</span>
+            </a>
+            <a href="#" class="nav-item" data-page="curriculum">
+                <i class="fas fa-book"></i>
+                <span>교육과정 설계</span>
+            </a>
+            <a href="#" class="nav-item" data-page="student-record">
+                <i class="fas fa-clipboard-list"></i>
+                <span>학생부 관리</span>
+            </a>
+            <a href="#" class="nav-item" data-page="admission">
+                <i class="fas fa-university"></i>
+                <span>대입전형 분석</span>
+            </a>
+            <a href="#" class="nav-item" data-page="study-plan">
+                <i class="fas fa-calendar-alt"></i>
+                <span>학습 계획</span>
+            </a>
+            <a href="#" class="nav-item" data-page="career">
+                <i class="fas fa-compass"></i>
+                <span>진로 탐색</span>
+            </a>
+            <a href="#" class="nav-item" data-page="analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>데이터 분석</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name">김학생</p>
+                    <p class="user-grade">고등학교 2학년</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content">
+        <!-- 헤더 -->
+        <header class="header">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">
+                <h1 id="pageTitle">대시보드</h1>
+                <p id="pageSubtitle">학습 현황 및 입시 관리 한눈에 보기</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-icon">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 페이지 컨텐츠 컨테이너 -->
+        <div class="content-container" id="contentContainer">
+            <!-- 대시보드 페이지 (기본) -->
+            <div class="page-content active" id="page-dashboard">
+                <!-- D-Day 카운터 -->
+                <div class="dday-counter">
+                    <div class="dday-content">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="dday-info">
+                            <h3>2027학년도 대입 전형</h3>
+                            <p class="dday-text">D-<span id="ddayCount">365</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 주요 지표 카드 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">이수 학점</p>
+                            <h3 class="stat-value">192<span class="stat-unit">/204</span></h3>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 94%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">내신 평균</p>
+                            <h3 class="stat-value">2.3<span class="stat-unit">등급</span></h3>
+                            <p class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 0.5 상승
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">학생부 활동</p>
+                            <h3 class="stat-value">48<span class="stat-unit">건</span></h3>
+                            <p class="stat-info">교과 18, 비교과 30</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">학습 계획 달성률</p>
+                            <h3 class="stat-value">87<span class="stat-unit">%</span></h3>
+                            <p class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 12% 증가
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6대 핵심 모듈 -->
+                <section class="modules-section">
+                    <h2 class="section-title">6대 핵심 모듈</h2>
+                    <div class="modules-grid">
+                        <div class="module-card" data-module="curriculum">
+                            <div class="module-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3 class="module-title">교육과정 설계</h3>
+                            <p class="module-desc">희망 전공 계열 맞춤 과목 선택 가이드</p>
+                            <ul class="module-tags">
+                                <li>#과목선택</li>
+                                <li>#진로연계</li>
+                                <li>#맞춤설계</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card" data-module="student-record">
+                            <div class="module-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <h3 class="module-title">학생부 관리</h3>
+                            <p class="module-desc">교과 성적과 비교과 활동을 통합 관리</p>
+                            <ul class="module-tags">
+                                <li>#성적관리</li>
+                                <li>#세특작성</li>
+                                <li>#포트폴리오</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card" data-module="admission">
+                            <div class="module-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h3 class="module-title">대입전형 분석</h3>
+                            <p class="module-desc">복잡한 대입 전형을 분석하여 맞춤 전략 제시</p>
+                            <ul class="module-tags">
+                                <li>#전형분석</li>
+                                <li>#합격예측</li>
+                                <li>#데이터기반</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card" data-module="study-plan">
+                            <div class="module-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3 class="module-title">학습 계획</h3>
+                            <p class="module-desc">공교육 중심의 자기주도 학습 계획 수립</p>
+                            <ul class="module-tags">
+                                <li>#로드맵</li>
+                                <li>#EBS활용</li>
+                                <li>#성취도추적</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card" data-module="career">
+                            <div class="module-icon">
+                                <i class="fas fa-compass"></i>
+                            </div>
+                            <h3 class="module-title">진로 탐색</h3>
+                            <p class="module-desc">적성과 흥미를 과학적으로 분석하여 진로 설계</p>
+                            <ul class="module-tags">
+                                <li>#적성검사</li>
+                                <li>#진로상담</li>
+                                <li>#멘토링</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card" data-module="analytics">
+                            <div class="module-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="module-title">데이터 분석</h3>
+                            <p class="module-desc">학습 및 입시 준비 데이터 종합 분석</p>
+                            <ul class="module-tags">
+                                <li>#성적분석</li>
+                                <li>#비교진단</li>
+                                <li>#맞춤솔루션</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 최근 활동 -->
+                <section class="recent-activity">
+                    <h2 class="section-title">최근 활동</h2>
+                    <div class="activity-list" id="recentActivities">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- 교육과정 설계 페이지 -->
+            <div class="page-content" id="page-curriculum">
+                <div class="page-header">
+                    <h2>교육과정 설계 모듈</h2>
+                    <p>희망 전공 계열에 맞춘 최적의 과목 선택을 지원합니다</p>
+                </div>
+
+                <div class="content-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3>과목 선택 가이드</h3>
+                        <p>희망 전공 계열 및 목표 대학의 전형 요건을 분석하여 필수 과목 및 선택 과목을 추천합니다.</p>
+                        <button class="btn-primary" onclick="showSubjectGuide()">
+                            <i class="fas fa-arrow-right"></i> 가이드 시작
+                        </button>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>진로 연계 큐레이션</h3>
+                        <p>선택한 과목들과 연계된 탐구 프로젝트 주제를 제공하고, 진로 역량을 드러낼 수 있는 수행평가 가이드를 제시합니다.</p>
+                        <button class="btn-primary" onclick="showCareerCuration()">
+                            <i class="fas fa-arrow-right"></i> 탐색하기
+                        </button>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>공동교육과정 매칭</h3>
+                        <p>소속 학교에 개설되지 않은 과목에 대해 인근 학교(거점형) 또는 온라인 공동교육과정 수강 정보를 제공하고 신청을 지원합니다.</p>
+                        <button class="btn-primary" onclick="showCommonCurriculum()">
+                            <i class="fas fa-arrow-right"></i> 과정 찾기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 이수 학점 현황 -->
+                <div class="credit-status">
+                    <h3>이수 학점 현황</h3>
+                    <div class="credit-chart" id="creditChart"></div>
+                </div>
+
+                <!-- 과목 선택 시뮬레이터 -->
+                <div class="subject-simulator">
+                    <h3>과목 선택 시뮬레이터</h3>
+                    <div class="simulator-content" id="subjectSimulator">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학생부 관리 페이지 -->
+            <div class="page-content" id="page-student-record">
+                <div class="page-header">
+                    <h2>학생부 관리 모듈</h2>
+                    <p>교과 성적과 비교과 활동을 통합적으로 관리합니다</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="curricular">교과 활동</button>
+                    <button class="tab-btn" data-tab="extracurricular">비교과 활동</button>
+                    <button class="tab-btn" data-tab="portfolio">포트폴리오</button>
+                </div>
+
+                <div class="tab-content active" id="tab-curricular">
+                    <div class="action-bar">
+                        <button class="btn-primary" onclick="addRecord('curricular')">
+                            <i class="fas fa-plus"></i> 성적 추가
+                        </button>
+                    </div>
+                    <div class="record-table" id="curricularTable">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-extracurricular">
+                    <div class="action-bar">
+                        <button class="btn-primary" onclick="addRecord('extracurricular')">
+                            <i class="fas fa-plus"></i> 활동 추가
+                        </button>
+                    </div>
+                    <div class="record-grid" id="extracurricularGrid">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-portfolio">
+                    <div class="portfolio-builder" id="portfolioBuilder">
+                        <p class="info-text">학생부 기록을 바탕으로 자동으로 포트폴리오가 생성됩니다.</p>
+                        <button class="btn-primary" onclick="generatePortfolio()">
+                            <i class="fas fa-file-pdf"></i> 포트폴리오 생성
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 대입전형 분석 페이지 -->
+            <div class="page-content" id="page-admission">
+                <div class="page-header">
+                    <h2>대입전형 분석 모듈</h2>
+                    <p>복잡한 대입 전형을 분석하여 맞춤형 전략을 제시합니다</p>
+                </div>
+
+                <div class="admission-analyzer">
+                    <div class="analyzer-section">
+                        <h3>맞춤형 전형 추천</h3>
+                        <p>학생의 내신 등급 추이, 모의고사 성적, 비교과 활동을 종합적으로 분석하여 학생부교과, 학생부종합, 정시 중에서 가장 유리한 전형을 추천합니다.</p>
+                        <button class="btn-primary" onclick="analyzeAdmission()">
+                            <i class="fas fa-chart-bar"></i> 전형 분석 시작
+                        </button>
+                    </div>
+
+                    <div class="analyzer-section">
+                        <h3>대학별 전형 분석</h3>
+                        <div class="university-search">
+                            <input type="text" id="universitySearch" placeholder="대학명 또는 학과명 검색" class="search-input">
+                            <button class="btn-search" onclick="searchUniversity()">
+                                <i class="fas fa-search"></i> 검색
+                            </button>
+                        </div>
+                        <div class="search-results" id="universityResults">
+                            <!-- JavaScript로 동적 생성 -->
+                        </div>
+                    </div>
+
+                    <div class="analyzer-section">
+                        <h3>합격 가능성 예측</h3>
+                        <p>전년도 입시 결과 데이터와 학생의 현재 성적을 비교하여 실시간으로 합격 가능성을 예측하고 지원 전략을 제시합니다.</p>
+                        <div class="prediction-chart" id="predictionChart">
+                            <!-- JavaScript로 차트 생성 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-Track 전략 -->
+                <div class="track-strategy">
+                    <h3>입시 3-Track 전략</h3>
+                    <div class="track-cards">
+                        <div class="track-card">
+                            <h4><i class="fas fa-book"></i> 학생부교과</h4>
+                            <p>3학년 1학기 내신 석차 극대화</p>
+                            <ul>
+                                <li>진로선택과목 A등급 확보</li>
+                                <li>수능 최저 학력 기준 충족 전략</li>
+                            </ul>
+                        </div>
+                        <div class="track-card">
+                            <h4><i class="fas fa-users"></i> 학생부종합</h4>
+                            <p>세특 및 심화활동 기록 마무리</p>
+                            <ul>
+                                <li>전공 적합성 드러내는 심화 탐구</li>
+                                <li>면접 기록 문서 마무리 면담</li>
+                            </ul>
+                        </div>
+                        <div class="track-card">
+                            <h4><i class="fas fa-pencil-alt"></i> 정시 (수능)</h4>
+                            <p>취약 단원 집중 보완</p>
+                            <ul>
+                                <li>EBS 연계 교재 철저 분석</li>
+                                <li>실전 모의고사 훈련</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학습 계획 페이지 -->
+            <div class="page-content" id="page-study-plan">
+                <div class="page-header">
+                    <h2>학습 계획 모듈</h2>
+                    <p>공교육 중심의 자기주도 학습 계획을 수립합니다</p>
+                </div>
+
+                <div class="plan-calendar">
+                    <h3>학습 캘린더</h3>
+                    <div id="studyCalendar">
+                        <!-- JavaScript로 캘린더 생성 -->
+                    </div>
+                </div>
+
+                <div class="roadmap-section">
+                    <h3>AI 기반 학습 로드맵</h3>
+                    <p>수업 중 활용한 비판적 사고력을 바탕으로 관련 주제를 제공하고, 교과 역량이 드러나는 기록 가이드를 제시합니다.</p>
+                    <div class="roadmap-timeline" id="roadmapTimeline">
+                        <!-- JavaScript로 타임라인 생성 -->
+                    </div>
+                </div>
+
+                <div class="ebs-integration">
+                    <h3>공교육 프로그램 연계</h3>
+                    <div class="program-cards">
+                        <div class="program-card">
+                            <div class="program-logo">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h4>EBSi</h4>
+                            <p>수능 대비 강좌 및 교과 심화 학습</p>
+                            <button class="btn-secondary">바로가기</button>
+                        </div>
+                        <div class="program-card">
+                            <div class="program-logo">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h4>K-MOOC</h4>
+                            <p>대학 수준의 온라인 공개 강좌</p>
+                            <button class="btn-secondary">바로가기</button>
+                        </div>
+                        <div class="program-card">
+                            <div class="program-logo">
+                                <i class="fas fa-school"></i>
+                            </div>
+                            <h4>공동교육과정</h4>
+                            <p>학교간 협력 수업 및 온라인 수업</p>
+                            <button class="btn-secondary">바로가기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement-tracker">
+                    <h3>성취도 추적 및 피드백</h3>
+                    <div class="achievement-chart" id="achievementChart">
+                        <!-- JavaScript로 차트 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 진로 탐색 페이지 -->
+            <div class="page-content" id="page-career">
+                <div class="page-header">
+                    <h2>진로 탐색 모듈</h2>
+                    <p>적성과 흥미를 과학적으로 분석하여 최적의 진로를 설계합니다</p>
+                </div>
+
+                <div class="career-test-section">
+                    <h3>진로·적성 정밀 진단</h3>
+                    <p>홀랜드(Holland) 검사 및 다중지능 검사 등 공인된 표준화 검사를 통해 학생의 흥미, 적성, 가치관을 다각도로 분석하여 진로 설정을 파악합니다.</p>
+                    <div class="test-cards">
+                        <div class="test-card">
+                            <h4><i class="fas fa-brain"></i> 적성 검사</h4>
+                            <p>홀랜드 검사를 통한 적성 유형 분석</p>
+                            <button class="btn-primary" onclick="startTest('aptitude')">검사 시작</button>
+                        </div>
+                        <div class="test-card">
+                            <h4><i class="fas fa-heart"></i> 흥미 검사</h4>
+                            <p>학습 및 직업 흥미 분야 탐색</p>
+                            <button class="btn-primary" onclick="startTest('interest')">검사 시작</button>
+                        </div>
+                        <div class="test-card">
+                            <h4><i class="fas fa-star"></i> 가치관 검사</h4>
+                            <p>직업 선택 시 중요시하는 가치 파악</p>
+                            <button class="btn-primary" onclick="startTest('value')">검사 시작</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="career-results" id="careerResults">
+                    <h3>검사 결과 및 추천</h3>
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+
+                <div class="major-info-section">
+                    <h3>학과/직업 정보 큐레이션</h3>
+                    <p>분석된 진로 성향을 바탕으로 적합한 대학 전공 학과와 유망 직업 정보를 제공하고, 졸업 후 진로를 보여 안 필요한 역량을 안내합니다.</p>
+                    <div class="info-tabs">
+                        <button class="info-tab-btn active" data-info-tab="majors">추천 전공</button>
+                        <button class="info-tab-btn" data-info-tab="careers">추천 직업</button>
+                    </div>
+                    <div class="info-content" id="majorCareerInfo">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+
+                <div class="mentoring-section">
+                    <h3>맞춤형 멘토링 연결</h3>
+                    <p>희망 학과 재학생 선배나 현직 직업인과의 온/오프라인 멘토링을 주선하여, 생생한 진학 경험을 듣고 구체적인 진로 설계를 돕습니다.</p>
+                    <div class="mentor-list" id="mentorList">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 데이터 분석 페이지 -->
+            <div class="page-content" id="page-analytics">
+                <div class="page-header">
+                    <h2>데이터 분석 모듈</h2>
+                    <p>학습 및 입시 준비 과정에서 축적된 데이터를 종합 분석합니다</p>
+                </div>
+
+                <div class="analytics-dashboard">
+                    <div class="analytics-card">
+                        <h3>학업 성취 정밀 분석</h3>
+                        <p>내신 성적과 모의고사 성적을 문항 유형별, 단원별로 분석하여 취약점 파악 및 성적 향상 방안을 제시합니다.</p>
+                        <div class="chart-container">
+                            <canvas id="gradeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <h3>비교과 역량 진단</h3>
+                        <p>학생별 기재 내용 대비 양 및 질을 선별하여 전공하고, 지원 희망 대학의 탐구와 비교하여 진단하고 개선점을 제시합니다.</p>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <h3>합격 가능성 예측</h3>
+                        <p>전년도 입시 결과 데이터와 학생의 성적을 비교하여 실시간 합격 가능성을 예측하고 지원 우선순위를 제시합니다.</p>
+                        <div class="chart-container">
+                            <canvas id="admissionPredictionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <h3>학습 패턴 분석</h3>
+                        <p>학습 시간, 과목별 공부 시간, 성취도 변화를 시각화하여 효율적인 학습 전략을 수립할 수 있도록 돕습니다.</p>
+                        <div class="chart-container">
+                            <canvas id="studyPatternChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendation-section">
+                    <h3>맞춤형 개선 솔루션</h3>
+                    <div class="solution-cards" id="solutionCards">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 차트 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 메인 JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
