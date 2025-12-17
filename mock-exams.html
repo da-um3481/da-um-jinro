@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 모의고사 성적 관리 - DA.UM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .grade-1 { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; }
+        .grade-2 { background: linear-gradient(135deg, #c0c0c0, #e8e8e8); color: #000; }
+        .grade-3 { background: linear-gradient(135deg, #cd7f32, #daa520); color: #fff; }
+        .grade-4 { background: linear-gradient(135deg, #4299e1, #63b3ed); color: #fff; }
+        .grade-5 { background: linear-gradient(135deg, #48bb78, #68d391); color: #fff; }
+        .grade-6 { background: linear-gradient(135deg, #f56565, #fc8181); color: #fff; }
+        .grade-7 { background: linear-gradient(135deg, #ed64a6, #f687b3); color: #fff; }
+        .grade-8 { background: linear-gradient(135deg, #9f7aea, #b794f4); color: #fff; }
+        .grade-9 { background: linear-gradient(135deg, #718096, #a0aec0); color: #fff; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect shadow-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-12 h-12 object-contain">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">📝 모의고사 성적 관리</h1>
+                        <p class="text-sm text-gray-600">수능 대비 모의고사 성적 추적 (고등학생 전용)</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="teacher-dashboard.html?level=high" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition">
+                        <i class="fas fa-arrow-left mr-2"></i>돌아가기
+                    </a>
+                    <button onclick="addExam()" class="px-6 py-2 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg hover:shadow-lg transition">
+                        <i class="fas fa-plus mr-2"></i>성적 입력
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- 안내 카드 -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-6 mb-8">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-info-circle text-2xl"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">📌 모의고사 성적 입력 안내</h3>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                        <li>✓ <strong>3월, 6월, 9월, 수능</strong> 모의고사 성적을 입력하여 추이를 관리합니다</li>
+                        <li>✓ 국어, 수학, 영어(절대평가), 한국사(절대평가), 탐구1, 탐구2 과목별 등급/백분위 입력</li>
+                        <li>✓ 차트로 성적 추이를 시각화하여 강점과 약점을 파악할 수 있습니다</li>
+                        <li>✓ 학생별로 모의고사 히스토리를 추적하고 목표 등급 달성 여부를 확인합니다</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 필터 섹션 -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">🔍 필터</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">학생 선택</label>
+                    <select id="studentSelect" onchange="loadExams()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                        <option value="">전체 고등학생</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">시험 유형</label>
+                    <select id="examTypeSelect" onchange="loadExams()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                        <option value="">전체</option>
+                        <option value="3월">3월 모의고사</option>
+                        <option value="6월">6월 모의고사</option>
+                        <option value="9월">9월 모의고사</option>
+                        <option value="수능">수능</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 성적 추이 차트 -->
+        <div id="chartSection" class="glass-effect rounded-2xl shadow-2xl p-6 mb-8" style="display: none;">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">📈 성적 추이 차트</h3>
+            <div class="bg-white rounded-lg p-4">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 성적 테이블 -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-800">📋 모의고사 성적 목록</h3>
+                <div class="text-sm text-gray-600">
+                    총 <span id="examCount" class="font-bold text-orange-600">0</span>개 성적
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">학생</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">시험일</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">유형</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">국어</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">수학</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">영어</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">한국사</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">탐구1</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">탐구2</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="examsTableBody" class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="10" class="px-4 py-8 text-center text-gray-500">
+                                모의고사 성적 데이터가 없습니다. 성적을 입력해주세요.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- 성적 입력 모달 -->
+    <div id="examModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="glass-effect rounded-2xl shadow-2xl p-8 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">📝 모의고사 성적 입력</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="examForm" onsubmit="saveExam(event)">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">학생 선택 *</label>
+                        <select id="modalStudentSelect" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                            <option value="">고등학생 선택</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">시험 날짜 *</label>
+                        <input type="date" id="examDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">시험 유형 *</label>
+                        <select id="modalExamType" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                            <option value="3월">3월 모의고사</option>
+                            <option value="6월">6월 모의고사</option>
+                            <option value="9월">9월 모의고사</option>
+                            <option value="수능">수능</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="bg-orange-50 rounded-lg p-4 mb-4">
+                    <div class="text-sm font-medium text-gray-700 mb-2">📊 등급 입력 (1~9등급)</div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">국어 등급 *</label>
+                        <input type="number" id="koreanGrade" required min="1" max="9" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                            placeholder="1~9">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">수학 등급 *</label>
+                        <input type="number" id="mathGrade" required min="1" max="9" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                            placeholder="1~9">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">영어 등급 * (절대평가)</label>
+                        <input type="number" id="englishGrade" required min="1" max="9" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                            placeholder="1~9">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">한국사 등급 (절대평가)</label>
+                        <input type="number" id="historyGrade" min="1" max="9" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                            placeholder="1~9">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">탐구1 등급</label>
+                        <input type="number" id="science1Grade" min="1" max="9" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                            placeholder="1~9">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">탐구2 등급</label>
+                        <input type="number" id="science2Grade" min="1" max="9" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                            placeholder="1~9">
+                    </div>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="button" onclick="closeModal()" 
+                        class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                        취소
+                    </button>
+                    <button type="submit" 
+                        class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg hover:shadow-lg transition">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 더미 학생 데이터 (고등학생만)
+        const students = [
+            { id: 1, name: '김철수', grade: '고1' },
+            { id: 2, name: '이영희', grade: '고2' },
+            { id: 3, name: '박민준', grade: '고3' },
+            { id: 4, name: '최서연', grade: '고1' },
+            { id: 5, name: '정지훈', grade: '고2' },
+        ];
+
+        // 더미 모의고사 데이터
+        let exams = [
+            { id: 1, studentId: 1, studentName: '김철수', date: '2024-03-15', type: '3월', korean: 2, math: 3, english: 2, history: 1, science1: 3, science2: 2 },
+            { id: 2, studentId: 1, studentName: '김철수', date: '2024-06-15', type: '6월', korean: 2, math: 2, english: 1, history: 1, science1: 2, science2: 2 },
+            { id: 3, studentId: 1, studentName: '김철수', date: '2024-09-15', type: '9월', korean: 1, math: 2, english: 1, history: 1, science1: 2, science2: 1 },
+            { id: 4, studentId: 2, studentName: '이영희', date: '2024-03-15', type: '3월', korean: 1, math: 2, english: 1, history: 1, science1: 1, science2: 2 },
+            { id: 5, studentId: 2, studentName: '이영희', date: '2024-06-15', type: '6월', korean: 1, math: 1, english: 1, history: 1, science1: 1, science2: 1 },
+        ];
+
+        let nextId = 6;
+        let trendChart = null;
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStudents();
+            loadExams();
+        });
+
+        // 학생 목록 로드
+        function loadStudents() {
+            const selects = [document.getElementById('studentSelect'), document.getElementById('modalStudentSelect')];
+            selects.forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = select.id === 'studentSelect' ? '<option value="">전체 고등학생</option>' : '<option value="">고등학생 선택</option>';
+                students.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = `${student.name} (${student.grade})`;
+                    select.appendChild(option);
+                });
+                select.value = currentValue;
+            });
+        }
+
+        // 모의고사 목록 로드
+        function loadExams() {
+            const studentId = document.getElementById('studentSelect').value;
+            const examType = document.getElementById('examTypeSelect').value;
+
+            let filteredExams = exams;
+            if (studentId) filteredExams = filteredExams.filter(e => e.studentId == studentId);
+            if (examType) filteredExams = filteredExams.filter(e => e.type == examType);
+
+            document.getElementById('examCount').textContent = filteredExams.length;
+
+            const tbody = document.getElementById('examsTableBody');
+            if (filteredExams.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="px-4 py-8 text-center text-gray-500">
+                            조건에 맞는 모의고사 성적이 없습니다.
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('chartSection').style.display = 'none';
+                return;
+            }
+
+            tbody.innerHTML = filteredExams.map(exam => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3 text-sm font-medium text-gray-900">${exam.studentName}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${exam.date}</td>
+                    <td class="px-4 py-3 text-sm font-medium text-orange-600">${exam.type}</td>
+                    <td class="px-4 py-3 text-center"><span class="grade-badge grade-${exam.korean}">${exam.korean}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="grade-badge grade-${exam.math}">${exam.math}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="grade-badge grade-${exam.english}">${exam.english}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="grade-badge grade-${exam.history || '-'}">${exam.history || '-'}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="grade-badge grade-${exam.science1 || '-'}">${exam.science1 || '-'}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="grade-badge grade-${exam.science2 || '-'}">${exam.science2 || '-'}</span></td>
+                    <td class="px-4 py-3 text-center">
+                        <button onclick="deleteExam(${exam.id})" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // 차트 업데이트 (학생 선택 시)
+            if (studentId) {
+                updateChart(filteredExams);
+            } else {
+                document.getElementById('chartSection').style.display = 'none';
+            }
+        }
+
+        // 차트 업데이트
+        function updateChart(examsData) {
+            document.getElementById('chartSection').style.display = 'block';
+            
+            const labels = examsData.map(e => `${e.date} (${e.type})`);
+            const koreanData = examsData.map(e => e.korean);
+            const mathData = examsData.map(e => e.math);
+            const englishData = examsData.map(e => e.english);
+            
+            const ctx = document.getElementById('trendChart');
+            
+            if (trendChart) {
+                trendChart.destroy();
+            }
+            
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '국어',
+                            data: koreanData,
+                            borderColor: 'rgb(239, 68, 68)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: '수학',
+                            data: mathData,
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: '영어',
+                            data: englishData,
+                            borderColor: 'rgb(34, 197, 94)',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            reverse: true,
+                            min: 1,
+                            max: 9,
+                            ticks: {
+                                stepSize: 1
+                            },
+                            title: {
+                                display: true,
+                                text: '등급 (낮을수록 좋음)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '모의고사 성적 추이'
+                        }
+                    }
+                }
+            });
+        }
+
+        // 모달 열기
+        function addExam() {
+            document.getElementById('examModal').classList.remove('hidden');
+            document.getElementById('examForm').reset();
+            document.getElementById('examDate').valueAsDate = new Date();
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('examModal').classList.add('hidden');
+        }
+
+        // 성적 저장
+        function saveExam(event) {
+            event.preventDefault();
+            
+            const studentId = parseInt(document.getElementById('modalStudentSelect').value);
+            const student = students.find(s => s.id === studentId);
+            const date = document.getElementById('examDate').value;
+            const type = document.getElementById('modalExamType').value;
+            const korean = parseInt(document.getElementById('koreanGrade').value);
+            const math = parseInt(document.getElementById('mathGrade').value);
+            const english = parseInt(document.getElementById('englishGrade').value);
+            const history = document.getElementById('historyGrade').value ? parseInt(document.getElementById('historyGrade').value) : null;
+            const science1 = document.getElementById('science1Grade').value ? parseInt(document.getElementById('science1Grade').value) : null;
+            const science2 = document.getElementById('science2Grade').value ? parseInt(document.getElementById('science2Grade').value) : null;
+            
+            exams.push({
+                id: nextId++,
+                studentId: studentId,
+                studentName: student.name,
+                date: date,
+                type: type,
+                korean: korean,
+                math: math,
+                english: english,
+                history: history,
+                science1: science1,
+                science2: science2
+            });
+            
+            // 날짜 순으로 정렬
+            exams.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            closeModal();
+            loadExams();
+            
+            alert('모의고사 성적이 저장되었습니다!');
+        }
+
+        // 성적 삭제
+        function deleteExam(id) {
+            if (confirm('이 모의고사 성적을 삭제하시겠습니까?')) {
+                exams = exams.filter(e => e.id !== id);
+                loadExams();
+            }
+        }
+    </script>
+</body>
+</html>
