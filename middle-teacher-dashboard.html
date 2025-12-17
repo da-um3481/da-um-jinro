@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중학생 100일 교사 관리시스템</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-nav .nav-item.removed {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 사이드바 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h2>교사<span>관리시스템</span></h2>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="overview">
+                <i class="fas fa-home"></i>
+                <span>전체 현황</span>
+            </a>
+            <a href="#" class="nav-item" data-page="students-list">
+                <i class="fas fa-users"></i>
+                <span>학생 목록</span>
+            </a>
+            <a href="#" class="nav-item" data-page="career-counsel">
+                <i class="fas fa-comments"></i>
+                <span>진로 상담</span>
+            </a>
+            <a href="#" class="nav-item" data-page="learning-management">
+                <i class="fas fa-book-reader"></i>
+                <span>학습부 관리</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar" style="background: #3b82f6;">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name">선생님</p>
+                    <p class="user-grade">중학생 100일 프로그램</p>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </button>
+        </div>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content">
+        <header class="header">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">
+                <h1 id="pageTitle">전체 현황</h1>
+                <p id="pageSubtitle">중학생 100일 프로그램 학습 현황</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="showNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-icon" onclick="window.location.href='index.html'">
+                    <i class="fas fa-home"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-container" id="contentContainer">
+            <!-- 전체 현황 페이지 -->
+            <div class="page-content active" id="page-overview">
+                <!-- 안내 배너 -->
+                <div class="alert-info" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-info-circle" style="font-size: 2rem;"></i>
+                        <div>
+                            <h3 style="margin: 0 0 5px 0; font-size: 1.2rem;">중학생 100일 프로그램 교사 시스템</h3>
+                            <p style="margin: 0; opacity: 0.9;">학습 관리 및 진로 상담에 집중된 중학생 맞춤형 관리 시스템입니다</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 주요 통계 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">전체 학생</p>
+                            <h3 class="stat-value">30<span class="stat-unit">명</span></h3>
+                            <p class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 신규 5명
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">평균 출석률</p>
+                            <h3 class="stat-value">94<span class="stat-unit">%</span></h3>
+                            <p class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> +2% 향상
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">평균 학습시간</p>
+                            <h3 class="stat-value">4.2<span class="stat-unit">시간/일</span></h3>
+                            <p class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 목표 달성
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">과제 완료율</p>
+                            <h3 class="stat-value">87<span class="stat-unit">%</span></h3>
+                            <p class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 우수
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 최근 활동 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock"></i> 최근 활동</h2>
+                        <button class="btn-secondary" onclick="refreshActivities()">
+                            <i class="fas fa-sync-alt"></i> 새로고침
+                        </button>
+                    </div>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: #3b82f6;">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p class="activity-title">김민준 학생이 수학 학습 완료</p>
+                                <p class="activity-time">5분 전</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: #10b981;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p class="activity-title">박서연 학생이 영어 과제 제출</p>
+                                <p class="activity-time">12분 전</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: #f59e0b;">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p class="activity-title">이지우 학생 진로 상담 예약</p>
+                                <p class="activity-time">25분 전</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학생 목록 페이지 -->
+            <div class="page-content" id="page-students-list">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users"></i> 학생 목록</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-primary" onclick="addStudent()">
+                                <i class="fas fa-user-plus"></i> 학생 추가
+                            </button>
+                            <button class="btn-secondary" onclick="window.location.href='students-bulk-upload.html'">
+                                <i class="fas fa-file-excel"></i> 일괄 등록
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>이름</th>
+                                    <th>학년</th>
+                                    <th>출석률</th>
+                                    <th>학습시간</th>
+                                    <th>과제완료율</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <tr>
+                                    <td>1</td>
+                                    <td>김민준</td>
+                                    <td>중2</td>
+                                    <td><span class="badge success">95%</span></td>
+                                    <td>4.5시간</td>
+                                    <td>90%</td>
+                                    <td>
+                                        <button class="btn-icon" onclick="viewStudent(1)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>박서연</td>
+                                    <td>중2</td>
+                                    <td><span class="badge success">98%</span></td>
+                                    <td>5.2시간</td>
+                                    <td>95%</td>
+                                    <td>
+                                        <button class="btn-icon" onclick="viewStudent(2)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>이지우</td>
+                                    <td>중1</td>
+                                    <td><span class="badge warning">88%</span></td>
+                                    <td>3.8시간</td>
+                                    <td>82%</td>
+                                    <td>
+                                        <button class="btn-icon" onclick="viewStudent(3)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 진로 상담 페이지 -->
+            <div class="page-content" id="page-career-counsel">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-comments"></i> 진로 상담</h2>
+                        <button class="btn-primary" onclick="newCareerCounsel()">
+                            <i class="fas fa-plus"></i> 상담 기록 작성
+                        </button>
+                    </div>
+                    <div class="career-counsel-grid">
+                        <div class="counsel-card">
+                            <div class="counsel-header">
+                                <h3>김민준 학생</h3>
+                                <span class="badge primary">중2</span>
+                            </div>
+                            <div class="counsel-content">
+                                <p><strong>관심 분야:</strong> IT, 프로그래밍</p>
+                                <p><strong>강점:</strong> 논리적 사고력, 수학</p>
+                                <p><strong>추천 진로:</strong> 소프트웨어 개발자, 데이터 분석가</p>
+                                <p class="counsel-date">최근 상담: 2024-12-15</p>
+                            </div>
+                            <button class="btn-secondary btn-block" onclick="viewCounsel(1)">
+                                <i class="fas fa-eye"></i> 상담 기록 보기
+                            </button>
+                        </div>
+
+                        <div class="counsel-card">
+                            <div class="counsel-header">
+                                <h3>박서연 학생</h3>
+                                <span class="badge primary">중2</span>
+                            </div>
+                            <div class="counsel-content">
+                                <p><strong>관심 분야:</strong> 의료, 생명과학</p>
+                                <p><strong>강점:</strong> 탐구력, 과학</p>
+                                <p><strong>추천 진로:</strong> 의사, 약사, 연구원</p>
+                                <p class="counsel-date">최근 상담: 2024-12-14</p>
+                            </div>
+                            <button class="btn-secondary btn-block" onclick="viewCounsel(2)">
+                                <i class="fas fa-eye"></i> 상담 기록 보기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학습부 관리 페이지 -->
+            <div class="page-content" id="page-learning-management">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-book-reader"></i> 학습부 관리</h2>
+                        <button class="btn-primary" onclick="exportLearningRecords()">
+                            <i class="fas fa-download"></i> 내보내기
+                        </button>
+                    </div>
+                    <div class="alert-info" style="margin-bottom: 20px;">
+                        <i class="fas fa-info-circle"></i>
+                        학생별 학습 활동 기록을 관리합니다. 성적, 과제, 출석, 특기사항을 종합적으로 기록할 수 있습니다.
+                    </div>
+                    <div class="learning-records-grid">
+                        <div class="record-summary-card">
+                            <h3>최근 학습 활동</h3>
+                            <div class="record-item">
+                                <div class="record-icon" style="background: #3b82f6;">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div>
+                                    <p class="record-title">수학 - 2차 방정식 학습</p>
+                                    <p class="record-detail">김민준, 박서연 외 8명</p>
+                                </div>
+                            </div>
+                            <div class="record-item">
+                                <div class="record-icon" style="background: #10b981;">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div>
+                                    <p class="record-title">영어 - 독해 연습</p>
+                                    <p class="record-detail">이지우, 최예은 외 12명</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/teacher-dashboard.js"></script>
+    <script>
+        // 페이지 전환
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.dataset.page;
+                
+                // 활성 메뉴 변경
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 페이지 전환
+                document.querySelectorAll('.page-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(`page-${page}`).classList.add('active');
+                
+                // 제목 변경
+                const titles = {
+                    'overview': { title: '전체 현황', subtitle: '중학생 100일 프로그램 학습 현황' },
+                    'students-list': { title: '학생 목록', subtitle: '등록된 학생 관리' },
+                    'career-counsel': { title: '진로 상담', subtitle: '학생별 진로 지도 기록' },
+                    'learning-management': { title: '학습부 관리', subtitle: '학습 활동 종합 기록' }
+                };
+                
+                if (titles[page]) {
+                    document.getElementById('pageTitle').textContent = titles[page].title;
+                    document.getElementById('pageSubtitle').textContent = titles[page].subtitle;
+                }
+            });
+        });
+
+        // 모바일 메뉴 토글
+        document.getElementById('mobileMenuToggle')?.addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+        });
+
+        // 간단한 함수들
+        function logout() {
+            if (confirm('로그아웃하시겠습니까?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function showNotifications() {
+            alert('알림 기능은 준비 중입니다.');
+        }
+
+        function refreshActivities() {
+            alert('활동 내역을 새로고침했습니다.');
+        }
+
+        function addStudent() {
+            window.location.href = 'students.html';
+        }
+
+        function viewStudent(id) {
+            alert(`학생 ${id}번의 상세 정보를 확인합니다.`);
+        }
+
+        function newCareerCounsel() {
+            alert('새 상담 기록 작성 기능은 준비 중입니다.');
+        }
+
+        function viewCounsel(id) {
+            alert(`상담 기록 ${id}를 확인합니다.`);
+        }
+
+        function exportLearningRecords() {
+            alert('학습부 내보내기 기능은 준비 중입니다.');
+        }
+    </script>
+</body>
+</html>
