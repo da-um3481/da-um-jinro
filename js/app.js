@@ -280,6 +280,9 @@ function loadPageData(pageName) {
         case 'career':
             loadCareerData();
             break;
+        case 'study-tracker':
+            loadStudyTracker();
+            break;
         case 'analytics':
             loadAnalyticsData();
             break;
@@ -1023,4 +1026,262 @@ function searchUniversity() {
 
 function startTest(testType) {
     alert(`${testType} 검사 시작 기능은 준비 중입니다.`);
+}
+
+// ==========================================
+// 학습 관리 시스템 (Study Tracker)
+// ==========================================
+
+let scoreChart = null;
+let scoresData = [];
+
+// 학습 관리 페이지 로드
+function loadStudyTracker() {
+    console.log('Loading study tracker...');
+    
+    // LocalStorage에서 성적 데이터 불러오기
+    const savedScores = localStorage.getItem('student_scores');
+    if (savedScores) {
+        scoresData = JSON.parse(savedScores);
+    }
+    
+    // 폼 이벤트 리스너
+    const scoreForm = document.getElementById('scoreForm');
+    if (scoreForm) {
+        scoreForm.addEventListener('submit', handleScoreSubmit);
+    }
+    
+    // 오늘 날짜 기본값 설정
+    const scoreDate = document.getElementById('scoreDate');
+    if (scoreDate) {
+        scoreDate.value = new Date().toISOString().split('T')[0];
+    }
+    
+    // 데이터 렌더링
+    renderScoreHistory();
+    updateStatistics();
+    renderScoreChart();
+}
+
+// 성적 추가 처리
+function handleScoreSubmit(event) {
+    event.preventDefault();
+    
+    const subject = document.getElementById('scoreSubject').value;
+    const type = document.getElementById('scoreType').value;
+    const value = parseFloat(document.getElementById('scoreValue').value);
+    const date = document.getElementById('scoreDate').value;
+    const memo = document.getElementById('scoreMemo').value;
+    
+    if (!subject || !type || !value || !date) {
+        alert('필수 항목을 모두 입력해주세요.');
+        return;
+    }
+    
+    // 새 성적 데이터
+    const newScore = {
+        id: Date.now(),
+        subject,
+        type,
+        value,
+        date,
+        memo,
+        createdAt: new Date().toISOString()
+    };
+    
+    // 배열에 추가
+    scoresData.unshift(newScore);
+    
+    // LocalStorage 저장
+    localStorage.setItem('student_scores', JSON.stringify(scoresData));
+    
+    // 폼 초기화
+    document.getElementById('scoreForm').reset();
+    document.getElementById('scoreDate').value = new Date().toISOString().split('T')[0];
+    
+    // UI 업데이트
+    renderScoreHistory();
+    updateStatistics();
+    renderScoreChart();
+    
+    alert('✅ 성적이 추가되었습니다!');
+}
+
+// 성적 삭제
+function deleteScore(id) {
+    if (!confirm('이 성적 기록을 삭제하시겠습니까?')) {
+        return;
+    }
+    
+    scoresData = scoresData.filter(score => score.id !== id);
+    localStorage.setItem('student_scores', JSON.stringify(scoresData));
+    
+    renderScoreHistory();
+    updateStatistics();
+    renderScoreChart();
+}
+
+// 성적 기록 목록 렌더링
+function renderScoreHistory() {
+    const tbody = document.getElementById('scoreHistoryBody');
+    if (!tbody) return;
+    
+    if (scoresData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>아직 기록된 성적이 없습니다.</p>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = scoresData.map(score => `
+        <tr>
+            <td>${score.date}</td>
+            <td>${score.subject}</td>
+            <td>${score.type}</td>
+            <td><strong>${score.value}점</strong></td>
+            <td>${score.memo || '-'}</td>
+            <td>
+                <button class="delete-btn" onclick="deleteScore(${score.id})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 통계 업데이트
+function updateStatistics() {
+    if (scoresData.length === 0) {
+        document.getElementById('avgScore').textContent = '--';
+        document.getElementById('maxScore').textContent = '--';
+        document.getElementById('totalRecords').textContent = '0건';
+        document.getElementById('improvement').textContent = '--';
+        return;
+    }
+    
+    // 평균 점수
+    const avg = (scoresData.reduce((sum, score) => sum + score.value, 0) / scoresData.length).toFixed(1);
+    document.getElementById('avgScore').textContent = avg + '점';
+    
+    // 최고 점수
+    const max = Math.max(...scoresData.map(s => s.value));
+    document.getElementById('maxScore').textContent = max + '점';
+    
+    // 기록 수
+    document.getElementById('totalRecords').textContent = scoresData.length + '건';
+    
+    // 최근 향상률 (최근 5개와 이전 5개 비교)
+    if (scoresData.length >= 5) {
+        const recent5 = scoresData.slice(0, 5).reduce((sum, s) => sum + s.value, 0) / 5;
+        const previous5 = scoresData.slice(5, 10).reduce((sum, s) => sum + s.value, 0) / Math.min(5, scoresData.length - 5);
+        const improvement = ((recent5 - previous5) / previous5 * 100).toFixed(1);
+        document.getElementById('improvement').textContent = (improvement > 0 ? '+' : '') + improvement + '%';
+    } else {
+        document.getElementById('improvement').textContent = '데이터 부족';
+    }
+}
+
+// 성적 추이 차트 렌더링
+function renderScoreChart() {
+    const canvas = document.getElementById('scoreLineChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // 기존 차트 삭제
+    if (scoreChart) {
+        scoreChart.destroy();
+    }
+    
+    if (scoresData.length === 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '16px Noto Sans KR';
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = 'center';
+        ctx.fillText('성적 데이터가 없습니다', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+    
+    // 과목별 데이터 그룹화
+    const subjects = ['국어', '영어', '수학', '사회', '과학'];
+    const colors = {
+        '국어': '#667eea',
+        '영어': '#f093fb',
+        '수학': '#4facfe',
+        '사회': '#43e97b',
+        '과학': '#fa709a'
+    };
+    
+    const datasets = subjects.map(subject => {
+        const subjectScores = scoresData
+            .filter(s => s.subject === subject)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        return {
+            label: subject,
+            data: subjectScores.map(s => ({ x: s.date, y: s.value })),
+            borderColor: colors[subject],
+            backgroundColor: colors[subject] + '20',
+            tension: 0.4,
+            fill: false,
+            pointRadius: 5,
+            pointHoverRadius: 7
+        };
+    }).filter(dataset => dataset.data.length > 0);
+    
+    // 차트 생성
+    scoreChart = new Chart(ctx, {
+        type: 'line',
+        data: { datasets },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '과목별 성적 추이',
+                    font: { size: 18, weight: 'bold' }
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + '점';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'MM/DD'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: '날짜'
+                    }
+                },
+                y: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: '점수'
+                    }
+                }
+            }
+        }
+    });
 }
