@@ -14,6 +14,18 @@
         .snowflake { position: fixed; top: -10vh; color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; z-index: 1; pointer-events: none; animation: snowfall linear infinite; }
         .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
     </style>
+    <style>
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            nav h1 { font-size: 1rem !important; }
+            nav p { font-size: 0.75rem !important; display: none; }
+            .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+            .md\:grid-cols-2, .md\:grid-cols-3, .md\:grid-cols-4 { grid-template-columns: 1fr !important; }
+            .glass-effect, .bg-white { padding: 1rem !important; }
+            input, select, textarea { font-size: 0.875rem !important; padding: 0.75rem !important; }
+            button { font-size: 0.875rem !important; padding: 0.75rem !important; }
+        }
+    </style>
 </head>
 <body>
     <div id="snowflakes"></div>

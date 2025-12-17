@@ -6,6 +6,93 @@
     <title>학교/기관 관리 - DA.UM 학습관리</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            
+            nav h1 {
+                font-size: 1rem !important;
+            }
+            
+            nav p {
+                font-size: 0.75rem !important;
+                display: none;
+            }
+            
+            nav .flex.space-x-4 {
+                display: none !important;
+            }
+            
+            .container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            /* 배너 최적화 */
+            .bg-gradient-to-r.from-blue-500 {
+                padding: 1.5rem !important;
+            }
+            
+            .bg-gradient-to-r.from-blue-500 h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .bg-gradient-to-r.from-blue-500 p {
+                font-size: 0.875rem !important;
+            }
+            
+            .bg-gradient-to-r.from-blue-500 .text-6xl {
+                display: none;
+            }
+            
+            /* 그리드 1열 */
+            .md\\:grid-cols-3,
+            .md\\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* 폼 최적화 */
+            .bg-white.rounded-2xl {
+                padding: 1rem !important;
+            }
+            
+            .bg-white.rounded-2xl h2 {
+                font-size: 1.1rem !important;
+            }
+            
+            input,
+            select,
+            textarea {
+                font-size: 0.875rem !important;
+                padding: 0.75rem !important;
+            }
+            
+            button {
+                font-size: 0.875rem !important;
+                padding: 0.75rem 1rem !important;
+            }
+            
+            /* 학교 카드 */
+            .rounded-2xl.shadow-xl {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            nav h1 {
+                font-size: 0.9rem !important;
+            }
+            
+            .bg-gradient-to-r.from-blue-500 h2 {
+                font-size: 1.1rem !important;
+            }
+        }
+    </style>
+    <script src="js/security.js"></script>
 </head>
 <body class="bg-gray-50">
     <!-- 상단 네비게이션 -->
