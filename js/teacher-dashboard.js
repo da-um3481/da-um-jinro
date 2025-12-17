@@ -257,20 +257,19 @@ let studentsData = [
 ];
 
 // 학생 목록 로드
-async function loadStudentsList() {
+function loadStudentsList() {
     const tableContainer = document.getElementById('studentsTable');
-    if (!tableContainer) return;
+    if (!tableContainer) {
+        console.error('studentsTable element not found');
+        return;
+    }
     
     try {
-        const students = studentsData;
-        
-        renderStudentsTable(students);
+        console.log('Loading students list...', studentsData.length, 'students');
+        renderStudentsTable(studentsData);
     } catch (error) {
         console.error('Error loading students:', error);
-        const tableContainer = document.getElementById('studentsTable');
-        if (tableContainer) {
-            tableContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #64748b;">학생 목록을 불러오는 중 오류가 발생했습니다.</p>';
-        }
+        tableContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #64748b;">학생 목록을 불러오는 중 오류가 발생했습니다: ' + error.message + '</p>';
     }
 }
 
