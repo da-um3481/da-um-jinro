@@ -588,17 +588,17 @@
                         <div class="test-card">
                             <h4><i class="fas fa-brain"></i> 적성 검사</h4>
                             <p>홀랜드 검사를 통한 적성 유형 분석</p>
-                            <button class="btn-primary" onclick="startTest('aptitude')">검사 시작</button>
+                            <a href="https://www.career.go.kr/cnet/front/examen/inspct/listInspct.do" target="_blank" class="btn-primary">검사 시작</a>
                         </div>
                         <div class="test-card">
                             <h4><i class="fas fa-heart"></i> 흥미 검사</h4>
                             <p>학습 및 직업 흥미 분야 탐색</p>
-                            <button class="btn-primary" onclick="startTest('interest')">검사 시작</button>
+                            <a href="https://www.career.go.kr/cnet/front/examen/inspct/listInspct.do" target="_blank" class="btn-primary">검사 시작</a>
                         </div>
                         <div class="test-card">
                             <h4><i class="fas fa-star"></i> 가치관 검사</h4>
                             <p>직업 선택 시 중요시하는 가치 파악</p>
-                            <button class="btn-primary" onclick="startTest('value')">검사 시작</button>
+                            <a href="https://www.career.go.kr/cnet/front/examen/inspct/listInspct.do" target="_blank" class="btn-primary">검사 시작</a>
                         </div>
                     </div>
                 </div>
@@ -979,6 +979,7 @@
         }
         
         .btn-secondary {
+            display: inline-block;
             padding: 12px 24px;
             background: #e2e8f0;
             color: #475569;
@@ -988,14 +989,19 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 1rem;
+            text-decoration: none;
+            text-align: center;
         }
         
         .btn-secondary:hover {
             background: #cbd5e1;
             transform: translateY(-2px);
+            color: #475569;
+            text-decoration: none;
         }
         
         .btn-primary {
+            display: inline-block;
             padding: 12px 24px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -1005,11 +1011,15 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 1rem;
+            text-decoration: none;
+            text-align: center;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
         }
         
         .modal-footer {
