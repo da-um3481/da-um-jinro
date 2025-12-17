@@ -256,6 +256,178 @@
             color: #fff;
         }
         
+        /* 공지사항 배너 */
+        .notice-banner {
+            background: linear-gradient(90deg, #ff6b9d 0%, #c86dd7 50%, #667eea 100%);
+            border-radius: 20px;
+            padding: 15px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(255, 107, 157, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .notice-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+        
+        .notice-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .notice-icon {
+            font-size: 1.5em;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .notice-text {
+            flex: 1;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        
+        .notice-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-weight: 700;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .notice-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(5px);
+        }
+        
+        /* 실시간 통계 대시보드 */
+        .stats-dashboard {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .stats-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .stats-header-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3em;
+        }
+        
+        .stats-header-title {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #333;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            border-radius: 18px;
+            padding: 25px 20px;
+            text-align: center;
+            border: 2px solid #f0f4ff;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 0.95em;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .stat-change {
+            font-size: 0.85em;
+            color: #43e97b;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+        
+        .stat-change i {
+            font-size: 0.9em;
+        }
+        
         /* 모바일 반응형 */
         @media (max-width: 768px) {
             .header {
@@ -291,6 +463,60 @@
             
             .contact-info p {
                 justify-content: center;
+            }
+            
+            .notice-banner {
+                padding: 12px 20px;
+            }
+            
+            .notice-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .notice-text {
+                font-size: 0.95em;
+            }
+            
+            .stats-dashboard {
+                padding: 25px 20px;
+            }
+            
+            .stats-header {
+                margin-bottom: 20px;
+            }
+            
+            .stats-header-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1em;
+            }
+            
+            .stats-header-title {
+                font-size: 1.2em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .stat-card {
+                padding: 20px 15px;
+            }
+            
+            .stat-icon {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
+            
+            .stat-number {
+                font-size: 1.6em;
+            }
+            
+            .stat-label {
+                font-size: 0.9em;
             }
             
             .grid-container {
@@ -352,6 +578,23 @@
             .section-card {
                 padding: 20px 15px;
             }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .stat-card {
+                padding: 18px 15px;
+            }
+            
+            .stat-icon {
+                font-size: 1.8em;
+            }
+            
+            .stat-number {
+                font-size: 1.5em;
+            }
         }
     </style>
     <script src="js/security.js"></script>
@@ -372,6 +615,61 @@
             <div class="contact-info">
                 <p><i class="fas fa-phone-alt"></i> <strong>010-2657-3481</strong></p>
                 <p><i class="fas fa-user-tie"></i> 정라미 대표</p>
+            </div>
+        </div>
+        
+        <!-- 공지사항 배너 -->
+        <div class="notice-banner">
+            <div class="notice-content">
+                <div class="notice-icon">📢</div>
+                <div class="notice-text">
+                    <strong>[신규 모집]</strong> 근화여중 겨울방학 30일 프로그램 | 1~3학년 대상 | 선착순 마감!
+                </div>
+                <a href="geunhwa_index.html" class="notice-link">자세히 보기 →</a>
+            </div>
+        </div>
+        
+        <!-- 실시간 통계 대시보드 -->
+        <div class="stats-dashboard">
+            <div class="stats-header">
+                <div class="stats-header-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stats-header-title">📊 실시간 학습 현황</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">128</div>
+                    <div class="stat-label">등록 학생 수</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i> +15 (이번 달)
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏫</div>
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">협력 학교/기관</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i> +3 (신규)
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">학습 완료율</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i> +2.5%
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-number">4.8</div>
+                    <div class="stat-label">학부모 만족도</div>
+                    <div class="stat-change">
+                        <i class="fas fa-star"></i> 최고 평점
+                    </div>
+                </div>
             </div>
         </div>
         
