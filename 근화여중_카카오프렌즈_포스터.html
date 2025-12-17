@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>근화여중 겨울방학 자기주도학습 UP 챌린지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .poster-container {
+            max-width: 600px;
+            width: 100%;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .poster-header {
+            background: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .school-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #7B1FA2;
+            margin-bottom: 15px;
+        }
+        
+        .main-title {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .sub-title {
+            font-size: 20px;
+            color: #FFB300;
+            font-weight: bold;
+        }
+        
+        .emoji-characters {
+            display: flex;
+            justify-content: space-around;
+            padding: 30px 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .emoji-char {
+            font-size: 60px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .emoji-char:nth-child(1) { animation-delay: 0s; }
+        .emoji-char:nth-child(2) { animation-delay: 0.2s; }
+        .emoji-char:nth-child(3) { animation-delay: 0.4s; }
+        .emoji-char:nth-child(4) { animation-delay: 0.6s; }
+        .emoji-char:nth-child(5) { animation-delay: 0.8s; }
+        .emoji-char:nth-child(6) { animation-delay: 1s; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 30px 20px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-card-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .info-card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #7B1FA2;
+            margin-bottom: 10px;
+        }
+        
+        .info-card-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .benefits {
+            padding: 20px;
+            background: white;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .benefit-emoji {
+            font-size: 32px;
+            min-width: 40px;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #7B1FA2, #9C27B0);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .cta-subtitle {
+            font-size: 18px;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+        
+        .contact-info {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .contact-info p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .poster-container {
+                border-radius: 15px;
+            }
+            
+            .poster-header {
+                padding: 30px 20px;
+            }
+            
+            .school-name {
+                font-size: 22px;
+            }
+            
+            .main-title {
+                font-size: 28px;
+            }
+            
+            .sub-title {
+                font-size: 16px;
+            }
+            
+            .emoji-char {
+                font-size: 45px;
+            }
+            
+            .info-cards {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 20px;
+            }
+            
+            .benefit-item {
+                font-size: 14px;
+                padding: 12px;
+            }
+            
+            .benefit-emoji {
+                font-size: 28px;
+            }
+            
+            .cta-section {
+                padding: 30px 20px;
+            }
+            
+            .cta-title {
+                font-size: 26px;
+            }
+            
+            .cta-subtitle {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .school-name {
+                font-size: 20px;
+            }
+            
+            .main-title {
+                font-size: 24px;
+            }
+            
+            .sub-title {
+                font-size: 14px;
+            }
+            
+            .emoji-char {
+                font-size: 40px;
+            }
+            
+            .benefit-item {
+                font-size: 13px;
+            }
+            
+            .cta-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="poster-container">
+        <!-- 헤더 -->
+        <div class="poster-header">
+            <div class="school-name">🏫 경주 근화여자중학교</div>
+            <div class="main-title">자기주도학습 UP 챌린지</div>
+            <div class="sub-title">⭐ 겨울방학 30일 자기주도학습 프로그램 ⭐</div>
+        </div>
+        
+        <!-- 귀여운 이모지 캐릭터 -->
+        <div class="emoji-characters">
+            <div class="emoji-char">😊</div>
+            <div class="emoji-char">📚</div>
+            <div class="emoji-char">🎯</div>
+            <div class="emoji-char">✨</div>
+            <div class="emoji-char">💪</div>
+            <div class="emoji-char">🌟</div>
+        </div>
+        
+        <!-- 프로그램 정보 카드 -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-icon">📋</div>
+                <div class="info-card-title">모집 대상</div>
+                <div class="info-card-content">
+                    희망 학생<br>20~40명<br>
+                    자기주도학습 온라인 콘텐츠 활용
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">🎯</div>
+                <div class="info-card-title">프로그램 특징</div>
+                <div class="info-card-content">
+                    개별 맞춤 관리<br>
+                    주 1회 피드백 실시
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">📅</div>
+                <div class="info-card-title">일정</div>
+                <div class="info-card-content">
+                    학생 모집: ~12/26<br>
+                    오리엔테이션: ~12/30<br>
+                    방학 중 4주간:<br>
+                    온라인+오프라인 활용<br>
+                    자기주도학습(1/30까지)<br>
+                    수료 및 평가: 2/2~2/5
+                </div>
+            </div>
+        </div>
+        
+        <!-- 혜택 -->
+        <div class="benefits">
+            <div class="benefit-item">
+                <div class="benefit-emoji">✨</div>
+                <div>성적이 쑥쑥!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">🎮</div>
+                <div>친구들이랑 재미있게!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">🎁</div>
+                <div>공부 습관 완성!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">👍</div>
+                <div>자신감 UP!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">🏆</div>
+                <div>내신 완벽 대비!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">🎯</div>
+                <div>내 꿈 찾기!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">📱</div>
+                <div>스마트 학습!</div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-emoji">☁️</div>
+                <div>혼자 공부해도 어떤 공부할지 알려줘서 좋아!</div>
+            </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="cta-section">
+            <div class="cta-title">⭐ 신청은 담임쌤<br>or 진로쌤께! ⭐</div>
+            <div class="cta-subtitle">지금 바로 신청하세요! 🚀</div>
+            
+            <div class="contact-info">
+                <p><strong>📞 교육콘텐츠제작 · 컨설팅</strong></p>
+                <p>DA.UM 다움진로진학컨설팅</p>
+                <p>연락처: 010-2657-3481 (정라미)</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
