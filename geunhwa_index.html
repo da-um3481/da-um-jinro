@@ -367,24 +367,25 @@
         
         @media (max-width: 768px) {
             .header {
-                padding: 40px 15px 30px;
+                padding: 40px 10px 30px;
             }
             
             .header h1 {
-                font-size: 38px;
-                letter-spacing: -1px;
+                font-size: 34px;
+                letter-spacing: -1.5px;
                 margin-bottom: 15px;
                 white-space: nowrap;
+                overflow: visible;
             }
             
             .header .program-title {
-                font-size: 16px;
-                padding: 10px 20px;
+                font-size: 15px;
+                padding: 10px 18px;
                 white-space: nowrap;
             }
             
             .header .school-name {
-                font-size: 15px;
+                font-size: 14px;
                 white-space: nowrap;
             }
             
@@ -454,18 +455,22 @@
         }
         
         @media (max-width: 480px) {
+            .header {
+                padding: 35px 5px 25px;
+            }
+            
             .header h1 {
-                font-size: 32px;
-                letter-spacing: -0.5px;
+                font-size: 28px;
+                letter-spacing: -2px;
             }
             
             .header .program-title {
-                font-size: 14px;
+                font-size: 13px;
                 padding: 8px 15px;
             }
             
             .header .school-name {
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .intro-box {
@@ -498,6 +503,25 @@
             
             .feature-box ul li {
                 font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 375px) {
+            .header h1 {
+                font-size: 26px;
+                letter-spacing: -2.5px;
+            }
+            
+            .header .program-title {
+                font-size: 12px;
+                padding: 7px 12px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .header h1 {
+                font-size: 24px;
+                letter-spacing: -3px;
             }
         }
     </style>
