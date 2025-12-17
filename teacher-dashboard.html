@@ -349,6 +349,29 @@
                         <i class="fas fa-arrow-right ml-2"></i>
                     </div>
                 </a>
+
+                <!-- 학년별 커리큘럼 (고등학생 전용) -->
+                <a href="high-school-curriculum.html" id="curriculumMenu" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl" style="display: none;">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-800">학년별 커리큘럼</h4>
+                                <p class="text-sm text-gray-600">맞춤 학습 계획</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-violet-100 text-violet-800 text-xs font-bold rounded-full">
+                            <i class="fas fa-star mr-1"></i>핵심
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">학년별·수준별 주간 스케줄, 교재, EBS 강의</p>
+                    <div class="flex items-center text-violet-600 font-medium">
+                        <span>확인하기</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -401,6 +424,7 @@
             // 고등학생 전용 메뉴 표시
             document.getElementById('mockExamMenu').style.display = 'block';
             document.getElementById('admissionMenu').style.display = 'block';
+            document.getElementById('curriculumMenu').style.display = 'block';
         } else if (level === 'middle') {
             titleElement.innerHTML = '<i class="fas fa-book-reader mr-2"></i>중학생 이하 100일 프로그램';
             subtitleElement.textContent = '중학생·예비중·초6 방과후 자기주도학습 100일';
@@ -409,6 +433,7 @@
             // 고등학생 전용 메뉴 숨김
             document.getElementById('mockExamMenu').style.display = 'none';
             document.getElementById('admissionMenu').style.display = 'none';
+            document.getElementById('curriculumMenu').style.display = 'none';
         }
         
         // 현재 날짜 표시
