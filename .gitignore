@@ -1,0 +1,55 @@
+# 민감한 정보 보호
+.env
+.env.local
+.env.production
+*.key
+*.pem
+*.p12
+config/secrets.js
+config/api-keys.js
+
+# 개인정보 보호
+**/student-data/
+**/학생정보/
+**/계약서/
+**/personal-info/
+
+# 백업 파일
+*.backup
+*.bak
+*.tmp
+*~
+
+# OS 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE 설정
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 로그 파일
+*.log
+logs/
+
+# Node modules (나중에 사용할 경우)
+node_modules/
+package-lock.json
+
+# 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
+
+# 압축 파일 (필요시)
+*.zip
+*.tar.gz
+*.rar
+
+# 임시 파일
+temp/
+tmp/
+cache/
