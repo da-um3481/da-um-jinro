@@ -1,0 +1,719 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+경주 근화여자중학교 맞춤형 상세 안내 자료 생성 (HTML)
+"""
+
+def create_detailed_handout():
+    """상세 안내 자료 HTML 생성"""
+    
+    html_content = """<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경주 근화여자중학교 겨울방학 자기주도학습 프로그램 상세 안내</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        header .subtitle {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        .section {
+            padding: 50px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            color: #7B1FA2;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #7B1FA2;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .intro-box {
+            background: #F3E5F5;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .intro-box h3 {
+            font-size: 24px;
+            color: #7B1FA2;
+            margin-bottom: 20px;
+        }
+        
+        .intro-box ul {
+            list-style: none;
+        }
+        
+        .intro-box li {
+            padding: 10px 0;
+            font-size: 18px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .intro-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #7B1FA2;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #E91E63;
+            margin: 30px 0;
+        }
+        
+        .highlight-box h3 {
+            font-size: 26px;
+            color: #C2185B;
+            margin-bottom: 15px;
+        }
+        
+        .highlight-box p {
+            font-size: 18px;
+            color: #424242;
+            line-height: 1.8;
+        }
+        
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .program-card {
+            background: white;
+            border: 2px solid #7B1FA2;
+            border-radius: 15px;
+            padding: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(123, 31, 162, 0.2);
+        }
+        
+        .program-card h3 {
+            font-size: 28px;
+            color: #7B1FA2;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .program-card .grade {
+            font-size: 20px;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .program-card .description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .program-card ul {
+            list-style: none;
+        }
+        
+        .program-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 15px;
+        }
+        
+        .program-card li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #7B1FA2;
+            font-size: 20px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            background: #F5F5F5;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature-item .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-item h4 {
+            font-size: 20px;
+            color: #7B1FA2;
+            margin-bottom: 10px;
+        }
+        
+        .feature-item p {
+            font-size: 15px;
+            color: #666;
+        }
+        
+        .schedule-box {
+            background: #FFF3E0;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid #FF9800;
+        }
+        
+        .schedule-box h3 {
+            font-size: 24px;
+            color: #E65100;
+            margin-bottom: 20px;
+        }
+        
+        .schedule-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #FFE0B2;
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .schedule-item strong {
+            color: #E65100;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .benefit-item {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            padding: 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+        }
+        
+        .benefit-item .emoji {
+            font-size: 36px;
+        }
+        
+        .benefit-item .content h4 {
+            font-size: 20px;
+            color: #6A1B9A;
+            margin-bottom: 8px;
+        }
+        
+        .benefit-item .content p {
+            font-size: 15px;
+            color: #424242;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            padding: 50px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .contact-section h3 {
+            font-size: 32px;
+            color: #6A1B9A;
+            margin-bottom: 30px;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .contact-item .icon {
+            font-size: 48px;
+        }
+        
+        .contact-item strong {
+            font-size: 18px;
+            color: #6A1B9A;
+        }
+        
+        .contact-item span {
+            font-size: 20px;
+            color: #424242;
+        }
+        
+        footer {
+            background: #4A148C;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .program-card, .benefit-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏫 경주 근화여자중학교</h1>
+            <div class="subtitle">1,2학년 겨울방학 자기주도학습 프로그램</div>
+            <p>학교 맞춤형 상세 안내서</p>
+        </header>
+        
+        <div class="section">
+            <h2 class="section-title">📋 제안 개요</h2>
+            <div class="intro-box">
+                <h3>프로그램 기본 정보</h3>
+                <ul>
+                    <li>대상: 경주 근화여자중학교 1학년, 2학년</li>
+                    <li>기간: 겨울방학 중 30일 집중 프로그램</li>
+                    <li>목표: 자기주도학습 능력 향상 및 학업 성취도 제고</li>
+                    <li>운영: 학교 맞춤형 체계적 학습관리</li>
+                    <li>특징: 여학생 특성을 고려한 개인별 맞춤 지도</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>💡 왜 근화여자중학교를 위한 특별 프로그램인가?</h3>
+                <p>
+                    여학생들의 학습 특성과 심리적 특성을 깊이 이해하고 반영한 맞춤형 프로그램입니다. 
+                    섬세한 학습 지도와 체계적인 관리를 통해 근화여중 학생들의 잠재력을 최대한 발휘할 수 있도록 설계되었습니다.
+                    겨울방학이라는 중요한 시기를 활용하여 자기주도학습 습관을 완성하고, 
+                    고등학교 진학 준비를 철저히 할 수 있는 최적의 프로그램입니다.
+                </p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">💡 프로그램의 필요성</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="icon">📚</div>
+                    <h4>학습 공백 방지</h4>
+                    <p>겨울방학 동안의 학습 공백을 최소화하고 지속적인 학습 리듬 유지</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">⏰</div>
+                    <h4>습관 형성 시기</h4>
+                    <p>30일 집중 훈련으로 평생 가는 자기주도학습 습관 완성</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🎓</div>
+                    <h4>고교 진학 준비</h4>
+                    <p>고등학교 진학 전 학업 기초를 탄탄히 다지는 중요한 기회</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">📈</div>
+                    <h4>성적 향상</h4>
+                    <p>체계적인 학습관리를 통한 확실한 내신 성적 향상</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🎯</div>
+                    <h4>맞춤형 교육</h4>
+                    <p>개인별 학습 수준과 속도에 맞춘 효율적인 학습</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🌟</div>
+                    <h4>진로 탐색</h4>
+                    <p>명확한 진로 목표 설정 및 학습 동기 부여</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">✨ 근화여중 맞춤형 프로그램 특징</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="emoji">👩‍🎓</div>
+                    <div class="content">
+                        <h4>여학생 특성 고려</h4>
+                        <p>여학생들의 학습 스타일과 심리적 특성을 반영한 섬세한 지도</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">📚</div>
+                    <div class="content">
+                        <h4>30일 집중 프로그램</h4>
+                        <p>과학적으로 입증된 습관 형성 기간을 활용한 체계적 학습</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">👩‍🏫</div>
+                    <div class="content">
+                        <h4>1:1 맞춤 지도</h4>
+                        <p>개인별 학습 수준 진단 후 맞춤형 학습 계획 수립 및 관리</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">📊</div>
+                    <div class="content">
+                        <h4>체계적 진도관리</h4>
+                        <p>매일매일 학습 진도를 체크하고 성취도를 평가하여 관리</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">💻</div>
+                    <div class="content">
+                        <h4>온라인 시스템</h4>
+                        <p>학습관리 앱을 통한 실시간 진도 확인 및 피드백</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">📞</div>
+                    <div class="content">
+                        <h4>학부모 소통</h4>
+                        <p>주간 학습 리포트 제공 및 정기 학부모 상담 진행</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">📚 1학년 프로그램</h2>
+            <div class="program-grid">
+                <div class="program-card">
+                    <h3>📖 교과 학습 강화</h3>
+                    <div class="description">
+                        국어, 영어, 수학, 사회, 과학 등 주요 교과의 기초를 탄탄히 다지고 내신 대비를 철저히 합니다.
+                    </div>
+                    <ul>
+                        <li>교과서 중심 개념 완벽 정리</li>
+                        <li>단원별 핵심 요약 및 정리</li>
+                        <li>기출 문제 분석 및 풀이</li>
+                        <li>취약 단원 집중 보완</li>
+                        <li>학교 시험 유형 대비</li>
+                        <li>서술형 문제 집중 훈련</li>
+                    </ul>
+                </div>
+                
+                <div class="program-card">
+                    <h3>✍️ 자기주도학습 훈련</h3>
+                    <div class="description">
+                        효과적인 공부 방법을 익히고 스스로 학습할 수 있는 능력을 기릅니다.
+                    </div>
+                    <ul>
+                        <li>학습 계획 수립 방법 훈련</li>
+                        <li>효율적인 시간 관리 기법</li>
+                        <li>집중력 향상 훈련</li>
+                        <li>노트 필기 및 정리 방법</li>
+                        <li>암기 및 이해 학습 전략</li>
+                        <li>학습 일지 작성 습관화</li>
+                    </ul>
+                </div>
+                
+                <div class="program-card">
+                    <h3>📝 기초 학력 완성</h3>
+                    <div class="description">
+                        취약한 과목과 단원을 파악하여 집중적으로 보완하고 기초를 다집니다.
+                    </div>
+                    <ul>
+                        <li>학력 진단 테스트 실시</li>
+                        <li>취약 과목 집중 지도</li>
+                        <li>기초 개념 다시 잡기</li>
+                        <li>기본 문제 반복 연습</li>
+                        <li>단계별 난이도 상승</li>
+                        <li>정기 실력 점검 평가</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">📚 2학년 프로그램</h2>
+            <div class="program-grid">
+                <div class="program-card">
+                    <h3>📖 교과 심화 학습</h3>
+                    <div class="description">
+                        주요 교과의 심화 내용을 학습하고 고등학교 과정을 미리 준비합니다.
+                    </div>
+                    <ul>
+                        <li>교과 심화 개념 학습</li>
+                        <li>고난도 문제 풀이 연습</li>
+                        <li>고등 과정 선행 학습</li>
+                        <li>심화 문제 해결 능력 향상</li>
+                        <li>사고력 확장 훈련</li>
+                        <li>논리적 문제 풀이 방법</li>
+                    </ul>
+                </div>
+                
+                <div class="program-card">
+                    <h3>🎯 고등학교 진학 준비</h3>
+                    <div class="description">
+                        고등학교 진학을 앞두고 진로를 탐색하고 목표를 명확히 설정합니다.
+                    </div>
+                    <ul>
+                        <li>진로 적성 검사 및 상담</li>
+                        <li>목표 고등학교 설정</li>
+                        <li>고등 교육과정 미리보기</li>
+                        <li>학습 로드맵 작성</li>
+                        <li>진로별 필요 역량 분석</li>
+                        <li>장기 학습 계획 수립</li>
+                    </ul>
+                </div>
+                
+                <div class="program-card">
+                    <h3>💪 학습 역량 강화</h3>
+                    <div class="description">
+                        자기주도학습 능력을 완성하고 고등학교에서도 통하는 학습 역량을 기릅니다.
+                    </div>
+                    <ul>
+                        <li>고차원적 사고력 훈련</li>
+                        <li>문제 해결 능력 향상</li>
+                        <li>창의적 학습 방법 개발</li>
+                        <li>자기 평가 및 점검 능력</li>
+                        <li>학습 전략 자체 수립</li>
+                        <li>완전한 자기주도학습 완성</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">⚙️ 체계적인 학습관리 시스템</h2>
+            <div class="schedule-box">
+                <h3>일일 학습 프로세스</h3>
+                <div class="schedule-item">
+                    <strong>📅 일일 학습 관리</strong>
+                    매일 학습 목표 설정 → 집중 학습 → 진도 체크 → 자기 점검
+                </div>
+                <div class="schedule-item">
+                    <strong>✍️ 학습 일지 작성</strong>
+                    학습 내용 정리 → 이해도 체크 → 질문 사항 기록 → 다음 계획 수립
+                </div>
+                <div class="schedule-item">
+                    <strong>📊 주간 학습 평가</strong>
+                    주간 학습 성취도 평가 → 취약점 분석 → 보완 계획 수립 → 학부모 리포트
+                </div>
+                <div class="schedule-item">
+                    <strong>👩‍🏫 개인별 상담</strong>
+                    학습 상담 및 피드백 → 고민 해결 → 동기 부여 → 목표 재설정
+                </div>
+                <div class="schedule-item">
+                    <strong>📞 학부모 소통</strong>
+                    주간 학습 리포트 발송 → 정기 학부모 상담 → 가정 학습 지도 → 협력 체계 구축
+                </div>
+                <div class="schedule-item">
+                    <strong>💻 온라인 관리</strong>
+                    학습관리 앱 활용 → 실시간 진도 공유 → 온라인 질의응답 → 학습 자료 제공
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">📋 프로그램 운영 계획</h2>
+            <div class="intro-box">
+                <h3>운영 세부 사항</h3>
+                <ul>
+                    <li>운영 기간: 겨울방학 중 30일 (학교와 협의하여 확정)</li>
+                    <li>운영 시간: 평일 09:00 ~ 17:00 (점심시간 12:00~13:00)</li>
+                    <li>운영 인원: 학년별 소그룹 (5~10명) 또는 개인별 맞춤</li>
+                    <li>운영 장소: 근화여자중학교 또는 DA.UM 학습센터</li>
+                    <li>교재 및 자료: 학교 교과서 + DA.UM 맞춤형 학습 자료</li>
+                    <li>지도 교사: 과목별 전문 강사진 (경력 5년 이상)</li>
+                    <li>온라인 지원: 학습관리 앱 제공 및 실시간 상담</li>
+                    <li>평가 시스템: 주 1회 학습 평가 + 프로그램 종료 후 최종 평가</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">✨ 기대 효과</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="emoji">🌟</div>
+                    <div class="content">
+                        <h4>자기주도학습 완성</h4>
+                        <p>30일 집중 훈련으로 평생 가는 자기주도학습 습관 완벽 형성</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">📈</div>
+                    <div class="content">
+                        <h4>성적 향상</h4>
+                        <p>체계적인 학습관리를 통한 내신 성적 20~30% 향상 기대</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">💪</div>
+                    <div class="content">
+                        <h4>학습 자신감</h4>
+                        <p>성취 경험을 통한 학습 자신감 및 자기효능감 극대화</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">🎯</div>
+                    <div class="content">
+                        <h4>명확한 목표 설정</h4>
+                        <p>진로 탐색을 통한 학습 목표 및 진로 방향 명확화</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">🎓</div>
+                    <div class="content">
+                        <h4>고교 진학 준비</h4>
+                        <p>고등학교 교육과정에 대한 이해 및 학업 기초 완성</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">👩‍👧</div>
+                    <div class="content">
+                        <h4>학부모 소통 강화</h4>
+                        <p>학부모-학생-교사 간 긴밀한 소통으로 학습 효과 배가</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">🏆</div>
+                    <div class="content">
+                        <h4>학업 경쟁력</h4>
+                        <p>근화여중 학생들의 전반적인 학업 경쟁력 강화</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">😊</div>
+                    <div class="content">
+                        <h4>학습 동기 부여</h4>
+                        <p>성공 경험과 칭찬을 통한 지속적인 학습 동기 유발</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="contact-section">
+                <h3>📞 문의 및 상담</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="icon">📱</div>
+                        <strong>전화번호</strong>
+                        <span>010-2657-3481</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon">👤</div>
+                        <strong>담당자</strong>
+                        <span>정라미</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon">🏫</div>
+                        <strong>제안 대상</strong>
+                        <span>경주 근화여자중학교</span>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; font-size: 18px; color: #424242;">
+                    💡 학교 맞춤형 프로그램 | 💡 체계적인 학습관리 시스템<br>
+                    💡 근화여중 학생들의 성장을 함께 만들어갑니다
+                </p>
+            </div>
+        </div>
+        
+        <footer>
+            <p style="font-size: 20px; margin-bottom: 10px;">DA.UM 다움진로진학컨설팅</p>
+            <p>© 2025 경주 근화여자중학교 맞춤형 겨울방학 프로그램</p>
+            <p style="margin-top: 10px; opacity: 0.8;">근화여중 학생들과 함께 성공적인 겨울방학을 만들어가겠습니다</p>
+        </footer>
+    </div>
+</body>
+</html>
+"""
+    
+    output_file = '/home/user/webapp/근화여자중학교_겨울방학_프로그램_상세안내.html'
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    print(f"✅ 상세 안내 자료 생성 완료: {output_file}")
+    return output_file
+
+if __name__ == "__main__":
+    create_detailed_handout()
