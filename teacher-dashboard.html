@@ -303,6 +303,52 @@
                         <i class="fas fa-arrow-right ml-2"></i>
                     </div>
                 </a>
+
+                <!-- 모의고사 (고등학생 전용) -->
+                <a href="#" id="mockExamMenu" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl" style="display: none;">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-800">모의고사 관리</h4>
+                                <p class="text-sm text-gray-600">수능 대비 성적</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded-full">
+                            <i class="fas fa-graduation-cap mr-1"></i>고등
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">모의고사 성적 입력 및 추이 분석</p>
+                    <div class="flex items-center text-orange-600 font-medium">
+                        <span>관리하기</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </a>
+
+                <!-- 입시 분석 (고등학생 전용) -->
+                <a href="#" id="admissionMenu" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl" style="display: none;">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-800">입시 분석</h4>
+                                <p class="text-sm text-gray-600">합격 예측 시스템</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full">
+                            <i class="fas fa-graduation-cap mr-1"></i>고등
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">3개년 입시 결과 기반 합격 예측</p>
+                    <div class="flex items-center text-rose-600 font-medium">
+                        <span>분석하기</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -312,21 +358,17 @@
                 <i class="fas fa-tasks text-purple-600 mr-3"></i>
                 오늘의 할 일
             </h3>
-            <div class="space-y-4">
+            <div class="space-y-4" id="todoList">
+                <!-- 기본 할 일 (학년 무관) -->
                 <div class="flex items-center p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
                     <input type="checkbox" class="w-5 h-5 text-blue-600 rounded">
-                    <span class="ml-4 text-gray-800">A중학교 학생 출결 확인 (30명)</span>
+                    <span class="ml-4 text-gray-800">학생 출결 확인</span>
                     <span class="ml-auto text-sm text-blue-600 font-medium">오전 9시</span>
                 </div>
                 <div class="flex items-center p-4 bg-green-50 rounded-xl border-l-4 border-green-500">
                     <input type="checkbox" class="w-5 h-5 text-green-600 rounded">
                     <span class="ml-4 text-gray-800">학부모 주간 리포트 발송 (전체)</span>
                     <span class="ml-auto text-sm text-green-600 font-medium">오후 3시</span>
-                </div>
-                <div class="flex items-center p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
-                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded">
-                    <span class="ml-4 text-gray-800">B중학교 계약 상담</span>
-                    <span class="ml-auto text-sm text-purple-600 font-medium">오후 5시</span>
                 </div>
             </div>
         </div>
@@ -353,18 +395,60 @@
         
         if (level === 'high') {
             titleElement.innerHTML = '<i class="fas fa-graduation-cap mr-2"></i>고등학생 100일 프로그램';
-            subtitleElement.textContent = '고1~고3 방과후 자기주도학습 100일';
+            subtitleElement.textContent = '고1~고3 방과후 자기주도학습 100일 - 입시와 내신 관리';
             document.title = '🎓 고등학생 100일 프로그램 - DA.UM';
+            
+            // 고등학생 전용 메뉴 표시
+            document.getElementById('mockExamMenu').style.display = 'block';
+            document.getElementById('admissionMenu').style.display = 'block';
         } else if (level === 'middle') {
             titleElement.innerHTML = '<i class="fas fa-book-reader mr-2"></i>중학생 이하 100일 프로그램';
             subtitleElement.textContent = '중학생·예비중·초6 방과후 자기주도학습 100일';
             document.title = '📖 중학생 이하 100일 프로그램 - DA.UM';
+            
+            // 고등학생 전용 메뉴 숨김
+            document.getElementById('mockExamMenu').style.display = 'none';
+            document.getElementById('admissionMenu').style.display = 'none';
         }
         
         // 현재 날짜 표시
         const today = new Date();
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('currentDate').textContent = today.toLocaleDateString('ko-KR', options);
+        
+        // 학년별 추가 할 일 표시
+        const todoList = document.getElementById('todoList');
+        if (level === 'high') {
+            // 고등학생용 할 일 추가
+            const highSchoolTodos = `
+                <div class="flex items-center p-4 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                    <input type="checkbox" class="w-5 h-5 text-orange-600 rounded">
+                    <span class="ml-4 text-gray-800">📊 모의고사 성적 입력 및 분석</span>
+                    <span class="ml-auto text-sm text-orange-600 font-medium">수시</span>
+                </div>
+                <div class="flex items-center p-4 bg-rose-50 rounded-xl border-l-4 border-rose-500">
+                    <input type="checkbox" class="w-5 h-5 text-rose-600 rounded">
+                    <span class="ml-4 text-gray-800">🎓 입시 합격 예측 업데이트</span>
+                    <span class="ml-auto text-sm text-rose-600 font-medium">주간</span>
+                </div>
+                <div class="flex items-center p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded">
+                    <span class="ml-4 text-gray-800">📚 내신 성적 관리 및 학생부 점검</span>
+                    <span class="ml-auto text-sm text-purple-600 font-medium">학기 중</span>
+                </div>
+            `;
+            todoList.insertAdjacentHTML('beforeend', highSchoolTodos);
+        } else if (level === 'middle') {
+            // 중학생용 할 일 추가
+            const middleSchoolTodos = `
+                <div class="flex items-center p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded">
+                    <span class="ml-4 text-gray-800">📖 기초 학습 점검 및 보충</span>
+                    <span class="ml-auto text-sm text-purple-600 font-medium">일일</span>
+                </div>
+            `;
+            todoList.insertAdjacentHTML('beforeend', middleSchoolTodos);
+        }
         
         // localStorage에 학년 레벨 저장
         if (level !== 'all') {
