@@ -328,13 +328,26 @@
         }
         
         @media (max-width: 768px) {
+            .header {
+                padding: 40px 15px 30px;
+            }
+            
             .header h1 {
-                font-size: 48px;
+                font-size: 38px;
+                letter-spacing: -1px;
+                margin-bottom: 15px;
+                white-space: nowrap;
             }
             
             .header .program-title {
-                font-size: 22px;
-                padding: 12px 30px;
+                font-size: 16px;
+                padding: 10px 20px;
+                white-space: nowrap;
+            }
+            
+            .header .school-name {
+                font-size: 15px;
+                white-space: nowrap;
             }
             
             .features-grid {
@@ -354,6 +367,10 @@
                 grid-template-columns: 1fr;
             }
             
+            .poster-card {
+                display: none;
+            }
+            
             .intro-box, .middle-school-features {
                 padding: 25px 20px;
             }
@@ -369,6 +386,20 @@
         }
         
         @media (max-width: 480px) {
+            .header h1 {
+                font-size: 32px;
+                letter-spacing: -0.5px;
+            }
+            
+            .header .program-title {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+            
+            .header .school-name {
+                font-size: 13px;
+            }
+            
             .info-grid {
                 grid-template-columns: 1fr;
             }
@@ -474,7 +505,7 @@
         </div>
         
         <div class="cards-grid">
-            <div class="card">
+            <div class="card poster-card">
                 <div class="card-icon">🎨</div>
                 <h2>프로그램 포스터</h2>
                 <p>학생 모집용 홍보 포스터<br>교실/복도 게시용 고화질 이미지</p>
