@@ -60,6 +60,45 @@
         .pulse-glow {
             animation: pulse-glow 2s infinite;
         }
+        
+        /* 모바일 메뉴 스타일 */
+        .mobile-menu {
+            display: none;
+        }
+        
+        @media (max-width: 1024px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .mobile-menu-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 99;
+            }
+            
+            .mobile-menu-content {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 280px;
+                background: white;
+                z-index: 100;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                overflow-y: auto;
+            }
+            
+            .mobile-menu-content.open {
+                transform: translateX(0);
+            }
+        }
     </style>
     <script src="js/security.js"></script>
 </head>
@@ -69,23 +108,21 @@
 
     <!-- 세련된 헤더 -->
     <header class="glass-effect shadow-2xl sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-5">
+        <div class="container mx-auto px-4 sm:px-6 py-4">
             <div class="flex justify-between items-center">
                 <!-- 로고 및 타이틀 -->
-                <div>
-                    <div class="flex items-center space-x-3 mb-2">
-                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
-                        <div>
-                            <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                                DA.UM 겨울방학 30일 프로그램
-                            </h1>
-                            <p class="text-xs text-gray-600 font-medium">❄️ 자기주도학습 습관 만들기 시스템</p>
-                        </div>
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl shadow-lg" onerror="this.style.display='none'">
+                    <div>
+                        <h1 class="text-base sm:text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                            DA.UM 겨울방학 30일
+                        </h1>
+                        <p class="hidden sm:block text-xs text-gray-600 font-medium">❄️ 자기주도학습 습관 만들기 시스템</p>
                     </div>
                 </div>
                 
-                <!-- 네비게이션 -->
-                <nav class="flex space-x-2">
+                <!-- 데스크톱 네비게이션 -->
+                <nav class="desktop-nav flex space-x-2">
                     <a href="winter-index.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
                         <i class="fas fa-home mr-2"></i>대시보드
                     </a>
@@ -105,9 +142,68 @@
                         <i class="fas fa-chart-line mr-2"></i>보고서
                     </a>
                 </nav>
+                
+                <!-- 모바일 메뉴 버튼 -->
+                <button onclick="toggleMobileMenu()" class="mobile-menu px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-xl transition">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
     </header>
+    
+    <!-- 모바일 메뉴 -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay hidden" onclick="toggleMobileMenu()"></div>
+    <div id="mobileMenuContent" class="mobile-menu-content">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">메뉴</h2>
+                <button onclick="toggleMobileMenu()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <nav class="space-y-2">
+                <a href="winter-index.html" class="block px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-medium">
+                    <i class="fas fa-home mr-3"></i>대시보드
+                </a>
+                <a href="winter-student-portal.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium">
+                    <i class="fas fa-user-graduate mr-3"></i>학생 포털
+                </a>
+                <a href="winter-weekly-schedule.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium">
+                    <i class="fas fa-calendar-week mr-3"></i>주간일정
+                </a>
+                <a href="winter-materials.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium">
+                    <i class="fas fa-book-open mr-3"></i>교재관리
+                </a>
+                <a href="winter-feedback.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium">
+                    <i class="fas fa-comments mr-3"></i>피드백
+                </a>
+                <a href="winter-report.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium">
+                    <i class="fas fa-chart-line mr-3"></i>보고서
+                </a>
+                <hr class="my-4">
+                <a href="index.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium">
+                    <i class="fas fa-arrow-left mr-3"></i>메인으로
+                </a>
+            </nav>
+        </div>
+    </div>
+    
+    <script>
+        function toggleMobileMenu() {
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const content = document.getElementById('mobileMenuContent');
+            
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                content.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                overlay.classList.add('hidden');
+                content.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
 
     <!-- 메인 대시보드 -->
     <main class="container mx-auto px-6 py-8">
