@@ -60,6 +60,74 @@
         .pulse-glow {
             animation: pulse-glow 2s infinite;
         }
+        
+        /* 모바일 최적화 - 한글 가로쓰기 강제 */
+        @media (max-width: 768px) {
+            header .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* 로고 및 타이틀 축소 */
+            header img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            header h1 {
+                font-size: 1rem;
+            }
+            
+            header p {
+                font-size: 0.625rem;
+            }
+            
+            /* 네비게이션 가로 스크롤 */
+            nav {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                gap: 0.5rem;
+            }
+            
+            nav::-webkit-scrollbar {
+                display: none;
+            }
+            
+            /* 모바일 네비게이션 링크 - 아이콘 위, 텍스트 아래 */
+            nav a.nav-link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.65rem;
+                min-width: 3.5rem;
+                flex-shrink: 0;
+                writing-mode: horizontal-tb !important;
+                white-space: nowrap;
+                line-height: 1.2;
+            }
+            
+            nav a.nav-link i {
+                display: block;
+                margin: 0 0 0.25rem 0;
+                font-size: 1.1rem;
+            }
+            
+            nav a.nav-link span:not(.absolute) {
+                display: block;
+                text-align: center;
+            }
+            
+            nav a span.absolute {
+                font-size: 0.5rem;
+                padding: 0.125rem 0.375rem;
+                top: -0.25rem;
+                right: -0.25rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -85,27 +153,27 @@
                 
                 <!-- 네비게이션 -->
                 <nav class="flex space-x-2">
-                    <a href="winter-index.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
-                        <i class="fas fa-home mr-2"></i>대시보드
+                    <a href="winter-index.html" class="nav-link px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
+                        <i class="fas fa-home mr-2"></i><span>대시보드</span>
                     </a>
-                    <a href="student-personalized-learning.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium relative">
-                        <i class="fas fa-bullseye mr-2"></i>맞춤학습
+                    <a href="student-personalized-learning.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium relative">
+                        <i class="fas fa-bullseye mr-2"></i><span>맞춤학습</span>
                         <span class="absolute -top-1 -right-1 px-1.5 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full">NEW</span>
                     </a>
-                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-user-graduate mr-2"></i>학생 포털
+                    <a href="winter-student-portal.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-user-graduate mr-2"></i><span>학생 포털</span>
                     </a>
-                    <a href="winter-weekly-schedule.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-calendar-week mr-2"></i>주간일정
+                    <a href="winter-weekly-schedule.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-calendar-week mr-2"></i><span>주간일정</span>
                     </a>
-                    <a href="winter-materials.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-book-open mr-2"></i>교재관리
+                    <a href="winter-materials.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-book-open mr-2"></i><span>교재관리</span>
                     </a>
-                    <a href="winter-feedback.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-comments mr-2"></i>피드백
+                    <a href="winter-feedback.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-comments mr-2"></i><span>피드백</span>
                     </a>
-                    <a href="winter-report.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-chart-line mr-2"></i>보고서
+                    <a href="winter-report.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-chart-line mr-2"></i><span>보고서</span>
                     </a>
                 </nav>
             </div>
