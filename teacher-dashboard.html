@@ -172,7 +172,7 @@
 
                 <div class="action-bar" style="margin-bottom: 25px;">
                     <div class="search-box" style="flex: 1; max-width: 400px;">
-                        <input type="text" id="studentSearch" placeholder="학생 이름 또는 학번 검색" class="search-input">
+                        <input type="text" id="studentSearch" placeholder="학생 이름 또는 학번 검색" class="search-input" onkeyup="searchStudent()">
                         <button class="btn-search" onclick="searchStudent()">
                             <i class="fas fa-search"></i>
                         </button>
@@ -185,6 +185,9 @@
                             <option value="3">3등급대</option>
                             <option value="4">4등급 이하</option>
                         </select>
+                        <button class="btn-primary" onclick="showAddStudentModal()" style="background: #10b981;">
+                            <i class="fas fa-plus"></i> 학생 추가
+                        </button>
                         <button class="btn-primary" onclick="exportData()">
                             <i class="fas fa-download"></i> 엑셀 다운로드
                         </button>
@@ -569,6 +572,189 @@
             .stats-dashboard {
                 grid-template-columns: 1fr;
             }
+        }
+    </style>
+
+    <!-- 학생 추가/수정 모달 -->
+    <div id="studentModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="modalTitle">학생 추가</h2>
+                <button class="modal-close" onclick="closeStudentModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm" onsubmit="saveStudent(event)">
+                    <input type="hidden" id="studentId">
+                    
+                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="studentName">이름 *</label>
+                            <input type="text" id="studentName" required placeholder="이름을 입력하세요">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentGrade">내신 평균 등급 *</label>
+                            <input type="number" id="studentGrade" required step="0.1" min="1" max="9" placeholder="예: 2.3">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentMajor">희망 전공 *</label>
+                            <input type="text" id="studentMajor" required placeholder="예: 컴퓨터공학">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentTarget">목표 대학 *</label>
+                            <input type="text" id="studentTarget" required placeholder="예: 서울대">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentType">전형 유형 *</label>
+                            <select id="studentType" required>
+                                <option value="">선택하세요</option>
+                                <option value="학생부종합">학생부종합</option>
+                                <option value="학생부교과">학생부교과</option>
+                                <option value="정시">정시(수능)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentCredits">이수 학점</label>
+                            <input type="number" id="studentCredits" placeholder="예: 192" min="0" max="204">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentActivities">비교과 활동 수</label>
+                            <input type="number" id="studentActivities" placeholder="예: 15" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer" style="margin-top: 30px; display: flex; gap: 10px; justify-content: flex-end;">
+                        <button type="button" class="btn-secondary" onclick="closeStudentModal()">취소</button>
+                        <button type="submit" class="btn-primary">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+        
+        .btn-secondary {
+            padding: 12px 24px;
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+        
+        .modal-footer {
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
         }
     </style>
 

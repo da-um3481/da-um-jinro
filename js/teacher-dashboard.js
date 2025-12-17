@@ -220,64 +220,57 @@ function loadPageData(pageName) {
     }
 }
 
+// 학생 데이터 저장소 (실제로는 서버 DB 사용)
+let studentsData = [
+    { id: 1, name: '김민준', grade: 2.3, major: '컴퓨터공학', type: '학생부종합', activities: 15, target: '서울대', credits: 192 },
+    { id: 2, name: '이서윤', grade: 1.8, major: '의예과', type: '학생부교과', activities: 12, target: '연세대', credits: 198 },
+    { id: 3, name: '박지훈', grade: 2.7, major: '경영학', type: '정시', activities: 8, target: '고려대', credits: 186 },
+    { id: 4, name: '최서준', grade: 2.1, major: '기계공학', type: '학생부종합', activities: 18, target: '한양대', credits: 195 },
+    { id: 5, name: '정하은', grade: 3.2, major: '화학공학', type: '학생부교과', activities: 10, target: '성균관대', credits: 189 },
+    { id: 6, name: '강도윤', grade: 1.9, major: '전기공학', type: '학생부교과', activities: 14, target: '서울대', credits: 196 },
+    { id: 7, name: '조예진', grade: 2.5, major: '경제학', type: '학생부종합', activities: 16, target: '연세대', credits: 192 },
+    { id: 8, name: '윤시우', grade: 2.8, major: '건축학', type: '정시', activities: 9, target: '고려대', credits: 184 },
+    { id: 9, name: '장아린', grade: 2.2, major: '생명과학', type: '학생부종합', activities: 17, target: '서울대', credits: 194 },
+    { id: 10, name: '임주원', grade: 3.0, major: '심리학', type: '학생부교과', activities: 11, target: '이화여대', credits: 188 },
+    { id: 11, name: '한지후', grade: 2.4, major: '수학교육', type: '학생부종합', activities: 13, target: '서울교대', credits: 191 },
+    { id: 12, name: '신다은', grade: 2.0, major: '화학', type: '학생부교과', activities: 15, target: 'KAIST', credits: 197 },
+    { id: 13, name: '곽우진', grade: 3.1, major: '산업공학', type: '정시', activities: 10, target: '서강대', credits: 185 },
+    { id: 14, name: '송지아', grade: 2.6, major: '국제학', type: '학생부종합', activities: 19, target: '한국외대', credits: 193 },
+    { id: 15, name: '백태양', grade: 2.3, major: '물리학', type: '학생부교과', activities: 14, target: '포스텍', credits: 195 },
+    { id: 16, name: '오수아', grade: 2.9, major: '사회학', type: '학생부종합', activities: 12, target: '중앙대', credits: 187 },
+    { id: 17, name: '권민서', grade: 1.7, major: '약학', type: '학생부교과', activities: 16, target: '서울대', credits: 199 },
+    { id: 18, name: '남준혁', grade: 2.5, major: '전자공학', type: '정시', activities: 11, target: '성균관대', credits: 190 },
+    { id: 19, name: '황서현', grade: 2.2, major: '생명공학', type: '학생부종합', activities: 20, target: '연세대', credits: 196 },
+    { id: 20, name: '류지원', grade: 3.3, major: '교육학', type: '학생부교과', activities: 9, target: '이화여대', credits: 183 },
+    { id: 21, name: '문하윤', grade: 2.7, major: '통계학', type: '학생부종합', activities: 13, target: '고려대', credits: 189 },
+    { id: 22, name: '선우진', grade: 2.4, major: '항공우주', type: '학생부종합', activities: 15, target: '서울대', credits: 192 },
+    { id: 23, name: '진시현', grade: 2.8, major: '언론정보', type: '정시', activities: 10, target: '중앙대', credits: 186 },
+    { id: 24, name: '허도현', grade: 2.1, major: '신소재공학', type: '학생부교과', activities: 17, target: '한양대', credits: 194 },
+    { id: 25, name: '노채원', grade: 2.6, major: '영문학', type: '학생부종합', activities: 14, target: '서울대', credits: 191 },
+    { id: 26, name: '추준서', grade: 3.0, major: '지리학', type: '정시', activities: 8, target: '서울시립대', credits: 184 },
+    { id: 27, name: '탁은서', grade: 2.3, major: '간호학', type: '학생부교과', activities: 16, target: '연세대', credits: 195 },
+    { id: 28, name: '유하준', grade: 2.9, major: '행정학', type: '학생부종합', activities: 11, target: '고려대', credits: 188 },
+    { id: 29, name: '편수빈', grade: 2.5, major: '화학생명공학', type: '학생부종합', activities: 18, target: '서울대', credits: 193 },
+    { id: 30, name: '변재윤', grade: 2.2, major: '데이터사이언스', type: '학생부교과', activities: 19, target: '고려대', credits: 196 },
+    { id: 31, name: '원지우', grade: 3.1, major: '디자인', type: '정시', activities: 12, target: '홍익대', credits: 185 },
+    { id: 32, name: '표민준', grade: 2.4, major: '환경공학', type: '학생부종합', activities: 15, target: '서울대', credits: 192 }
+];
+
 // 학생 목록 로드
 async function loadStudentsList() {
     const tableContainer = document.getElementById('studentsTable');
     if (!tableContainer) return;
     
     try {
-        const response = await fetch('tables/students?limit=50&sort=name');
-        const data = await response.json();
+        const students = studentsData;
         
-        // 샘플 데이터 (실제로는 API에서 가져옴)
-        const students = [
-            { id: 1, name: '김학생', grade: 2.3, major: '컴퓨터공학', type: '학생부종합', activities: 15 },
-            { id: 2, name: '이학생', grade: 1.8, major: '의예과', type: '학생부교과', activities: 12 },
-            { id: 3, name: '박학생', grade: 2.7, major: '경영학', type: '정시', activities: 8 },
-            { id: 4, name: '최학생', grade: 2.1, major: '기계공학', type: '학생부종합', activities: 18 },
-            { id: 5, name: '정학생', grade: 3.2, major: '화학공학', type: '학생부교과', activities: 10 }
-        ];
-        
-        tableContainer.innerHTML = `
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>이름</th>
-                    <th>내신 평균</th>
-                    <th>희망 전공</th>
-                    <th>전형 유형</th>
-                    <th>비교과 활동</th>
-                    <th>관리</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${students.map(student => `
-                    <tr>
-                        <td>${student.id}</td>
-                        <td><strong>${student.name}</strong></td>
-                        <td>
-                            <span style="background: ${getGradeColor(student.grade)}; color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
-                                ${student.grade}등급
-                            </span>
-                        </td>
-                        <td>${student.major}</td>
-                        <td>${student.type}</td>
-                        <td>${student.activities}건</td>
-                        <td>
-                            <button class="btn-icon" onclick="viewStudentDetail('${student.name}')" title="상세보기">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn-icon" onclick="editStudent('${student.name}')" title="수정">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        `;
+        renderStudentsTable(students);
     } catch (error) {
         console.error('Error loading students:', error);
-        tableContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #64748b;">학생 목록을 불러오는 중 오류가 발생했습니다.</p>';
+        const tableContainer = document.getElementById('studentsTable');
+        if (tableContainer) {
+            tableContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #64748b;">학생 목록을 불러오는 중 오류가 발생했습니다.</p>';
+        }
     }
 }
 
@@ -448,25 +441,197 @@ function viewStudentDetail(name) {
 }
 
 // 학생 수정
-function editStudent(name) {
-    alert(`${name} 학생 정보를 수정합니다.`);
+function editStudent(id) {
+    const student = studentsData.find(s => s.id === parseInt(id));
+    if (!student) return;
+    
+    document.getElementById('modalTitle').textContent = '학생 정보 수정';
+    document.getElementById('studentId').value = student.id;
+    document.getElementById('studentName').value = student.name;
+    document.getElementById('studentGrade').value = student.grade;
+    document.getElementById('studentMajor').value = student.major;
+    document.getElementById('studentTarget').value = student.target;
+    document.getElementById('studentType').value = student.type;
+    document.getElementById('studentCredits').value = student.credits;
+    document.getElementById('studentActivities').value = student.activities;
+    
+    document.getElementById('studentModal').style.display = 'flex';
+}
+
+// 학생 삭제
+function deleteStudent(id) {
+    if (!confirm('정말 이 학생을 삭제하시겠습니까?')) return;
+    
+    studentsData = studentsData.filter(s => s.id !== parseInt(id));
+    loadStudentsList();
+    alert('학생이 삭제되었습니다.');
+}
+
+// 학생 추가 모달 표시
+function showAddStudentModal() {
+    document.getElementById('modalTitle').textContent = '학생 추가';
+    document.getElementById('studentForm').reset();
+    document.getElementById('studentId').value = '';
+    document.getElementById('studentModal').style.display = 'flex';
+}
+
+// 모달 닫기
+function closeStudentModal() {
+    document.getElementById('studentModal').style.display = 'none';
+    document.getElementById('studentForm').reset();
+}
+
+// 학생 저장
+function saveStudent(event) {
+    event.preventDefault();
+    
+    const id = document.getElementById('studentId').value;
+    const studentData = {
+        id: id ? parseInt(id) : studentsData.length > 0 ? Math.max(...studentsData.map(s => s.id)) + 1 : 1,
+        name: document.getElementById('studentName').value,
+        grade: parseFloat(document.getElementById('studentGrade').value),
+        major: document.getElementById('studentMajor').value,
+        target: document.getElementById('studentTarget').value,
+        type: document.getElementById('studentType').value,
+        credits: parseInt(document.getElementById('studentCredits').value) || 0,
+        activities: parseInt(document.getElementById('studentActivities').value) || 0
+    };
+    
+    if (id) {
+        // 수정
+        const index = studentsData.findIndex(s => s.id === parseInt(id));
+        if (index !== -1) {
+            studentsData[index] = studentData;
+        }
+    } else {
+        // 추가
+        studentsData.push(studentData);
+    }
+    
+    closeStudentModal();
+    loadStudentsList();
+    alert(id ? '학생 정보가 수정되었습니다.' : '학생이 추가되었습니다.');
 }
 
 // 학생 검색
 function searchStudent() {
-    const searchValue = document.getElementById('studentSearch').value;
-    alert(`"${searchValue}" 검색 기능 구현 예정`);
+    const searchValue = document.getElementById('studentSearch').value.toLowerCase();
+    if (!searchValue) {
+        loadStudentsList();
+        return;
+    }
+    
+    const filtered = studentsData.filter(s => 
+        s.name.toLowerCase().includes(searchValue) ||
+        s.id.toString().includes(searchValue) ||
+        s.major.toLowerCase().includes(searchValue)
+    );
+    
+    renderStudentsTable(filtered);
 }
 
 // 학생 필터링
 function filterStudents() {
     const filterValue = document.getElementById('gradeFilter').value;
-    alert(`${filterValue}등급대 학생 필터링 구현 예정`);
+    if (!filterValue) {
+        loadStudentsList();
+        return;
+    }
+    
+    let filtered = studentsData;
+    if (filterValue === '1') {
+        filtered = studentsData.filter(s => s.grade <= 2);
+    } else if (filterValue === '2') {
+        filtered = studentsData.filter(s => s.grade > 2 && s.grade <= 3);
+    } else if (filterValue === '3') {
+        filtered = studentsData.filter(s => s.grade > 3 && s.grade <= 4);
+    } else if (filterValue === '4') {
+        filtered = studentsData.filter(s => s.grade > 4);
+    }
+    
+    renderStudentsTable(filtered);
 }
 
-// 데이터 내보내기
+// 학생 테이블 렌더링 함수
+function renderStudentsTable(students) {
+    const tableContainer = document.getElementById('studentsTable');
+    if (!tableContainer) return;
+    
+    tableContainer.innerHTML = `
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>이름</th>
+                <th>내신 평균</th>
+                <th>희망 전공</th>
+                <th>목표 대학</th>
+                <th>전형 유형</th>
+                <th>학점</th>
+                <th>비교과</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${students.map((student, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><strong>${student.name}</strong></td>
+                    <td>
+                        <span style="background: ${getGradeColor(student.grade)}; color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
+                            ${student.grade}등급
+                        </span>
+                    </td>
+                    <td>${student.major}</td>
+                    <td>${student.target}</td>
+                    <td>${student.type}</td>
+                    <td>${student.credits}학점</td>
+                    <td>${student.activities}건</td>
+                    <td>
+                        <button class="btn-icon" onclick="viewStudentDetail('${student.name}')" title="상세보기">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon" onclick="editStudent(${student.id})" title="수정">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon" onclick="deleteStudent(${student.id})" title="삭제" style="color: #ef4444;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+}
+
+// 데이터 내보내기 (CSV)
 function exportData() {
-    alert('엑셀 다운로드 기능 구현 예정');
+    if (studentsData.length === 0) {
+        alert('내보낼 데이터가 없습니다.');
+        return;
+    }
+    
+    // CSV 헤더
+    let csv = '번호,이름,내신평균,희망전공,목표대학,전형유형,이수학점,비교과활동\n';
+    
+    // CSV 데이터
+    studentsData.forEach((student, index) => {
+        csv += `${index + 1},${student.name},${student.grade},${student.major},${student.target},${student.type},${student.credits},${student.activities}\n`;
+    });
+    
+    // 다운로드
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `학생목록_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert('학생 목록이 CSV 파일로 다운로드되었습니다.');
 }
 
 // 알림 표시
