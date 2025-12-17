@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: #1a1a1a;
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,22 +22,27 @@
         }
         
         .poster {
-            max-width: 550px;
             width: 100%;
-            background: linear-gradient(180deg, #2c1654 0%, #1a0b2e 100%);
+            max-width: 1920px;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #1a0b2e 0%, #2c1654 50%, #4a148c 100%);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
         
-        .story-scene {
-            padding: 50px 40px;
-            background: 
-                linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.5) 100%),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23667eea;stop-opacity:0.3" /><stop offset="100%" style="stop-color:%23764ba2;stop-opacity:0.3" /></linearGradient></defs><circle cx="200" cy="200" r="150" fill="url(%23grad)"/><circle cx="800" cy="300" r="200" fill="url(%23grad)"/><circle cx="500" cy="700" r="180" fill="url(%23grad)"/></svg>');
-            background-size: cover;
-            background-position: center;
+        /* 왼쪽: 스토리 소개 */
+        .left-section {
+            padding: 80px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             position: relative;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(102, 126, 234, 0.2), transparent 70%);
         }
         
         .chapter-badge {
@@ -45,210 +50,63 @@
             background: rgba(255, 215, 0, 0.2);
             border: 2px solid #FFD700;
             color: #FFD700;
-            padding: 8px 20px;
+            padding: 12px 30px;
             border-radius: 50px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             letter-spacing: 2px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            align-self: flex-start;
             text-transform: uppercase;
         }
         
         .main-title {
-            font-size: 56px;
+            font-size: 82px;
             font-weight: 900;
             color: white;
-            line-height: 1.1;
-            margin-bottom: 20px;
+            line-height: 0.95;
+            margin-bottom: 30px;
             text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
         }
         
         .subtitle {
-            font-size: 22px;
+            font-size: 28px;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 400;
-            line-height: 1.5;
+            line-height: 1.4;
             margin-bottom: 40px;
         }
         
-        .character-intro {
+        .quote-box {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border-left: 4px solid #667eea;
+            border-radius: 20px;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 40px;
         }
         
-        .character-label {
-            font-size: 12px;
-            color: #FFD700;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        
-        .character-text {
-            font-size: 18px;
+        .quote-text {
+            font-size: 22px;
             color: white;
             font-weight: 500;
             line-height: 1.6;
             font-style: italic;
         }
         
-        .timeline {
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        
-        .timeline-title {
-            font-size: 28px;
-            color: white;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        .timeline-item {
-            display: flex;
-            gap: 25px;
-            margin-bottom: 35px;
-            position: relative;
-        }
-        
-        .timeline-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 29px;
-            top: 60px;
-            width: 2px;
-            height: calc(100% + 35px);
-            background: linear-gradient(180deg, #667eea, #764ba2);
-        }
-        
-        .timeline-dot {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .timeline-content {
-            flex: 1;
-            padding-top: 5px;
-        }
-        
-        .timeline-date {
-            font-size: 14px;
-            color: #FFD700;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .timeline-title-text {
-            font-size: 20px;
-            color: white;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .timeline-desc {
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-        }
-        
-        .rewards-section {
-            padding: 40px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            text-align: center;
-        }
-        
-        .rewards-title {
-            font-size: 32px;
-            color: white;
-            font-weight: 900;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-        }
-        
-        .rewards-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 40px;
-        }
-        
-        .reward-card {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .reward-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .reward-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-        
-        .reward-text {
-            font-size: 16px;
-            color: white;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-        
-        .final-cta {
-            padding: 50px 40px;
-            background: #000;
-            text-align: center;
-        }
-        
-        .cta-text {
-            font-size: 28px;
-            color: white;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .cta-subtext {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 30px;
-        }
-        
         .cta-button {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            padding: 18px 50px;
+            padding: 22px 60px;
             border-radius: 50px;
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 900;
             display: inline-block;
             text-decoration: none;
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.5);
             transition: all 0.3s ease;
+            align-self: flex-start;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
         
         .cta-button:hover {
@@ -256,24 +114,149 @@
             box-shadow: 0 15px 50px rgba(102, 126, 234, 0.7);
         }
         
-        .credits {
-            padding: 30px 40px;
-            background: rgba(0, 0, 0, 0.5);
-            text-align: center;
+        /* 오른쪽: 타임라인 */
+        .right-section {
+            padding: 80px 60px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
-        .credits-text {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.5);
-            line-height: 1.8;
+        .timeline-title {
+            font-size: 36px;
+            color: #FFD700;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 25px;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 34px;
+            top: 70px;
+            width: 3px;
+            height: calc(100% + 35px);
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+        
+        .timeline-dot {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding-top: 8px;
+        }
+        
+        .timeline-date {
+            font-size: 16px;
+            color: #FFD700;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title-text {
+            font-size: 24px;
+            color: white;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-desc {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
         }
         
         /* 모바일 최적화 */
+        @media (max-width: 1200px) {
+            .poster {
+                grid-template-columns: 1fr;
+                aspect-ratio: 9 / 16;
+            }
+            
+            .left-section {
+                padding: 50px 40px;
+            }
+            
+            .main-title {
+                font-size: 56px;
+            }
+            
+            .subtitle {
+                font-size: 22px;
+            }
+            
+            .right-section {
+                padding: 50px 40px;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .story-scene {
+            .left-section {
                 padding: 40px 30px;
             }
             
+            .main-title {
+                font-size: 48px;
+            }
+            
+            .subtitle {
+                font-size: 20px;
+            }
+            
+            .quote-text {
+                font-size: 18px;
+            }
+            
+            .right-section {
+                padding: 40px 30px;
+            }
+            
+            .timeline-title {
+                font-size: 28px;
+            }
+            
+            .timeline-dot {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+            
+            .timeline-item:not(:last-child)::after {
+                left: 29px;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .main-title {
                 font-size: 42px;
             }
@@ -282,191 +265,96 @@
                 font-size: 18px;
             }
             
-            .timeline {
-                padding: 30px 25px;
-            }
-            
-            .timeline-title {
-                font-size: 24px;
-            }
-            
-            .timeline-dot {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-            
-            .timeline-item:not(:last-child)::after {
-                left: 24px;
-            }
-            
-            .rewards-section {
-                padding: 30px 25px;
-            }
-            
-            .rewards-title {
-                font-size: 26px;
-            }
-            
-            .rewards-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .final-cta {
-                padding: 40px 30px;
-            }
-            
-            .cta-text {
-                font-size: 24px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .main-title {
-                font-size: 36px;
-            }
-            
-            .subtitle {
-                font-size: 16px;
-            }
-            
-            .character-text {
-                font-size: 16px;
-            }
-            
             .timeline-title-text {
-                font-size: 18px;
+                font-size: 20px;
             }
             
             .timeline-desc {
                 font-size: 14px;
             }
             
-            .cta-text {
-                font-size: 22px;
-            }
-            
             .cta-button {
-                padding: 16px 40px;
-                font-size: 16px;
+                padding: 18px 40px;
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="poster">
-        <!-- 스토리 오프닝 -->
-        <div class="story-scene">
-            <div class="chapter-badge">Chapter 1: Winter</div>
+        <!-- 왼쪽: 스토리 소개 -->
+        <div class="left-section">
+            <div class="chapter-badge">Winter Story 2025</div>
+            
             <div class="main-title">
                 나의 성장<br>
                 스토리
             </div>
+            
             <div class="subtitle">
                 30일 동안 펼쳐질<br>
                 특별한 겨울방학 이야기
             </div>
             
-            <div class="character-intro">
-                <div class="character-label">Your Story</div>
-                <div class="character-text">
+            <div class="quote-box">
+                <div class="quote-text">
                     "나도 할 수 있을까?"<br>
                     고민하던 그 순간부터,<br>
                     나의 변화가 시작되었다.
                 </div>
             </div>
+            
+            <a href="#" class="cta-button">시작하기 →</a>
         </div>
         
-        <!-- 타임라인 -->
-        <div class="timeline">
+        <!-- 오른쪽: 타임라인 -->
+        <div class="right-section">
             <div class="timeline-title">The Journey</div>
             
-            <div class="timeline-item">
-                <div class="timeline-dot">📋</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">~12/26</div>
-                    <div class="timeline-title-text">프롤로그: 시작</div>
-                    <div class="timeline-desc">
-                        친구들과 함께 신청하고<br>
-                        나만의 목표를 세운다
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">📋</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">~12/26</div>
+                        <div class="timeline-title-text">시작</div>
+                        <div class="timeline-desc">
+                            친구들과 함께 신청하고 나만의 목표를 세운다
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="timeline-dot">🎯</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">~12/30</div>
-                    <div class="timeline-title-text">Chapter 1: 준비</div>
-                    <div class="timeline-desc">
-                        오리엔테이션으로<br>
-                        성공적인 시작을 다진다
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">🎯</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">~12/30</div>
+                        <div class="timeline-title-text">준비</div>
+                        <div class="timeline-desc">
+                            오리엔테이션으로 성공적인 시작을 다진다
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="timeline-dot">💪</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">4주간</div>
-                    <div class="timeline-title-text">Chapter 2: 성장</div>
-                    <div class="timeline-desc">
-                        매일 조금씩 성장하며<br>
-                        나의 가능성을 발견한다
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">💪</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">4주간</div>
+                        <div class="timeline-title-text">성장</div>
+                        <div class="timeline-desc">
+                            매일 조금씩 성장하며 나의 가능성을 발견한다
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="timeline-dot">🏆</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">2/2~2/5</div>
-                    <div class="timeline-title-text">에필로그: 완성</div>
-                    <div class="timeline-desc">
-                        달라진 나를 확인하고<br>
-                        새 학기를 준비한다
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">🏆</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2/2~2/5</div>
+                        <div class="timeline-title-text">완성</div>
+                        <div class="timeline-desc">
+                            달라진 나를 확인하고 새 학기를 준비한다
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- 보상/결과 -->
-        <div class="rewards-section">
-            <div class="rewards-title">✨ 당신이 얻게 될 것들</div>
-            
-            <div class="rewards-grid">
-                <div class="reward-card">
-                    <div class="reward-icon">📈</div>
-                    <div class="reward-text">성적이<br>쑥쑥 오른다</div>
-                </div>
-                <div class="reward-card">
-                    <div class="reward-icon">💪</div>
-                    <div class="reward-text">자신감이<br>생긴다</div>
-                </div>
-                <div class="reward-card">
-                    <div class="reward-icon">🎯</div>
-                    <div class="reward-text">공부 습관이<br>완성된다</div>
-                </div>
-                <div class="reward-card">
-                    <div class="reward-icon">👥</div>
-                    <div class="reward-text">좋은 친구를<br>만난다</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 최종 CTA -->
-        <div class="final-cta">
-            <div class="cta-text">당신의 스토리를 시작하세요</div>
-            <div class="cta-subtext">담임쌤 또는 진로쌤께 신청</div>
-            <a href="#" class="cta-button">지금 시작하기 →</a>
-        </div>
-        
-        <!-- 크레딧 -->
-        <div class="credits">
-            <div class="credits-text">
-                경주 근화여자중학교 겨울방학 프로그램<br>
-                DA.UM 다움진로진학컨설팅<br>
-                010-2657-3481 (정라미)
             </div>
         </div>
     </div>

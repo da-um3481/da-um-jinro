@@ -22,32 +22,120 @@
         }
         
         .poster {
-            max-width: 500px;
             width: 100%;
+            max-width: 1920px;
+            aspect-ratio: 16 / 9;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            border-radius: 30px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 30px 80px rgba(102, 126, 234, 0.5);
+            position: relative;
+            display: flex;
+        }
+        
+        /* 왼쪽: 메인 콘텐츠 */
+        .left-section {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+        }
+        
+        .school-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            align-self: flex-start;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .main-title {
+            font-size: 84px;
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .hashtags {
+            font-size: 28px;
+            color: #FFD700;
+            font-weight: 700;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .info-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .info-pill {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 22px 60px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: 900;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        /* 오른쪽: 인스타 UI */
+        .right-section {
+            width: 45%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
         }
         
         .insta-header {
-            padding: 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .profile-pic {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 32px;
         }
         
         .profile-info {
@@ -56,132 +144,67 @@
         
         .username {
             color: white;
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 2px;
+            font-weight: 800;
+            font-size: 20px;
+            margin-bottom: 3px;
         }
         
         .location {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
         }
         
-        .main-content {
-            padding: 40px 30px;
-            text-align: center;
-            color: white;
-        }
-        
-        .emoji-row {
-            font-size: 60px;
-            margin-bottom: 20px;
-            line-height: 1;
-        }
-        
-        .main-text {
-            font-size: 48px;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 15px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-        }
-        
-        .hashtags {
-            font-size: 18px;
-            color: #FFD700;
-            font-weight: 600;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .info-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        
-        .pill {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-        }
-        
-        .story-highlight {
+        .story-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            flex: 1;
         }
         
         .story-item {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px 25px;
             text-align: center;
-        }
-        
-        .story-circle {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 8px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
-            padding: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .story-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-        }
-        
-        .story-label {
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .cta-button {
-            background: white;
-            color: #667eea;
-            padding: 18px 40px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 800;
-            display: inline-block;
-            text-decoration: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
-            margin-bottom: 20px;
         }
         
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        .story-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .story-emoji {
+            font-size: 56px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .story-title {
+            font-size: 20px;
+            color: white;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        
+        .story-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
         }
         
         .like-section {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
-            gap: 20px;
+            gap: 25px;
             align-items: center;
         }
         
         .like-btn {
-            font-size: 28px;
+            font-size: 32px;
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -190,152 +213,146 @@
             transform: scale(1.2);
         }
         
-        .like-count {
-            color: white;
-            font-weight: 700;
-            font-size: 15px;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-        
         /* 모바일 최적화 */
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
             .poster {
-                border-radius: 20px;
+                flex-direction: column;
+                aspect-ratio: 9 / 16;
             }
             
-            .main-text {
-                font-size: 36px;
+            .left-section {
+                padding: 40px;
             }
             
-            .emoji-row {
-                font-size: 50px;
-            }
-            
-            .story-circle {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .story-inner {
-                font-size: 24px;
-            }
-            
-            .story-label {
-                font-size: 11px;
+            .main-title {
+                font-size: 56px;
             }
             
             .hashtags {
+                font-size: 20px;
+            }
+            
+            .right-section {
+                width: 100%;
+            }
+            
+            .story-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .left-section {
+                padding: 30px;
+            }
+            
+            .main-title {
+                font-size: 42px;
+            }
+            
+            .hashtags {
+                font-size: 18px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .info-pill {
                 font-size: 16px;
+                padding: 12px 24px;
+            }
+            
+            .cta-button {
+                padding: 18px 40px;
+                font-size: 20px;
             }
         }
         
         @media (max-width: 480px) {
-            .main-content {
-                padding: 30px 20px;
+            .main-title {
+                font-size: 36px;
             }
             
-            .main-text {
-                font-size: 32px;
+            .story-emoji {
+                font-size: 42px;
             }
             
-            .emoji-row {
-                font-size: 45px;
-            }
-            
-            .story-highlight {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
-            }
-            
-            .story-circle {
-                width: 55px;
-                height: 55px;
-            }
-            
-            .story-inner {
-                font-size: 22px;
+            .story-title {
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
     <div class="poster">
-        <!-- 인스타그램 스타일 헤더 -->
-        <div class="insta-header">
-            <div class="profile-pic">🏫</div>
-            <div class="profile-info">
-                <div class="username">근화여자중학교</div>
-                <div class="location">경주 · 겨울방학 특별 프로그램</div>
-            </div>
-        </div>
-        
-        <!-- 메인 콘텐츠 -->
-        <div class="main-content">
-            <div class="emoji-row floating">✨💫⭐</div>
+        <!-- 왼쪽 섹션 -->
+        <div class="left-section">
+            <div class="school-badge">🏫 근화여자중학교</div>
             
-            <div class="main-text">
+            <div class="main-title">
                 자기주도학습<br>
                 UP 챌린지
             </div>
             
             <div class="hashtags">
-                #겨울방학_대박<br>
-                #성적UP_자신감UP<br>
-                #친구들이랑_함께
+                #겨울방학_대박 #성적UP<br>
+                #친구들이랑_함께 #자신감UP
             </div>
             
-            <div class="info-pills">
-                <div class="pill">🎯 20~40명 모집</div>
-                <div class="pill">📅 12/26 마감</div>
-                <div class="pill">⏰ 4주 프로그램</div>
+            <div class="info-row">
+                <div class="info-pill">🎯 20~40명 모집</div>
+                <div class="info-pill">📅 ~12/26 마감</div>
+                <div class="info-pill">⏰ 4주간</div>
             </div>
             
-            <!-- 스토리 하이라이트 스타일 -->
-            <div class="story-highlight">
-                <div class="story-item">
-                    <div class="story-circle">
-                        <div class="story-inner">📚</div>
-                    </div>
-                    <div class="story-label">맞춤학습</div>
-                </div>
-                <div class="story-item">
-                    <div class="story-circle">
-                        <div class="story-inner">🎮</div>
-                    </div>
-                    <div class="story-label">재미있게</div>
-                </div>
-                <div class="story-item">
-                    <div class="story-circle">
-                        <div class="story-inner">🏆</div>
-                    </div>
-                    <div class="story-label">성적UP</div>
-                </div>
-                <div class="story-item">
-                    <div class="story-circle">
-                        <div class="story-inner">💪</div>
-                    </div>
-                    <div class="story-label">자신감</div>
-                </div>
-            </div>
-            
-            <a href="#" class="cta-button">지금 바로 신청하기 🚀</a>
+            <a href="#" class="cta-button">지금 신청하기 🚀</a>
         </div>
         
-        <!-- 좋아요 섹션 -->
-        <div class="like-section">
-            <div class="like-btn">❤️</div>
-            <div class="like-btn">💬</div>
-            <div class="like-btn">📤</div>
-            <div style="flex: 1;"></div>
-            <div class="like-btn">🔖</div>
+        <!-- 오른쪽 섹션 (인스타 UI) -->
+        <div class="right-section">
+            <div class="insta-header">
+                <div class="profile-pic">🏫</div>
+                <div class="profile-info">
+                    <div class="username">근화여자중학교</div>
+                    <div class="location">경주 · 겨울방학 프로그램</div>
+                </div>
+            </div>
+            
+            <div class="story-grid">
+                <div class="story-item">
+                    <span class="story-emoji">📚</span>
+                    <div class="story-title">맞춤 학습</div>
+                    <div class="story-desc">나만의<br>학습 플랜</div>
+                </div>
+                
+                <div class="story-item">
+                    <span class="story-emoji">🎯</span>
+                    <div class="story-title">주 1회 피드백</div>
+                    <div class="story-desc">선생님과<br>1:1 코칭</div>
+                </div>
+                
+                <div class="story-item">
+                    <span class="story-emoji">👥</span>
+                    <div class="story-title">함께 성장</div>
+                    <div class="story-desc">친구들과<br>레벨업</div>
+                </div>
+                
+                <div class="story-item">
+                    <span class="story-emoji">🏆</span>
+                    <div class="story-title">성적 향상</div>
+                    <div class="story-desc">확실한<br>결과</div>
+                </div>
+            </div>
+            
+            <div class="like-section">
+                <div class="like-btn">❤️</div>
+                <div class="like-btn">💬</div>
+                <div class="like-btn">📤</div>
+                <div style="flex: 1;"></div>
+                <div class="like-btn">🔖</div>
+            </div>
         </div>
     </div>
 </body>
