@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 학습관리 시스템 - 프로그램 선택</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .program-card {
+            transition: all 0.3s ease;
+        }
+        .program-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-white/10 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-white/20">
+        <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-5">
+            <div class="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+                <div class="flex items-center space-x-3">
+                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl shadow-lg">
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-xl sm:text-2xl font-black text-white">DA.UM 학습관리 시스템</h1>
+                        <p class="text-xs sm:text-sm text-white/90 font-medium">맞춤형 자기주도학습 프로그램</p>
+                    </div>
+                </div>
+                <div class="text-white text-sm font-medium">
+                    <i class="fas fa-phone-alt mr-2"></i>010-2657-3481
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <!-- Welcome Section -->
+        <div class="text-center mb-8 sm:mb-12">
+            <div class="inline-block mb-4 sm:mb-6 float-animation">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border-4 border-white/30">
+                    <i class="fas fa-graduation-cap text-4xl sm:text-5xl text-white"></i>
+                </div>
+            </div>
+            <h2 class="text-3xl sm:text-5xl font-black text-white mb-3 sm:mb-4">어떤 프로그램을 시작하시나요?</h2>
+            <p class="text-base sm:text-xl text-white/90 mb-2">학습 목표에 맞는 프로그램을 선택하세요</p>
+            <p class="text-xs sm:text-sm text-white/80">각 프로그램은 학생의 학습 상황에 최적화되어 있습니다</p>
+        </div>
+
+        <!-- Program Cards -->
+        <div class="grid md:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto mb-8">
+            <!-- 100일 프로그램 -->
+            <div class="program-card bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 sm:p-8 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-book-open text-3xl sm:text-4xl"></i>
+                        </div>
+                        <span class="px-3 sm:px-4 py-1 sm:py-2 bg-white/30 backdrop-blur-md rounded-full text-xs sm:text-sm font-bold">
+                            <i class="fas fa-calendar-alt mr-1"></i>정규학기
+                        </span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-black mb-2">방과후 100일 프로그램</h3>
+                    <p class="text-sm sm:text-base text-white/90">매일 학교 수업 복습 중심</p>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">📚 프로그램 특징</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>당일 수업 복습</strong>: 학교에서 배운 내용을 그날 복습</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>개념 정착</strong>: 수업 내용을 완전히 이해하고 정착</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>진도 맞춤</strong>: 학교 진도에 맞춘 학습 계획</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>시험 대비</strong>: 중간고사/기말고사 완벽 준비</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-calendar-check text-blue-600"></i>
+                            <h5 class="font-bold text-gray-800">운영 기간</h5>
+                        </div>
+                        <p class="text-sm text-gray-700">정규학기 중 100일 (약 3개월)</p>
+                        <p class="text-xs text-gray-600 mt-1">예: 3월 ~ 중간고사 / 중간고사 ~ 기말고사</p>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-green-50 rounded-xl border-2 border-green-200">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-clock text-green-600"></i>
+                            <h5 class="font-bold text-gray-800">학습 시간</h5>
+                        </div>
+                        <p class="text-sm text-gray-700">주 32시간 (평일 4시간 × 5일 + 주말 12시간)</p>
+                    </div>
+
+                    <a href="index.html" class="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
+                        <i class="fas fa-arrow-right mr-2"></i>100일 프로그램 시작하기
+                    </a>
+                </div>
+            </div>
+
+            <!-- 30일 프로그램 -->
+            <div class="program-card bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div class="bg-gradient-to-br from-cyan-500 to-blue-600 p-6 sm:p-8 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-snowflake text-3xl sm:text-4xl"></i>
+                        </div>
+                        <span class="px-3 sm:px-4 py-1 sm:py-2 bg-white/30 backdrop-blur-md rounded-full text-xs sm:text-sm font-bold">
+                            <i class="fas fa-calendar-alt mr-1"></i>방학특강
+                        </span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-black mb-2">겨울방학 30일 프로그램</h3>
+                    <p class="text-sm sm:text-base text-white/90">한 학년 전체 복습 중심</p>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">❄️ 프로그램 특징</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-cyan-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>전체 복습</strong>: 한 학년 전 과정 총정리</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-cyan-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>부족분 보충</strong>: 취약 개념 집중 학습</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-cyan-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>선행 학습</strong>: 다음 학년 미리 준비</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-cyan-500 mt-1 flex-shrink-0"></i>
+                                <span class="text-sm sm:text-base text-gray-700"><strong>학습 습관</strong>: 방학 중 규칙적인 학습</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-cyan-50 rounded-xl border-2 border-cyan-200">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-calendar-check text-cyan-600"></i>
+                            <h5 class="font-bold text-gray-800">운영 기간</h5>
+                        </div>
+                        <p class="text-sm text-gray-700">겨울방학 30일 (약 4주)</p>
+                        <p class="text-xs text-gray-600 mt-1">예: 1월 6일 ~ 2월 4일</p>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-green-50 rounded-xl border-2 border-green-200">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-clock text-green-600"></i>
+                            <h5 class="font-bold text-gray-800">학습 시간</h5>
+                        </div>
+                        <p class="text-sm text-gray-700">총 120시간 (1일 4시간 × 30일)</p>
+                    </div>
+
+                    <a href="winter-index.html" class="block w-full px-6 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-center rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
+                        <i class="fas fa-arrow-right mr-2"></i>30일 프로그램 시작하기
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 max-w-6xl mx-auto">
+            <h3 class="text-2xl font-black text-gray-800 mb-6 text-center">
+                <i class="fas fa-balance-scale text-purple-600 mr-2"></i>프로그램 비교
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm sm:text-base">
+                    <thead>
+                        <tr class="border-b-2 border-gray-300">
+                            <th class="py-3 px-2 sm:px-4 text-left font-bold text-gray-800">구분</th>
+                            <th class="py-3 px-2 sm:px-4 text-center font-bold text-blue-600">100일 프로그램</th>
+                            <th class="py-3 px-2 sm:px-4 text-center font-bold text-cyan-600">30일 프로그램</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-3 px-2 sm:px-4 font-semibold text-gray-700">학습 목표</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">당일 수업 복습</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">한 학년 전체 복습</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="py-3 px-2 sm:px-4 font-semibold text-gray-700">진도 방식</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">학교 진도 맞춤</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">학생 수준 맞춤</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-2 sm:px-4 font-semibold text-gray-700">운영 시기</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">정규학기 중</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">겨울방학</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="py-3 px-2 sm:px-4 font-semibold text-gray-700">일일 학습량</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">평일 4시간</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">매일 4시간</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-2 sm:px-4 font-semibold text-gray-700">중점 사항</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">시험 대비</td>
+                            <td class="py-3 px-2 sm:px-4 text-center text-gray-700">부족분 보충</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 sm:p-8 border-2 border-white/20 max-w-4xl mx-auto">
+            <div class="text-center text-white">
+                <i class="fas fa-info-circle text-3xl sm:text-4xl mb-4"></i>
+                <h4 class="text-xl sm:text-2xl font-bold mb-4">프로그램 선택 가이드</h4>
+                <div class="grid sm:grid-cols-2 gap-4 sm:gap-6 text-left">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                        <h5 class="font-bold mb-2 text-blue-200"><i class="fas fa-lightbulb mr-2"></i>100일 프로그램이 좋은 경우</h5>
+                        <ul class="text-xs sm:text-sm space-y-1">
+                            <li>• 학교 수업을 따라가기 어려운 경우</li>
+                            <li>• 시험 성적 향상이 목표인 경우</li>
+                            <li>• 매일 꾸준한 학습이 필요한 경우</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                        <h5 class="font-bold mb-2 text-cyan-200"><i class="fas fa-lightbulb mr-2"></i>30일 프로그램이 좋은 경우</h5>
+                        <ul class="text-xs sm:text-sm space-y-1">
+                            <li>• 전체 복습이 필요한 경우</li>
+                            <li>• 부족한 개념을 찾고 싶은 경우</li>
+                            <li>• 방학을 효율적으로 보내고 싶은 경우</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 py-6">
+        <div class="container mx-auto px-4 sm:px-6 text-center text-white">
+            <p class="text-sm sm:text-base font-medium mb-2">
+                <i class="fas fa-heart text-red-400 mr-2"></i>
+                DA.UM 진로진학컨설팅
+            </p>
+            <p class="text-xs sm:text-sm text-white/80">
+                정라미 | 010-2657-3481 | 청소년교육학 학사, 교육학 석사
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
