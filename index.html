@@ -1,409 +1,1162 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)index.html -->
-<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다움진로진학컨설팅 - 학습 관리 대시보드</title>
-    <script src="./다움진로진학컨설팅 - 학습 관리 대시보드_files/saved_resource"></script>
-    <link rel="stylesheet" href="./다움진로진학컨설팅 - 학습 관리 대시보드_files/all.min.css">
-    <script src="./다움진로진학컨설팅 - 학습 관리 대시보드_files/chart.js.다운로드"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .gradient-border {
-            position: relative;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-        
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: -1;
-            margin: -2px;
-            border-radius: inherit;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-        
-        @keyframes pulse-border {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
-            50% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
-        }
-        
-        .pulse-border {
-            animation: pulse-border 2s infinite;
-        }
-    </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.sticky{position:sticky}.top-0{top:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-8{margin-top:2rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.h-1{height:0.25rem}.h-10{height:2.5rem}.h-14{height:3.5rem}.w-10{width:2.5rem}.w-14{width:3.5rem}.w-full{width:100%}.min-w-full{min-width:100%}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-gray-100 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(243 244 246 / var(--tw-divide-opacity, 1))}.overflow-x-auto{overflow-x:auto}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-t-2{border-top-width:2px}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-500{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-500{--tw-gradient-from:#22c55e var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 197 94 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-500{--tw-gradient-from:#6366f1 var(--tw-gradient-from-position);--tw-gradient-to:rgb(99 102 241 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-orange-500{--tw-gradient-from:#f97316 var(--tw-gradient-from-position);--tw-gradient-to:rgb(249 115 22 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-pink-500{--tw-gradient-from:#ec4899 var(--tw-gradient-from-position);--tw-gradient-to:rgb(236 72 153 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-50{--tw-gradient-from:#faf5ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(250 245 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#a855f7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(168 85 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-600{--tw-gradient-from:#9333ea var(--tw-gradient-from-position);--tw-gradient-to:rgb(147 51 234 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-indigo-50{--tw-gradient-to:#eef2ff var(--tw-gradient-to-position)}.to-indigo-600{--tw-gradient-to:#4f46e5 var(--tw-gradient-to-position)}.to-pink-600{--tw-gradient-to:#db2777 var(--tw-gradient-to-position)}.to-purple-500{--tw-gradient-to:#a855f7 var(--tw-gradient-to-position)}.to-purple-600{--tw-gradient-to:#9333ea var(--tw-gradient-to-position)}.to-red-600{--tw-gradient-to:#dc2626 var(--tw-gradient-to-position)}.to-teal-500{--tw-gradient-to:#14b8a6 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.hover\:shadow-lg:hover{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-purple-500:focus{--tw-border-opacity:1;border-color:rgb(168 85 247 / var(--tw-border-opacity, 1))}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.focus\:ring-purple-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(168 85 247 / var(--tw-ring-opacity, 1))}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:col-span-4{grid-column:span 4 / span 4}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}}</style></head>
+    <title>다움 중·고등 학습센터 - 과학적 데이터 기반 맞춤형 학습 관리</title>
+    <meta name="description" content="단 1회 성적 입력으로 완전한 분석, EBS 단추 즉시 연동, AI 기반 맞춤 학습자료 추천">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
 <body>
-    <!-- 세련된 헤더 -->
-    <header class="glass-effect shadow-2xl sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-5">
-            <div class="flex justify-between items-center">
-                <!-- 로고 및 타이틀 -->
-                <div>
-                    <div class="flex items-center space-x-3 mb-2">
-                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
-                        <div>
-                            <h1 class="text-2xl font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                                DA.UM 다움진로진학컨설팅
-                            </h1>
-                            <p class="text-xs text-gray-600 font-medium">중학생 맞춤형 학습 관리 시스템</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 네비게이션 -->
-                <nav class="flex space-x-2">
-                    <a href="index.html" class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition font-medium">
-                        <i class="fas fa-home mr-2"></i>대시보드
-                    </a>
-                    <a href="students.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-users mr-2"></i>학생 관리
-                    </a>
-                    <a href="weekly-schedule.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-calendar-week mr-2"></i>주간스케줄
-                    </a>
-                    <a href="lessons.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-book mr-2"></i>수업
-                    </a>
-                    <a href="materials.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-book-open mr-2"></i>교재
-                    </a>
-                    <a href="advanced-learning.html" class="px-4 py-2.5 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl hover:shadow-lg transition font-medium">
-                        <i class="fas fa-rocket mr-2"></i>선행학습
-                    </a>
-                    <a href="student-intro.html" class="px-4 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl hover:shadow-lg transition font-medium">
-                        <i class="fas fa-star mr-2"></i>학생용
-                    </a>
-                </nav>
-            </div>
+    <!-- 사이드바 -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-graduation-cap"></i> 다움 학습센터</h2>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-    </header>
+        <nav class="sidebar-nav">
+            <!-- 대시보드 -->
+            <a href="#" class="nav-item active gradient-btn-purple" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>대시보드</span>
+            </a>
+            
+            <!-- 학생 관리 그룹 -->
+            <div style="margin: 15px 0; padding: 0 20px;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">학생 관리</p>
+            </div>
+            <a href="#" class="nav-item gradient-btn-blue" data-page="students">
+                <i class="fas fa-users"></i>
+                <span>학생 관리</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-blue" data-page="weekly-goals">
+                <i class="fas fa-calendar-week"></i>
+                <span>주간 학습목표</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-blue" data-page="study-log">
+                <i class="fas fa-book-open"></i>
+                <span>학습 이력</span>
+            </a>
+            
+            <!-- 성적 관리 그룹 -->
+            <div style="margin: 15px 0; padding: 0 20px;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">성적 관리</p>
+            </div>
+            <a href="#" class="nav-item gradient-btn-teal" data-page="semester-grades">
+                <i class="fas fa-chart-bar"></i>
+                <span>학기별 성적</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-teal" data-page="mock-exams" id="mockExamNav" style="display:none;">
+                <i class="fas fa-clipboard-list"></i>
+                <span>모의고사 (고등)</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-teal" data-page="analysis">
+                <i class="fas fa-chart-line"></i>
+                <span>성적 분석</span>
+            </a>
+            
+            <!-- 맞춤 학습 그룹 -->
+            <div style="margin: 15px 0; padding: 0 20px;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">맞춤 학습</p>
+            </div>
+            <a href="#" class="nav-item gradient-btn-pink" data-page="personalized-roadmap">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>맞춤형 학습 로드맵 (고등)</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-pink" data-page="middle-school-roadmap">
+                <i class="fas fa-route"></i>
+                <span>맞춤형 학습 로드맵 (중학)</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-pink" data-page="learning-strategy">
+                <i class="fas fa-brain"></i>
+                <span>학습전략검사</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-pink" data-page="level-assessment">
+                <i class="fas fa-chart-line"></i>
+                <span>수준평가 & EBS연동</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-pink" data-page="career">
+                <i class="fas fa-compass"></i>
+                <span>진로 설정</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-pink" data-page="admission" id="admissionNav" style="display:none;">
+                <i class="fas fa-university"></i>
+                <span>입시 분석 (고등)</span>
+            </a>
+            <a href="fourweek-program.html" target="_blank" class="nav-item gradient-btn-pink">
+                <i class="fas fa-calendar-check"></i>
+                <span>4주 집중프로그램</span>
+            </a>
+            
+            <!-- 학습 지원 그룹 -->
+            <div style="margin: 15px 0; padding: 0 20px;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">학습 지원</p>
+            </div>
+            <a href="learning-materials-library.html" target="_blank" class="nav-item gradient-btn-cyan">
+                <i class="fas fa-books"></i>
+                <span>학습자료 라이브러리 📚</span>
+            </a>
+            <a href="learning-materials-admin.html" target="_blank" class="nav-item gradient-btn-cyan">
+                <i class="fas fa-cog"></i>
+                <span>학습자료 관리자 ⚙️</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-cyan" data-page="learning-resources">
+                <i class="fas fa-book-reader"></i>
+                <span>학습자료 & 멘토링</span>
+            </a>
+            <a href="curriculum-guide.html" target="_blank" class="nav-item gradient-btn-cyan">
+                <i class="fas fa-book"></i>
+                <span>2022 교육과정 가이드</span>
+            </a>
+            <a href="career-resources.html" target="_blank" class="nav-item gradient-btn-cyan">
+                <i class="fas fa-globe"></i>
+                <span>진로진학 외부 리소스</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-cyan" data-page="message-system">
+                <i class="fas fa-mobile-alt"></i>
+                <span>학생 메시지 전송</span>
+            </a>
+            <a href="#" class="nav-item gradient-btn-cyan" data-page="student-monitor">
+                <i class="fas fa-desktop"></i>
+                <span>학생 활동 모니터링</span>
+            </a>
+
+        </nav>
+    </div>
 
     <!-- 메인 컨텐츠 -->
-    <div class="container mx-auto px-6 py-8">
-        <!-- 환영 배너 + 학교 선택 -->
-        <div class="glass-effect rounded-2xl shadow-2xl p-8 mb-8 bg-gradient-to-r from-purple-50 to-indigo-50">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
-                        <span class="inline-block animate-bounce">👋</span> 안녕하세요, 선생님!
-                    </h2>
-                    <p class="text-gray-600 text-lg">오늘도 학생들의 학습을 함께 관리해요</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-sm text-gray-500 mb-1">운영: 다움진로진학컨설팅</div>
-                    <div class="text-xs text-gray-400">대표: 정라미 컨설턴트</div>
+    <div class="main-content" id="mainContent">
+        <!-- 대시보드 페이지 -->
+        <div class="page active" id="dashboard-page">
+            <!-- 상단 웰컴 헤더 -->
+            <div class="dashboard-welcome-header">
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <h1><i class="fas fa-graduation-cap"></i> 안녕하세요<br>다움 진로진학컨설팅 컨설턴트 정라미입니다.</h1>
+                        <p class="welcome-subtitle">오늘도 학생들의 성장을 함께 만들어가요 ✨</p>
+                        <p class="welcome-date" id="currentDate"></p>
+                    </div>
+                    <div class="welcome-badge">
+                        <div class="system-badge">
+                            <i class="fas fa-robot"></i>
+                            <span>AI 학습관리 v3.18.0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- 학교 선택 -->
-            <div class="flex items-center space-x-4 pt-4 border-t border-gray-200">
-                <label class="text-sm font-medium text-gray-700 flex items-center">
-                    <i class="fas fa-school mr-2 text-purple-600"></i>
-                    학교 선택:
-                </label>
-                <select id="schoolFilter" onchange="filterBySchool()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white">
-                    <option value="">전체 학교</option>
-                </select>
-                <a href="school-selector.html" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium">
-                    <i class="fas fa-cog mr-2"></i>학교 관리
-                </a>
-            </div>
-        </div>
 
-        <!-- 통계 카드 (세련된 디자인) -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <!-- 전체 학생 -->
-            <div class="glass-effect rounded-2xl shadow-xl p-6 card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                        <i class="fas fa-users text-white text-2xl"></i>
+            <!-- 핵심 KPI 대시보드 -->
+            <div class="kpi-dashboard">
+                <div class="kpi-card kpi-purple">
+                    <div class="kpi-icon">
+                        <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500 font-medium">전체 학생</p>
-                        <p class="text-4xl font-black text-gray-800" id="totalStudents">0</p>
-                    </div>
-                </div>
-                <div class="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
-            </div>
-            
-            <!-- 주간 평균 달성률 -->
-            <div class="glass-effect rounded-2xl shadow-xl p-6 card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                        <i class="fas fa-chart-line text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500 font-medium">주간 평균 달성률</p>
-                        <p class="text-4xl font-black text-gray-800" id="avgAchievement">0%</p>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="totalStudents">0</div>
+                        <div class="kpi-label">전체 학생</div>
+                        <div class="kpi-sublabel">
+                            <span class="kpi-subvalue" id="middleStudents">0</span> 중학생 · 
+                            <span class="kpi-subvalue" id="highStudents">0</span> 고등학생
+                        </div>
                     </div>
                 </div>
-                <div class="h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full"></div>
-            </div>
-            
-            <!-- 오늘 학습 목표 -->
-            <div class="glass-effect rounded-2xl shadow-xl p-6 card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-                        <i class="fas fa-bullseye text-white text-2xl"></i>
+                
+                <div class="kpi-card kpi-blue">
+                    <div class="kpi-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500 font-medium">오늘 학습 목표</p>
-                        <p class="text-4xl font-black text-gray-800" id="todayGoal">0/0</p>
-                    </div>
-                </div>
-                <div class="h-1 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full"></div>
-            </div>
-            
-            <!-- 피드백 대기 -->
-            <div class="glass-effect rounded-2xl shadow-xl p-6 card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg pulse-border">
-                        <i class="fas fa-comments text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500 font-medium">피드백 대기</p>
-                        <p class="text-4xl font-black text-gray-800" id="pendingFeedback">0</p>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="weekStudyTime">0시간</div>
+                        <div class="kpi-label">이번 주 학습시간</div>
+                        <div class="kpi-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>지난주 대비 +12%</span>
+                        </div>
                     </div>
                 </div>
-                <div class="h-1 bg-gradient-to-r from-orange-500 to-red-600 rounded-full"></div>
+                
+                <div class="kpi-card kpi-green">
+                    <div class="kpi-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="weekGoalRate">0%</div>
+                        <div class="kpi-label">주간 목표 달성률</div>
+                        <div class="kpi-progress">
+                            <div class="kpi-progress-bar" id="weekGoalProgressBar"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="kpi-card kpi-orange">
+                    <div class="kpi-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="newAlerts">0</div>
+                        <div class="kpi-label">신규 알림</div>
+                        <div class="kpi-action">
+                            <a href="#" onclick="showAlerts(); return false;">확인하기 →</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- 빠른 학생 등록 섹션 (NEW!) -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-3">
-                        <i class="fas fa-user-plus text-white"></i>
+            <!-- Quick Actions - 최우선 작업 -->
+            <div class="quick-actions-section">
+                <div class="section-header-modern">
+                    <div class="section-header-left">
+                        <h2><i class="fas fa-bolt"></i> 빠른 실행</h2>
+                        <p>가장 많이 사용하는 핵심 기능</p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800">👨‍🎓 빠른 학생 등록</h3>
                 </div>
-                <a href="students.html" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition text-sm font-medium">
-                    <i class="fas fa-list mr-2"></i>전체 학생 목록
-                </a>
+                
+                <div class="quick-actions-grid">
+                    <div class="quick-action-modern qa-purple" onclick="App.showPage('students')">
+                        <div class="qa-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>학생 관리</h3>
+                        <p>등록 · 수정 · 조회</p>
+                    </div>
+                    
+                    <div class="quick-action-modern qa-pink" onclick="App.showPage('semester-grades')">
+                        <div class="qa-icon">
+                            <i class="fas fa-pen-alt"></i>
+                        </div>
+                        <h3>성적 입력</h3>
+                        <p>학기 · 모의고사</p>
+                    </div>
+                    
+                    <div class="quick-action-modern qa-blue" onclick="App.showPage('analysis')">
+                        <div class="qa-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>AI 성적분석</h3>
+                        <p>강·약점 진단</p>
+                    </div>
+                    
+                    <div class="quick-action-modern qa-green" onclick="App.showPage('personalized-roadmap')">
+                        <div class="qa-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3>맞춤 로드맵</h3>
+                        <p>학습전략 생성</p>
+                    </div>
+                </div>
             </div>
-            
-            <form id="quickStudentForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- 기본 정보 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">이름 *</label>
-                    <input type="text" id="quickName" required="" placeholder="예: 홍길동" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                </div>
+
+            <!-- 통합 기능 카테고리 (접기/펼치기) -->
+            <div class="feature-categories">
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">학년 *</label>
-                    <select id="quickGrade" required="" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        <option value="">선택</option>
-                        <option value="1">1학년</option>
-                        <option value="2">2학년</option>
-                        <option value="3">3학년</option>
-                    </select>
+                <!-- 성적 분석 & 진단 -->
+                <div class="category-section">
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-left">
+                            <i class="fas fa-chart-line category-icon"></i>
+                            <h3>성적 분석 & 학습 진단</h3>
+                            <span class="category-count">3개 기능</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-grid">
+                            <div class="category-card" onclick="App.showPage('analysis')">
+                                <i class="fas fa-chart-line"></i>
+                                <h4>AI 성적 분석</h4>
+                                <p>학기별/모의고사 통합 분석</p>
+                            </div>
+                            <div class="category-card" onclick="App.showPage('level-assessment')">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h4>수준평가 & EBS연동</h4>
+                                <p>과목별 평가 및 강의 추천</p>
+                            </div>
+                            <div class="category-card" onclick="App.showPage('learning-strategy')">
+                                <i class="fas fa-brain"></i>
+                                <h4>학습전략검사 (MLST)</h4>
+                                <p>학습 습관 진단 및 개선</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">반 *</label>
-                    <input type="number" id="quickClass" required="" min="1" placeholder="예: 3" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+
+                <!-- 맞춤형 로드맵 -->
+                <div class="category-section">
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-left">
+                            <i class="fas fa-route category-icon"></i>
+                            <h3>맞춤형 학습 로드맵</h3>
+                            <span class="category-count">3개 기능</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-grid">
+                            <div class="category-card" onclick="App.showPage('personalized-roadmap')">
+                                <i class="fas fa-route"></i>
+                                <h4>고등학교 로드맵</h4>
+                                <p>5등급제 기반 맞춤 전략</p>
+                                <span class="card-badge">인기</span>
+                            </div>
+                            <div class="category-card" onclick="App.showPage('middle-school-roadmap')">
+                                <i class="fas fa-school"></i>
+                                <h4>중학교 로드맵</h4>
+                                <p>점수별 단계적 학습 전략</p>
+                            </div>
+                            <div class="category-card" onclick="window.open('fourweek-program.html', '_blank')">
+                                <i class="fas fa-calendar-check"></i>
+                                <h4>4주 집중프로그램</h4>
+                                <p>방학 특화 학습 플랜</p>
+                                <span class="card-badge">방학</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">번호 *</label>
-                    <input type="number" id="quickNumber" required="" min="1" placeholder="예: 15" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+
+                <!-- 학습 관리 도구 -->
+                <div class="category-section">
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-left">
+                            <i class="fas fa-calendar-alt category-icon"></i>
+                            <h3>학습 관리 도구</h3>
+                            <span class="category-count">3개 기능</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-grid">
+                            <div class="category-card" onclick="window.open('weekly-timetable.html', '_blank')">
+                                <i class="fas fa-calendar-week"></i>
+                                <h4>주간 학습 계획표</h4>
+                                <p>AI 자동 배치 시간표</p>
+                            </div>
+                            <div class="category-card" onclick="window.open('daily-planner.html', '_blank')">
+                                <i class="fas fa-calendar-day"></i>
+                                <h4>일일 학습플래너</h4>
+                                <p>오늘의 목표 설정 및 추적</p>
+                            </div>
+                            <div class="category-card" onclick="window.open('weekly-assessment.html', '_blank')">
+                                <i class="fas fa-clipboard-check"></i>
+                                <h4>주간 평가시스템</h4>
+                                <p>매주 성취도 평가 리포트</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- EBS AI 진단평가 점수 -->
-                <div class="md:col-span-4">
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border-2 border-blue-200">
-                        <h4 class="text-sm font-bold text-blue-800 mb-3 flex items-center">
-                            <i class="fas fa-robot mr-2"></i>🤖 EBS AI 코스웨어 진단평가 점수 (선택)
-                        </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-700 mb-1">📚 국어</label>
-                                <input type="number" id="quickKorean" min="0" max="100" placeholder="0-100" class="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+
+                <!-- 교육과정 & 외부 리소스 -->
+                <div class="category-section">
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-left">
+                            <i class="fas fa-book category-icon"></i>
+                            <h3>교육과정 & 외부 리소스</h3>
+                            <span class="category-count">4개 기능</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-grid">
+                            <div class="category-card highlight-card" onclick="window.open('learning-materials-library.html', '_blank')">
+                                <i class="fas fa-books"></i>
+                                <h4>학습자료 라이브러리 📚</h4>
+                                <p>120+ 대입 준비 자료 검색</p>
+                                <span class="card-badge badge-new">NEW</span>
                             </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-700 mb-1">🗣️ 영어</label>
-                                <input type="number" id="quickEnglish" min="0" max="100" placeholder="0-100" class="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                            <div class="category-card" onclick="window.open('curriculum-guide.html', '_blank')">
+                                <i class="fas fa-book-open"></i>
+                                <h4>2022 교육과정 가이드</h4>
+                                <p>교육부 공식 커리큘럼 정보</p>
+                                <span class="card-badge">공식</span>
                             </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-700 mb-1">🔢 수학</label>
-                                <input type="number" id="quickMath" min="0" max="100" placeholder="0-100" class="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                            <div class="category-card" onclick="window.open('career-resources.html', '_blank')">
+                                <i class="fas fa-globe"></i>
+                                <h4>진로진학 외부 리소스</h4>
+                                <p>52개 사이트 QR 코드 지원</p>
                             </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-700 mb-1">🔬 과학</label>
-                                <input type="number" id="quickScience" min="0" max="100" placeholder="0-100" class="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-700 mb-1">🌏 사회</label>
-                                <input type="number" id="quickSocial" min="0" max="100" placeholder="0-100" class="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                            <div class="category-card" onclick="App.showPage('learning-resources')">
+                                <i class="fas fa-book-reader"></i>
+                                <h4>학습자료 & 멘토링</h4>
+                                <p>교재 추천 및 학습자료실</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 학습 수준 (자동 판정) -->
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">📊 학습 수준 (자동 판정)</label>
-                    <select id="quickLevel" disabled="" class="w-full px-4 py-2 border-2 border-purple-300 bg-gray-50 rounded-lg font-medium">
-                        <option value="">점수 입력 시 자동 판정</option>
-                        <option value="기초">🟢 기초 (0-49점)</option>
-                        <option value="중하">🔵 중하 (50-69점)</option>
-                        <option value="중상">🟡 중상 (70-84점)</option>
-                        <option value="상급">🔴 상급 (85-100점)</option>
-                    </select>
+            </div>
+
+            <!-- 학습 통계 대시보드 -->
+            <div class="analytics-section">
+                <div class="section-header-modern">
+                    <div class="section-header-left">
+                        <h2><i class="fas fa-chart-area"></i> 학습 현황 분석</h2>
+                        <p>이번 주 학습 활동 및 진도 요약</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn-icon" title="새로고침">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- 등록 버튼 -->
-                <div class="md:col-span-2 flex items-end">
-                    <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-xl transition font-bold text-lg">
-                        <i class="fas fa-save mr-2"></i>학생 등록
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- 차트 섹션 (세련된 디자인) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <!-- 주간 학습시간 달성률 -->
-            <div class="glass-effect rounded-2xl shadow-xl p-6">
-                <div class="flex items-center mb-6">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-3">
-                        <i class="fas fa-chart-area text-white"></i>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-card-header">
+                            <h3><i class="fas fa-chart-line"></i> 이번 주 학습시간 추이</h3>
+                            <span class="analytics-period">최근 7일</span>
+                        </div>
+                        <div class="analytics-chart">
+                            <canvas id="weeklyStudyChart" height="280"></canvas>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800">주간 학습시간 달성률</h3>
-                </div>
-                <div style="height: 300px;">
-                    <canvas id="weeklyChart"></canvas>
-                </div>
-            </div>
-
-            <!-- 과목별 평균 학습시간 -->
-            <div class="glass-effect rounded-2xl shadow-xl p-6">
-                <div class="flex items-center mb-6">
-                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-3">
-                        <i class="fas fa-chart-bar text-white"></i>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-card-header">
+                            <h3><i class="fas fa-history"></i> 최근 학습 활동</h3>
+                            <a href="#" class="analytics-link">전체보기 →</a>
+                        </div>
+                        <div class="activity-timeline" id="recentStudyLogs">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <p class="no-data">최근 학습 활동이 없습니다.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800">과목별 평균 학습시간</h3>
-                </div>
-                <div style="height: 300px;">
-                    <canvas id="subjectChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- 학생 현황 테이블 (세련된 디자인) -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mr-3">
-                        <i class="fas fa-users text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800">학생 현황 (실시간)</h3>
-                </div>
-                <button onclick="location.href=&#39;students.html&#39;" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition font-medium">
-                    <i class="fas fa-plus mr-2"></i>학생 추가
+        <!-- 학생 관리 페이지 -->
+        <div class="page" id="students-page">
+            <div class="page-header">
+                <h1><i class="fas fa-users"></i> 학생 관리</h1>
+                <button class="btn btn-primary" id="addStudentBtn">
+                    <i class="fas fa-plus"></i> 학생 등록
                 </button>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table class="min-w-full">
+
+            <div class="filter-tabs" style="margin-bottom: 20px;">
+                <button class="tab-btn active" data-filter="all">전체</button>
+                <button class="tab-btn" data-filter="중학생">중학생</button>
+                <button class="tab-btn" data-filter="고등학생">고등학생</button>
+            </div>
+
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="studentSearch" placeholder="학생 이름, 학교로 검색...">
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
                     <thead>
-                        <tr class="border-b-2 border-gray-200">
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">이름</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">학년/반/번호</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">수준</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">평균 성적</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                                오늘 학습 진행
-                                <span class="text-xs text-green-600 font-medium ml-1 bg-green-50 px-2 py-1 rounded-full">실시간</span>
-                            </th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">이번주 달성률</th>
-                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700">작업</th>
+                        <tr>
+                            <th>이름</th>
+                            <th>구분</th>
+                            <th>학년</th>
+                            <th>학교</th>
+                            <th>연락처</th>
+                            <th>상태</th>
+                            <th>작업</th>
                         </tr>
                     </thead>
-                    <tbody id="studentTableBody" class="divide-y divide-gray-100">
-                        <!-- 동적으로 생성됨 -->
+                    <tbody id="studentsTableBody">
+                        <tr>
+                            <td colspan="7" class="no-data">등록된 학생이 없습니다.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
-    <!-- 세련된 푸터 -->
-    <footer class="glass-effect mt-12 shadow-2xl">
-        <div class="container mx-auto px-6 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- 운영 정보 -->
-                <div>
-                    <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-building mr-2 text-purple-600"></i>
-                        운영 정보
-                    </h4>
-                    <div class="space-y-2 text-gray-600">
-                        <p class="font-semibold text-gray-800">다움진로진학컨설팅</p>
-                        <p class="text-sm">대표: 정라미 컨설턴트</p>
-                        <p class="text-sm">중학생 맞춤형 진로진학 컨설팅</p>
-                    </div>
-                </div>
-                
-                <!-- 프로그램 정보 -->
-                <div>
-                    <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-graduation-cap mr-2 text-indigo-600"></i>
-                        프로그램 안내
-                    </h4>
-                    <div class="space-y-2 text-gray-600">
-                        <p class="text-sm">📚 평일 3~4시간 + 주말 5시간 학습</p>
-                        <p class="text-sm">🎯 주간 25시간 목표 달성</p>
-                        <p class="text-sm">📊 실시간 학습 현황 모니터링</p>
-                        <p class="text-sm">💬 주간 맞춤 피드백 제공</p>
-                    </div>
-                </div>
+        <!-- 주간 학습목표 페이지 -->
+        <div class="page" id="weekly-goals-page">
+            <div class="page-header">
+                <h1><i class="fas fa-calendar-week"></i> 주간 학습목표</h1>
+                <button class="btn btn-primary" id="addWeeklyGoalBtn">
+                    <i class="fas fa-plus"></i> 목표 설정
+                </button>
             </div>
-            
-            <div class="border-t-2 border-gray-200 mt-8 pt-6 text-center text-gray-600">
-                <p class="text-sm">
-                    © 2025 다움진로진학컨설팅. All rights reserved.
-                </p>
-                <p class="text-xs mt-2 text-gray-500">
-                    Version 1.7.0 | 중학생 방과후 맞춤형 학습 관리 시스템
-                </p>
+
+            <div class="week-selector">
+                <button class="btn btn-secondary" id="prevWeek"><i class="fas fa-chevron-left"></i> 이전 주</button>
+                <div class="week-display" id="weekDisplay">2024년 1월 1주차</div>
+                <button class="btn btn-secondary" id="nextWeek">다음 주 <i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div id="weeklyGoalsContainer" class="goals-grid">
+                <p class="no-data">이번 주 학습목표가 없습니다.</p>
             </div>
         </div>
-    </footer>
 
-    <script src="js/dashboard.js"></script>
+        <!-- 학습 이력 페이지 -->
+        <div class="page" id="study-log-page">
+            <div class="page-header">
+                <h1><i class="fas fa-book-open"></i> 학습 이력</h1>
+                <button class="btn btn-primary" id="addStudyLogBtn">
+                    <i class="fas fa-plus"></i> 학습 기록
+                </button>
+            </div>
+
+            <div class="filter-section">
+                <div class="student-selector">
+                    <label>학생 선택:</label>
+                    <select id="studyLogStudentSelect">
+                        <option value="">전체 학생</option>
+                    </select>
+                </div>
+                <div class="date-range-selector">
+                    <label>기간:</label>
+                    <input type="date" id="studyLogStartDate">
+                    <span>~</span>
+                    <input type="date" id="studyLogEndDate">
+                </div>
+            </div>
+
+            <div id="studyLogsContainer" class="logs-container">
+                <p class="no-data">학습 기록이 없습니다.</p>
+            </div>
+        </div>
+
+        <!-- 학기별 성적 페이지 -->
+        <div class="page" id="semester-grades-page">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-bar"></i> 학기별 성적 관리</h1>
+                <button class="btn btn-primary" id="addSemesterGradeBtn">
+                    <i class="fas fa-plus"></i> 성적 입력
+                </button>
+            </div>
+
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1976d2;">
+                <p style="margin: 0; color: #1565c0;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>성적 입력 방법:</strong> 
+                    ① 아래에서 학생을 선택하여 성적을 조회하거나, 
+                    ② "성적 입력" 버튼을 클릭하면 나오는 창에서 직접 학생을 선택할 수 있습니다.
+                </p>
+            </div>
+
+            <div class="filter-section">
+                <div class="student-selector">
+                    <label>학생 선택 (선택사항):</label>
+                    <select id="semesterStudentSelect">
+                        <option value="">전체 / 학생 선택</option>
+                    </select>
+                </div>
+                <div class="semester-selector">
+                    <label>학년도:</label>
+                    <select id="yearSelect"></select>
+                    <label>학기:</label>
+                    <select id="semesterSelect">
+                        <option value="">전체</option>
+                        <option value="1학기">1학기</option>
+                        <option value="2학기">2학기</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="semesterGradesContainer">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>학년도</th>
+                                <th>학기</th>
+                                <th>과목</th>
+                                <th>중간고사</th>
+                                <th>기말고사</th>
+                                <th>수행평가</th>
+                                <th>학기평균</th>
+                                <th>등급/등수</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="semesterGradesTableBody">
+                            <tr>
+                                <td colspan="9" class="no-data">학생을 선택하세요.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 모의고사 페이지 (고등학생 전용) -->
+        <div class="page" id="mock-exams-page">
+            <div class="page-header">
+                <h1><i class="fas fa-clipboard-list"></i> 모의고사 관리 (고등학생)</h1>
+                <button class="btn btn-primary" id="addMockExamBtn">
+                    <i class="fas fa-plus"></i> 성적 입력
+                </button>
+            </div>
+
+            <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f57c00;">
+                <p style="margin: 0; color: #ef6c00;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>모의고사 입력 방법:</strong> 
+                    ① 아래에서 고등학생을 선택하여 성적을 조회하거나, 
+                    ② "성적 입력" 버튼을 클릭하면 나오는 창에서 직접 학생을 선택할 수 있습니다.
+                </p>
+            </div>
+
+            <div class="student-selector">
+                <label>학생 선택 (선택사항):</label>
+                <select id="mockExamStudentSelect">
+                    <option value="">전체 / 고등학생 선택</option>
+                </select>
+            </div>
+
+            <div id="mockExamsContainer">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>시험일</th>
+                                <th>시험유형</th>
+                                <th>국어</th>
+                                <th>수학</th>
+                                <th>영어<br><small style="font-weight: normal;">(절대평가)</small></th>
+                                <th>한국사<br><small style="font-weight: normal;">(절대평가)</small></th>
+                                <th>탐구1</th>
+                                <th>탐구2</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mockExamsTableBody">
+                            <tr>
+                                <td colspan="9" class="no-data">학생을 선택하세요.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 맞춤형 학습 로드맵 페이지 -->
+        <div class="page" id="personalized-roadmap-page">
+            <div class="page-header">
+                <h1><i class="fas fa-map-marked-alt"></i> 맞춤형 학습 로드맵</h1>
+                <p style="margin-top: 10px; color: var(--text-light); font-size: 1.05rem;">
+                    학생의 현재 성적을 분석하여 1등급 향상을 위한 개인 맞춤 학습 계획을 생성합니다
+                </p>
+            </div>
+
+            <div class="student-selector">
+                <label>고등학생 선택:</label>
+                <select id="roadmapStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div id="studentInfoContainer">
+                <p class="no-data">학생을 선택하면 현재 성적이 표시됩니다.</p>
+            </div>
+
+            <div id="roadmapContainer">
+                <!-- 로드맵이 여기에 생성됩니다 -->
+            </div>
+        </div>
+
+        <!-- 학습전략검사 페이지 -->
+        <div class="page" id="learning-strategy-page">
+            <div class="page-header">
+                <h1><i class="fas fa-brain"></i> 학습전략검사</h1>
+                <button class="btn btn-primary" id="addStrategyBtn">
+                    <i class="fas fa-plus"></i> 검사 실시
+                </button>
+            </div>
+
+            <div class="student-selector">
+                <label>학생 선택:</label>
+                <select id="strategyStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div id="strategyContainer">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>검사일</th>
+                                <th>학습스타일</th>
+                                <th>집중력</th>
+                                <th>자기주도</th>
+                                <th>시간관리</th>
+                                <th>이해력</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="strategyTableBody">
+                            <tr>
+                                <td colspan="7" class="no-data">학생을 선택하세요.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 수준평가 & EBS연동 페이지 -->
+        <div class="page" id="level-assessment-page">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-line"></i> 수준평가 & EBS 단추 연동</h1>
+                <button class="btn btn-primary" id="addAssessmentBtn">
+                    <i class="fas fa-plus"></i> 수준평가 등록
+                </button>
+            </div>
+
+            <div class="student-selector">
+                <label>학생 선택:</label>
+                <select id="assessmentStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div class="dashboard-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; margin-bottom: 25px;">
+                <h2 style="color: white; margin-bottom: 15px;">
+                    <i class="fas fa-graduation-cap"></i> EBS 단추 AI코스웨어 + 맞춤 교재 추천
+                </h2>
+                <p style="opacity: 0.95; line-height: 1.8; font-size: 1rem;">
+                    📊 <strong>학생의 현재 수준을 평가</strong>하여 <strong style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">EBS 단추 AI코스웨어</strong>로 바로 연결!<br>
+                    📚 수준에 맞는 <strong>시중 교재</strong>도 함께 추천해드립니다.<br>
+                    🎯 기초부터 심화까지, 맞춤형 학습으로 효과적인 성적 향상을 경험하세요!
+                </p>
+            </div>
+
+            <div class="dashboard-card">
+                <h2 style="margin-bottom: 20px;"><i class="fas fa-clipboard-list"></i> 수준평가 목록</h2>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>평가일</th>
+                                <th>과목</th>
+                                <th>현재 수준</th>
+                                <th>EBS 단추</th>
+                                <th>추천 교재</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assessmentTableBody">
+                            <tr>
+                                <td colspan="6" class="no-data">학생을 선택하세요.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- EBS 안내 섹션 -->
+            <div class="dashboard-card" style="background: #e3f2fd; border-left: 4px solid #1976d2;">
+                <h3 style="margin-bottom: 15px;"><i class="fas fa-info-circle"></i> EBS 단추 AI코스웨어란?</h3>
+                <div style="line-height: 1.8;">
+                    <p style="margin-bottom: 10px;">
+                        <strong>🤖 AI 기반 맞춤형 학습</strong><br>
+                        학생의 수준과 학습 속도에 맞춰 자동으로 문제를 제공하는 인공지능 학습 시스템입니다.
+                    </p>
+                    <p style="margin-bottom: 10px;">
+                        <strong>📱 언제 어디서나 학습</strong><br>
+                        PC, 태블릿, 스마트폰으로 언제든지 접속하여 학습할 수 있습니다.
+                    </p>
+                    <p style="margin-bottom: 10px;">
+                        <strong>📊 실시간 학습 분석</strong><br>
+                        학습 진도와 취약점을 실시간으로 분석하여 효율적인 학습을 도와줍니다.
+                    </p>
+                    <p>
+                        <strong>✅ 무료 제공</strong><br>
+                        EBS 회원가입만 하면 누구나 무료로 이용 가능합니다!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 학습자료 & 멘토링 페이지 -->
+        <div class="page" id="learning-resources-page">
+            <div class="page-header">
+                <h1><i class="fas fa-book-reader"></i> 학습자료 & 멘토링</h1>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-success" id="addSampleResourcesBtn" onclick="seedLearningResources()">
+                        <i class="fas fa-download"></i> 샘플 자료 추가
+                    </button>
+                    <button class="btn btn-info" id="showAllResourcesBtn">
+                        <i class="fas fa-list"></i> 전체 자료 보기
+                    </button>
+                </div>
+            </div>
+
+            <div class="student-selector">
+                <label>학생 선택:</label>
+                <select id="resourcesStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div class="dashboard-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 25px;">
+                <h2 style="color: white; margin-bottom: 15px;"><i class="fas fa-lightbulb"></i> 맞춤형 학습자료 추천</h2>
+                <p style="opacity: 0.9; line-height: 1.6;">
+                    학생의 학습전략검사 결과를 분석하여 학습 스타일, LQ 수준, 약점에 맞는 맞춤형 학습자료를 추천합니다.<br>
+                    각 자료에는 구체적인 학습 방법, 실천 체크리스트, 과목별 학습 전략이 포함되어 있습니다.
+                </p>
+            </div>
+
+            <div id="recommendedResourcesContainer">
+                <p class="no-data">학생을 선택하고 학습전략검사를 먼저 실시해주세요.</p>
+            </div>
+        </div>
+
+        <!-- 진로 설정 페이지 -->
+        <div class="page" id="career-page">
+            <div class="page-header">
+                <h1><i class="fas fa-compass"></i> 진로 설정 및 진학목표</h1>
+                <button class="btn btn-primary" id="addCareerGoalBtn">
+                    <i class="fas fa-plus"></i> 진로 설정
+                </button>
+            </div>
+
+            <div class="student-selector">
+                <label>학생 선택:</label>
+                <select id="careerStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div id="careerGoalContainer">
+                <p class="no-data">학생을 선택하세요.</p>
+            </div>
+        </div>
+
+        <!-- 중학생 맞춤형 학습 로드맵 페이지 -->
+        <div class="page" id="middle-school-roadmap-page">
+            <div class="page-header">
+                <h1><i class="fas fa-route"></i> 맞춤형 학습 로드맵 (중학생)</h1>
+                <p style="margin-top: 10px; color: #6c757d;">학생별 현재 성적과 목표에 맞는 개인화된 학습 로드맵을 자동 생성합니다.</p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+                <h3 style="color: white; margin-bottom: 10px;"><i class="fas fa-info-circle"></i> 중학생 맞춤형 로드맵 특징</h3>
+                <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
+                    <li><i class="fas fa-check"></i> 학기 성적 기반 과목별 학습 계획 생성</li>
+                    <li><i class="fas fa-check"></i> 목표 고등학교 유형에 맞는 학습 전략</li>
+                    <li><i class="fas fa-check"></i> 단계별 학습 플랜 (기초 → 심화 → 완성)</li>
+                    <li><i class="fas fa-check"></i> 주간 학습 시간표 및 일일 시간표 제공</li>
+                    <li><i class="fas fa-check"></i> 교재 및 학습 자료 추천</li>
+                </ul>
+            </div>
+
+            <div class="student-selector">
+                <label style="font-size: 1.1rem; font-weight: 600;">중학생 선택:</label>
+                <select id="middleRoadmapStudentSelect" style="font-size: 1rem; padding: 12px;">
+                    <option value="">중학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div id="middleStudentInfoContainer" style="margin-top: 30px;">
+                <p class="no-data">학생을 선택하면 현재 성적이 표시됩니다.</p>
+            </div>
+
+            <div id="middleRoadmapContainer" style="margin-top: 30px;"></div>
+        </div>
 
 
-</body></html>
+
+        <!-- 입시 분석 페이지 (고등학생) - v3.2.3 정확한 입시 결과 기반 -->
+        <div class="page" id="admission-page">
+            <div class="page-header">
+                <h1><i class="fas fa-university"></i> 입시 분석 및 합격 예측 (3개년 입시 결과 기반)</h1>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="window.open('입시합격예측분석.html', '_blank')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                        <i class="fas fa-chart-line"></i> 입시 합격 예측 분석
+                    </button>
+                    <button class="btn btn-success" onclick="AdmissionPrediction.showAdmissionDataModal()">
+                        <i class="fas fa-database"></i> 입시 결과 데이터 관리
+                    </button>
+                </div>
+            </div>
+
+            <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; border-left: 4px solid #2196F3; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 10px;"><i class="fas fa-info-circle"></i> 정확한 입시 예측 시스템</h3>
+                <p style="line-height: 1.8; color: #1565c0;">
+                    ✅ <strong>당해년도 + 3개년 실제 입시 결과</strong>를 기반으로 합격 가능성을 정확하게 예측합니다.<br>
+                    ✅ <strong>수시(학생부교과/학생부종합)</strong>와 <strong>정시</strong> 전형별로 분석합니다.<br>
+                    ✅ <strong>일반고 학생 합격 비율</strong>을 반영하여 더욱 현실적인 예측을 제공합니다.<br>
+                    ✅ <strong>경쟁률, 커트라인, 평균 등급</strong> 등의 상세 정보를 확인할 수 있습니다.
+                </p>
+            </div>
+
+            <div class="student-selector">
+                <label style="font-size: 1.1rem; font-weight: 600;">고등학생 선택:</label>
+                <select id="admissionStudentSelect" style="font-size: 1rem; padding: 12px;">
+                    <option value="">고등학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div id="admissionInfoContainer" style="margin-top: 30px;">
+                <p class="no-data">학생을 선택하면 현재 성적과 진로 목표가 표시됩니다.</p>
+            </div>
+        </div>
+
+        <!-- 성적 분석 페이지 -->
+        <div class="page" id="analysis-page">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-line"></i> 성적 분석</h1>
+                <div style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); padding: 15px; border-radius: 12px; margin-top: 15px;">
+                    <p style="margin: 0; line-height: 1.8; font-size: 1.05rem;">
+                        <strong style="color: var(--primary-color);">✨ 성적을 새로 입력할 필요 없습니다!</strong><br>
+                        <span style="color: var(--text-light);">이미 입력된 학기별 성적과 모의고사 성적을 바탕으로 자동으로 분석합니다.</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="student-selector">
+                <label>분석할 학생 선택:</label>
+                <select id="analysisStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <div id="analysisContainer">
+                <!-- 학기별 성적 추이 -->
+                <div class="dashboard-card">
+                    <h2><i class="fas fa-chart-area"></i> 과목별 학기 성적 추이</h2>
+                    <div style="height: 400px;">
+                        <canvas id="semesterTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 모의고사 추이 (고등학생) -->
+                <div class="dashboard-card" id="mockExamAnalysis" style="display: none;">
+                    <h2><i class="fas fa-chart-line"></i> 모의고사 등급 추이</h2>
+                    <div style="height: 400px;">
+                        <canvas id="mockExamTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 과목별 강약점 분석 -->
+                <div class="dashboard-card">
+                    <h2><i class="fas fa-chart-radar"></i> 과목별 평균 성적</h2>
+                    <div style="height: 400px;">
+                        <canvas id="subjectRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 학생 활동 모니터링 페이지 -->
+        <div class="page" id="student-monitor-page">
+            <div class="page-header">
+                <h1><i class="fas fa-desktop"></i> 학생 활동 모니터링</h1>
+                <p style="color: var(--text-light); margin-top: 10px;">
+                    📱 학생 모바일 앱에서 입력한 학습 활동을 실시간으로 확인합니다
+                </p>
+            </div>
+
+            <!-- 실시간 활동 -->
+            <div class="dashboard-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2><i class="fas fa-bolt"></i> 실시간 활동</h2>
+                    <button class="btn btn-small btn-secondary" onclick="StudentMonitor.refresh()">
+                        <i class="fas fa-sync-alt"></i> 새로고침
+                    </button>
+                </div>
+                <div id="realtimeActivity">
+                    <p class="no-data">로딩 중...</p>
+                </div>
+            </div>
+
+            <!-- 오늘의 학생 활동 -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-calendar-day"></i> 오늘의 학생 활동 현황</h2>
+                <div id="todayActivity" style="margin-top: 20px;">
+                    <p class="no-data">로딩 중...</p>
+                </div>
+            </div>
+
+            <!-- 주간 목표 달성 현황 -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-chart-pie"></i> 주간 목표 달성 현황</h2>
+                <div id="weeklyGoalsStatus" style="margin-top: 20px;">
+                    <p class="no-data">로딩 중...</p>
+                </div>
+            </div>
+
+            <!-- 학생 모바일 앱 링크 -->
+            <div class="dashboard-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h2 style="color: white;"><i class="fas fa-mobile-alt"></i> 학생 모바일 앱</h2>
+                <p style="opacity: 0.9; margin: 15px 0;">학생들이 직접 학습을 기록할 수 있는 모바일 앱입니다.</p>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>앱 URL:</strong><br>
+                    <code style="background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 4px; display: inline-block; margin-top: 8px;">
+                        <span id="studentAppUrl">student-mobile.html</span>
+                    </code>
+                    <button class="btn btn-small" style="background: white; color: var(--primary-color); margin-left: 10px;" onclick="StudentMonitor.copyUrl()">
+                        <i class="fas fa-copy"></i> 복사
+                    </button>
+                </div>
+                <a href="student-mobile.html" target="_blank" class="btn btn-large" style="background: white; color: var(--primary-color); display: inline-block; margin-top: 10px;">
+                    <i class="fas fa-external-link-alt"></i> 학생 앱 열기
+                </a>
+            </div>
+        </div>
+
+        <!-- 학생 메시지 전송 페이지 -->
+        <div class="page" id="message-system-page">
+            <div class="page-header">
+                <h1><i class="fas fa-mobile-alt"></i> 학생 메시지 전송 시스템</h1>
+                <p style="color: var(--text-light); margin-top: 10px;">
+                    📱 학생 휴대폰으로 학습 내용과 성취도 메시지를 자동으로 전송합니다
+                </p>
+            </div>
+
+            <div class="student-selector">
+                <label>학생 선택:</label>
+                <select id="messageStudentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+
+            <!-- 메시지 종류 선택 -->
+            <div class="dashboard-card" style="margin-top: 20px;">
+                <h2><i class="fas fa-envelope"></i> 메시지 종류 선택</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <button class="btn btn-info" onclick="MessageUI.previewMessage('일일')" style="padding: 20px;">
+                        <i class="fas fa-sun" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                        <strong>일일 학습 안내</strong><br>
+                        <small>오늘의 학습 목표</small>
+                    </button>
+                    <button class="btn btn-success" onclick="MessageUI.previewMessage('주간')" style="padding: 20px;">
+                        <i class="fas fa-calendar-week" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                        <strong>주간 학습 리포트</strong><br>
+                        <small>이번 주 학습 통계</small>
+                    </button>
+                    <button class="btn btn-warning" onclick="MessageUI.previewMessage('월간')" style="padding: 20px;">
+                        <i class="fas fa-calendar-alt" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                        <strong>월간 성과 리포트</strong><br>
+                        <small>한 달 학습 분석</small>
+                    </button>
+                    <button class="btn btn-primary" onclick="MessageUI.previewMessage('성취도')" style="padding: 20px;">
+                        <i class="fas fa-trophy" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                        <strong>성취도 분석</strong><br>
+                        <small>성적 기반 분석</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 메시지 미리보기 -->
+            <div class="dashboard-card" id="messagePreviewCard" style="display: none; margin-top: 20px;">
+                <h2><i class="fas fa-eye"></i> 메시지 미리보기</h2>
+                <div id="messagePreviewContent" style="margin-top: 20px;">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 20px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="MessageUI.closePreview()">
+                        <i class="fas fa-times"></i> 취소
+                    </button>
+                    <button class="btn btn-primary" onclick="MessageUI.sendMessage()">
+                        <i class="fas fa-paper-plane"></i> 메시지 전송
+                    </button>
+                </div>
+            </div>
+
+            <!-- 전송 이력 -->
+            <div class="dashboard-card" style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2><i class="fas fa-history"></i> 전송 이력</h2>
+                    <button class="btn btn-small btn-secondary" onclick="MessageUI.loadHistory()">
+                        <i class="fas fa-sync-alt"></i> 새로고침
+                    </button>
+                </div>
+                <div id="messageHistoryContainer">
+                    <p class="no-data">전송 이력이 없습니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달 (동적으로 생성됨) -->
+    <div id="modal" class="modal"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/api-v2.js"></script>
+    <script src="js/modals-v2.js"></script>
+    <script src="js/students-v2.js"></script>
+    <script src="js/weekly-goals.js"></script>
+    <script src="js/study-log.js"></script>
+    <script src="js/semester-grades.js"></script>
+    <script src="js/mock-exams.js"></script>
+    <script src="js/analysis-v3.js"></script>
+    <script src="js/personalized-roadmap.js"></script>
+    <script src="js/middle-school-roadmap.js"></script>
+    <script src="js/curriculum-guide.js"></script>
+    <script src="js/learning-strategy.js"></script>
+    <script src="js/level-assessment.js"></script>
+    <script src="js/career.js"></script>
+    <script src="js/admission-prediction.js"></script>
+    <script src="js/learning-resources.js"></script>
+    <script src="js/seed-learning-resources.js"></script>
+    <script src="js/message-system.js"></script>
+    <script src="js/message-ui.js"></script>
+    <script src="js/student-monitor.js"></script>
+    <script src="js/dashboard-v2.js"></script>
+    <script src="js/main-v2.js"></script>
+    
+    <script>
+    // 대시보드 전용 JavaScript v3.18.0
+    
+    // 카테고리 토글 함수
+    function toggleCategory(header) {
+        const section = header.parentElement;
+        section.classList.toggle('active');
+    }
+    
+    // 현재 날짜 표시
+    function updateCurrentDate() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        const dateStr = now.toLocaleDateString('ko-KR', options);
+        const dateElement = document.getElementById('currentDate');
+        if (dateElement) {
+            dateElement.textContent = dateStr;
+        }
+    }
+    
+    // 주간 목표 달성률 프로그레스바 업데이트
+    function updateWeekGoalProgress() {
+        const rateElement = document.getElementById('weekGoalRate');
+        const progressBar = document.getElementById('weekGoalProgressBar');
+        
+        if (rateElement && progressBar) {
+            const rate = parseInt(rateElement.textContent) || 0;
+            progressBar.style.width = rate + '%';
+        }
+    }
+    
+    // 알림 표시 함수
+    function showAlerts() {
+        // TODO: 실제 알림 시스템 구현
+        alert('새로운 알림이 없습니다.');
+    }
+    
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        // 현재 날짜 업데이트
+        updateCurrentDate();
+        
+        // 주간 목표 달성률 프로그레스바 업데이트
+        setTimeout(updateWeekGoalProgress, 500);
+        
+        // 모든 카테고리 섹션 초기 닫기 (첫 번째는 열어두기)
+        const categorySections = document.querySelectorAll('.category-section');
+        if (categorySections.length > 0) {
+            // 첫 번째 섹션은 기본적으로 열기
+            categorySections[0].classList.add('active');
+        }
+    });
+    </script>
+</body>
+</html>
