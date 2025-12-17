@@ -738,25 +738,28 @@ function openSubjectSimulator() {
 function addRecord(type) {
     const modal = document.getElementById('recordModal');
     const modalTitle = document.getElementById('recordModalTitle');
-    const hoursGroup = document.getElementById('hoursGroup');
     const recordType = document.getElementById('recordType');
+    const curricularForm = document.getElementById('curricularForm');
+    const extracurricularForm = document.getElementById('extracurricularForm');
     const recordDate = document.getElementById('recordDate');
     
     // 타입 설정
     recordType.value = type;
     
-    // 모달 제목 설정
+    // 모달 제목 및 폼 표시 설정
     if (type === 'curricular') {
-        modalTitle.textContent = '교과 활동 추가';
-        hoursGroup.style.display = 'none';
+        modalTitle.textContent = '교과 성적 추가';
+        curricularForm.style.display = 'block';
+        extracurricularForm.style.display = 'none';
     } else {
         modalTitle.textContent = '비교과 활동 추가';
-        hoursGroup.style.display = 'block';
+        curricularForm.style.display = 'none';
+        extracurricularForm.style.display = 'block';
+        
+        // 비교과 활동 일자 기본값 설정
+        const today = new Date().toISOString().split('T')[0];
+        if (recordDate) recordDate.value = today;
     }
-    
-    // 오늘 날짜를 기본값으로 설정
-    const today = new Date().toISOString().split('T')[0];
-    recordDate.value = today;
     
     // 모달 표시
     modal.style.display = 'flex';
@@ -775,23 +778,66 @@ async function saveRecord(event) {
     event.preventDefault();
     
     const type = document.getElementById('recordType').value;
-    const title = document.getElementById('recordTitle').value;
-    const description = document.getElementById('recordDescription').value;
-    const date = document.getElementById('recordDate').value;
-    const hours = document.getElementById('recordHours').value || 0;
+    let recordData;
     
     try {
-        // 1. 학생부 기록 추가
-        const recordData = {
-            student_id: currentStudent,
-            record_type: type === 'curricular' ? '교과' : '비교과',
-            title: title,
-            description: description,
-            date: new Date(date).toISOString(),
-            hours: parseInt(hours),
-            grade: 2
-        };
+        if (type === 'curricular') {
+            // 교과 성적 입력
+            const subjectName = document.getElementById('subjectName').value.trim();
+            const subjectType = document.getElementById('subjectType').value;
+            const semester = document.getElementById('semester').value;
+            const credit = document.getElementById('credit').value;
+            const gradeScore = document.getElementById('gradeScore').value;
+            const subjectDetail = document.getElementById('subjectDetail').value.trim();
+            
+            // 필수 입력 검증
+            if (!subjectName || !subjectType || !semester || !credit || !gradeScore) {
+                alert('⚠️ 필수 항목을 모두 입력해주세요.');
+                return;
+            }
+            
+            // 성적 범위 검증
+            const grade = parseFloat(gradeScore);
+            if (grade < 1 || grade > 9) {
+                alert('⚠️ 성적은 1~9등급 사이로 입력해주세요.');
+                return;
+            }
+            
+            recordData = {
+                student_id: currentStudent,
+                record_type: '교과',
+                title: `${subjectName} (${semester})`,
+                description: `[${subjectType}] 이수단위: ${credit}, 등급: ${gradeScore}\n${subjectDetail ? '\n세부능력 및 특기사항:\n' + subjectDetail : ''}`,
+                date: new Date().toISOString(),
+                hours: 0,
+                grade: parseInt(credit)  // 이수 단위를 grade 필드에 임시 저장
+            };
+            
+        } else {
+            // 비교과 활동 입력
+            const title = document.getElementById('recordTitle').value.trim();
+            const description = document.getElementById('recordDescription').value.trim();
+            const date = document.getElementById('recordDate').value;
+            const hours = document.getElementById('recordHours') ? document.getElementById('recordHours').value : 0;
+            
+            // 필수 입력 검증
+            if (!title || !description || !date) {
+                alert('⚠️ 필수 항목을 모두 입력해주세요.');
+                return;
+            }
+            
+            recordData = {
+                student_id: currentStudent,
+                record_type: '비교과',
+                title: title,
+                description: description,
+                date: new Date(date).toISOString(),
+                hours: parseInt(hours) || 0,
+                grade: 2
+            };
+        }
         
+        // 1. 학생부 기록 추가
         const recordResponse = await fetch('tables/student_records', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -803,6 +849,7 @@ async function saveRecord(event) {
         }
         
         const newRecord = await recordResponse.json();
+        console.log('Record added:', newRecord);
         
         // 2. 자동 연계: 대입전형 분석 트리거
         await triggerAdmissionAnalysis(currentStudent);
@@ -813,14 +860,15 @@ async function saveRecord(event) {
         // 모달 닫기
         closeRecordModal();
         
-        alert('✅ 학생부 기록이 추가되었습니다!\n\n자동으로 다음 항목이 업데이트되었습니다:\n- 대입전형 분석\n- 통계 데이터\n- 비교과 활동 건수');
+        const recordTypeText = type === 'curricular' ? '교과 성적' : '비교과 활동';
+        alert(`✅ ${recordTypeText}이(가) 추가되었습니다!\n\n자동으로 다음 항목이 업데이트되었습니다:\n- 대입전형 분석\n- 통계 데이터\n- 학생부 기록`);
         
         // 페이지 새로고침
         loadStudentRecordData();
         
     } catch (error) {
         console.error('Error adding record:', error);
-        alert('기록 추가 중 오류가 발생했습니다.');
+        alert('기록 추가 중 오류가 발생했습니다: ' + error.message);
     }
 }
 

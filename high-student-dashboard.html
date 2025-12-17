@@ -599,25 +599,78 @@
                 <form id="recordForm" onsubmit="saveRecord(event)">
                     <input type="hidden" id="recordType">
                     
-                    <div class="form-group">
-                        <label for="recordTitle">활동 제목 *</label>
-                        <input type="text" id="recordTitle" required placeholder="예: 수학 심화 탐구 프로젝트">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="recordDescription">활동 내용 *</label>
-                        <textarea id="recordDescription" required rows="5" placeholder="활동 내용을 자세히 입력하세요..." style="resize: vertical;"></textarea>
-                    </div>
-                    
-                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="recordDate">활동 일자 *</label>
-                            <input type="date" id="recordDate" required>
+                    <!-- 교과 성적 입력 폼 -->
+                    <div id="curricularForm" style="display: none;">
+                        <div class="form-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label for="subjectName">과목명 *</label>
+                                <input type="text" id="subjectName" placeholder="예: 수학 I">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subjectType">과목 구분 *</label>
+                                <select id="subjectType">
+                                    <option value="">선택</option>
+                                    <option value="공통">공통과목</option>
+                                    <option value="선택">일반선택</option>
+                                    <option value="진로">진로선택</option>
+                                </select>
+                            </div>
                         </div>
                         
-                        <div class="form-group" id="hoursGroup" style="display: none;">
-                            <label for="recordHours">활동 시간</label>
-                            <input type="number" id="recordHours" placeholder="시간 (예: 3)" min="0">
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label for="semester">학기 *</label>
+                                <select id="semester">
+                                    <option value="">선택</option>
+                                    <option value="1-1">1학년 1학기</option>
+                                    <option value="1-2">1학년 2학기</option>
+                                    <option value="2-1">2학년 1학기</option>
+                                    <option value="2-2">2학년 2학기</option>
+                                    <option value="3-1">3학년 1학기</option>
+                                    <option value="3-2">3학년 2학기</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="credit">이수 단위 *</label>
+                                <input type="number" id="credit" placeholder="3" min="1" max="10">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="gradeScore">성적(등급) *</label>
+                                <input type="number" id="gradeScore" placeholder="2.5" step="0.1" min="1" max="9">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subjectDetail">세부능력 및 특기사항</label>
+                            <textarea id="subjectDetail" rows="4" placeholder="수업 중 탐구 활동, 발표 내용, 심화 학습 등을 기록하세요..." style="resize: vertical;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- 비교과 활동 입력 폼 -->
+                    <div id="extracurricularForm" style="display: none;">
+                        <div class="form-group">
+                            <label for="recordTitle">활동 제목 *</label>
+                            <input type="text" id="recordTitle" placeholder="예: 수학 심화 탐구 프로젝트">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recordDescription">활동 내용 *</label>
+                            <textarea id="recordDescription" rows="5" placeholder="활동 내용을 자세히 입력하세요..." style="resize: vertical;"></textarea>
+                        </div>
+                        
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label for="recordDate">활동 일자 *</label>
+                                <input type="date" id="recordDate">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="recordHours">활동 시간</label>
+                                <input type="number" id="recordHours" placeholder="시간 (예: 3)" min="0">
+                            </div>
                         </div>
                     </div>
                     
