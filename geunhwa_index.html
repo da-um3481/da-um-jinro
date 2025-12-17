@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>경주 근화여자중학교 - 자기주도학습UP 챌린지</title>
+    <title>자기주도학습UP 챌린지 - 경주 근화여자중학교</title>
     <style>
         * {
             margin: 0;
@@ -20,24 +20,34 @@
         
         .header {
             text-align: center;
-            padding: 60px 20px;
+            padding: 60px 20px 40px;
         }
         
         .header h1 {
-            font-size: 52px;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 72px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+        
+        .header .program-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            opacity: 0.95;
+            background: rgba(255,255,255,0.2);
+            padding: 15px 40px;
+            border-radius: 50px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
         }
         
         .header .school-name {
-            font-size: 36px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .header p {
             font-size: 22px;
-            opacity: 0.95;
+            margin-bottom: 10px;
+            font-weight: normal;
+            opacity: 0.9;
         }
         
         .container {
@@ -49,7 +59,7 @@
         .intro-box {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 50px;
             margin-bottom: 40px;
             color: #333;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -57,14 +67,94 @@
         
         .intro-box h2 {
             color: #7B1FA2;
-            font-size: 32px;
-            margin-bottom: 20px;
+            font-size: 36px;
+            margin-bottom: 25px;
+            text-align: center;
         }
         
         .intro-box p {
-            font-size: 18px;
-            line-height: 1.8;
+            font-size: 19px;
+            line-height: 1.9;
             color: #555;
+            text-align: center;
+        }
+        
+        .intro-box .highlight {
+            color: #7B1FA2;
+            font-weight: bold;
+            font-size: 22px;
+        }
+        
+        /* 중학생 특화 섹션 */
+        .middle-school-features {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            color: #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .middle-school-features h2 {
+            color: #7B1FA2;
+            font-size: 34px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-box {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #7B1FA2;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-box:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(123, 31, 162, 0.3);
+        }
+        
+        .feature-box h3 {
+            color: #7B1FA2;
+            font-size: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-box p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+        }
+        
+        .feature-box ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .feature-box ul li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+        }
+        
+        .feature-box ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #7B1FA2;
+            font-weight: bold;
         }
         
         .cards-grid {
@@ -205,6 +295,7 @@
         .info-item p {
             font-size: 15px;
             opacity: 0.9;
+            line-height: 1.6;
         }
         
         .footer {
@@ -226,11 +317,12 @@
         
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 36px;
+                font-size: 48px;
             }
             
-            .header .school-name {
-                font-size: 28px;
+            .header .program-title {
+                font-size: 22px;
+                padding: 12px 30px;
             }
             
             .cards-grid {
@@ -240,24 +332,113 @@
             .download-section {
                 padding: 30px 20px;
             }
+            
+            .intro-box, .middle-school-features {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🏫</h1>
-        <div class="school-name">경주 근화여자중학교</div>
-        <p>1,2학년 자기주도학습UP 챌린지 제안서</p>
+        <h1>🚀 자기주도학습UP 챌린지</h1>
+        <div class="program-title">겨울방학 30일 집중 프로그램</div>
+        <div class="school-name">경주 근화여자중학교 1,2학년</div>
     </div>
     
     <div class="container">
         <div class="intro-box">
             <h2>🎯 근화여중 학생들을 위한 특별한 제안</h2>
             <p>
-                근화여자중학교 1,2학년 학생들의 성장을 위해 특별히 설계된 <strong>자기주도학습UP 챌린지 (겨울방학 30일 집중 프로그램)</strong>입니다.
-                여학생들의 특성을 깊이 이해하고 반영한 맞춤형 학습 지도와 체계적인 관리를 통해,
+                근화여자중학교 1,2학년 학생들의 성장을 위해 특별히 설계된 <span class="highlight">자기주도학습UP 챌린지</span>입니다.<br>
+                여학생들의 특성을 깊이 이해하고 반영한 맞춤형 학습 지도와 체계적인 관리를 통해,<br>
                 자기주도학습 습관을 완성하고 학업 성취도를 높이며 고등학교 진학을 철저히 준비할 수 있습니다.
             </p>
+        </div>
+        
+        <!-- 중학생 특화 섹션 추가 -->
+        <div class="middle-school-features">
+            <h2>📚 중학생 맞춤 학습 설계</h2>
+            
+            <div class="features-grid">
+                <div class="feature-box">
+                    <h3>📖 1학년 특화 프로그램</h3>
+                    <p><strong>중학교 적응과 학습 기초 다지기</strong></p>
+                    <ul>
+                        <li>교과 학습 강화 (국어, 영어, 수학, 사회, 과학)</li>
+                        <li>자기주도학습 습관 형성 훈련</li>
+                        <li>학습 플래너 작성법 및 시간 관리</li>
+                        <li>노트 정리법 및 복습 시스템 구축</li>
+                        <li>기초 학력 완성 및 성적 향상</li>
+                        <li>진로 탐색 시작 (적성 검사, 진로 특강)</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>📗 2학년 특화 프로그램</h3>
+                    <p><strong>고등학교 준비와 학습 역량 강화</strong></p>
+                    <ul>
+                        <li>교과 심화 학습 (주요 과목 선행 학습 포함)</li>
+                        <li>고등학교 진학 준비 (학습 전략 수립)</li>
+                        <li>자유학기제 연계 진로 설계</li>
+                        <li>학습 역량 강화 (문제 해결력, 사고력)</li>
+                        <li>고등학교 교육과정 이해 및 과목 선택 가이드</li>
+                        <li>자기소개서 작성 및 면접 준비 (특성화고/자사고)</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>👩‍🎓 여학생 특성 고려 지도</h3>
+                    <p><strong>섬세한 감정 케어와 학습 관리</strong></p>
+                    <ul>
+                        <li>여학생의 심리적 특성을 고려한 상담</li>
+                        <li>또래 관계 고민 및 스트레스 관리</li>
+                        <li>자존감 향상 프로그램</li>
+                        <li>학습 동기 부여 및 목표 설정</li>
+                        <li>생리 주기를 고려한 학습 계획</li>
+                        <li>여성 롤모델 멘토링 (선배 만남)</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>🎯 자기주도학습 핵심 역량</h3>
+                    <p><strong>평생 학습 습관 만들기</strong></p>
+                    <ul>
+                        <li>스스로 계획하고 실천하는 힘</li>
+                        <li>메타인지 훈련 (나의 학습 점검)</li>
+                        <li>효율적인 암기법 및 이해 학습법</li>
+                        <li>오답노트 작성 및 활용법</li>
+                        <li>집중력 향상 훈련 (포모도로 기법 등)</li>
+                        <li>자기평가 및 성찰 일지 작성</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>📱 스마트폰 자율 관리</h3>
+                    <p><strong>디지털 기기와 건강한 관계 맺기</strong></p>
+                    <ul>
+                        <li>스마트폰 사용 시간 자기 점검</li>
+                        <li>학습 시간 중 스마트폰 보관 훈련</li>
+                        <li>SNS 사용 조절 및 자기 통제력</li>
+                        <li>디지털 디톡스 프로그램</li>
+                        <li>학습용 앱 활용법 (긍정적 활용)</li>
+                        <li>학부모와 함께하는 스마트폰 약속</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>🏫 학교 생활 연계 관리</h3>
+                    <p><strong>학교와 연계한 통합 학습 관리</strong></p>
+                    <ul>
+                        <li>학교 진도와 연계한 복습 시스템</li>
+                        <li>학교 수행평가 대비 전략</li>
+                        <li>학교 시험 대비 맞춤 학습</li>
+                        <li>학교 생활기록부 관리 (중학교용)</li>
+                        <li>교과 세부능력 특기사항 준비</li>
+                        <li>학교 선생님과의 소통 방법</li>
+                    </ul>
+                </div>
+            </div>
         </div>
         
         <div class="cards-grid">
@@ -290,43 +471,53 @@
         </div>
         
         <div class="info-section">
-            <h2>✨ 근화여중 맞춤형 프로그램 특징</h2>
+            <h2>✨ 프로그램 핵심 특징</h2>
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-item-icon">👩‍🎓</div>
-                    <h3>여학생 특성 고려</h3>
-                    <p>섬세한 학습 지도</p>
+                    <h3>여학생 맞춤 지도</h3>
+                    <p>섬세한 감정 케어<br>여학생 특성 이해<br>자존감 향상</p>
                 </div>
                 <div class="info-item">
                     <div class="info-item-icon">📚</div>
-                    <h3>30일 집중 프로그램</h3>
-                    <p>체계적인 습관 형성</p>
+                    <h3>30일 집중 시스템</h3>
+                    <p>체계적인 습관 형성<br>매일 학습 점검<br>성장 기록 관리</p>
                 </div>
                 <div class="info-item">
                     <div class="info-item-icon">👩‍🏫</div>
-                    <h3>1:1 맞춤 지도</h3>
-                    <p>개인별 학습 관리</p>
+                    <h3>1:1 개별 지도</h3>
+                    <p>개인별 학습 진단<br>맞춤형 학습 계획<br>실시간 피드백</p>
                 </div>
                 <div class="info-item">
                     <div class="info-item-icon">🎯</div>
-                    <h3>고교 진학 준비</h3>
-                    <p>철저한 준비 과정</p>
+                    <h3>고교 진학 완벽 준비</h3>
+                    <p>고등학교 교육과정 이해<br>과목 선택 가이드<br>진로 설계 지원</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">📱</div>
+                    <h3>스마트폰 자율 관리</h3>
+                    <p>자기 통제력 향상<br>학습 시간 보호<br>디지털 건강</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">🏫</div>
+                    <h3>학교 연계 관리</h3>
+                    <p>학교 진도 연계<br>수행평가 대비<br>생기부 관리</p>
                 </div>
             </div>
         </div>
         
         <div class="info-section">
-            <h2>📚 학년별 프로그램</h2>
+            <h2>📚 학년별 프로그램 목표</h2>
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-item-icon">📖</div>
                     <h3>1학년</h3>
-                    <p>교과 학습 강화<br>자기주도학습 훈련<br>기초 학력 완성</p>
+                    <p>중학교 적응 완성<br>자기주도학습 습관 형성<br>기초 학력 다지기<br>진로 탐색 시작</p>
                 </div>
                 <div class="info-item">
                     <div class="info-item-icon">📗</div>
                     <h3>2학년</h3>
-                    <p>교과 심화 학습<br>고등학교 진학 준비<br>학습 역량 강화</p>
+                    <p>고등학교 진학 준비<br>학습 역량 심화<br>진로 구체화<br>학습 자신감 향상</p>
                 </div>
             </div>
         </div>
