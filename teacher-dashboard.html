@@ -343,10 +343,33 @@
     </footer>
 
     <script>
+        // URL 파라미터에서 학년 수준 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const level = urlParams.get('level') || 'all';
+        
+        // 학년 구분에 따라 제목 업데이트
+        const titleElement = document.querySelector('h1');
+        const subtitleElement = document.querySelector('p.text-sm.text-gray-600');
+        
+        if (level === 'high') {
+            titleElement.innerHTML = '<i class="fas fa-graduation-cap mr-2"></i>고등학생 100일 프로그램';
+            subtitleElement.textContent = '고1~고3 방과후 자기주도학습 100일';
+            document.title = '🎓 고등학생 100일 프로그램 - DA.UM';
+        } else if (level === 'middle') {
+            titleElement.innerHTML = '<i class="fas fa-book-reader mr-2"></i>중학생 이하 100일 프로그램';
+            subtitleElement.textContent = '중학생·예비중·초6 방과후 자기주도학습 100일';
+            document.title = '📖 중학생 이하 100일 프로그램 - DA.UM';
+        }
+        
         // 현재 날짜 표시
         const today = new Date();
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('currentDate').textContent = today.toLocaleDateString('ko-KR', options);
+        
+        // localStorage에 학년 레벨 저장
+        if (level !== 'all') {
+            localStorage.setItem('da_um_level', level);
+        }
     </script>
 </body>
 </html>
