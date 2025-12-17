@@ -14,6 +14,103 @@
         @keyframes snowfall { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(110vh) translateX(100px); opacity: 0; } }
         .snowflake { position: fixed; top: -10vh; color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; z-index: 1; pointer-events: none; animation: snowfall linear infinite; }
         .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        
+        /* 인쇄 스타일 - 1장에 모든 내용이 들어가도록 */
+        @media print {
+            body {
+                background: white !important;
+                margin: 0;
+                padding: 0;
+            }
+            
+            #snowflakes,
+            header nav,
+            .no-print {
+                display: none !important;
+            }
+            
+            header {
+                position: relative !important;
+                background: white !important;
+                padding: 10px 20px !important;
+                box-shadow: none !important;
+                border-bottom: 2px solid #0ea5e9;
+            }
+            
+            header h1 {
+                font-size: 18px !important;
+            }
+            
+            main {
+                padding: 10px 20px !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+            
+            .glass-effect {
+                background: white !important;
+                backdrop-filter: none !important;
+                border: 1px solid #e5e7eb !important;
+                box-shadow: none !important;
+                margin-bottom: 10px !important;
+                padding: 12px !important;
+                border-radius: 8px !important;
+            }
+            
+            /* 공간 축소 */
+            .grid {
+                gap: 10px !important;
+            }
+            
+            /* 텍스트 크기 축소 */
+            h2, h3 {
+                font-size: 14px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .text-3xl {
+                font-size: 20px !important;
+            }
+            
+            .text-2xl {
+                font-size: 16px !important;
+            }
+            
+            .text-lg {
+                font-size: 13px !important;
+            }
+            
+            .text-sm, .text-xs {
+                font-size: 10px !important;
+            }
+            
+            /* 차트 크기 축소 */
+            canvas {
+                max-height: 180px !important;
+            }
+            
+            /* 페이지 분할 방지 */
+            .glass-effect {
+                page-break-inside: avoid;
+            }
+            
+            /* 1페이지에 모든 내용 */
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+            
+            /* 배경색 제거 */
+            .bg-gradient-to-br,
+            .bg-gradient-to-r,
+            .bg-blue-50,
+            .bg-green-50,
+            .bg-red-50,
+            .bg-cyan-50 {
+                background: white !important;
+                border: 1px solid #e5e7eb !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -40,7 +137,7 @@
 
     <main class="container mx-auto px-6 py-8">
         <!-- 학생 선택 -->
-        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6 no-print">
             <label class="block text-sm font-semibold text-gray-700 mb-3">
                 <i class="fas fa-user-circle mr-2 text-cyan-600"></i>학생 선택
             </label>
@@ -267,7 +364,7 @@
 
         // 주간 학습 시간 차트
         const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
-        new Chart(weeklyCtx, {
+        window.weeklyChart = new Chart(weeklyCtx, {
             type: 'bar',
             data: {
                 labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
@@ -289,7 +386,7 @@
 
         // 교과별 분포 차트
         const subjectCtx = document.getElementById('subjectChart').getContext('2d');
-        new Chart(subjectCtx, {
+        window.subjectChart = new Chart(subjectCtx, {
             type: 'doughnut',
             data: {
                 labels: ['수학', '영어', '국어', '과학', '사회'],
@@ -307,11 +404,37 @@
             }
         });
 
-        // 학생 보고서 생성
+        // 학생의 실제 학습 데이터 불러오기
+        function getStudentLearningData(studentName) {
+            const subjects = ['수학', '영어', '국어', '과학', '사회'];
+            const data = {
+                totalHours: 0,
+                subjectData: {}
+            };
+            
+            subjects.forEach(subject => {
+                const storageKey = `student_${studentName}_${subject}`;
+                const hours = parseFloat(localStorage.getItem(storageKey) || '0');
+                data.totalHours += hours;
+                data.subjectData[subject] = hours;
+            });
+            
+            return data;
+        }
+        
+        // 학생 보고서 생성 (실제 학습 데이터 기반)
         function loadStudentReport() {
             const name = document.getElementById('studentNameInput').value.trim();
             if (!name) {
                 alert('학생 이름을 입력해주세요.');
+                return;
+            }
+            
+            // 실제 학습 데이터 불러오기
+            const learningData = getStudentLearningData(name);
+            
+            if (learningData.totalHours === 0) {
+                alert(`⚠️ ${name} 학생의 학습 기록이 없습니다.\n학생 포털에서 먼저 학습 시간을 입력해주세요.`);
                 return;
             }
             
@@ -322,8 +445,41 @@
             // localStorage에 저장
             localStorage.setItem('winter_selected_student', name);
             
+            // 실제 데이터로 보고서 업데이트
+            updateReportWithRealData(name, learningData);
+            
             // 성공 메시지
             showToast(`${name} 학생의 보고서를 생성했습니다.`);
+        }
+        
+        // 실제 데이터로 보고서 업데이트
+        function updateReportWithRealData(studentName, learningData) {
+            // 총 학습 시간 업데이트
+            const totalHoursElement = document.querySelector('.text-3xl.font-black.text-gray-800');
+            if (totalHoursElement) {
+                totalHoursElement.textContent = learningData.totalHours.toFixed(1) + '시간';
+            }
+            
+            // 차트 데이터 업데이트
+            updateCharts(learningData);
+            
+            // 교과별 상세 분석 업데이트 (실제 데이터 반영)
+            // 여기에 추가 로직 구현 가능
+        }
+        
+        // 차트 업데이트
+        function updateCharts(learningData) {
+            // 교과별 분포 차트 업데이트
+            if (window.subjectChart) {
+                window.subjectChart.data.datasets[0].data = [
+                    learningData.subjectData['수학'] || 0,
+                    learningData.subjectData['영어'] || 0,
+                    learningData.subjectData['국어'] || 0,
+                    learningData.subjectData['과학'] || 0,
+                    learningData.subjectData['사회'] || 0
+                ];
+                window.subjectChart.update();
+            }
         }
 
         // 토스트 메시지
