@@ -734,13 +734,51 @@ function openSubjectSimulator() {
 }
 
 // 학생부 기록 추가 (자동 연계 기능)
-async function addRecord(type) {
-    // 간단한 입력 폼 (실제로는 모달이나 별도 페이지 사용)
-    const title = prompt(`${type} 활동 제목을 입력하세요:`);
-    if (!title) return;
+// 학생부 활동 추가 모달 열기
+function addRecord(type) {
+    const modal = document.getElementById('recordModal');
+    const modalTitle = document.getElementById('recordModalTitle');
+    const hoursGroup = document.getElementById('hoursGroup');
+    const recordType = document.getElementById('recordType');
+    const recordDate = document.getElementById('recordDate');
     
-    const description = prompt('활동 내용을 입력하세요:');
-    if (!description) return;
+    // 타입 설정
+    recordType.value = type;
+    
+    // 모달 제목 설정
+    if (type === 'curricular') {
+        modalTitle.textContent = '교과 활동 추가';
+        hoursGroup.style.display = 'none';
+    } else {
+        modalTitle.textContent = '비교과 활동 추가';
+        hoursGroup.style.display = 'block';
+    }
+    
+    // 오늘 날짜를 기본값으로 설정
+    const today = new Date().toISOString().split('T')[0];
+    recordDate.value = today;
+    
+    // 모달 표시
+    modal.style.display = 'flex';
+}
+
+// 모달 닫기
+function closeRecordModal() {
+    const modal = document.getElementById('recordModal');
+    const form = document.getElementById('recordForm');
+    modal.style.display = 'none';
+    form.reset();
+}
+
+// 학생부 기록 저장
+async function saveRecord(event) {
+    event.preventDefault();
+    
+    const type = document.getElementById('recordType').value;
+    const title = document.getElementById('recordTitle').value;
+    const description = document.getElementById('recordDescription').value;
+    const date = document.getElementById('recordDate').value;
+    const hours = document.getElementById('recordHours').value || 0;
     
     try {
         // 1. 학생부 기록 추가
@@ -749,8 +787,8 @@ async function addRecord(type) {
             record_type: type === 'curricular' ? '교과' : '비교과',
             title: title,
             description: description,
-            date: new Date().toISOString(),
-            hours: type === 'extracurricular' ? parseInt(prompt('활동 시간 (시간):') || 0) : 0,
+            date: new Date(date).toISOString(),
+            hours: parseInt(hours),
             grade: 2
         };
         
@@ -771,6 +809,9 @@ async function addRecord(type) {
         
         // 3. 자동 연계: 통계 데이터 업데이트
         await updateStudentStats(currentStudent);
+        
+        // 모달 닫기
+        closeRecordModal();
         
         alert('✅ 학생부 기록이 추가되었습니다!\n\n자동으로 다음 항목이 업데이트되었습니다:\n- 대입전형 분석\n- 통계 데이터\n- 비교과 활동 건수');
         
