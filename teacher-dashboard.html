@@ -27,23 +27,105 @@
         
         /* 모바일 최적화 */
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.25rem !important;
+            body {
+                font-size: 14px;
             }
+            
+            header {
+                padding: 0.75rem 0 !important;
+            }
+            
+            header h1 {
+                font-size: 1rem !important;
+                line-height: 1.2;
+            }
+            
             header p {
+                font-size: 0.7rem !important;
+                display: none;
+            }
+            
+            header img {
+                width: 2rem !important;
+                height: 2rem !important;
+            }
+            
+            header .flex.items-center.space-x-4 {
+                gap: 0.5rem !important;
+            }
+            
+            header .px-4 {
+                padding: 0.5rem !important;
                 font-size: 0.75rem !important;
             }
+            
+            main {
+                padding: 1rem !important;
+            }
+            
+            .glass-effect {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .glass-effect h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .glass-effect p {
+                font-size: 0.85rem !important;
+            }
+            
+            .glass-effect .text-2xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .glass-effect .text-3xl {
+                font-size: 1.5rem !important;
+            }
+            
+            /* 통계 카드 */
+            .grid-cols-3 {
+                grid-template-columns: 1fr !important;
+                gap: 0.75rem !important;
+            }
+            
+            /* 메뉴 카드 */
             .menu-card {
                 padding: 1rem !important;
             }
+            
             .menu-card i {
                 font-size: 1.5rem !important;
             }
+            
             .menu-card h4 {
-                font-size: 1rem !important;
+                font-size: 0.95rem !important;
+                margin-bottom: 0.25rem !important;
             }
+            
             .menu-card p {
                 font-size: 0.75rem !important;
+            }
+            
+            /* 메뉴 그리드 */
+            .grid-cols-2,
+            .grid-cols-3 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 0.9rem !important;
+            }
+            
+            .menu-card {
+                padding: 0.875rem !important;
+            }
+            
+            .menu-card h4 {
+                font-size: 0.9rem !important;
             }
         }
     </style>

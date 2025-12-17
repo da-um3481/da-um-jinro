@@ -31,6 +31,89 @@
         .animate-slide-up {
             animation: slideUp 0.5s ease-out;
         }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            
+            nav h1 {
+                font-size: 0.95rem !important;
+            }
+            
+            nav p {
+                font-size: 0.7rem !important;
+            }
+            
+            nav a {
+                padding: 0.5rem !important;
+                font-size: 0.8rem !important;
+            }
+            
+            main {
+                padding: 1rem !important;
+            }
+            
+            .glass-effect {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .glass-effect h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .glass-effect h3 {
+                font-size: 1rem !important;
+            }
+            
+            /* 성적 입력 그리드 */
+            .md\\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* 라디오 버튼 그리드 */
+            .grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            select,
+            input {
+                font-size: 0.875rem !important;
+                padding: 0.75rem !important;
+            }
+            
+            button {
+                padding: 0.875rem !important;
+                font-size: 0.95rem !important;
+            }
+            
+            /* 대학 추천 카드 */
+            .flex.items-center.justify-between {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.75rem;
+            }
+            
+            .flex.items-center.space-x-3 {
+                gap: 0.5rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            nav h1 {
+                font-size: 0.85rem !important;
+            }
+            
+            .glass-effect {
+                padding: 0.875rem !important;
+            }
+            
+            .glass-effect h2 {
+                font-size: 1.1rem !important;
+            }
+        }
     </style>
     <script src="js/security.js"></script>
 </head>

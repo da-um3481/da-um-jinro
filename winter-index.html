@@ -99,6 +99,101 @@
                 transform: translateX(0);
             }
         }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            main {
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+            }
+            
+            .glass-effect {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* 헤더 최적화 */
+            header h1 {
+                font-size: 0.9rem !important;
+            }
+            
+            /* 프로그램 진행 현황 */
+            .glass-effect h2 {
+                font-size: 1.1rem !important;
+            }
+            
+            .glass-effect h2 i {
+                display: none;
+            }
+            
+            /* D-day 표시 */
+            .glass-effect .text-3xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .glass-effect .text-sm {
+                font-size: 0.7rem !important;
+            }
+            
+            /* Week 카드 그리드 - 2열로 변경 */
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important;
+            }
+            
+            /* Week 카드 내부 */
+            .grid-cols-4 > div {
+                padding: 0.75rem !important;
+            }
+            
+            .grid-cols-4 .text-2xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .grid-cols-4 .text-xs {
+                font-size: 0.65rem !important;
+            }
+            
+            .grid-cols-4 .font-bold {
+                font-size: 0.75rem !important;
+            }
+            
+            /* 빠른 학생 등록 폼 */
+            .md\\:grid-cols-4 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* 버튼 크기 조정 */
+            .px-4 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            /* 섹션 제목 */
+            .text-xl {
+                font-size: 1rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* 초소형 모바일 - Week 카드 1열 */
+            .grid-cols-4 {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
     <script src="js/security.js"></script>
 </head>

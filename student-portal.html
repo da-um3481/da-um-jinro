@@ -69,6 +69,26 @@
             z-index: 9999;
             animation: slideUp 0.3s ease-out;
         }
+        
+        /* 추가 모바일 최적화 */
+        @media (max-width: 768px) {
+            nav h1 {
+                font-size: 0.95rem !important;
+            }
+            
+            nav p {
+                font-size: 0.7rem !important;
+            }
+            
+            .glass-effect h2,
+            .glass-effect h3 {
+                font-size: 1.1rem !important;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
     <script src="js/security.js"></script>
 </head>
