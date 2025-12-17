@@ -4,7 +4,7 @@
 
 [[redirects]]
   from = "/"
-  to = "/winter-index.html"
+  to = "/index.html"
   status = 200
 
 [[headers]]
