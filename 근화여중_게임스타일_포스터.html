@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>근화여중 겨울방학 챌린지 - 게임 스타일</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0a0e27;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 128, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 255, 255, 0.2), transparent 50%);
+            animation: bgMove 20s ease infinite;
+        }
+        
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, -50px); }
+        }
+        
+        .poster {
+            max-width: 600px;
+            width: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 60px rgba(120, 119, 198, 0.6),
+                0 0 100px rgba(255, 0, 128, 0.4),
+                inset 0 0 60px rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            animation: scan 4s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .level-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .game-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                0 0 10px rgba(102, 126, 234, 0.8),
+                0 0 20px rgba(118, 75, 162, 0.6),
+                3px 3px 0px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-subtitle {
+            font-size: 18px;
+            color: #00ffff;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 30px 25px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+        
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 900;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+        
+        .quest-section {
+            padding: 30px 25px;
+        }
+        
+        .quest-title {
+            font-size: 24px;
+            color: #FFD700;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+        
+        .quest-item {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #00ffff;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .quest-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .quest-icon {
+            font-size: 28px;
+            min-width: 40px;
+        }
+        
+        .quest-text {
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .quest-reward {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .boss-battle {
+            background: linear-gradient(135deg, #ff0080 0%, #ff8c00 100%);
+            padding: 40px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .boss-battle::before {
+            content: '⚡';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.15; }
+        }
+        
+        .boss-text {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .start-button {
+            background: white;
+            color: #ff0080;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 900;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.6),
+                0 0 60px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 36px;
+                letter-spacing: 2px;
+            }
+            
+            .game-subtitle {
+                font-size: 16px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                padding: 20px 15px;
+            }
+            
+            .stat-box {
+                padding: 15px 10px;
+            }
+            
+            .stat-value {
+                font-size: 20px;
+            }
+            
+            .quest-section {
+                padding: 20px 15px;
+            }
+            
+            .quest-title {
+                font-size: 20px;
+            }
+            
+            .boss-text {
+                font-size: 24px;
+            }
+            
+            .start-button {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 32px;
+            }
+            
+            .stat-icon {
+                font-size: 28px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+            
+            .stat-label {
+                font-size: 11px;
+            }
+            
+            .quest-item {
+                padding: 12px 15px;
+            }
+            
+            .quest-text {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="poster">
+        <!-- 게임 헤더 -->
+        <div class="game-header">
+            <div class="level-badge">⭐ WINTER SPECIAL EVENT ⭐</div>
+            <div class="game-title">STUDY<br>CHALLENGE</div>
+            <div class="game-subtitle">겨울방학 자기주도학습 30일 미션</div>
+        </div>
+        
+        <!-- 스탯 정보 -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">40명</div>
+                <div class="stat-label">플레이어</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-value">30일</div>
+                <div class="stat-label">게임기간</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value">100%</div>
+                <div class="stat-label">성공률UP</div>
+            </div>
+        </div>
+        
+        <!-- 퀘스트 섹션 -->
+        <div class="quest-section">
+            <div class="quest-title">🎮 MAIN QUESTS</div>
+            
+            <div class="quest-item">
+                <div class="quest-icon">📚</div>
+                <div class="quest-text">개인 맞춤 학습 시스템</div>
+                <div class="quest-reward">+999 EXP</div>
+            </div>
+            
+            <div class="quest-item">
+                <div class="quest-icon">🎯</div>
+                <div class="quest-text">주 1회 피드백 미션</div>
+                <div class="quest-reward">+999 EXP</div>
+            </div>
+            
+            <div class="quest-item">
+                <div class="quest-icon">💪</div>
+                <div class="quest-text">친구들과 함께 레벨업</div>
+                <div class="quest-reward">+999 EXP</div>
+            </div>
+            
+            <div class="quest-item">
+                <div class="quest-icon">⚡</div>
+                <div class="quest-text">온라인+오프라인 하이브리드</div>
+                <div class="quest-reward">+999 EXP</div>
+            </div>
+            
+            <div class="quest-item">
+                <div class="quest-icon">🌟</div>
+                <div class="quest-text">성적 UP! 자신감 UP!</div>
+                <div class="quest-reward">+9999 EXP</div>
+            </div>
+        </div>
+        
+        <!-- 보스 배틀 (신청 섹션) -->
+        <div class="boss-battle">
+            <div class="boss-text">
+                🔥 지금 바로 게임 시작! 🔥<br>
+                담임쌤 or 진로쌤께 신청하세요!
+            </div>
+            <a href="#" class="start-button">게임 시작 ▶</a>
+        </div>
+    </div>
+</body>
+</html>
