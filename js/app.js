@@ -196,7 +196,9 @@ function setupTabSystem() {
 
 // D-Day 계산
 function calculateDDay() {
-    const targetDate = new Date('2027-11-18'); // 2027학년도 수능일 (예시)
+    // 2027학년도 대입 일정 (2026년 실시)
+    // 수능일: 2026년 11월 19일 (목요일)
+    const targetDate = new Date('2026-11-19');
     const today = new Date();
     const diffTime = targetDate - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
