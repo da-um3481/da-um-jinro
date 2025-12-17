@@ -21,61 +21,119 @@
         }
         
         .header {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            padding: 25px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
         }
         
         .logo-section {
             display: flex;
             align-items: center;
             gap: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .logo-img {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 20px;
+            width: 75px;
+            height: 75px;
+            background: white;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            font-size: 2.2em;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: relative;
         }
         
-        .company-info h1 {
-            font-size: 1.8em;
-            font-weight: 800;
+        .logo-img i {
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 5px;
+        }
+        
+        .company-info h1 {
+            font-size: 1.6em;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .company-info p {
-            color: #666;
-            font-size: 1em;
+            color: rgba(255,255,255,0.95);
+            font-size: 0.95em;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .company-info p i {
+            font-size: 0.9em;
         }
         
         .contact-info {
             text-align: right;
-            color: #666;
+            color: white;
             font-size: 0.95em;
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.15);
+            padding: 15px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-info p {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
         }
         
         .contact-info strong {
-            color: #667eea;
-            font-weight: 700;
+            color: white;
+            font-weight: 800;
+            font-size: 1.05em;
+        }
+        
+        .contact-info i {
+            color: rgba(255,255,255,0.9);
         }
         
         .container {
@@ -205,31 +263,37 @@
             .header {
                 flex-direction: column;
                 gap: 20px;
-                padding: 25px;
+                padding: 25px 20px;
                 text-align: center;
             }
             
             .logo-section {
                 flex-direction: column;
-                gap: 15px;
+                gap: 12px;
             }
             
             .logo-img {
-                width: 70px;
-                height: 70px;
-                font-size: 2em;
+                width: 65px;
+                height: 65px;
+                font-size: 1.9em;
             }
             
             .company-info h1 {
-                font-size: 1.4em;
+                font-size: 1.3em;
             }
             
             .company-info p {
                 font-size: 0.9em;
+                justify-content: center;
             }
             
             .contact-info {
                 text-align: center;
+                width: 100%;
+            }
+            
+            .contact-info p {
+                justify-content: center;
             }
             
             .grid-container {
@@ -267,17 +331,26 @@
             }
             
             .header {
-                padding: 20px;
+                padding: 20px 15px;
             }
             
             .logo-img {
-                width: 60px;
-                height: 60px;
-                font-size: 1.8em;
+                width: 55px;
+                height: 55px;
+                font-size: 1.6em;
             }
             
             .company-info h1 {
-                font-size: 1.2em;
+                font-size: 1.15em;
+            }
+            
+            .company-info p {
+                font-size: 0.85em;
+            }
+            
+            .contact-info {
+                padding: 12px 15px;
+                font-size: 0.9em;
             }
             
             .section-card {
@@ -297,12 +370,12 @@
                 </div>
                 <div class="company-info">
                     <h1>DA.UM 다움진로진학컨설팅</h1>
-                    <p>학습관리 통합 시스템</p>
+                    <p><i class="fas fa-award"></i> 학습관리 통합 시스템</p>
                 </div>
             </div>
             <div class="contact-info">
-                <p><i class="fas fa-phone"></i> <strong>010-2657-3481</strong></p>
-                <p><i class="fas fa-user"></i> 정라미</p>
+                <p><i class="fas fa-phone-alt"></i> <strong>010-2657-3481</strong></p>
+                <p><i class="fas fa-user-tie"></i> 정라미 대표</p>
             </div>
         </div>
         
