@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2028 대학입시 전략 가이드 - DA.UM</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .key-point {
+            background: #dbeafe;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: #fee2e2;
+            border-left: 5px solid #ef4444;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: #d1fae5;
+            border-left: 5px solid #10b981;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 18px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #cbd5e1;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f3f4f6;
+            font-weight: 700;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 헤더 -->
+        <div class="text-center mb-8">
+            <div class="inline-block bg-white rounded-full px-6 py-3 mb-4 shadow-lg">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-university text-3xl text-purple-600"></i>
+                    <div class="text-left">
+                        <h1 class="text-2xl font-bold text-gray-800">2028 대학입시 전략 가이드</h1>
+                        <p class="text-sm text-gray-600">학생부종합전형 완벽 대비</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 핵심 변화 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-exclamation-circle text-red-600"></i>
+                2028 입시의 핵심 변화
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="highlight-box">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-arrow-right text-orange-600"></i>
+                        수시의 정시화
+                    </h3>
+                    <p class="text-gray-700">수능 최저학력기준 강화<br/>성적 분산 효과</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-orange-600"></i>
+                        정시의 수시화
+                    </h3>
+                    <p class="text-gray-700">생활기록부 반영 확대<br/>면접 평가 도입</p>
+                </div>
+            </div>
+            
+            <div class="key-point mt-6">
+                <h3 class="text-xl font-bold text-blue-800 mb-3">5등급제의 영향</h3>
+                <ul class="space-y-2 text-gray-700">
+                    <li class="flex items-start gap-2">
+                        <i class="fas fa-check text-blue-600 mt-1"></i>
+                        <span><strong>동점자 증가</strong> → 원점수와 세특의 중요성 극대화</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fas fa-check text-blue-600 mt-1"></i>
+                        <span><strong>1등급 비율 감소</strong> → 2등급도 충분히 경쟁력 있음</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fas fa-check text-blue-600 mt-1"></i>
+                        <span><strong>상승 곡선 중요</strong> → 꾸준함과 성실함이 핵심</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 전형별 전략 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-list-alt text-green-600"></i>
+                전형별 전략
+            </h2>
+            
+            <!-- 학생부교과 -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-book text-blue-600"></i>
+                    학생부교과전형
+                </h3>
+                
+                <div class="success-box">
+                    <h4 class="font-bold text-lg mb-2">✅ 특징</h4>
+                    <ul class="space-y-2 text-gray-700 ml-4">
+                        <li>• 교과 성적 50% 이상 반영</li>
+                        <li>• <strong>정성평가 도입 대학 증가</strong> (건국대, 고려대, 서강대 등)</li>
+                        <li>• 학교장 추천 필요 (수도권 대학)</li>
+                        <li>• <strong>서울대 지역균형</strong>: 일반고 학생만, 학교당 3명 추천</li>
+                    </ul>
+                </div>
+                
+                <div class="key-point">
+                    <h4 class="font-bold text-lg mb-2">🎯 전략</h4>
+                    <ul class="space-y-2 text-gray-700 ml-4">
+                        <li>• <strong>모든 과목 성실히</strong> (소홀한 과목 없도록)</li>
+                        <li>• 성적 상승 곡선 만들기</li>
+                        <li>• 정성평가 대비: 학업태도, 탐구력 보이기</li>
+                        <li>• 수능 최저 반드시 확인</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 학생부종합 -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-users text-purple-600"></i>
+                    학생부종합전형
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-4">
+                        <h4 class="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                            <i class="fas fa-graduation-cap"></i>
+                            학업역량 (30%)
+                        </h4>
+                        <ul class="text-sm space-y-1 text-gray-700">
+                            <li>✓ 학업성취도</li>
+                            <li>✓ 학업태도 (주도성)</li>
+                            <li>✓ 탐구력</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-purple-50 border-2 border-purple-300 rounded-xl p-4">
+                        <h4 class="font-bold text-purple-800 mb-2 flex items-center gap-2">
+                            <i class="fas fa-compass"></i>
+                            진로역량 (40%)
+                        </h4>
+                        <ul class="text-sm space-y-1 text-gray-700">
+                            <li>✓ 과목 선택 적절성</li>
+                            <li>✓ 전공 관련 성적</li>
+                            <li>✓ 노력과 열정</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 border-2 border-green-300 rounded-xl p-4">
+                        <h4 class="font-bold text-green-800 mb-2 flex items-center gap-2">
+                            <i class="fas fa-handshake"></i>
+                            공동체역량 (30%)
+                        </h4>
+                        <ul class="text-sm space-y-1 text-gray-700">
+                            <li>✓ 협력과 소통</li>
+                            <li>✓ 나눔과 배려</li>
+                            <li>✓ 리더십</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <h4 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        AI 생기부의 함정
+                    </h4>
+                    <p class="text-gray-700 mb-2">
+                        <strong>ChatGPT로 작성한 생기부는 무의미합니다!</strong>
+                    </p>
+                    <ul class="space-y-2 text-gray-700 ml-4">
+                        <li>• 면접에서 "과목에서 무엇을 배웠니?" 질문 증가</li>
+                        <li>• 수업 내용 질문 강화</li>
+                        <li>• <strong>실제 활동과 경험만이 답</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 정시 -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-pencil-alt text-orange-600"></i>
+                    정시전형
+                </h3>
+                
+                <div class="highlight-box">
+                    <h4 class="font-bold text-lg mb-2">⚡ 서울대 2028 정시 혁명</h4>
+                    <ul class="space-y-2 text-gray-700 ml-4">
+                        <li>• <strong>1단계</strong>: 국수영탐 등급만 활용 (표준점수 X)</li>
+                        <li>• <strong>2단계</strong>: 국수탐 백분위 활용</li>
+                        <li>• <strong>교과역량평가 40% 반영</strong> (A/B/C/D 4단계)</li>
+                        <li>• <strong>의미</strong>: 수능 무력화, 교과역량 강화</li>
+                    </ul>
+                </div>
+                
+                <div class="key-point">
+                    <h4 class="font-bold text-lg mb-2">💡 대응 전략</h4>
+                    <ul class="space-y-2 text-gray-700 ml-4">
+                        <li>• <strong>출결 관리</strong> 철저히 (반영 대학 증가)</li>
+                        <li>• 생활기록부도 중요 (정시에도 반영)</li>
+                        <li>• 면접 대비 (인적성면접 확대)</li>
+                        <li>• N수생 불리: 내신 강화 추세</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 생활기록부 작성 전략 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-file-alt text-indigo-600"></i>
+                생활기록부 작성 전략
+            </h2>
+            
+            <!-- 세특 예시 -->
+            <div class="success-box mb-6">
+                <h3 class="text-xl font-bold text-green-800 mb-3">✅ 좋은 세특 예시 (서울대 합격 수준)</h3>
+                <p class="text-gray-700 leading-relaxed bg-white p-4 rounded-lg">
+                    "심화 문제 제시 시 끝까지 해결하려는 집중력과 탐구력을 보임. 
+                    답지와 다른 자신만의 풀이 방법을 개발하여 선생님께 설명함. 
+                    틀린 문제는 오답노트를 작성하고 왜 틀렸는지 분석함. 
+                    유사 문제를 직접 제작하여 친구들과 공유함. <strong>GeoGebra를 
+                    활용하여 그래프를 직접 그려보며 수학적 개념을 시각화</strong>함. 
+                    퍼지함수에 대한 관심으로 관련 강의를 듣고 보고서를 작성함."
+                </p>
+            </div>
+            
+            <div class="warning-box mb-6">
+                <h3 class="text-xl font-bold text-red-800 mb-3">❌ 나쁜 창체 예시</h3>
+                <ul class="space-y-2 text-gray-700 ml-4">
+                    <li>• 회장단 선거에 참여하여 한 표를 행사함</li>
+                    <li>• 양성평등교육을 통해 인식 개선의 중요성을 깨달음</li>
+                    <li>• 다문화교육에서 자신의 의견을 제시함</li>
+                </ul>
+                <p class="text-red-700 font-bold mt-3">
+                    → <strong>개인 활동</strong>이 아닌 <strong>단체 활동</strong>만 하면 차별화 불가!
+                </p>
+            </div>
+            
+            <!-- 창체 작성법 -->
+            <div class="key-point">
+                <h3 class="text-xl font-bold text-blue-800 mb-3">📝 창의적체험활동 핵심</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-2">1. 자율자치활동</h4>
+                        <div class="success-box">
+                            <p class="text-gray-700 leading-relaxed">
+                                "<strong>환경 문제에 관심</strong>을 가져 관련 서적을 읽고 생각을 정리하여 
+                                학급에서 발표함. 이후 <strong>설문조사를 실시</strong>하고 자료를 분석하여 
+                                환경 캠페인을 기획함. 포스터를 제작하고 학교에 부착하였으며, 
+                                <strong>기후에너지 국제협약 사이트에 정책 의견을 제출</strong>함."
+                            </p>
+                            <p class="text-blue-700 font-bold mt-2">
+                                ✓ 독서 → 발표 → 설문 → 분석 → 캠페인 → 정책 제안 (1년 프로젝트)
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-2">2. 동아리활동</h4>
+                        <ul class="space-y-2 text-gray-700 ml-4">
+                            <li>• <strong>3개년 활동</strong>을 한눈에 평가</li>
+                            <li>• <strong>지속 → 확장 → 심화</strong> 흐름 보이기</li>
+                            <li>• 개별 활동으로 차별화</li>
+                            <li>• 독서와 연계</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-2">3. 진로활동 (가장 중요!)</h4>
+                        <ul class="space-y-2 text-gray-700 ml-4">
+                            <li>• 자신의 역량을 가장 잘 드러낼 수 있는 부분</li>
+                            <li>• 관심 분야 독서 + 발표/토론</li>
+                            <li>• 확장된 탐구 활동</li>
+                            <li>• 담임상담 내용도 기재 가능</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 심화탐구 작성법 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-microscope text-purple-600"></i>
+                심화탐구 활동 작성법
+            </h2>
+            
+            <div class="timeline-item">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    <span class="text-blue-600">Step 1.</span> 탐구 동기 (가장 중요!)
+                </h3>
+                <p class="text-gray-700">"왜 궁금했는가?"를 명확히</p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    <span class="text-blue-600">Step 2.</span> 주제 선정 이유
+                </h3>
+                <p class="text-gray-700">구체적이고 명확하게</p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    <span class="text-blue-600">Step 3.</span> 핵심 내용 간추리기
+                </h3>
+                <p class="text-gray-700">너무 길지 않게, 핵심만</p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    <span class="text-blue-600">Step 4.</span> 준비 과정 구체화
+                </h3>
+                <ul class="text-gray-700 ml-4">
+                    <li>• 어떤 자료를 참고했는가?</li>
+                    <li>• 어떤 방법을 사용했는가?</li>
+                    <li>• 어떤 어려움이 있었는가?</li>
+                </ul>
+            </div>
+            
+            <div class="timeline-item">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    <span class="text-blue-600">Step 5.</span> 결론 도출
+                </h3>
+                <p class="text-gray-700">
+                    <strong>실패도 기록 가능</strong> → 실패를 통한 성장 강조
+                </p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    <span class="text-blue-600">Step 6.</span> 교사와의 소통
+                </h3>
+                <p class="text-gray-700">담임/과목 교사에게 전달 → 공동체역량 향상</p>
+            </div>
+            
+            <div class="highlight-box mt-6">
+                <h3 class="text-xl font-bold text-orange-800 mb-3">
+                    <i class="fas fa-star"></i> 깊이 있는 학습의 예: 커피
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div class="bg-white p-3 rounded">품종 연구</div>
+                    <div class="bg-white p-3 rounded">미디어 속 커피</div>
+                    <div class="bg-white p-3 rounded">경제적 가치</div>
+                    <div class="bg-white p-3 rounded">역사적 영향</div>
+                    <div class="bg-white p-3 rounded">건강 영향</div>
+                    <div class="bg-white p-3 rounded">공정무역 이슈</div>
+                </div>
+                <p class="text-gray-700 mt-3">
+                    → 하나의 주제를 <strong>다각도로 탐구</strong>하고 <strong>융합적으로 사고</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- 입학사정관 조언 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-user-tie text-blue-600"></i>
+                입학사정관의 조언
+            </h2>
+            
+            <div class="key-point mb-6">
+                <h3 class="text-xl font-bold text-blue-800 mb-3">경희대 입학사정관 (임진택)</h3>
+                <blockquote class="text-lg text-gray-700 italic border-l-4 border-blue-500 pl-4">
+                    "AI 생기부를 걱정하지 말고, 선생님이 불을 피울 수 있도록 
+                    <strong>땔감(활동 내용)을 마련</strong>해서 선생님께 잘 전달하라"
+                </blockquote>
+            </div>
+            
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>교과 성적</strong>: 모든 과목 성실히</span>
+            </div>
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>출결</strong>: 철저한 관리</span>
+            </div>
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>체육/예술</strong>: 소홀히 하지 말 것</span>
+            </div>
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>리더십</strong>: 담임 앞에서 적극성 보이기</span>
+            </div>
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>과목 선택</strong>: 전공 관련 필수 과목 반드시 이수</span>
+            </div>
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>탐구 능력</strong>: "왜?"라는 질문 습관화</span>
+            </div>
+            <div class="checklist-item">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                <span><strong>협력 능력</strong>: 팀 활동에서 역할 수행</span>
+            </div>
+        </div>
+
+        <!-- 정보 확인 사이트 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-link text-indigo-600"></i>
+                필수 확인 사이트
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border-2 border-blue-300 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-blue-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-external-link-alt"></i>
+                        대입정보포털 어디가
+                    </h3>
+                    <p class="text-gray-600 mb-2">adiga.kr</p>
+                    <ul class="space-y-1 text-sm text-gray-700">
+                        <li>✓ 입시 용어 정리</li>
+                        <li>✓ 대학별 전형 정보</li>
+                        <li>✓ 성적 산출 계산기</li>
+                        <li>✓ 전형 비교</li>
+                    </ul>
+                </div>
+                
+                <div class="border-2 border-purple-300 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-purple-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-book"></i>
+                        서울대 아로리
+                    </h3>
+                    <p class="text-gray-600 mb-2">서울대학교 입학본부</p>
+                    <ul class="space-y-1 text-sm text-gray-700">
+                        <li>✓ 합격생 추천 도서</li>
+                        <li>✓ "내가 이곳에 오기까지" 영상</li>
+                        <li>✓ 합격생 생기부 사례</li>
+                        <li>✓ 심화탐구 사례</li>
+                    </ul>
+                </div>
+                
+                <div class="border-2 border-green-300 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-green-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-school"></i>
+                        학교알리미
+                    </h3>
+                    <p class="text-gray-600 mb-2">www.schoolinfo.go.kr</p>
+                    <ul class="space-y-1 text-sm text-gray-700">
+                        <li>✓ 학교별 교육과정</li>
+                        <li>✓ 수행평가 내용</li>
+                        <li>✓ 성적 분포</li>
+                        <li>✓ 학업성취 현황</li>
+                    </ul>
+                </div>
+                
+                <div class="border-2 border-orange-300 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-orange-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-video"></i>
+                        온라인 강의
+                    </h3>
+                    <p class="text-gray-600 mb-2">무료 학습 자료</p>
+                    <ul class="space-y-1 text-sm text-gray-700">
+                        <li>✓ K-MOOC (한국형 MOOC)</li>
+                        <li>✓ KOCW (공개 강의)</li>
+                        <li>✓ 교수님 무료 강의</li>
+                        <li>✓ 검증된 학습 자료</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 핵심 메시지 -->
+        <div class="content-card">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-3">
+                <i class="fas fa-heart text-red-600"></i>
+                핵심 메시지
+            </h2>
+            
+            <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-2xl p-8 text-center">
+                <p class="text-2xl font-bold text-gray-800 mb-4">
+                    "생활기록부는 학생의 실제 활동을 기록하는 것입니다."
+                </p>
+                <p class="text-xl text-gray-700 mb-2">
+                    <strong>활동이 없으면 기록도 없습니다.</strong>
+                </p>
+                <p class="text-lg text-gray-600">
+                    AI가 아닌 여러분의 열정과 호기심으로 채워가세요.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <div class="text-center p-6 bg-blue-50 rounded-xl">
+                    <i class="fas fa-trophy text-4xl text-yellow-500 mb-3"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">1등급이 전부가 아니다</h3>
+                    <p class="text-gray-600">2등급도 충분히 경쟁력<br/>상승 곡선이 더 중요</p>
+                </div>
+                
+                <div class="text-center p-6 bg-green-50 rounded-xl">
+                    <i class="fas fa-seedling text-4xl text-green-600 mb-3"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">꾸준함과 성실함</h3>
+                    <p class="text-gray-600">매일의 작은 노력이<br/>3년 후 큰 차이를 만듭니다</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <div class="text-center mt-8 space-x-4">
+            <a href="high-student-dashboard.html" class="inline-block bg-white text-purple-700 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <i class="fas fa-arrow-right mr-2"></i>
+                학생 대시보드로 이동
+            </a>
+            <a href="neural-learning-program.html" class="inline-block bg-white text-blue-700 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <i class="fas fa-brain mr-2"></i>
+                신경망 발달 프로그램
+            </a>
+        </div>
+    </div>
+</body>
+</html>
