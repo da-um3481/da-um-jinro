@@ -59,30 +59,68 @@
         .intro-box {
             background: white;
             border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 40px;
+            padding: 40px;
+            margin-bottom: 30px;
             color: #333;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .intro-box h2 {
             color: #7B1FA2;
-            font-size: 36px;
-            margin-bottom: 25px;
+            font-size: 32px;
+            margin-bottom: 20px;
             text-align: center;
+            font-weight: 700;
         }
         
-        .intro-box p {
-            font-size: 19px;
-            line-height: 1.9;
+        .intro-box .intro-main {
+            font-size: 18px;
+            line-height: 1.8;
             color: #555;
             text-align: center;
+            margin-bottom: 30px;
         }
         
         .intro-box .highlight {
             color: #7B1FA2;
-            font-weight: bold;
-            font-size: 22px;
+            font-weight: 700;
+            font-size: 20px;
+            border-bottom: 2px solid #7B1FA2;
+            padding-bottom: 2px;
+        }
+        
+        .intro-features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .intro-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #f8f4fc 0%, #f0e6f6 100%);
+            padding: 15px 25px;
+            border-radius: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .intro-feature-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.2);
+        }
+        
+        .intro-feature-item .feature-icon {
+            font-size: 24px;
+        }
+        
+        .intro-feature-item .feature-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #7B1FA2;
+            white-space: nowrap;
         }
         
         /* 중학생 특화 섹션 */
@@ -375,6 +413,36 @@
                 padding: 25px 20px;
             }
             
+            .intro-box h2 {
+                font-size: 24px;
+            }
+            
+            .intro-box .intro-main {
+                font-size: 16px;
+            }
+            
+            .intro-box .highlight {
+                font-size: 18px;
+            }
+            
+            .intro-features {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .intro-feature-item {
+                justify-content: center;
+                padding: 12px 20px;
+            }
+            
+            .intro-feature-item .feature-icon {
+                font-size: 20px;
+            }
+            
+            .intro-feature-item .feature-text {
+                font-size: 14px;
+            }
+            
             .middle-school-features h2 {
                 font-size: 24px;
                 margin-bottom: 20px;
@@ -397,6 +465,26 @@
             }
             
             .header .school-name {
+                font-size: 13px;
+            }
+            
+            .intro-box {
+                padding: 20px 15px;
+            }
+            
+            .intro-box h2 {
+                font-size: 20px;
+            }
+            
+            .intro-box .intro-main {
+                font-size: 15px;
+            }
+            
+            .intro-box .highlight {
+                font-size: 16px;
+            }
+            
+            .intro-feature-item .feature-text {
                 font-size: 13px;
             }
             
@@ -424,11 +512,24 @@
     <div class="container">
         <div class="intro-box">
             <h2>🎯 근화여중 학생들을 위한 특별한 제안</h2>
-            <p>
-                근화여자중학교 1,2학년 학생들의 성장을 위해 특별히 설계된 <span class="highlight">자기주도학습UP 챌린지</span>입니다.<br>
-                학생 학습수준에 따른 맞춤형 학습 지도와 체계적인 관리를 통해,<br>
-                자기주도학습 습관을 완성하고 학업 성취도를 높이며 고등학교 진학을 철저히 준비할 수 있습니다.
+            <p class="intro-main">
+                근화여자중학교 1,2학년 학생들의 성장을 위해<br>
+                특별히 설계된 <span class="highlight">자기주도학습UP 챌린지</span>
             </p>
+            <div class="intro-features">
+                <div class="intro-feature-item">
+                    <span class="feature-icon">📚</span>
+                    <span class="feature-text">학생 학습수준별 맞춤 지도</span>
+                </div>
+                <div class="intro-feature-item">
+                    <span class="feature-icon">✨</span>
+                    <span class="feature-text">자기주도학습 습관 완성</span>
+                </div>
+                <div class="intro-feature-item">
+                    <span class="feature-icon">📈</span>
+                    <span class="feature-text">학업 성취도 향상</span>
+                </div>
+            </div>
         </div>
         
         <!-- 중학생 특화 섹션 추가 -->
