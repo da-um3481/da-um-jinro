@@ -19,6 +19,120 @@
         .snowflake { position: fixed; top: -10vh; color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; z-index: 1; pointer-events: none; animation: snowfall linear infinite; }
         .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
     </style>
+    <style>
+        @media (max-width: 768px) {
+            body { font-size: 15px; }
+            
+            /* 헤더 완전 재설계 */
+            header {
+                padding: 0.75rem 0 !important;
+            }
+            
+            header .container {
+                padding: 0 0.875rem !important;
+            }
+            
+            header .flex.justify-between {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.75rem;
+            }
+            
+            /* 로고 + 제목 부분 */
+            header .flex.items-center.space-x-3 {
+                width: 100%;
+                gap: 0.625rem !important;
+            }
+            
+            header img {
+                width: 2.25rem !important;
+                height: 2.25rem !important;
+                flex-shrink: 0;
+            }
+            
+            header h1 {
+                font-size: 1rem !important;
+                line-height: 1.3 !important;
+                white-space: normal !important;
+                word-break: keep-all !important;
+            }
+            
+            header p {
+                font-size: 0.7rem !important;
+                display: block !important;
+                white-space: nowrap;
+            }
+            
+            /* 네비게이션 버튼 */
+            header nav {
+                width: 100%;
+                display: flex !important;
+                gap: 0.375rem !important;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            header nav a {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.8rem !important;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            
+            header nav a i {
+                display: none;
+            }
+            
+            /* 메인 컨텐츠 */
+            main {
+                padding: 0.875rem !important;
+            }
+            
+            .container {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            
+            /* 카드 그리드 */
+            .grid-cols-4 {
+                grid-template-columns: 1fr !important;
+                gap: 0.75rem !important;
+            }
+            
+            .glass-effect, .bg-white {
+                padding: 1.25rem !important;
+                margin-bottom: 0.875rem !important;
+                border-radius: 1rem !important;
+            }
+            
+            .glass-effect h2 {
+                font-size: 1.25rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* 입력 필드 */
+            input, select, textarea {
+                font-size: 0.95rem !important;
+                padding: 0.875rem !important;
+            }
+            
+            button {
+                font-size: 0.95rem !important;
+                padding: 0.875rem 1rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 0.95rem !important;
+            }
+            
+            header nav a {
+                font-size: 0.75rem !important;
+                padding: 0.5rem 0.625rem !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="snowflakes"></div>
@@ -27,7 +141,7 @@
         <div class="container mx-auto px-6 py-5">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
                     <div>
                         <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">겨울방학 30일 - 교재 관리</h1>
                         <p class="text-xs text-gray-600 font-medium">❄️ 수준별 맞춤 교재 추천</p>

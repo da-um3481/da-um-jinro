@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>매출 1천만원 달성 로드맵</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: #f0fdf4;
+            border-radius: 10px;
+        }
+        
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #059669;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #10b981;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #047857;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #059669;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #11998e, #38ef7d);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            width: 45%;
+            padding: 30px;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+            position: relative;
+        }
+        
+        .timeline-dot {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 1.2em;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .revenue-card {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+        }
+        
+        .revenue-number {
+            font-size: 4em;
+            font-weight: 900;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .scenario-box {
+            background: white;
+            border: 3px solid #10b981;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+        
+        .scenario-title {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        tr:hover {
+            background: #f0fdf4;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 6px solid #10b981;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 6px solid #f59e0b;
+        }
+        
+        .action-step {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 5px solid #10b981;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .action-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.2);
+        }
+        
+        .milestone {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 6px solid #3b82f6;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #11998e, #38ef7d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            transition: width 1s ease;
+        }
+        
+        .calculation {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border: 2px solid #10b981;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #059669;
+            font-size: 1.3em;
+            text-align: center;
+            padding: 40px;
+            margin: 40px 0;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 20px;
+            font-weight: 500;
+            border: 3px solid #10b981;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 60px;
+            }
+            .timeline-content {
+                width: 100%;
+            }
+            .timeline-dot {
+                left: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 매출 1천만원 달성<br>로드맵</h1>
+        
+        <div class="subtitle">
+            <p><strong>목표</strong>: 월 매출 1천만원 (연 매출 1.2억원)</p>
+            <p><strong>예상 기간</strong>: 6~12개월</p>
+            <p><strong>작성일</strong>: 2025년 12월 14일</p>
+        </div>
+
+        <div class="revenue-card">
+            <h2 style="color: white; margin: 0;">🎯 목표</h2>
+            <div class="revenue-number">월 1,000만원</div>
+            <p style="font-size: 1.3em; margin-top: 20px;">= 학생 200명 × 5만원</p>
+            <p style="font-size: 1.2em; opacity: 0.9;">또는 학교 7개 × 30명 × 5만원</p>
+        </div>
+
+        <h2>📊 1. 매출 발생 시기 예측</h2>
+
+        <div class="timeline">
+            <!-- 1개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">1M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">1개월차 (1월)</h3>
+                    <h4>📌 목표: 첫 매출 발생</h4>
+                    <p><strong>매출</strong>: 15만원 (학생 3명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>무료 체험 3명 진행</li>
+                        <li>만족 후기 1개 확보</li>
+                        <li>유료 전환 3명</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 검증 완료, 첫 매출!</p>
+                </div>
+            </div>
+
+            <!-- 2개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">2M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">2개월차 (2월)</h3>
+                    <h4>📌 목표: 입소문 시작</h4>
+                    <p><strong>매출</strong>: 50만원 (학생 10명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>기존 학생 추천 프로그램</li>
+                        <li>맘카페 후기 게시</li>
+                        <li>추가 7명 확보</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 추천이 시작됨</p>
+                </div>
+            </div>
+
+            <!-- 3개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">3M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">3개월차 (3월)</h3>
+                    <h4>📌 목표: 100일 프로그램 시작</h4>
+                    <p><strong>매출</strong>: 150만원 (학생 30명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>신학기 100일 프로그램 론칭</li>
+                        <li>학교 1곳 제안 (30명)</li>
+                        <li>또는 개인 고객 20명 추가</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 본격적인 성장 시작</p>
+                </div>
+            </div>
+
+            <!-- 4개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">4M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">4개월차 (4월)</h3>
+                    <h4>📌 목표: 시스템 안정화</h4>
+                    <p><strong>매출</strong>: 250만원 (학생 50명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>기존 학생 유지율 90% 달성</li>
+                        <li>학교 1곳 추가 또는 개인 20명</li>
+                        <li>시스템 자동화 개선</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 안정적인 운영</p>
+                </div>
+            </div>
+
+            <!-- 6개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">6M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">6개월차 (6월)</h3>
+                    <h4>📌 목표: 500만원 돌파</h4>
+                    <p><strong>매출</strong>: 500만원 (학생 100명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>학교 3곳 또는 개인 100명</li>
+                        <li>여름방학 특강 준비</li>
+                        <li>교육청 공모사업 제안</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 중간 목표 달성</p>
+                </div>
+            </div>
+
+            <!-- 9개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">9M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">9개월차 (9월)</h3>
+                    <h4>📌 목표: 750만원 돌파</h4>
+                    <p><strong>매출</strong>: 750만원 (학생 150명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>2학기 신규 모집</li>
+                        <li>학교 5곳 또는 개인 150명</li>
+                        <li>보조 강사 1명 채용 고려</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 규모의 경제</p>
+                </div>
+            </div>
+
+            <!-- 12개월차 -->
+            <div class="timeline-item">
+                <div class="timeline-dot">12M</div>
+                <div class="timeline-content">
+                    <h3 style="color: #11998e; margin-top: 0;">12개월차 (12월)</h3>
+                    <h4>📌 목표: 1,000만원 달성! 🎉</h4>
+                    <p><strong>매출</strong>: 1,000만원 (학생 200명 × 5만원)</p>
+                    <p><strong>활동</strong>:</p>
+                    <ul>
+                        <li>학교 7곳 또는 개인 200명</li>
+                        <li>겨울방학 프로그램 론칭</li>
+                        <li>다음 해 확장 계획 수립</li>
+                    </ul>
+                    <p><strong>핵심</strong>: 목표 달성! 축하합니다!</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 2. 세 가지 시나리오</h2>
+
+        <div class="scenario-box">
+            <div class="scenario-title">🐢 보수적 시나리오 (18개월)</div>
+            <p><strong>전략</strong>: 개인 고객 중심, 천천히 확장</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>기간</th>
+                        <th>학생 수</th>
+                        <th>월 매출</th>
+                        <th>누적 매출</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1~3개월</td>
+                        <td>3 → 10 → 20명</td>
+                        <td>15 → 50 → 100만원</td>
+                        <td>165만원</td>
+                    </tr>
+                    <tr>
+                        <td>4~6개월</td>
+                        <td>30 → 40 → 60명</td>
+                        <td>150 → 200 → 300만원</td>
+                        <td>815만원</td>
+                    </tr>
+                    <tr>
+                        <td>7~12개월</td>
+                        <td>80 → 100 → 130명</td>
+                        <td>400 → 500 → 650만원</td>
+                        <td>4,565만원</td>
+                    </tr>
+                    <tr>
+                        <td>13~18개월</td>
+                        <td>150 → 180 → 200명</td>
+                        <td>750 → 900 → 1,000만원</td>
+                        <td>9,865만원</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="calculation">
+                <p><strong>월 1,000만원 달성</strong>: 18개월차</p>
+                <p><strong>18개월 누적 매출</strong>: 약 9,865만원</p>
+                <p><strong>장점</strong>: 안정적, 리스크 낮음</p>
+                <p><strong>단점</strong>: 느린 성장</p>
+            </div>
+        </div>
+
+        <div class="scenario-box">
+            <div class="scenario-title">🐰 현실적 시나리오 (12개월) ⭐ 추천</div>
+            <p><strong>전략</strong>: 개인 + 학교 병행, 균형잡힌 성장</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>기간</th>
+                        <th>학생 수</th>
+                        <th>월 매출</th>
+                        <th>누적 매출</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1~3개월</td>
+                        <td>3 → 10 → 30명</td>
+                        <td>15 → 50 → 150만원</td>
+                        <td>215만원</td>
+                    </tr>
+                    <tr>
+                        <td>4~6개월</td>
+                        <td>50 → 70 → 100명</td>
+                        <td>250 → 350 → 500만원</td>
+                        <td>1,315만원</td>
+                    </tr>
+                    <tr>
+                        <td>7~9개월</td>
+                        <td>120 → 140 → 150명</td>
+                        <td>600 → 700 → 750만원</td>
+                        <td>3,365만원</td>
+                    </tr>
+                    <tr>
+                        <td>10~12개월</td>
+                        <td>170 → 185 → 200명</td>
+                        <td>850 → 925 → 1,000만원</td>
+                        <td>6,140만원</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="calculation">
+                <p><strong>월 1,000만원 달성</strong>: 12개월차 ✅</p>
+                <p><strong>12개월 누적 매출</strong>: 약 6,140만원</p>
+                <p><strong>장점</strong>: 현실적, 균형잡힘</p>
+                <p><strong>추천 이유</strong>: 가장 달성 가능성 높음</p>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 구성 (12개월차 기준)</h4>
+                <ul>
+                    <li><strong>학교 연계</strong>: 3개 학교 × 30명 = 90명 (450만원)</li>
+                    <li><strong>개인 고객</strong>: 110명 (550만원)</li>
+                    <li><strong>합계</strong>: 200명 (1,000만원)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="scenario-box">
+            <div class="scenario-title">🚀 공격적 시나리오 (6개월)</div>
+            <p><strong>전략</strong>: 학교 중심, 빠른 확장</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>기간</th>
+                        <th>학생 수</th>
+                        <th>월 매출</th>
+                        <th>누적 매출</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1~2개월</td>
+                        <td>3 → 30명</td>
+                        <td>15 → 150만원</td>
+                        <td>165만원</td>
+                    </tr>
+                    <tr>
+                        <td>3~4개월</td>
+                        <td>60 → 120명</td>
+                        <td>300 → 600만원</td>
+                        <td>1,065만원</td>
+                    </tr>
+                    <tr>
+                        <td>5~6개월</td>
+                        <td>150 → 200명</td>
+                        <td>750 → 1,000만원</td>
+                        <td>2,815만원</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="calculation">
+                <p><strong>월 1,000만원 달성</strong>: 6개월차 🚀</p>
+                <p><strong>6개월 누적 매출</strong>: 약 2,815만원</p>
+                <p><strong>조건</strong>: 초기 성공 사례 확보 필수</p>
+                <p><strong>리스크</strong>: 학교 제안 실패 시 어려움</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ 주의사항</h4>
+                <ul>
+                    <li>학교 계약은 3~6개월 소요</li>
+                    <li>초기 성공 사례 없으면 불가능</li>
+                    <li>시스템 자동화 필수</li>
+                    <li>관리 인력 추가 필요할 수 있음</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>📈 3. 월별 상세 로드맵 (현실적 시나리오)</h2>
+
+        <div class="milestone">
+            <h3 style="color: #1e40af; margin-top: 0;">🎯 1개월차 (2025년 1월): 검증 단계</h3>
+            <p><strong>목표 매출</strong>: 15만원 (학생 3명)</p>
+            
+            <div class="action-step">
+                <h4>Week 1-2: 무료 체험</h4>
+                <ul>
+                    <li>□ 학부모 20명 대화</li>
+                    <li>□ 무료 체험 3명 확보</li>
+                    <li>□ 체험 시작</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <h4>Week 3-4: 유료 전환</h4>
+                <ul>
+                    <li>□ 만족 후기 1개 확보</li>
+                    <li>□ 3명 유료 전환 (5만원/월)</li>
+                    <li>□ <strong>첫 매출 15만원 발생! 🎉</strong></li>
+                </ul>
+            </div>
+
+            <div class="calculation">
+                <strong>누적 매출</strong>: 15만원<br>
+                <strong>핵심 성과</strong>: 비즈니스 검증 완료
+            </div>
+        </div>
+
+        <div class="milestone">
+            <h3 style="color: #1e40af; margin-top: 0;">🎯 2개월차 (2025년 2월): 입소문 시작</h3>
+            <p><strong>목표 매출</strong>: 50만원 (학생 10명)</p>
+            
+            <div class="action-step">
+                <h4>추천 프로그램 가동</h4>
+                <ul>
+                    <li>□ 기존 학생 학부모에게 추천 요청</li>
+                    <li>□ "친구 추천 시 1만원 할인" 이벤트</li>
+                    <li>□ 추천으로 3명 확보</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <h4>맘카페 마케팅</h4>
+                <ul>
+                    <li>□ 만족 후기를 맘카페에 게시 (본인 또는 학부모)</li>
+                    <li>□ "2월 특별 모집 5명" 공고</li>
+                    <li>□ 맘카페로 4명 확보</li>
+                </ul>
+            </div>
+
+            <div class="calculation">
+                <strong>신규 고객</strong>: 7명 (3명 추천 + 4명 맘카페)<br>
+                <strong>이번 달 매출</strong>: 50만원<br>
+                <strong>누적 매출</strong>: 65만원
+            </div>
+        </div>
+
+        <div class="milestone">
+            <h3 style="color: #1e40af; margin-top: 0;">🎯 3개월차 (2025년 3월): 100일 프로그램 시작</h3>
+            <p><strong>목표 매출</strong>: 150만원 (학생 30명)</p>
+            
+            <div class="action-step">
+                <h4>신학기 대규모 모집</h4>
+                <ul>
+                    <li>□ "3월~중간고사 100일 프로그램" 론칭</li>
+                    <li>□ 맘카페 + 지인 통해 20명 모집</li>
+                    <li>□ 학교 1곳 제안 (30명 중 일부)</li>
+                </ul>
+            </div>
+
+            <div class="calculation">
+                <strong>신규 고객</strong>: 20명<br>
+                <strong>이번 달 매출</strong>: 150만원<br>
+                <strong>누적 매출</strong>: 215만원
+            </div>
+        </div>
+
+        <div class="milestone">
+            <h3 style="color: #1e40af; margin-top: 0;">🎯 4~6개월차: 안정화 & 성장</h3>
+            <p><strong>목표 매출</strong>: 250만원 → 350만원 → 500만원</p>
+            
+            <div class="action-step">
+                <h4>시스템 안정화</h4>
+                <ul>
+                    <li>□ 학생 유지율 90% 이상 달성</li>
+                    <li>□ 자동화 시스템 개선</li>
+                    <li>□ 주간 리포트 템플릿 완성</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <h4>지속적 신규 유입</h4>
+                <ul>
+                    <li>□ 매월 20명씩 신규 확보</li>
+                    <li>□ 학교 1곳 추가 계약</li>
+                    <li>□ 교육청 공모사업 제안서 제출</li>
+                </ul>
+            </div>
+
+            <div class="calculation">
+                <strong>6개월차 학생 수</strong>: 100명<br>
+                <strong>6개월차 매출</strong>: 500만원<br>
+                <strong>누적 매출</strong>: 1,315만원
+            </div>
+        </div>
+
+        <div class="milestone">
+            <h3 style="color: #1e40af; margin-top: 0;">🎯 7~9개월차: 확장 가속화</h3>
+            <p><strong>목표 매출</strong>: 600만원 → 700만원 → 750만원</p>
+            
+            <div class="action-step">
+                <h4>2학기 신규 모집</h4>
+                <ul>
+                    <li>□ 9월 신학기 대규모 모집</li>
+                    <li>□ 학교 2곳 추가 (총 3곳)</li>
+                    <li>□ 매월 15~20명 신규</li>
+                </ul>
+            </div>
+
+            <div class="calculation">
+                <strong>9개월차 학생 수</strong>: 150명<br>
+                <strong>9개월차 매출</strong>: 750만원<br>
+                <strong>누적 매출</strong>: 3,365만원
+            </div>
+        </div>
+
+        <div class="milestone">
+            <h3 style="color: #1e40af; margin-top: 0;">🎯 10~12개월차: 목표 달성!</h3>
+            <p><strong>목표 매출</strong>: 850만원 → 925만원 → 1,000만원</p>
+            
+            <div class="action-step">
+                <h4>최종 스퍼트</h4>
+                <ul>
+                    <li>□ 학교 1~2곳 추가 (총 4~5곳)</li>
+                    <li>□ 겨울방학 프로그램 론칭</li>
+                    <li>□ 200명 달성!</li>
+                </ul>
+            </div>
+
+            <div class="revenue-card">
+                <h2 style="color: white; margin: 0;">🎉 12개월차 달성!</h2>
+                <div class="revenue-number">1,000만원</div>
+                <p style="font-size: 1.3em;">학생 200명 × 5만원</p>
+                <p style="font-size: 1.2em; margin-top: 20px;">연간 누적 매출: 6,140만원</p>
+            </div>
+        </div>
+
+        <h2>💡 4. 성공 확률을 높이는 핵심 전략</h2>
+
+        <div class="highlight-box">
+            <h3>🎯 전략 1: 초기 3개월이 가장 중요</h3>
+            <ul>
+                <li><strong>왜?</strong> 첫 성공 사례가 이후 모든 것을 결정</li>
+                <li><strong>집중할 것</strong>: 3명의 만족도를 200%로 만들기</li>
+                <li><strong>목표</strong>: "이거 정말 좋아요!" 라는 진심 어린 후기</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🎯 전략 2: 학교 vs 개인 비율 = 40:60</h3>
+            <ul>
+                <li><strong>학교 (40%)</strong>: 안정적 수입, 큰 규모</li>
+                <li><strong>개인 (60%)</strong>: 빠른 의사결정, 유연성</li>
+                <li><strong>이유</strong>: 한 쪽에만 의존하면 리스크 큼</li>
+            </ul>
+            
+            <div class="calculation">
+                <p><strong>목표 200명 구성 (12개월차)</strong></p>
+                <p>학교: 80명 (3개 학교 × 평균 27명) = 400만원</p>
+                <p>개인: 120명 = 600만원</p>
+                <p><strong>합계: 1,000만원</strong></p>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🎯 전략 3: 유지율이 생명</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>유지율</th>
+                        <th>12개월 후 결과</th>
+                        <th>의미</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>70%</td>
+                        <td>140명 (700만원) ❌</td>
+                        <td>목표 미달성</td>
+                    </tr>
+                    <tr>
+                        <td>85%</td>
+                        <td>185명 (925만원) △</td>
+                        <td>거의 달성</td>
+                    </tr>
+                    <tr>
+                        <td>90%</td>
+                        <td>200명 (1,000만원) ✅</td>
+                        <td>목표 달성!</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>유지율 90% 달성 방법</strong>:</p>
+            <ul>
+                <li>매일 학생 상태 체크</li>
+                <li>주간 리포트 빠짐없이 발송</li>
+                <li>학부모 불만 즉시 해결</li>
+                <li>학생 성적 향상 데이터 보여주기</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🎯 전략 4: 가격 전략</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>단계</th>
+                        <th>가격</th>
+                        <th>대상</th>
+                        <th>목적</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>베타 (1~2개월)</td>
+                        <td>3만원/월</td>
+                        <td>첫 10명</td>
+                        <td>후기 확보</td>
+                    </tr>
+                    <tr>
+                        <td>얼리버드 (3~4개월)</td>
+                        <td>4만원/월</td>
+                        <td>11~50명</td>
+                        <td>빠른 확장</td>
+                    </tr>
+                    <tr>
+                        <td>정가 (5개월~)</td>
+                        <td>5만원/월</td>
+                        <td>51명~</td>
+                        <td>정상 운영</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="calculation">
+                <p><strong>예상 매출 (12개월)</strong></p>
+                <p>베타 10명 × 3만원 × 2개월 = 60만원</p>
+                <p>얼리버드 40명 × 4만원 × 2개월 = 320만원</p>
+                <p>정가 150명 × 5만원 × 8개월 평균 = 4,800만원</p>
+                <p><strong>합계: 약 5,180만원</strong></p>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🎯 전략 5: 추천 프로그램</h3>
+            <p><strong>"추천하면 둘 다 1만원 할인"</strong></p>
+            
+            <div class="calculation">
+                <p><strong>계산</strong></p>
+                <p>기존 학생 1명이 친구 2명 추천</p>
+                <p>→ 3명 모두 1만원 할인 = 총 3만원 할인</p>
+                <p>→ 하지만 2명 신규 확보 (10만원 매출)</p>
+                <p>→ 순이익 7만원</p>
+                <br>
+                <p><strong>목표</strong>: 학생 10명이 각 2명씩 추천</p>
+                <p>→ 신규 20명 확보</p>
+                <p>→ 추가 매출 100만원 (할인 후 70만원)</p>
+            </div>
+        </div>
+
+        <h2>⚠️ 5. 주의해야 할 함정</h2>
+
+        <div class="warning-box">
+            <h3>❌ 함정 1: 너무 많은 학생을 한꺼번에 받기</h3>
+            <ul>
+                <li><strong>문제</strong>: 관리 불가능 → 서비스 품질 저하 → 이탈</li>
+                <li><strong>해결</strong>: 월 최대 20~30명씩만 받기</li>
+                <li><strong>이유</strong>: 시스템 안정화 + 학생 개별 관리</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <h3>❌ 함정 2: 학교 계약에만 올인</h3>
+            <ul>
+                <li><strong>문제</strong>: 학교 계약 안 되면 매출 0원</li>
+                <li><strong>해결</strong>: 개인 고객 병행 (60% 이상)</li>
+                <li><strong>이유</strong>: 학교는 의사결정 3~6개월 소요</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <h3>❌ 함정 3: 가격 인하 경쟁</h3>
+            <ul>
+                <li><strong>문제</strong>: "더 싸게 해주세요" → 3만원 → 2만원...</li>
+                <li><strong>해결</strong>: 5만원 고수, 대신 가치 증명</li>
+                <li><strong>이유</strong>: 저가 경쟁은 끝이 없음</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <h3>❌ 함정 4: 완벽주의</h3>
+            <ul>
+                <li><strong>문제</strong>: "시스템이 완벽해지면 시작할게요"</li>
+                <li><strong>해결</strong>: 70% 완성도에서 시작, 개선하며 진행</li>
+                <li><strong>이유</strong>: 고객 피드백이 가장 중요한 개선 자료</li>
+            </ul>
+        </div>
+
+        <h2>🎯 6. 체크포인트: 이정표별 판단 기준</h2>
+
+        <div class="milestone">
+            <h3>✅ 1개월 후: 계속 vs 수정 vs 중단?</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>지표</th>
+                        <th>계속 (Go)</th>
+                        <th>수정 필요</th>
+                        <th>중단 고려</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>학부모 대화</td>
+                        <td>20명 이상</td>
+                        <td>10~19명</td>
+                        <td>10명 미만</td>
+                    </tr>
+                    <tr>
+                        <td>관심 표현</td>
+                        <td>5명 이상</td>
+                        <td>2~4명</td>
+                        <td>1명 이하</td>
+                    </tr>
+                    <tr>
+                        <td>유료 전환</td>
+                        <td>3명 이상</td>
+                        <td>1~2명</td>
+                        <td>0명</td>
+                    </tr>
+                    <tr>
+                        <td>만족도</td>
+                        <td>9~10점</td>
+                        <td>7~8점</td>
+                        <td>6점 이하</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>판단</strong>:</p>
+            <ul>
+                <li><strong>계속</strong>: 모든 지표 달성 → 그대로 진행!</li>
+                <li><strong>수정</strong>: 일부 미달 → 타겟/가격/서비스 조정</li>
+                <li><strong>중단</strong>: 대부분 미달 → 근본적 재검토</li>
+            </ul>
+        </div>
+
+        <div class="milestone">
+            <h3>✅ 3개월 후: 가속화 vs 유지 vs 축소?</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>지표</th>
+                        <th>가속화 (빠른 확장)</th>
+                        <th>유지 (현재 속도)</th>
+                        <th>축소 (속도 낮춤)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>학생 수</td>
+                        <td>30명 이상</td>
+                        <td>20~29명</td>
+                        <td>20명 미만</td>
+                    </tr>
+                    <tr>
+                        <td>유지율</td>
+                        <td>90% 이상</td>
+                        <td>80~89%</td>
+                        <td>80% 미만</td>
+                    </tr>
+                    <tr>
+                        <td>추천율</td>
+                        <td>30% 이상</td>
+                        <td>10~29%</td>
+                        <td>10% 미만</td>
+                    </tr>
+                    <tr>
+                        <td>관리 부담</td>
+                        <td>여유 있음</td>
+                        <td>적당함</td>
+                        <td>힘듦</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>전략</strong>:</p>
+            <ul>
+                <li><strong>가속화</strong>: 학교 제안 본격화, 월 30~40명 모집</li>
+                <li><strong>유지</strong>: 현재 속도 유지 (월 20명)</li>
+                <li><strong>축소</strong>: 품질 개선에 집중, 신규 모집 중단</li>
+            </ul>
+        </div>
+
+        <div class="milestone">
+            <h3>✅ 6개월 후: 투자 vs 현상유지?</h3>
+            
+            <p><strong>학생 100명, 월 500만원 달성 시</strong>:</p>
+            
+            <div class="calculation">
+                <p><strong>옵션 A: 보조 인력 투입</strong></p>
+                <p>학생 관리 보조 1명 채용 (월 200만원)</p>
+                <p>→ 관리 가능 학생 수: 200 → 300명</p>
+                <p>→ 순이익: 500만원 - 200만원 = 300만원</p>
+                <p>→ 하지만 최대 매출: 1,500만원 가능</p>
+                <br>
+                <p><strong>옵션 B: 혼자 계속</strong></p>
+                <p>최대 관리 가능: 200명</p>
+                <p>→ 최대 매출: 1,000만원</p>
+                <p>→ 순이익: 1,000만원 (전액)</p>
+            </div>
+
+            <p><strong>추천</strong>: 6개월 시점에서는 혼자 계속 (Option B)</p>
+            <p><strong>이유</strong>: 200명까지는 혼자 충분히 관리 가능</p>
+        </div>
+
+        <h2>💰 7. 수익성 분석</h2>
+
+        <div class="highlight-box">
+            <h3>📊 비용 구조</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>월 비용</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>서버/시스템</td>
+                        <td>10~20만원</td>
+                        <td>호스팅, SMS 등</td>
+                    </tr>
+                    <tr>
+                        <td>마케팅</td>
+                        <td>20~50만원</td>
+                        <td>초기에는 0원 가능</td>
+                    </tr>
+                    <tr>
+                        <td>사무실</td>
+                        <td>0원</td>
+                        <td>재택 가능</td>
+                    </tr>
+                    <tr>
+                        <td>인건비</td>
+                        <td>0원</td>
+                        <td>200명까지 혼자</td>
+                    </tr>
+                    <tr>
+                        <td><strong>합계</strong></td>
+                        <td><strong>30~70만원</strong></td>
+                        <td>매출의 3~7%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <h3>💵 순이익 계산</h3>
+            
+            <div class="calculation">
+                <p><strong>12개월차 (학생 200명)</strong></p>
+                <p>매출: 1,000만원</p>
+                <p>비용: -70만원 (최대 기준)</p>
+                <p>세전 순이익: 930만원</p>
+                <p>세후 순이익: 약 750~800만원</p>
+                <br>
+                <p><strong>연간 (12개월 누적)</strong></p>
+                <p>총 매출: 6,140만원</p>
+                <p>총 비용: -500만원 (평균 월 40만원)</p>
+                <p>세전 순이익: 5,640만원</p>
+                <p>세후 순이익: 약 4,500~5,000만원</p>
+            </div>
+
+            <p><strong>🎉 첫 해에 4,500~5,000만원 순이익!</strong></p>
+        </div>
+
+        <h2>🚀 8. 다음 단계: 월 1,000만원 이후</h2>
+
+        <div class="scenario-box">
+            <div class="scenario-title">🎯 목표 달성 후 선택지</div>
+            
+            <h4>선택지 1: 현상 유지 (학생 200명)</h4>
+            <ul>
+                <li>월 1,000만원 안정적 유지</li>
+                <li>연 1.2억원 매출</li>
+                <li>순이익 연 9,000~1억원</li>
+                <li><strong>장점</strong>: 안정적, 부담 없음</li>
+            </ul>
+
+            <h4>선택지 2: 확장 (학생 500명)</h4>
+            <ul>
+                <li>보조 인력 2명 채용</li>
+                <li>월 2,500만원 매출</li>
+                <li>순이익 월 1,500~2,000만원</li>
+                <li><strong>단점</strong>: 관리 부담 증가</li>
+            </ul>
+
+            <h4>선택지 3: 프랜차이즈 (지역 확장)</h4>
+            <ul>
+                <li>다른 지역 컨설턴트와 제휴</li>
+                <li>시스템 라이선스 수익</li>
+                <li>지역당 월 100만원 수익</li>
+                <li><strong>장점</strong>: 규모 경제</li>
+            </ul>
+
+            <h4>선택지 4: 교육청 사업 (B2G 전환)</h4>
+            <ul>
+                <li>교육청 공모사업 수주</li>
+                <li>1건당 5천만~1억원</li>
+                <li>안정적 계약</li>
+                <li><strong>장점</strong>: 대규모 매출</li>
+            </ul>
+        </div>
+
+        <div class="quote">
+            "첫 1,000만원이 가장 어렵습니다.<br>
+            하지만 한 번 달성하면,<br>
+            그 다음은 훨씬 쉬워집니다."
+        </div>
+
+        <h2>📋 9. 실행 체크리스트</h2>
+
+        <div class="highlight-box">
+            <h3>✅ 이번 주 할 일 (당장 시작!)</h3>
+            <div class="action-step">
+                <strong>월요일</strong>
+                <ul>
+                    <li>□ 학부모 10명 리스트 작성</li>
+                    <li>□ 맘카페 3개 가입</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <strong>화요일</strong>
+                <ul>
+                    <li>□ 학부모 5명 전화/카톡</li>
+                    <li>□ 무료 체험 제안</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <strong>수요일</strong>
+                <ul>
+                    <li>□ 맘카페 게시글 50개 읽기</li>
+                    <li>□ 학부모 고민 키워드 정리</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <strong>목요일</strong>
+                <ul>
+                    <li>□ 관심 있는 학부모 1명 미팅</li>
+                    <li>□ 브리핑 자료 보여주기</li>
+                </ul>
+            </div>
+
+            <div class="action-step">
+                <strong>금요일</strong>
+                <ul>
+                    <li>□ 이번 주 피드백 정리</li>
+                    <li>□ 다음 주 계획 수립</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="revenue-card">
+            <h2 style="color: white; margin-bottom: 30px;">🎯 최종 목표</h2>
+            <div style="font-size: 1.5em; margin-bottom: 20px;">
+                <strong>12개월 후</strong>
+            </div>
+            <div class="revenue-number" style="font-size: 3.5em;">월 1,000만원</div>
+            <div style="font-size: 1.3em; margin-top: 20px;">
+                <p>학생 200명</p>
+                <p>연 매출 1.2억원</p>
+                <p>연 순이익 9천만~1억원</p>
+            </div>
+            <div style="font-size: 1.5em; margin-top: 30px; padding-top: 30px; border-top: 2px solid rgba(255,255,255,0.3);">
+                <strong>당신은 할 수 있습니다! 🚀</strong>
+            </div>
+        </div>
+
+        <div class="quote" style="font-size: 1.4em; padding: 50px; margin: 50px 0;">
+            "지금 이 순간이<br>
+            당신 인생의 전환점입니다.<br>
+            <br>
+            12개월 후,<br>
+            당신은 월 1,000만원을 버는<br>
+            성공한 사업가가 되어 있을 것입니다.<br>
+            <br>
+            믿고, 실행하세요! 💪"
+        </div>
+
+        <div style="text-align: center; color: #999; margin-top: 80px; padding-top: 40px; border-top: 2px solid #e5e7eb;">
+            <p><strong>작성일</strong>: 2025년 12월 14일</p>
+            <p><strong>파일명</strong>: 매출_1천만원_달성_로드맵.html</p>
+            <p><strong>목적</strong>: 구체적이고 현실적인 매출 계획 수립</p>
+        </div>
+    </div>
+</body>
+</html>

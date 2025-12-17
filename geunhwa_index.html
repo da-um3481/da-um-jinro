@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경주 근화여자중학교 - 겨울방학 자기주도학습 프로그램</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .header h1 {
+            font-size: 52px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .school-name {
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .header p {
+            font-size: 22px;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .intro-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            color: #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .intro-box h2 {
+            color: #7B1FA2;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .intro-box p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            color: #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .card-icon {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            font-size: 26px;
+            color: #7B1FA2;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .card-btn {
+            display: block;
+            background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+            color: white;
+            text-align: center;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(123, 31, 162, 0.4);
+        }
+        
+        .download-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 0;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .download-section h2 {
+            font-size: 34px;
+            color: #7B1FA2;
+            margin-bottom: 20px;
+        }
+        
+        .download-section p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .download-big-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #E91E63 0%, #F06292 100%);
+            color: white;
+            padding: 20px 60px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 30px rgba(233, 30, 99, 0.4);
+        }
+        
+        .download-big-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px rgba(233, 30, 99, 0.6);
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-section h2 {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .info-item-icon {
+            font-size: 44px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item h3 {
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+        
+        .info-item p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.2);
+            margin-top: 60px;
+        }
+        
+        .footer h3 {
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        
+        .footer p {
+            font-size: 19px;
+            margin: 8px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .header .school-name {
+                font-size: 28px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏫</h1>
+        <div class="school-name">경주 근화여자중학교</div>
+        <p>1,2학년 겨울방학 자기주도학습 프로그램 제안서</p>
+    </div>
+    
+    <div class="container">
+        <div class="intro-box">
+            <h2>🎯 근화여중 학생들을 위한 특별한 제안</h2>
+            <p>
+                근화여자중학교 1,2학년 학생들의 성장을 위해 특별히 설계된 <strong>겨울방학 30일 집중 자기주도학습 프로그램</strong>입니다.
+                여학생들의 특성을 깊이 이해하고 반영한 맞춤형 학습 지도와 체계적인 관리를 통해,
+                자기주도학습 습관을 완성하고 학업 성취도를 높이며 고등학교 진학을 철저히 준비할 수 있습니다.
+            </p>
+        </div>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h2>프레젠테이션 제안서</h2>
+                <p>학교 제안용 PowerPoint<br>11개 슬라이드로 구성된 전문 제안서</p>
+                <a href="근화여자중학교_겨울방학_자기주도학습_프로그램_제안서.pptx" download class="card-btn">PPT 다운로드</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📄</div>
+                <h2>상세 안내 자료</h2>
+                <p>웹 기반 상세 프로그램 설명<br>학년별 프로그램 완벽 안내</p>
+                <a href="근화여자중학교_겨울방학_프로그램_상세안내.html" target="_blank" class="card-btn">자료 보기</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <h2>요약 제안서</h2>
+                <p>1페이지 간단 요약본<br>핵심 정보만 담은 제안서</p>
+                <a href="근화여자중학교_겨울방학_프로그램_요약제안서.html" target="_blank" class="card-btn">제안서 보기</a>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h2>⚡ 전체 제안서 한번에 받기</h2>
+            <p>모든 제안서 자료를 ZIP 파일로 한번에 다운로드하세요!</p>
+            <a href="근화여자중학교_제안서_전체.zip" download class="download-big-btn">🎁 전체 자료 다운로드 (ZIP)</a>
+        </div>
+        
+        <div class="info-section">
+            <h2>✨ 근화여중 맞춤형 프로그램 특징</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-item-icon">👩‍🎓</div>
+                    <h3>여학생 특성 고려</h3>
+                    <p>섬세한 학습 지도</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">📚</div>
+                    <h3>30일 집중 프로그램</h3>
+                    <p>체계적인 습관 형성</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">👩‍🏫</div>
+                    <h3>1:1 맞춤 지도</h3>
+                    <p>개인별 학습 관리</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">🎯</div>
+                    <h3>고교 진학 준비</h3>
+                    <p>철저한 준비 과정</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>📚 학년별 프로그램</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-item-icon">📖</div>
+                    <h3>1학년</h3>
+                    <p>교과 학습 강화<br>자기주도학습 훈련<br>기초 학력 완성</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">📗</div>
+                    <h3>2학년</h3>
+                    <p>교과 심화 학습<br>고등학교 진학 준비<br>학습 역량 강화</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <h3>📞 문의 및 상담</h3>
+        <p>📱 전화: 010-2657-3481</p>
+        <p>👤 담당자: 정라미 (DA.UM 다움진로진학컨설팅)</p>
+        <p>🏫 제안 대상: 경주 근화여자중학교 1,2학년</p>
+        <p style="margin-top: 25px; opacity: 0.8; font-size: 16px;">근화여중 학생들의 성장을 함께 만들어가겠습니다</p>
+    </div>
+</body>
+</html>

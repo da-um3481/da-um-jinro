@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 초간단 따라하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .big-step {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            margin: 30px 0;
+            border-radius: 20px;
+            font-size: 2em;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .action {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            font-size: 1.5em;
+            line-height: 2;
+        }
+        
+        .number {
+            background: #ff4757;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-right: 20px;
+            vertical-align: middle;
+        }
+        
+        .highlight {
+            background: yellow;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.2em;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .success {
+            background: #d4edda;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid #28a745;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 1.1em;
+            color: #e83e8c;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #ffc107;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 초간단 따라하기</h1>
+        
+        <div class="big-step">
+            딱 3단계만 하면 끝!
+        </div>
+
+        <!-- 1단계 -->
+        <div class="action">
+            <div style="margin-bottom: 20px;">
+                <span class="number">1</span>
+                <strong>파일 5개 받기</strong>
+            </div>
+            
+            <div style="margin-left: 80px; font-size: 0.9em; line-height: 1.8;">
+                <p>① GenSpark 화면에서 <span class="highlight">왼쪽 파일 목록</span> 보이죠?</p>
+                <p>② 이 파일들을 <span class="highlight">하나씩 클릭</span>:</p>
+                <div style="margin: 20px 0; padding: 20px; background: white; border-radius: 10px;">
+                    <p>• winter-student-portal.html</p>
+                    <p>• students-bulk-upload.html</p>
+                    <p>• winter-index.html</p>
+                    <p>• students.html</p>
+                    <p>• schools-management.html</p>
+                </div>
+                <p>③ 파일 클릭하면 내용이 보여요</p>
+                <p>④ 키보드에서 <span class="highlight">Ctrl + S</span> 누르기</p>
+                <p>⑤ "다른 이름으로 저장" 창이 뜨면</p>
+                <p>⑥ 바탕화면에 <span class="highlight">"daum-files"</span> 폴더 만들고</p>
+                <p>⑦ 그 폴더에 저장</p>
+                <p>⑧ <strong>파일명 절대 바꾸지 마세요!</strong></p>
+            </div>
+        </div>
+
+        <div class="tip">
+            💡 <strong>쉬운 방법:</strong><br>
+            Ctrl + S 눌렀을 때<br>
+            파일명에 이미 "winter-student-portal.html" 이렇게 되어있으면<br>
+            그냥 "저장" 버튼만 누르면 됩니다!
+        </div>
+
+        <!-- 2단계 -->
+        <div class="action">
+            <div style="margin-bottom: 20px;">
+                <span class="number">2</span>
+                <strong>GitHub에 올리기</strong>
+            </div>
+            
+            <div style="margin-left: 80px; font-size: 0.9em; line-height: 1.8;">
+                <p>① 새 창에서 이 주소로 가세요:</p>
+                <code style="display: block; padding: 15px; text-align: center;">
+                    https://github.com/da-um3481/da-um-jinro
+                </code>
+                
+                <p style="margin-top: 20px;">② 화면 오른쪽 위에 <span class="highlight">"Add file"</span> 버튼 보이죠?</p>
+                <p>③ 그거 클릭!</p>
+                <p>④ <span class="highlight">"Upload files"</span> 클릭!</p>
+                <p>⑤ 바탕화면 "daum-files" 폴더 열기</p>
+                <p>⑥ 파일 5개를 <span class="highlight">마우스로 끌어서</span> GitHub 화면에 놓기</p>
+                <p>⑦ 화면 아래로 스크롤 내리기</p>
+                <p>⑧ 초록색 <span class="highlight">"Commit changes"</span> 버튼 클릭!</p>
+            </div>
+        </div>
+
+        <div class="warning">
+            ⚠️ <strong>끌어서 놓기가 어려우면:</strong><br>
+            "choose your files" 글자를 클릭하고<br>
+            파일 5개를 선택해도 됩니다!
+        </div>
+
+        <!-- 3단계 -->
+        <div class="action">
+            <div style="margin-bottom: 20px;">
+                <span class="number">3</span>
+                <strong>5분 기다렸다가 확인</strong>
+            </div>
+            
+            <div style="margin-left: 80px; font-size: 0.9em; line-height: 1.8;">
+                <p>① 커피 한 잔 마시거나 휴대폰 보면서 <span class="highlight">5분 기다리기</span></p>
+                <p>② 5분 후 이 주소로 가세요:</p>
+                <code style="display: block; padding: 15px; text-align: center; margin: 20px 0;">
+                    https://da-um3481.github.io/da-um-jinro/winter-student-portal.html
+                </code>
+                <p>③ 예쁜 화면이 보이면 <span class="highlight">성공!</span> 🎉</p>
+            </div>
+        </div>
+
+        <div class="success">
+            ✅ 성공하면 이렇게 보여요:<br><br>
+            • "DA.UM 학생 포털" 제목<br>
+            • "이름을 입력하세요" 입력창<br>
+            • 보라색 배경<br>
+            • 예쁜 디자인
+        </div>
+
+        <div class="big-step" style="background: linear-gradient(135deg, #2ecc71, #27ae60); margin-top: 50px;">
+            끝! 정말 이게 다예요! 😊
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+            <h2 style="margin-bottom: 30px; font-size: 2em;">💬 어디까지 했는지 말씀해주세요:</h2>
+            <div style="font-size: 1.5em; line-height: 2.5;">
+                <p>"1단계 하는 중"</p>
+                <p>"2단계 하는 중"</p>
+                <p>"3단계 하는 중"</p>
+                <p>"다 했어요!"</p>
+                <p>"○○가 안 돼요"</p>
+            </div>
+        </div>
+
+        <div class="tip" style="margin-top: 30px; font-size: 1.3em; text-align: center;">
+            <strong>🚨 막히면 즉시 말씀하세요!</strong><br>
+            스크린샷 찍어서 보내주셔도 좋아요!
+        </div>
+    </div>
+</body>
+</html>

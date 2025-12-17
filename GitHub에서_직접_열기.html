@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub에서 직접 열기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 35px;
+            margin: 30px 0;
+            border-radius: 20px;
+            border-left: 8px solid #667eea;
+        }
+        
+        .step-number {
+            background: #ff4757;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-right: 20px;
+            vertical-align: middle;
+        }
+        
+        .step h2 {
+            display: inline;
+            color: #667eea;
+            font-size: 2em;
+        }
+        
+        .step-content {
+            margin-left: 80px;
+            margin-top: 25px;
+            font-size: 1.3em;
+            line-height: 2;
+        }
+        
+        .url-box {
+            background: #667eea;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.3em;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .url-box:hover {
+            transform: scale(1.02);
+            background: #764ba2;
+        }
+        
+        .highlight {
+            background: yellow;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .image-example {
+            background: #e3f2fd;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .file-name {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            color: #856404;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 3px solid #28a745;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 1.5em;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 가장 확실한 방법!</h1>
+        
+        <div class="step">
+            <h2><span class="step-number">1</span> GitHub 저장소 열기</h2>
+            <div class="step-content">
+                <div class="url-box" onclick="window.open('https://github.com/da-um3481/da-um-jinro')">
+                    https://github.com/da-um3481/da-um-jinro
+                </div>
+                <p>↑ 클릭해서 열기</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">2</span> 파일 찾기</h2>
+            <div class="step-content">
+                <p>파일 목록에서 이 파일을 찾으세요:</p>
+                <div class="file-name">
+                    학생 업로드.html
+                </div>
+                <p style="margin-top: 20px;">또는</p>
+                <div class="file-name">
+                    파일 업로드.html
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">3</span> 파일 클릭</h2>
+            <div class="step-content">
+                <p>파일 이름을 <span class="highlight">클릭</span>하세요!</p>
+                <p style="margin-top: 15px; color: #666;">
+                    (파일 내용이 보일 거예요)
+                </p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">4</span> Raw 버튼 클릭</h2>
+            <div class="step-content">
+                <p>파일이 열리면:</p>
+                <ul style="margin: 20px 0 20px 40px; line-height: 2;">
+                    <li>오른쪽 위에 <span class="highlight">"Raw"</span> 버튼이 있어요</li>
+                    <li>그 버튼을 클릭하세요!</li>
+                    <li>새 창에서 실제 페이지가 열려요!</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="success">
+            🎉 이 방법이 가장 확실해요! 🎉<br>
+            파일을 직접 보면서 열 수 있어요!
+        </div>
+        
+        <div class="image-example">
+            <h3 style="color: #2196f3; font-size: 1.8em; margin-bottom: 20px;">
+                💡 찾는 순서 요약
+            </h3>
+            <div style="font-size: 1.3em; line-height: 2.5; text-align: left; max-width: 600px; margin: 0 auto;">
+                <p>1. GitHub 저장소 열기</p>
+                <p>2. "학생 업로드.html" 파일 찾기</p>
+                <p>3. 파일명 클릭</p>
+                <p>4. "Raw" 버튼 클릭</p>
+                <p>5. 페이지 열림! ✅</p>
+            </div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;">
+            <h2 style="font-size: 2.5em; margin-bottom: 20px;">
+                🎯 지금 시작하세요!
+            </h2>
+            <button onclick="window.open('https://github.com/da-um3481/da-um-jinro')" style="background: white; color: #2ecc71; padding: 20px 50px; border-radius: 15px; font-size: 1.5em; font-weight: bold; border: none; cursor: pointer; margin-top: 20px;">
+                GitHub 저장소 열기 🚀
+            </button>
+        </div>
+    </div>
+</body>
+</html>

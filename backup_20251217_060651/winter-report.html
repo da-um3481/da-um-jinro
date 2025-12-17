@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 30일 - 학습 보고서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/mobile-nav-fix.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Noto+Sans KR', sans-serif; }
+        body { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%); min-height: 100vh; }
+        @keyframes snowfall { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(110vh) translateX(100px); opacity: 0; } }
+        .snowflake { position: fixed; top: -10vh; color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; z-index: 1; pointer-events: none; animation: snowfall linear infinite; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        
+        /* 인쇄 스타일 - 1장에 모든 내용이 들어가도록 */
+        @media print {
+            body {
+                background: white !important;
+                margin: 0;
+                padding: 0;
+            }
+            
+            #snowflakes,
+            header nav,
+            .no-print {
+                display: none !important;
+            }
+            
+            header {
+                position: relative !important;
+                background: white !important;
+                padding: 10px 20px !important;
+                box-shadow: none !important;
+                border-bottom: 2px solid #0ea5e9;
+            }
+            
+            header h1 {
+                font-size: 18px !important;
+            }
+            
+            main {
+                padding: 10px 20px !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+            
+            .glass-effect {
+                background: white !important;
+                backdrop-filter: none !important;
+                border: 1px solid #e5e7eb !important;
+                box-shadow: none !important;
+                margin-bottom: 10px !important;
+                padding: 12px !important;
+                border-radius: 8px !important;
+            }
+            
+            /* 공간 축소 */
+            .grid {
+                gap: 10px !important;
+            }
+            
+            /* 텍스트 크기 축소 */
+            h2, h3 {
+                font-size: 14px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .text-3xl {
+                font-size: 20px !important;
+            }
+            
+            .text-2xl {
+                font-size: 16px !important;
+            }
+            
+            .text-lg {
+                font-size: 13px !important;
+            }
+            
+            .text-sm, .text-xs {
+                font-size: 10px !important;
+            }
+            
+            /* 차트 크기 축소 */
+            canvas {
+                max-height: 180px !important;
+            }
+            
+            /* 페이지 분할 방지 */
+            .glass-effect {
+                page-break-inside: avoid;
+            }
+            
+            /* 1페이지에 모든 내용 */
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+            
+            /* 배경색 제거 */
+            .bg-gradient-to-br,
+            .bg-gradient-to-r,
+            .bg-blue-50,
+            .bg-green-50,
+            .bg-red-50,
+            .bg-cyan-50 {
+                background: white !important;
+                border: 1px solid #e5e7eb !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="snowflakes"></div>
+
+    <header class="glass-effect shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                    <div>
+                        <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">겨울방학 30일 - 학습 보고서</h1>
+                        <p class="text-xs text-gray-600 font-medium">❄️ 종합 학습 성과 분석</p>
+                    </div>
+                </div>
+                <nav class="flex space-x-2">
+                    <a href="winter-index.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium"><i class="fas fa-home mr-2"></i>대시보드</a>
+                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium"><i class="fas fa-user-graduate mr-2"></i>학생포털</a>
+                    <a href="winter-report.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium"><i class="fas fa-chart-line mr-2"></i>보고서</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <!-- 학생 선택 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6 no-print">
+            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <i class="fas fa-user-circle mr-2 text-cyan-600"></i>학생 선택
+            </label>
+            <div class="flex space-x-3">
+                <input 
+                    type="text" 
+                    id="studentNameInput" 
+                    placeholder="학생 이름을 입력하세요 (예: 김민준)"
+                    class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
+                    onkeypress="if(event.key==='Enter') loadStudentReport()"
+                >
+                <button 
+                    onclick="loadStudentReport()"
+                    class="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                >
+                    <i class="fas fa-search mr-2"></i>보고서 생성
+                </button>
+                <button 
+                    onclick="sendToGoogleSheets()"
+                    class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    id="sendToSheetsBtn"
+                >
+                    <i class="fas fa-table mr-2"></i>구글 시트 전송
+                </button>
+                <button 
+                    onclick="window.print()"
+                    class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                >
+                    <i class="fas fa-print mr-2"></i>인쇄
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">
+                <i class="fas fa-info-circle mr-1"></i>학생 이름을 입력하고 "보고서 생성" 버튼을 눌러주세요. "구글 시트 전송" 버튼으로 자동 저장할 수 있습니다.
+            </p>
+            <!-- 구글 시트 설정 알림 -->
+            <div id="sheetsConfigWarning" class="mt-3 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-xl">
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                    <div class="flex-1">
+                        <div class="font-bold text-gray-800 mb-1">⚠️ 구글 시트 연동 설정 필요</div>
+                        <div class="text-sm text-gray-700 mb-2">
+                            구글 시트로 자동 전송하려면 아래 버튼을 눌러 Web App URL을 설정해주세요.
+                        </div>
+                        <button 
+                            onclick="showSheetsConfig()"
+                            class="px-4 py-2 bg-yellow-500 text-white rounded-lg font-bold hover:bg-yellow-600 transition"
+                        >
+                            <i class="fas fa-cog mr-2"></i>구글 시트 연동 설정하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="selectedStudent" class="hidden mt-3 p-3 bg-cyan-50 rounded-lg border-2 border-cyan-300">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-user-check text-cyan-600"></i>
+                    <span class="font-bold text-gray-800">보고서 대상: <span id="studentNameDisplay"></span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 프로그램 개요 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <h2 class="text-2xl font-black text-gray-800 mb-6"><i class="fas fa-file-alt text-cyan-500 mr-2"></i>프로그램 개요</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="bg-gradient-to-br from-cyan-50 to-cyan-100 rounded-xl p-5 border-2 border-cyan-300">
+                    <div class="text-cyan-600 font-bold mb-2">프로그램명</div>
+                    <div class="text-lg font-black text-gray-800">겨울방학 30일</div>
+                </div>
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border-2 border-blue-300">
+                    <div class="text-blue-600 font-bold mb-2">기간</div>
+                    <div class="text-lg font-black text-gray-800">2025.1.6 ~ 2.4</div>
+                </div>
+                <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-5 border-2 border-indigo-300">
+                    <div class="text-indigo-600 font-bold mb-2">진행일</div>
+                    <div class="text-lg font-black text-gray-800">7일 / 30일</div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border-2 border-purple-300">
+                    <div class="text-purple-600 font-bold mb-2">진행률</div>
+                    <div class="text-lg font-black text-gray-800">23%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 핵심 지표 -->
+        <div class="grid grid-cols-4 gap-6 mb-6">
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-cyan-500 to-blue-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-clock text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">⏰</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">28시간</div>
+                <div class="text-sm text-gray-600 font-medium">총 학습 시간</div>
+                <div class="mt-3 bg-gray-200 rounded-full h-2">
+                    <div class="bg-cyan-500 h-full rounded-full" style="width: 23%"></div>
+                </div>
+                <div class="text-xs text-gray-600 mt-1">목표: 120시간</div>
+            </div>
+
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-check-circle text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">✅</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">100%</div>
+                <div class="text-sm text-gray-600 font-medium">출석률</div>
+                <div class="mt-3 bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-full rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="text-xs text-gray-600 mt-1">7일 연속 출석</div>
+            </div>
+
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">📊</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">4.0h</div>
+                <div class="text-sm text-gray-600 font-medium">일일 평균</div>
+                <div class="mt-3 bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-500 h-full rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="text-xs text-green-600 font-bold mt-1">✅ 목표 달성</div>
+            </div>
+
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-purple-500 to-pink-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">📚</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">18%</div>
+                <div class="text-sm text-gray-600 font-medium">평균 교재 진도</div>
+                <div class="mt-3 bg-gray-200 rounded-full h-2">
+                    <div class="bg-purple-500 h-full rounded-full" style="width: 18%"></div>
+                </div>
+                <div class="text-xs text-gray-600 mt-1">5개 교재 진행중</div>
+            </div>
+        </div>
+
+        <!-- 차트 영역 -->
+        <div class="grid grid-cols-2 gap-6 mb-6">
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-chart-bar text-cyan-500 mr-2"></i>주간 학습 시간</h3>
+                <div style="height: 300px;"><canvas id="weeklyChart"></canvas></div>
+            </div>
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-chart-pie text-blue-500 mr-2"></i>교과별 분포</h3>
+                <div style="height: 300px;"><canvas id="subjectChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- 교과별 상세 분석 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-clipboard-list text-cyan-500 mr-2"></i>교과별 상세 분석</h3>
+            <div class="space-y-4">
+                <div class="bg-blue-50 rounded-xl p-5 border-2 border-blue-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white"><i class="fas fa-calculator"></i></div>
+                            <div><div class="font-bold text-gray-800">수학</div><div class="text-xs text-gray-600">개념원리 중학수학 1-1</div></div>
+                        </div>
+                        <div class="text-right"><div class="text-2xl font-black text-blue-600">8.5h</div><div class="text-xs text-gray-600">30% 진도</div></div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2"><div class="bg-blue-500 h-full rounded-full" style="width: 15%"></div></div>
+                    <div class="mt-2 text-sm text-gray-700">✅ 개념 이해도 우수, 문제 풀이 속도 향상 필요</div>
+                </div>
+                <div class="bg-green-50 rounded-xl p-5 border-2 border-green-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center text-white"><i class="fas fa-language"></i></div>
+                            <div><div class="font-bold text-gray-800">영어</div><div class="text-xs text-gray-600">Grammar Zone 기초편</div></div>
+                        </div>
+                        <div class="text-right"><div class="text-2xl font-black text-green-600">7.2h</div><div class="text-xs text-gray-600">26% 진도</div></div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2"><div class="bg-green-500 h-full rounded-full" style="width: 20%"></div></div>
+                    <div class="mt-2 text-sm text-gray-700">✅ 문법 이해도 양호, 단어 암기 강화 권장</div>
+                </div>
+                <div class="bg-red-50 rounded-xl p-5 border-2 border-red-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white"><i class="fas fa-book"></i></div>
+                            <div><div class="font-bold text-gray-800">국어</div><div class="text-xs text-gray-600">비문학 독해 워크북</div></div>
+                        </div>
+                        <div class="text-right"><div class="text-2xl font-black text-red-600">5.8h</div><div class="text-xs text-gray-600">21% 진도</div></div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2"><div class="bg-red-500 h-full rounded-full" style="width: 25%"></div></div>
+                    <div class="mt-2 text-sm text-gray-700">⚠️ 독해 속도 향상 필요, 시간 측정 연습 권장</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 종합 평가 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl">
+            <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-star text-yellow-500 mr-2"></i>종합 평가</h3>
+            <div class="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-6 border-2 border-cyan-300">
+                <div class="text-center mb-4"><div class="text-6xl mb-2">🏆</div><div class="text-2xl font-black text-gray-800">우수</div></div>
+                <div class="text-gray-700 leading-relaxed">
+                    <p class="mb-3"><strong>Week 1 완벽 달성!</strong> 목표한 28시간을 완료하며 훌륭한 시작을 보여주었습니다. 특히 매일 꾸준히 학습하는 습관을 형성한 점이 인상적입니다.</p>
+                    <p class="mb-3"><strong>강점:</strong> 수학과 영어에 대한 집중도가 높고, 개념 이해도가 우수합니다.</p>
+                    <p><strong>개선 방향:</strong> 국어 독해 속도 향상과 과학 실험 정리에 더 신경 쓰면 더욱 좋은 결과를 얻을 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const snowflakesContainer = document.getElementById('snowflakes');
+        for (let i = 0; i < 15; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflakesContainer.appendChild(snowflake);
+        }
+
+        // 주간 학습 시간 차트
+        const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+        window.weeklyChart = new Chart(weeklyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: '학습 시간 (시간)',
+                    data: [28, 0, 0, 0],
+                    backgroundColor: ['rgba(14, 165, 233, 0.8)', 'rgba(200, 200, 200, 0.3)', 'rgba(200, 200, 200, 0.3)', 'rgba(200, 200, 200, 0.3)'],
+                    borderWidth: 2,
+                    borderColor: ['rgb(14, 165, 233)', 'rgb(200, 200, 200)', 'rgb(200, 200, 200)', 'rgb(200, 200, 200)']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 30, ticks: { callback: function(value) { return value + '시간'; } } } }
+            }
+        });
+
+        // 교과별 분포 차트
+        const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+        window.subjectChart = new Chart(subjectCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['수학', '영어', '국어', '과학', '사회'],
+                datasets: [{
+                    data: [8.5, 7.2, 5.8, 4.0, 2.5],
+                    backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(168, 85, 247, 0.8)', 'rgba(234, 179, 8, 0.8)'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: true, position: 'right' } }
+            }
+        });
+
+        // 학생의 실제 학습 데이터 불러오기
+        function getStudentLearningData(studentName) {
+            const subjects = ['수학', '영어', '국어', '과학', '사회'];
+            const data = {
+                totalHours: 0,
+                subjectData: {}
+            };
+            
+            subjects.forEach(subject => {
+                const storageKey = `student_${studentName}_${subject}`;
+                const hours = parseFloat(localStorage.getItem(storageKey) || '0');
+                data.totalHours += hours;
+                data.subjectData[subject] = hours;
+            });
+            
+            return data;
+        }
+        
+        // 학생 보고서 생성 (실제 학습 데이터 기반)
+        function loadStudentReport() {
+            const name = document.getElementById('studentNameInput').value.trim();
+            if (!name) {
+                alert('학생 이름을 입력해주세요.');
+                return;
+            }
+            
+            // 실제 학습 데이터 불러오기
+            const learningData = getStudentLearningData(name);
+            
+            if (learningData.totalHours === 0) {
+                alert(`⚠️ ${name} 학생의 학습 기록이 없습니다.\n학생 포털에서 먼저 학습 시간을 입력해주세요.`);
+                return;
+            }
+            
+            // 선택된 학생 표시
+            document.getElementById('selectedStudent').classList.remove('hidden');
+            document.getElementById('studentNameDisplay').textContent = name;
+            
+            // localStorage에 저장
+            localStorage.setItem('winter_selected_student', name);
+            
+            // 실제 데이터로 보고서 업데이트
+            updateReportWithRealData(name, learningData);
+            
+            // 성공 메시지
+            showToast(`${name} 학생의 보고서를 생성했습니다.`);
+        }
+        
+        // 실제 데이터로 보고서 업데이트
+        function updateReportWithRealData(studentName, learningData) {
+            // 총 학습 시간 업데이트
+            const totalHoursElement = document.querySelector('.text-3xl.font-black.text-gray-800');
+            if (totalHoursElement) {
+                totalHoursElement.textContent = learningData.totalHours.toFixed(1) + '시간';
+            }
+            
+            // 차트 데이터 업데이트
+            updateCharts(learningData);
+            
+            // 교과별 상세 분석 업데이트 (실제 데이터 반영)
+            // 여기에 추가 로직 구현 가능
+        }
+        
+        // 차트 업데이트
+        function updateCharts(learningData) {
+            // 교과별 분포 차트 업데이트
+            if (window.subjectChart) {
+                window.subjectChart.data.datasets[0].data = [
+                    learningData.subjectData['수학'] || 0,
+                    learningData.subjectData['영어'] || 0,
+                    learningData.subjectData['국어'] || 0,
+                    learningData.subjectData['과학'] || 0,
+                    learningData.subjectData['사회'] || 0
+                ];
+                window.subjectChart.update();
+            }
+        }
+
+        // 토스트 메시지
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 right-6 bg-white rounded-xl shadow-2xl p-4 flex items-center space-x-3 border-l-4 border-cyan-500 z-50';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle text-cyan-500 text-2xl"></i>
+                <span class="font-bold text-gray-800">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // 구글 시트 Web App URL 설정
+        function showSheetsConfig() {
+            const currentUrl = localStorage.getItem('winter_google_sheets_url') || '';
+            const url = prompt(
+                '구글 시트 Web App URL을 입력하세요:\n\n' +
+                '1. 구글 시트를 생성하세요\n' +
+                '2. 확장 프로그램 > Apps Script를 클릭하세요\n' +
+                '3. 아래 코드를 붙여넣고 배포 > 새 배포를 선택하세요\n' +
+                '4. 웹 앱 URL을 복사해서 여기에 붙여넣으세요\n\n' +
+                'Apps Script 코드는 아래 "도움말" 버튼을 눌러 확인하세요.', 
+                currentUrl
+            );
+            
+            if (url !== null) {
+                localStorage.setItem('winter_google_sheets_url', url.trim());
+                if (url.trim()) {
+                    document.getElementById('sheetsConfigWarning').classList.add('hidden');
+                    showToast('✅ 구글 시트 연동이 설정되었습니다!');
+                } else {
+                    document.getElementById('sheetsConfigWarning').classList.remove('hidden');
+                }
+            }
+        }
+        
+        // 구글 시트로 데이터 전송
+        async function sendToGoogleSheets() {
+            const webAppUrl = localStorage.getItem('winter_google_sheets_url');
+            
+            if (!webAppUrl) {
+                alert('⚠️ 먼저 구글 시트 연동을 설정해주세요!');
+                showSheetsConfig();
+                return;
+            }
+            
+            const studentName = document.getElementById('studentNameInput').value.trim();
+            if (!studentName) {
+                alert('⚠️ 학생 이름을 먼저 입력해주세요!');
+                return;
+            }
+            
+            // 전송 중 표시
+            const btn = document.getElementById('sendToSheetsBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>전송 중...';
+            btn.disabled = true;
+            
+            try {
+                // 현재 보고서 데이터 수집
+                const reportData = {
+                    timestamp: new Date().toISOString(),
+                    studentName: studentName,
+                    programName: '겨울방학 30일',
+                    startDate: '2025.1.6',
+                    endDate: '2025.2.4',
+                    currentDay: 7,
+                    totalDays: 30,
+                    progress: 23,
+                    totalStudyHours: 28,
+                    attendanceRate: 100,
+                    dailyAverage: 4.0,
+                    materialProgress: 18,
+                    subjects: {
+                        math: { hours: 8.5, progress: 30, material: '개념원리 중학수학 1-1', comment: '개념 이해도 우수, 문제 풀이 속도 향상 필요' },
+                        english: { hours: 7.2, progress: 26, material: 'Grammar Zone 기초편', comment: '문법 이해도 양호, 단어 암기 강화 권장' },
+                        korean: { hours: 5.8, progress: 21, material: '비문학 독해 워크북', comment: '독해 속도 향상 필요, 시간 측정 연습 권장' },
+                        science: { hours: 4.0, progress: 15, material: '과학 탐구 노트', comment: '실험 정리 강화 필요' },
+                        social: { hours: 2.5, progress: 12, material: '사회 교과서', comment: '기본 개념 학습 중' }
+                    },
+                    overallEvaluation: '우수',
+                    strengths: '수학과 영어에 대한 집중도가 높고, 개념 이해도가 우수합니다.',
+                    improvements: '국어 독해 속도 향상과 과학 실험 정리에 더 신경 쓰면 더욱 좋은 결과를 얻을 수 있습니다.'
+                };
+                
+                // Google Sheets Web App으로 데이터 전송
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // CORS 우회
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                // no-cors 모드에서는 응답을 읽을 수 없으므로 성공으로 간주
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showToast('✅ 구글 시트로 전송이 완료되었습니다!');
+                
+            } catch (error) {
+                console.error('전송 오류:', error);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showToast('❌ 전송 실패: ' + error.message);
+            }
+        }
+
+        // 페이지 로드 시 저장된 학생 정보 및 구글 시트 설정 확인
+        window.addEventListener('load', function() {
+            const savedStudent = localStorage.getItem('winter_selected_student');
+            if (savedStudent) {
+                document.getElementById('studentNameInput').value = savedStudent;
+                document.getElementById('selectedStudent').classList.remove('hidden');
+                document.getElementById('studentNameDisplay').textContent = savedStudent;
+            }
+            
+            // 구글 시트 URL이 설정되어 있으면 경고 숨김
+            const sheetsUrl = localStorage.getItem('winter_google_sheets_url');
+            if (sheetsUrl && sheetsUrl.trim()) {
+                document.getElementById('sheetsConfigWarning').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

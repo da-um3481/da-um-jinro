@@ -1,0 +1,106 @@
+/* 
+ * DA.UM 모바일 네비게이션 최적화 CSS
+ * 모든 HTML 파일에 공통 적용
+ * 작성일: 2025-12-17
+ * © 2024-2025 DA.UM by 정라미
+ */
+
+/* 모바일 최적화 - 한글 가로쓰기 강제 */
+@media (max-width: 768px) {
+    /* 헤더 컴팩트화 */
+    header .container,
+    header > div {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    /* 로고 축소 */
+    header img {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+    
+    /* 타이틀 축소 */
+    header h1 {
+        font-size: 0.875rem !important;
+        line-height: 1.25rem !important;
+    }
+    
+    header p {
+        font-size: 0.625rem !important;
+    }
+    
+    /* 네비게이션 가로 스크롤 */
+    nav,
+    nav.flex {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        gap: 0.25rem !important;
+        padding-right: 0.5rem !important;
+    }
+    
+    nav::-webkit-scrollbar {
+        display: none !important;
+    }
+    
+    /* 모바일 네비게이션 링크 - 아이콘 위, 텍스트 아래 */
+    nav a,
+    nav > a {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.375rem 0.5rem !important;
+        font-size: 0.625rem !important;
+        min-width: 3.5rem !important;
+        max-width: 4rem !important;
+        flex-shrink: 0 !important;
+        writing-mode: horizontal-tb !important;
+        white-space: nowrap !important;
+        line-height: 1.1 !important;
+        text-align: center !important;
+    }
+    
+    /* 아이콘 스타일 */
+    nav a i,
+    nav > a > i {
+        display: block !important;
+        margin: 0 0 0.25rem 0 !important;
+        font-size: 1rem !important;
+    }
+    
+    /* 텍스트 스타일 */
+    nav a span:not(.absolute):not(.hidden),
+    nav a:not(:has(span)) {
+        display: block !important;
+        text-align: center !important;
+    }
+    
+    /* NEW 배지 등 절대 위치 요소 */
+    nav a span.absolute {
+        font-size: 0.5rem !important;
+        padding: 0.125rem 0.25rem !important;
+        top: -0.125rem !important;
+        right: -0.125rem !important;
+    }
+    
+    /* 버튼 스타일 네비게이션 */
+    nav button {
+        font-size: 0.625rem !important;
+        padding: 0.375rem 0.5rem !important;
+    }
+}
+
+/* 태블릿 (768px ~ 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    nav a {
+        font-size: 0.75rem !important;
+        padding: 0.5rem 0.75rem !important;
+    }
+    
+    nav a i {
+        font-size: 1.125rem !important;
+    }
+}

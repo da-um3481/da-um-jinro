@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ 정확한 주소 모음</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #2ecc71;
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.5em;
+            margin-bottom: 50px;
+        }
+        
+        .url-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 35px;
+            margin: 25px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .url-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .url-card h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .url-card .desc {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .url-box {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 1.1em;
+            word-break: break-all;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .url-box:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .priority {
+            display: inline-block;
+            background: #ff4757;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .success {
+            display: inline-block;
+            background: #2ecc71;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .button {
+            background: white;
+            color: #667eea;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: scale(1.05);
+        }
+        
+        .tip {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+        
+        .tip h3 {
+            color: #856404;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        
+        .tip p {
+            color: #856404;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ 정확한 주소 모음</h1>
+        <div class="subtitle">클릭하면 새 창에서 열립니다!</div>
+        
+        <div class="url-card" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
+            <div class="success">✅ 작동 확인됨</div>
+            <h2>👨‍🎓 학생 포털</h2>
+            <div class="desc">학생들이 사용할 메인 페이지 (1월 2일부터)</div>
+            <div class="url-box" onclick="openURL(this.textContent.trim())">
+                https://da-um3481.github.io/da-um-jinro/winter-student-portal.html
+            </div>
+            <button class="button" onclick="openURL('https://da-um3481.github.io/da-um-jinro/winter-student-portal.html')">
+                열기 🚀
+            </button>
+        </div>
+        
+        <div class="url-card">
+            <div class="priority">⭐ 최우선</div>
+            <h2>📝 학생 30명 일괄 등록</h2>
+            <div class="desc">엑셀로 학생 30명 한 번에 등록하기</div>
+            <div class="url-box" onclick="openURL(this.textContent.trim())">
+                https://da-um3481.github.io/da-um-jinro/학생%20업로드.html
+            </div>
+            <button class="button" onclick="openURL('https://da-um3481.github.io/da-um-jinro/학생%20업로드.html')">
+                열기 🚀
+            </button>
+        </div>
+        
+        <div class="url-card">
+            <h2>👥 학생 관리</h2>
+            <div class="desc">학생 개별 관리 및 수정</div>
+            <div class="url-box" onclick="openURL(this.textContent.trim())">
+                https://da-um3481.github.io/da-um-jinro/학생%20관리.html
+            </div>
+            <button class="button" onclick="openURL('https://da-um3481.github.io/da-um-jinro/학생%20관리.html')">
+                열기 🚀
+            </button>
+        </div>
+        
+        <div class="url-card">
+            <h2>🏠 메인 페이지</h2>
+            <div class="desc">시스템 메인 대시보드</div>
+            <div class="url-box" onclick="openURL(this.textContent.trim())">
+                https://da-um3481.github.io/da-um-jinro/인덱스.html
+            </div>
+            <button class="button" onclick="openURL('https://da-um3481.github.io/da-um-jinro/인덱스.html')">
+                열기 🚀
+            </button>
+        </div>
+        
+        <div class="tip">
+            <h3>🎯 다음 단계</h3>
+            <p>
+                <strong>1단계:</strong> "학생 30명 일괄 등록" 페이지 열기<br>
+                <strong>2단계:</strong> 엑셀에 학생 정보 작성<br>
+                <strong>3단계:</strong> 복사해서 붙여넣기<br>
+                <strong>4단계:</strong> 등록하기 버튼 클릭<br>
+                <strong>5단계:</strong> 완료! 🎉
+            </p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;">
+            <h2 style="font-size: 2.5em; margin-bottom: 20px;">
+                🎊 모든 주소가 준비됐어요! 🎊
+            </h2>
+            <p style="font-size: 1.5em; line-height: 2;">
+                이제 학생 30명만 등록하면<br>
+                시스템 완성입니다!<br><br>
+                화이팅! 💪
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openURL(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

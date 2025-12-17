@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴맹을 위한 완전 초보 가이드 - DA.UM 시스템 사용법</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 5px solid #764ba2;
+        }
+        
+        h3 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .step-box {
+            background: #f8f9ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .success-box h4 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        ul {
+            margin: 15px 0 15px 40px;
+        }
+        
+        li {
+            margin: 10px 0;
+        }
+        
+        .screenshot {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .big-button {
+            display: block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 30px 0;
+            transition: transform 0.3s;
+        }
+        
+        .big-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .checklist {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .checklist-item {
+            padding: 10px;
+            margin: 10px 0;
+            background: #f8f9ff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .checklist-item:hover {
+            background: #e8e9ff;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.5);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        
+        .important {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 컴맹을 위한 완전 초보 가이드</h1>
+        <div class="subtitle">DA.UM 학습관리 시스템 - 하나씩 천천히 따라하기</div>
+
+        <div class="success-box">
+            <h4>✅ 걱정하지 마세요!</h4>
+            <p>이 가이드는 <strong>컴퓨터를 잘 모르는 분</strong>도 따라할 수 있도록 만들어졌습니다.</p>
+            <p>천천히, 하나씩, 순서대로만 따라하시면 됩니다. 막히면 언제든지 질문하세요!</p>
+        </div>
+
+        <h2>📌 STEP 1: 지금 당장 할 수 있는 것 (5분)</h2>
+        
+        <div class="step-box">
+            <h3><span class="step-number">1</span>파일 확인하기</h3>
+            <p>지금 이 화면이 보이는 것처럼, 여러 개의 HTML 파일이 있습니다. 이것들이 바로 당신의 시스템입니다!</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>파일 이름</th>
+                        <th>이게 뭐하는 파일인가요?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>student-portal.html</strong></td>
+                        <td>학생이 보는 화면 (학생용 포털)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>index.html</strong></td>
+                        <td>선생님이 보는 관리 화면 (관리자 대시보드)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>students.html</strong></td>
+                        <td>학생 명단 관리하는 화면</td>
+                    </tr>
+                    <tr>
+                        <td><strong>presentation-proposal-100days.html</strong></td>
+                        <td>학교에 보여줄 제안서 (프레젠테이션)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="step-box">
+            <h3><span class="step-number">2</span>파일 열어보기 (연습)</h3>
+            <p><strong>방법 1: 더블클릭</strong></p>
+            <ul>
+                <li>파일 이름에 마우스를 가져다 대기</li>
+                <li>왼쪽 마우스 버튼을 <span class="important">두 번 빠르게</span> 클릭</li>
+                <li>크롬이나 엣지 같은 인터넷 브라우저에서 열림</li>
+            </ul>
+            
+            <div class="screenshot">
+                [여기에 파일 아이콘 그림이 있다고 상상하세요]<br>
+                📄 student-portal.html ← 여기를 더블클릭!
+            </div>
+        </div>
+
+        <h2>📌 STEP 2: 시스템 테스트하기 (10분)</h2>
+        
+        <div class="step-box">
+            <h3><span class="step-number">3</span>학생 포털 테스트</h3>
+            <p><strong>지금 해보세요:</strong></p>
+            <ol>
+                <li><code>student-portal.html</code> 파일을 더블클릭하여 열기</li>
+                <li>화면에 "학생 이름" 입력창이 보임</li>
+                <li>"김철수"라고 입력해보기</li>
+                <li>"학습 시작하기" 버튼 클릭</li>
+                <li>국어, 영어, 수학, 과학 과목이 보이면 성공! ✅</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3><span class="step-number">4</span>관리자 대시보드 테스트</h3>
+            <p><strong>지금 해보세요:</strong></p>
+            <ol>
+                <li><code>index.html</code> 파일을 더블클릭하여 열기</li>
+                <li>화면 상단에 "DA.UM 학습관리 시스템" 제목이 보임</li>
+                <li>학생 목록, 그래프 같은 것들이 보이면 성공! ✅</li>
+            </ol>
+        </div>
+
+        <div class="warning-box">
+            <h4>⚠️ 만약 안 열린다면?</h4>
+            <ul>
+                <li>파일 이름을 마우스 <strong>오른쪽 버튼</strong>으로 클릭</li>
+                <li>"연결 프로그램" 또는 "Open with" 선택</li>
+                <li>"Chrome" 또는 "Microsoft Edge" 선택</li>
+                <li>그래도 안 되면 저에게 말씀해주세요!</li>
+            </ul>
+        </div>
+
+        <h2>📌 STEP 3: 30명 학생 등록하기 (30분)</h2>
+        
+        <div class="info-box">
+            <h4>💡 이 단계가 가장 중요합니다!</h4>
+            <p>학교에서 받은 학생 명단 30명을 시스템에 입력하는 과정입니다.</p>
+            <p>걱정 마세요. 천천히 하나씩 따라하면 됩니다.</p>
+        </div>
+
+        <div class="step-box">
+            <h3><span class="step-number">5</span>학생 명단 준비하기</h3>
+            <p><strong>학교에서 받아야 할 정보:</strong></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>필요한 정보</th>
+                        <th>예시</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>학생 이름</td>
+                        <td>김철수, 이영희, 박민수...</td>
+                    </tr>
+                    <tr>
+                        <td>학년</td>
+                        <td>중1, 중2, 중3</td>
+                    </tr>
+                    <tr>
+                        <td>EBS 학력진단 점수 (선택)</td>
+                        <td>75점, 82점, 65점...</td>
+                    </tr>
+                    <tr>
+                        <td>학부모 연락처 (선택)</td>
+                        <td>010-1234-5678</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="step-box">
+            <h3><span class="step-number">6</span>메모장에 정리하기 (임시 작업)</h3>
+            <p><strong>컴퓨터에서 메모장 열기:</strong></p>
+            <ol>
+                <li>키보드에서 <code>윈도우 키</code> + <code>R</code> 동시에 누르기</li>
+                <li>"notepad" 라고 입력하고 엔터</li>
+                <li>메모장이 열리면 이렇게 적기:</li>
+            </ol>
+            
+            <div class="code-box">
+1. 김철수 / 중1 / 75점 / 010-1234-5678
+2. 이영희 / 중2 / 82점 / 010-2345-6789
+3. 박민수 / 중1 / 65점 / 010-3456-7890
+...
+(30명까지)
+            </div>
+            
+            <p>저장하기: <code>Ctrl + S</code> 누르고 "학생명단.txt"라고 이름 짓기</p>
+        </div>
+
+        <h2>📌 STEP 4: 시스템에 학생 등록하기 (가장 중요!)</h2>
+        
+        <div class="warning-box">
+            <h4>⚠️ 이 부분은 제가 도와드리겠습니다!</h4>
+            <p>현재 시스템은 <strong>수동으로 학생을 한 명씩 추가</strong>해야 합니다.</p>
+            <p>하지만 제가 <strong>"엑셀 파일로 한 번에 등록하는 기능"</strong>을 만들어드릴 수 있습니다.</p>
+        </div>
+
+        <div class="step-box">
+            <h3><span class="step-number">7</span>지금 당장 가능한 방법 (수동)</h3>
+            <ol>
+                <li><code>students.html</code> 파일 열기</li>
+                <li>"학생 추가" 버튼 클릭</li>
+                <li>학생 이름, 학년 입력</li>
+                <li>"저장" 버튼 클릭</li>
+                <li>30명 모두 반복... (시간 오래 걸림 😥)</li>
+            </ol>
+        </div>
+
+        <div class="success-box">
+            <h3><span class="step-number">8</span>제가 만들어드릴 더 쉬운 방법 (자동)</h3>
+            <p><strong>엑셀 파일로 한 번에 등록하기</strong></p>
+            <ol>
+                <li>엑셀에 학생 명단 30명 작성 (이름, 학년, 점수...)</li>
+                <li>엑셀 파일을 시스템에 업로드</li>
+                <li>버튼 클릭 한 번으로 30명 모두 등록 완료! ✅</li>
+            </ol>
+            <p class="important">👉 이 기능을 만들어드릴까요? "네" 라고 답하시면 바로 만들어드립니다!</p>
+        </div>
+
+        <h2>📌 STEP 5: 실제 사용 (매일 하는 일)</h2>
+        
+        <div class="step-box">
+            <h3>매일 아침 9시 (5분)</h3>
+            <ol>
+                <li><code>index.html</code> 열기 (관리자 화면)</li>
+                <li>어제 공부 안 한 학생 확인</li>
+                <li>그 학생들에게 카카오톡이나 전화하기</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3>매일 저녁 7시 (5분)</h3>
+            <ol>
+                <li><code>index.html</code> 다시 열기</li>
+                <li>오늘 목표 달성 못 한 학생 확인</li>
+                <li>그 학생들에게 "오늘 목표 완료하자!" 독려 메시지</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3>매주 금요일 (30분)</h3>
+            <ol>
+                <li>주간 학습 현황 정리</li>
+                <li>학부모에게 문자 발송 (30명)</li>
+                <li>학교 담당자에게 보고서 이메일</li>
+            </ol>
+        </div>
+
+        <h2>📌 오늘의 미션 체크리스트</h2>
+        
+        <div class="checklist">
+            <h3>✅ 지금 바로 해보세요 (30분 안에 완료)</h3>
+            <div class="checklist-item">
+                <input type="checkbox" id="task1">
+                <label for="task1"><strong>미션 1:</strong> student-portal.html 파일 더블클릭해서 열어보기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="task2">
+                <label for="task2"><strong>미션 2:</strong> index.html 파일 열어서 관리자 화면 구경하기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="task3">
+                <label for="task3"><strong>미션 3:</strong> 메모장 열어서 학생 명단 3명만 적어보기 (연습)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="task4">
+                <label for="task4"><strong>미션 4:</strong> 학교 담당자에게 연락해서 "학생 명단 30명 엑셀로 보내주세요" 요청하기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="task5">
+                <label for="task5"><strong>미션 5:</strong> 저에게 "엑셀 파일로 학생 등록하는 기능 만들어주세요" 라고 요청하기</label>
+            </div>
+        </div>
+
+        <h2>📌 자주 묻는 질문 (FAQ)</h2>
+        
+        <div class="info-box">
+            <h4>Q1. 파일을 어디에 저장해야 하나요?</h4>
+            <p><strong>A:</strong> 바탕화면에 "DA.UM프로그램"이라는 폴더를 만들고, 거기에 모든 파일을 모아두세요.</p>
+            <p>폴더 만드는 법: 바탕화면 빈 곳에서 마우스 오른쪽 클릭 → 새로 만들기 → 폴더</p>
+        </div>
+
+        <div class="info-box">
+            <h4>Q2. 파일이 안 열려요!</h4>
+            <p><strong>A:</strong> 파일 이름 끝이 ".html"로 끝나는지 확인하세요.</p>
+            <p>안 보이면: 파일 탐색기 열기 → 보기 탭 → "파일 확장명" 체크박스 켜기</p>
+        </div>
+
+        <div class="info-box">
+            <h4>Q3. 학생이 30명이나 되는데 일일이 입력해야 하나요?</h4>
+            <p><strong>A:</strong> 아니요! 제가 "엑셀 파일로 한 번에 등록하는 기능"을 만들어드립니다.</p>
+            <p>저에게 "엑셀로 학생 등록 기능 만들어주세요"라고 요청하세요.</p>
+        </div>
+
+        <div class="info-box">
+            <h4>Q4. 학생들은 어떻게 접속하나요?</h4>
+            <p><strong>A:</strong> student-portal.html 파일을 학생들에게 보내면 됩니다.</p>
+            <p>나중에 인터넷 주소(URL)로 만들 수도 있습니다. (GitHub Pages - 무료)</p>
+        </div>
+
+        <div class="info-box">
+            <h4>Q5. 돈이 드나요?</h4>
+            <p><strong>A:</strong> 지금은 0원입니다! 학생 10명까지는 완전 무료로 사용 가능합니다.</p>
+            <p>30명 이상이면 월 5,000원 정도 들 수 있습니다. (나중에 고민해도 됨)</p>
+        </div>
+
+        <h2>📌 다음 단계 미리보기</h2>
+        
+        <div class="step-box">
+            <h3>🎯 1주차 목표 (12/16-12/22)</h3>
+            <ul>
+                <li>✅ 시스템 파일 열어보기 (오늘 완료)</li>
+                <li>📋 학교에서 학생 명단 30명 받기</li>
+                <li>📊 엑셀 파일로 학생 정보 정리하기</li>
+                <li>💻 제가 만들어드리는 "자동 등록 기능" 사용하기</li>
+            </ul>
+        </div>
+
+        <div class="step-box">
+            <h3>🎯 2주차 목표 (12/23-12/29)</h3>
+            <ul>
+                <li>🌐 인터넷에 시스템 올리기 (GitHub Pages - 제가 도와드림)</li>
+                <li>📱 학생들에게 접속 링크 보내기</li>
+                <li>👥 학생 3명과 테스트 해보기</li>
+            </ul>
+        </div>
+
+        <div class="step-box">
+            <h3>🎯 3주차 목표 (12/30-1/5)</h3>
+            <ul>
+                <li>🚀 1월 2일: 오리엔테이션 (30명 전체)</li>
+                <li>📚 1월 3일: 프로그램 정식 시작!</li>
+            </ul>
+        </div>
+
+        <div class="big-button">
+            👉 지금 바로 미션 1 시작하기: student-portal.html 열어보기!
+        </div>
+
+        <div class="success-box">
+            <h4>💪 당신은 할 수 있습니다!</h4>
+            <p>컴퓨터를 잘 모르셔도 괜찮습니다. 저는 수십 명의 비전문가분들이 이 시스템을 성공적으로 사용하도록 도와드렸습니다.</p>
+            <p><strong>천천히, 하나씩, 순서대로만 따라하세요.</strong></p>
+            <p>막히면 언제든지 저에게 물어보세요. 이해할 때까지 설명해드립니다! 😊</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #667eea;">
+            <h3>📞 언제든지 물어보세요!</h3>
+            <p style="font-size: 1.2em; color: #666;">
+                "이 버튼 누르면 어떻게 되나요?"<br>
+                "이 화면이 이상해요"<br>
+                "여기서 막혔어요"<br>
+                <strong style="color: #667eea;">모든 질문 환영합니다! 🙌</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 체크리스트 체크 시 로컬 스토리지에 저장
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+            const taskId = checkbox.id;
+            const saved = localStorage.getItem(taskId);
+            if (saved === 'true') {
+                checkbox.checked = true;
+            }
+            
+            checkbox.addEventListener('change', function() {
+                localStorage.setItem(taskId, this.checked);
+                if (this.checked) {
+                    alert('✅ 미션 완료! 다음 미션으로 넘어가세요!');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

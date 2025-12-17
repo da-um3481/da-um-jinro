@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DA.UM 다움진로진학컨설팅 - 100일의 변화 프로그램. 사교육비 98% 절감, 평균 15점 성적 향상. 중고등학생 맞춤형 진로진학·학습관리 시스템">
+    <meta name="keywords" content="진로컨설팅, 진학컨설팅, 자기주도학습, 학습관리, 사교육비절감, 100일의변화, 다움진로진학컨설팅, 정라미">
+    <title>DA.UM 다움진로진학컨설팅 | 100일의 변화 - 중고등학생 진로진학 & 학습관리 전문</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 로고 스타일 - 투명 배경 */
+        .logo-transparent {
+            background: transparent !important;
+        }
+        
+        /* 그라데이션 배경 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-bg-light {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        /* Glass Effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        /* 카드 호버 */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 네비게이션 */
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 버튼 */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* 통계 숫자 */
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 섹션 제목 */
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        /* 타임라인 */
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 20px);
+            background: rgba(102, 126, 234, 0.3);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        /* 스크롤 인디케이터 */
+        @keyframes scroll-down {
+            0%, 100% { transform: translateY(0); opacity: 0; }
+            50% { transform: translateY(10px); opacity: 1; }
+        }
+        
+        .scroll-indicator {
+            animation: scroll-down 2s infinite;
+        }
+        
+        /* 프로그램 카드 */
+        .program-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .program-card:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- 네비게이션 -->
+    <nav class="nav-sticky glass-effect" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- 로고 -->
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="h-12 w-12 logo-transparent">
+                    <div>
+                        <div class="text-xl font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                            DA.UM
+                        </div>
+                        <div class="text-xs text-gray-600">다움진로진학컨설팅</div>
+                    </div>
+                </div>
+                
+                <!-- 메뉴 -->
+                <div class="hidden md:flex space-x-6">
+                    <a href="#hero" class="text-gray-700 hover:text-purple-600 font-medium transition">홈</a>
+                    <a href="#about" class="text-gray-700 hover:text-purple-600 font-medium transition">소개</a>
+                    <a href="#program" class="text-gray-700 hover:text-purple-600 font-medium transition">100일의 변화</a>
+                    <a href="#system" class="text-gray-700 hover:text-purple-600 font-medium transition">시스템</a>
+                    <a href="#results" class="text-gray-700 hover:text-purple-600 font-medium transition">성과</a>
+                    <a href="#features" class="text-gray-700 hover:text-purple-600 font-medium transition">기능</a>
+                    <a href="#pricing" class="text-gray-700 hover:text-purple-600 font-medium transition">가격</a>
+                    <a href="#contact" class="text-gray-700 hover:text-purple-600 font-medium transition">문의</a>
+                </div>
+                
+                <!-- CTA 버튼 -->
+                <div class="hidden md:flex space-x-3">
+                    <a href="index.html" class="bg-white border-2 border-purple-600 text-purple-600 px-5 py-2.5 rounded-full font-bold hover:bg-purple-50 transition">
+                        <i class="fas fa-dashboard mr-2"></i>시스템 체험
+                    </a>
+                    <a href="#contact" class="btn-primary text-white px-5 py-2.5 rounded-full font-bold shadow-lg">
+                        무료 상담
+                    </a>
+                </div>
+                
+                <!-- 모바일 메뉴 버튼 -->
+                <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 모바일 메뉴 -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-6 py-4 space-y-3">
+                <a href="#hero" class="block text-gray-700">홈</a>
+                <a href="#about" class="block text-gray-700">소개</a>
+                <a href="#program" class="block text-gray-700">100일의 변화</a>
+                <a href="#system" class="block text-gray-700">시스템</a>
+                <a href="#results" class="block text-gray-700">성과</a>
+                <a href="#features" class="block text-gray-700">기능</a>
+                <a href="#pricing" class="block text-gray-700">가격</a>
+                <a href="#contact" class="block text-gray-700">문의</a>
+                <a href="index.html" class="block bg-purple-50 text-purple-600 px-5 py-3 rounded-lg font-bold text-center">
+                    시스템 체험
+                </a>
+                <a href="#contact" class="block btn-primary text-white px-5 py-3 rounded-lg font-bold text-center">
+                    무료 상담
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="hero" class="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- 배경 장식 -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="fade-in-up">
+                <!-- 로고 -->
+                <div class="mb-8 flex justify-center">
+                    <img src="images/daum-logo-official.png" alt="DA.UM Logo" class="h-32 w-32 float-animation">
+                </div>
+                
+                <!-- 메인 카피 -->
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                    <span class="text-yellow-300">100일</span>이면<br/>
+                    아이의 미래가 <span class="text-yellow-300">바뀝니다</span>
+                </h1>
+                
+                <p class="text-2xl md:text-3xl text-white opacity-90 mb-6 font-bold">
+                    사교육비 98% 절감 + 성적 평균 15점 향상
+                </p>
+                
+                <p class="text-xl md:text-2xl text-white opacity-80 mb-4">
+                    DA.UM 다움진로진학컨설팅
+                </p>
+                
+                <p class="text-lg md:text-xl text-white opacity-70 mb-12">
+                    중고등학생 맞춤형 진로진학·학습관리 전문 프로그램
+                </p>
+                
+                <!-- CTA 버튼 -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                    <a href="#program" class="bg-white text-purple-600 px-10 py-5 rounded-full font-bold text-xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition pulse-glow">
+                        <i class="fas fa-rocket mr-2"></i>
+                        100일의 변화 알아보기
+                    </a>
+                    <a href="index.html" class="glass-dark text-white px-10 py-5 rounded-full font-bold text-xl hover:bg-white hover:text-purple-600 transition">
+                        <i class="fas fa-desktop mr-2"></i>
+                        시스템 체험하기
+                    </a>
+                </div>
+                
+                <!-- 신뢰 지표 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="glass-dark p-6 rounded-2xl">
+                        <div class="text-4xl font-black text-yellow-300">100일</div>
+                        <div class="text-white text-sm mt-2">프로그램 기간</div>
+                    </div>
+                    <div class="glass-dark p-6 rounded-2xl">
+                        <div class="text-4xl font-black text-yellow-300">98%</div>
+                        <div class="text-white text-sm mt-2">사교육비 절감</div>
+                    </div>
+                    <div class="glass-dark p-6 rounded-2xl">
+                        <div class="text-4xl font-black text-yellow-300">+15점</div>
+                        <div class="text-white text-sm mt-2">평균 성적 향상</div>
+                    </div>
+                    <div class="glass-dark p-6 rounded-2xl">
+                        <div class="text-4xl font-black text-yellow-300">5만원</div>
+                        <div class="text-white text-sm mt-2">월 이용료</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 스크롤 인디케이터 -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-indicator">
+            <i class="fas fa-chevron-down text-white text-3xl"></i>
+        </div>
+    </section>
+    
+    <!-- About Section - 대표 소개 -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-800 mb-4 section-title">
+                    믿을 수 있는 전문가
+                </h2>
+                <p class="text-xl text-gray-600 mt-8">
+                    풍부한 경력과 전문성으로 학생의 미래를 설계합니다
+                </p>
+            </div>
+            
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-gradient-to-br from-purple-50 to-blue-50 p-10 md:p-16 rounded-3xl shadow-2xl">
+                    <div class="flex flex-col md:flex-row items-center gap-10">
+                        <!-- 프로필 이미지 영역 -->
+                        <div class="flex-shrink-0">
+                            <div class="w-48 h-48 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center shadow-2xl">
+                                <img src="images/daum-logo-official.png" alt="DA.UM" class="w-32 h-32">
+                            </div>
+                        </div>
+                        
+                        <!-- 프로필 정보 -->
+                        <div class="flex-1 text-center md:text-left">
+                            <h3 class="text-4xl font-black text-gray-800 mb-2">정라미</h3>
+                            <p class="text-xl text-purple-600 font-bold mb-4">CHUNG LAMI</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6 justify-center md:justify-start">
+                                <span class="bg-white px-4 py-2 rounded-full text-sm font-bold text-gray-700 shadow">대표</span>
+                                <span class="bg-white px-4 py-2 rounded-full text-sm font-bold text-gray-700 shadow">진로진학컨설턴트</span>
+                                <span class="bg-white px-4 py-2 rounded-full text-sm font-bold text-gray-700 shadow">학습멘토</span>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center justify-center md:justify-start gap-3">
+                                    <i class="fas fa-graduation-cap text-purple-600"></i>
+                                    <span class="text-gray-700">교육학사 · 진로진학컨설팅 석사</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-2xl shadow-lg">
+                                <h4 class="font-bold text-lg mb-4 text-gray-800">주요 경력</h4>
+                                <div class="space-y-3 text-left">
+                                    <div class="flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                        <span class="text-gray-700">(주)소셜에듀텍코리아 교육이사</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                        <span class="text-gray-700">WOW교육컨설팅 경북지사</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                        <span class="text-gray-700">경주시진로교육체험센터 운영</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                        <span class="text-gray-700">중·고교 진로진학 프로그램 개발운영</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                        <span class="text-gray-700">학습프로그램 개발운영 · 초중고 출강</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 100일의 변화 프로그램 소개 -->
+    <section id="program" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-800 mb-4 section-title">
+                    100일의 변화 프로그램
+                </h2>
+                <p class="text-xl text-gray-600 mt-8">
+                    학교 수업 기반 · 실시간 관리 · 데이터 분석으로 확실한 성과
+                </p>
+            </div>
+            
+            <!-- 문제점과 솔루션 -->
+            <div class="max-w-6xl mx-auto mb-16">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- 문제점 -->
+                    <div class="bg-red-50 p-8 rounded-3xl border-4 border-red-200 slide-in-left">
+                        <h3 class="text-2xl font-bold text-red-700 mb-6 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-3"></i>
+                            이런 고민 있으신가요?
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">사교육비 부담</p>
+                                    <p class="text-sm text-gray-600">월 90만원 × 36개월 = 3,240만원</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">학원 다녀도 성적 안 오름</p>
+                                    <p class="text-sm text-gray-600">74.3%가 사교육 받지만 효과 의문</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">방과후 학습 공백</p>
+                                    <p class="text-sm text-gray-600">뭘 공부해야 할지 모르는 학생 68%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">자기주도 학습 실패</p>
+                                    <p class="text-sm text-gray-600">계획은 세우나 실천 안 되는 학생 82%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 솔루션 -->
+                    <div class="bg-green-50 p-8 rounded-3xl border-4 border-green-200 slide-in-right">
+                        <h3 class="text-2xl font-bold text-green-700 mb-6 flex items-center">
+                            <i class="fas fa-check-circle mr-3"></i>
+                            DA.UM의 해결책
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">월 5만원의 합리적 가격</p>
+                                    <p class="text-sm text-gray-600">3년간 3,060만원 절약 = 소형차 1대 값</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">평균 15점 성적 향상</p>
+                                    <p class="text-sm text-gray-600">실증된 데이터 기반 학습 관리</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">학교 수업 기반 맞춤 계획</p>
+                                    <p class="text-sm text-gray-600">오늘 배운 내용 → 즉시 복습</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-gray-800">실시간 학습 관리</p>
+                                    <p class="text-sm text-gray-600">30초마다 선생님이 확인 & 피드백</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4 ONLY 차별점 -->
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-black text-gray-800 mb-4">
+                        오직 <span class="text-purple-600">DA.UM</span>만의 4가지
+                    </h3>
+                    <p class="text-lg text-gray-600">
+                        다른 곳에서는 찾을 수 없는 특별한 시스템
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- ONLY 1 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg card-hover program-card">
+                        <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl font-black">1</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">학교 선생님 직접 관리</h4>
+                        <p class="text-gray-600 mb-3">
+                            학원 강사가 아닌 학교 수업을 직접 가르치시는 담임 선생님이 관리합니다
+                        </p>
+                        <div class="text-sm text-purple-600 font-bold">
+                            → 학교 수업과 100% 연계
+                        </div>
+                    </div>
+                    
+                    <!-- ONLY 2 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg card-hover program-card">
+                        <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl font-black">2</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">실시간 양방향 소통</h4>
+                        <p class="text-gray-600 mb-3">
+                            30초마다 자동 새로고침으로 학생의 학습 상황을 실시간 확인
+                        </p>
+                        <div class="text-sm text-purple-600 font-bold">
+                            → 즉각적인 피드백
+                        </div>
+                    </div>
+                    
+                    <!-- ONLY 3 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg card-hover program-card">
+                        <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl font-black">3</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">학교 수업 기반 계획</h4>
+                        <p class="text-gray-600 mb-3">
+                            오늘 배운 학교 수업 내용을 바탕으로 맞춤형 학습 계획 자동 생성
+                        </p>
+                        <div class="text-sm text-purple-600 font-bold">
+                            → 효율적인 복습
+                        </div>
+                    </div>
+                    
+                    <!-- ONLY 4 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg card-hover program-card">
+                        <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl font-black">4</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">월 5만원 합리적 가격</h4>
+                        <p class="text-gray-600 mb-3">
+                            학원비 월 90만원 → 5만원으로 3년간 3,060만원 절약
+                        </p>
+                        <div class="text-sm text-purple-600 font-bold">
+                            → 98% 비용 절감
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 평일/주말 프로그램 -->
+            <div class="max-w-6xl mx-auto mt-16">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-black text-gray-800 mb-4">
+                        체계적인 학습 시간 관리
+                    </h3>
+                    <p class="text-lg text-gray-600">
+                        평일 4시간 + 주말 6시간 = 주 32시간 목표
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- 평일 -->
+                    <div class="bg-blue-50 p-10 rounded-3xl shadow-xl">
+                        <div class="flex items-center mb-6">
+                            <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-calendar-week text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-black text-blue-600">평일 (월~금)</h4>
+                                <p class="text-gray-600">하교 후 4시간/일</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-5 rounded-xl">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white font-bold">1</span>
+                                    </div>
+                                    <h5 class="font-bold text-lg">학교 수업 복습 (60분)</h5>
+                                </div>
+                                <p class="text-sm text-gray-600 pl-11">오늘 배운 내용 정리 및 개념 확인</p>
+                            </div>
+                            
+                            <div class="bg-white p-5 rounded-xl">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white font-bold">2</span>
+                                    </div>
+                                    <h5 class="font-bold text-lg">주요과목 집중 (90분)</h5>
+                                </div>
+                                <p class="text-sm text-gray-600 pl-11">국/영/수 핵심 문제 풀이</p>
+                            </div>
+                            
+                            <div class="bg-white p-5 rounded-xl">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white font-bold">3</span>
+                                    </div>
+                                    <h5 class="font-bold text-lg">약점 보완 (90분)</h5>
+                                </div>
+                                <p class="text-sm text-gray-600 pl-11">과학/사회 개념 학습</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 주말 -->
+                    <div class="bg-orange-50 p-10 rounded-3xl shadow-xl">
+                        <div class="flex items-center mb-6">
+                            <div class="w-14 h-14 bg-orange-500 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-calendar-check text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-black text-orange-600">주말 (토~일)</h4>
+                                <p class="text-gray-600">6시간/일 심화 학습</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-5 rounded-xl">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white font-bold">1</span>
+                                    </div>
+                                    <h5 class="font-bold text-lg">주간 총복습 (180분)</h5>
+                                </div>
+                                <p class="text-sm text-gray-600 pl-11">평일 배운 내용 전체 복습 및 핵심 정리</p>
+                            </div>
+                            
+                            <div class="bg-white p-5 rounded-xl">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white font-bold">2</span>
+                                    </div>
+                                    <h5 class="font-bold text-lg">단원별 문제풀이 (180분)</h5>
+                                </div>
+                                <p class="text-sm text-gray-600 pl-11">유형별 문제 풀이 및 오답 정리</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 bg-gradient-to-r from-orange-100 to-yellow-100 p-4 rounded-xl">
+                            <p class="text-sm text-gray-700 text-center">
+                                <i class="fas fa-lightbulb text-yellow-600 mr-2"></i>
+                                <strong>주말은 한 주를 마무리하고 다음 주를 준비하는 핵심 시간!</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- System Features - 학습관리 시스템 -->
+    <section id="system" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-800 mb-4 section-title">
+                    완벽한 학습관리 시스템
+                </h2>
+                <p class="text-xl text-gray-600 mt-8">
+                    선생님·학생·학부모 모두를 위한 올인원 플랫폼
+                </p>
+            </div>
+            
+            <div class="max-w-7xl mx-auto">
+                <!-- 시스템 개요 -->
+                <div class="bg-gradient-to-br from-purple-50 to-blue-50 p-10 rounded-3xl shadow-2xl mb-16">
+                    <div class="text-center mb-10">
+                        <h3 class="text-3xl font-black text-gray-800 mb-4">
+                            <i class="fas fa-laptop-code text-purple-600 mr-3"></i>
+                            웹 기반 통합 관리 시스템
+                        </h3>
+                        <p class="text-lg text-gray-600">
+                            PC, 태블릿, 스마트폰 어디서나 접속 가능
+                        </p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                            <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">선생님용 시스템</h4>
+                            <p class="text-sm text-gray-600">실시간 모니터링</p>
+                            <p class="text-sm text-gray-600">학습 계획 수립</p>
+                            <p class="text-sm text-gray-600">주간 피드백</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                            <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-user-graduate text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">학생용 포털</h4>
+                            <p class="text-sm text-gray-600">오늘의 학습 체크</p>
+                            <p class="text-sm text-gray-600">실시간 타이머</p>
+                            <p class="text-sm text-gray-600">진행률 확인</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                            <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-users text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">학부모 확인</h4>
+                            <p class="text-sm text-gray-600">학습 현황 투명 공개</p>
+                            <p class="text-sm text-gray-600">주간 리포트</p>
+                            <p class="text-sm text-gray-600">성적 추이 분석</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 주요 기능 -->
+                <div class="grid md:grid-cols-2 gap-8 mb-16">
+                    <!-- 선생님 기능 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-xl border-2 border-purple-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-gray-800">선생님용 기능</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">실시간 대시보드</p>
+                                    <p class="text-sm text-gray-600">30초마다 자동 새로고침, 학생별 학습 현황 한눈에</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">자동 학습 계획 생성</p>
+                                    <p class="text-sm text-gray-600">학교 수업 기반, 과목별 시간 자동 배분</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">주간 피드백 시스템</p>
+                                    <p class="text-sm text-gray-600">데이터 기반 분석, 시각화 차트 제공</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">교재 자동 추천</p>
+                                    <p class="text-sm text-gray-600">수준별 22개 교재, EBS 강의 링크</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">담임 보고서 생성</p>
+                                    <p class="text-sm text-gray-600">개별 학생별 상세 보고서, PDF 출력 가능</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 학생 기능 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-xl border-2 border-blue-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-user-graduate text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-gray-800">학생용 기능</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">오늘의 학습 체크리스트</p>
+                                    <p class="text-sm text-gray-600">과목별 목표, 완료 상태 실시간 확인</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">학습 타이머</p>
+                                    <p class="text-sm text-gray-600">시작/완료 버튼, 실제 학습 시간 자동 측정</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">실시간 진행률</p>
+                                    <p class="text-sm text-gray-600">오늘 목표 대비 달성률, 이번주 누적 시간</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">평일/주말 자동 구분</p>
+                                    <p class="text-sm text-gray-600">평일 4시간, 주말 6시간 목표 자동 조정</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold">추천 교재 확인</p>
+                                    <p class="text-sm text-gray-600">내 수준에 맞는 교재, 강의 바로 연결</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 시스템 화면 미리보기 -->
+                <div class="bg-gray-900 p-10 rounded-3xl shadow-2xl">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-black text-white mb-4">
+                            지금 바로 체험해보세요
+                        </h3>
+                        <p class="text-lg text-gray-300">
+                            실제 시스템을 직접 사용해보고 효과를 확인하세요
+                        </p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <a href="index.html" class="bg-white p-6 rounded-2xl hover:shadow-2xl transition group">
+                            <div class="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl mb-4 flex items-center justify-center">
+                                <i class="fas fa-dashboard text-5xl text-purple-600 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">선생님 대시보드</h4>
+                            <p class="text-sm text-gray-600">실시간 모니터링 화면</p>
+                        </a>
+                        
+                        <a href="student-portal.html" class="bg-white p-6 rounded-2xl hover:shadow-2xl transition group">
+                            <div class="aspect-video bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl mb-4 flex items-center justify-center">
+                                <i class="fas fa-user-graduate text-5xl text-blue-600 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">학생 포털</h4>
+                            <p class="text-sm text-gray-600">학습 체크 및 타이머</p>
+                        </a>
+                        
+                        <a href="report.html" class="bg-white p-6 rounded-2xl hover:shadow-2xl transition group">
+                            <div class="aspect-video bg-gradient-to-br from-green-100 to-teal-100 rounded-xl mb-4 flex items-center justify-center">
+                                <i class="fas fa-file-alt text-5xl text-green-600 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">보고서</h4>
+                            <p class="text-sm text-gray-600">성과 분석 리포트</p>
+                        </a>
+                    </div>
+                    
+                    <div class="text-center mt-8">
+                        <a href="index.html" class="inline-block bg-white text-gray-900 px-10 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition transform hover:scale-105">
+                            <i class="fas fa-external-link-alt mr-2"></i>
+                            전체 시스템 체험하기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Results - 실증된 성과 -->
+    <section id="results" class="py-20 gradient-bg">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">
+                    실증된 성과
+                </h2>
+                <p class="text-xl text-white opacity-90 mt-8">
+                    숫자로 증명하는 확실한 변화
+                </p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto">
+                <!-- 핵심 지표 -->
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
+                    <div class="glass-dark p-10 rounded-3xl text-center card-hover">
+                        <div class="text-7xl font-black text-yellow-300 mb-4">+15점</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">평균 성적 향상</h3>
+                        <p class="text-white opacity-80">
+                            100점 만점 기준<br/>
+                            평균 15점 성적 상승
+                        </p>
+                    </div>
+                    
+                    <div class="glass-dark p-10 rounded-3xl text-center card-hover">
+                        <div class="text-7xl font-black text-yellow-300 mb-4">85%</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">평균 달성률</h3>
+                        <p class="text-white opacity-80">
+                            주 32시간 목표<br/>
+                            평균 27.2시간 달성
+                        </p>
+                    </div>
+                    
+                    <div class="glass-dark p-10 rounded-3xl text-center card-hover">
+                        <div class="text-7xl font-black text-yellow-300 mb-4">98%</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">사교육비 절감</h3>
+                        <p class="text-white opacity-80">
+                            월 90만원 → 5만원<br/>
+                            3년간 3,060만원 절약
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 비용 비교 -->
+                <div class="glass-effect p-10 rounded-3xl">
+                    <h3 class="text-3xl font-black text-center mb-10 text-gray-800">
+                        3년간 비용 비교
+                    </h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-gradient-to-br from-red-50 to-red-100 p-8 rounded-2xl border-4 border-red-300">
+                            <div class="text-center">
+                                <div class="text-red-600 font-bold mb-4 text-xl">일반 사교육</div>
+                                <div class="text-6xl font-black text-red-600 mb-4">3,240만원</div>
+                                <div class="text-red-700 mb-4">월 90만원 × 36개월</div>
+                                <div class="text-sm text-red-600">
+                                    ❌ 높은 비용 부담<br/>
+                                    ❌ 학교 수업과 괴리<br/>
+                                    ❌ 획일적 진도
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl border-4 border-green-300">
+                            <div class="text-center">
+                                <div class="text-green-600 font-bold mb-4 text-xl">DA.UM 프로그램</div>
+                                <div class="text-6xl font-black text-green-600 mb-4">180만원</div>
+                                <div class="text-green-700 mb-4">월 5만원 × 36개월</div>
+                                <div class="text-sm text-green-600">
+                                    ✅ 합리적 가격<br/>
+                                    ✅ 학교 수업 완벽 연계<br/>
+                                    ✅ 개인 맞춤형 관리
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-yellow-100 to-orange-100 p-6 rounded-2xl text-center border-2 border-yellow-300">
+                        <p class="text-2xl font-black text-gray-800 mb-2">
+                            <i class="fas fa-piggy-bank text-yellow-600 mr-2"></i>
+                            3년간 총 <span class="text-4xl text-yellow-600">3,060만원</span> 절약!
+                        </p>
+                        <p class="text-lg text-gray-700">
+                            이 돈이면 <strong>소형차 1대</strong>를 살 수 있어요!
+                        </p>
+                        <p class="text-sm text-gray-600 mt-2">
+                            또는 대학 등록금 1년치 / 해외 어학연수 / 가족 여행 등에 활용 가능
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features - 추가 기능 -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-800 mb-4 section-title">
+                    더 많은 특별한 기능
+                </h2>
+                <p class="text-xl text-gray-600 mt-8">
+                    학습 효과를 극대화하는 다양한 시스템
+                </p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 선행학습 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-rocket text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">선행학습 프로그램</h4>
+                    <p class="text-gray-600 mb-4">
+                        상위권 학생(평균 80점 이상)을 위한 맞춤형 선행 학습 계획
+                    </p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>• 다음 학기/학년 70% 진도</li>
+                        <li>• 과목별 진도 관리</li>
+                        <li>• 선행 교재 추천</li>
+                    </ul>
+                </div>
+                
+                <!-- 학교별 관리 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-school text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">학교별 독립 운영</h4>
+                    <p class="text-gray-600 mb-4">
+                        여러 학교를 독립적으로 관리하는 멀티 스쿨 시스템
+                    </p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>• 학교별 데이터 분리</li>
+                        <li>• 담당 선생님 배정</li>
+                        <li>• 학교별 진도 관리</li>
+                    </ul>
+                </div>
+                
+                <!-- 교재 추천 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">수준별 교재 추천</h4>
+                    <p class="text-gray-600 mb-4">
+                        학생 수준에 맞는 22개 교재 자동 추천
+                    </p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>• 상/중/하 수준별 구분</li>
+                        <li>• EBS 무료 강의 연결</li>
+                        <li>• 교재 바로가기 링크</li>
+                    </ul>
+                </div>
+                
+                <!-- 실시간 모니터링 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">실시간 모니터링</h4>
+                    <p class="text-gray-600 mb-4">
+                        30초마다 자동 새로고침으로 최신 데이터 확인
+                    </p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>• 학생 학습 현황 실시간</li>
+                        <li>• 오늘의 목표 달성률</li>
+                        <li>• 과목별 완료 상태</li>
+                    </ul>
+                </div>
+                
+                <!-- 주간 피드백 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-comments text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">데이터 기반 피드백</h4>
+                    <p class="text-gray-600 mb-4">
+                        주간 학습 데이터 자동 분석 및 피드백 제공
+                    </p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>• 주간 달성률 자동 계산</li>
+                        <li>• 과목별 진도 분석</li>
+                        <li>• 시각화 차트 제공</li>
+                    </ul>
+                </div>
+                
+                <!-- 담임 보고서 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-file-pdf text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">종합 보고서</h4>
+                    <p class="text-gray-600 mb-4">
+                        개별 학생별 상세 보고서 자동 생성
+                    </p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>• 기간별 학습 통계</li>
+                        <li>• 과목별 성취도 차트</li>
+                        <li>• PDF 출력 가능</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-800 mb-4 section-title">
+                    합리적인 가격
+                </h2>
+                <p class="text-xl text-gray-600 mt-8">
+                    누구나 부담 없이 시작할 수 있습니다
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-10 md:p-16 rounded-3xl shadow-2xl border-4 border-purple-100">
+                    <div class="text-center mb-8">
+                        <div class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-full mb-4">
+                            ⭐ 추천 플랜
+                        </div>
+                        <h3 class="text-4xl font-black text-gray-800 mb-4">100일의 변화 프로그램</h3>
+                        <div class="flex justify-center items-baseline mb-4">
+                            <span class="text-7xl font-black text-purple-600">5만원</span>
+                            <span class="text-3xl text-gray-500 ml-2">/ 월</span>
+                        </div>
+                        <p class="text-xl text-gray-600">학원비의 약 5.5% 가격 (월 90만원 → 5만원)</p>
+                    </div>
+                    
+                    <div class="border-t border-b border-gray-200 py-8 mb-8">
+                        <h4 class="font-bold text-2xl mb-6 text-gray-800 text-center">📦 포함 내용</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">실시간 학습 모니터링 (30초 자동 새로고침)</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">학교 수업 기반 맞춤형 학습 계획</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">주간 학습 피드백 및 성취도 분석</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">학생 포털 무제한 이용</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">교재 추천 및 학습 자료 제공</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">담임 선생님 직접 관리</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">데이터 기반 성적 분석</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                                <span class="text-gray-700">월간 종합 보고서</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-8 rounded-2xl mb-8 border-2 border-yellow-200">
+                        <h4 class="font-bold text-2xl mb-4 text-gray-800 text-center">
+                            <i class="fas fa-gift text-yellow-600 mr-2"></i>
+                            특별 혜택
+                        </h4>
+                        <div class="grid md:grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-4xl mb-2">🎁</div>
+                                <p class="font-bold text-gray-800">첫 달 무료 체험</p>
+                                <p class="text-sm text-gray-600">부담 없이 시작하세요</p>
+                            </div>
+                            <div>
+                                <div class="text-4xl mb-2">📊</div>
+                                <p class="font-bold text-gray-800">개별 맞춤 계획</p>
+                                <p class="text-sm text-gray-600">학생별 맞춤형 설계</p>
+                            </div>
+                            <div>
+                                <div class="text-4xl mb-2">📈</div>
+                                <p class="font-bold text-gray-800">주간 리포트</p>
+                                <p class="text-sm text-gray-600">매주 성과 분석 제공</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="#contact" class="inline-block btn-primary text-white px-12 py-5 rounded-full font-bold text-2xl shadow-2xl transform hover:scale-105 transition">
+                            <i class="fas fa-rocket mr-2"></i>
+                            지금 바로 시작하기
+                        </a>
+                        <p class="text-sm text-gray-500 mt-4">부담 없이 상담부터 받아보세요 (무료 상담)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact -->
+    <section id="contact" class="py-20 gradient-bg">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">
+                    무료 상담 신청
+                </h2>
+                <p class="text-xl text-white opacity-90 mt-8">
+                    우리 아이에게 맞는 프로그램인지 궁금하신가요?<br/>
+                    부담 없이 상담 신청하세요
+                </p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto">
+                <div class="glass-effect p-10 rounded-3xl">
+                    <div class="text-center mb-8">
+                        <img src="images/daum-logo-official.png" alt="DA.UM Logo" class="h-24 w-24 mx-auto mb-4">
+                        <h3 class="text-3xl font-bold text-gray-800">DA.UM 다움진로진학컨설팅</h3>
+                        <p class="text-gray-600 mt-2 text-lg">정라미 대표 | 진로진학컨설턴트 | 학습멘토</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center p-5 bg-white rounded-xl shadow-lg">
+                            <div class="w-14 h-14 gradient-bg rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-phone text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">전화 상담</div>
+                                <div class="text-xl font-bold text-gray-800">010-2657-3481</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center p-5 bg-white rounded-xl shadow-lg">
+                            <div class="w-14 h-14 gradient-bg rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-map-marker-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">주소</div>
+                                <div class="text-lg font-bold text-gray-800">경주시 강동면 동해대로 166-11</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-5">
+                            <div class="flex items-start gap-3 mb-3">
+                                <div class="w-14 h-14 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-building text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-500 mb-2">주요 경력</div>
+                                    <div class="text-sm font-medium text-gray-800 space-y-1">
+                                        <div>• (주)소셜에듀텍코리아 교육이사</div>
+                                        <div>• WOW교육컨설팅 경북지사</div>
+                                        <div>• 경주시진로교육체험센터 운영</div>
+                                        <div>• 교육학사 · 진로진학컨설팅 석사</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-6 rounded-2xl mb-8">
+                        <h4 class="font-bold text-center mb-4 text-gray-800 text-lg">
+                            <i class="fas fa-clock text-blue-600 mr-2"></i>
+                            상담 가능 시간
+                        </h4>
+                        <div class="text-center text-gray-700 space-y-2">
+                            <div class="text-lg">평일: 09:00 - 18:00</div>
+                            <div class="text-lg">토요일: 10:00 - 15:00</div>
+                            <div class="text-sm text-gray-500 mt-3">(일요일 및 공휴일 휴무)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="tel:010-2657-3481" class="inline-block btn-primary text-white px-10 py-4 rounded-full font-bold text-xl shadow-xl transform hover:scale-105 transition">
+                            <i class="fas fa-phone-alt mr-2"></i>
+                            전화 상담 신청
+                        </a>
+                        <p class="text-sm text-gray-500 mt-4">클릭하면 바로 전화 연결됩니다</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-10 mb-10">
+                <!-- 회사 정보 -->
+                <div>
+                    <div class="flex items-center mb-6">
+                        <img src="images/daum-logo-official.png" alt="DA.UM Logo" class="h-12 w-12 mr-3 bg-white rounded-full p-1">
+                        <div>
+                            <div class="text-2xl font-bold">DA.UM</div>
+                            <div class="text-sm text-gray-400">다움진로진학컨설팅</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        중고등학생 맞춤형 진로진학·학습관리 전문 프로그램
+                    </p>
+                    <div class="text-gray-400 text-sm space-y-1">
+                        <div>대표: 정라미</div>
+                        <div>전화: 010-2657-3481</div>
+                        <div>주소: 경주시 강동면 동해대로 166-11</div>
+                    </div>
+                </div>
+                
+                <!-- 빠른 링크 -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6">빠른 링크</h4>
+                    <div class="space-y-3">
+                        <a href="#about" class="block text-gray-400 hover:text-white transition">소개</a>
+                        <a href="#program" class="block text-gray-400 hover:text-white transition">100일의 변화</a>
+                        <a href="#system" class="block text-gray-400 hover:text-white transition">시스템</a>
+                        <a href="#results" class="block text-gray-400 hover:text-white transition">성과</a>
+                        <a href="#pricing" class="block text-gray-400 hover:text-white transition">가격</a>
+                        <a href="index.html" class="block text-purple-400 hover:text-purple-300 transition font-bold">시스템 체험</a>
+                    </div>
+                </div>
+                
+                <!-- 주요 성과 -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6">주요 성과</h4>
+                    <div class="space-y-3 text-gray-400">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>사교육비 98% 절감</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>평균 15점 성적 향상</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>평균 달성률 85%</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>3년간 3,060만원 절약</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-gray-500 text-sm mb-4 md:mb-0">
+                        © 2024 DA.UM 다움진로진학컨설팅. All rights reserved.
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-500 text-sm">중고등학생 진로진학 전문</span>
+                        <span class="text-gray-600">|</span>
+                        <span class="text-gray-500 text-sm">학습관리 시스템</span>
+                        <span class="text-gray-600">|</span>
+                        <span class="text-purple-400 text-sm font-bold">100일의 변화</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 맨 위로 버튼 -->
+    <button id="scrollTopBtn" class="fixed bottom-8 right-8 bg-gradient-to-r from-purple-600 to-indigo-600 text-white w-14 h-14 rounded-full shadow-2xl hidden hover:shadow-3xl transition transform hover:scale-110 z-50" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- 빠른 문의 버튼 (모바일) -->
+    <a href="tel:010-2657-3481" class="fixed bottom-24 right-8 md:hidden bg-green-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center z-50 pulse-glow">
+        <i class="fas fa-phone text-xl"></i>
+    </a>
+    
+    <script>
+        // 모바일 메뉴 토글
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // 스크롤 시 네비게이션 스타일 변경
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            
+            if (window.scrollY > 100) {
+                navbar.classList.add('nav-scrolled');
+                scrollTopBtn.classList.remove('hidden');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+                scrollTopBtn.classList.add('hidden');
+            }
+        });
+        
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // 모바일 메뉴 닫기
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                }
+            });
+        });
+        
+        // 숫자 카운팅 애니메이션
+        function animateValue(element, start, end, duration, suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.innerHTML = value + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Intersection Observer로 통계 숫자 애니메이션
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number, .text-7xl.font-black.text-yellow-300');
+                    statNumbers.forEach(stat => {
+                        const text = stat.textContent.trim();
+                        if (text.includes('+')) {
+                            stat.textContent = '+0점';
+                            animateValue(stat, 0, 15, 2000, '점');
+                        } else if (text.includes('%')) {
+                            const num = parseInt(text);
+                            stat.textContent = '0%';
+                            animateValue(stat, 0, num, 2000, '%');
+                        }
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        const resultsSection = document.getElementById('results');
+        if (resultsSection) {
+            observer.observe(resultsSection);
+        }
+        
+        console.log('%cDA.UM 다움진로진학컨설팅', 'font-size: 28px; color: #667eea; font-weight: bold;');
+        console.log('%c100일의 변화 프로그램', 'font-size: 16px; color: #764ba2; font-weight: bold;');
+        console.log('%c중고등학생 맞춤형 진로진학·학습관리 시스템', 'font-size: 14px; color: #666;');
+    </script>
+</body>
+</html>

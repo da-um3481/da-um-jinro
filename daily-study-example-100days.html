@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100일 프로그램 - 일일 학습 실행 예시</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .subject-card {
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            border: 3px solid;
+            transition: all 0.3s;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .stat-card {
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="card">
+            <div class="flex items-center justify-center mb-6">
+                <i class="fas fa-laptop-code text-5xl text-purple-600 mr-4"></i>
+                <h1 class="text-4xl font-black text-gray-800">일일 학습 실행 예시</h1>
+            </div>
+            
+            <!-- 날짜 및 프로그램 정보 -->
+            <div class="flex justify-center gap-3 mb-6">
+                <span class="bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-bold">중2과정 2학년</span>
+                <span class="bg-purple-500 text-white px-5 py-2 rounded-full text-sm font-bold">주중 수업</span>
+                <span class="bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-bold">1주차 / 14주</span>
+            </div>
+            
+            <!-- 전체 진행률 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-lg font-bold text-gray-700">오늘의 학습: 180분 (4과목)</span>
+                    <span class="text-3xl font-black text-purple-600">50%</span>
+                </div>
+                <div class="flex justify-end mb-2">
+                    <span class="text-sm text-gray-600">오늘 완료 <span class="text-purple-600 font-bold">120분</span> / 90분 남음</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill bg-gradient-to-r from-purple-500 to-pink-500" style="width: 50%">
+                        50% 완료
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 과목 카드들 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 1교시 - 국어 (완료) -->
+            <div class="subject-card bg-red-50 border-red-300">
+                <span class="badge bg-green-500 text-white">완료</span>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-book text-4xl text-red-500 mr-3"></i>
+                    <div>
+                        <h3 class="text-2xl font-black text-gray-800">1교시 - 국어</h3>
+                        <p class="text-sm text-gray-600">17:00 - 18:00</p>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-book-open mr-2 text-red-500"></i>
+                        교재: 중2 국어 교과서 (p.32-48)
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-chalkboard-teacher mr-2 text-red-500"></i>
+                        강의: 학교 수업 - 현대시 감상
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-check-circle mr-2 text-red-500"></i>
+                        성과: 20문항 / 정답률 90%
+                    </p>
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <div class="text-2xl font-black text-green-600">60분</div>
+                    <div class="text-lg font-bold text-gray-600">20/22 정답</div>
+                </div>
+            </div>
+
+            <!-- 2교시 - 영어 (완료) -->
+            <div class="subject-card bg-blue-50 border-blue-300">
+                <span class="badge bg-green-500 text-white">완료</span>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-language text-4xl text-blue-500 mr-3"></i>
+                    <div>
+                        <h3 class="text-2xl font-black text-gray-800">2교시 - 영어</h3>
+                        <p class="text-sm text-gray-600">18:15 - 19:15</p>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-book-open mr-2 text-blue-500"></i>
+                        교재: 내신대비 문법 중2 (Unit 4)
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-chalkboard-teacher mr-2 text-blue-500"></i>
+                        강의: EBS 중학 - 관계대명사
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-check-circle mr-2 text-blue-500"></i>
+                        성과: 18문항 / 정답률 88%
+                    </p>
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <div class="text-2xl font-black text-green-600">60분</div>
+                    <div class="text-lg font-bold text-gray-600">16/18 정답</div>
+                </div>
+            </div>
+
+            <!-- 3교시 - 수학 (진행중) -->
+            <div class="subject-card bg-purple-50 border-purple-300">
+                <span class="badge bg-yellow-500 text-white">진행중</span>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-calculator text-4xl text-purple-500 mr-3"></i>
+                    <div>
+                        <h3 class="text-2xl font-black text-gray-800">3교시 - 수학</h3>
+                        <p class="text-sm text-gray-600">19:30 - 20:40</p>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-book-open mr-2 text-purple-500"></i>
+                        교재: 중학 수학 2-1 (일차함수)
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-chalkboard-teacher mr-2 text-purple-500"></i>
+                        강의: EBS 중학 - 일차함수의 그래프
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-hourglass-half mr-2 text-purple-500"></i>
+                        진행: 35/70분 완료 (진행중)
+                    </p>
+                </div>
+                <div class="mt-4">
+                    <div class="text-sm text-gray-600 mb-2">진행률: 50%</div>
+                    <div class="progress-bar h-6">
+                        <div class="progress-fill bg-gradient-to-r from-purple-500 to-pink-500" style="width: 50%">
+                            35분 / 70분
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4교시 - 과학 (예정) -->
+            <div class="subject-card bg-green-50 border-green-300">
+                <span class="badge bg-gray-400 text-white">예정</span>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-flask text-4xl text-green-500 mr-3"></i>
+                    <div>
+                        <h3 class="text-2xl font-black text-gray-800">4교시 - 과학</h3>
+                        <p class="text-sm text-gray-600">20:50 - 21:40</p>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-book-open mr-2 text-green-500"></i>
+                        교재: 중2 과학 (p.64-80)
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-chalkboard-teacher mr-2 text-green-500"></i>
+                        강의: EBS 중학 - 물질의 특성
+                    </p>
+                    <p class="flex items-center text-gray-700">
+                        <i class="fas fa-clock mr-2 text-green-500"></i>
+                        예정: 15문제 예정
+                    </p>
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <div class="text-2xl font-black text-gray-400">50분</div>
+                    <div class="text-lg font-bold text-gray-400">대기중</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 통계 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="stat-card bg-gradient-to-br from-orange-400 to-orange-600">
+                <div class="text-6xl font-black mb-2">2/4</div>
+                <div class="text-xl">완료 과목</div>
+            </div>
+            <div class="stat-card bg-gradient-to-br from-purple-400 to-purple-600">
+                <div class="text-6xl font-black mb-2">120분</div>
+                <div class="text-xl">학습 시간</div>
+            </div>
+            <div class="stat-card bg-gradient-to-br from-blue-400 to-blue-600">
+                <div class="text-6xl font-black mb-2">89%</div>
+                <div class="text-xl">정답률</div>
+            </div>
+        </div>
+
+        <!-- 추가 정보 -->
+        <div class="card mt-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+                100일 방과후 프로그램 안내
+            </h3>
+            <div class="space-y-3 text-gray-700">
+                <p class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                    <span><strong>평일 학습:</strong> 하교 후 4시간 집중 학습 (17:00~21:40)</span>
+                </p>
+                <p class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                    <span><strong>학교 수업 기반:</strong> 오늘 학교에서 배운 내용을 오늘 복습</span>
+                </p>
+                <p class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                    <span><strong>실시간 관리:</strong> DA.UM 컨설팅이 학습 진행 상황을 실시간 모니터링</span>
+                </p>
+                <p class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                    <span><strong>주간 리포트:</strong> 매주 학부모님께 학습 현황 SMS 발송</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 주간 학습 계획 -->
+        <div class="card">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-calendar-week text-purple-500 mr-3"></i>
+                이번 주 학습 계획 (1주차)
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-3 font-bold text-gray-700">구분</th>
+                            <th class="p-3 font-bold text-gray-700">월</th>
+                            <th class="p-3 font-bold text-gray-700">화</th>
+                            <th class="p-3 font-bold text-gray-700">수</th>
+                            <th class="p-3 font-bold text-gray-700">목</th>
+                            <th class="p-3 font-bold text-gray-700">금</th>
+                            <th class="p-3 font-bold text-gray-700 bg-blue-100">토</th>
+                            <th class="p-3 font-bold text-gray-700 bg-blue-100">일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="p-3 font-semibold bg-gray-50">학습시간</td>
+                            <td class="p-3">4시간</td>
+                            <td class="p-3 bg-yellow-50">4시간 (오늘)</td>
+                            <td class="p-3">4시간</td>
+                            <td class="p-3">4시간</td>
+                            <td class="p-3">4시간</td>
+                            <td class="p-3 bg-blue-50">6시간</td>
+                            <td class="p-3 bg-blue-50">6시간</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold bg-gray-50">목표</td>
+                            <td class="p-3">✅</td>
+                            <td class="p-3 bg-yellow-50">🔄 진행중</td>
+                            <td class="p-3">-</td>
+                            <td class="p-3">-</td>
+                            <td class="p-3">-</td>
+                            <td class="p-3 bg-blue-50">-</td>
+                            <td class="p-3 bg-blue-50">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 p-4 bg-purple-50 rounded-xl">
+                <p class="text-center text-gray-700">
+                    <strong class="text-purple-600">주간 목표:</strong> 32시간 학습 (평일 20시간 + 주말 12시간)
+                </p>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="text-center mt-8 text-white">
+            <p class="text-lg mb-2">DA.UM 다움진로진학컨설팅</p>
+            <p class="text-sm opacity-80">100일 방과후 학습관리 프로그램</p>
+        </div>
+    </div>
+</body>
+</html>

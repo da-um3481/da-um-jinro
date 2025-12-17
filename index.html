@@ -3,350 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎓 DA.UM 학습관리 시스템 - 선생님 통합 대시보드</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>DA.UM 겨울방학 프로그램 - 자료실</title>
     <style>
-        * { font-family: 'Noto Sans KR', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background: linear-gradient(135deg, #2962FF 0%, #1E88E5 100%);
+            min-height: 100vh;
+            color: white;
         }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
+        
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .header h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 24px;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            color: #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .card-icon {
+            font-size: 72px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            font-size: 28px;
+            color: #2962FF;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .card-btn {
+            display: block;
+            background: linear-gradient(135deg, #2962FF 0%, #1E88E5 100%);
+            color: white;
+            text-align: center;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(41, 98, 255, 0.4);
+        }
+        
+        .download-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 0;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .download-section h2 {
+            font-size: 36px;
+            color: #2962FF;
+            margin-bottom: 20px;
+        }
+        
+        .download-section p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .download-big-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            padding: 20px 60px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4);
+        }
+        
+        .download-big-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.6);
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        .menu-card {
-            transition: all 0.3s ease;
+        
+        .info-section h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 30px;
         }
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .info-item-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .info-item p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.2);
+            margin-top: 60px;
+        }
+        
+        .footer h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .footer p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-section {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Header -->
-    <header class="glass-effect shadow-xl sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <!-- DA.UM 로고 -->
-                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-12 h-12 object-contain">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-800">DA.UM 학습관리 시스템</h1>
-                        <p class="text-sm text-gray-600">선생님 통합 관리 대시보드 · 100일 + 30일 프로그램</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg shadow-lg">
-                        <i class="fas fa-user-shield mr-2"></i>
-                        <span class="font-medium">선생님</span>
-                    </div>
-                </div>
+<body>
+    <div class="header">
+        <h1>🎓 DA.UM 다움진로진학컨설팅</h1>
+        <p>겨울방학 프로그램 학교 설명회 자료실</p>
+    </div>
+    
+    <div class="container">
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h2>프레젠테이션</h2>
+                <p>학교 설명회용 PowerPoint 발표 자료<br>10개 슬라이드로 구성된 전문 자료</p>
+                <a href="DA_UM_겨울방학_프로그램_설명회.pptx" download class="card-btn">PPT 다운로드</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📄</div>
+                <h2>상세 안내 자료</h2>
+                <p>웹 기반 상세 설명 자료<br>학년별 프로그램 완벽 안내</p>
+                <a href="DA_UM_겨울방학_프로그램_상세안내.html" target="_blank" class="card-btn">자료 보기</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <h2>요약 전단지</h2>
+                <p>1페이지 간단 요약본<br>핵심 정보만 담은 전단지</p>
+                <a href="DA_UM_겨울방학_프로그램_요약.html" target="_blank" class="card-btn">전단지 보기</a>
             </div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- 환영 메시지 -->
-        <div class="glass-effect rounded-2xl shadow-2xl p-8 mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
-                        안녕하세요, 선생님! 👋
-                    </h2>
-                    <p class="text-gray-600 text-lg">오늘도 학생들과 함께 성장하는 하루 되세요!</p>
+        <div class="download-section">
+            <h2>⚡ 전체 자료 한번에 받기</h2>
+            <p>모든 설명회 자료를 ZIP 파일로 한번에 다운로드하세요!</p>
+            <a href="download.html" class="download-big-btn">🎁 다운로드 페이지로 이동</a>
+        </div>
+        
+        <div class="info-section">
+            <h2>❄️ 겨울방학 프로그램 특징</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-item-icon">📚</div>
+                    <h3>30일 집중</h3>
+                    <p>체계적인 방학 학습 관리</p>
                 </div>
-                <div class="text-right">
-                    <div class="text-sm text-gray-600">오늘 날짜</div>
-                    <div class="text-2xl font-bold text-cyan-600" id="currentDate">2025년 1월 12일</div>
-                    <div class="text-sm text-gray-600 mt-1">프로그램 Day 8</div>
+                <div class="info-item">
+                    <div class="info-item-icon">👨‍🏫</div>
+                    <h3>1:1 관리</h3>
+                    <p>개인별 맞춤 학습 지도</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">📊</div>
+                    <h3>맞춤 커리큘럼</h3>
+                    <p>학년별 최적화 프로그램</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">🎯</div>
+                    <h3>진로 컨설팅</h3>
+                    <p>전문 진로진학 지도</p>
                 </div>
             </div>
         </div>
-
-        <!-- 빠른 통계 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="glass-effect rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-2">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-school text-2xl text-blue-600"></i>
-                    </div>
-                    <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">학교</span>
+        
+        <div class="info-section">
+            <h2>📚 프로그램 대상</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-item-icon">🎓</div>
+                    <h3>고등학생</h3>
+                    <p>고1, 고2, 고3<br>(예비 고등학생 포함)</p>
                 </div>
-                <div class="text-3xl font-bold text-gray-800">3</div>
-                <div class="text-sm text-gray-600">등록된 학교</div>
-            </div>
-
-            <div class="glass-effect rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-2">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-user-graduate text-2xl text-green-600"></i>
-                    </div>
-                    <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">학생</span>
+                <div class="info-item">
+                    <div class="info-item-icon">📖</div>
+                    <h3>중학생</h3>
+                    <p>중1, 중2, 중3</p>
                 </div>
-                <div class="text-3xl font-bold text-gray-800">85</div>
-                <div class="text-sm text-gray-600">전체 학생</div>
-            </div>
-
-            <div class="glass-effect rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-2">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-check-circle text-2xl text-purple-600"></i>
-                    </div>
-                    <span class="text-xs px-2 py-1 bg-purple-100 text-purple-800 rounded-full">오늘</span>
-                </div>
-                <div class="text-3xl font-bold text-gray-800">72</div>
-                <div class="text-sm text-gray-600">학습 완료</div>
-            </div>
-
-        </div>
-
-        <!-- 관리 메뉴 -->
-        <div class="mb-8">
-            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                <i class="fas fa-grip-horizontal mr-3"></i>
-                빠른 메뉴
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <!-- 학교 관리 -->
-                <a href="schools-management-new.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-school"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">학교 관리</h4>
-                            <p class="text-sm text-gray-600">학교/기관 등록</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">학교 계약 정보, 담당자 관리</p>
-                    <div class="flex items-center text-blue-600 font-medium">
-                        <span>관리하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 학생 관리 -->
-                <a href="students-new.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">학생 관리</h4>
-                            <p class="text-sm text-gray-600">학생 정보 등록</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">학생 등록, 성적 관리, 필터링</p>
-                    <div class="flex items-center text-green-600 font-medium">
-                        <span>관리하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 대시보드 -->
-                <a href="winter-index.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">학습 대시보드</h4>
-                            <p class="text-sm text-gray-600">실시간 모니터링</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">학생들의 학습 현황 실시간 확인</p>
-                    <div class="flex items-center text-purple-600 font-medium">
-                        <span>확인하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 주간 일정 -->
-                <a href="winter-weekly-schedule.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-calendar-week"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">주간 일정</h4>
-                            <p class="text-sm text-gray-600">30일 스케줄</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">주차별 학습 계획 관리</p>
-                    <div class="flex items-center text-indigo-600 font-medium">
-                        <span>확인하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 수준별 맞춤 학습 -->
-                <a href="student-personalized-learning.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                                <i class="fas fa-bullseye"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-lg font-bold text-gray-800">수준별 맞춤 학습</h4>
-                                <p class="text-sm text-gray-600">개별화 교육</p>
-                            </div>
-                        </div>
-                        <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full">
-                            <i class="fas fa-magic mr-1"></i>NEW
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">진단 점수 기반 맞춤형 교재 및 강의 추천</p>
-                    <div class="flex items-center text-purple-600 font-medium">
-                        <span>확인하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 학습 자료 -->
-                <a href="winter-materials.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-book-open"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">학습 자료</h4>
-                            <p class="text-sm text-gray-600">EBS 자료 관리</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">학습 자료 링크 및 콘텐츠 관리</p>
-                    <div class="flex items-center text-cyan-600 font-medium">
-                        <span>관리하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 주간 리포트 -->
-                <a href="winter-report.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-lg font-bold text-gray-800">주간 리포트</h4>
-                                <p class="text-sm text-gray-600">학부모 전달용</p>
-                            </div>
-                        </div>
-                        <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
-                            <i class="fas fa-table mr-1"></i>구글 시트 연동
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">주간 학습 리포트 생성 및 구글 시트 자동 저장</p>
-                    <div class="flex items-center text-pink-600 font-medium">
-                        <span>생성하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 피드백 시스템 -->
-                <a href="winter-feedback.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">피드백</h4>
-                            <p class="text-sm text-gray-600">만족도 조사</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">학생/학부모 피드백 수집</p>
-                    <div class="flex items-center text-yellow-600 font-medium">
-                        <span>확인하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 학생 포털 미리보기 -->
-                <a href="winter-student-portal.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-laptop"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">학생 포털</h4>
-                            <p class="text-sm text-gray-600">학생 화면 미리보기</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">학생들이 사용하는 포털 확인</p>
-                    <div class="flex items-center text-red-600 font-medium">
-                        <span>미리보기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-
-                <!-- 프로그램 소개 -->
-                <a href="winter-30days.html" class="menu-card glass-effect rounded-2xl shadow-xl p-6 hover:shadow-2xl">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg">
-                            <i class="fas fa-snowflake"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800">프로그램 소개</h4>
-                            <p class="text-sm text-gray-600">30일 프로그램</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">프로그램 안내 페이지 (대외용)</p>
-                    <div class="flex items-center text-teal-600 font-medium">
-                        <span>확인하기</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <!-- 오늘의 할 일 -->
-        <div class="glass-effect rounded-2xl shadow-2xl p-8">
-            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-tasks text-purple-600 mr-3"></i>
-                오늘의 할 일
-            </h3>
-            <div class="space-y-4">
-                <div class="flex items-center p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
-                    <input type="checkbox" class="w-5 h-5 text-blue-600 rounded">
-                    <span class="ml-4 text-gray-800">A중학교 학생 출결 확인 (30명)</span>
-                    <span class="ml-auto text-sm text-blue-600 font-medium">오전 9시</span>
-                </div>
-                <div class="flex items-center p-4 bg-green-50 rounded-xl border-l-4 border-green-500">
-                    <input type="checkbox" class="w-5 h-5 text-green-600 rounded">
-                    <span class="ml-4 text-gray-800">학부모 주간 리포트 발송 (전체)</span>
-                    <span class="ml-auto text-sm text-green-600 font-medium">오후 3시</span>
-                </div>
-                <div class="flex items-center p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
-                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded">
-                    <span class="ml-4 text-gray-800">B중학교 계약 상담</span>
-                    <span class="ml-auto text-sm text-purple-600 font-medium">오후 5시</span>
+                <div class="info-item">
+                    <div class="info-item-icon">🎒</div>
+                    <h3>예비 중학생</h3>
+                    <p>초등학교 6학년</p>
                 </div>
             </div>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="glass-effect mt-12 py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-600">
-                <i class="fas fa-heart text-red-500 mr-2"></i>
-                DA.UM 진로진학컨설팅 | 010-2657-3481
-            </p>
-        </div>
-    </footer>
-
-    <script>
-        // 현재 날짜 표시
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('currentDate').textContent = today.toLocaleDateString('ko-KR', options);
-    </script>
+    </div>
+    
+    <div class="footer">
+        <h3>📞 문의 및 상담</h3>
+        <p>📱 전화: 010-2657-3481</p>
+        <p>👤 담당자: 정라미</p>
+        <p>🌐 웹사이트: <a href="https://da-um3481.github.io/da-um-jinro/" style="color: white; text-decoration: underline;">da-um3481.github.io/da-um-jinro</a></p>
+        <p style="margin-top: 30px; opacity: 0.8; font-size: 16px;">© 2025 DA.UM 다움진로진학컨설팅</p>
+    </div>
 </body>
 </html>

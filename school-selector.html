@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학교 선택 - 다움진로진학컨설팅</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .school-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .school-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="p-6">
+    <!-- 헤더 -->
+    <div class="glass-effect rounded-2xl shadow-2xl p-8 mb-8 max-w-6xl mx-auto">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+                <i class="fas fa-school text-white text-4xl"></i>
+            </div>
+            <h1 class="text-4xl font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                학교 선택
+            </h1>
+            <p class="text-gray-600 text-lg">다움진로진학컨설팅 학습 관리 시스템</p>
+        </div>
+    </div>
+
+    <!-- 학교 목록 -->
+    <div class="max-w-6xl mx-auto mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-white">
+                <i class="fas fa-list mr-2"></i>운영 중인 학교
+            </h2>
+            <button onclick="showAddSchoolModal()" class="px-6 py-3 bg-white text-purple-600 rounded-xl hover:shadow-xl transition font-bold">
+                <i class="fas fa-plus mr-2"></i>학교 추가
+            </button>
+        </div>
+
+        <div id="schoolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 동적으로 생성됨 -->
+        </div>
+
+        <div id="emptySchools" class="glass-effect rounded-2xl shadow-xl p-12 text-center" style="display: none;">
+            <i class="fas fa-school text-gray-400 text-6xl mb-4"></i>
+            <p class="text-gray-600 text-lg mb-4">아직 등록된 학교가 없습니다.</p>
+            <button onclick="showAddSchoolModal()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:shadow-xl transition font-bold">
+                <i class="fas fa-plus mr-2"></i>첫 학교 등록하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 학교 추가 모달 -->
+    <div id="addSchoolModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="glass-effect rounded-2xl shadow-2xl p-8 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-school mr-2 text-purple-600"></i>학교 등록
+                </h3>
+                <button onclick="closeAddSchoolModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <form id="addSchoolForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">학교명 *</label>
+                        <input type="text" id="schoolName" required placeholder="예: 경주 근화여자중학교"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">학교 구분 *</label>
+                        <select id="schoolType" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <option value="">선택하세요</option>
+                            <option value="중학교">중학교</option>
+                            <option value="고등학교">고등학교</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">지역 *</label>
+                        <input type="text" id="location" required placeholder="예: 경주, 대구"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">담당 선생님</label>
+                        <input type="text" id="contactTeacher" placeholder="예: 김선생님"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">연락처</label>
+                        <input type="tel" id="phone" placeholder="예: 010-1234-5678"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">프로그램 시작일 *</label>
+                        <input type="date" id="startDate" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="closeAddSchoolModal()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                        취소
+                    </button>
+                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-xl transition font-bold">
+                        <i class="fas fa-save mr-2"></i>등록하기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="glass-effect rounded-2xl shadow-2xl p-6 max-w-6xl mx-auto text-center text-gray-600">
+        <p class="text-sm">© 2025 다움진로진학컨설팅. All rights reserved.</p>
+        <p class="text-xs mt-2 text-gray-500">Version 1.8.0 | 학교별 프로그램 운영 시스템</p>
+    </footer>
+
+    <script src="js/school-selector.js"></script>
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100일의 변화 - 학교 설명회 프레젠테이션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            position: relative;
+            background: white;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px;
+            box-sizing: border-box;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px 30px;
+            border-radius: 50px;
+        }
+        
+        .controls button {
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .controls button:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .slide-number {
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 999;
+        }
+        
+        .speaker-note {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 243, 205, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #ff9800;
+            font-size: 16px;
+            line-height: 1.6;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            z-index: 998;
+        }
+        
+        .speaker-note.show {
+            display: block;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .slide-title {
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .stat-huge {
+            font-size: 120px;
+            font-weight: 900;
+            line-height: 1;
+            margin: 20px 0;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 타이머 -->
+    <div class="timer" id="timer">00:00</div>
+
+    <!-- 발표자 노트 -->
+    <div class="speaker-note" id="speaker-note"></div>
+
+    <!-- Slide 1: 오프닝 -->
+    <div class="slide active" data-note="[오프닝 - 2분] 안녕하세요, 학부모님. 다움진로진학컨설팅 정라미입니다. 오늘 이 자리에 참석해주셔서 진심으로 감사드립니다. 여러분께 우리 아이들의 미래를 바꿀 수 있는 특별한 이야기를 들려드리고자 합니다.">
+        <div class="slide-content gradient-bg text-white">
+            <div class="flex justify-center mb-8">
+                <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-48 h-48">
+            </div>
+            <h1 class="text-8xl font-black mb-8 mt-12">100일의 변화</h1>
+            <p class="text-5xl mb-12 opacity-90">사교육 없이 성적을 올리는 혁신적 방법</p>
+            <p class="text-3xl opacity-80">학부모 설명회</p>
+            <div class="mt-12 text-2xl">
+                <p>정라미 컨설턴트</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: 오늘의 약속 -->
+    <div class="slide" data-note="[약속 - 1분] 오늘 이 시간이 끝나면, 여러분은 세 가지를 얻어가실 수 있습니다. 첫째, 사교육비를 98% 줄일 수 있는 구체적인 방법. 둘째, 우리 아이 성적을 실제로 올릴 수 있다는 확신. 셋째, 오늘 바로 시작할 수 있는 실천 방법입니다.">
+        <div class="slide-content">
+            <h2 class="slide-title gradient-text">오늘의 약속</h2>
+            <div class="grid grid-cols-3 gap-8 w-full max-w-6xl">
+                <div class="bg-gradient-to-br from-blue-100 to-blue-200 p-10 rounded-3xl border-4 border-blue-300">
+                    <div class="text-7xl mb-6">💰</div>
+                    <h3 class="text-3xl font-bold mb-4 text-blue-900">사교육비 98% 절감</h3>
+                    <p class="text-xl text-gray-700">구체적인 방법을<br/>알려드립니다</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-100 to-green-200 p-10 rounded-3xl border-4 border-green-300">
+                    <div class="text-7xl mb-6">📈</div>
+                    <h3 class="text-3xl font-bold mb-4 text-green-900">성적 향상 확신</h3>
+                    <p class="text-xl text-gray-700">실제 데이터로<br/>증명합니다</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-10 rounded-3xl border-4 border-purple-300">
+                    <div class="text-7xl mb-6">🚀</div>
+                    <h3 class="text-3xl font-bold mb-4 text-purple-900">즉시 실천 가능</h3>
+                    <p class="text-xl text-gray-700">오늘 바로<br/>시작하세요</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: 학부모님의 고민 -->
+    <div class="slide" data-note="[공감 - 2분] 학부모님, 이런 고민 해보신 적 있으시죠? '학원비가 너무 부담스러워요. 한 달에 100만원씩 쓰는데 성적은 그대로예요.' '우리 아이가 학원 다녀올 때마다 지쳐 보여요. 밤 10시까지 학원 다니고 오면 숙제도 못 하고 잠만 자요.' '정말 제대로 공부하는 건지 확인할 방법이 없어요.' 고개를 끄덕이시는 분들이 보이네요. 여러분만 그런 게 아닙니다.">
+        <div class="slide-content bg-red-50">
+            <h2 class="slide-title text-red-700">혹시 이런 고민 하시나요?</h2>
+            <div class="space-y-6 w-full max-w-5xl">
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-red-500">
+                    <div class="flex items-center">
+                        <div class="text-6xl mr-6">😰</div>
+                        <div class="flex-1">
+                            <h3 class="text-3xl font-bold text-gray-800 mb-3">"학원비가 너무 부담스러워요"</h3>
+                            <p class="text-2xl text-gray-600">한 달에 100만원씩 쓰는데 성적은 그대로...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-orange-500">
+                    <div class="flex items-center">
+                        <div class="text-6xl mr-6">😓</div>
+                        <div class="flex-1">
+                            <h3 class="text-3xl font-bold text-gray-800 mb-3">"아이가 너무 지쳐 보여요"</h3>
+                            <p class="text-2xl text-gray-600">밤 10시까지 학원... 집에 오면 숙제도 못하고 잠만...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-yellow-500">
+                    <div class="flex items-center">
+                        <div class="text-6xl mr-6">😕</div>
+                        <div class="flex-1">
+                            <h3 class="text-3xl font-bold text-gray-800 mb-3">"제대로 공부하는지 모르겠어요"</h3>
+                            <p class="text-2xl text-gray-600">학원 간다고 나가는데 정말 공부하는 건지...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: 충격적인 현실 -->
+    <div class="slide" data-note="[데이터 제시 - 2분] 지금부터 말씀드리는 숫자는 통계청 공식 자료입니다. 2024년 기준, 중학생의 74.3%가 사교육을 받고 있습니다. 한 가정당 평균 월 90만원을 지출합니다. 3년간 계산하면 얼마일까요? 무려 3,240만원입니다. 소형차 한 대 값입니다. 그런데 더 충격적인 사실은... 이렇게 막대한 돈을 쓰는데도 우리 아이들의 자기주도학습 능력은 오히려 저하되고 있다는 겁니다.">
+        <div class="slide-content gradient-bg text-white">
+            <h2 class="text-7xl font-black mb-16">충격적인 현실</h2>
+            <div class="grid grid-cols-2 gap-12 w-full max-w-6xl">
+                <div class="bg-white/20 backdrop-blur-lg p-12 rounded-3xl border-4 border-white/40">
+                    <div class="stat-huge text-yellow-300">74.3%</div>
+                    <p class="text-3xl mt-4">중학생 사교육 참여율</p>
+                    <p class="text-xl mt-3 opacity-80">(통계청, 2024)</p>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg p-12 rounded-3xl border-4 border-white/40">
+                    <div class="stat-huge text-red-300">90<span class="text-6xl">만원</span></div>
+                    <p class="text-3xl mt-4">월평균 사교육비</p>
+                    <p class="text-xl mt-3 opacity-80">(한 가정당)</p>
+                </div>
+            </div>
+            <div class="mt-16 bg-red-500 p-10 rounded-3xl w-full max-w-6xl border-4 border-white">
+                <p class="text-5xl font-black mb-4">3년간 총 3,240만원 지출</p>
+                <p class="text-3xl opacity-90">= 소형차 1대 값</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: 더 큰 문제 -->
+    <div class="slide" data-note="[문제의 핵심 - 2분] 하지만 진짜 문제는 돈이 아닙니다. 우리 아이들이 학원에 의존하면 할수록, 스스로 공부하는 능력을 잃어간다는 겁니다. 대학에 가면 어떻게 할까요? 직장에 가면요? 평생 학원을 다닐 수는 없습니다. 이 화면을 보시죠. 이것이 악순환의 고리입니다.">
+        <div class="slide-content bg-gray-900 text-white">
+            <h2 class="text-7xl font-black mb-16 text-red-400">더 큰 문제는...</h2>
+            <div class="bg-white/10 backdrop-blur-lg p-12 rounded-3xl border-4 border-red-500 w-full max-w-5xl">
+                <p class="text-5xl font-bold mb-8 text-yellow-300">막대한 비용에도 불구하고</p>
+                <p class="text-6xl font-black text-red-300 mb-12">자기주도학습 능력은<br/>오히려 저하</p>
+                <div class="grid grid-cols-3 gap-6 mt-12">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">🏫</div>
+                        <p class="text-2xl">학원 의존</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">➡️</div>
+                        <p class="text-2xl">수동적 학습</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">📉</div>
+                        <p class="text-2xl">능력 저하</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 질문 던지기 -->
+    <div class="slide" data-note="[질문 - 1분] 그렇다면 질문을 던져봅시다. 학원 없이도 성적을 올릴 수 있을까요? (잠시 멈춤) 네, 가능합니다. 어떻게냐고요? 바로 학교 수업을 최대한 활용하는 겁니다. 생각해보세요. 우리 아이들이 하루에 몇 시간씩 학교에 있나요? 그 시간을 제대로만 활용한다면, 학원이 필요 없습니다.">
+        <div class="slide-content gradient-bg text-white">
+            <h2 class="text-8xl font-black mb-16">그렇다면...</h2>
+            <div class="bg-white/20 backdrop-blur-lg p-16 rounded-3xl border-4 border-white/40 text-center pulse">
+                <p class="text-6xl font-black mb-12">학원 없이도<br/>성적을 올릴 수 있을까?</p>
+                <div class="text-9xl">🤔</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: 답은 YES -->
+    <div class="slide" data-note="[솔루션 제시 - 2분] 답은 '예스'입니다! (힘차게) 그 비밀은 바로 학교 수업의 최대 활용입니다. 우리 아이들이 하루 6-7시간씩 학교에 있습니다. 그 시간에 선생님이 가르쳐주시는 내용을 제대로만 이해하고, 집에 와서 복습만 잘 한다면, 고액 사교육이 필요 없습니다. 이것이 우리 '100일의 변화' 프로그램의 핵심 철학입니다.">
+        <div class="slide-content bg-green-50">
+            <div class="text-9xl mb-12 pulse">✅</div>
+            <h2 class="text-8xl font-black mb-12 text-green-600">YES!</h2>
+            <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-green-500 w-full max-w-5xl">
+                <p class="text-5xl font-bold text-gray-800 mb-8">비밀은 바로...</p>
+                <p class="text-6xl font-black text-green-600 mb-8">학교 수업 최대 활용</p>
+                <p class="text-3xl text-gray-700 leading-relaxed">
+                    선생님이 가르쳐주신 내용을<br/>
+                    제대로 이해하고 복습하면<br/>
+                    <strong class="text-green-600">고액 사교육이 필요 없습니다</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: 100일의 변화 소개 -->
+    <div class="slide" data-note="[프로그램 소개 - 2분] 그래서 우리가 만든 것이 바로 '100일의 변화' 프로그램입니다. 3월부터 중간고사까지 100일 동안, 우리 아이들의 자기주도학습 습관을 완전히 바꿔놓는 시스템입니다. 단순한 학습 플래너가 아닙니다. 담임 선생님이 실시간으로 확인하고 피드백을 주는, 완전히 새로운 개념의 학습 관리 시스템입니다.">
+        <div class="slide-content gradient-bg text-white">
+            <div class="text-9xl mb-8">🎓</div>
+            <h2 class="text-8xl font-black mb-8">100일의 변화</h2>
+            <p class="text-4xl mb-16 opacity-90">3월~중간고사, 100일간의 특별한 여정</p>
+            <div class="grid grid-cols-3 gap-8 w-full max-w-6xl">
+                <div class="bg-white/20 backdrop-blur-lg p-10 rounded-2xl border-2 border-white/40">
+                    <div class="text-8xl font-black text-yellow-300 mb-4">100일</div>
+                    <p class="text-2xl mt-4">집중 관리</p>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg p-10 rounded-2xl border-2 border-white/40">
+                    <div class="text-7xl font-black text-green-300 mb-4">32시간</div>
+                    <p class="text-2xl mt-4">주간 학습</p>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg p-10 rounded-2xl border-2 border-white/40">
+                    <div class="text-7xl font-black text-blue-300 mb-4">실시간</div>
+                    <p class="text-2xl mt-4">교사 관리</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: 하루 일과 -->
+    <div class="slide" data-note="[구체적 사례 - 3분] 우리 아이의 하루가 어떻게 바뀌는지 보시죠. 오후 4시, 학교에서 돌아옵니다. 잠깐 쉬고 4시 10분, 스마트폰으로 학생 포털에 접속합니다. 그러면 오늘 해야 할 학습이 자동으로 나타납니다. '국어 - 오늘 학교수업 복습 60분', '수학 - 핵심 개념 정리 70분' 이런 식으로요. [시작] 버튼을 누르면 타이머가 작동합니다. 공부가 끝나면 [완료] 버튼. 그러면 담임 선생님 화면에 30초 안에 바로 표시됩니다. '○○이가 국어 60분 완료했네.' 이렇게요.">
+        <div class="slide-content">
+            <h2 class="slide-title" style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">우리 아이의 하루</h2>
+            <div class="grid grid-cols-5 gap-6 w-full max-w-6xl text-center">
+                <div class="bg-blue-100 p-8 rounded-2xl border-4 border-blue-300">
+                    <div class="text-5xl font-black text-blue-600 mb-4">16:00</div>
+                    <div class="text-4xl mb-3">🏠</div>
+                    <p class="text-xl font-semibold text-gray-700">하교<br/>휴식</p>
+                </div>
+                <div class="bg-green-100 p-8 rounded-2xl border-4 border-green-300">
+                    <div class="text-5xl font-black text-green-600 mb-4">16:10</div>
+                    <div class="text-4xl mb-3">📱</div>
+                    <p class="text-xl font-semibold text-gray-700">포털<br/>접속</p>
+                </div>
+                <div class="bg-purple-100 p-8 rounded-2xl border-4 border-purple-300">
+                    <div class="text-5xl font-black text-purple-600 mb-4">16:15</div>
+                    <div class="text-4xl mb-3">▶️</div>
+                    <p class="text-xl font-semibold text-gray-700">학습<br/>시작</p>
+                </div>
+                <div class="bg-orange-100 p-8 rounded-2xl border-4 border-orange-300">
+                    <div class="text-5xl font-black text-orange-600 mb-4">20:00</div>
+                    <div class="text-4xl mb-3">✅</div>
+                    <p class="text-xl font-semibold text-gray-700">목표<br/>달성</p>
+                </div>
+                <div class="bg-pink-100 p-8 rounded-2xl border-4 border-pink-300">
+                    <div class="text-5xl font-black text-pink-600 mb-4">30초</div>
+                    <div class="text-4xl mb-3">👨‍🏫</div>
+                    <p class="text-xl font-semibold text-gray-700">선생님<br/>확인</p>
+                </div>
+            </div>
+            <div class="mt-12 bg-gradient-to-r from-blue-100 to-purple-100 p-8 rounded-2xl w-full max-w-6xl">
+                <p class="text-3xl font-bold text-center text-gray-800">
+                    집에서 편안하게 공부하고, 선생님은 실시간으로 확인합니다
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: 학생 화면 실제 -->
+    <div class="slide" data-note="[화면 시연 - 2분] 실제 학생 화면을 보시겠습니다. 이렇게 깔끔하게 나옵니다. 오늘이 화요일이라면 '평일 4시간 목표'라고 나오고, 토요일이라면 '주말 6시간 목표'로 자동으로 바뀝니다. 과목별로 색깔도 다르게 해서 아이들이 지루하지 않게 했습니다. 빨간색은 국어, 파란색은 수학, 노란색은 영어. 마치 게임하듯이 체크해나갈 수 있습니다.">
+        <div class="slide-content bg-gray-50">
+            <h2 class="slide-title text-gray-800">학생 포털 화면 (실제)</h2>
+            <div class="bg-white p-12 rounded-3xl shadow-2xl w-full max-w-4xl border-4 border-purple-300">
+                <div class="text-center mb-8">
+                    <div class="text-3xl font-bold text-gray-800 mb-3">오늘의 학습 (2024년 3월 5일 화요일)</div>
+                    <div class="text-2xl text-blue-600 font-semibold">목표: 240분 (평일 4시간)</div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-gradient-to-r from-red-100 to-red-200 p-6 rounded-xl flex items-center justify-between border-2 border-red-300">
+                        <span class="text-2xl font-bold text-gray-800">✏️ 국어 - 학교 수업 복습 (60분)</span>
+                        <button class="bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold">▶️ 시작</button>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-xl flex items-center justify-between border-2 border-blue-300">
+                        <span class="text-2xl font-bold text-gray-800">✏️ 수학 - 핵심 개념 정리 (70분)</span>
+                        <button class="bg-gray-300 text-gray-500 px-8 py-3 rounded-full text-xl font-bold">대기</button>
+                    </div>
+                    <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-xl flex items-center justify-between border-2 border-yellow-300">
+                        <span class="text-2xl font-bold text-gray-800">✏️ 영어 - 단어 + 문법 (60분)</span>
+                        <button class="bg-gray-300 text-gray-500 px-8 py-3 rounded-full text-xl font-bold">대기</button>
+                    </div>
+                </div>
+                <div class="mt-8 text-center text-gray-600 text-lg">
+                    ✨ 버튼 하나로 시작하고, 버튼 하나로 완료!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: 핵심 차별점 1 -->
+    <div class="slide" data-note="[차별점 1 - 2분] 여기서 중요한 포인트! 첫 번째, DA.UM 다움진로진학컨설팅의 전문 컨설턴트가 직접 관리한다는 겁니다. 학원 강사가 아닙니다. 진로진학 전문가인 정라미 대표가 매일 확인합니다. '○○이는 수학이 약하구나', '△△이는 요즘 학습 시간이 줄었네' 이렇게 실시간으로 파악합니다. 학원 강사는 우리 아이의 개별 상황을 모릅니다. 하지만 DA.UM 컨설팅은 1:1 맞춤 관리를 제공합니다.">
+        <div class="slide-content gradient-bg text-white">
+            <h2 class="text-7xl font-black mb-16">핵심 차별점 ①</h2>
+            <div class="bg-white/20 backdrop-blur-lg p-16 rounded-3xl border-4 border-white/40 w-full max-w-5xl">
+                <div class="text-9xl mb-8">👨‍🏫</div>
+                <h3 class="text-6xl font-black mb-8">DA.UM 컨설팅 전문 관리</h3>
+                <p class="text-3xl leading-relaxed opacity-90">
+                    학원 강사 ❌<br/>
+                    진로진학 전문가가<br/>
+                    <strong class="text-yellow-300">DA.UM 컨설팅이 매일 확인</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: 핵심 차별점 2 -->
+    <div class="slide" data-note="[차별점 2 - 2분] 두 번째! 실시간 반영입니다. 우리 아이가 [완료] 버튼을 누르면, 30초 안에 선생님 화면에 뜹니다. 30초요! 이게 얼마나 중요한지 아십니까? 학원은 일주일 후에야 학부모님께 전화 한 통 합니다. '이번 주 출석 잘했어요.' 이런 식이죠. 우리는 30초입니다. 선생님이 바로 확인하시고, 바로 격려 메시지를 보내실 수 있습니다. '○○아, 오늘 수학 70분이나 했네! 대단한데?' 이런 즉각적인 피드백이 아이들에게 얼마나 큰 동기부여가 되는지 아십니까?">
+        <div class="slide-content" style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); color: white;">
+            <h2 class="text-7xl font-black mb-16">핵심 차별점 ②</h2>
+            <div class="bg-white/20 backdrop-blur-lg p-16 rounded-3xl border-4 border-white/40 w-full max-w-5xl text-center">
+                <div class="text-9xl mb-8">⚡</div>
+                <h3 class="text-6xl font-black mb-12">실시간 양방향 소통</h3>
+                <div class="bg-yellow-400 text-gray-900 p-10 rounded-2xl">
+                    <p class="text-8xl font-black mb-4">30초</p>
+                    <p class="text-3xl font-bold">안에 선생님께 전달</p>
+                </div>
+                <p class="text-3xl mt-12 opacity-90">
+                    학원: 일주일 후 전화 📞<br/>
+                    우리: 30초 후 확인 ✅
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: 핵심 차별점 3 -->
+    <div class="slide" data-note="[차별점 3 - 2분] 세 번째! 학교 수업 기반입니다. 학원은 학원대로, 학교는 학교대로 따로 놉니다. 그래서 아이들이 혼란스러워합니다. '학원에서는 이렇게 풀라는데, 학교 선생님은 저렇게 하래...' 우리는 학교 수업 내용을 그날 그날 복습하는 겁니다. 오늘 학교에서 배운 수학 개념을, 오늘 저녁에 다시 정리합니다. 이게 진짜 실력입니다. 선행학습으로 앞만 나가는 게 아니라, 배운 걸 확실히 내 것으로 만드는 겁니다.">
+        <div class="slide-content" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white;">
+            <h2 class="text-7xl font-black mb-16">핵심 차별점 ③</h2>
+            <div class="bg-white/20 backdrop-blur-lg p-16 rounded-3xl border-4 border-white/40 w-full max-w-5xl">
+                <div class="text-9xl mb-8">📚</div>
+                <h3 class="text-6xl font-black mb-8">학교 수업 기반 맞춤 계획</h3>
+                <div class="grid grid-cols-2 gap-8 mt-12">
+                    <div>
+                        <p class="text-3xl mb-4 text-red-300">❌ 학원 방식</p>
+                        <p class="text-2xl opacity-80">학원 진도 따로<br/>학교 진도 따로</p>
+                    </div>
+                    <div>
+                        <p class="text-3xl mb-4 text-green-300">✅ 우리 방식</p>
+                        <p class="text-2xl opacity-80">오늘 배운 내용<br/>오늘 복습</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: 핵심 차별점 4 (비용) -->
+    <div class="slide" data-note="[차별점 4 - 2분] 마지막! 가장 중요한 비용입니다. 학원은 한 달에 얼마입니까? 90만원입니다. 온라인 강의는 10만원, 학습 앱은 3만원. 그런데 우리는? 학교 연계 시 월 5만원, 개별 신청 시 월 10만원입니다! (잠시 멈춤) 이 가격으로 DA.UM 컨설팅의 전문 관리를 받고, 실시간으로 소통하고, 맞춤형 학습 계획을 받을 수 있습니다. 학교 연계로 3년간 계산하면 얼마나 절약될까요? 3,060만원입니다. 이 돈으로 대학 등록금 2년을 낼 수 있습니다.">
+        <div class="slide-content" style="background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); color: white;">
+            <h2 class="text-7xl font-black mb-16">핵심 차별점 ④</h2>
+            <div class="bg-white/20 backdrop-blur-lg p-16 rounded-3xl border-4 border-white/40 w-full max-w-6xl text-center">
+                <div class="text-9xl mb-8">💰</div>
+                <h3 class="text-6xl font-black mb-12">합리적인 가격</h3>
+                <div class="grid grid-cols-3 gap-4 mb-12">
+                    <div class="bg-white/20 p-6 rounded-xl">
+                        <p class="text-xl mb-2">학원</p>
+                        <p class="text-5xl font-black text-red-300">90</p>
+                        <p class="text-lg">만원/월</p>
+                    </div>
+                    <div class="bg-white/20 p-6 rounded-xl">
+                        <p class="text-xl mb-2">온라인</p>
+                        <p class="text-5xl font-black text-orange-300">10</p>
+                        <p class="text-lg">만원/월</p>
+                    </div>
+                    <div class="bg-white/20 p-6 rounded-xl">
+                        <p class="text-xl mb-2">앱</p>
+                        <p class="text-5xl font-black text-yellow-300">3</p>
+                        <p class="text-lg">만원/월</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <div class="bg-green-400 p-8 rounded-2xl border-4 border-yellow-300">
+                        <p class="text-2xl mb-2 text-gray-900">🏫 학교 연계</p>
+                        <p class="text-7xl font-black text-gray-900">5</p>
+                        <p class="text-xl text-gray-900">만원/월</p>
+                        <p class="text-sm mt-2 text-gray-700">단체 할인</p>
+                    </div>
+                    <div class="bg-purple-400 p-8 rounded-2xl border-4 border-pink-300">
+                        <p class="text-2xl mb-2 text-white">👤 개별 신청</p>
+                        <p class="text-7xl font-black text-white">10</p>
+                        <p class="text-xl text-white">만원/월</p>
+                        <p class="text-sm mt-2 text-white/80">1:1 맞춤</p>
+                    </div>
+                </div>
+                <div class="bg-yellow-400 text-gray-900 p-8 rounded-2xl">
+                    <p class="text-4xl font-black">학교 연계 시 3년간 3,060만원 절약!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: 실제 성과 데이터 -->
+    <div class="slide" data-note="[성과 데이터 - 3분] 말로만 하는 게 아닙니다. 실제 데이터를 보시죠. 이미 이 프로그램을 시작한 학생들의 평균 달성률은 85%입니다. 주 32시간 목표 중에서 평균 27.2시간을 달성했습니다. 그리고 성적은? 평균 15점이 올랐습니다. 100점 만점 기준입니다. 국어 12점, 영어는 무려 18점, 수학 15점, 과학 14점, 사회 13점. 전 과목 고르게 올랐습니다. 특정 과목만 잘하는 게 아니라 전체적으로 실력이 향상된 겁니다.">
+        <div class="slide-content bg-blue-50">
+            <h2 class="slide-title text-blue-900">실제 검증된 성과</h2>
+            <div class="grid grid-cols-3 gap-8 mb-12 w-full max-w-6xl">
+                <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-blue-300 text-center">
+                    <div class="text-8xl font-black text-blue-600 mb-4">85%</div>
+                    <p class="text-2xl font-bold text-gray-800 mt-2">평균 달성률</p>
+                    <p class="text-lg text-gray-600 mt-2">주 27.2시간 / 32시간</p>
+                </div>
+                <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-green-300 text-center">
+                    <div class="text-8xl font-black text-green-600 mb-4">+15점</div>
+                    <p class="text-2xl font-bold text-gray-800 mt-2">평균 성적 향상</p>
+                    <p class="text-lg text-gray-600 mt-2">100점 만점 기준</p>
+                </div>
+                <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-purple-300 text-center">
+                    <div class="text-7xl font-black text-purple-600 mb-4">3,060</div>
+                    <p class="text-2xl font-bold text-gray-800 mt-2">만원 절감</p>
+                    <p class="text-lg text-gray-600 mt-2">3년 기준</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl w-full max-w-6xl shadow-xl">
+                <h3 class="text-3xl font-bold mb-6 text-center text-gray-800">과목별 성적 향상</h3>
+                <div class="grid grid-cols-5 gap-4 text-center">
+                    <div>
+                        <div class="text-5xl font-black text-red-500 mb-2">+12점</div>
+                        <div class="text-xl font-semibold">국어</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-blue-500 mb-2">+18점</div>
+                        <div class="text-xl font-semibold">영어</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-purple-500 mb-2">+15점</div>
+                        <div class="text-xl font-semibold">수학</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-green-500 mb-2">+14점</div>
+                        <div class="text-xl font-semibold">과학</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-orange-500 mb-2">+13점</div>
+                        <div class="text-xl font-semibold">사회</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: 실제 학부모 후기 1 -->
+    <div class="slide" data-note="[후기 1 - 2분] 실제 학부모님들의 생생한 후기입니다. 서울 모 중학교 2학년 학부모님 말씀입니다. '처음엔 반신반의했는데, 3개월 만에 아이 성적이 20점 올랐어요. 학원 3개 끊고 이 프로그램만 했는데도 오히려 성적이 더 올랐습니다.' 여기서 주목하실 점은 '학원 3개를 끊었다'는 겁니다. 그런데도 성적이 올랐습니다. 왜일까요? 아이가 지치지 않았기 때문입니다.">
+        <div class="slide-content bg-purple-50">
+            <h2 class="slide-title text-purple-900">학부모님 생생 후기 ①</h2>
+            <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-purple-300 w-full max-w-5xl">
+                <div class="flex items-center mb-8">
+                    <div class="text-7xl mr-6">👩</div>
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">서울 ○○중 2학년 학부모</p>
+                        <div class="text-yellow-500 text-2xl mt-2">★★★★★ 5.0</div>
+                    </div>
+                </div>
+                <p class="text-3xl text-gray-700 leading-relaxed italic">
+                    "처음엔 반신반의했는데, <strong class="text-purple-600">3개월 만에 아이 성적이 20점 올랐어요.</strong> 
+                    학원 3개 끊고 이 프로그램만 했는데도 오히려 성적이 더 올랐습니다. 
+                    무엇보다 <strong class="text-purple-600">아이가 스스로 공부하는 모습</strong>을 보니 뭉클했어요."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: 실제 학부모 후기 2 -->
+    <div class="slide" data-note="[후기 2 - 2분] 경기도 모 중학교 1학년 학부모님입니다. '학원비 월 100만원 쓰던 때보다 아이가 덜 지쳐 보여요. 집에서 자기 속도로 공부하니까 스트레스도 줄고, 담임 선생님이 매주 피드백 주시니 더 믿음이 갑니다.' 여기서 핵심은 '자기 속도'입니다. 학원은 진도가 정해져 있습니다. 이해를 못 해도 다음 단원으로 넘어갑니다. 우리는 아이가 이해할 때까지 할 수 있습니다.">
+        <div class="slide-content bg-green-50">
+            <h2 class="slide-title text-green-900">학부모님 생생 후기 ②</h2>
+            <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-green-300 w-full max-w-5xl">
+                <div class="flex items-center mb-8">
+                    <div class="text-7xl mr-6">👨</div>
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">경기 ○○중 1학년 학부모</p>
+                        <div class="text-yellow-500 text-2xl mt-2">★★★★★ 5.0</div>
+                    </div>
+                </div>
+                <p class="text-3xl text-gray-700 leading-relaxed italic">
+                    "학원비 월 100만원 쓰던 때보다 <strong class="text-green-600">아이가 덜 지쳐 보여요.</strong> 
+                    집에서 자기 속도로 공부하니까 스트레스도 줄고, 
+                    <strong class="text-green-600">DA.UM 컨설팅이 매주 피드백</strong> 주시니 더 믿음이 갑니다."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: 담임교사 후기 -->
+    <div class="slide" data-note="[교사 후기 - 2분] 선생님들의 반응도 좋습니다. 30년 경력의 베테랑 선생님 말씀입니다. '30년 교직 생활 중 가장 혁신적인 프로그램입니다. DA.UM 컨설팅에서 학생들의 학습 데이터를 실시간으로 관리해주니까 우리 교사들도 상담할 때 구체적으로 얘기할 수 있어요.' 선생님들이 가장 도움이 된다고 하시는 게 뭔지 아십니까? 학생들의 학습 패턴 데이터를 바탕으로 상담할 수 있다는 겁니다. 이제는 더 효과적인 지도가 가능합니다.">
+        <div class="slide-content bg-blue-50">
+            <h2 class="slide-title text-blue-900">학교 선생님 평가</h2>
+            <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-blue-300 w-full max-w-5xl">
+                <div class="flex items-center mb-8">
+                    <div class="text-7xl mr-6">👨‍🏫</div>
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">서울 ○○중 담임교사 (교직 30년)</p>
+                        <div class="text-yellow-500 text-2xl mt-2">★★★★★ 5.0</div>
+                    </div>
+                </div>
+                <p class="text-3xl text-gray-700 leading-relaxed italic">
+                    "<strong class="text-blue-600">30년 교직 생활 중 가장 혁신적인 프로그램</strong>입니다. 
+                    DA.UM 컨설팅에서 학생들의 학습 데이터를 실시간으로 관리해주니까 
+                    우리 교사들도 상담할 때 구체적으로 얘기할 수 있어요. 
+                    '너 어제 수학 2시간 했던데, 어디가 어려웠어?' 하면 
+                    아이들이 깜짝 놀라면서도 진지하게 답변합니다."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 19: 3년 비용 비교 -->
+    <div class="slide" data-note="[비용 비교 - 2분] 이제 구체적인 숫자로 비교해보시죠. 3년간 학원을 다니면 3,240만원입니다. 우리 프로그램은 180만원입니다. 차이가 얼마죠? 3,060만원입니다. (화면을 가리키며) 이 돈으로 뭘 할 수 있을까요? 소형차 한 대를 살 수 있습니다. 대학 등록금 2년을 낼 수 있습니다. 6개월 어학연수를 보낼 수 있습니다. 학원비로 다 날려버릴 건가요, 아니면 우리 아이의 미래를 위해 저축할 건가요?">
+        <div class="slide-content" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
+            <h2 class="text-7xl font-black mb-12 text-gray-900">3년 비용 비교</h2>
+            <div class="grid grid-cols-2 gap-8 w-full max-w-5xl mb-12">
+                <div class="bg-white p-12 rounded-3xl shadow-2xl text-center border-4 border-red-500">
+                    <p class="text-3xl mb-4 text-gray-700">학원 (3년)</p>
+                    <p class="stat-huge text-red-600">3,240</p>
+                    <p class="text-4xl text-gray-700">만원</p>
+                </div>
+                <div class="bg-white p-12 rounded-3xl shadow-2xl text-center border-4 border-green-500">
+                    <p class="text-3xl mb-4 text-gray-700">100일의 변화 (3년)</p>
+                    <p class="stat-huge text-green-600">180</p>
+                    <p class="text-4xl text-gray-700">만원</p>
+                </div>
+            </div>
+            <div class="bg-white p-10 rounded-3xl w-full max-w-5xl border-4 border-gray-900">
+                <p class="text-5xl font-black text-center mb-8 text-gray-900">절약: 3,060만원</p>
+                <div class="grid grid-cols-3 gap-6 text-center">
+                    <div>
+                        <div class="text-6xl mb-3">🚗</div>
+                        <p class="text-2xl font-bold text-gray-800">소형차 1대</p>
+                    </div>
+                    <div>
+                        <div class="text-6xl mb-3">🎓</div>
+                        <p class="text-2xl font-bold text-gray-800">대학 등록금 2년</p>
+                    </div>
+                    <div>
+                        <div class="text-6xl mb-3">✈️</div>
+                        <p class="text-2xl font-bold text-gray-800">어학연수 6개월</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20: 프로그램 제공 내역 -->
+    <div class="slide" data-note="[프로그램 혜택 - 2분] DA.UM 프로그램에 포함된 내역을 말씀드립니다. 첫째, 개인별 맞춤 학습 계획을 수립해드립니다. 우리 아이의 수준과 목표에 맞춰서요. 둘째, DA.UM 컨설팅의 전문 관리를 받으실 수 있습니다. 정라미 대표가 직접 학생들의 학습을 모니터링하고 피드백을 드립니다. 셋째, 학부모님께 주간 리포트를 문자로 보내드립니다. '이번 주 ○○이는 총 28시간 학습했습니다. 달성률 87.5%입니다.' 이런 식으로요. 모든 것이 포함된 가격입니다.">
+        <div class="slide-content gradient-bg text-white">
+            <h2 class="text-7xl font-black mb-16">프로그램 제공 내역</h2>
+            <div class="space-y-6 w-full max-w-5xl">
+                <div class="bg-white/20 backdrop-blur-lg p-10 rounded-3xl border-4 border-white/40">
+                    <div class="flex items-center">
+                        <div class="text-7xl mr-6">📋</div>
+                        <div>
+                            <p class="text-4xl font-bold mb-2">개인별 맞춤 학습 계획</p>
+                            <p class="text-2xl opacity-90">아이 수준과 목표에 맞춤 설계</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg p-10 rounded-3xl border-4 border-white/40">
+                    <div class="flex items-center">
+                        <div class="text-7xl mr-6">👨‍💼</div>
+                        <div>
+                            <p class="text-4xl font-bold mb-2">DA.UM 컨설팅 전문 관리</p>
+                            <p class="text-2xl opacity-90">정라미 대표 직접 모니터링</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg p-10 rounded-3xl border-4 border-white/40">
+                    <div class="flex items-center">
+                        <div class="text-7xl mr-6">📱</div>
+                        <div>
+                            <p class="text-4xl font-bold mb-2">주간 리포트 문자 발송</p>
+                            <p class="text-2xl opacity-90">매주 학습 현황을 문자로</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 21: CTA -->
+    <div class="slide" data-note="[마무리 - 3분] 학부모님, 선택의 시간입니다. 앞으로도 계속 월 90만원씩 학원비를 낼 건가요? 아니면 오늘부터 새로운 시작을 할 건가요? 100일만 믿고 시작해보세요. 100일 후, 우리 아이가 달라져 있을 겁니다. 스스로 공부하고, 성적도 오르고, 무엇보다 자신감이 생긴 모습을 보실 겁니다. 지금 바로 신청하세요. 여러분의 선택이 우리 아이의 미래를 바꿉니다. 감사합니다!">
+        <div class="slide-content gradient-bg text-white">
+            <h2 class="text-8xl font-black mb-16">지금 바로 시작하세요!</h2>
+            <div class="bg-white/20 backdrop-blur-lg p-16 rounded-3xl border-4 border-white/40 text-center w-full max-w-5xl pulse">
+                <p class="text-6xl font-black mb-12">100일 후,<br/>우리 아이가 달라집니다</p>
+                <div class="grid grid-cols-3 gap-8 mb-12">
+                    <div>
+                        <div class="text-7xl mb-4">📚</div>
+                        <p class="text-3xl">스스로<br/>공부하고</p>
+                    </div>
+                    <div>
+                        <div class="text-7xl mb-4">📈</div>
+                        <p class="text-3xl">성적도<br/>오르고</p>
+                    </div>
+                    <div>
+                        <div class="text-7xl mb-4">😊</div>
+                        <p class="text-3xl">자신감이<br/>생깁니다</p>
+                    </div>
+                </div>
+                <p class="text-5xl font-bold">여러분의 선택이<br/>우리 아이의 미래를 바꿉니다</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 22: 학교 설명회 시 -->
+    <div class="slide" data-note="[학교 설명회 활용법 - 2분] 학교 설명회에서 이렇게 활용하세요. 학부모들에게 프로그램을 소개하고, 실제 사례를 보여주고, 예산 안내까지 체계적으로 진행하시면 됩니다.">
+        <div class="slide-content bg-gradient-to-br from-blue-50 to-purple-50">
+            <h2 class="text-6xl font-black text-gray-800 mb-12">2. 학교 설명회 시</h2>
+            
+            <div class="grid grid-cols-2 gap-8 w-full max-w-6xl">
+                <!-- 발표 시나리오 -->
+                <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-blue-300">
+                    <h3 class="text-3xl font-black text-blue-700 mb-6">
+                        발표 시나리오:
+                    </h3>
+                    <div class="space-y-4 text-2xl text-gray-700 leading-relaxed">
+                        <div class="flex items-start">
+                            <span class="text-blue-600 mr-4 mt-1 text-xl">1.</span>
+                            <span>슬라이드 5: <span class="font-bold text-blue-600">프로그램 개요 설명</span></span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-blue-600 mr-4 mt-1 text-xl">2.</span>
+                            <span>슬라이드 13: <span class="font-bold text-green-600">"실제 답을 보여드립니다"</span> (2분 검증)</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-blue-600 mr-4 mt-1 text-xl">3.</span>
+                            <span>슬라이드 14: 예산 안내 <span class="font-bold text-purple-600">(50,000원)</span></span>
+                        </div>
+                        <div class="bg-blue-50 p-5 rounded-xl mt-4 border-2 border-blue-200">
+                            <p class="text-xl font-semibold text-blue-800">→ 예상: "아, 이렇게 관리되는구나!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 교육청 제안 시 -->
+                <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-green-300">
+                    <h3 class="text-3xl font-black text-green-700 mb-6">
+                        제안서 구성:
+                    </h3>
+                    <div class="space-y-4 text-2xl text-gray-700 leading-relaxed">
+                        <div class="flex items-start">
+                            <span class="text-green-600 mr-4 mt-1 text-xl">1.</span>
+                            <div>
+                                <p class="font-bold">DA.UM: 겨울방학 30일 프로그램 제안서.md <span class="text-gray-600">(본문)</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-green-600 mr-4 mt-1 text-xl">2.</span>
+                            <div>
+                                <p>슬라이드 13번 <span class="font-bold text-purple-600">관련 이미지 첨부</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-green-600 mr-4 mt-1 text-xl">3.</span>
+                            <div>
+                                <p class="font-bold text-orange-600">"다시는 없는 건지 시스템 실험 결과" 세트</p>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 p-5 rounded-xl mt-4 border-2 border-green-200">
+                            <p class="text-xl font-semibold text-green-800">→ 교육청: "체계적이고 투명하군요!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 포인트 -->
+            <div class="mt-8 bg-gradient-to-r from-yellow-400 to-orange-400 p-6 rounded-2xl w-full max-w-6xl">
+                <p class="text-2xl font-black text-gray-900 text-center">
+                    <i class="fas fa-star text-white mr-3"></i>
+                    핵심: 실제 화면을 보여주면서 "이렇게 관리됩니다"를 강조!
+                    <i class="fas fa-star text-white ml-3"></i>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 23: 감사 -->
+    <div class="slide" data-note="[엔딩] 긴 시간 집중해서 들어주셔서 감사합니다. 이제 질문 받겠습니다. 궁금하신 점 편하게 물어보세요.">
+        <div class="slide-content gradient-bg text-white">
+            <div class="text-9xl mb-12">🙏</div>
+            <h2 class="text-8xl font-black mb-12">감사합니다</h2>
+            <p class="text-4xl mb-16">질문하실 내용이 있으신가요?</p>
+            <div class="bg-white/20 backdrop-blur-lg p-10 rounded-3xl border-2 border-white/40">
+                <div class="flex justify-center mb-4">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-24 h-24" style="border-radius: 50%; padding: 8px;">
+                </div>
+                <p class="text-2xl">정라미 컨설턴트</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 컨트롤 -->
+    <div class="controls">
+        <button onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button onclick="toggleNotes()"><i class="fas fa-comment"></i></button>
+        <div class="slide-number">
+            <span id="current-slide">1</span> / <span id="total-slides">23</span>
+        </div>
+        <button onclick="toggleTimer()"><i class="fas fa-clock"></i></button>
+        <button onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let timerRunning = false;
+        let seconds = 0;
+        let timerInterval;
+        let notesVisible = false;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // 발표자 노트 업데이트
+            const note = slides[currentSlide].getAttribute('data-note');
+            document.getElementById('speaker-note').textContent = note || '';
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        function toggleTimer() {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+            } else {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    const mins = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    document.getElementById('timer').textContent = 
+                        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+                }, 1000);
+            }
+        }
+        
+        function toggleNotes() {
+            notesVisible = !notesVisible;
+            document.getElementById('speaker-note').classList.toggle('show', notesVisible);
+        }
+        
+        // 키보드 네비게이션
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'n' || e.key === 'N') {
+                toggleNotes();
+            } else if (e.key === 't' || e.key === 'T') {
+                toggleTimer();
+            }
+        });
+        
+        // 초기 노트 설정
+        showSlide(0);
+    </script>
+
+</body>
+</html>

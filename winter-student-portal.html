@@ -69,19 +69,119 @@
         }
         
         /* 모바일 최적화 */
-        @media (max-width: 640px) {
-            .snowflake {
-                font-size: 1rem;
+        @media (max-width: 768px) {
+            body {
+                font-size: 15px;
             }
             
-            .success-toast {
-                top: 10px;
-                right: 10px;
-                left: 10px;
-                right: 10px;
+            nav h1 {
+                font-size: 1rem !important;
+            }
+            
+            nav p {
+                font-size: 0.75rem !important;
+            }
+            
+            main {
+                padding: 0.875rem !important;
+            }
+            
+            .glass-effect {
+                padding: 1.25rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .glass-effect h2,
+            .glass-effect h3 {
+                font-size: 1.2rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: 1fr !important;
+                gap: 0.875rem !important;
+            }
+            
+            /* 주간 학습 통계 - 요일 카드 */
+            .grid-cols-7 {
+                grid-template-columns: repeat(7, 1fr) !important;
+                gap: 0.375rem !important;
+            }
+            
+            .grid-cols-7 > div {
+                padding: 0.625rem 0.25rem !important;
+                border-radius: 0.5rem !important;
+                min-height: 85px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            
+            .grid-cols-7 .text-xs {
+                font-size: 0.7rem !important;
+                font-weight: 600;
+                margin-bottom: 0.25rem;
+            }
+            
+            .grid-cols-7 .text-lg {
+                font-size: 1.1rem !important;
+                font-weight: 900;
+                margin: 0.125rem 0;
+            }
+            
+            .grid-cols-7 .mt-2 {
+                margin-top: 0.375rem !important;
+                font-size: 1.1rem;
+            }
+            
+            button {
+                padding: 0.875rem !important;
+                font-size: 0.95rem !important;
+            }
+            
+            input {
+                font-size: 0.95rem !important;
+                padding: 0.875rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            nav h1 {
+                font-size: 0.95rem !important;
+            }
+            
+            .glass-effect {
+                padding: 1rem !important;
+            }
+            
+            .glass-effect h3 {
+                font-size: 1.1rem !important;
+            }
+            
+            /* 480px 이하에서 요일 카드 더 작게 */
+            .grid-cols-7 {
+                gap: 0.25rem !important;
+            }
+            
+            .grid-cols-7 > div {
+                padding: 0.5rem 0.2rem !important;
+                min-height: 75px;
+            }
+            
+            .grid-cols-7 .text-xs {
+                font-size: 0.65rem !important;
+            }
+            
+            .grid-cols-7 .text-lg {
+                font-size: 1rem !important;
+            }
+            
+            .grid-cols-7 .mt-2 {
+                font-size: 1rem;
             }
         }
     </style>
+    <script src="js/security.js"></script>
 </head>
 <body>
     <!-- 눈송이 효과 -->
@@ -92,53 +192,48 @@
     
     <!-- 상단 네비게이션 -->
     <nav class="glass-effect sticky top-0 z-50 shadow-lg border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-            <div class="flex items-center justify-between h-14 sm:h-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
                 <!-- 로고 & 인사말 -->
-                <div class="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
-                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
-                    <div class="min-w-0">
-                        <h1 class="text-sm sm:text-lg font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent truncate">
-                            겨울방학 30일
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
+                    <div>
+                        <h1 class="text-lg font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                            겨울방학 30일 프로그램
                         </h1>
-                        <p class="text-xs text-gray-600 truncate" id="studentInfo">❄️ 학생 선택</p>
+                        <p class="text-xs text-gray-600" id="studentInfo">❄️ 학생을 선택하세요</p>
                     </div>
                 </div>
                 
-                <!-- 우측 메뉴 -->
-                <div class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-                    <a href="student-personalized-learning.html" class="px-2 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xs sm:text-sm font-semibold hover:shadow-lg transition">
-                        <i class="fas fa-star"></i>
-                        <span class="hidden sm:inline ml-1">나만의 학습</span>
+                <!-- 우측 메뉴 (대시보드 링크 제거) -->
+                <div class="flex items-center space-x-2">
+                    <a href="student-intro.html" class="p-2 text-gray-600 hover:text-cyan-600 transition">
+                        <i class="fas fa-question-circle text-xl"></i>
                     </a>
-                    <div class="px-2 sm:px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full text-xs sm:text-sm font-semibold">
-                        <i class="fas fa-lock"></i>
-                        <span class="hidden sm:inline ml-1">포털</span>
-                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- 메인 컨텐츠 -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
         <!-- 학생 이름 입력 -->
-        <div class="glass-effect rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 animate-slide-up">
+        <div class="glass-effect rounded-2xl shadow-lg p-6 animate-slide-up">
             <label class="block text-sm font-semibold text-gray-700 mb-3">
                 <i class="fas fa-user-circle mr-2 text-cyan-600"></i>내 이름 입력
             </label>
-            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <div class="flex space-x-3">
                 <input 
                     type="text" 
                     id="studentNameInput" 
-                    placeholder="이름 입력 (예: 김민준)"
+                    placeholder="이름을 입력하세요 (예: 김민준)"
                     class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
                     onkeypress="if(event.key==='Enter') loadStudentByName()"
                 >
                 <button 
                     onclick="loadStudentByName()"
-                    class="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+                    class="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                 >
                     <i class="fas fa-search mr-2"></i>찾기
                 </button>
@@ -146,38 +241,21 @@
             <p class="text-xs text-gray-500 mt-2">
                 <i class="fas fa-info-circle mr-1"></i>이름을 정확히 입력하고 "찾기" 버튼을 눌러주세요
             </p>
-            <div class="mt-3 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
-                <p class="text-xs text-yellow-800">
-                    <i class="fas fa-shield-alt mr-1"></i><strong>개인정보 보호:</strong> 본인의 이름으로만 로그인하세요. 다른 학생의 정보는 볼 수 없습니다.
-                </p>
-            </div>
         </div>
 
         <!-- 오늘의 날짜 & 목표 -->
-        <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 text-white animate-slide-up">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 mb-3">
+        <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl shadow-xl p-6 text-white animate-slide-up">
+            <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs sm:text-sm opacity-90 mb-1">오늘</p>
-                    <p class="text-lg sm:text-2xl font-bold" id="todayDate">2025년 1월 12일 (일)</p>
+                    <p class="text-sm opacity-90 mb-1">오늘</p>
+                    <p class="text-2xl font-bold" id="todayDate">2025년 1월 12일 (일)</p>
                 </div>
-                <div class="sm:text-right">
-                    <p class="text-xs sm:text-sm opacity-90 mb-1">오늘 목표</p>
+                <div class="text-right">
+                    <p class="text-sm opacity-90 mb-1">오늘 목표</p>
                     <div class="flex items-center space-x-2">
-                        <p class="text-2xl font-bold" id="dailyTarget">5시간</p>
+                        <p class="text-2xl font-bold" id="dailyTarget">3.5시간</p>
                         <span class="text-xs px-3 py-1 bg-white/20 rounded-full" id="programDay">Day 8</span>
                     </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/20">
-                <div class="text-center">
-                    <p class="text-xs opacity-75 mb-1">평일 목표</p>
-                    <p class="text-lg font-bold">3시간</p>
-                    <p class="text-xs opacity-75">09:00-12:00 (3과목)</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-xs opacity-75 mb-1">주말 목표</p>
-                    <p class="text-lg font-bold">5시간</p>
-                    <p class="text-xs opacity-75">오전 3시간 + 오후 2시간</p>
                 </div>
             </div>
         </div>
@@ -378,223 +456,6 @@
                 </div>
                 <div class="bg-white/20 rounded-full h-3 mt-3">
                     <div class="bg-white h-full rounded-full transition-all" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 이번 주 학습 일정 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-                <i class="fas fa-calendar-week text-cyan-500 mr-2"></i>이번 주 학습 일정
-            </h3>
-            <div class="space-y-3">
-                <!-- 월요일 -->
-                <div class="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-xl border-l-4 border-indigo-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="font-bold text-indigo-800">월요일 (평일)</div>
-                        <span class="text-xs px-2 py-1 bg-indigo-200 text-indigo-800 rounded-full">09:00-12:00 (3시간)</span>
-                    </div>
-                    <div class="text-sm text-gray-700 mb-2">
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-calculator text-indigo-600"></i>
-                            <span><strong>수학</strong>: 개념원리 1단원 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-language text-indigo-600"></i>
-                            <span><strong>영어</strong>: Grammar Zone + 단어 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-book text-indigo-600"></i>
-                            <span><strong>국어</strong>: 비문학 독해 (60분)</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-600 bg-white/50 rounded p-2">
-                        <i class="fas fa-clock mr-1"></i>총 3과목 180분 (3시간)
-                    </div>
-                </div>
-
-                <!-- 화요일 -->
-                <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border-l-4 border-green-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="font-bold text-green-800">화요일 (평일)</div>
-                        <span class="text-xs px-2 py-1 bg-green-200 text-green-800 rounded-full">09:00-12:00 (3시간)</span>
-                    </div>
-                    <div class="text-sm text-gray-700 mb-2">
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-language text-green-600"></i>
-                            <span><strong>영어</strong>: Grammar Zone Unit 3-4 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-flask text-green-600"></i>
-                            <span><strong>과학</strong>: 화학 1단원 개념 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-calculator text-green-600"></i>
-                            <span><strong>수학</strong>: 복습 문제 풀이 (60분)</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-600 bg-white/50 rounded p-2">
-                        <i class="fas fa-clock mr-1"></i>총 3과목 180분 (3시간)
-                    </div>
-                </div>
-
-                <!-- 수요일 -->
-                <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="font-bold text-blue-800">수요일 (평일)</div>
-                        <span class="text-xs px-2 py-1 bg-blue-200 text-blue-800 rounded-full">09:00-12:00 (3시간)</span>
-                    </div>
-                    <div class="text-sm text-gray-700 mb-2">
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-book text-blue-600"></i>
-                            <span><strong>국어</strong>: 문학 작품 분석 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-globe text-blue-600"></i>
-                            <span><strong>사회</strong>: 지리 1단원 정리 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-language text-blue-600"></i>
-                            <span><strong>영어</strong>: 독해 연습 (60분)</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-600 bg-white/50 rounded p-2">
-                        <i class="fas fa-clock mr-1"></i>총 3과목 180분 (3시간)
-                    </div>
-                </div>
-
-                <!-- 목요일 -->
-                <div class="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="font-bold text-purple-800">목요일 (평일)</div>
-                        <span class="text-xs px-2 py-1 bg-purple-200 text-purple-800 rounded-full">09:00-12:00 (3시간)</span>
-                    </div>
-                    <div class="text-sm text-gray-700 mb-2">
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-flask text-purple-600"></i>
-                            <span><strong>과학</strong>: 실험 영상 및 개념 정리 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-calculator text-purple-600"></i>
-                            <span><strong>수학</strong>: 응용 문제 풀이 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-book text-purple-600"></i>
-                            <span><strong>국어</strong>: 어휘 및 문법 (60분)</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-600 bg-white/50 rounded p-2">
-                        <i class="fas fa-clock mr-1"></i>총 3과목 180분 (3시간)
-                    </div>
-                </div>
-
-                <!-- 금요일 -->
-                <div class="p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl border-l-4 border-yellow-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="font-bold text-yellow-800">금요일 (평일)</div>
-                        <span class="text-xs px-2 py-1 bg-yellow-200 text-yellow-800 rounded-full">09:00-12:00 (3시간)</span>
-                    </div>
-                    <div class="text-sm text-gray-700 mb-2">
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-sync text-yellow-600"></i>
-                            <span><strong>주간 복습</strong>: 수학 + 영어 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2 mb-1">
-                            <i class="fas fa-globe text-yellow-600"></i>
-                            <span><strong>사회</strong>: 역사 연표 정리 (60분)</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-check-circle text-yellow-600"></i>
-                            <span><strong>주간 테스트</strong>: 준비 및 풀이 (60분)</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-600 bg-white/50 rounded p-2">
-                        <i class="fas fa-clock mr-1"></i>총 3과목 180분 (3시간)
-                    </div>
-                </div>
-
-                <!-- 토요일 (주말) -->
-                <div class="p-4 bg-gradient-to-r from-pink-50 to-pink-100 rounded-xl border-l-4 border-pink-500">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="font-bold text-pink-800">토요일 (주말)</div>
-                        <span class="text-xs px-2 py-1 bg-pink-200 text-pink-800 rounded-full">총 5시간</span>
-                    </div>
-                    
-                    <!-- 오전 일정 -->
-                    <div class="mb-3 pb-3 border-b border-pink-200">
-                        <div class="text-xs font-bold text-pink-700 mb-2">
-                            <i class="fas fa-sun mr-1"></i>오전 일정 (3시간)
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            <div class="flex items-center space-x-2 mb-1">
-                                <i class="fas fa-calculator text-pink-600"></i>
-                                <span><strong>수학</strong>: 심화 문제 풀이 (90분)</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-language text-pink-600"></i>
-                                <span><strong>영어</strong>: 독해 + 문법 (90분)</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 오후 일정 -->
-                    <div>
-                        <div class="text-xs font-bold text-pink-700 mb-2">
-                            <i class="fas fa-moon mr-1"></i>오후 일정 (2시간)
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            <div class="flex items-center space-x-2 mb-1">
-                                <i class="fas fa-book text-pink-600"></i>
-                                <span><strong>국어</strong>: 문학 작품 분석 (60분)</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-flask text-pink-600"></i>
-                                <span><strong>과학</strong>: 실험 복습 (60분)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 일요일 (주말) -->
-                <div class="p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl border-l-4 border-orange-500">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="font-bold text-orange-800">일요일 (주말)</div>
-                        <span class="text-xs px-2 py-1 bg-orange-200 text-orange-800 rounded-full">총 5시간</span>
-                    </div>
-                    
-                    <!-- 오전 일정 -->
-                    <div class="mb-3 pb-3 border-b border-orange-200">
-                        <div class="text-xs font-bold text-orange-700 mb-2">
-                            <i class="fas fa-sun mr-1"></i>오전 일정 (3시간)
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            <div class="flex items-center space-x-2 mb-1">
-                                <i class="fas fa-language text-orange-600"></i>
-                                <span><strong>영어</strong>: 모의고사 풀이 (90분)</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-calculator text-orange-600"></i>
-                                <span><strong>수학</strong>: 오답 노트 정리 (90분)</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 오후 일정 -->
-                    <div>
-                        <div class="text-xs font-bold text-orange-700 mb-2">
-                            <i class="fas fa-moon mr-1"></i>오후 일정 (2시간)
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            <div class="flex items-center space-x-2 mb-1">
-                                <i class="fas fa-globe text-orange-600"></i>
-                                <span><strong>사회</strong>: 주간 정리 (60분)</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-check-double text-orange-600"></i>
-                                <span><strong>전과목</strong>: 주간 총정리 (60분)</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -954,39 +815,8 @@
                 return;
             }
             
-            // 본인 이름을 세션에 저장 (브라우저 탭이 닫히면 삭제됨)
-            sessionStorage.setItem('currentStudentName', name);
-            
             document.getElementById('studentInfo').textContent = `❄️ ${name} 학생의 학습 포털`;
             showToast(`${name} 학생님, 환영합니다! 오늘도 열심히 공부해요! 💪`);
-            
-            // 입력 필드 비활성화 (로그인 후)
-            document.getElementById('studentNameInput').disabled = true;
-            document.getElementById('studentNameInput').classList.add('bg-gray-100');
-        }
-        
-        // 학습 데이터 저장 시 본인 이름으로만 저장
-        function saveStudentData(subject, time) {
-            const currentStudent = sessionStorage.getItem('currentStudentName');
-            if (!currentStudent) {
-                alert('먼저 본인의 이름을 입력해주세요.');
-                return;
-            }
-            
-            // 본인 이름을 키로 사용하여 데이터 저장
-            const storageKey = `student_${currentStudent}_${subject}`;
-            localStorage.setItem(storageKey, time);
-        }
-        
-        // 학습 데이터 불러오기 (본인 것만)
-        function loadStudentData(subject) {
-            const currentStudent = sessionStorage.getItem('currentStudentName');
-            if (!currentStudent) {
-                return null;
-            }
-            
-            const storageKey = `student_${currentStudent}_${subject}`;
-            return localStorage.getItem(storageKey);
         }
         
         // 페이지 로드 시 초기화
