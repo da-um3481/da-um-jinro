@@ -273,7 +273,7 @@
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 20px;
         }
         
@@ -335,6 +335,16 @@
             
             .intro-box, .middle-school-features {
                 padding: 30px 20px;
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .info-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
