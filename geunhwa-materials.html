@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 프로그램 - 자료실</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background: linear-gradient(135deg, #2962FF 0%, #1E88E5 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .header h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 24px;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            color: #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .card-icon {
+            font-size: 72px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            font-size: 28px;
+            color: #2962FF;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .card-btn {
+            display: block;
+            background: linear-gradient(135deg, #2962FF 0%, #1E88E5 100%);
+            color: white;
+            text-align: center;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(41, 98, 255, 0.4);
+        }
+        
+        .download-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 0;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .download-section h2 {
+            font-size: 36px;
+            color: #2962FF;
+            margin-bottom: 20px;
+        }
+        
+        .download-section p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .download-big-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            padding: 20px 60px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4);
+        }
+        
+        .download-big-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.6);
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-section h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .info-item-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .info-item p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.2);
+            margin-top: 60px;
+        }
+        
+        .footer h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .footer p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎓 DA.UM 다움진로진학컨설팅</h1>
+        <p>겨울방학 프로그램 학교 설명회 자료실</p>
+    </div>
+    
+    <div class="container">
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h2>프레젠테이션</h2>
+                <p>학교 설명회용 PowerPoint 발표 자료<br>10개 슬라이드로 구성된 전문 자료</p>
+                <a href="DA_UM_겨울방학_프로그램_설명회.pptx" download class="card-btn">PPT 다운로드</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📄</div>
+                <h2>상세 안내 자료</h2>
+                <p>웹 기반 상세 설명 자료<br>학년별 프로그램 완벽 안내</p>
+                <a href="DA_UM_겨울방학_프로그램_상세안내.html" target="_blank" class="card-btn">자료 보기</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <h2>요약 전단지</h2>
+                <p>1페이지 간단 요약본<br>핵심 정보만 담은 전단지</p>
+                <a href="DA_UM_겨울방학_프로그램_요약.html" target="_blank" class="card-btn">전단지 보기</a>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h2>⚡ 전체 자료 한번에 받기</h2>
+            <p>모든 설명회 자료를 ZIP 파일로 한번에 다운로드하세요!</p>
+            <a href="download.html" class="download-big-btn">🎁 다운로드 페이지로 이동</a>
+        </div>
+        
+        <div class="info-section">
+            <h2>❄️ 겨울방학 프로그램 특징</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-item-icon">📚</div>
+                    <h3>30일 집중</h3>
+                    <p>체계적인 방학 학습 관리</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">👨‍🏫</div>
+                    <h3>1:1 관리</h3>
+                    <p>개인별 맞춤 학습 지도</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">📊</div>
+                    <h3>맞춤 커리큘럼</h3>
+                    <p>학년별 최적화 프로그램</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">🎯</div>
+                    <h3>진로 컨설팅</h3>
+                    <p>전문 진로진학 지도</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>📚 프로그램 대상</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-item-icon">🎓</div>
+                    <h3>고등학생</h3>
+                    <p>고1, 고2, 고3<br>(예비 고등학생 포함)</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">📖</div>
+                    <h3>중학생</h3>
+                    <p>중1, 중2, 중3</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">🎒</div>
+                    <h3>예비 중학생</h3>
+                    <p>초등학교 6학년</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <h3>📞 문의 및 상담</h3>
+        <p>📱 전화: 010-2657-3481</p>
+        <p>👤 담당자: 정라미</p>
+        <p>🌐 웹사이트: <a href="https://da-um3481.github.io/da-um-jinro/" style="color: white; text-decoration: underline;">da-um3481.github.io/da-um-jinro</a></p>
+        <p style="margin-top: 30px; opacity: 0.8; font-size: 16px;">© 2025 DA.UM 다움진로진학컨설팅</p>
+    </div>
+</body>
+</html>
