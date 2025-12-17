@@ -165,7 +165,7 @@
 **추천 교재 체계**:
 | 수준 | 교재 | EBS 강의 |
 |------|------|----------|
-| 기초 | EBS 만점왕 | 만점왕 기초 강의 |
+| 기초 | EBS 기초 교재 | EBS 중학 프리미엄 기본편 |
 | 중하 | EBS 중학 프리미엄 기본편 | 기본 개념 강의 |
 | 중상 | EBS 중학 프리미엄 실력편 | 실력 향상 강의 |
 | 상급 | EBS 중학 프리미엄 심화편 | 심화 문제 풀이 |
@@ -173,7 +173,6 @@
 **외부 연동**:
 - EBS AI 코스웨어 (단추): https://ai-plus.ebs.co.kr/onestop/mid/main_mid.ebs
 - EBS 중학 프리미엄: https://mid.ebs.co.kr/premium/middle/index
-- EBS 만점왕: https://mid.ebs.co.kr/course/lctrList?TYPE=5
 
 ---
 
