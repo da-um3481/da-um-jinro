@@ -89,73 +89,69 @@
         .middle-school-features {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 40px;
+            padding: 30px;
+            margin-bottom: 30px;
             color: #333;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .middle-school-features h2 {
             color: #7B1FA2;
-            font-size: 34px;
-            margin-bottom: 35px;
+            font-size: 28px;
+            margin-bottom: 25px;
             text-align: center;
         }
         
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 40px;
+            gap: 20px;
+            margin-bottom: 30px;
         }
         
         .feature-box {
             background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-            border-radius: 15px;
-            padding: 35px;
-            border-left: 5px solid #7B1FA2;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #7B1FA2;
             transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            min-height: 420px;
         }
         
         .feature-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(123, 31, 162, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.2);
         }
         
         .feature-box h3 {
             color: #7B1FA2;
-            font-size: 24px;
-            margin-bottom: 18px;
+            font-size: 18px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             font-weight: 700;
         }
         
         .feature-box p {
-            font-size: 17px;
-            line-height: 1.8;
+            font-size: 14px;
+            line-height: 1.5;
             color: #666;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             font-weight: 600;
         }
         
         .feature-box ul {
             list-style: none;
-            margin-top: 15px;
-            flex-grow: 1;
+            margin-top: 8px;
         }
         
         .feature-box ul li {
-            padding: 10px 0;
-            padding-left: 30px;
+            padding: 5px 0;
+            padding-left: 20px;
             position: relative;
             color: #555;
-            font-size: 16px;
-            line-height: 1.7;
+            font-size: 13px;
+            line-height: 1.5;
         }
         
         .feature-box ul li:before {
@@ -164,7 +160,7 @@
             left: 0;
             color: #7B1FA2;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 14px;
         }
         
         .cards-grid {
@@ -329,10 +325,6 @@
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
-            .feature-box {
-                min-height: 380px;
-            }
         }
         
         @media (max-width: 768px) {
@@ -347,28 +339,28 @@
             
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 25px;
+                gap: 15px;
             }
             
             .feature-box {
-                min-height: auto;
-                padding: 30px;
+                padding: 18px;
             }
             
             .feature-box h3 {
-                font-size: 22px;
+                font-size: 17px;
             }
             
             .cards-grid {
                 grid-template-columns: 1fr;
             }
             
-            .download-section {
-                padding: 30px 20px;
+            .intro-box, .middle-school-features {
+                padding: 25px 20px;
             }
             
-            .intro-box, .middle-school-features {
-                padding: 30px 20px;
+            .middle-school-features h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
             }
             
             .info-grid {
@@ -382,11 +374,11 @@
             }
             
             .feature-box h3 {
-                font-size: 20px;
+                font-size: 16px;
             }
             
             .feature-box ul li {
-                font-size: 15px;
+                font-size: 12px;
             }
         }
     </style>
