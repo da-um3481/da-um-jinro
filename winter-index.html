@@ -66,6 +66,14 @@
             display: none;
         }
         
+        .mobile-menu-overlay {
+            display: none;
+        }
+        
+        .mobile-menu-content {
+            display: none;
+        }
+        
         @media (max-width: 1024px) {
             .desktop-nav {
                 display: none;
@@ -76,6 +84,7 @@
             }
             
             .mobile-menu-overlay {
+                display: block;
                 position: fixed;
                 inset: 0;
                 background: rgba(0, 0, 0, 0.5);
@@ -83,6 +92,7 @@
             }
             
             .mobile-menu-content {
+                display: block;
                 position: fixed;
                 top: 0;
                 right: 0;
