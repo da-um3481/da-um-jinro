@@ -6,7 +6,6 @@
     <title>DA.UM 겨울방학 30일 프로그램 - 학습 관리 대시보드</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/mobile-nav-fix.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
@@ -61,74 +60,6 @@
         .pulse-glow {
             animation: pulse-glow 2s infinite;
         }
-        
-        /* 모바일 최적화 - 한글 가로쓰기 강제 */
-        @media (max-width: 768px) {
-            header .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-            
-            /* 로고 및 타이틀 축소 */
-            header img {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-            
-            header h1 {
-                font-size: 1rem;
-            }
-            
-            header p {
-                font-size: 0.625rem;
-            }
-            
-            /* 네비게이션 가로 스크롤 */
-            nav {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                gap: 0.5rem;
-            }
-            
-            nav::-webkit-scrollbar {
-                display: none;
-            }
-            
-            /* 모바일 네비게이션 링크 - 아이콘 위, 텍스트 아래 */
-            nav a.nav-link {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 0.5rem 0.75rem;
-                font-size: 0.65rem;
-                min-width: 3.5rem;
-                flex-shrink: 0;
-                writing-mode: horizontal-tb !important;
-                white-space: nowrap;
-                line-height: 1.2;
-            }
-            
-            nav a.nav-link i {
-                display: block;
-                margin: 0 0 0.25rem 0;
-                font-size: 1.1rem;
-            }
-            
-            nav a.nav-link span:not(.absolute) {
-                display: block;
-                text-align: center;
-            }
-            
-            nav a span.absolute {
-                font-size: 0.5rem;
-                padding: 0.125rem 0.375rem;
-                top: -0.25rem;
-                right: -0.25rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -142,7 +73,7 @@
                 <!-- 로고 및 타이틀 -->
                 <div>
                     <div class="flex items-center space-x-3 mb-2">
-                        <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
                         <div>
                             <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
                                 DA.UM 겨울방학 30일 프로그램
@@ -154,27 +85,23 @@
                 
                 <!-- 네비게이션 -->
                 <nav class="flex space-x-2">
-                    <a href="winter-index.html" class="nav-link px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
-                        <i class="fas fa-home mr-2"></i><span>대시보드</span>
+                    <a href="winter-index.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
+                        <i class="fas fa-home mr-2"></i>대시보드
                     </a>
-                    <a href="student-personalized-learning.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium relative">
-                        <i class="fas fa-bullseye mr-2"></i><span>맞춤학습</span>
-                        <span class="absolute -top-1 -right-1 px-1.5 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full">NEW</span>
+                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-user-graduate mr-2"></i>학생 포털
                     </a>
-                    <a href="winter-student-portal.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-user-graduate mr-2"></i><span>학생 포털</span>
+                    <a href="winter-weekly-schedule.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-calendar-week mr-2"></i>주간일정
                     </a>
-                    <a href="winter-weekly-schedule.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-calendar-week mr-2"></i><span>주간일정</span>
+                    <a href="winter-materials.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-book-open mr-2"></i>교재관리
                     </a>
-                    <a href="winter-materials.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-book-open mr-2"></i><span>교재관리</span>
+                    <a href="winter-feedback.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-comments mr-2"></i>피드백
                     </a>
-                    <a href="winter-feedback.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-comments mr-2"></i><span>피드백</span>
-                    </a>
-                    <a href="winter-report.html" class="nav-link px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
-                        <i class="fas fa-chart-line mr-2"></i><span>보고서</span>
+                    <a href="winter-report.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-chart-line mr-2"></i>보고서
                     </a>
                 </nav>
             </div>
@@ -233,23 +160,18 @@
             </div>
         </div>
 
-        <!-- 빠른 등록 섹션 (NEW!) -->
+        <!-- 빠른 학생 등록 섹션 (NEW!) -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 mb-6">
             <div class="flex justify-between items-center mb-6">
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mr-3">
                         <i class="fas fa-user-plus text-white"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800">⚡ 빠른 등록</h3>
+                    <h3 class="text-xl font-bold text-gray-800">👨‍🎓 빠른 학생 등록</h3>
                 </div>
-                <div class="flex space-x-2">
-                    <a href="schools-management-new.html" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition text-sm font-medium">
-                        <i class="fas fa-school mr-2"></i>학교 관리
-                    </a>
-                    <a href="students-new.html" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition text-sm font-medium">
-                        <i class="fas fa-list mr-2"></i>학생 관리
-                    </a>
-                </div>
+                <a href="students.html" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition text-sm font-medium">
+                    <i class="fas fa-list mr-2"></i>전체 학생 목록
+                </a>
             </div>
             
             <form id="quickStudentForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">

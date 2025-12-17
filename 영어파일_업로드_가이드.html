@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영어 파일 업로드 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 15px;
+            border-left: 6px solid #667eea;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+        
+        .step h2 {
+            display: inline;
+            color: #667eea;
+            font-size: 1.8em;
+        }
+        
+        .file-name {
+            background: #fff3cd;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Consolas', monospace;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #856404;
+            border: 2px solid #ffc107;
+        }
+        
+        .action {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .warning {
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 5px solid #f44336;
+        }
+        
+        .success {
+            background: #d4edda;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 1.5em;
+            border: 3px solid #28a745;
+            color: #155724;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            color: #e83e8c;
+            font-size: 1.1em;
+        }
+        
+        .url-box {
+            background: #667eea;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.3em;
+            margin: 25px 0;
+            font-family: 'Consolas', monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 영어 파일 업로드 가이드</h1>
+        
+        <div class="tip" style="font-size: 1.2em; text-align: center;">
+            <strong>🎯 목표: 한글 파일명 문제 해결!</strong><br>
+            영어 이름으로 된 파일을 GitHub에 올려서<br>
+            학생들이 접속할 수 있게 만들기!
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">1</span> 파일 2개 다운로드</h2>
+            <div style="margin-left: 65px; margin-top: 20px;">
+                <p style="font-size: 1.2em; margin-bottom: 20px;">GenSpark 왼쪽 파일 목록에서 이 2개를 찾으세요:</p>
+                
+                <div class="file-name">
+                    ⭐ winter-student-portal.html
+                </div>
+                <p style="margin: 10px 0 25px 0; color: #666;">→ 학생들이 사용할 포털 (가장 중요!)</p>
+                
+                <div class="file-name">
+                    ⭐ students-bulk-upload.html
+                </div>
+                <p style="margin: 10px 0 25px 0; color: #666;">→ 30명 한 번에 등록하는 페이지</p>
+                
+                <div class="action">
+                    <strong>다운로드 방법:</strong><br>
+                    1. 파일 이름 클릭<br>
+                    2. <code>Ctrl + S</code> 누르기<br>
+                    3. 바탕화면 "daum-files" 폴더에 저장<br>
+                    4. <strong>파일명 절대 바꾸지 마세요!</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2><span class="step-number">2</span> GitHub에 올리기</h2>
+            <div style="margin-left: 65px; margin-top: 20px;">
+                <div class="url-box">
+                    https://github.com/da-um3481/da-um-jinro
+                </div>
+                
+                <p style="font-size: 1.2em; margin: 20px 0;">위 주소로 가서:</p>
+                
+                <div class="action">
+                    1. 오른쪽 위 <strong>"Add file"</strong> 버튼 클릭<br>
+                    2. <strong>"Upload files"</strong> 선택<br>
+                    3. 파일 2개를 <strong>마우스로 끌어다 놓기</strong><br>
+                    4. 아래로 스크롤<br>
+                    5. <strong>"Commit changes"</strong> 버튼 클릭 (초록색)
+                </div>
+                
+                <div class="tip">
+                    💡 <strong>팁:</strong> 끌어다 놓기가 어려우면<br>
+                    "choose your files" 글자를 클릭해서<br>
+                    파일 2개를 선택해도 됩니다!
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2><span class="step-number">3</span> 5분 기다리기</h2>
+            <div style="margin-left: 65px; margin-top: 20px;">
+                <p style="font-size: 1.3em; margin: 20px 0;">
+                    ⏰ GitHub가 파일을 처리하는 시간이 필요해요<br>
+                    커피 ☕ 한 잔 마시면서 5분만 기다리세요!
+                </p>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2><span class="step-number">4</span> 접속 테스트</h2>
+            <div style="margin-left: 65px; margin-top: 20px;">
+                <p style="font-size: 1.2em; margin-bottom: 20px;">5분 후 이 주소로 가보세요:</p>
+                
+                <div class="url-box">
+                    https://da-um3481.github.io/da-um-jinro/winter-student-portal.html
+                </div>
+                
+                <div class="success" style="margin-top: 30px;">
+                    ✅ 성공하면 이렇게 보여요:<br><br>
+                    • "DA.UM 학생 포털" 제목<br>
+                    • "이름을 입력하세요" 입력창<br>
+                    • 보라색 배경<br>
+                    • 예쁜 디자인
+                </div>
+                
+                <div class="warning">
+                    ❌ <strong>404 오류가 나면:</strong><br>
+                    • 5분 더 기다리기<br>
+                    • 주소 정확히 복사했는지 확인<br>
+                    • 파일명이 정확한지 확인<br>
+                    (winter-student-portal.html)
+                </div>
+            </div>
+        </div>
+
+        <div class="success" style="font-size: 1.3em;">
+            🎉 성공하면 저에게 알려주세요!<br>
+            "됐어요!" 라고만 말씀해주세요!
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+            <h3 style="margin-bottom: 20px; font-size: 1.8em;">💬 진행 상황을 알려주세요:</h3>
+            <div style="font-size: 1.3em; line-height: 2.5;">
+                <p>"파일 다운로드 완료"</p>
+                <p>"GitHub에 업로드 완료"</p>
+                <p>"5분 기다리는 중"</p>
+                <p>"됐어요!" 🎉</p>
+                <p>"안 돼요" 😅</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -6,7 +6,6 @@
     <title>DA.UM 겨울방학 30일 - 주간 일정</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/mobile-nav-fix.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -53,7 +52,7 @@
         <div class="container mx-auto px-6 py-5">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <img src="https://www.genspark.ai/api/files/s/3voQr3x8" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
                     <div>
                         <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
                             겨울방학 30일 - 주간 일정
@@ -252,6 +251,9 @@
         </div>
     </main>
 
+    <!-- JavaScript 로드 -->
+    <script src="js/winter-weekly-schedule.js"></script>
+    
     <script>
         // 눈송이 생성
         const snowflakesContainer = document.getElementById('snowflakes');
@@ -263,172 +265,6 @@
             snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
             snowflake.style.animationDelay = Math.random() * 5 + 's';
             snowflakesContainer.appendChild(snowflake);
-        }
-
-        // 자동 스케줄 생성 함수
-        function generateAutoSchedule() {
-            const studentName = document.getElementById('studentSelect').value.trim();
-            
-            if (!studentName) {
-                alert('학생 이름을 먼저 입력해주세요!');
-                return;
-            }
-            
-            // 시간 가이드 카드 표시
-            document.getElementById('timeGuideCard').classList.remove('hidden');
-            document.getElementById('scheduleSection').classList.remove('hidden');
-            
-            // 기본 주간 스케줄 템플릿
-            const weekdaySchedule = [
-                { time: '09:00-10:00', subject: '수학', icon: '📐', color: 'blue', goal: '개념 이해 + 문제풀이 30문제' },
-                { time: '10:15-11:15', subject: '영어', icon: '🗣️', color: 'green', goal: '독해 + 문법 + 단어 50개' },
-                { time: '11:30-12:30', subject: '국어', icon: '📖', color: 'red', goal: '독서 + 문법 + 어휘 학습' }
-            ];
-            
-            const saturdaySchedule = [
-                { time: '09:00-10:30', subject: '수학', icon: '📐', color: 'blue', goal: '심화 문제풀이 50문제' },
-                { time: '10:45-12:15', subject: '영어', icon: '🗣️', color: 'green', goal: '모의고사 + 오답정리' },
-                { time: '14:00-15:00', subject: '국어', icon: '📖', color: 'red', goal: '독해 집중 훈련' },
-                { time: '15:15-16:15', subject: '과학', icon: '🔬', color: 'purple', goal: '실험 복습 + 개념 정리' }
-            ];
-            
-            const sundaySchedule = [
-                { time: '09:00-10:30', subject: '영어', icon: '🗣️', color: 'green', goal: '듣기 + 말하기 연습' },
-                { time: '10:45-12:15', subject: '수학', icon: '📐', color: 'blue', goal: '주간 복습 + 오답정리' },
-                { time: '14:00-15:00', subject: '사회', icon: '🌍', color: 'yellow', goal: '개념 정리 + 시사 연계' },
-                { time: '15:15-16:15', subject: '전과목', icon: '📚', color: 'gray', goal: '주간 복습 + 다음 주 계획' }
-            ];
-            
-            // 평일 스케줄 생성 (월~금)
-            const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
-            const weekdayNames = ['월요일', '화요일', '수요일', '목요일', '금요일'];
-            
-            weekdays.forEach((day, index) => {
-                const scheduleDiv = document.getElementById(`${day}Schedule`);
-                scheduleDiv.innerHTML = renderSchedule(weekdaySchedule, weekdayNames[index]);
-            });
-            
-            // 토요일 스케줄
-            document.getElementById('saturdaySchedule').innerHTML = renderSchedule(saturdaySchedule, '토요일');
-            
-            // 일요일 스케줄
-            document.getElementById('sundaySchedule').innerHTML = renderSchedule(sundaySchedule, '일요일');
-            
-            // 로컬스토리지에 저장
-            const scheduleData = {
-                studentName: studentName,
-                weekday: weekdaySchedule,
-                saturday: saturdaySchedule,
-                sunday: sundaySchedule,
-                createdAt: new Date().toISOString()
-            };
-            
-            localStorage.setItem(`schedule_${studentName}`, JSON.stringify(scheduleData));
-            
-            // 성공 메시지
-            showToast(`✅ ${studentName} 학생의 주간 일정이 자동 생성되었습니다!`);
-        }
-        
-        // 스케줄 렌더링 함수
-        function renderSchedule(schedule, dayName) {
-            const colorMap = {
-                'blue': 'from-blue-500 to-blue-600',
-                'green': 'from-green-500 to-green-600',
-                'red': 'from-red-500 to-red-600',
-                'purple': 'from-purple-500 to-purple-600',
-                'yellow': 'from-yellow-500 to-yellow-600',
-                'gray': 'from-gray-500 to-gray-600'
-            };
-            
-            let html = '<div class="space-y-3">';
-            
-            schedule.forEach(item => {
-                html += `
-                    <div class="flex items-center p-4 bg-gradient-to-r ${colorMap[item.color]} rounded-xl text-white shadow-lg">
-                        <div class="text-3xl mr-4">${item.icon}</div>
-                        <div class="flex-1">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-xl font-bold">${item.subject}</span>
-                                <span class="text-sm bg-white/20 px-3 py-1 rounded-full">${item.time}</span>
-                            </div>
-                            <div class="text-sm text-white/90">📋 ${item.goal}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            return html;
-        }
-        
-        // 학생 일정 조회
-        function loadWeeklySchedule() {
-            const studentName = document.getElementById('studentSelect').value.trim();
-            
-            if (!studentName) {
-                alert('학생 이름을 입력해주세요!');
-                return;
-            }
-            
-            // 로컬스토리지에서 일정 불러오기
-            const savedSchedule = localStorage.getItem(`schedule_${studentName}`);
-            
-            if (savedSchedule) {
-                const data = JSON.parse(savedSchedule);
-                
-                // 시간 가이드 카드 표시
-                document.getElementById('timeGuideCard').classList.remove('hidden');
-                document.getElementById('scheduleSection').classList.remove('hidden');
-                
-                // 평일 스케줄 렌더링
-                const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
-                weekdays.forEach(day => {
-                    document.getElementById(`${day}Schedule`).innerHTML = renderSchedule(data.weekday, day);
-                });
-                
-                // 주말 스케줄 렌더링
-                document.getElementById('saturdaySchedule').innerHTML = renderSchedule(data.saturday, '토요일');
-                document.getElementById('sundaySchedule').innerHTML = renderSchedule(data.sunday, '일요일');
-                
-                showToast(`✅ ${studentName} 학생의 저장된 일정을 불러왔습니다!`);
-            } else {
-                alert(`${studentName} 학생의 저장된 일정이 없습니다.\n"자동 스케줄 생성" 버튼을 눌러 일정을 만들어주세요.`);
-            }
-        }
-        
-        // 요일별 일정 수정 (간단한 알림만)
-        function editDaySchedule(day) {
-            const dayNames = {
-                'monday': '월요일',
-                'tuesday': '화요일',
-                'wednesday': '수요일',
-                'thursday': '목요일',
-                'friday': '금요일',
-                'saturday': '토요일',
-                'sunday': '일요일'
-            };
-            
-            alert(`${dayNames[day]} 일정 수정 기능은 곧 추가될 예정입니다.\n현재는 "자동 스케줄 생성"으로 일정을 다시 만들어주세요.`);
-        }
-        
-        // 토스트 메시지
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-24 right-6 bg-white rounded-xl shadow-2xl p-5 flex items-center space-x-3 border-l-4 border-cyan-500 z-50 animate-fade-in';
-            toast.innerHTML = `
-                <i class="fas fa-check-circle text-cyan-500 text-3xl"></i>
-                <div>
-                    <div class="font-bold text-gray-800">${message}</div>
-                    <div class="text-xs text-gray-500 mt-1">자동으로 저장되었습니다</div>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.5s';
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
         }
     </script>
 </body>

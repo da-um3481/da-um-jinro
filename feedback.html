@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주간 피드백 - 공부를 어떻게 할지 모르겠어요~~</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- 상단 네비게이션 -->
+    <nav class="bg-indigo-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">📚 공부를 어떻게 할지 모르겠어요~~</h1>
+                    <p class="text-sm text-indigo-200">주간 피드백 작성</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="index.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-home mr-2"></i>대시보드
+                    </a>
+                    <a href="students.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-users mr-2"></i>학생 관리
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- 학생 정보 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">👨‍🎓 학생 정보</h2>
+            <div id="studentInfo" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 동적으로 생성됨 -->
+            </div>
+        </div>
+
+        <!-- 주간 선택 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">📅 피드백 주간 선택</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">주 시작일</label>
+                    <input type="date" id="weekStart" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">주 종료일</label>
+                    <input type="date" id="weekEnd" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+            <button onclick="loadWeeklyData()" class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                <i class="fas fa-sync-alt mr-2"></i>주간 데이터 불러오기
+            </button>
+        </div>
+
+        <!-- 주간 학습 통계 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-4">📊 주간 학습시간 현황</h3>
+                <div style="height: 300px;">
+                    <canvas id="weeklyTimeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-4">📈 과목별 달성률</h3>
+                <div style="height: 300px;">
+                    <canvas id="subjectAchievementChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 주간 상세 데이터 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">📋 주간 상세 데이터</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-3">계획 vs 실제</h4>
+                    <div id="weeklyStats" class="space-y-2">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-3">과목별 진도</h4>
+                    <div id="subjectProgress" class="space-y-2">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 피드백 작성 폼 -->
+        <form id="feedbackForm" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-6">✍️ 주간 피드백 작성</h2>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">학습시간 달성률 (%)</label>
+                <input type="number" id="achievement" min="0" max="100" step="0.1" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" readonly>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">국어 진도</label>
+                    <textarea id="koreanProgress" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                        placeholder="예: 문학 작품 분석 3편 완료"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">영어 진도</label>
+                    <textarea id="englishProgress" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                        placeholder="예: Grammar Zone Unit 5-7 완료"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">수학 진도</label>
+                    <textarea id="mathProgress" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                        placeholder="예: 일차함수 문제풀이 50문항"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">과학 진도</label>
+                    <textarea id="scienceProgress" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                        placeholder="예: 화학반응 단원 복습"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">사회 진도</label>
+                    <textarea id="socialProgress" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                        placeholder="예: 근대사 정리 및 문제풀이"></textarea>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">개선사항 💡</label>
+                <textarea id="improvementNotes" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                    placeholder="예: 수학 공부 시간을 늘릴 필요가 있음. 복습 시간을 매일 30분씩 확보해야 함."></textarea>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">선생님 종합 코멘트 📝</label>
+                <textarea id="teacherComment" rows="5" required class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                    placeholder="이번 주 학습 태도와 성과에 대한 종합 의견을 작성해주세요."></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button type="button" onclick="location.href='index.html'" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                    취소
+                </button>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    <i class="fas fa-save mr-2"></i>피드백 저장
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/feedback.js"></script>
+</body>
+</html>

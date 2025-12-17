@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 등록 엑셀 양식</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 20px;
+            border-left: 6px solid #667eea;
+        }
+        
+        .step h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .excel-table th {
+            background: #667eea;
+            color: white;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .excel-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 1.1em;
+        }
+        
+        .excel-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .copyable {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Consolas', monospace;
+            white-space: pre;
+            overflow-x: auto;
+            cursor: pointer;
+            border: 2px solid #ffc107;
+        }
+        
+        .copyable:hover {
+            background: #ffe9a8;
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .tip h3 {
+            color: #2196f3;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .tip p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #666;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .warning h3 {
+            color: #856404;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: scale(1.05);
+        }
+        
+        .number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 학생 30명 등록 양식</h1>
+        
+        <div class="step">
+            <h2>📋 엑셀 양식 (복사해서 사용하세요)</h2>
+            
+            <table class="excel-table">
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>학교</th>
+                        <th>학년</th>
+                        <th>프로그램</th>
+                        <th>시작일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>김철수</td>
+                        <td>A중학교</td>
+                        <td>1</td>
+                        <td>겨울방학 30일</td>
+                        <td>2025-01-02</td>
+                    </tr>
+                    <tr>
+                        <td>이영희</td>
+                        <td>A중학교</td>
+                        <td>2</td>
+                        <td>겨울방학 30일</td>
+                        <td>2025-01-02</td>
+                    </tr>
+                    <tr>
+                        <td>박민수</td>
+                        <td>A중학교</td>
+                        <td>1</td>
+                        <td>겨울방학 30일</td>
+                        <td>2025-01-02</td>
+                    </tr>
+                    <tr>
+                        <td>정수진</td>
+                        <td>A중학교</td>
+                        <td>3</td>
+                        <td>겨울방학 30일</td>
+                        <td>2025-01-02</td>
+                    </tr>
+                    <tr>
+                        <td>최민호</td>
+                        <td>A중학교</td>
+                        <td>2</td>
+                        <td>겨울방학 30일</td>
+                        <td>2025-01-02</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #999; font-style: italic;">
+                            ... 나머지 25명 추가 ...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="step">
+            <h2>📝 복사용 텍스트 (클릭하면 복사됩니다)</h2>
+            <div class="copyable" onclick="copyText(this)" id="sampleData">이름	학교	학년	프로그램	시작일
+김철수	A중학교	1	겨울방학 30일	2025-01-02
+이영희	A중학교	2	겨울방학 30일	2025-01-02
+박민수	A중학교	1	겨울방학 30일	2025-01-02
+정수진	A중학교	3	겨울방학 30일	2025-01-02
+최민호	A중학교	2	겨울방학 30일	2025-01-02</div>
+            <p style="text-align: center; color: #999; margin-top: 10px;">
+                ⬆️ 위 박스를 클릭하면 복사됩니다 (나머지 25명은 직접 추가하세요)
+            </p>
+        </div>
+        
+        <div class="step">
+            <h2>🎯 등록 순서 (3단계)</h2>
+            
+            <div style="margin: 20px 0; font-size: 1.2em; line-height: 2.5;">
+                <p><span class="number">1</span> <strong>엑셀 준비:</strong> 위 양식대로 30명 학생 정보 작성</p>
+                <p><span class="number">2</span> <strong>복사:</strong> 엑셀에서 전체 선택 (헤더 포함) → Ctrl+C</p>
+                <p><span class="number">3</span> <strong>붙여넣기:</strong> 학생 등록 페이지 → 입력창 클릭 → Ctrl+V → 미리보기 → 등록하기</p>
+            </div>
+        </div>
+        
+        <div class="tip">
+            <h3>💡 중요한 팁</h3>
+            <p>
+                <strong>1. 구분자는 탭(Tab)입니다</strong><br>
+                • 엑셀에서 복사하면 자동으로 탭으로 구분됩니다<br>
+                • 손으로 입력할 때는 Tab 키를 누르세요<br><br>
+                
+                <strong>2. 헤더(첫 줄)도 함께 복사하세요</strong><br>
+                • "이름	학교	학년	프로그램	시작일" 이 줄도 포함!<br><br>
+                
+                <strong>3. 날짜 형식을 지켜주세요</strong><br>
+                • 2025-01-02 (이런 형식)<br>
+                • 2025/01/02 (이것도 가능)<br><br>
+                
+                <strong>4. 프로그램명을 정확히</strong><br>
+                • "겨울방학 30일" (띄어쓰기 포함)
+            </p>
+        </div>
+        
+        <div class="warning">
+            <h3>⚠️ 주의사항</h3>
+            <p>
+                <strong>• 학교명을 똑같이 써주세요</strong><br>
+                모든 학생이 같은 학교라면 "A중학교"로 통일<br><br>
+                
+                <strong>• 학년은 숫자만</strong><br>
+                "1학년" (X) → "1" (O)<br><br>
+                
+                <strong>• 미리보기를 꼭 확인하세요</strong><br>
+                등록하기 전에 데이터가 제대로 들어갔는지 확인!
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; padding: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 20px;">
+            <h2 style="color: white; font-size: 2em; margin-bottom: 20px;">
+                준비되셨나요? 🎯
+            </h2>
+            <p style="color: white; font-size: 1.3em; margin-bottom: 30px;">
+                학생 등록 페이지로 가서 등록을 시작하세요!
+            </p>
+            <a href="https://da-um3481.github.io/da-um-jinro/students-bulk-upload.html" target="_blank">
+                <button class="button">
+                    📝 학생 등록하러 가기
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function copyText(element) {
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalBg = element.style.background;
+                element.style.background = '#28a745';
+                element.style.color = 'white';
+                element.textContent = '✅ 복사되었습니다!';
+                
+                setTimeout(() => {
+                    element.style.background = originalBg;
+                    element.style.color = 'black';
+                    element.textContent = text;
+                }, 2000);
+            }).catch(() => {
+                alert('복사 실패! 수동으로 복사해주세요.');
+            });
+        }
+    </script>
+</body>
+</html>

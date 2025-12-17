@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엑셀로 학생 등록하기 - 컴맹도 5분만에!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .header .time-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .step-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #667eea;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-right: 20px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .step-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .step-time {
+            background: #ffd700;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: auto;
+        }
+        
+        .instruction {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .instruction-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instruction-title::before {
+            content: '👉';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .instruction-steps {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .instruction-steps li {
+            padding: 12px 20px;
+            margin: 10px 0;
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            position: relative;
+            padding-left: 60px;
+        }
+        
+        .instruction-steps li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .screenshot-box {
+            background: #e9ecef;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .screenshot-box .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        .screenshot-box .text {
+            color: #666;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning-box h4::before {
+            content: '⚠️';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            color: #155724;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .success-box h4::before {
+            content: '✅';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h4 {
+            color: #0c5460;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-box h4::before {
+            content: '💡';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .big-button {
+            display: block;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 30px 0;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .big-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+        }
+        
+        .big-button::before {
+            content: '🚀';
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        
+        tr:hover {
+            background: #e8e9ff;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .checklist {
+            background: white;
+            border: 3px solid #28a745;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .checklist h3 {
+            color: #28a745;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .checklist-item {
+            padding: 15px;
+            margin: 12px 0;
+            background: #f8f9ff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .checklist-item:hover {
+            background: #e8e9ff;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.8);
+            cursor: pointer;
+        }
+        
+        .checklist-item label {
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .big-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 엑셀로 학생 30명 한 번에 등록하기</h1>
+            <div class="subtitle">컴맹도 따라할 수 있는 완전 초보 가이드</div>
+            <div class="time-badge">⏱️ 총 소요시간: 5분</div>
+        </div>
+
+        <div class="success-box">
+            <h4>축하합니다! 이제 한 명씩 입력하지 않아도 됩니다!</h4>
+            <p>엑셀 파일로 30명을 단 3단계로 한 번에 등록할 수 있습니다.</p>
+            <p><strong>엑셀이 없어도 괜찮아요!</strong> 구글 스프레드시트(무료)로도 가능합니다.</p>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step-container">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">템플릿 다운로드</div>
+                <div class="step-time">⏱️ 1분</div>
+            </div>
+
+            <div class="instruction">
+                <div class="instruction-title">이렇게 하세요</div>
+                <ul class="instruction-steps">
+                    <li data-step="1">아래에 있는 <span class="highlight">파란색 큰 버튼</span>을 누릅니다</li>
+                    <li data-step="2">"students-bulk-upload.html" 파일을 <span class="highlight">더블클릭</span>하여 엽니다</li>
+                    <li data-step="3">화면에 보이는 <span class="highlight">"엑셀 템플릿 다운로드하기"</span> 버튼을 누릅니다</li>
+                    <li data-step="4">다운로드 폴더에 "DA.UM_학생명단_템플릿.xlsx" 파일이 생겼습니다! ✅</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>템플릿이 뭔가요?</h4>
+                <p>템플릿은 <strong>이미 양식이 만들어진 파일</strong>입니다. 마치 빈 신청서를 받은 것처럼, 내용만 채우면 됩니다!</p>
+                <p>첫 번째 줄에 "이름", "학년", "반" 같은 제목이 이미 적혀있어요.</p>
+            </div>
+
+            <div class="screenshot-box">
+                <div class="icon">📥</div>
+                <div class="text">다운로드 버튼을 누르면<br>자동으로 파일이 만들어집니다</div>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-container">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">학생 정보 입력</div>
+                <div class="step-time">⏱️ 3분</div>
+            </div>
+
+            <div class="instruction">
+                <div class="instruction-title">이렇게 하세요</div>
+                <ul class="instruction-steps">
+                    <li data-step="1">다운로드한 파일을 <span class="highlight">더블클릭</span>하여 엑셀에서 엽니다</li>
+                    <li data-step="2">두 번째 줄부터 학생 정보를 입력합니다 (첫 번째 줄은 건드리지 마세요!)</li>
+                    <li data-step="3">이름, 학년, 반, 번호는 <span class="highlight">꼭 입력</span>해야 합니다</li>
+                    <li data-step="4">점수는 나중에 입력해도 되니까 비워둬도 괜찮아요</li>
+                    <li data-step="5">다 입력했으면 <span class="highlight">Ctrl + S</span> 눌러서 저장합니다</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>주의! 이것만은 꼭 지켜주세요</h4>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>첫 번째 줄을 절대 지우지 마세요!</strong> (이름, 학년, 반... 등의 제목)</li>
+                    <li><strong>학년은 1, 2, 3만 가능합니다</strong> (중1, 중2, 중3)</li>
+                    <li><strong>점수는 0~100 사이 숫자만 가능합니다</strong></li>
+                </ul>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">📝 입력 예시 (이렇게 적으면 됩니다)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>학년</th>
+                            <th>반</th>
+                            <th>번호</th>
+                            <th>국어</th>
+                            <th>영어</th>
+                            <th>수학</th>
+                            <th>과학</th>
+                            <th>사회</th>
+                            <th>연락처</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>김철수</td>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>15</td>
+                            <td>75</td>
+                            <td>82</td>
+                            <td>68</td>
+                            <td>79</td>
+                            <td>71</td>
+                            <td>010-1234-5678</td>
+                        </tr>
+                        <tr>
+                            <td>이영희</td>
+                            <td>2</td>
+                            <td>5</td>
+                            <td>8</td>
+                            <td>88</td>
+                            <td>91</td>
+                            <td>85</td>
+                            <td>90</td>
+                            <td>87</td>
+                            <td>010-2345-6789</td>
+                        </tr>
+                        <tr>
+                            <td>박민수</td>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>22</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>010-3456-7890</td>
+                        </tr>
+                        <tr>
+                            <td colspan="10" style="text-align: center; color: #667eea; font-weight: bold;">
+                                👆 박민수는 점수를 비워뒀어요. 나중에 입력해도 됩니다!
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box">
+                <h4>엑셀이 없어요! 어떻게 하나요?</h4>
+                <p><strong>구글 스프레드시트(무료)</strong>를 사용하세요!</p>
+                <ol style="margin-left: 30px; margin-top: 10px;">
+                    <li>인터넷에서 <strong>sheets.google.com</strong> 접속</li>
+                    <li>다운로드한 템플릿 파일을 열기</li>
+                    <li>학생 정보 입력하기</li>
+                    <li>"파일" 메뉴 → "다운로드" → "Microsoft Excel (.xlsx)" 선택</li>
+                    <li>다운로드된 파일을 사용하면 끝!</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-container">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">파일 업로드</div>
+                <div class="step-time">⏱️ 1분</div>
+            </div>
+
+            <div class="instruction">
+                <div class="instruction-title">이렇게 하세요</div>
+                <ul class="instruction-steps">
+                    <li data-step="1">"students-bulk-upload.html" 파일을 다시 엽니다</li>
+                    <li data-step="2">화면에 보이는 <span class="highlight">분홍색 점선 박스</span>를 클릭합니다</li>
+                    <li data-step="3">저장한 엑셀 파일을 선택합니다</li>
+                    <li data-step="4">화면에 학생 명단이 미리보기로 나타납니다</li>
+                    <li data-step="5">내용을 확인하고 <span class="highlight">"등록 완료하기"</span> 버튼을 누릅니다</li>
+                    <li data-step="6">완료! 🎉 30명이 한 번에 등록되었습니다!</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h4>등록이 완료되면?</h4>
+                <p>✅ 학생 관리 페이지에서 바로 확인할 수 있습니다</p>
+                <p>✅ 각 학생의 학습 수준이 자동으로 판정됩니다</p>
+                <p>✅ 이제 학생별 학습 관리를 시작할 수 있습니다!</p>
+            </div>
+
+            <div class="screenshot-box">
+                <div class="icon">🎉</div>
+                <div class="text">등록이 완료되면<br>"30명의 학생이 성공적으로 등록되었습니다"<br>메시지가 나타납니다</div>
+            </div>
+        </div>
+
+        <!-- 오늘의 체크리스트 -->
+        <div class="checklist">
+            <h3>✅ 오늘의 미션 체크리스트</h3>
+            <div class="checklist-item">
+                <input type="checkbox" id="mission1">
+                <label for="mission1"><strong>미션 1:</strong> students-bulk-upload.html 파일 열어보기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="mission2">
+                <label for="mission2"><strong>미션 2:</strong> 템플릿 다운로드 버튼 눌러보기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="mission3">
+                <label for="mission3"><strong>미션 3:</strong> 다운로드한 템플릿 파일 엑셀로 열기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="mission4">
+                <label for="mission4"><strong>미션 4:</strong> 테스트로 학생 3명만 입력해보기 (연습)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="mission5">
+                <label for="mission5"><strong>미션 5:</strong> 파일 저장하고 업로드해보기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="mission6">
+                <label for="mission6"><strong>미션 6:</strong> 학교에서 받은 실제 명단으로 30명 등록하기</label>
+            </div>
+        </div>
+
+        <!-- 문제 해결 가이드 -->
+        <div style="margin-top: 50px;">
+            <h2 style="color: #667eea; font-size: 2em; margin-bottom: 20px; text-align: center;">
+                🆘 문제가 생겼을 때
+            </h2>
+
+            <div class="warning-box">
+                <h4>Q1. "파일을 읽을 수 없습니다" 오류가 나요</h4>
+                <p><strong>해결책:</strong></p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li>엑셀 파일 형식이 .xlsx인지 확인하세요</li>
+                    <li>파일 이름에 특수문자(!, @, # 등)가 있으면 제거하세요</li>
+                    <li>엑셀에서 "다른 이름으로 저장" → ".xlsx" 형식으로 다시 저장해보세요</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>Q2. "필수 항목이 비어있습니다" 오류가 나요</h4>
+                <p><strong>해결책:</strong></p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li>이름, 학년, 반, 번호가 모두 입력되었는지 확인하세요</li>
+                    <li>빈 줄이 있으면 삭제하세요</li>
+                    <li>학년에 "1", "2", "3" 숫자만 입력했는지 확인하세요 (중1 ❌, 1 ✅)</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>Q3. 업로드 버튼이 안 눌러져요</h4>
+                <p><strong>해결책:</strong></p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li>인터넷 브라우저를 Chrome이나 Edge로 바꿔보세요</li>
+                    <li>F5 키를 눌러 페이지를 새로고침하세요</li>
+                    <li>파일 크기가 너무 크면 안 됩니다 (학생 100명 이하로 유지)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>Q4. 학생이 50명인데 가능한가요?</h4>
+                <p><strong>답변:</strong> 네! 5명이든 100명이든 상관없습니다. 같은 방법으로 한 번에 등록 가능합니다.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Q5. 나중에 수정할 수 있나요?</h4>
+                <p><strong>답변:</strong> 물론입니다! "학생 관리" 메뉴에서 언제든지 개별 수정/삭제가 가능합니다.</p>
+            </div>
+        </div>
+
+        <!-- 큰 실행 버튼 -->
+        <a href="students-bulk-upload.html" class="big-button">
+            지금 바로 시작하기 - 학생 일괄 등록 페이지로 이동
+        </a>
+
+        <div class="success-box" style="margin-top: 40px;">
+            <h4>💪 당신은 할 수 있습니다!</h4>
+            <p>처음에는 어려워 보이지만, 한 번만 해보면 정말 쉽습니다.</p>
+            <p><strong>3분이면 30명을 등록할 수 있어요!</strong></p>
+            <p>막히는 부분이 있으면 언제든지 저에게 물어보세요. 바로 도와드립니다! 😊</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #667eea;">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📞 도움이 필요하신가요?</h3>
+            <p style="font-size: 1.2em; color: #666;">
+                "여기서 막혔어요"<br>
+                "이 부분이 이상해요"<br>
+                "오류 메시지가 떠요"<br>
+                <strong style="color: #667eea;">모든 질문 환영합니다! 🙌</strong>
+            </p>
+            <p style="margin-top: 20px; font-size: 1.1em; color: #764ba2;">
+                <strong>정라미</strong> | 010-2657-3481
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 체크리스트 체크 시 로컬 스토리지에 저장
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+            const taskId = checkbox.id;
+            const saved = localStorage.getItem('excel_' + taskId);
+            if (saved === 'true') {
+                checkbox.checked = true;
+            }
+            
+            checkbox.addEventListener('change', function() {
+                localStorage.setItem('excel_' + taskId, this.checked);
+                if (this.checked) {
+                    // 완료 효과
+                    this.parentElement.style.background = 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)';
+                    this.parentElement.style.borderColor = '#28a745';
+                    
+                    // 축하 메시지
+                    if (taskId === 'mission6') {
+                        alert('🎉 축하합니다! 모든 미션을 완료했습니다!\n\n이제 학생 관리 페이지에서 30명의 학생을 확인하실 수 있습니다.');
+                    }
+                } else {
+                    this.parentElement.style.background = '#f8f9ff';
+                    this.parentElement.style.borderColor = 'transparent';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
