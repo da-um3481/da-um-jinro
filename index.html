@@ -7,8 +7,23 @@
     <meta name="description" content="단 1회 성적 입력으로 완전한 분석, EBS 단추 즉시 연동, AI 기반 맞춤 학습자료 추천">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #f5f7fa; }
+        .sidebar { width: 260px; height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: fixed; left: 0; top: 0; overflow-y: auto; }
+        .sidebar-header { padding: 20px; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-header h2 { font-size: 1.5rem; font-weight: 700; }
+        .sidebar-toggle { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; float: right; }
+        .sidebar-nav { padding: 20px 10px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: rgba(255,255,255,0.8); text-decoration: none; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.15); color: white; }
+        .nav-item i { font-size: 1.2rem; }
+        .main-content { margin-left: 260px; padding: 30px; }
+        .gradient-btn-purple { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .gradient-btn-blue { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .gradient-btn-teal { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .gradient-btn-pink { background: linear-gradient(135deg, #fa709a, #fee140); }
+    </style>
 </head>
 <body>
     <!-- 사이드바 -->
