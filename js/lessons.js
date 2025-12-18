@@ -25,13 +25,13 @@ function setupFormHandler() {
     });
 }
 
-// 수업 내용 목록 로드
+// 수업 내용 목록 로드 (localStorage 기반)
 async function loadLessons() {
     try {
-        const response = await fetch('tables/school_lessons?limit=500&sort=-date');
-        const data = await response.json();
+        let lessons = JSON.parse(localStorage.getItem('lessons')) || [];
         
-        let lessons = data.data;
+        // 날짜순 정렬 (최신순)
+        lessons.sort((a, b) => new Date(b.date) - new Date(a.date));
         
         // 필터 적용
         const filterGrade = document.getElementById('filterGrade')?.value;
@@ -108,43 +108,38 @@ function displayLessons(lessons) {
     }).join('');
 }
 
-// 수업 내용 저장
+// 수업 내용 저장 (localStorage 기반)
 async function saveLesson() {
     try {
+        const lessons = JSON.parse(localStorage.getItem('lessons')) || [];
+        
         const lessonData = {
+            id: currentEditId || 'lesson_' + Date.now(),
             date: document.getElementById('date').value,
             grade: parseInt(document.getElementById('grade').value),
             subject: document.getElementById('subject').value,
             chapter: document.getElementById('chapter').value,
             importance: document.getElementById('importance').value,
-            content: document.getElementById('content').value
+            content: document.getElementById('content').value,
+            created_at: currentEditId ? lessons.find(l => l.id === currentEditId)?.created_at : new Date().toISOString(),
+            updated_at: new Date().toISOString()
         };
         
         if (currentEditId) {
             // 수정
-            const response = await fetch(`tables/school_lessons/${currentEditId}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(lessonData)
-            });
-            
-            if (response.ok) {
-                alert('수업 내용이 수정되었습니다.');
-                currentEditId = null;
+            const index = lessons.findIndex(l => l.id === currentEditId);
+            if (index !== -1) {
+                lessons[index] = lessonData;
             }
+            alert('수업 내용이 수정되었습니다.');
+            currentEditId = null;
         } else {
             // 신규 등록
-            const response = await fetch('tables/school_lessons', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(lessonData)
-            });
-            
-            if (response.ok) {
-                alert('수업 내용이 등록되었습니다.');
-            }
+            lessons.push(lessonData);
+            alert('수업 내용이 등록되었습니다.');
         }
         
+        localStorage.setItem('lessons', JSON.stringify(lessons));
         resetForm();
         loadLessons();
         
@@ -157,8 +152,13 @@ async function saveLesson() {
 // 수업 내용 수정
 async function editLesson(lessonId) {
     try {
-        const response = await fetch(`tables/school_lessons/${lessonId}`);
-        const lesson = await response.json();
+        const lessons = JSON.parse(localStorage.getItem('lessons')) || [];
+        const lesson = lessons.find(l => l.id === lessonId);
+        
+        if (!lesson) {
+            alert('수업 내용을 찾을 수 없습니다.');
+            return;
+        }
         
         document.getElementById('date').value = lesson.date;
         document.getElementById('grade').value = lesson.grade;
@@ -178,7 +178,7 @@ async function editLesson(lessonId) {
     }
 }
 
-// 날짜별 검색
+// 날짜별 검색 (localStorage 기반)
 async function searchByDate() {
     const searchDate = document.getElementById('searchDate').value;
     if (!searchDate) {
@@ -187,10 +187,8 @@ async function searchByDate() {
     }
     
     try {
-        const response = await fetch('tables/school_lessons?limit=500');
-        const data = await response.json();
-        
-        const lessons = data.data.filter(l => l.date === searchDate);
+        const allLessons = JSON.parse(localStorage.getItem('lessons')) || [];
+        const lessons = allLessons.filter(l => l.date === searchDate);
         displayLessons(lessons);
         
         if (lessons.length === 0) {
@@ -219,17 +217,15 @@ function closeDeleteModal() {
     deleteLessonId = null;
 }
 
-// 수업 내용 삭제
+// 수업 내용 삭제 (localStorage 기반)
 async function deleteLesson(lessonId) {
     try {
-        const response = await fetch(`tables/school_lessons/${lessonId}`, {
-            method: 'DELETE'
-        });
+        const lessons = JSON.parse(localStorage.getItem('lessons')) || [];
+        const updatedLessons = lessons.filter(l => l.id !== lessonId);
         
-        if (response.ok) {
-            alert('수업 내용이 삭제되었습니다.');
-            loadLessons();
-        }
+        localStorage.setItem('lessons', JSON.stringify(updatedLessons));
+        alert('수업 내용이 삭제되었습니다.');
+        loadLessons();
     } catch (error) {
         console.error('수업 내용 삭제 오류:', error);
         alert('수업 내용 삭제에 실패했습니다.');
