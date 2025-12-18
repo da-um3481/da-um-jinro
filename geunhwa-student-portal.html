@@ -461,7 +461,7 @@
         </div>
 
         <!-- 나의 교재 진도 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="progressSection">
             <h3 class="text-lg font-bold text-gray-800 mb-4">
                 <i class="fas fa-book-open text-purple-500 mr-2"></i>나의 교재 진도
             </h3>
@@ -509,7 +509,7 @@
         </div>
 
         <!-- 주간 학습 통계 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="weeklyStatsSection">
             <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-4">
                 <i class="fas fa-chart-bar text-purple-500 mr-2"></i>이번 주 학습 통계
             </h3>
@@ -588,6 +588,43 @@
             }
         }
 
+        // 교재 진도 및 주간 통계 섹션 숨기기/표시
+        function hideProgressSections() {
+            const progressSection = document.getElementById('progressSection');
+            const weeklyStatsSection = document.getElementById('weeklyStatsSection');
+            
+            if (progressSection) {
+                progressSection.innerHTML = `
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                        <i class="fas fa-book-open text-purple-500 mr-2"></i>나의 교재 진도
+                    </h3>
+                    <div class="text-center py-8">
+                        <div class="text-6xl mb-4">📚</div>
+                        <p class="text-gray-600 text-lg font-semibold mb-2">학습 시작 전입니다</p>
+                        <p class="text-gray-500 text-sm">첫 학습을 시작하면 교재 진도가 기록됩니다</p>
+                    </div>
+                `;
+            }
+            
+            if (weeklyStatsSection) {
+                weeklyStatsSection.innerHTML = `
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-4">
+                        <i class="fas fa-chart-bar text-purple-500 mr-2"></i>이번 주 학습 통계
+                    </h3>
+                    <div class="text-center py-8">
+                        <div class="text-6xl mb-4">📊</div>
+                        <p class="text-gray-600 text-lg font-semibold mb-2">학습 데이터가 없습니다</p>
+                        <p class="text-gray-500 text-sm">학습을 시작하면 일일 학습 시간이 자동으로 기록됩니다</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function showProgressSections() {
+            // 실제 데이터가 있을 때 표시하는 함수 (향후 구현)
+            // 현재는 하드코딩된 데이터를 그대로 사용
+        }
+
         // 프로그램 진행 상태 관리
         function initProgramProgress() {
             const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
@@ -604,6 +641,10 @@
                 document.getElementById('startDate').textContent = '시작: 미정';
                 document.getElementById('dDay').textContent = '학습 시작 전';
                 document.getElementById('endDate').textContent = '종료: 미정';
+                
+                // 교재 진도 및 주간 통계 섹션 숨기기
+                hideProgressSections();
+                
                 return false;
             } else {
                 // 학습 시작됨
