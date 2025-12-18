@@ -374,9 +374,50 @@
 
         // 페이지 로드 시
         document.addEventListener('DOMContentLoaded', function() {
+            initializeSchoolsData();
             loadSchools();
             setupFormHandler();
         });
+
+        // 초기 학교 데이터 설정
+        function initializeSchoolsData() {
+            const existingSchools = localStorage.getItem('schools');
+            if (!existingSchools) {
+                const defaultSchools = [
+                    {
+                        id: 'school_1',
+                        school_name: '근화여자중학교',
+                        school_type: 'middle_school',
+                        contract_status: 'active',
+                        main_program: 'winter_30days',
+                        student_count: 30,
+                        monthly_fee: 1500000,
+                        contact_name: '담당선생님',
+                        contact_phone: '010-1234-5678',
+                        contract_start_date: '2025-01-05',
+                        contract_end_date: '2025-02-04',
+                        memo: '겨울방학 30일 프로그램',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    },
+                    {
+                        id: 'school_2',
+                        school_name: 'DA.UM 진로진학컨설팅',
+                        school_type: 'learning_center',
+                        contract_status: 'active',
+                        main_program: 'custom',
+                        student_count: 0,
+                        monthly_fee: 0,
+                        contact_name: '김은숙',
+                        contact_phone: '010-9876-5432',
+                        memo: '통합 학습 관리 시스템',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    }
+                ];
+                localStorage.setItem('schools', JSON.stringify(defaultSchools));
+            }
+        }
 
         // 폼 핸들러 설정
         function setupFormHandler() {
@@ -386,12 +427,11 @@
             });
         }
 
-        // 학교 목록 로드
+        // 학교 목록 로드 (localStorage 기반)
         async function loadSchools() {
             try {
-                const response = await fetch('tables/schools?limit=100');
-                const data = await response.json();
-                displaySchools(data.data || []);
+                const schools = JSON.parse(localStorage.getItem('schools')) || [];
+                displaySchools(schools);
             } catch (error) {
                 console.error('학교 목록 로드 오류:', error);
                 displaySchools([]);
@@ -467,10 +507,13 @@
             }).join('');
         }
 
-        // 학교 저장
+        // 학교 저장 (localStorage 기반)
         async function saveSchool() {
             try {
+                const schools = JSON.parse(localStorage.getItem('schools')) || [];
+                
                 const schoolData = {
+                    id: currentEditId || 'school_' + Date.now(),
                     school_name: document.getElementById('schoolName').value,
                     school_type: document.getElementById('schoolType').value,
                     contract_start_date: document.getElementById('contractStartDate').value || null,
@@ -481,42 +524,42 @@
                     contact_phone: document.getElementById('contactPhone').value || null,
                     contract_status: document.getElementById('contractStatus').value,
                     main_program: document.getElementById('mainProgram').value || null,
-                    memo: document.getElementById('schoolMemo').value || null
+                    memo: document.getElementById('schoolMemo').value || null,
+                    created_at: currentEditId ? schools.find(s => s.id === currentEditId)?.created_at : new Date().toISOString(),
+                    updated_at: new Date().toISOString()
                 };
 
-                let response;
                 if (currentEditId) {
-                    response = await fetch(`tables/schools/${currentEditId}`, {
-                        method: 'PUT',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(schoolData)
-                    });
+                    // 수정
+                    const index = schools.findIndex(s => s.id === currentEditId);
+                    if (index !== -1) {
+                        schools[index] = schoolData;
+                    }
                 } else {
-                    response = await fetch('tables/schools', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(schoolData)
-                    });
+                    // 신규 등록
+                    schools.push(schoolData);
                 }
 
-                if (response.ok) {
-                    alert(currentEditId ? '✅ 수정되었습니다!' : '✅ 등록되었습니다!');
-                    resetForm();
-                    loadSchools();
-                } else {
-                    throw new Error('저장 실패');
-                }
+                localStorage.setItem('schools', JSON.stringify(schools));
+                alert(currentEditId ? '✅ 수정되었습니다!' : '✅ 등록되었습니다!');
+                resetForm();
+                loadSchools();
             } catch (error) {
                 console.error('저장 오류:', error);
                 alert('❌ 저장에 실패했습니다.');
             }
         }
 
-        // 학교 수정
+        // 학교 수정 (localStorage 기반)
         async function editSchool(id) {
             try {
-                const response = await fetch(`tables/schools/${id}`);
-                const school = await response.json();
+                const schools = JSON.parse(localStorage.getItem('schools')) || [];
+                const school = schools.find(s => s.id === id);
+
+                if (!school) {
+                    alert('❌ 학교 정보를 찾을 수 없습니다.');
+                    return;
+                }
 
                 currentEditId = id;
                 document.getElementById('schoolName').value = school.school_name;
@@ -550,20 +593,16 @@
             deleteSchoolId = null;
         }
 
-        // 학교 삭제
+        // 학교 삭제 (localStorage 기반)
         async function deleteSchool() {
             try {
-                const response = await fetch(`tables/schools/${deleteSchoolId}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    alert('✅ 삭제되었습니다!');
-                    closeDeleteModal();
-                    loadSchools();
-                } else {
-                    throw new Error('삭제 실패');
-                }
+                const schools = JSON.parse(localStorage.getItem('schools')) || [];
+                const updatedSchools = schools.filter(s => s.id !== deleteSchoolId);
+                
+                localStorage.setItem('schools', JSON.stringify(updatedSchools));
+                alert('✅ 삭제되었습니다!');
+                closeDeleteModal();
+                loadSchools();
             } catch (error) {
                 console.error('삭제 오류:', error);
                 alert('❌ 삭제에 실패했습니다.');
