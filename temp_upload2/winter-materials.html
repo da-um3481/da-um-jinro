@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 30일 - 교재 관리</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        body { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%); min-height: 100vh; }
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px); opacity: 0; }
+        }
+        .snowflake { position: fixed; top: -10vh; color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; z-index: 1; pointer-events: none; animation: snowfall linear infinite; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+</head>
+<body>
+    <div id="snowflakes"></div>
+
+    <header class="glass-effect shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                    <div>
+                        <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">겨울방학 30일 - 교재 관리</h1>
+                        <p class="text-xs text-gray-600 font-medium">❄️ 수준별 맞춤 교재 추천</p>
+                    </div>
+                </div>
+                <nav class="flex space-x-2">
+                    <a href="winter-index.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium"><i class="fas fa-home mr-2"></i>대시보드</a>
+                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium"><i class="fas fa-user-graduate mr-2"></i>학생포털</a>
+                    <a href="winter-materials.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium"><i class="fas fa-book-open mr-2"></i>교재관리</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <!-- 수학 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <h2 class="text-2xl font-black text-gray-800 mb-6"><i class="fas fa-calculator text-blue-500 mr-2"></i>수학 교재</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="bg-green-50 rounded-xl p-5 border-2 border-green-300">
+                    <div class="text-green-600 font-bold mb-2 flex items-center">🟢 기초 <span class="ml-2 text-xs bg-green-200 px-2 py-0.5 rounded">0-49점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">체크체크 수학</div>
+                    <div class="text-sm text-gray-700 mb-3">기초 개념부터 차근차근 학습</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 기초 개념 반복 학습</div>
+                        <div><strong>난이도:</strong> ⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 0-49점</div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-5 border-2 border-blue-300">
+                    <div class="text-blue-600 font-bold mb-2 flex items-center">🔵 중하 <span class="ml-2 text-xs bg-blue-200 px-2 py-0.5 rounded">50-69점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">개념원리 RPM</div>
+                    <div class="text-sm text-gray-700 mb-3">개념 강화 및 기본 유형 연습</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 개념+기본 유형</div>
+                        <div><strong>난이도:</strong> ⭐⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 50-69점</div>
+                    </div>
+                </div>
+                <div class="bg-yellow-50 rounded-xl p-5 border-2 border-yellow-300">
+                    <div class="text-yellow-700 font-bold mb-2 flex items-center">🟡 중상 <span class="ml-2 text-xs bg-yellow-200 px-2 py-0.5 rounded">70-84점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">개념원리 중학수학</div>
+                    <div class="text-sm text-gray-700 mb-3">내신 대비 및 응용 문제 대비</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 개념+응용 종합</div>
+                        <div><strong>난이도:</strong> ⭐⭐⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 70-84점</div>
+                    </div>
+                </div>
+                <div class="bg-red-50 rounded-xl p-5 border-2 border-red-300">
+                    <div class="text-red-600 font-bold mb-2 flex items-center">🔴 상급 <span class="ml-2 text-xs bg-red-200 px-2 py-0.5 rounded">85-100점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">일품/블랙라벨</div>
+                    <div class="text-sm text-gray-700 mb-3">심화 문제 및 경시 대비</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 고난도 심화</div>
+                        <div><strong>난이도:</strong> ⭐⭐⭐⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 85-100점</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 영어 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <h2 class="text-2xl font-black text-gray-800 mb-6"><i class="fas fa-language text-green-500 mr-2"></i>영어 교재</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="bg-green-50 rounded-xl p-5 border-2 border-green-300">
+                    <div class="text-green-600 font-bold mb-2 flex items-center">🟢 기초 <span class="ml-2 text-xs bg-green-200 px-2 py-0.5 rounded">0-49점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">Grammar Zone 기초편</div>
+                    <div class="text-sm text-gray-700 mb-3">영문법 기초부터 단계별 학습</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 문법 기초 다지기</div>
+                        <div><strong>난이도:</strong> ⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 0-49점</div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-5 border-2 border-blue-300">
+                    <div class="text-blue-600 font-bold mb-2 flex items-center">🔵 중하 <span class="ml-2 text-xs bg-blue-200 px-2 py-0.5 rounded">50-69점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">중학 영문법 3800제</div>
+                    <div class="text-sm text-gray-700 mb-3">문법 개념 강화 및 연습</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 문법+기본 독해</div>
+                        <div><strong>난이도:</strong> ⭐⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 50-69점</div>
+                    </div>
+                </div>
+                <div class="bg-yellow-50 rounded-xl p-5 border-2 border-yellow-300">
+                    <div class="text-yellow-700 font-bold mb-2 flex items-center">🟡 중상 <span class="ml-2 text-xs bg-yellow-200 px-2 py-0.5 rounded">70-84점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">리딩튜터 + 자습서</div>
+                    <div class="text-sm text-gray-700 mb-3">내신 대비 및 독해력 향상</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 내신+독해 병행</div>
+                        <div><strong>난이도:</strong> ⭐⭐⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 70-84점</div>
+                    </div>
+                </div>
+                <div class="bg-red-50 rounded-xl p-5 border-2 border-red-300">
+                    <div class="text-red-600 font-bold mb-2 flex items-center">🔴 상급 <span class="ml-2 text-xs bg-red-200 px-2 py-0.5 rounded">85-100점</span></div>
+                    <div class="text-xl font-black text-gray-800 mb-3">리딩파워/능률보카</div>
+                    <div class="text-sm text-gray-700 mb-3">고난도 독해 및 고급 어휘</div>
+                    <div class="bg-white rounded-lg p-3 text-xs space-y-1">
+                        <div><strong>특징:</strong> 심화 독해+어휘</div>
+                        <div><strong>난이도:</strong> ⭐⭐⭐⭐⭐</div>
+                        <div><strong>권장:</strong> EBS AI 진단 85-100점</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 국어, 과학, 사회 -->
+        <div class="grid grid-cols-3 gap-6">
+            <div class="glass-effect rounded-xl p-6 shadow-xl">
+                <h3 class="text-xl font-black text-gray-800 mb-4"><i class="fas fa-book text-red-500 mr-2"></i>국어</h3>
+                <div class="space-y-3">
+                    <div class="bg-red-50 rounded-lg p-4 border-2 border-red-200">
+                        <div class="font-bold text-gray-800 mb-2">비문학 독해 워크북</div>
+                        <div class="text-xs text-gray-600">설명문, 논설문 독해</div>
+                    </div>
+                    <div class="bg-red-50 rounded-lg p-4 border-2 border-red-200">
+                        <div class="font-bold text-gray-800 mb-2">문법 총정리</div>
+                        <div class="text-xs text-gray-600">중학 문법 핵심</div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 shadow-xl">
+                <h3 class="text-xl font-black text-gray-800 mb-4"><i class="fas fa-flask text-purple-500 mr-2"></i>과학</h3>
+                <div class="space-y-3">
+                    <div class="bg-purple-50 rounded-lg p-4 border-2 border-purple-200">
+                        <div class="font-bold text-gray-800 mb-2">오투 중등과학</div>
+                        <div class="text-xs text-gray-600">개념+실험 종합</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-lg p-4 border-2 border-purple-200">
+                        <div class="font-bold text-gray-800 mb-2">완자 중등과학</div>
+                        <div class="text-xs text-gray-600">내신 완벽 대비</div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 shadow-xl">
+                <h3 class="text-xl font-black text-gray-800 mb-4"><i class="fas fa-globe text-yellow-600 mr-2"></i>사회</h3>
+                <div class="space-y-3">
+                    <div class="bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200">
+                        <div class="font-bold text-gray-800 mb-2">완자 중등사회</div>
+                        <div class="text-xs text-gray-600">역사/지리/일반사회</div>
+                    </div>
+                    <div class="bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200">
+                        <div class="font-bold text-gray-800 mb-2">자이스토리 사회</div>
+                        <div class="text-xs text-gray-600">문제 중심 학습</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EBS AI 코스웨어 (NEW!) -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mt-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-gray-800">
+                    <i class="fas fa-robot text-purple-500 mr-2"></i>EBS AI 코스웨어 (최신 추천!)
+                </h2>
+                <span class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-bold text-sm animate-pulse">
+                    🔥 NEW
+                </span>
+            </div>
+            
+            <div class="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 rounded-xl p-6 border-2 border-purple-300 mb-4">
+                <div class="flex items-start space-x-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white flex-shrink-0">
+                        <i class="fas fa-brain text-3xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-xl font-black text-gray-800 mb-2">AI 맞춤형 학습 시스템</div>
+                        <div class="text-sm text-gray-700 mb-3">인공지능이 학생 수준을 분석하여 최적의 학습 콘텐츠를 제공하는 차세대 학습 플랫폼</div>
+                        <div class="grid grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white rounded-lg p-3 border border-purple-200">
+                                <div class="text-purple-600 font-bold mb-1">🎯 맞춤 진단</div>
+                                <div class="text-gray-600">AI가 약점 분석</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-purple-200">
+                                <div class="text-pink-600 font-bold mb-1">📚 개인화 학습</div>
+                                <div class="text-gray-600">수준별 콘텐츠</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-purple-200">
+                                <div class="text-indigo-600 font-bold mb-1">📊 실시간 피드백</div>
+                                <div class="text-gray-600">즉각 성과 확인</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- 수학 AI 코스웨어 -->
+                <div class="bg-white rounded-xl p-5 border-2 border-blue-300 hover:shadow-xl transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-calculator text-blue-500 text-xl"></i>
+                            <div class="text-lg font-bold text-gray-800">수학 AI 코스웨어</div>
+                        </div>
+                        <a href="https://ai-plus.ebs.co.kr/?learning" target="_blank" class="px-3 py-1 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 transition">
+                            바로가기
+                        </a>
+                    </div>
+                    <div class="space-y-2 text-sm text-gray-700">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>AI 진단 평가로 정확한 수준 파악</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>약점 집중 공략 문제 자동 생성</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>개념 동영상 + 문제 풀이 통합</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>학습 패턴 분석 및 맞춤 추천</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <div class="text-xs text-blue-800">
+                            <strong>추천:</strong> 수학 기초가 부족하거나 혼자 학습하기 어려운 학생
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 영어 AI 코스웨어 -->
+                <div class="bg-white rounded-xl p-5 border-2 border-green-300 hover:shadow-xl transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-language text-green-500 text-xl"></i>
+                            <div class="text-lg font-bold text-gray-800">영어 AI 코스웨어</div>
+                        </div>
+                        <a href="https://ai-plus.ebs.co.kr/?learning" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded-lg text-xs hover:bg-green-600 transition">
+                            바로가기
+                        </a>
+                    </div>
+                    <div class="space-y-2 text-sm text-gray-700">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>AI 음성 인식으로 발음 교정</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>어휘 수준 자동 진단 및 추천</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>문법 개념 맞춤형 학습</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            <span>독해력 향상 단계별 훈련</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-green-50 rounded-lg">
+                        <div class="text-xs text-green-800">
+                            <strong>추천:</strong> 영어 기초 다지기부터 실력 향상까지 전 학생
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주요 특징 -->
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-5 border-2 border-indigo-300">
+                <div class="font-bold text-indigo-800 mb-3 flex items-center">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>
+                    EBS AI 코스웨어 주요 특징
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="space-y-2">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-600 font-bold">💯</span>
+                            <div>
+                                <div class="font-bold text-gray-800">완전 무료</div>
+                                <div class="text-xs text-gray-600">회원가입만 하면 모든 기능 이용 가능</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-600 font-bold">🎮</span>
+                            <div>
+                                <div class="font-bold text-gray-800">게이미피케이션</div>
+                                <div class="text-xs text-gray-600">재미있는 게임형 학습으로 동기부여</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-600 font-bold">📱</span>
+                            <div>
+                                <div class="font-bold text-gray-800">모바일 지원</div>
+                                <div class="text-xs text-gray-600">PC, 태블릿, 스마트폰 모두 이용</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-600 font-bold">🤖</span>
+                            <div>
+                                <div class="font-bold text-gray-800">AI 튜터</div>
+                                <div class="text-xs text-gray-600">24시간 언제든지 질문하고 답변 받기</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-600 font-bold">📈</span>
+                            <div>
+                                <div class="font-bold text-gray-800">학습 분석</div>
+                                <div class="text-xs text-gray-600">상세한 학습 리포트 제공</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-600 font-bold">🎯</span>
+                            <div>
+                                <div class="font-bold text-gray-800">적응형 학습</div>
+                                <div class="text-xs text-gray-600">실력에 따라 난이도 자동 조절</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 활용 팁 -->
+            <div class="mt-4 p-5 bg-yellow-50 rounded-xl border-2 border-yellow-300">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-lightbulb text-yellow-500 text-2xl mt-1"></i>
+                    <div>
+                        <div class="font-bold text-yellow-800 mb-2">💡 활용 팁</div>
+                        <div class="text-sm text-gray-700 space-y-1">
+                            <div>• <strong>매일 30분</strong> AI 코스웨어로 약점 보완 학습</div>
+                            <div>• <strong>교재 학습 전</strong> AI 진단으로 현재 수준 파악</div>
+                            <div>• <strong>오답 문제</strong>를 AI가 자동으로 재출제하여 완벽 이해</div>
+                            <div>• <strong>학습 리포트</strong>를 보고 주간 학습 계획 수립</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EBS 무료 강의 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mt-6">
+            <h2 class="text-2xl font-black text-gray-800 mb-4"><i class="fas fa-video text-cyan-500 mr-2"></i>EBS 무료 강의</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-5 border-2 border-cyan-300">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-lg font-bold text-gray-800">EBS 중학 프리미엄</div>
+                        <a href="https://www.ebs.co.kr" target="_blank" class="px-3 py-1 bg-cyan-500 text-white rounded-lg text-xs hover:bg-cyan-600">바로가기</a>
+                    </div>
+                    <div class="text-sm text-gray-700">전 과목 무료 인터넷 강의, 교재와 함께 학습하면 효과 극대화</div>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border-2 border-blue-300">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-lg font-bold text-gray-800">EBS 중학 인터넷 교재</div>
+                        <a href="https://www.ebs.co.kr" target="_blank" class="px-3 py-1 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600">바로가기</a>
+                    </div>
+                    <div class="text-sm text-gray-700">PDF 교재 무료 다운로드 가능, 프린트하여 사용</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const snowflakesContainer = document.getElementById('snowflakes');
+        for (let i = 0; i < 15; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflakesContainer.appendChild(snowflake);
+        }
+    </script>
+</body>
+</html>

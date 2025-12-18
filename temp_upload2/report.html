@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>담임 보고서 - 공부를 어떻게 할지 모르겠어요~~</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/print.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- 상단 네비게이션 -->
+    <nav class="bg-indigo-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">📚 공부를 어떻게 할지 모르겠어요~~</h1>
+                    <p class="text-sm text-indigo-200">담임 보고서 생성</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="index.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-home mr-2"></i>대시보드
+                    </a>
+                    <a href="students.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-users mr-2"></i>학생 관리
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- 학생 선택 및 기간 설정 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">📋 보고서 설정</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">학생 선택 *</label>
+                    <select id="studentSelect" onchange="generateReport()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">학생을 선택하세요</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">시작일 *</label>
+                    <input type="date" id="startDate" onchange="generateReport()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">종료일 *</label>
+                    <input type="date" id="endDate" onchange="generateReport()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+            <div class="mt-4 flex justify-end space-x-4">
+                <button onclick="generateReport()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    <i class="fas fa-sync-alt mr-2"></i>보고서 생성
+                </button>
+                <button onclick="printReport()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    <i class="fas fa-print mr-2"></i>인쇄
+                </button>
+            </div>
+        </div>
+
+        <!-- 보고서 내용 -->
+        <div id="reportContent" class="bg-white rounded-lg shadow-md p-8">
+            <div id="emptyReport" class="text-center py-12 text-gray-500">
+                <i class="fas fa-file-alt text-6xl mb-4"></i>
+                <p class="text-lg">학생을 선택하고 기간을 설정하면 보고서가 생성됩니다.</p>
+            </div>
+
+            <!-- 동적으로 생성되는 보고서 -->
+            <div id="reportBody" class="hidden">
+                <!-- 헤더 -->
+                <div class="text-center mb-8 pb-6 border-b-2 border-indigo-600">
+                    <h1 class="text-3xl font-bold text-indigo-600 mb-2">방과후 학습 프로그램 보고서</h1>
+                    <p class="text-lg text-gray-600" id="reportPeriod"></p>
+                </div>
+
+                <!-- 학생 기본 정보 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-user text-indigo-600 mr-2"></i>
+                        학생 기본 정보
+                    </h2>
+                    <div id="studentBasicInfo" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <!-- 학습 시간 통계 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-clock text-indigo-600 mr-2"></i>
+                        학습 시간 통계
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div style="height: 300px;">
+                                <canvas id="studyTimeChart"></canvas>
+                            </div>
+                        </div>
+                        <div id="timeStats" class="space-y-3">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 과목별 성취도 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-chart-bar text-indigo-600 mr-2"></i>
+                        과목별 성취도
+                    </h2>
+                    <div style="height: 300px;">
+                        <canvas id="subjectChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 주간 피드백 이력 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-comments text-indigo-600 mr-2"></i>
+                        주간 피드백 이력
+                    </h2>
+                    <div id="feedbackHistory" class="space-y-4">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <!-- 종합 의견 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-clipboard-check text-indigo-600 mr-2"></i>
+                        종합 의견
+                    </h2>
+                    <div id="comprehensiveOpinion" class="p-4 bg-indigo-50 rounded-lg">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <!-- 서명 -->
+                <div class="text-right mt-12 pt-6 border-t">
+                    <p class="text-gray-600" id="reportDate"></p>
+                    <p class="text-gray-800 font-semibold mt-2">방과후 학습 담당: _______________</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/report.js"></script>
+</body>
+</html>

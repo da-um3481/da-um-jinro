@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여러 학교 동시 관리 - 완전 초보 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        
+        .scenario-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #667eea;
+        }
+        
+        .scenario-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .scenario-title::before {
+            content: '🎯';
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        
+        .step-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .step-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .step-content {
+            padding-left: 65px;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            color: #155724;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h4 {
+            color: #0c5460;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        
+        .big-button {
+            display: block;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 30px 0;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .big-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏫 여러 학교 동시 관리 가이드</h1>
+        <div class="subtitle">중학교, 고등학교, 개별 학생을 한 곳에서 관리하세요!</div>
+
+        <div class="success-box">
+            <h4>✅ 이제 가능합니다!</h4>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li><strong>A중학교 30명</strong> + <strong>B중학교 25명</strong> → 섞이지 않고 독립 관리</li>
+                <li><strong>겨울방학 프로그램</strong> + <strong>100일 프로그램</strong> → 프로그램별 분류</li>
+                <li><strong>중학생</strong> + <strong>고등학생</strong> → 학년 구분 자동</li>
+                <li><strong>개별 학생</strong> → 학교 없이 1:1 관리</li>
+            </ul>
+        </div>
+
+        <!-- 시나리오 1 -->
+        <div class="scenario-box">
+            <div class="scenario-title">시나리오 1: 첫 학교 등록 (1월 시작)</div>
+            
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    학교 등록하기
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>schools-management.html</code> 파일 열기</li>
+                        <li>상단 폼에 정보 입력:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>학교명:</strong> "A중학교"</li>
+                                <li><strong>유형:</strong> "🏫 중학교" 선택</li>
+                                <li><strong>계약 시작일:</strong> 2025-01-02</li>
+                                <li><strong>계약 종료일:</strong> 2025-02-28</li>
+                                <li><strong>월 계약금액:</strong> 1,500,000원</li>
+                                <li><strong>학생 수:</strong> 30명</li>
+                                <li><strong>담당자:</strong> 김선생님</li>
+                                <li><strong>연락처:</strong> 010-1234-5678</li>
+                                <li><strong>계약 상태:</strong> "✅ 활성" 선택</li>
+                                <li><strong>주 프로그램:</strong> "❄️ 겨울방학 30일" 선택</li>
+                            </ul>
+                        </li>
+                        <li>"저장" 버튼 클릭</li>
+                        <li>✅ 완료! 학교 목록에 A중학교가 나타남</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    학생 30명 일괄 등록
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>students-bulk-upload.html</code> 파일 열기</li>
+                        <li><span class="highlight">맨 위 선택 박스</span>에서:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>학교/기관 선택:</strong> "🏫 A중학교" 선택</li>
+                                <li><strong>프로그램 선택:</strong> "❄️ 겨울방학 30일" 선택</li>
+                                <li><strong>학생 유형:</strong> "🏫 중학생" 선택</li>
+                            </ul>
+                        </li>
+                        <li>"엑셀 템플릿 다운로드" 버튼 클릭</li>
+                        <li>엑셀에 30명 학생 정보 입력 (학년: 1, 2, 3)</li>
+                        <li>파일 저장 후 업로드</li>
+                        <li>✅ 완료! A중학교 학생 30명 등록</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    학생 확인하기
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>students.html</code> 파일 열기</li>
+                        <li><span class="highlight">필터</span>에서 "🏫 A중학교" 선택</li>
+                        <li>✅ A중학교 학생 30명만 표시됨!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시나리오 2 -->
+        <div class="scenario-box">
+            <div class="scenario-title">시나리오 2: 두 번째 학교 추가 (3월)</div>
+            
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    B중학교 등록
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>schools-management.html</code> 열기</li>
+                        <li>새 학교 정보 입력:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>학교명:</strong> "B중학교"</li>
+                                <li><strong>유형:</strong> "🏫 중학교"</li>
+                                <li><strong>월 계약금액:</strong> 1,250,000원 (25명)</li>
+                                <li><strong>주 프로그램:</strong> "📚 정규학기 100일"</li>
+                            </ul>
+                        </li>
+                        <li>저장</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    B중학교 학생 25명 등록
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>students-bulk-upload.html</code> 열기</li>
+                        <li><strong>학교:</strong> "🏫 B중학교" 선택</li>
+                        <li><strong>프로그램:</strong> "📚 정규학기 100일" 선택</li>
+                        <li>템플릿 다운로드 → 25명 입력 → 업로드</li>
+                        <li>✅ B중학교 학생 25명 등록</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>💡 중요! A중학교와 B중학교가 섞이지 않습니다!</h4>
+                <p><code>students.html</code>에서 필터로 학교를 선택하면:</p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>A중학교 선택:</strong> 30명만 표시</li>
+                    <li><strong>B중학교 선택:</strong> 25명만 표시</li>
+                    <li><strong>전체 선택:</strong> 55명 모두 표시</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 시나리오 3 -->
+        <div class="scenario-box">
+            <div class="scenario-title">시나리오 3: 고등학교 + 개별 학생</div>
+            
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    고등학교 등록
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>schools-management.html</code> 열기</li>
+                        <li><strong>학교명:</strong> "C고등학교"</li>
+                        <li><strong>유형:</strong> "🎓 고등학교" 선택</li>
+                        <li><strong>학생 수:</strong> 20명</li>
+                        <li>저장</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    고등학생 등록
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>students-bulk-upload.html</code> 열기</li>
+                        <li><strong>학교:</strong> "🎓 C고등학교" 선택</li>
+                        <li><strong>학생 유형:</strong> "🎓 고등학생" 선택 ⭐</li>
+                        <li>템플릿 다운로드</li>
+                        <li>엑셀에 <strong>학년: 4, 5, 6</strong> 입력 (고1, 고2, 고3)</li>
+                        <li>업로드 완료!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    개별 학생 등록 (학교 소속 없음)
+                </div>
+                <div class="step-content">
+                    <ol style="margin-left: 20px;">
+                        <li><code>schools-management.html</code>에서:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>학교명:</strong> "개별학생"</li>
+                                <li><strong>유형:</strong> "👤 개별학생" 선택</li>
+                                <li>저장</li>
+                            </ul>
+                        </li>
+                        <li><code>students.html</code>에서:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>학교:</strong> "👤 개별학생" 선택</li>
+                                <li><strong>프로그램:</strong> "✨ 맞춤형" 선택</li>
+                                <li>학생 이름, 학년 등 입력</li>
+                                <li>저장</li>
+                            </ul>
+                        </li>
+                        <li>✅ 1:1 맞춤 관리 학생 등록 완료!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- 현황 정리 -->
+        <h2 style="color: #667eea; font-size: 2em; margin-top: 50px; margin-bottom: 20px;">📊 전체 현황 정리</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>학교/기관</th>
+                    <th>유형</th>
+                    <th>프로그램</th>
+                    <th>학생 수</th>
+                    <th>월 매출</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>🏫 A중학교</td>
+                    <td>중학교</td>
+                    <td>❄️ 겨울방학 30일</td>
+                    <td>30명</td>
+                    <td>1,500,000원</td>
+                </tr>
+                <tr>
+                    <td>🏫 B중학교</td>
+                    <td>중학교</td>
+                    <td>📚 정규학기 100일</td>
+                    <td>25명</td>
+                    <td>1,250,000원</td>
+                </tr>
+                <tr>
+                    <td>🎓 C고등학교</td>
+                    <td>고등학교</td>
+                    <td>📚 정규학기 100일</td>
+                    <td>20명</td>
+                    <td>1,000,000원</td>
+                </tr>
+                <tr>
+                    <td>👤 개별학생</td>
+                    <td>개별</td>
+                    <td>✨ 맞춤형</td>
+                    <td>5명</td>
+                    <td>250,000원</td>
+                </tr>
+                <tr style="background: #d4edda; font-weight: bold;">
+                    <td colspan="3">총계</td>
+                    <td>80명</td>
+                    <td>4,000,000원/월</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 자주 묻는 질문 -->
+        <h2 style="color: #667eea; font-size: 2em; margin-top: 50px; margin-bottom: 20px;">❓ 자주 묻는 질문</h2>
+
+        <div class="info-box">
+            <h4>Q1. 학교를 먼저 등록해야 하나요?</h4>
+            <p><strong>A:</strong> 네! 학생을 등록하기 전에 반드시 학교를 먼저 등록해야 합니다.</p>
+            <p>순서: schools-management.html → students-bulk-upload.html</p>
+        </div>
+
+        <div class="info-box">
+            <h4>Q2. 학교를 잘못 선택했어요</h4>
+            <p><strong>A:</strong> students.html에서 학생을 찾아서 "수정" 버튼을 누르면 학교를 변경할 수 있습니다.</p>
+        </div>
+
+        <div class="info-box">
+            <h4>Q3. 학년 4, 5, 6이 뭔가요?</h4>
+            <p><strong>A:</strong></p>
+            <ul style="margin-left: 30px;">
+                <li><strong>중학생:</strong> 1(중1), 2(중2), 3(중3)</li>
+                <li><strong>고등학생:</strong> 4(고1), 5(고2), 6(고3)</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h4>Q4. 한 학생이 두 프로그램에 동시 참여 가능한가요?</h4>
+            <p><strong>A:</strong> 현재는 불가능합니다. 한 학생은 하나의 프로그램에만 속합니다.</p>
+            <p>필요하면 같은 학생을 다른 프로그램으로 다시 등록해야 합니다.</p>
+        </div>
+
+        <div class="warning-box">
+            <h4>⚠️ 중요 주의사항</h4>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li><strong>학교를 먼저 등록</strong>하지 않으면 학생 등록 시 선택할 학교가 없습니다!</li>
+                <li><strong>학교와 프로그램을 반드시 선택</strong>해야 합니다. 안 하면 나중에 구분 불가!</li>
+                <li><strong>학년 번호 주의:</strong> 중학생(1,2,3) / 고등학생(4,5,6)</li>
+            </ul>
+        </div>
+
+        <a href="schools-management.html" class="big-button">
+            🚀 지금 바로 시작하기 - 학교 관리 페이지로
+        </a>
+
+        <div class="success-box" style="margin-top: 40px;">
+            <h4>🎉 축하합니다!</h4>
+            <p>이제 여러 학교를 동시에 관리할 수 있습니다!</p>
+            <p><strong>1월부터 본격적으로 비즈니스를 확장하세요!</strong></p>
+        </div>
+    </div>
+</body>
+</html>

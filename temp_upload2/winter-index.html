@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 30일 프로그램 - 학습 관리 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            min-height: 100vh;
+        }
+        
+        /* 눈송이 애니메이션 */
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px); opacity: 0; }
+        }
+        
+        .snowflake {
+            position: fixed;
+            top: -10vh;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+            z-index: 1;
+            pointer-events: none;
+            animation: snowfall linear infinite;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(14, 165, 233, 0.8); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- 눈송이 효과 -->
+    <div id="snowflakes"></div>
+
+    <!-- 세련된 헤더 -->
+    <header class="glass-effect shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex justify-between items-center">
+                <!-- 로고 및 타이틀 -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-2">
+                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                        <div>
+                            <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                                DA.UM 겨울방학 30일 프로그램
+                            </h1>
+                            <p class="text-xs text-gray-600 font-medium">❄️ 자기주도학습 습관 만들기 시스템</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 네비게이션 -->
+                <nav class="flex space-x-2">
+                    <a href="winter-index.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
+                        <i class="fas fa-home mr-2"></i>대시보드
+                    </a>
+                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-user-graduate mr-2"></i>학생 포털
+                    </a>
+                    <a href="winter-weekly-schedule.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-calendar-week mr-2"></i>주간일정
+                    </a>
+                    <a href="winter-materials.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-book-open mr-2"></i>교재관리
+                    </a>
+                    <a href="winter-feedback.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-comments mr-2"></i>피드백
+                    </a>
+                    <a href="winter-report.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-chart-line mr-2"></i>보고서
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 대시보드 -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- 프로그램 진행 현황 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-2xl mb-6 pulse-glow">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-snowflake text-cyan-500 mr-2"></i>30일 프로그램 진행 현황
+                </h2>
+                <div class="text-right">
+                    <div class="text-3xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                        D-23
+                    </div>
+                    <div class="text-sm text-gray-600">2025년 1월 12일 (일)</div>
+                </div>
+            </div>
+            
+            <!-- 진행 막대 -->
+            <div class="bg-gray-200 rounded-full h-6 mb-4 overflow-hidden">
+                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 h-full rounded-full flex items-center justify-center text-white font-bold text-sm" style="width: 23.3%">
+                    7일 / 30일 (23%)
+                </div>
+            </div>
+            
+            <!-- 4주 진행 상황 -->
+            <div class="grid grid-cols-4 gap-4 mt-6">
+                <div class="bg-gradient-to-br from-cyan-50 to-blue-50 p-4 rounded-xl border-2 border-cyan-400">
+                    <div class="text-cyan-600 font-bold mb-2">Week 1</div>
+                    <div class="text-2xl font-black text-gray-800">100%</div>
+                    <div class="text-xs text-gray-600 mt-1">학습 습관 만들기 ✅</div>
+                    <div class="text-xs text-cyan-600 font-bold mt-2">28시간 완료</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-2 border-cyan-300 pulse-glow">
+                    <div class="text-cyan-600 font-bold mb-2">Week 2 (진행중)</div>
+                    <div class="text-2xl font-black text-gray-800">0%</div>
+                    <div class="text-xs text-gray-600 mt-1">취약 영역 강화 🔄</div>
+                    <div class="text-xs text-blue-600 font-bold mt-2">0/28시간</div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-300">
+                    <div class="text-gray-500 font-bold mb-2">Week 3</div>
+                    <div class="text-2xl font-black text-gray-400">0%</div>
+                    <div class="text-xs text-gray-500 mt-1">새학기 준비</div>
+                    <div class="text-xs text-gray-500 font-bold mt-2">0/28시간</div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-300">
+                    <div class="text-gray-500 font-bold mb-2">Week 4</div>
+                    <div class="text-2xl font-black text-gray-400">0%</div>
+                    <div class="text-xs text-gray-500 mt-1">종합 복습 & 계획</div>
+                    <div class="text-xs text-gray-500 font-bold mt-2">0/28시간</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 빠른 학생 등록 섹션 (NEW!) -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mr-3">
+                        <i class="fas fa-user-plus text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">👨‍🎓 빠른 학생 등록</h3>
+                </div>
+                <a href="students.html" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition text-sm font-medium">
+                    <i class="fas fa-list mr-2"></i>전체 학생 목록
+                </a>
+            </div>
+            
+            <form id="quickStudentForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- 기본 정보 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">이름 *</label>
+                    <input type="text" id="quickName" required placeholder="예: 홍길동" 
+                           class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">학년 *</label>
+                    <select id="quickGrade" required class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500">
+                        <option value="">선택</option>
+                        <option value="1">1학년</option>
+                        <option value="2">2학년</option>
+                        <option value="3">3학년</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">반 *</label>
+                    <input type="number" id="quickClass" required min="1" placeholder="예: 3" 
+                           class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">번호 *</label>
+                    <input type="number" id="quickNumber" required min="1" placeholder="예: 15" 
+                           class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500">
+                </div>
+                
+                <!-- EBS AI 진단평가 점수 -->
+                <div class="md:col-span-4">
+                    <div class="bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-lg border-2 border-cyan-200">
+                        <h4 class="text-sm font-bold text-cyan-800 mb-3 flex items-center">
+                            <i class="fas fa-robot mr-2"></i>🤖 EBS AI 코스웨어 진단평가 점수 (선택)
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">📚 국어</label>
+                                <input type="number" id="quickKorean" min="0" max="100" placeholder="0-100" 
+                                       class="w-full px-3 py-2 border-2 border-cyan-300 rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">🗣️ 영어</label>
+                                <input type="number" id="quickEnglish" min="0" max="100" placeholder="0-100" 
+                                       class="w-full px-3 py-2 border-2 border-cyan-300 rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">🔢 수학</label>
+                                <input type="number" id="quickMath" min="0" max="100" placeholder="0-100" 
+                                       class="w-full px-3 py-2 border-2 border-cyan-300 rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">🔬 과학</label>
+                                <input type="number" id="quickScience" min="0" max="100" placeholder="0-100" 
+                                       class="w-full px-3 py-2 border-2 border-cyan-300 rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">🌏 사회</label>
+                                <input type="number" id="quickSocial" min="0" max="100" placeholder="0-100" 
+                                       class="w-full px-3 py-2 border-2 border-cyan-300 rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 학습 수준 (자동 판정) -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📊 학습 수준 (자동 판정)</label>
+                    <select id="quickLevel" disabled class="w-full px-4 py-2 border-2 border-cyan-300 bg-gray-50 rounded-lg font-medium">
+                        <option value="">점수 입력 시 자동 판정</option>
+                        <option value="기초">🟢 기초 (0-49점)</option>
+                        <option value="중하">🔵 중하 (50-69점)</option>
+                        <option value="중상">🟡 중상 (70-84점)</option>
+                        <option value="상급">🔴 상급 (85-100점)</option>
+                    </select>
+                </div>
+                
+                <!-- 등록 버튼 -->
+                <div class="md:col-span-2 flex items-end">
+                    <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-xl transition font-bold text-lg">
+                        <i class="fas fa-save mr-2"></i>학생 등록
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 통계 카드 -->
+        <div class="grid grid-cols-4 gap-6 mb-6">
+            <!-- 총 학습 시간 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl card-hover">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-cyan-500 to-blue-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-clock text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">⏰</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">28시간</div>
+                <div class="text-sm text-gray-600 font-medium">총 학습 시간</div>
+                <div class="mt-3 text-xs text-cyan-600 font-bold">
+                    목표: 120시간 (23% 달성)
+                </div>
+            </div>
+
+            <!-- 일일 평균 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl card-hover">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">📊</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">4.0시간</div>
+                <div class="text-sm text-gray-600 font-medium">일일 평균</div>
+                <div class="mt-3 text-xs text-green-600 font-bold">
+                    ✅ 목표 달성 (4시간/일)
+                </div>
+            </div>
+
+            <!-- 출석률 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl card-hover">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-check-circle text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">✅</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">100%</div>
+                <div class="text-sm text-gray-600 font-medium">출석률</div>
+                <div class="mt-3 text-xs text-green-600 font-bold">
+                    7일 연속 출석 🔥
+                </div>
+            </div>
+
+            <!-- 교재 진도 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl card-hover">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="bg-gradient-to-br from-purple-500 to-pink-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl">📚</span>
+                </div>
+                <div class="text-3xl font-black text-gray-800 mb-1">18%</div>
+                <div class="text-sm text-gray-600 font-medium">평균 교재 진도</div>
+                <div class="mt-3 text-xs text-purple-600 font-bold">
+                    5개 교재 학습 중
+                </div>
+            </div>
+        </div>
+
+        <!-- 차트 영역 -->
+        <div class="grid grid-cols-2 gap-6 mb-6">
+            <!-- 일일 학습 시간 추이 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-area text-cyan-500 mr-2"></i>일일 학습 시간 추이
+                </h3>
+                <div style="height: 300px;">
+                    <canvas id="dailyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 교과별 학습 시간 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-pie text-blue-500 mr-2"></i>교과별 학습 시간 분포
+                </h3>
+                <div style="height: 300px;">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오늘의 학습 현황 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-calendar-day text-cyan-500 mr-2"></i>오늘의 학습 현황 (1월 12일)
+            </h3>
+            <div class="grid grid-cols-5 gap-4">
+                <div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200">
+                    <div class="text-blue-600 font-bold mb-2">수학</div>
+                    <div class="text-2xl font-black text-gray-800">0분</div>
+                    <div class="text-xs text-gray-600 mt-1">목표: 60분</div>
+                    <div class="bg-gray-200 rounded-full h-2 mt-2">
+                        <div class="bg-blue-500 h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200">
+                    <div class="text-green-600 font-bold mb-2">영어</div>
+                    <div class="text-2xl font-black text-gray-800">0분</div>
+                    <div class="text-xs text-gray-600 mt-1">목표: 60분</div>
+                    <div class="bg-gray-200 rounded-full h-2 mt-2">
+                        <div class="bg-green-500 h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-xl border-2 border-red-200">
+                    <div class="text-red-600 font-bold mb-2">국어</div>
+                    <div class="text-2xl font-black text-gray-800">0분</div>
+                    <div class="text-xs text-gray-600 mt-1">목표: 50분</div>
+                    <div class="bg-gray-200 rounded-full h-2 mt-2">
+                        <div class="bg-red-500 h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-xl border-2 border-purple-200">
+                    <div class="text-purple-600 font-bold mb-2">과학</div>
+                    <div class="text-2xl font-black text-gray-800">0분</div>
+                    <div class="text-xs text-gray-600 mt-1">목표: 40분</div>
+                    <div class="bg-gray-200 rounded-full h-2 mt-2">
+                        <div class="bg-purple-500 h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200">
+                    <div class="text-yellow-600 font-bold mb-2">사회</div>
+                    <div class="text-2xl font-black text-gray-800">0분</div>
+                    <div class="text-xs text-gray-600 mt-1">목표: 30분</div>
+                    <div class="bg-gray-200 rounded-full h-2 mt-2">
+                        <div class="bg-yellow-500 h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 최근 활동 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-history text-cyan-500 mr-2"></i>최근 학습 활동
+            </h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-800">수학 - 개념원리 중학수학</div>
+                            <div class="text-sm text-gray-600">2단원 일차방정식 (p.45-52)</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-bold text-blue-600">60분</div>
+                        <div class="text-xs text-gray-500">2025-01-11 15:00</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-green-500 w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-800">영어 - Grammar Zone 기초편</div>
+                            <div class="text-sm text-gray-600">Unit 3 현재시제 (p.28-35)</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-bold text-green-600">55분</div>
+                        <div class="text-xs text-gray-500">2025-01-11 16:10</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-red-500 w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-800">국어 - 비문학 독해</div>
+                            <div class="text-sm text-gray-600">설명문 독해 연습 5지문</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-bold text-red-600">45분</div>
+                        <div class="text-xs text-gray-500">2025-01-11 17:20</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 눈송이 생성
+        const snowflakesContainer = document.getElementById('snowflakes');
+        for (let i = 0; i < 15; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflakesContainer.appendChild(snowflake);
+        }
+
+        // 일일 학습 시간 차트
+        const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+        new Chart(dailyCtx, {
+            type: 'line',
+            data: {
+                labels: ['1일', '2일', '3일', '4일', '5일', '6일', '7일'],
+                datasets: [{
+                    label: '학습 시간 (시간)',
+                    data: [4.2, 3.8, 4.5, 4.0, 4.3, 3.7, 4.1],
+                    borderColor: 'rgb(14, 165, 233)',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: '목표 (4시간)',
+                    data: [4, 4, 4, 4, 4, 4, 4],
+                    borderColor: 'rgb(34, 197, 94)',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '시간';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 교과별 학습 시간 차트
+        const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+        new Chart(subjectCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['수학', '영어', '국어', '과학', '사회'],
+                datasets: [{
+                    data: [8.5, 7.2, 5.8, 4.0, 2.5],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(234, 179, 8, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '시간 (' + 
+                                       Math.round(context.parsed / 28 * 100) + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // ========================================
+        // 빠른 학생 등록 기능 (NEW!)
+        // ========================================
+        
+        const quickForm = document.getElementById('quickStudentForm');
+        if (quickForm) {
+            quickForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await handleQuickStudentSubmit();
+            });
+            
+            // 점수 입력 시 자동 수준 판정
+            const scoreInputs = ['quickKorean', 'quickEnglish', 'quickMath', 'quickScience', 'quickSocial'];
+            scoreInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('input', autoCalculateLevelQuick);
+                }
+            });
+        }
+        
+        // 빠른 등록 처리
+        async function handleQuickStudentSubmit() {
+            try {
+                autoCalculateLevelQuick();
+                
+                const level = document.getElementById('quickLevel').value;
+                if (!level) {
+                    alert('⚠️ 학습 수준을 판정하기 위해 최소 1개 과목의 EBS AI 진단평가 점수를 입력해주세요.');
+                    return;
+                }
+                
+                const studentData = {
+                    name: document.getElementById('quickName').value.trim(),
+                    grade: parseInt(document.getElementById('quickGrade').value),
+                    class_num: parseInt(document.getElementById('quickClass').value),
+                    student_num: parseInt(document.getElementById('quickNumber').value),
+                    korean_score: parseFloat(document.getElementById('quickKorean').value) || 0,
+                    english_score: parseFloat(document.getElementById('quickEnglish').value) || 0,
+                    math_score: parseFloat(document.getElementById('quickMath').value) || 0,
+                    science_score: parseFloat(document.getElementById('quickScience').value) || 0,
+                    social_score: parseFloat(document.getElementById('quickSocial').value) || 0,
+                    level: level,
+                    status: '활동중'
+                };
+                
+                studentData.total_score = studentData.korean_score + studentData.english_score + 
+                                           studentData.math_score + studentData.science_score + 
+                                           studentData.social_score;
+                
+                const response = await fetch('tables/students', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(studentData)
+                });
+                
+                if (response.ok) {
+                    showSuccessMessage(`✅ ${studentData.name} 학생이 성공적으로 등록되었습니다!`);
+                    document.getElementById('quickStudentForm').reset();
+                    document.getElementById('quickLevel').disabled = true;
+                    document.getElementById('quickLevel').style.backgroundColor = '';
+                    setTimeout(() => location.reload(), 1500);
+                }
+            } catch (error) {
+                console.error('등록 오류:', error);
+                alert('❌ 학생 등록에 실패했습니다.');
+            }
+        }
+        
+        // 자동 수준 계산
+        function autoCalculateLevelQuick() {
+            const korean = parseFloat(document.getElementById('quickKorean').value) || 0;
+            const english = parseFloat(document.getElementById('quickEnglish').value) || 0;
+            const math = parseFloat(document.getElementById('quickMath').value) || 0;
+            const science = parseFloat(document.getElementById('quickScience').value) || 0;
+            const social = parseFloat(document.getElementById('quickSocial').value) || 0;
+            
+            const scores = [korean, english, math, science, social].filter(s => s > 0);
+            
+            if (scores.length === 0) {
+                document.getElementById('quickLevel').value = '';
+                document.getElementById('quickLevel').disabled = true;
+                return;
+            }
+            
+            const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+            let level = avgScore >= 85 ? '상급' : avgScore >= 70 ? '중상' : avgScore >= 50 ? '중하' : '기초';
+            
+            const levelSelect = document.getElementById('quickLevel');
+            levelSelect.value = level;
+            levelSelect.disabled = false;
+            
+            const colors = {'기초': '#dcfce7', '중하': '#dbeafe', '중상': '#fef3c7', '상급': '#fee2e2'};
+            levelSelect.style.backgroundColor = colors[level];
+            levelSelect.style.fontWeight = 'bold';
+        }
+        
+        // 성공 메시지
+        function showSuccessMessage(message) {
+            const div = document.createElement('div');
+            div.className = 'fixed top-20 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-2xl z-50 animate-bounce';
+            div.innerHTML = `<div class="flex items-center space-x-3"><i class="fas fa-check-circle text-2xl"></i><span class="font-bold">${message}</span></div>`;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

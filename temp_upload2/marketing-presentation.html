@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100일의 변화 - 프레젠테이션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 15px 30px;
+            border-radius: 50px;
+        }
+        
+        .controls button {
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .controls button:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .slide-number {
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .stat-box-big {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: 표지 -->
+    <div class="slide active">
+        <div class="slide-content text-center">
+            <div class="fade-in">
+                <div class="text-8xl mb-6">📚</div>
+                <h1 class="text-8xl font-black text-white mb-8">100일의 변화</h1>
+                <p class="text-4xl text-white/90 mb-12">사교육 없이 성적을 올리는<br/>혁신적 학습 관리 시스템</p>
+                <div class="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="stat-box-big">
+                        <div class="text-6xl font-black mb-2">98%</div>
+                        <div class="text-2xl">사교육비 절감</div>
+                    </div>
+                    <div class="stat-box-big">
+                        <div class="text-6xl font-black mb-2">+15점</div>
+                        <div class="text-2xl">평균 성적 향상</div>
+                    </div>
+                    <div class="stat-box-big">
+                        <div class="text-6xl font-black mb-2">32시간</div>
+                        <div class="text-2xl">주간 학습 시간</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: 문제 제기 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-7xl font-black text-white mb-12">🚨 교육 현장의 위기</h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-7xl font-black text-white mb-4">74.3%</div>
+                        <div class="text-3xl text-white/90">중학생 사교육 참여율</div>
+                        <div class="text-xl text-white/70 mt-4">통계청, 2024</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-7xl font-black text-white mb-4">90만원</div>
+                        <div class="text-3xl text-white/90">월평균 사교육비</div>
+                        <div class="text-xl text-white/70 mt-4">한 가정당</div>
+                    </div>
+                </div>
+                <div class="bg-red-500/80 backdrop-blur-lg p-8 rounded-2xl mt-8 border-2 border-white/30">
+                    <h3 class="text-4xl font-bold text-white mb-4">3년간 총 3,240만원 지출</h3>
+                    <p class="text-2xl text-white/90">
+                        막대한 비용에도 불구하고<br/>
+                        자기주도학습 능력은 오히려 저하
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: 학생들의 고민 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-7xl font-black text-white mb-12">😰 학생들의 고민</h2>
+                <div class="space-y-6">
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 flex items-center">
+                        <div class="text-7xl mr-8">❓</div>
+                        <div class="flex-1">
+                            <h3 class="text-4xl font-bold text-white mb-2">방향성 상실</h3>
+                            <p class="text-2xl text-white/90">"뭐부터 공부해야 할지 모르겠어요" - 68%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 flex items-center">
+                        <div class="text-7xl mr-8">😰</div>
+                        <div class="flex-1">
+                            <h3 class="text-4xl font-bold text-white mb-2">실행력 부족</h3>
+                            <p class="text-2xl text-white/90">"계획은 세우는데 실천이 안 돼요" - 82%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 flex items-center">
+                        <div class="text-7xl mr-8">😕</div>
+                        <div class="flex-1">
+                            <h3 class="text-4xl font-bold text-white mb-2">피드백 부재</h3>
+                            <p class="text-2xl text-white/90">"내가 잘하고 있는지 모르겠어요" - 71%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: 우리의 솔루션 -->
+    <div class="slide">
+        <div class="slide-content text-center">
+            <div class="fade-in">
+                <h2 class="text-7xl font-black text-white mb-12">💡 우리의 믿음</h2>
+                <div class="bg-white/20 backdrop-blur-lg p-12 rounded-3xl border-4 border-white/40">
+                    <p class="text-5xl font-black text-white leading-relaxed mb-8">
+                        "학교 수업을 최대한 활용하면,<br/>
+                        고액 사교육 없이도<br/>
+                        성적을 올릴 수 있다"
+                    </p>
+                    <div class="text-3xl text-white/90">
+                        이 믿음을 실천하기 위해<br/>
+                        <strong class="text-yellow-300">100일의 변화</strong> 프로그램을 개발했습니다
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: 핵심 목표 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-7xl font-black text-white mb-12 text-center">🎯 4가지 핵심 목표</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-blue-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-6xl mb-4">🎓</div>
+                        <h3 class="text-3xl font-bold text-white mb-4">자기주도학습 습관</h3>
+                        <ul class="text-xl text-white/90 space-y-2">
+                            <li>• 100일 집중 습관 형성</li>
+                            <li>• 주 32시간 체계적 관리</li>
+                            <li>• 매일 체크로 동기부여</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-6xl mb-4">📈</div>
+                        <h3 class="text-3xl font-bold text-white mb-4">실질적 성적 향상</h3>
+                        <ul class="text-xl text-white/90 space-y-2">
+                            <li>• 평균 +15점 향상</li>
+                            <li>• 학교 수업 기반 복습</li>
+                            <li>• 데이터 기반 개선</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-6xl mb-4">🤝</div>
+                        <h3 class="text-3xl font-bold text-white mb-4">협력 체계 구축</h3>
+                        <ul class="text-xl text-white/90 space-y-2">
+                            <li>• 교사 실시간 모니터링</li>
+                            <li>• 학생 명확한 가이드</li>
+                            <li>• 학부모 투명한 확인</li>
+                        </ul>
+                    </div>
+                    <div class="bg-orange-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-6xl mb-4">💰</div>
+                        <h3 class="text-3xl font-bold text-white mb-4">교육비 부담 완화</h3>
+                        <ul class="text-xl text-white/90 space-y-2">
+                            <li>• 98% 절감 (5만원)</li>
+                            <li>• 3년 3,000만원 절약</li>
+                            <li>• 교육 기회 평등</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 시스템 - 교사 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10">👨‍🏫 교사용 대시보드</h2>
+                <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 mb-6">
+                    <div class="flex items-center mb-6">
+                        <div class="text-6xl mr-6">📊</div>
+                        <h3 class="text-4xl font-bold text-white">실시간 학습 모니터링</h3>
+                    </div>
+                    <ul class="text-2xl text-white/90 space-y-3">
+                        <li>✓ 30초마다 자동 새로고침</li>
+                        <li>✓ 현재 학습 중인 학생 실시간 확인</li>
+                        <li>✓ 주간 목표 달성률 (32시간 기준)</li>
+                        <li>✓ 문제 학생 조기 발견 (3일 미접속 등)</li>
+                    </ul>
+                </div>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-indigo-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">학생 관리</div>
+                        <p class="text-lg text-white/90">등록·정보·성적</p>
+                    </div>
+                    <div class="bg-purple-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">학습 계획</div>
+                        <p class="text-lg text-white/90">과목별 우선순위</p>
+                    </div>
+                    <div class="bg-pink-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">주간 피드백</div>
+                        <p class="text-lg text-white/90">칭찬·개선점</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: 시스템 - 학생 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10">👦 학생용 포털</h2>
+                <div class="bg-white/95 p-10 rounded-3xl max-w-3xl mx-auto">
+                    <div class="text-center mb-6">
+                        <div class="text-3xl font-bold text-gray-800 mb-3">오늘의 학습 (2024년 3월 5일 화요일)</div>
+                        <div class="text-xl text-blue-600 font-semibold">목표: 240분 (평일 4시간)</div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-r from-red-100 to-red-200 p-6 rounded-xl flex items-center justify-between border-2 border-red-300">
+                            <span class="text-2xl font-bold text-gray-800">✏️ 국어 - 학교 수업 복습 (60분)</span>
+                            <button class="bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg">▶️ 시작</button>
+                        </div>
+                        <div class="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-xl flex items-center justify-between border-2 border-blue-300">
+                            <span class="text-2xl font-bold text-gray-800">✏️ 수학 - 핵심 개념 정리 (70분)</span>
+                            <button class="bg-gray-300 text-gray-500 px-8 py-3 rounded-full text-xl font-bold">대기</button>
+                        </div>
+                        <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-xl flex items-center justify-between border-2 border-yellow-300">
+                            <span class="text-2xl font-bold text-gray-800">✏️ 영어 - 단어 + 문법 (60분)</span>
+                            <button class="bg-gray-300 text-gray-500 px-8 py-3 rounded-full text-xl font-bold">대기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: 학생 포털 특징 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-12 text-center">✨ 학생 포털 핵심 기능</h2>
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-green-400 to-green-600 p-10 rounded-2xl text-center border-4 border-white/50">
+                        <div class="text-7xl mb-6">⏱️</div>
+                        <div class="text-3xl font-bold text-white mb-3">실시간 타이머</div>
+                        <p class="text-xl text-white/90">자동 시간 기록<br/>조작 불가능</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-10 rounded-2xl text-center border-4 border-white/50">
+                        <div class="text-7xl mb-6">📈</div>
+                        <div class="text-3xl font-bold text-white mb-3">진도율 표시</div>
+                        <p class="text-xl text-white/90">시각적 동기부여<br/>Progress Bar</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 p-10 rounded-2xl text-center border-4 border-white/50">
+                        <div class="text-7xl mb-6">💬</div>
+                        <div class="text-3xl font-bold text-white mb-3">교사 피드백</div>
+                        <p class="text-xl text-white/90">주간 격려 메시지<br/>개선 방향 제시</p>
+                    </div>
+                </div>
+                <div class="bg-yellow-500/80 backdrop-blur-lg p-8 rounded-2xl mt-8 border-2 border-white/30 text-center">
+                    <h3 class="text-3xl font-bold text-white mb-3">🎮 게이미피케이션</h3>
+                    <p class="text-2xl text-white/90">체크 완료 시 "잘했어요! ✨" 애니메이션 보상</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: 일일 루틴 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10">📅 일일 학습 루틴</h2>
+                <div class="grid grid-cols-5 gap-4 text-center">
+                    <div class="bg-blue-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30">
+                        <div class="text-4xl font-black text-white mb-3">16:00</div>
+                        <div class="text-3xl mb-2">👋</div>
+                        <div class="text-lg text-white/90 font-semibold">포털 접속</div>
+                    </div>
+                    <div class="bg-green-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30">
+                        <div class="text-4xl font-black text-white mb-3">16:10</div>
+                        <div class="text-3xl mb-2">▶️</div>
+                        <div class="text-lg text-white/90 font-semibold">학습 시작</div>
+                    </div>
+                    <div class="bg-orange-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30">
+                        <div class="text-4xl font-black text-white mb-3">17:10</div>
+                        <div class="text-3xl mb-2">⏹️</div>
+                        <div class="text-lg text-white/90 font-semibold">학습 완료</div>
+                    </div>
+                    <div class="bg-purple-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30">
+                        <div class="text-4xl font-black text-white mb-3">20:00</div>
+                        <div class="text-3xl mb-2">🎉</div>
+                        <div class="text-lg text-white/90 font-semibold">목표 달성</div>
+                    </div>
+                    <div class="bg-pink-500/80 backdrop-blur-lg p-6 rounded-xl border-2 border-white/30">
+                        <div class="text-4xl font-black text-white mb-3">30초</div>
+                        <div class="text-3xl mb-2">📊</div>
+                        <div class="text-lg text-white/90 font-semibold">교사 반영</div>
+                    </div>
+                </div>
+                <div class="mt-10 bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                    <h3 class="text-3xl font-bold text-white text-center mb-4">주간 학습 시간</h3>
+                    <div class="text-center">
+                        <div class="text-7xl font-black text-white">32시간</div>
+                        <div class="text-2xl text-white/90 mt-3">평일 20시간 + 주말 12시간</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: 차별화 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10 text-center">🌟 "4 ONLY" 차별화</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 p-8 rounded-2xl border-4 border-white/50">
+                        <div class="text-6xl mb-4">👨‍🏫</div>
+                        <h3 class="text-3xl font-bold text-white mb-3">ONLY 1: 선생님 직접 관리</h3>
+                        <p class="text-xl text-white/90">학생을 가장 잘 아는 담임 선생님</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-700 p-8 rounded-2xl border-4 border-white/50">
+                        <div class="text-6xl mb-4">⚡</div>
+                        <h3 class="text-3xl font-bold text-white mb-3">ONLY 2: 실시간 양방향</h3>
+                        <p class="text-xl text-white/90">30초 내 교사에게 반영</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-700 p-8 rounded-2xl border-4 border-white/50">
+                        <div class="text-6xl mb-4">📚</div>
+                        <h3 class="text-3xl font-bold text-white mb-3">ONLY 3: 학교별 맞춤</h3>
+                        <p class="text-xl text-white/90">학교 진도에 맞춘 복습</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-500 to-orange-700 p-8 rounded-2xl border-4 border-white/50">
+                        <div class="text-6xl mb-4">💰</div>
+                        <h3 class="text-3xl font-bold text-white mb-3">ONLY 4: 월 5만원</h3>
+                        <p class="text-xl text-white/90">전문 관리 + 저렴한 가격</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: 성과 데이터 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10 text-center">📊 실증 데이터</h2>
+                <div class="grid grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 text-center">
+                        <div class="text-7xl font-black text-white mb-3">85%</div>
+                        <div class="text-2xl text-white/90">평균 달성률</div>
+                        <div class="text-lg text-white/70 mt-2">주 27.2시간 / 32시간</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 text-center">
+                        <div class="text-7xl font-black text-white mb-3">+15점</div>
+                        <div class="text-2xl text-white/90">평균 성적 향상</div>
+                        <div class="text-lg text-white/70 mt-2">100점 만점 기준</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30 text-center">
+                        <div class="text-7xl font-black text-white mb-3">3,060</div>
+                        <div class="text-2xl text-white/90">만원 절감</div>
+                        <div class="text-lg text-white/70 mt-2">3년 기준</div>
+                    </div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                    <h3 class="text-3xl font-bold text-white mb-6 text-center">과목별 성적 향상</h3>
+                    <div class="grid grid-cols-5 gap-4 text-center">
+                        <div>
+                            <div class="text-5xl font-black text-blue-300 mb-2">+12점</div>
+                            <div class="text-xl text-white/90">국어</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black text-green-300 mb-2">+18점</div>
+                            <div class="text-xl text-white/90">영어</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black text-purple-300 mb-2">+15점</div>
+                            <div class="text-xl text-white/90">수학</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black text-orange-300 mb-2">+14점</div>
+                            <div class="text-xl text-white/90">과학</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black text-red-300 mb-2">+13점</div>
+                            <div class="text-xl text-white/90">사회</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: 사용 후기 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10 text-center">💬 실제 사용 후기</h2>
+                <div class="space-y-6">
+                    <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="text-5xl mr-4">👩</div>
+                            <div>
+                                <div class="text-2xl font-bold text-gray-800">서울 ○○중 2학년 학부모</div>
+                                <div class="text-yellow-500 text-xl">★★★★★ 5.0</div>
+                            </div>
+                        </div>
+                        <p class="text-2xl text-gray-700 italic leading-relaxed">
+                            "3개월 만에 아이 성적이 20점 올랐어요. 학원 3개 끊고 이 프로그램만 했는데도 
+                            오히려 성적이 더 올랐습니다. 아이가 스스로 공부하는 모습에 감동했어요."
+                        </p>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="text-5xl mr-4">👨‍🏫</div>
+                            <div>
+                                <div class="text-2xl font-bold text-gray-800">서울 ○○중 담임교사 (교직 30년)</div>
+                                <div class="text-yellow-500 text-xl">★★★★★ 5.0</div>
+                            </div>
+                        </div>
+                        <p class="text-2xl text-gray-700 italic leading-relaxed">
+                            "30년 교직 생활 중 가장 혁신적입니다. 학생들이 뭐 하는지 실시간으로 보이니까 
+                            상담할 때 구체적으로 얘기할 수 있어요."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: 비용 비교 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10 text-center">💰 비용 비교</h2>
+                <div class="grid grid-cols-4 gap-6 mb-8 text-center">
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-3xl mb-3">🏢</div>
+                        <div class="text-2xl font-bold text-white mb-2">학원</div>
+                        <div class="text-5xl font-black text-red-300">90만원</div>
+                        <div class="text-lg text-white/70 mt-2">월</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-3xl mb-3">💻</div>
+                        <div class="text-2xl font-bold text-white mb-2">온라인</div>
+                        <div class="text-5xl font-black text-orange-300">10만원</div>
+                        <div class="text-lg text-white/70 mt-2">월</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="text-3xl mb-3">📱</div>
+                        <div class="text-2xl font-bold text-white mb-2">학습앱</div>
+                        <div class="text-5xl font-black text-yellow-300">3만원</div>
+                        <div class="text-lg text-white/70 mt-2">월</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-400 to-green-600 p-8 rounded-2xl border-4 border-yellow-400">
+                        <div class="text-3xl mb-3">⭐</div>
+                        <div class="text-2xl font-bold text-white mb-2">100일의 변화</div>
+                        <div class="text-5xl font-black text-white">5만원</div>
+                        <div class="text-lg text-white mt-2">월</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-10 rounded-3xl border-4 border-white/50">
+                    <h3 class="text-4xl font-black text-white text-center mb-6">3년간 3,060만원 절약</h3>
+                    <div class="grid grid-cols-3 gap-8 text-center">
+                        <div>
+                            <div class="text-6xl mb-3">🚗</div>
+                            <div class="text-2xl font-bold text-white">소형차 1대</div>
+                        </div>
+                        <div>
+                            <div class="text-6xl mb-3">🎓</div>
+                            <div class="text-2xl font-bold text-white">대학 등록금 2년</div>
+                        </div>
+                        <div>
+                            <div class="text-6xl mb-3">✈️</div>
+                            <div class="text-2xl font-bold text-white">어학연수 6개월</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: 학교별 제안 -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="fade-in">
+                <h2 class="text-6xl font-black text-white mb-10 text-center">🎯 학교별 맞춤 제안</h2>
+                <div class="space-y-6">
+                    <div class="bg-blue-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="flex items-center mb-4">
+                            <div class="text-6xl mr-6">🏫</div>
+                            <h3 class="text-4xl font-bold text-white">공립 중학교</h3>
+                        </div>
+                        <ul class="text-2xl text-white/90 space-y-2 pl-20">
+                            <li>✓ 무료 파일럿 1개월</li>
+                            <li>✓ 방과후 예산 활용</li>
+                            <li>✓ 교육청 우수 사례</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="flex items-center mb-4">
+                            <div class="text-6xl mr-6">🏢</div>
+                            <h3 class="text-4xl font-bold text-white">사립 중학교</h3>
+                        </div>
+                        <ul class="text-2xl text-white/90 space-y-2 pl-20">
+                            <li>✓ 프리미엄 패키지</li>
+                            <li>✓ 월 2회 학부모 리포트</li>
+                            <li>✓ 학교 브랜드 강화</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-500/80 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                        <div class="flex items-center mb-4">
+                            <div class="text-6xl mr-6">🌳</div>
+                            <h3 class="text-4xl font-bold text-white">소규모 중학교</h3>
+                        </div>
+                        <ul class="text-2xl text-white/90 space-y-2 pl-20">
+                            <li>✓ 초저가 패키지 (3만원)</li>
+                            <li>✓ 교육 평등 실현</li>
+                            <li>✓ 교통비 절감</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Call to Action -->
+    <div class="slide">
+        <div class="slide-content text-center">
+            <div class="fade-in">
+                <h2 class="text-7xl font-black text-white mb-12">🚀 지금 시작하세요!</h2>
+                <div class="bg-white/20 backdrop-blur-lg p-12 rounded-3xl border-4 border-white/40 mb-10">
+                    <p class="text-5xl font-black text-white leading-relaxed">
+                        우리 학교가<br/>
+                        교육 혁신의 중심이 됩니다
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white p-8 rounded-2xl">
+                        <h3 class="text-3xl font-bold text-gray-800 mb-4">📞 무료 상담</h3>
+                        <div class="flex justify-center mb-3">
+                            <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-24 h-24">
+                        </div>
+                        <p class="text-xl text-gray-700">정라미 컨설턴트</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl">
+                        <h3 class="text-3xl font-bold text-gray-800 mb-4">🎁 무료 혜택</h3>
+                        <p class="text-xl text-gray-700">1개 학년 1개월</p>
+                        <p class="text-xl text-gray-700">파일럿 프로그램</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 컨트롤 버튼 -->
+    <div class="controls">
+        <button onclick="prevSlide()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="slide-number">
+            <span id="current-slide">1</span> / <span id="total-slides">15</span>
+        </div>
+        <button onclick="nextSlide()">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // 키보드 네비게이션
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+
+</body>
+</html>

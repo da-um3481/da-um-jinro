@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 30일 프로그램 - 나의 학습 포털</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            min-height: 100vh;
+        }
+        
+        /* 눈송이 애니메이션 */
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px); opacity: 0; }
+        }
+        
+        .snowflake {
+            position: fixed;
+            top: -10vh;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+            z-index: 1;
+            pointer-events: none;
+            animation: snowfall linear infinite;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.05em;
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease-out;
+        }
+        
+        /* 성공 메시지 스타일 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideUp 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- 눈송이 효과 -->
+    <div id="snowflakes"></div>
+    
+    <!-- 성공 메시지 (토스트) -->
+    <div id="successMessage" class="hidden success-toast"></div>
+    
+    <!-- 상단 네비게이션 -->
+    <nav class="glass-effect sticky top-0 z-50 shadow-lg border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- 로고 & 인사말 -->
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
+                    <div>
+                        <h1 class="text-lg font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                            겨울방학 30일 프로그램
+                        </h1>
+                        <p class="text-xs text-gray-600" id="studentInfo">❄️ 학생을 선택하세요</p>
+                    </div>
+                </div>
+                
+                <!-- 우측 메뉴 -->
+                <div class="flex items-center space-x-2">
+                    <a href="winter-index.html" class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full text-sm font-semibold hover:shadow-lg transition">
+                        <i class="fas fa-home"></i>
+                        <span>대시보드</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        
+        <!-- 학생 이름 입력 -->
+        <div class="glass-effect rounded-2xl shadow-lg p-6 animate-slide-up">
+            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <i class="fas fa-user-circle mr-2 text-cyan-600"></i>내 이름 입력
+            </label>
+            <div class="flex space-x-3">
+                <input 
+                    type="text" 
+                    id="studentNameInput" 
+                    placeholder="이름을 입력하세요 (예: 김민준)"
+                    class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
+                    onkeypress="if(event.key==='Enter') loadStudentByName()"
+                >
+                <button 
+                    onclick="loadStudentByName()"
+                    class="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                >
+                    <i class="fas fa-search mr-2"></i>찾기
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">
+                <i class="fas fa-info-circle mr-1"></i>이름을 정확히 입력하고 "찾기" 버튼을 눌러주세요
+            </p>
+        </div>
+
+        <!-- 오늘의 날짜 & 목표 -->
+        <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl shadow-xl p-6 text-white animate-slide-up">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm opacity-90 mb-1">오늘</p>
+                    <p class="text-2xl font-bold" id="todayDate">2025년 1월 12일 (일)</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm opacity-90 mb-1">오늘 목표</p>
+                    <div class="flex items-center space-x-2">
+                        <p class="text-2xl font-bold" id="dailyTarget">3.5시간</p>
+                        <span class="text-xs px-3 py-1 bg-white/20 rounded-full" id="programDay">Day 8</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 30일 프로그램 진행률 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-chart-line text-cyan-500 mr-2"></i>30일 프로그램 진행률
+                </h3>
+                <div class="text-right">
+                    <div class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                        23%
+                    </div>
+                    <div class="text-xs text-gray-600">7일 / 30일</div>
+                </div>
+            </div>
+            <div class="bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 h-full rounded-full" style="width: 23%"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-600">
+                <span>시작: 1월 6일</span>
+                <span>D-23</span>
+                <span>종료: 2월 4일</span>
+            </div>
+        </div>
+
+        <!-- 오늘의 학습 현황 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-calendar-day text-cyan-500 mr-2"></i>오늘의 학습 현황
+            </h3>
+            
+            <!-- 과목별 학습 현황 -->
+            <div class="space-y-4">
+                <!-- 수학 -->
+                <div class="p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">수학</div>
+                                <div class="text-xs text-gray-600">목표: 45분</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-blue-600 timer-display" id="mathTime">00:00</div>
+                            <div class="text-xs text-gray-600">0 / 45분</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div class="bg-blue-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="startTimer('math')" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-bold">
+                            <i class="fas fa-play mr-2"></i>시작
+                        </button>
+                        <button onclick="stopTimer('math')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
+                            <i class="fas fa-stop mr-2"></i>완료
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 영어 -->
+                <div class="p-4 bg-green-50 rounded-xl border-2 border-green-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center text-white">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">영어</div>
+                                <div class="text-xs text-gray-600">목표: 45분</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-green-600 timer-display" id="englishTime">00:00</div>
+                            <div class="text-xs text-gray-600">0 / 45분</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div class="bg-green-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="startTimer('english')" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-bold">
+                            <i class="fas fa-play mr-2"></i>시작
+                        </button>
+                        <button onclick="stopTimer('english')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
+                            <i class="fas fa-stop mr-2"></i>완료
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 국어 -->
+                <div class="p-4 bg-red-50 rounded-xl border-2 border-red-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">국어</div>
+                                <div class="text-xs text-gray-600">목표: 45분</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-red-600 timer-display" id="koreanTime">00:00</div>
+                            <div class="text-xs text-gray-600">0 / 45분</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div class="bg-red-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="startTimer('korean')" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-bold">
+                            <i class="fas fa-play mr-2"></i>시작
+                        </button>
+                        <button onclick="stopTimer('korean')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
+                            <i class="fas fa-stop mr-2"></i>완료
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 과학 -->
+                <div class="p-4 bg-purple-50 rounded-xl border-2 border-purple-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-white">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">과학</div>
+                                <div class="text-xs text-gray-600">목표: 45분</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-purple-600 timer-display" id="scienceTime">00:00</div>
+                            <div class="text-xs text-gray-600">0 / 45분</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div class="bg-purple-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="startTimer('science')" class="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition font-bold">
+                            <i class="fas fa-play mr-2"></i>시작
+                        </button>
+                        <button onclick="stopTimer('science')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
+                            <i class="fas fa-stop mr-2"></i>완료
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 사회 -->
+                <div class="p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center text-white">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">사회</div>
+                                <div class="text-xs text-gray-600">목표: 45분</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-yellow-600 timer-display" id="socialTime">00:00</div>
+                            <div class="text-xs text-gray-600">0 / 45분</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div class="bg-yellow-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="startTimer('social')" class="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-bold">
+                            <i class="fas fa-play mr-2"></i>시작
+                        </button>
+                        <button onclick="stopTimer('social')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
+                            <i class="fas fa-stop mr-2"></i>완료
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오늘의 총 학습 시간 -->
+            <div class="mt-6 p-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-sm opacity-90">오늘의 총 학습 시간</div>
+                        <div class="text-3xl font-black mt-1">0시간 0분</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm opacity-90">달성률</div>
+                        <div class="text-3xl font-black mt-1">0%</div>
+                    </div>
+                </div>
+                <div class="bg-white/20 rounded-full h-3 mt-3">
+                    <div class="bg-white h-full rounded-full transition-all" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 나의 교재 진도 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-book-open text-cyan-500 mr-2"></i>나의 교재 진도
+            </h3>
+            <div class="space-y-3">
+                <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <div class="text-sm text-blue-600 font-bold">수학</div>
+                            <div class="font-bold text-gray-800">개념원리 중학수학 1-1</div>
+                        </div>
+                        <div class="text-2xl font-black text-blue-600">15%</div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-full rounded-full" style="width: 15%"></div>
+                    </div>
+                    <div class="text-xs text-gray-600 mt-2">p.45 / 300</div>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border-2 border-green-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <div class="text-sm text-green-600 font-bold">영어</div>
+                            <div class="font-bold text-gray-800">Grammar Zone 기초편</div>
+                        </div>
+                        <div class="text-2xl font-black text-green-600">20%</div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-full rounded-full" style="width: 20%"></div>
+                    </div>
+                    <div class="text-xs text-gray-600 mt-2">p.35 / 180</div>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-xl border-2 border-red-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <div class="text-sm text-red-600 font-bold">국어</div>
+                            <div class="font-bold text-gray-800">비문학 독해 워크북</div>
+                        </div>
+                        <div class="text-2xl font-black text-red-600">25%</div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2">
+                        <div class="bg-red-500 h-full rounded-full" style="width: 25%"></div>
+                    </div>
+                    <div class="text-xs text-gray-600 mt-2">15지문 / 60지문</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 주간 학습 통계 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-bar text-cyan-500 mr-2"></i>이번 주 학습 통계 (Week 2)
+            </h3>
+            <div class="grid grid-cols-7 gap-2">
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
+                    <div class="text-xs text-gray-600 mb-1">월</div>
+                    <div class="text-lg font-black text-green-600">4.2h</div>
+                    <div class="mt-2">✅</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
+                    <div class="text-xs text-gray-600 mb-1">화</div>
+                    <div class="text-lg font-black text-green-600">4.0h</div>
+                    <div class="mt-2">✅</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
+                    <div class="text-xs text-gray-600 mb-1">수</div>
+                    <div class="text-lg font-black text-green-600">4.5h</div>
+                    <div class="mt-2">✅</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
+                    <div class="text-xs text-gray-600 mb-1">목</div>
+                    <div class="text-lg font-black text-green-600">4.0h</div>
+                    <div class="mt-2">✅</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
+                    <div class="text-xs text-gray-600 mb-1">금</div>
+                    <div class="text-lg font-black text-green-600">4.3h</div>
+                    <div class="mt-2">✅</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
+                    <div class="text-xs text-gray-600 mb-1">토</div>
+                    <div class="text-lg font-black text-green-600">3.7h</div>
+                    <div class="mt-2">⚠️</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded-lg border-2 border-gray-300">
+                    <div class="text-xs text-gray-600 mb-1">일</div>
+                    <div class="text-lg font-black text-gray-400">0h</div>
+                    <div class="mt-2">⏳</div>
+                </div>
+            </div>
+            <div class="mt-4 text-center text-sm text-gray-600">
+                <span class="font-bold text-cyan-600">Week 1 완료!</span> 총 28시간 학습 🎉
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 눈송이 생성
+        const snowflakesContainer = document.getElementById('snowflakes');
+        for (let i = 0; i < 15; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflakesContainer.appendChild(snowflake);
+        }
+
+        // 오늘 날짜 표시
+        const today = new Date();
+        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 (${days[today.getDay()]})`;
+        document.getElementById('todayDate').textContent = dateStr;
+
+        // 타이머 변수
+        let timers = {
+            math: { seconds: 0, interval: null, started: false, completed: false },
+            english: { seconds: 0, interval: null, started: false, completed: false },
+            korean: { seconds: 0, interval: null, started: false, completed: false },
+            science: { seconds: 0, interval: null, started: false, completed: false },
+            social: { seconds: 0, interval: null, started: false, completed: false }
+        };
+
+        // 과목 목록 (자유 선택)
+        const subjects = ['math', 'english', 'korean', 'science', 'social'];
+        
+        // 학습 시간 설정
+        const STUDY_TIME = 45 * 60; // 45분 (초)
+        const BREAK_TIME = 10 * 60; // 10분 (초)
+        
+        // 현재 학습 중인 과목
+        let currentLearningSubject = null;
+        
+        // 휴식 시간 타이머
+        let breakTimer = null;
+        let breakSeconds = 0;
+
+        // 타이머 시작 (자유 선택 + 중복 방지)
+        function startTimer(subject) {
+            // 1. 중복 학습 방지
+            if (timers[subject].started) {
+                alert(`❌ ${getSubjectName(subject)}는 이미 학습을 시작했습니다.\n\n한 번 시작한 과목은 다시 시작할 수 없습니다.`);
+                return;
+            }
+            
+            // 2. 다른 과목이 학습 중인지 확인
+            if (currentLearningSubject && currentLearningSubject !== subject) {
+                alert(`❌ 현재 ${getSubjectName(currentLearningSubject)} 학습 중입니다.\n\n한 번에 한 과목만 학습할 수 있습니다.\n먼저 "완료" 버튼을 눌러주세요.`);
+                return;
+            }
+            
+            // 3. 타이머 시작
+            timers[subject].started = true;
+            currentLearningSubject = subject;
+            
+            timers[subject].interval = setInterval(() => {
+                timers[subject].seconds++;
+                updateTimerDisplay(subject);
+                
+                // 45분 달성 시 알림
+                if (timers[subject].seconds === STUDY_TIME) {
+                    showToast(`⏰ ${getSubjectName(subject)} 45분 학습 목표 달성! 훈륭해요! 🎉`);
+                    playNotificationSound();
+                }
+            }, 1000);
+            
+            // 4. 버튼 상태 업데이트
+            updateButtonStates();
+            
+            showToast(`✅ ${getSubjectName(subject)} 학습을 시작합니다! 💪\n목표: 45분`);
+        }
+
+        // 타이머 정지 (완료)
+        function stopTimer(subject) {
+            if (!timers[subject].interval) {
+                alert('❌ 시작된 타이머가 없습니다.');
+                return;
+            }
+            
+            // 1. 타이머 종료
+            clearInterval(timers[subject].interval);
+            timers[subject].interval = null;
+            timers[subject].completed = true;
+            currentLearningSubject = null;
+            
+            // 2. 학습 시간 기록
+            const minutes = Math.floor(timers[subject].seconds / 60);
+            const seconds = timers[subject].seconds % 60;
+            
+            // 3. 버튼 상태 업데이트
+            updateButtonStates();
+            
+            showToast(`✅ ${getSubjectName(subject)} ${minutes}분 ${seconds}초 학습 완료! 🎉`);
+            
+            // 4. 10분 휴식 시간 시작
+            startBreakTime();
+            
+            // 5. 모든 과목 완료 확인
+            checkAllCompleted();
+        }
+
+        // 타이머 표시 업데이트
+        function updateTimerDisplay(subject) {
+            const minutes = Math.floor(timers[subject].seconds / 60);
+            const seconds = timers[subject].seconds % 60;
+            const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById(subject + 'Time').textContent = display;
+        }
+
+        // 과목명 가져오기
+        function getSubjectName(subject) {
+            const names = {
+                math: '수학',
+                english: '영어',
+                korean: '국어',
+                science: '과학',
+                social: '사회'
+            };
+            return names[subject];
+        }
+
+        // 토스트 메시지
+        function showToast(message) {
+            const toast = document.getElementById('successMessage');
+            toast.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl p-4 flex items-center space-x-3 border-l-4 border-cyan-500">
+                    <i class="fas fa-check-circle text-cyan-500 text-2xl"></i>
+                    <span class="font-bold text-gray-800">${message}</span>
+                </div>
+            `;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 휴식 시간 시작
+        function startBreakTime() {
+            breakSeconds = 0;
+            
+            // 기존 휴식 타이머 정리
+            if (breakTimer) {
+                clearInterval(breakTimer);
+            }
+            
+            // 휴식 시간 메시지
+            showToast(`☕ 10분 휴식 시간입니다! 잠시 쉐어가세요 😌`);
+            
+            // 휴식 타이머 시작
+            breakTimer = setInterval(() => {
+                breakSeconds++;
+                
+                // 10분 종료
+                if (breakSeconds >= BREAK_TIME) {
+                    clearInterval(breakTimer);
+                    breakTimer = null;
+                    showToast(`✅ 휴식 종료! 다음 과목을 시작해볼까요? 💪`);
+                    playNotificationSound();
+                }
+            }, 1000);
+        }
+        
+        // 알림음 재생
+        function playNotificationSound() {
+            // 브라우저 기본 알림음
+            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZUA0PVqzn77BdGAg+ltryxnMpBSh+zPLaizsIGGS57OihUhELTKXh8bllHAU2jdXzzn0vBSF1xe/glEILElyx6OyrWBUIQ5vd8sFuJAUuhM/z1YU2Bhxqvu7mnFENDlOq5O+zYBoGPJTY88p2KwUme8rx3I4+CRZiturqpVQTC0mi4PK8aB8GM4nU8tGAMQYfcsLu45ZLDAw+ldry0H4xBSF3xu/glEELElyx6OyrWBUIQ5vd8sFuJAUuhM/z1YU2Bhxqvu7mnFENDlOq5O+zYBoGPJTY88p2KwUme8rx3I4+CRZiturqpVQTC0mi4PK8aB8GM4nU8tGAMQYfcsLu45ZLDAw+ldry0H4xBSF3xu/glEELElyx6OyrWBUIQ5vd8sFuJAUuhM/z1YU2Bhxqvu7mnFENDlOq5O+zYBoGPJTY88p2KwUme8rx3I4+CRZiturqpVQTC0mi4PK8aB8GM4nU8tGAMQYfcsLu45ZLDAw=');
+            audio.play().catch(e => console.log('알림음 재생 실패:', e));
+        }
+        
+        // 버튼 상태 업데이트
+        function updateButtonStates() {
+            subjects.forEach((subject) => {
+                const startBtn = document.querySelector(`button[onclick="startTimer('${subject}')"]:not([onclick="stopTimer"])`);
+                const stopBtn = document.querySelector(`button[onclick="stopTimer('${subject}')"]`);
+                
+                if (!startBtn || !stopBtn) return;
+                
+                // 시작 버튼 상태
+                if (timers[subject].started) {
+                    // 이미 시작한 과목 - 비활성화
+                    startBtn.disabled = true;
+                    startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    startBtn.innerHTML = '<i class="fas fa-check mr-2"></i>시작함';
+                } else if (currentLearningSubject && currentLearningSubject !== subject) {
+                    // 다른 과목 학습 중 - 잠금
+                    startBtn.disabled = true;
+                    startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    startBtn.innerHTML = '<i class="fas fa-lock mr-2"></i>잠금';
+                } else {
+                    // 시작 가능
+                    startBtn.disabled = false;
+                    startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>시작';
+                }
+                
+                // 완료 버튼 상태
+                if (timers[subject].interval) {
+                    // 학습 중 - 활성화
+                    stopBtn.disabled = false;
+                    stopBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    // 학습 중 아님 - 비활성화
+                    stopBtn.disabled = true;
+                    stopBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                
+                // 완료된 과목 스타일
+                if (timers[subject].completed) {
+                    stopBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>완료함';
+                    stopBtn.classList.add('bg-green-500', 'text-white');
+                    stopBtn.classList.remove('bg-gray-300', 'text-gray-700');
+                }
+            });
+        }
+        
+        // 완료 상태 문자열
+        function getCompletionStatus() {
+            const status = subjects.map(subject => {
+                const name = getSubjectName(subject);
+                return timers[subject].completed ? `✅ ${name}` : `❌ ${name}`;
+            });
+            return status.join(', ');
+        }
+        
+        // 모든 과목 완료 확인
+        function checkAllCompleted() {
+            const allCompleted = subjects.every(subject => timers[subject].completed);
+            if (allCompleted) {
+                setTimeout(() => {
+                    const totalMinutes = subjects.reduce((sum, subject) => {
+                        return sum + Math.floor(timers[subject].seconds / 60);
+                    }, 0);
+                    
+                    // 휴식 타이머 종료
+                    if (breakTimer) {
+                        clearInterval(breakTimer);
+                        breakTimer = null;
+                    }
+                    
+                    alert(`🎉 🎉 🎉 축하합니다! 🎉 🎉 🎉\n\n오늘의 모든 학습을 완료했습니다!\n총 학습 시간: ${totalMinutes}분\n\n정말 대단해요! 💪`);
+                    playNotificationSound();
+                }, 500);
+            }
+        }
+
+        // 학생 이름으로 로드
+        function loadStudentByName() {
+            const name = document.getElementById('studentNameInput').value.trim();
+            if (!name) {
+                alert('이름을 입력해주세요.');
+                return;
+            }
+            
+            document.getElementById('studentInfo').textContent = `❄️ ${name} 학생의 학습 포털`;
+            showToast(`${name} 학생님, 환영합니다! 오늘도 열심히 공부해요! 💪`);
+        }
+        
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            updateButtonStates();
+        });
+    </script>
+</body>
+</html>

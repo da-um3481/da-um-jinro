@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 겨울방학 30일 - 주간 일정</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            min-height: 100vh;
+        }
+        
+        /* 눈송이 애니메이션 */
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px); opacity: 0; }
+        }
+        
+        .snowflake {
+            position: fixed;
+            top: -10vh;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+            z-index: 1;
+            pointer-events: none;
+            animation: snowfall linear infinite;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 눈송이 효과 -->
+    <div id="snowflakes"></div>
+
+    <!-- 헤더 -->
+    <header class="glass-effect shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg">
+                    <div>
+                        <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                            겨울방학 30일 - 주간 일정
+                        </h1>
+                        <p class="text-xs text-gray-600 font-medium">❄️ 4주간의 학습 계획</p>
+                    </div>
+                </div>
+                <nav class="flex space-x-2">
+                    <a href="winter-index.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-home mr-2"></i>대시보드
+                    </a>
+                    <a href="winter-student-portal.html" class="px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition font-medium">
+                        <i class="fas fa-user-graduate mr-2"></i>학생포털
+                    </a>
+                    <a href="winter-weekly-schedule.html" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-lg transition font-medium">
+                        <i class="fas fa-calendar-week mr-2"></i>주간일정
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- 학생 선택 -->
+        <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-user-circle mr-2 text-cyan-600"></i>학생 이름
+                    </label>
+                    <input 
+                        type="text" 
+                        id="studentSelect" 
+                        placeholder="학생 이름 입력 (예: 김민준)"
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
+                        onkeypress="if(event.key==='Enter') loadWeeklySchedule()"
+                    >
+                </div>
+                <div class="flex items-end">
+                    <button 
+                        onclick="loadWeeklySchedule()"
+                        class="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    >
+                        <i class="fas fa-search mr-2"></i>주간 일정 조회
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 flex space-x-3">
+                <button 
+                    onclick="generateAutoSchedule()"
+                    class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                >
+                    <i class="fas fa-magic mr-2"></i>자동 스케줄 생성
+                </button>
+            </div>
+        </div>
+
+        <!-- 학습 시간 가이드 -->
+        <div id="timeGuideCard" class="glass-effect rounded-2xl p-6 shadow-xl mb-6 hidden">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-clock text-cyan-500 mr-2"></i>주간 학습 시간 가이드
+            </h3>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl p-4 border-2 border-cyan-300">
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600 mb-1">평일 (월~금)</div>
+                        <div class="text-3xl font-black text-cyan-600">3.5시간</div>
+                        <div class="text-xs text-gray-500 mt-1">하루 3과목</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 border-2 border-purple-300">
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600 mb-1">주말 (토~일)</div>
+                        <div class="text-3xl font-black text-purple-600">5시간</div>
+                        <div class="text-xs text-gray-500 mt-1">하루 3과목</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 border-2 border-indigo-400">
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600 mb-1">주간 총계</div>
+                        <div class="text-3xl font-black text-indigo-600">25시간</div>
+                        <div class="text-xs text-gray-500 mt-1">집중 학습</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 주간 스케줄 섹션 (동적 표시) -->
+        <div id="scheduleSection" class="hidden">
+
+            <!-- 월요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-cyan-500 mr-2"></i>월요일
+                    </h3>
+                    <button onclick="editDaySchedule('monday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="mondaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 화요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-blue-500 mr-2"></i>화요일
+                    </h3>
+                    <button onclick="editDaySchedule('tuesday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="tuesdaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 수요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-indigo-500 mr-2"></i>수요일
+                    </h3>
+                    <button onclick="editDaySchedule('wednesday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="wednesdaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 목요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-purple-500 mr-2"></i>목요일
+                    </h3>
+                    <button onclick="editDaySchedule('thursday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="thursdaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 금요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-pink-500 mr-2"></i>금요일
+                    </h3>
+                    <button onclick="editDaySchedule('friday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="fridaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 토요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-orange-500 mr-2"></i>토요일
+                    </h3>
+                    <button onclick="editDaySchedule('saturday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="saturdaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 일요일 -->
+            <div class="glass-effect rounded-2xl p-6 shadow-xl mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-calendar-day text-red-500 mr-2"></i>일요일
+                    </h3>
+                    <button onclick="editDaySchedule('sunday')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                        <i class="fas fa-edit mr-1"></i>수정
+                    </button>
+                </div>
+                <div id="sundaySchedule">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript 로드 -->
+    <script src="js/winter-weekly-schedule.js"></script>
+    
+    <script>
+        // 눈송이 생성
+        const snowflakesContainer = document.getElementById('snowflakes');
+        for (let i = 0; i < 15; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflakesContainer.appendChild(snowflake);
+        }
+    </script>
+</body>
+</html>

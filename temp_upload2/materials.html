@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교재 관리 - 공부를 어떻게 할지 모르겠어요~~</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- 상단 네비게이션 -->
+    <nav class="bg-indigo-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">📚 공부를 어떻게 할지 모르겠어요~~</h1>
+                    <p class="text-sm text-indigo-200">교재 및 강의 관리</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="index.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-home mr-2"></i>대시보드
+                    </a>
+                    <a href="students.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-users mr-2"></i>학생 관리
+                    </a>
+                    <a href="lessons.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                        <i class="fas fa-book mr-2"></i>수업 관리
+                    </a>
+                    <a href="materials.html" class="px-4 py-2 bg-indigo-700 rounded-lg hover:bg-indigo-800 transition">
+                        <i class="fas fa-book-open mr-2"></i>교재 관리
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- 필터 및 검색 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">🔍 교재 검색 및 필터</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <select id="filterType" onchange="loadMaterials()" class="px-4 py-2 border border-gray-300 rounded-lg">
+                    <option value="">전체 유형</option>
+                    <option value="교재">교재</option>
+                    <option value="EBS강의">EBS강의</option>
+                </select>
+                
+                <select id="filterSubject" onchange="loadMaterials()" class="px-4 py-2 border border-gray-300 rounded-lg">
+                    <option value="">전체 과목</option>
+                    <option value="국어">국어</option>
+                    <option value="영어">영어</option>
+                    <option value="수학">수학</option>
+                    <option value="과학">과학</option>
+                    <option value="사회">사회</option>
+                </select>
+                
+                <select id="filterLevel" onchange="loadMaterials()" class="px-4 py-2 border border-gray-300 rounded-lg">
+                    <option value="">전체 수준</option>
+                    <option value="상">상</option>
+                    <option value="중">중</option>
+                    <option value="하">하</option>
+                </select>
+                
+                <input type="text" id="searchText" placeholder="제목 검색..." 
+                    class="px-4 py-2 border border-gray-300 rounded-lg" onkeyup="searchMaterials()">
+            </div>
+        </div>
+
+        <!-- 교재 목록 -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold">📚 등록된 교재 목록</h2>
+                <p class="text-sm text-gray-600">총 <span id="materialCount" class="font-semibold text-indigo-600">0</span>개</p>
+            </div>
+            
+            <div id="materialsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 동적으로 생성됨 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/materials.js"></script>
+</body>
+</html>

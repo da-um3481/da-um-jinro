@@ -1,0 +1,47 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="compassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer circle -->
+  <circle cx="60" cy="60" r="55" stroke="url(#compassGradient)" stroke-width="3" fill="none"/>
+  
+  <!-- Inner decorative circles -->
+  <circle cx="60" cy="60" r="48" stroke="url(#compassGradient)" stroke-width="1" fill="none" opacity="0.3"/>
+  <circle cx="60" cy="60" r="42" stroke="url(#compassGradient)" stroke-width="1" fill="none" opacity="0.2"/>
+  
+  <!-- Compass needle - North (pointing up) -->
+  <path d="M 60 15 L 65 55 L 60 50 L 55 55 Z" fill="url(#compassGradient)"/>
+  
+  <!-- Compass needle - South (pointing down) -->
+  <path d="M 60 105 L 65 65 L 60 70 L 55 65 Z" fill="#764ba2" opacity="0.5"/>
+  
+  <!-- Compass needle - East -->
+  <path d="M 105 60 L 65 65 L 70 60 L 65 55 Z" fill="url(#compassGradient)" opacity="0.4"/>
+  
+  <!-- Compass needle - West -->
+  <path d="M 15 60 L 55 65 L 50 60 L 55 55 Z" fill="url(#compassGradient)" opacity="0.4"/>
+  
+  <!-- Center circle -->
+  <circle cx="60" cy="60" r="8" fill="url(#compassGradient)"/>
+  <circle cx="60" cy="60" r="5" fill="white"/>
+  
+  <!-- Cardinal direction markers -->
+  <!-- N -->
+  <text x="60" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="url(#compassGradient)" text-anchor="middle">N</text>
+  <!-- E -->
+  <text x="108" y="64" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="url(#compassGradient)" text-anchor="middle">E</text>
+  <!-- S -->
+  <text x="60" y="113" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#764ba2" text-anchor="middle">S</text>
+  <!-- W -->
+  <text x="12" y="64" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="url(#compassGradient)" text-anchor="middle">W</text>
+  
+  <!-- Degree marks -->
+  <line x1="60" y1="8" x2="60" y2="12" stroke="url(#compassGradient)" stroke-width="2"/>
+  <line x1="108" y1="60" x2="112" y2="60" stroke="url(#compassGradient)" stroke-width="2"/>
+  <line x1="60" y1="108" x2="60" y2="112" stroke="#764ba2" stroke-width="2"/>
+  <line x1="8" y1="60" x2="12" y2="60" stroke="url(#compassGradient)" stroke-width="2"/>
+</svg>

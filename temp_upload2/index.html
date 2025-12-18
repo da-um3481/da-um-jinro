@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 학습관리 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.5em;
+            margin-bottom: 50px;
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .menu-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .menu-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .menu-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .menu-desc {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+            text-align: left;
+        }
+        
+        .info-box h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .info-box p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">DA.UM</div>
+        <div class="subtitle">학습관리 시스템</div>
+        
+        <div class="menu">
+            <a href="winter-student-portal.html" class="menu-item">
+                <div class="menu-icon">👨‍🎓</div>
+                <div class="menu-title">학생 포털</div>
+                <div class="menu-desc">학습 현황 확인</div>
+            </a>
+            
+            <a href="students-bulk-upload.html" class="menu-item">
+                <div class="menu-icon">📝</div>
+                <div class="menu-title">학생 등록</div>
+                <div class="menu-desc">30명 일괄 등록</div>
+            </a>
+            
+            <a href="students.html" class="menu-item">
+                <div class="menu-icon">👥</div>
+                <div class="menu-title">학생 관리</div>
+                <div class="menu-desc">개별 학생 관리</div>
+            </a>
+            
+            <a href="schools-management.html" class="menu-item">
+                <div class="menu-icon">🏫</div>
+                <div class="menu-title">학교 관리</div>
+                <div class="menu-desc">학교 정보 등록</div>
+            </a>
+        </div>
+        
+        <div class="info-box">
+            <h3>🎯 겨울방학 30일 프로그램</h3>
+            <p>
+                • <strong>대상:</strong> A중학교 30명<br>
+                • <strong>기간:</strong> 2025년 1월 2일 ~ 30일<br>
+                • <strong>목표:</strong> 매일 학습 기록 및 관리<br>
+                • <strong>기능:</strong> 출석, 학습시간, 진도율 관리
+            </p>
+        </div>
+    </div>
+</body>
+</html>

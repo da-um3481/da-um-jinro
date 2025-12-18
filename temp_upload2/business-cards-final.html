@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다움진로진학컨설팅 - 최종 프리미엄 명함</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Montserrat:wght@500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            color: rgba(255,255,255,0.95);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .header .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .gallery {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card-set {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .card-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-title h2 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-title .subtitle {
+            color: #666;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .cards-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* 명함 기본 스타일 */
+        .business-card {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .card-front, .card-back {
+            padding: 28px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        /* 앞면 - 로고 포함 */
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+        }
+        
+        /* 로고 배경 제거를 위한 처리 */
+        .final-front .logo-image {
+            background: transparent;
+        }
+
+        .logo-text-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+
+        .company-name {
+            font-size: 11px;
+            font-weight: 300;
+            letter-spacing: 0.8px;
+        }
+
+        .name-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        .name-box {
+            margin-bottom: 8px;
+        }
+
+        .name-kor {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .name-eng {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.85;
+        }
+
+        .credentials {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 7px;
+        }
+
+        .credential-badge {
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 8.5px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .positions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 7px;
+        }
+
+        .position-badge {
+            padding: 3px 9px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .titles {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .title-badge {
+            padding: 3px 9px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        /* 뒷면 */
+        .contact-section {
+            flex: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 10.5px;
+        }
+
+        .contact-icon {
+            width: 15px;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .phone-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .services-box {
+            padding: 11px 14px;
+            border-radius: 7px;
+            margin-top: 8px;
+        }
+
+        .services-title {
+            font-size: 8.5px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .service-item {
+            font-size: 10px;
+            margin-bottom: 2.5px;
+            padding-left: 9px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .service-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        /* 최종 프리미엄 스타일 */
+        .final-front {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .final-front::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .final-front .logo-image {
+            /* 테두리 없음 - 투명 배경 로고 */
+        }
+
+        .final-front .name-section {
+            border-top: 2px solid rgba(255,255,255,0.3);
+            padding-top: 12px;
+        }
+
+        .final-front .credential-badge {
+            background: rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.95);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .final-front .position-badge {
+            background: rgba(255,255,255,0.22);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.35);
+        }
+
+        .final-front .title-badge {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        .final-back {
+            background: white;
+        }
+
+        .final-back::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .final-back .contact-icon {
+            color: #1e3c72;
+        }
+
+        .final-back .phone-number {
+            color: #1e3c72;
+        }
+
+        .final-back .services-box {
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+        }
+
+        .final-back .services-title {
+            color: #1e3c72;
+        }
+
+        .final-back .service-item {
+            color: #555;
+        }
+
+        .final-back .service-item::before {
+            color: #1e3c72;
+        }
+
+        /* 인쇄 버튼 */
+        .print-section {
+            max-width: 900px;
+            margin: 30px auto 0;
+            text-align: center;
+        }
+
+        .btn-print {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            color: white;
+        }
+
+        .info-box h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .info-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .business-card {
+                height: 230px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+        }
+
+        /* 인쇄 스타일 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .header,
+            .print-section,
+            .info-box {
+                display: none;
+            }
+
+            .card-set {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+
+            .business-card {
+                width: 90mm;
+                height: 50mm;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 다움진로진학컨설팅 최종 프리미엄 명함</h1>
+        <p class="subtitle">로고 포함 · 완벽한 프로필 · 최고급 디자인</p>
+        <div class="badges">
+            <span class="badge">✨ 공식 로고 적용</span>
+            <span class="badge">💼 3개 기업 경력</span>
+            <span class="badge">🎓 석사 학위</span>
+            <span class="badge">🏢 센터 운영</span>
+        </div>
+    </div>
+
+    <div class="gallery">
+        <!-- 최종 프리미엄 명함 -->
+        <div class="card-set">
+            <div class="card-title">
+                <h2>🏆 최종 프리미엄 명함</h2>
+                <div class="subtitle">로고 포함 · 네이비 × 화이트 · 완벽한 전문성</div>
+            </div>
+            <div class="cards-wrapper">
+                <!-- 앞면 -->
+                <div class="business-card card-front final-front">
+                    <div class="logo-section">
+                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="logo-image">
+                        <div class="logo-text-group">
+                            <div class="logo-text">DA.UM</div>
+                            <div class="company-name">다움진로진학컨설팅</div>
+                        </div>
+                    </div>
+                    <div class="name-section">
+                        <div class="name-box">
+                            <div class="name-kor">정라미</div>
+                            <div class="name-eng">CHUNG LAMI</div>
+                        </div>
+                        <div class="credentials">
+                            <span class="credential-badge">교육학사</span>
+                            <span class="credential-badge">진로진학컨설팅 석사</span>
+                        </div>
+                        <div class="positions">
+                            <span class="position-badge">(주)소셜에듀텍코리아 교육이사</span>
+                            <span class="position-badge">WOW교육컨설팅 경북지사</span>
+                        </div>
+                        <div class="titles">
+                            <span class="title-badge">대표</span>
+                            <span class="title-badge">진로진학컨설턴트</span>
+                            <span class="title-badge">학습멘토</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 뒷면 -->
+                <div class="business-card card-back final-back">
+                    <div class="contact-section">
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="phone-number">010-2657-3481</div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-text">경주시 강동면 동해대로 166-11</div>
+                        </div>
+                    </div>
+                    <div class="services-box">
+                        <div class="services-title">Services & Career</div>
+                        <div class="service-item">경주시진로교육체험센터 운영</div>
+                        <div class="service-item">(주)소셜에듀텍코리아 교육이사</div>
+                        <div class="service-item">WOW교육컨설팅 경북지사</div>
+                        <div class="service-item">중·고교 진로진학 프로그램 개발운영</div>
+                        <div class="service-item">학습프로그램 개발운영 · 초중고 출강</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 명함 정보 -->
+    <div class="gallery">
+        <div class="info-box">
+            <h3>✨ 최종 프리미엄 명함 특징</h3>
+            <ul>
+                <li><strong>공식 로고 적용:</strong> DA.UM 나침반 로고로 브랜드 아이덴티티 강화</li>
+                <li><strong>완벽한 프로필:</strong> 학력 2개 + 기업 경력 3개 + 센터 운영</li>
+                <li><strong>서비스 명시:</strong> 중·고교 진로진학, 학습프로그램, 초중고 출강</li>
+                <li><strong>전문성 극대화:</strong> 교육학사·석사 + 교육이사 + 지사 + 센터장</li>
+                <li><strong>신뢰감 최고:</strong> 다중 경력으로 검증된 전문가 이미지</li>
+            </ul>
+
+            <h3 style="margin-top: 25px;">📋 포함된 모든 정보</h3>
+            <p><strong>기본 정보:</strong> 정라미 (CHUNG LAMI) · 010-2657-3481 · 경주시 강동면 동해대로 166-11</p>
+            <p><strong>학력:</strong> 교육학사 · 진로진학컨설팅 석사</p>
+            <p><strong>경력:</strong> 다움진로진학컨설팅 대표 · (주)소셜에듀텍코리아 교육이사 · WOW교육컨설팅 경북지사</p>
+            <p><strong>운영:</strong> 경주시진로교육체험센터</p>
+            <p><strong>서비스:</strong> 중·고교 진로진학 프로그램 개발운영 · 학습프로그램 개발운영 · 초중고 출강</p>
+        </div>
+    </div>
+
+    <div class="print-section">
+        <button class="btn-print" onclick="window.print()">🖨️ 명함 인쇄하기</button>
+        <p style="color: white; margin-top: 20px; font-size: 14px;">
+            🏆 최종 프리미엄 버전 | 로고 포함 | 완벽한 프로필 | 최고급 명함
+        </p>
+    </div>
+
+    <script>
+        console.log('%c다움진로진학컨설팅 최종 프리미엄 명함', 'font-size: 22px; color: #667eea; font-weight: bold;');
+        console.log('🎯 로고 포함 · 3개 기업 경력 · 완벽한 프로필');
+    </script>
+</body>
+</html>

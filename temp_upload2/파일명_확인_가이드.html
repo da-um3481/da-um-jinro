@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파일명 확인하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 20px;
+            border-left: 6px solid #667eea;
+        }
+        
+        .step h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        
+        .url-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-family: 'Consolas', monospace;
+            font-size: 1.2em;
+            word-break: break-all;
+            cursor: pointer;
+        }
+        
+        .url-box:hover {
+            background: #ffe9a8;
+        }
+        
+        .big-number {
+            background: #667eea;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-right: 20px;
+            vertical-align: middle;
+        }
+        
+        .action {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 정확한 파일명 찾기</h1>
+        
+        <div class="step">
+            <h2><span class="big-number">1</span> GitHub 저장소 열기</h2>
+            <div class="action">
+                이 주소로 가세요:
+            </div>
+            <div class="url-box" onclick="window.open(this.textContent.trim())">
+                https://github.com/da-um3481/da-um-jinro
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="big-number">2</span> 파일 목록 확인</h2>
+            <div style="font-size: 1.2em; line-height: 2; margin: 20px 0;">
+                <p>화면에 파일들이 보일 거예요.</p>
+                <p>이런 이름들을 찾아보세요:</p>
+                <ul style="margin: 20px 0 20px 40px;">
+                    <li style="margin: 10px 0;">students-bulk-upload.html</li>
+                    <li style="margin: 10px 0;">학생 대량 업로드.html</li>
+                    <li style="margin: 10px 0;">학생대량업로드.html</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="big-number">3</span> 파일 클릭</h2>
+            <div style="font-size: 1.2em; line-height: 2; margin: 20px 0;">
+                <p>학생 등록 관련 파일을 찾으면 <strong>파일 이름을 클릭</strong>하세요</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="big-number">4</span> 정확한 주소 확인</h2>
+            <div style="font-size: 1.2em; line-height: 2; margin: 20px 0;">
+                <p>파일이 열리면:</p>
+                <ul style="margin: 20px 0 20px 40px;">
+                    <li style="margin: 15px 0;">화면 위쪽에 <strong>주소창</strong>이 보여요</li>
+                    <li style="margin: 15px 0;">그 주소를 <strong>복사</strong>하세요</li>
+                    <li style="margin: 15px 0;">저에게 <strong>붙여넣기</strong>해주세요!</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="tip">
+            <h3 style="color: #2196f3; font-size: 1.6em; margin-bottom: 15px;">
+                💡 또는 더 쉬운 방법!
+            </h3>
+            <p style="font-size: 1.2em; line-height: 2;">
+                <strong>GitHub 저장소에서 파일 목록을 스크린샷 찍어서 보내주세요!</strong><br>
+                그러면 제가 정확한 주소를 만들어드릴게요!
+            </p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;">
+            <h2 style="font-size: 2em; margin-bottom: 20px;">
+                🎯 선택하세요!
+            </h2>
+            <div style="font-size: 1.4em; line-height: 2.5;">
+                <p>A) "GitHub 저장소 스크린샷 보낼게요"</p>
+                <p>B) "파일명 찾았어요: ___"</p>
+                <p>C) "주소 복사했어요: ___"</p>
+                <p>D) "다른 방법으로 해요"</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

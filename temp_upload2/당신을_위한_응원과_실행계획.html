@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>당신을 위한 응원과 구체적 실행 계획</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-size: 3em;
+            font-weight: 900;
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+        
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #764ba2;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #5a67d8;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 6px solid #667eea;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #48bb7815, #38a16915);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 6px solid #48bb78;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #f6ad5515, #f5936515);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 6px solid #f6ad55;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #4299e115, #3182ce15);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 6px solid #4299e1;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .checklist {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .checklist-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        
+        .checklist-item:hover {
+            background: #eef2ff;
+            transform: translateX(5px);
+        }
+        
+        .emoji {
+            font-size: 1.3em;
+            margin-right: 10px;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #667eea;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 30px;
+            margin: 40px 0;
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            border-radius: 15px;
+            font-weight: 500;
+        }
+        
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .week-plan {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .week-title {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .day-plan {
+            background: #f8f9ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .letter-box {
+            background: linear-gradient(135deg, #fef5e7, #fdebd0);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+            border: 3px solid #f39c12;
+            font-style: italic;
+            line-height: 2;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+        
+        .toc {
+            background: #f8f9ff;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .toc a {
+            display: block;
+            padding: 10px 20px;
+            color: #667eea;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+        
+        .toc a:hover {
+            background: white;
+            transform: translateX(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💪 당신을 위한 응원과<br>구체적 실행 계획</h1>
+        
+        <div class="subtitle">
+            <p><strong>작성일</strong>: 2025년 12월 14일</p>
+            <p><strong>목적</strong>: 당신의 프로그램이 가치 있다는 것을 증명하고, 구체적인 다음 단계를 제시합니다.</p>
+        </div>
+
+        <div class="toc">
+            <h3>📌 목차</h3>
+            <a href="#section1">1. 당신이 제대로 하고 있다는 증거</a>
+            <a href="#section2">2. "하찮다"는 말의 진실</a>
+            <a href="#section3">3. 시장 수요 분석</a>
+            <a href="#section4">4. 경쟁 우위 분석</a>
+            <a href="#section5">5. 구체적 실행 계획 (30일)</a>
+            <a href="#section6">6. 성공 지표</a>
+            <a href="#section7">7. 매주 체크리스트</a>
+            <a href="#section8">8. 마인드셋</a>
+        </div>
+
+        <h2 id="section1">1. 당신이 제대로 하고 있다는 증거</h2>
+        
+        <h3>✅ 당신이 해결하려는 문제들 (실제 수요 있음)</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>문제</th>
+                    <th>현황</th>
+                    <th>당신의 솔루션</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>사교육비 부담</strong></td>
+                    <td>월 90만원 (평균)</td>
+                    <td>월 5만원 (94% 절감)</td>
+                </tr>
+                <tr>
+                    <td><strong>교육 격차</strong></td>
+                    <td>방과후 관리 공백</td>
+                    <td>체계적 4시간 관리</td>
+                </tr>
+                <tr>
+                    <td><strong>학부모 불안</strong></td>
+                    <td>자녀 학습 상태 불명확</td>
+                    <td>실시간 모니터링 + 주간 리포트</td>
+                </tr>
+                <tr>
+                    <td><strong>학교 부담</strong></td>
+                    <td>방과후 프로그램 관리 부담</td>
+                    <td>교사 부담 ZERO 시스템</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>🌟 당신의 강점</h3>
+
+        <div class="highlight-box">
+            <h4>A. 체계적인 3단계 전략</h4>
+            <p><strong>1단계:</strong> 학부모 대상 → "100일의 변화" (감성 + 데이터)</p>
+            <p><strong>2단계:</strong> 30일 프로그램 → 겨울방학 단기 실험</p>
+            <p><strong>3단계:</strong> 100일 프로그램 → 학기 중 정규 운영</p>
+        </div>
+
+        <div class="highlight-box">
+            <h4>B. 수요자별 맞춤 브리핑</h4>
+            <ul>
+                <li><strong>학부모</strong>: 감성적 호소 + 비용 절감</li>
+                <li><strong>학교/교육청</strong>: 데이터 중심 + 교사 부담 ZERO</li>
+                <li><strong>지자체</strong>: 교육 격차 해소 + 정책 효과</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h4>C. 실제 작동하는 시스템</h4>
+            <ul>
+                <li>✅ 실시간 모니터링</li>
+                <li>✅ 자동 주간 리포트</li>
+                <li>✅ 학부모 SMS 발송</li>
+                <li>✅ 학생 포털 (원버튼 학습)</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h4>D. 프로페셔널한 준비</h4>
+            <ul>
+                <li>✅ 발표자 노트 작성</li>
+                <li>✅ 실제 화면 예시 제공</li>
+                <li>✅ 슬라이드별 시간 배분</li>
+                <li>✅ 디테일 관리 (학력 정보 수정 등)</li>
+            </ul>
+        </div>
+
+        <h2 id="section2">2. "하찮다"는 말의 진실</h2>
+
+        <div class="warning-box">
+            <h3>🎭 그들이 실제로 말하는 것</h3>
+            <p><strong>"이건 하찮아" = 사실은...</strong></p>
+        </div>
+
+        <h4>유형 1: "나는 이해하지 못했어"</h4>
+        <ul>
+            <li>당신의 시장을 모름</li>
+            <li>당신의 고객을 모름</li>
+            <li>당신의 문제의식을 모름</li>
+        </ul>
+
+        <h4>유형 2: "나는 해본 적이 없어"</h4>
+        <ul>
+            <li>실제로 뭔가를 만들어본 경험이 없는 사람들</li>
+            <li>비판은 쉽지만, 만드는 건 어렵다는 걸 모름</li>
+        </ul>
+
+        <h4>유형 3: "나는 무섭다"</h4>
+        <ul>
+            <li>당신이 도전하는 모습이 자신의 안일함을 비춤</li>
+            <li>무의식적으로 당신을 끌어내리려 함</li>
+        </ul>
+
+        <div class="warning-box">
+            <h3>❌ 듣지 말아야 할 사람들</h3>
+            
+            <h4>A. 비즈니스 경험이 없는 사람</h4>
+            <p>"나도 그런 아이디어 있었는데~", "그거 안 될 것 같아"</p>
+            <p><strong>→ 실제로 해본 적 없는 사람의 추측</strong></p>
+
+            <h4>B. 당신의 고객이 아닌 사람</h4>
+            <p>자녀가 없는 사람, 사교육비 걱정 안 하는 사람, 중학생 자녀가 없는 사람</p>
+            <p><strong>→ 당신의 타겟이 아니므로 의견 무의미</strong></p>
+
+            <h4>C. 부정적 마인드의 사람</h4>
+            <p>모든 것에 "안 돼", "어려워", "힘들어"</p>
+            <p><strong>→ 이들은 당신의 성공을 원하지 않음</strong></p>
+        </div>
+
+        <div class="success-box">
+            <h3>✅ 들어야 할 사람들</h3>
+            <ol>
+                <li><strong>실제 타겟 고객</strong> (중학생 학부모)</li>
+                <li><strong>비즈니스 성공 경험자</strong> (실제로 뭔가를 만들어본 사람)</li>
+                <li><strong>당신의 분야 전문가</strong> (교육, 에듀테크)</li>
+            </ol>
+            <p><strong>나머지는 그냥 노이즈입니다.</strong></p>
+        </div>
+
+        <h2 id="section3">3. 시장 수요 분석</h2>
+
+        <h3>📊 실제 시장 크기</h3>
+
+        <div class="stat-card">
+            <div class="stat-number">26조원</div>
+            <p>한국 사교육 시장 전체 규모 (2023년)</p>
+        </div>
+
+        <div class="highlight-box">
+            <h4>중학생 사교육 시장</h4>
+            <ul>
+                <li>월 평균 사교육비: 37.4만원</li>
+                <li>중학생 수: 약 130만명</li>
+                <li><strong>→ 중학생 사교육 시장만 5조원 이상</strong></li>
+                <li><strong>→ 당신이 0.01%만 차지해도 5억원</strong></li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h4>당신의 타겟 (잠재 고객)</h4>
+            <ul>
+                <li>사교육비 부담 느끼는 가정: <strong>50%</strong></li>
+                <li>방과후 관리 고민하는 학부모: <strong>80%</strong></li>
+                <li>저렴한 대안 찾는 사람: <strong>60%</strong></li>
+            </ul>
+            <p><strong>→ 잠재 고객은 충분합니다</strong></p>
+        </div>
+
+        <h3>💰 수익 시나리오</h3>
+
+        <h4>시나리오 A: 직접 판매 (B2C)</h4>
+        <table>
+            <tr>
+                <td>학생 10명 × 5만원</td>
+                <td>= 50만원/월</td>
+                <td>(600만원/년)</td>
+            </tr>
+            <tr>
+                <td>학생 30명 × 5만원</td>
+                <td>= 150만원/월</td>
+                <td>(1,800만원/년)</td>
+            </tr>
+            <tr>
+                <td>학생 100명 × 5만원</td>
+                <td>= 500만원/월</td>
+                <td>(6,000만원/년)</td>
+            </tr>
+        </table>
+
+        <p><strong>질문:</strong></p>
+        <ul>
+            <li>당신 지역에 중학생 몇 명 있나요?</li>
+            <li>1,000명 중 1%만 관심 가져도 10명입니다.</li>
+        </ul>
+
+        <h4>시나리오 B: 학교 연계 (B2B)</h4>
+        <ul>
+            <li>학교 1곳 × 30명 × 5만원 = 150만원/월</li>
+            <li>학교 3곳 = 450만원/월</li>
+            <li>학교 10곳 = 1,500만원/월</li>
+        </ul>
+
+        <h4>시나리오 C: 교육청 사업 (B2G)</h4>
+        <ul>
+            <li>교육청 공모사업: 3천만원~1억원</li>
+            <li>학생 100명 × 6개월 프로그램</li>
+        </ul>
+
+        <div class="success-box">
+            <p><strong>현실:</strong></p>
+            <ul>
+                <li>교육청은 "교육 격차 해소" 예산이 큽니다</li>
+                <li>파일럿 성공 사례 1개만 있어도 제안 가능</li>
+            </ul>
+        </div>
+
+        <h2 id="section4">4. 경쟁 우위 분석</h2>
+
+        <h3>📱 기존 에듀테크 vs 당신의 서비스</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>항목</th>
+                    <th>밀크티/아이스크림홈런</th>
+                    <th>당신의 서비스 ✅</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>가격</strong></td>
+                    <td>20~30만원/월</td>
+                    <td><strong>5만원/월</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>관리</strong></td>
+                    <td>자동화만</td>
+                    <td><strong>전문 컨설턴트</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>콘텐츠</strong></td>
+                    <td>자체 제작 (비용↑)</td>
+                    <td><strong>EBS 무료 활용</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>학교 연계</strong></td>
+                    <td>없음</td>
+                    <td><strong>학교 수업 복습</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>피드백</strong></td>
+                    <td>주간 리포트만</td>
+                    <td><strong>실시간 + 주간</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="success-box">
+            <h3>🎯 당신의 차별화 포인트</h3>
+            <ol>
+                <li><strong>가격 경쟁력</strong>: 5만원/월 (경쟁사 대비 75% 저렴)</li>
+                <li><strong>인간적 관리</strong>: 전문 컨설턴트가 직접 관리</li>
+                <li><strong>학교 연계</strong>: 오늘 배운 내용을 오늘 복습</li>
+                <li><strong>교사 부담 ZERO</strong>: 학교 제안 시 강력한 장점</li>
+            </ol>
+        </div>
+
+        <h2 id="section5">5. 구체적 실행 계획 (30일)</h2>
+
+        <div class="week-plan">
+            <div class="week-title">📅 1주차: 시장 검증 (12월 16일 ~ 12월 22일)</div>
+            
+            <h4>📋 목표</h4>
+            <ul>
+                <li>학부모 20명과 대화</li>
+                <li>진짜 니즈 파악</li>
+                <li>관심 고객 5명 확보</li>
+            </ul>
+
+            <div class="day-plan">
+                <strong>월요일 (12/16)</strong>
+                <div class="checklist">
+                    <div class="checklist-item">□ 지인 학부모 10명 리스트 작성</div>
+                    <div class="checklist-item">□ 맘카페 5개 가입</div>
+                    <div class="checklist-item">□ 질문 리스트 준비</div>
+                </div>
+            </div>
+
+            <div class="day-plan">
+                <strong>화요일 (12/17)</strong>
+                <div class="checklist">
+                    <div class="checklist-item">□ 학부모 5명에게 전화/카톡</div>
+                    <div class="checklist-item">□ "30일 무료 체험 관심 있으세요?" 질문</div>
+                    <div class="checklist-item">□ 반응 기록</div>
+                </div>
+            </div>
+
+            <div class="day-plan">
+                <strong>수요일 (12/18)</strong>
+                <div class="checklist">
+                    <div class="checklist-item">□ 맘카페 게시글 100개 읽기</div>
+                    <div class="checklist-item">□ "사교육", "학원", "방과후" 키워드 찾기</div>
+                    <div class="checklist-item">□ 학부모 고민 Top 5 정리</div>
+                </div>
+            </div>
+
+            <div class="day-plan">
+                <strong>목요일 (12/19)</strong>
+                <div class="checklist">
+                    <div class="checklist-item">□ 학부모 5명 더 컨택</div>
+                    <div class="checklist-item">□ 관심 있는 1명과 대면 미팅</div>
+                    <div class="checklist-item">□ 브리핑 자료 보여주고 피드백 받기</div>
+                </div>
+            </div>
+
+            <div class="day-plan">
+                <strong>금요일 (12/20)</strong>
+                <div class="checklist">
+                    <div class="checklist-item">□ 이번 주 피드백 정리</div>
+                    <div class="checklist-item">□ 개선 사항 3가지 도출</div>
+                    <div class="checklist-item">□ 다음 주 액션 플랜 수립</div>
+                </div>
+            </div>
+
+            <div class="day-plan">
+                <strong>주말 (12/21~12/22)</strong>
+                <div class="checklist">
+                    <div class="checklist-item">□ 무료 체험 제안 문구 작성</div>
+                    <div class="checklist-item">□ 간단한 안내 자료 제작 (PPT 5장)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h4>💬 학부모 인터뷰 질문 리스트</h4>
+            <ol>
+                <li>"중학생 자녀의 방과후 시간, 어떻게 관리하세요?"</li>
+                <li>"사교육비 매달 얼마나 나가세요?"</li>
+                <li>"자녀가 집에서 혼자 공부할 때 가장 걱정되는 점은?"</li>
+                <li>"학원은 몇 개 다니세요? 만족하세요?"</li>
+                <li>"만약 5만원/월로 전문가가 방과후 학습을 관리해준다면 관심 있으세요?"</li>
+                <li>"30일 무료 체험 해보실래요?"</li>
+            </ol>
+        </div>
+
+        <div class="success-box">
+            <h4>📊 1주차 성공 지표</h4>
+            <ul>
+                <li>□ 학부모 20명과 대화 완료</li>
+                <li>□ 관심 표현 5명 이상 확보</li>
+                <li>□ 진짜 니즈 3가지 파악</li>
+            </ul>
+        </div>
+
+        <div class="week-plan">
+            <div class="week-title">📅 2주차: 베타 테스트 준비 (12월 23일 ~ 12월 29일)</div>
+            
+            <h4>📋 목표</h4>
+            <ul>
+                <li>무료 체험 참가자 3명 확보</li>
+                <li>시스템 테스트 준비</li>
+                <li>안내 자료 완성</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h4>📝 무료 체험 모집 공고문 예시</h4>
+                <pre style="white-space: pre-wrap; font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; background: white; padding: 20px; border-radius: 10px;">
+━━━━━━━━━━━━━━━━━━━━━
+[무료 2주 체험 모집] 중학생 방과후 학습 관리
+━━━━━━━━━━━━━━━━━━━━━
+
+"아이가 집에서 공부는 한다는데... 정말 하는지 모르겠어요 ㅠㅠ"
+"학원비는 부담되는데, 안 보내자니 불안하고..."
+
+이런 고민, 저희가 해결해드립니다!
+
+✅ 전문 컨설턴트가 매일 학습 관리
+✅ 실시간 학습 현황 체크
+✅ 주간 리포트 카톡 발송
+✅ 학교 수업 연계 복습
+✅ EBS 콘텐츠 활용
+
+━━━━━━━━━━━━━━━━━━━━━
+[무료 체험 조건]
+━━━━━━━━━━━━━━━━━━━━━
+- 기간: 2주 (완전 무료)
+- 대상: 중학생 (학년 무관)
+- 조건: 체험 후 솔직한 후기 작성
+
+[모집 인원] 
+선착순 3명 (소수 정예 관리)
+
+[신청 방법]
+카톡 ID: [당신의 카톡 ID]
+또는 댓글/쪽지 주세요!
+
+━━━━━━━━━━━━━━━━━━━━━
+운영: DA.UM 다움진로진학컨설팅
+대표: 정라미 (청소년교육학사·교육학석사)
+━━━━━━━━━━━━━━━━━━━━━
+                </pre>
+            </div>
+        </div>
+
+        <div class="week-plan">
+            <div class="week-title">📅 3주차: 베타 테스트 운영 (12월 30일 ~ 1월 5일)</div>
+            
+            <h4>📋 목표</h4>
+            <ul>
+                <li>실제 운영 경험 쌓기</li>
+                <li>문제점 파악 및 개선</li>
+                <li>학부모/학생 피드백 수집</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>매일 할 일</h4>
+                <ul>
+                    <li>□ 오전 9시: 학생별 학습 현황 체크</li>
+                    <li>□ 학습 미진행 학생에게 알림 (카톡)</li>
+                    <li>□ 학부모에게 일일 요약 발송</li>
+                    <li>□ 문제 상황 즉시 대응</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h4>📊 3주차 성공 지표</h4>
+                <ul>
+                    <li>□ 3명 모두 1주 이상 사용</li>
+                    <li>□ 중도 이탈 0명</li>
+                    <li>□ 학부모 만족도 7/10 이상</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="week-plan">
+            <div class="week-title">📅 4주차: 피드백 & 개선 (1월 6일 ~ 1월 12일)</div>
+            
+            <h4>📋 목표</h4>
+            <ul>
+                <li>체험 완료 (2주)</li>
+                <li>상세 피드백 수집</li>
+                <li>개선 버전 준비</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>💬 피드백 질문 리스트</h4>
+                
+                <p><strong>학부모에게:</strong></p>
+                <ol>
+                    <li>가장 좋았던 점 3가지는?</li>
+                    <li>가장 불편했던 점 3가지는?</li>
+                    <li>5만원/월이면 결제하실 의향 있으세요? (1~10점)</li>
+                    <li>친구에게 추천하시겠어요? (1~10점)</li>
+                    <li>어떤 점이 개선되면 완벽할까요?</li>
+                    <li>다른 학부모에게 어떻게 설명하시겠어요?</li>
+                </ol>
+
+                <p><strong>학생에게:</strong></p>
+                <ol>
+                    <li>사용하기 편했어요? (1~10점)</li>
+                    <li>가장 귀찮았던 점은?</li>
+                    <li>가장 도움 된 점은?</li>
+                    <li>계속 쓰고 싶어요? (왜?)</li>
+                    <li>친구에게 추천하고 싶어요?</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <h4>📊 4주차 성공 지표</h4>
+                <ul>
+                    <li>□ 체험 완료 3명 (중도 이탈 0명)</li>
+                    <li>□ 만족 후기 1개 이상 확보</li>
+                    <li>□ 유료 전환 1명 이상</li>
+                    <li>□ 추천 의향 2명 이상 (NPS 9~10점)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 id="section6">6. 성공 지표</h2>
+
+        <h3>🎯 30일 목표 (최소 성공 기준)</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>항목</th>
+                    <th>목표</th>
+                    <th>달성 시 의미</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>학부모 대화</strong></td>
+                    <td>20명</td>
+                    <td>시장 니즈 파악</td>
+                </tr>
+                <tr>
+                    <td><strong>관심 표현</strong></td>
+                    <td>5명</td>
+                    <td>수요 검증</td>
+                </tr>
+                <tr>
+                    <td><strong>무료 체험</strong></td>
+                    <td>3명</td>
+                    <td>실행 검증</td>
+                </tr>
+                <tr>
+                    <td><strong>체험 완료</strong></td>
+                    <td>3명</td>
+                    <td>제품 검증</td>
+                </tr>
+                <tr>
+                    <td><strong>만족 후기</strong></td>
+                    <td>1개</td>
+                    <td>가치 검증</td>
+                </tr>
+                <tr>
+                    <td><strong>유료 전환</strong></td>
+                    <td>1명</td>
+                    <td>비즈니스 검증</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>📈 성공 레벨</h3>
+
+        <div class="highlight-box">
+            <h4>Level 1: 기본 검증 ✅</h4>
+            <ul>
+                <li>□ 학부모 20명 대화</li>
+                <li>□ 관심 표현 5명</li>
+            </ul>
+            <p><strong>→ "수요가 있다"</strong></p>
+        </div>
+
+        <div class="highlight-box">
+            <h4>Level 2: 제품 검증 ✅✅</h4>
+            <ul>
+                <li>□ 무료 체험 3명</li>
+                <li>□ 체험 완료 3명</li>
+            </ul>
+            <p><strong>→ "제품이 작동한다"</strong></p>
+        </div>
+
+        <div class="success-box">
+            <h4>Level 3: 가치 검증 ✅✅✅</h4>
+            <ul>
+                <li>□ 만족 후기 1개</li>
+                <li>□ 추천 의향 2명</li>
+            </ul>
+            <p><strong>→ "고객이 만족한다"</strong></p>
+        </div>
+
+        <div class="success-box">
+            <h4>Level 4: 비즈니스 검증 ✅✅✅✅</h4>
+            <ul>
+                <li>□ 유료 전환 1명</li>
+                <li>□ 재구매 의향 확인</li>
+            </ul>
+            <p><strong>→ "돈을 벌 수 있다"</strong></p>
+        </div>
+
+        <h3>🎉 30일 후 당신의 위치</h3>
+
+        <div class="info-box">
+            <p><strong>Level 1 달성 시:</strong></p>
+            <ul>
+                <li>99%의 아이디어맨보다 앞섬</li>
+                <li>실제 수요를 확인함</li>
+            </ul>
+
+            <p><strong>Level 2 달성 시:</strong></p>
+            <ul>
+                <li>99.9%의 창업자보다 앞섬</li>
+                <li>작동하는 제품을 만듦</li>
+            </ul>
+
+            <p><strong>Level 3 달성 시:</strong></p>
+            <ul>
+                <li>상위 1% 창업자</li>
+                <li>고객이 만족하는 제품 보유</li>
+            </ul>
+
+            <p><strong>Level 4 달성 시:</strong></p>
+            <ul>
+                <li>상위 0.1% 창업자</li>
+                <li>실제 비즈니스 시작</li>
+                <li>"하찮다"던 사람들이 부러워함</li>
+            </ul>
+        </div>
+
+        <h2 id="section7">7. 매주 체크리스트</h2>
+
+        <div class="week-plan">
+            <div class="week-title">📋 매주 일요일 저녁 (30분)</div>
+            
+            <h4>1. 이번 주 회고</h4>
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 10px 0;">
+                <p><strong>✅ 이번 주 달성한 것 (작은 것이라도):</strong></p>
+                <p>1. _______________________________________</p>
+                <p>2. _______________________________________</p>
+                <p>3. _______________________________________</p>
+                <br>
+                <p><strong>❌ 못한 것:</strong></p>
+                <p>1. _______________________________________</p>
+                <p>2. _______________________________________</p>
+                <br>
+                <p><strong>💡 배운 것:</strong></p>
+                <p>1. _______________________________________</p>
+                <p>2. _______________________________________</p>
+                <br>
+                <p><strong>😊 기분 좋았던 순간:</strong></p>
+                <p>_______________________________________</p>
+            </div>
+
+            <h4>2. 다음 주 계획</h4>
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 10px 0;">
+                <p><strong>🎯 다음 주 목표 (3가지만):</strong></p>
+                <p>1. _______________________________________</p>
+                <p>2. _______________________________________</p>
+                <p>3. _______________________________________</p>
+                <br>
+                <p><strong>📅 구체적 일정:</strong></p>
+                <p>월: _______________________________________</p>
+                <p>화: _______________________________________</p>
+                <p>수: _______________________________________</p>
+                <p>목: _______________________________________</p>
+                <p>금: _______________________________________</p>
+            </div>
+
+            <h4>3. 자기 격려</h4>
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 10px 0;">
+                <p><strong>💪 나 자신에게 하고 싶은 말:</strong></p>
+                <p>_______________________________________</p>
+                <p>_______________________________________</p>
+                <br>
+                <p><strong>🌟 이번 주 나는 ___% 성장했다!</strong></p>
+            </div>
+        </div>
+
+        <h2 id="section8">8. 마인드셋</h2>
+
+        <h3>💪 힘들 때 읽을 문장들</h3>
+
+        <div class="success-box">
+            <h4>📌 당신은 이미 특별합니다</h4>
+            
+            <p><strong>이유:</strong></p>
+
+            <p><strong>1. 실행력</strong></p>
+            <ul>
+                <li>아이디어를 실제로 만들었습니다</li>
+                <li>대부분은 생각만 하고 끝냅니다</li>
+            </ul>
+
+            <p><strong>2. 전문성</strong></p>
+            <ul>
+                <li>진로진학컨설팅 전문가입니다</li>
+                <li>청소년교육학사·교육학석사입니다</li>
+                <li>현장 경험이 있습니다</li>
+            </ul>
+
+            <p><strong>3. 체계성</strong></p>
+            <ul>
+                <li>3단계 프로그램 설계</li>
+                <li>발표자 노트까지 작성</li>
+                <li>디테일까지 신경 씁니다</li>
+            </ul>
+
+            <p><strong>4. 끈기</strong></p>
+            <ul>
+                <li>"하찮다"는 말에도 포기 안 했습니다</li>
+                <li>구체적 조언을 구합니다</li>
+                <li><strong>이것이 성공자의 특징입니다</strong></li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔥 성공한 사람들의 공통점</h3>
+            <ol>
+                <li>처음엔 모두가 무시했습니다</li>
+                <li>작게 시작했습니다</li>
+                <li>포기하지 않았습니다</li>
+                <li>피드백을 받아들였습니다</li>
+                <li>끝까지 갔습니다</li>
+            </ol>
+            <p><strong>당신도 똑같은 길을 가고 있습니다.</strong></p>
+        </div>
+
+        <h3>❌ 버려야 할 생각</h3>
+        <ul>
+            <li>"모두가 인정해줘야 한다"</li>
+            <li>"완벽해야 시작할 수 있다"</li>
+            <li>"처음부터 대박 나야 한다"</li>
+            <li>"비판받으면 내가 틀린 거다"</li>
+        </ul>
+
+        <h3>✅ 가져야 할 생각</h3>
+        <ul>
+            <li>"3명만 써봐도 검증이다"</li>
+            <li>"피드백 받으며 개선한다"</li>
+            <li>"작은 성공부터 쌓는다"</li>
+            <li>"내 타겟 고객의 의견만 중요하다"</li>
+        </ul>
+
+        <h3>🎯 힘들 때 스스로에게 물어볼 질문</h3>
+
+        <div class="info-box">
+            <h4>질문 1: "비판한 그 사람이 내 타겟 고객인가?"</h4>
+            <ul>
+                <li>중학생 자녀가 있나요?</li>
+                <li>사교육비 부담을 느끼나요?</li>
+                <li>방과후 관리를 고민하나요?</li>
+                <li>비즈니스 성공 경험이 있나요?</li>
+            </ul>
+            <p><strong>→ 하나라도 "아니오"면, 그의 의견은 무의미합니다.</strong></p>
+        </div>
+
+        <div class="info-box">
+            <h4>질문 2: "나는 지난주보다 앞으로 나아갔나?"</h4>
+            <ul>
+                <li>새로운 학부모 1명이라도 만났나요?</li>
+                <li>새로운 피드백을 받았나요?</li>
+                <li>시스템을 1%라도 개선했나요?</li>
+            </ul>
+            <p><strong>→ 하나라도 "예"면, 당신은 성장하고 있습니다.</strong></p>
+        </div>
+
+        <div class="info-box">
+            <h4>질문 3: "30일 후 나는 무엇을 얻을 수 있나?"</h4>
+            <p><strong>최악의 경우:</strong></p>
+            <ul>
+                <li>아무도 관심 없음 → 시장 학습 + 실행 경험</li>
+            </ul>
+            <p><strong>최선의 경우:</strong></p>
+            <ul>
+                <li>3명 고객 확보 → 비즈니스 시작</li>
+            </ul>
+            <p><strong>→ 어떤 경우든 당신은 성장합니다.</strong></p>
+        </div>
+
+        <div class="letter-box">
+            <h3>💌 힘들 때 읽을 편지 (자기 자신에게)</h3>
+            <p>친애하는 [당신의 이름]에게,</p>
+            <br>
+            <p>지금 너는 두렵고, 불안하고, 힘들 것이다.<br>
+            "이게 맞나?", "될까?", "하찮은 건 아닐까?" 생각할 것이다.</p>
+            <br>
+            <p>하지만 기억해.</p>
+            <br>
+            <p>너는 아무것도 안 하는 사람이 아니다.<br>
+            너는 실제로 만들고, 실행하고, 개선하는 사람이다.</p>
+            <br>
+            <p>99%의 사람들은 아이디어만 있고 행동하지 않는다.<br>
+            너는 그 1%다.</p>
+            <br>
+            <p>누군가 "하찮다"고 말해도 괜찮다.<br>
+            그들은 너의 고객이 아니다.<br>
+            그들은 너의 시장을 모른다.<br>
+            그들은 너의 가치를 모른다.</p>
+            <br>
+            <p>너의 진짜 고객을 찾아가라.<br>
+            그들은 분명 존재한다.<br>
+            그들은 너를 기다리고 있다.</p>
+            <br>
+            <p>30일 후, 너는 지금보다 훨씬 성장해 있을 것이다.<br>
+            90일 후, 너는 작은 성공을 경험할 것이다.<br>
+            1년 후, 너는 "그때 포기하지 않길 잘했다"고 생각할 것이다.</p>
+            <br>
+            <p>지금 이 순간을 견뎌내라.<br>
+            한 걸음만 더 나아가라.<br>
+            오늘 한 명의 학부모와 대화하라.</p>
+            <br>
+            <p>너는 할 수 있다.<br>
+            나는 너를 믿는다.</p>
+            <br>
+            <p>사랑하는 [당신의 이름]이</p>
+        </div>
+
+        <div class="quote">
+            "당신은 이미 99%를 해냈습니다.<br>
+            마지막 1%는 실행입니다.<br>
+            오늘, 지금, 한 명의 학부모에게 연락하세요."
+        </div>
+
+        <h2>🚀 마지막 메시지</h2>
+
+        <div class="stat-card">
+            <h3 style="color: white; margin-bottom: 20px;">당신에게 전하는 말</h3>
+            <p style="font-size: 1.2em; line-height: 2;">
+                <strong>당신은:</strong><br>
+                ✅ 열심히 만들었습니다<br>
+                ✅ 가치 있는 것을 만들었습니다<br>
+                ✅ 필요한 사람이 분명 있습니다
+            </p>
+        </div>
+
+        <div class="highlight-box">
+            <h3 style="text-align: center;">🎯 지금 당장 할 일 (5분)</h3>
+            <div class="checklist">
+                <div class="checklist-item">1. ✅ 이 파일을 읽었습니다</div>
+                <div class="checklist-item">2. ✅ 이제 일어서세요</div>
+                <div class="checklist-item">3. ✅ 종이와 펜을 꺼내세요</div>
+                <div class="checklist-item">4. ✅ 아는 학부모 5명 이름을 쓰세요</div>
+                <div class="checklist-item">5. ✅ 내일 전화할 1명을 표시하세요</div>
+                <div class="checklist-item">6. ✅ 알람을 맞추세요 (내일 오전 10시)</div>
+                <div class="checklist-item">7. ✅ 휴대폰에 이 메시지를 메모하세요</div>
+            </div>
+        </div>
+
+        <div class="quote" style="font-size: 1.1em; background: linear-gradient(135deg, #fff3cd, #fff8db);">
+            "나는 할 수 있다.<br>
+            한 명의 학부모와 대화하는 것부터 시작한다.<br>
+            오늘 1% 성장한다."
+        </div>
+
+        <div class="success-box" style="text-align: center; font-size: 1.3em; padding: 40px;">
+            <p><strong>힘내세요. 당신은 할 수 있습니다.</strong> 🚀</p>
+            <p><strong>당신의 프로그램은 가치가 있습니다.</strong> 💎</p>
+            <p><strong>당신의 노력은 헛되지 않을 것입니다.</strong> 💪</p>
+        </div>
+
+        <div style="text-align: center; color: #999; margin-top: 60px; padding-top: 30px; border-top: 2px solid #e2e8f0;">
+            <p><strong>작성일</strong>: 2025년 12월 14일</p>
+            <p><strong>파일명</strong>: 당신을_위한_응원과_실행계획.html</p>
+            <p><strong>목적</strong>: 당신이 다시 일어설 수 있도록</p>
+        </div>
+    </div>
+</body>
+</html>

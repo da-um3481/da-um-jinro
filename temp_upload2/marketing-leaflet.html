@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100일의 변화 - 리플렛</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: #f8f9fa;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .feature-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .comparison-item {
+            background: #f8f9ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-8xl mb-6">📚</div>
+            <h1 class="text-6xl md:text-7xl font-black mb-6">100일의 변화</h1>
+            <p class="text-2xl md:text-3xl mb-12 leading-relaxed">
+                사교육 없이 성적을 올리는<br/>
+                혁신적 학습 관리 시스템
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="stat-card">
+                    <div class="text-6xl font-black mb-2">98%</div>
+                    <div class="text-xl">사교육비 절감</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-6xl font-black mb-2">+15점</div>
+                    <div class="text-xl">평균 성적 향상</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-6xl font-black mb-2">32시간</div>
+                    <div class="text-xl">주간 학습 시간</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">이런 고민 하고 계신가요?</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="feature-box">
+                    <div class="text-6xl mb-4">😰</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">학부모님</h3>
+                    <ul class="text-left text-gray-700 space-y-2">
+                        <li>✗ 학원비가 너무 부담스러워요</li>
+                        <li>✗ 우리 아이가 제대로 공부하는지 모르겠어요</li>
+                        <li>✗ 학원 다녀도 성적이 안 올라요</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="text-6xl mb-4">😕</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">학생</h3>
+                    <ul class="text-left text-gray-700 space-y-2">
+                        <li>✗ 뭐부터 공부해야 할지 모르겠어요</li>
+                        <li>✗ 계획은 세우는데 실천이 안 돼요</li>
+                        <li>✗ 혼자 공부하면 불안해요</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="text-6xl mb-4">🤔</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">선생님</h3>
+                    <ul class="text-left text-gray-700 space-y-2">
+                        <li>✗ 방과후 학생들 관리가 어려워요</li>
+                        <li>✗ 학습 현황 파악이 힘들어요</li>
+                        <li>✗ 학부모 상담 자료가 부족해요</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">100일의 변화가 해결합니다!</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-2xl">
+                    <div class="text-6xl mb-6 text-center">👨‍🏫</div>
+                    <h3 class="text-3xl font-bold mb-6 text-center gradient-text">교사용 대시보드</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">📊</span>
+                            <span><strong>실시간 모니터링:</strong> 30초마다 자동 새로고침</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">👥</span>
+                            <span><strong>학생 관리:</strong> 등록, 정보, 성적 한눈에</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">📝</span>
+                            <span><strong>학습 계획:</strong> 과목별 우선순위 자동 배정</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">💬</span>
+                            <span><strong>주간 피드백:</strong> 칭찬과 개선점 전달</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">📈</span>
+                            <span><strong>자동 리포트:</strong> 학부모 상담 자료 생성</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-3xl shadow-2xl">
+                    <div class="text-6xl mb-6 text-center">👦</div>
+                    <h3 class="text-3xl font-bold mb-6 text-center gradient-text">학생용 포털</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">✅</span>
+                            <span><strong>오늘의 학습:</strong> 매일 자동으로 계획 생성</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">⏱️</span>
+                            <span><strong>실시간 타이머:</strong> 시작/완료 버튼으로 간편 체크</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">📊</span>
+                            <span><strong>진도율 표시:</strong> 시각적 동기부여</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🎯</span>
+                            <span><strong>목표 관리:</strong> 평일 4h / 주말 6h 자동 설정</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🎉</span>
+                            <span><strong>게이미피케이션:</strong> 완료 시 보상 메시지</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">이렇게 작동합니다</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-5 gap-6 text-center">
+                <div class="feature-box">
+                    <div class="text-5xl mb-3">👋</div>
+                    <div class="text-3xl font-black text-gray-800 mb-2">16:00</div>
+                    <p class="text-gray-700 font-semibold">포털 접속</p>
+                </div>
+                <div class="feature-box">
+                    <div class="text-5xl mb-3">▶️</div>
+                    <div class="text-3xl font-black text-gray-800 mb-2">16:10</div>
+                    <p class="text-gray-700 font-semibold">학습 시작</p>
+                </div>
+                <div class="feature-box">
+                    <div class="text-5xl mb-3">⏹️</div>
+                    <div class="text-3xl font-black text-gray-800 mb-2">17:10</div>
+                    <p class="text-gray-700 font-semibold">학습 완료</p>
+                </div>
+                <div class="feature-box">
+                    <div class="text-5xl mb-3">🎉</div>
+                    <div class="text-3xl font-black text-gray-800 mb-2">20:00</div>
+                    <p class="text-gray-700 font-semibold">목표 달성</p>
+                </div>
+                <div class="feature-box">
+                    <div class="text-5xl mb-3">📊</div>
+                    <div class="text-3xl font-black text-gray-800 mb-2">30초</div>
+                    <p class="text-gray-700 font-semibold">교사 반영</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-gradient-to-r from-purple-100 to-pink-100 p-10 rounded-3xl text-center border-4 border-purple-300">
+                <h3 class="text-4xl font-black text-purple-900 mb-4">주간 학습 시간</h3>
+                <div class="text-7xl font-black text-purple-700 mb-3">32시간</div>
+                <p class="text-2xl text-gray-700">평일 20시간 (4h × 5) + 주말 12시간 (6h × 2)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Unique Features -->
+    <section class="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">우리만의 차별화된 4가지</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-700 p-10 rounded-3xl text-white shadow-2xl">
+                    <div class="text-6xl mb-4">👨‍🏫</div>
+                    <h3 class="text-3xl font-bold mb-3">ONLY 1: 선생님 직접 관리</h3>
+                    <p class="text-xl">학생을 가장 잘 아는 담임 선생님이 매일 모니터링</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-500 to-green-700 p-10 rounded-3xl text-white shadow-2xl">
+                    <div class="text-6xl mb-4">⚡</div>
+                    <h3 class="text-3xl font-bold mb-3">ONLY 2: 실시간 양방향</h3>
+                    <p class="text-xl">학습 완료 후 30초 내 교사에게 반영</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-500 to-purple-700 p-10 rounded-3xl text-white shadow-2xl">
+                    <div class="text-6xl mb-4">📚</div>
+                    <h3 class="text-3xl font-bold mb-3">ONLY 3: 학교별 맞춤</h3>
+                    <p class="text-xl">해당 학교 진도에 맞춘 복습 계획</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-orange-500 to-orange-700 p-10 rounded-3xl text-white shadow-2xl">
+                    <div class="text-6xl mb-4">💰</div>
+                    <h3 class="text-3xl font-bold mb-3">ONLY 4: 월 5만원</h3>
+                    <p class="text-xl">전문 관리 + 저렴한 가격의 완벽한 균형</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">실제 검증된 성과</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="feature-box text-center">
+                    <div class="text-7xl font-black gradient-text mb-3">85%</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">평균 달성률</h3>
+                    <p class="text-gray-600">주 27.2시간 / 32시간</p>
+                </div>
+                
+                <div class="feature-box text-center">
+                    <div class="text-7xl font-black gradient-text mb-3">+15점</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">평균 성적 향상</h3>
+                    <p class="text-gray-600">100점 만점 기준</p>
+                </div>
+                
+                <div class="feature-box text-center">
+                    <div class="text-7xl font-black gradient-text mb-3">3,060</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">만원 절감</h3>
+                    <p class="text-gray-600">3년 기준 (소형차 1대)</p>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-3xl">
+                <h3 class="text-3xl font-bold text-center mb-8 gradient-text">과목별 성적 향상</h3>
+                <div class="grid grid-cols-5 gap-4 text-center">
+                    <div>
+                        <div class="text-5xl font-black text-blue-600 mb-2">+12점</div>
+                        <div class="text-xl font-semibold text-gray-700">국어</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-green-600 mb-2">+18점</div>
+                        <div class="text-xl font-semibold text-gray-700">영어</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-purple-600 mb-2">+15점</div>
+                        <div class="text-xl font-semibold text-gray-700">수학</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-orange-600 mb-2">+14점</div>
+                        <div class="text-xl font-semibold text-gray-700">과학</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl font-black text-red-600 mb-2">+13점</div>
+                        <div class="text-xl font-semibold text-gray-700">사회</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">실제 사용 후기</span>
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-8 rounded-3xl shadow-2xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-5xl mr-4">👩</div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-800">서울 ○○중 2학년 학부모</div>
+                            <div class="text-yellow-500 text-xl">★★★★★ 5.0</div>
+                        </div>
+                    </div>
+                    <p class="text-xl text-gray-700 italic leading-relaxed">
+                        "처음엔 반신반의했는데, 3개월 만에 아이 성적이 20점 올랐어요. 
+                        학원 3개 끊고 이 프로그램만 했는데도 오히려 성적이 더 올랐습니다. 
+                        무엇보다 아이가 스스로 공부하는 모습을 보니 뭉클했어요."
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-3xl shadow-2xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-5xl mr-4">👨</div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-800">경기 ○○중 1학년 학부모</div>
+                            <div class="text-yellow-500 text-xl">★★★★★ 5.0</div>
+                        </div>
+                    </div>
+                    <p class="text-xl text-gray-700 italic leading-relaxed">
+                        "학원비 월 100만원 쓰던 때보다 아이가 덜 지쳐 보여요. 
+                        집에서 자기 속도로 공부하니까 스트레스도 줄고, 
+                        담임 선생님이 매주 피드백 주시니 더 믿음이 갑니다."
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-3xl shadow-2xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-5xl mr-4">👨‍🏫</div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-800">서울 ○○중 담임교사 (교직 30년)</div>
+                            <div class="text-yellow-500 text-xl">★★★★★ 5.0</div>
+                        </div>
+                    </div>
+                    <p class="text-xl text-gray-700 italic leading-relaxed">
+                        "30년 교직 생활 중 가장 혁신적인 프로그램입니다. 
+                        학생들이 방과후에 뭐 하는지 실시간으로 보이니까 
+                        상담할 때도 구체적으로 얘기할 수 있어요."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Comparison -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-12">
+                <span class="gradient-text">비용 비교</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-4 gap-6 mb-12">
+                <div class="feature-box text-center">
+                    <div class="text-4xl mb-3">🏢</div>
+                    <div class="text-xl font-bold text-gray-800 mb-2">학원</div>
+                    <div class="text-5xl font-black text-red-500 mb-2">90만원</div>
+                    <div class="text-gray-600">/ 월</div>
+                </div>
+                
+                <div class="feature-box text-center">
+                    <div class="text-4xl mb-3">💻</div>
+                    <div class="text-xl font-bold text-gray-800 mb-2">온라인강의</div>
+                    <div class="text-5xl font-black text-orange-500 mb-2">10만원</div>
+                    <div class="text-gray-600">/ 월</div>
+                </div>
+                
+                <div class="feature-box text-center">
+                    <div class="text-4xl mb-3">📱</div>
+                    <div class="text-xl font-bold text-gray-800 mb-2">학습앱</div>
+                    <div class="text-5xl font-black text-yellow-500 mb-2">3만원</div>
+                    <div class="text-gray-600">/ 월</div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-400 to-green-600 p-8 rounded-3xl text-center border-4 border-yellow-400 shadow-2xl">
+                    <div class="text-4xl mb-3">⭐</div>
+                    <div class="text-xl font-bold text-white mb-2">100일의 변화</div>
+                    <div class="text-5xl font-black text-white mb-2">5만원</div>
+                    <div class="text-white/90">/ 월</div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-10 rounded-3xl text-white text-center border-4 border-white shadow-2xl">
+                <h3 class="text-4xl font-black mb-6">3년간 3,060만원 절약!</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div>
+                        <div class="text-6xl mb-3">🚗</div>
+                        <div class="text-2xl font-bold">소형차 1대</div>
+                    </div>
+                    <div>
+                        <div class="text-6xl mb-3">🎓</div>
+                        <div class="text-2xl font-bold">대학 등록금 2년</div>
+                    </div>
+                    <div>
+                        <div class="text-6xl mb-3">✈️</div>
+                        <div class="text-2xl font-bold">어학연수 6개월</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-600 to-indigo-700 text-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-6xl font-black mb-8">지금 시작하세요!</h2>
+            <p class="text-3xl mb-12 leading-relaxed">
+                우리 학교가 교육 혁신의 중심이 됩니다
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                    <div class="text-5xl mb-4">🎁</div>
+                    <h3 class="text-2xl font-bold mb-2">무료 파일럿</h3>
+                    <p class="text-lg">1개 학년, 1개월 무료</p>
+                </div>
+                
+                <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                    <div class="text-5xl mb-4">📞</div>
+                    <h3 class="text-2xl font-bold mb-2">무료 상담</h3>
+                    <p class="text-lg">30분 데모 시연</p>
+                </div>
+                
+                <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl border-2 border-white/30">
+                    <div class="text-5xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-bold mb-2">빠른 도입</h3>
+                    <p class="text-lg">1주일 내 시작 가능</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-10 rounded-3xl text-gray-800 mb-8">
+                <h3 class="text-3xl font-bold mb-6">문의 및 상담</h3>
+                <div class="flex justify-center mb-4">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-32 h-32">
+                </div>
+                <div class="text-xl text-gray-600 mb-4">정라미 컨설턴트</div>
+                <div class="text-lg text-gray-600">중학생 맞춤형 진로진학 컨설팅</div>
+            </div>
+            
+            <a href="#" class="cta-button">
+                지금 무료 상담 신청하기 →
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="flex justify-center mb-6">
+                <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-32 h-32" style="border-radius: 50%; padding: 10px;">
+            </div>
+            <h3 class="text-3xl font-bold mb-4">100일의 변화</h3>
+            <p class="text-gray-400 mb-6">사교육 없이 성적을 올리는 혁신적 학습 관리 시스템</p>
+            <div class="text-gray-500">
+                <p>대표: 정라미 컨설턴트</p>
+                <p class="mt-4">© 2024 100일의 변화. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

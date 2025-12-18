@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 일일 학습 계획 실행 예시 | DA.UM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .subject-math { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .subject-english { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .subject-korean { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .subject-science { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+
+        .completed {
+            opacity: 0.7;
+            background: #f0f0f0;
+        }
+
+        .in-progress {
+            animation: pulse 2s infinite;
+            border: 3px solid #fbbf24;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .badge-level { background: #8b5cf6; color: white; }
+        .badge-grade { background: #3b82f6; color: white; }
+        .badge-day { background: #f59e0b; color: white; }
+    </style>
+</head>
+<body class="p-6">
+    <div class="max-w-7xl mx-auto">
+        <!-- 헤더 -->
+        <div class="glass-card rounded-3xl p-8 mb-6 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="badge badge-grade">중학교 2학년</span>
+                        <span class="badge badge-level">중하 수준</span>
+                        <span class="badge badge-day">15일차 / 30일</span>
+                    </div>
+                    <h1 class="text-4xl font-black text-gray-800 mb-2">
+                        <i class="fas fa-calendar-day text-purple-600 mr-3"></i>2025년 1월 15일 (수) 학습 계획
+                    </h1>
+                    <p class="text-lg text-gray-600">김민수 학생의 맞춤형 일일 학습 플랜</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-5xl font-black text-purple-600">50%</div>
+                    <div class="text-sm text-gray-600 font-bold">전체 진행률</div>
+                    <div class="text-xs text-gray-500 mt-1">2/4 과목 완료</div>
+                </div>
+            </div>
+            
+            <!-- 전체 진행 상태 -->
+            <div class="mt-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold text-gray-700">오늘의 학습 목표: 180분 (3시간)</span>
+                    <span class="text-sm font-bold text-purple-600">90분 완료 / 90분 남음</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                    <div class="progress-bar bg-gradient-to-r from-purple-600 to-pink-600 h-4 rounded-full" style="width: 50%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 과목별 학습 카드 -->
+        <div class="grid grid-cols-1 gap-6 mb-6">
+            <!-- 1교시: 수학 (완료) -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl completed">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 subject-math rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
+                            📐
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h2 class="text-2xl font-black text-gray-800">1교시 - 수학</h2>
+                                <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                    <i class="fas fa-check mr-1"></i>완료
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600">45분 완료 • 09:00 - 09:45</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-black text-green-600">100%</div>
+                        <div class="text-xs text-gray-500">성취도</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-5 mb-4">
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-book-open text-purple-600 mr-2"></i>학습 내용
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-600 font-semibold">📚 교재:</span>
+                            <span class="text-gray-800 ml-2">개념원리 중2-1 (p.42-48)</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">📺 강의:</span>
+                            <span class="text-gray-800 ml-2">EBS 중학 프리미엄 - 일차방정식</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">🎯 학습목표:</span>
+                            <span class="text-gray-800 ml-2">일차방정식의 풀이 (기본)</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">✅ 문제풀이:</span>
+                            <span class="text-gray-800 ml-2">기본 20문제 / 정답률 85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-green-200">
+                        <div class="text-2xl font-bold text-green-600">20/20</div>
+                        <div class="text-xs text-gray-600">문제 완료</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-blue-200">
+                        <div class="text-2xl font-bold text-blue-600">17/20</div>
+                        <div class="text-xs text-gray-600">정답 개수</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-purple-200">
+                        <div class="text-2xl font-bold text-purple-600">45분</div>
+                        <div class="text-xs text-gray-600">학습 시간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2교시: 영어 (완료) -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl completed">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 subject-english rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
+                            🔤
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h2 class="text-2xl font-black text-gray-800">2교시 - 영어</h2>
+                                <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                    <i class="fas fa-check mr-1"></i>완료
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600">45분 완료 • 10:00 - 10:45</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-black text-green-600">100%</div>
+                        <div class="text-xs text-gray-500">성취도</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-5 mb-4">
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-book-open text-pink-600 mr-2"></i>학습 내용
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-600 font-semibold">📚 교재:</span>
+                            <span class="text-gray-800 ml-2">내신콘서트 중2 (Unit 3)</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">📺 강의:</span>
+                            <span class="text-gray-800 ml-2">EBS 중학 영어 - 현재완료 시제</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">🎯 학습목표:</span>
+                            <span class="text-gray-800 ml-2">현재완료 have/has + p.p</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">✅ 문제풀이:</span>
+                            <span class="text-gray-800 ml-2">문법 15문제 / 정답률 80%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-green-200">
+                        <div class="text-2xl font-bold text-green-600">15/15</div>
+                        <div class="text-xs text-gray-600">문제 완료</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-blue-200">
+                        <div class="text-2xl font-bold text-blue-600">12/15</div>
+                        <div class="text-xs text-gray-600">정답 개수</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-purple-200">
+                        <div class="text-2xl font-bold text-purple-600">45분</div>
+                        <div class="text-xs text-gray-600">학습 시간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3교시: 국어 (진행중) -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl in-progress">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 subject-korean rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
+                            📖
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h2 class="text-2xl font-black text-gray-800">3교시 - 국어</h2>
+                                <span class="bg-yellow-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse">
+                                    <i class="fas fa-play mr-1"></i>진행중
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600">23분 경과 • 14:00 시작</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-black text-yellow-600">51%</div>
+                        <div class="text-xs text-gray-500">성취도</div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-2xl p-5 mb-4 border-2 border-blue-300">
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-book-open text-blue-600 mr-2"></i>학습 내용
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-600 font-semibold">📚 교재:</span>
+                            <span class="text-gray-800 ml-2">비상 국어 자습서 중2-1 (p.58-65)</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">📺 강의:</span>
+                            <span class="text-gray-800 ml-2">EBS 중학 국어 - 설명문 독해</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">🎯 학습목표:</span>
+                            <span class="text-gray-800 ml-2">설명문의 구조와 독해법</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">✅ 문제풀이:</span>
+                            <span class="text-gray-800 ml-2">독해 10문제 (진행중)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-bold text-gray-700">현재 학습 진행도</span>
+                        <span class="text-sm font-bold text-yellow-600">23분 / 45분</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div class="progress-bar bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full" style="width: 51%"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-yellow-200">
+                        <div class="text-2xl font-bold text-yellow-600">5/10</div>
+                        <div class="text-xs text-gray-600">문제 진행</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-blue-200">
+                        <div class="text-2xl font-bold text-blue-600">4/5</div>
+                        <div class="text-xs text-gray-600">정답 개수</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-3 text-center border-2 border-purple-200">
+                        <div class="text-2xl font-bold text-purple-600">23분</div>
+                        <div class="text-xs text-gray-600">학습 시간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4교시: 과학 (예정) -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl opacity-70">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 subject-science rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
+                            🔬
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h2 class="text-2xl font-black text-gray-800">4교시 - 과학</h2>
+                                <span class="bg-gray-400 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                    <i class="fas fa-clock mr-1"></i>예정
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600">15:00 시작 예정</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-black text-gray-400">0%</div>
+                        <div class="text-xs text-gray-500">성취도</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-5 mb-4">
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-book-open text-green-600 mr-2"></i>학습 계획
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-600 font-semibold">📚 교재:</span>
+                            <span class="text-gray-800 ml-2">오투 과학 중2-1 (p.34-40)</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">📺 강의:</span>
+                            <span class="text-gray-800 ml-2">EBS 중학 과학 - 물질의 구성</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">🎯 학습목표:</span>
+                            <span class="text-gray-800 ml-2">원소와 원자, 분자 개념</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 font-semibold">✅ 문제풀이:</span>
+                            <span class="text-gray-800 ml-2">개념 확인 12문제 예정</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-gray-100 rounded-xl p-3 text-center border-2 border-gray-200">
+                        <div class="text-2xl font-bold text-gray-400">0/12</div>
+                        <div class="text-xs text-gray-500">문제 대기</div>
+                    </div>
+                    <div class="bg-gray-100 rounded-xl p-3 text-center border-2 border-gray-200">
+                        <div class="text-2xl font-bold text-gray-400">-</div>
+                        <div class="text-xs text-gray-500">정답률</div>
+                    </div>
+                    <div class="bg-gray-100 rounded-xl p-3 text-center border-2 border-gray-200">
+                        <div class="text-2xl font-bold text-gray-400">45분</div>
+                        <div class="text-xs text-gray-500">예정 시간</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 요약 정보 -->
+        <div class="grid grid-cols-3 gap-6">
+            <!-- 오늘의 성과 -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>오늘의 성과
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">완료 과목</span>
+                        <span class="text-xl font-bold text-green-600">2 / 4</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">학습 시간</span>
+                        <span class="text-xl font-bold text-purple-600">90분</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">정답률</span>
+                        <span class="text-xl font-bold text-blue-600">82.9%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 30일 누적 -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-chart-line text-blue-500 mr-2"></i>30일 누적
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">연속 학습</span>
+                        <span class="text-xl font-bold text-orange-600">15일</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">총 학습시간</span>
+                        <span class="text-xl font-bold text-purple-600">27시간</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">평균 정답률</span>
+                        <span class="text-xl font-bold text-blue-600">78.5%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 추천 학습 -->
+            <div class="glass-card rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>AI 추천
+                </h3>
+                <div class="space-y-3 text-sm">
+                    <div class="bg-blue-50 p-3 rounded-xl">
+                        <div class="font-bold text-blue-800 mb-1">수학 복습 필요</div>
+                        <div class="text-gray-600">틀린 문제 3개 다시 풀어보세요</div>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-xl">
+                        <div class="font-bold text-green-800 mb-1">영어 문법 강화</div>
+                        <div class="text-gray-600">현재완료 추가 학습 권장</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="glass-card rounded-3xl p-6 shadow-xl mt-6 text-center">
+            <p class="text-gray-600 text-sm">
+                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                학습 데이터는 실시간으로 저장되며, 학부모님도 학습 현황을 확인하실 수 있습니다.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 페이지 로드 시 애니메이션
+        window.addEventListener('load', function() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
