@@ -1,107 +1,95 @@
-// ❄️ 겨울방학 30일 프로그램 - 주간 학습 스케줄 관리 스크립트
-// 평일 3.5시간 + 주말 5시간 (주간 25시간) / 하루 3과목 학습
+// ❄️ 겨울방학 30일 프로그램 - 주간 학습 스케줄 관리 스크립트 (localStorage 기반)
+// 평일 3시간 (09:00~12:00, 45분×4교시) + 주말 4시간 (오전2h+오후2h)
 
 let currentStudent = null;
 let currentSchedule = null;
 
 // ⏰ 평일/주말 학습 시간 (분 단위)
-const WEEKDAY_HOURS = 3.5; // 평일 3.5시간 (210분)
-const WEEKEND_HOURS = 5;   // 주말 5시간 (300분)
-const WEEKDAY_MINUTES = 210;
-const WEEKEND_MINUTES = 300;
+const WEEKDAY_HOURS = 3;    // 평일 3시간 (180분) - 09:00~12:00
+const WEEKEND_HOURS = 4;    // 주말 4시간 (240분) - 오전2h+오후2h
+const WEEKDAY_MINUTES = 180;
+const WEEKEND_MINUTES = 240;
 
-// 📚 하루 3과목 학습 시스템
-const SUBJECTS_PER_DAY = 3;
+// 📚 평일 4교시, 주말 4교시 시스템
+const WEEKDAY_PERIODS = 4;  // 45분 × 4교시
+const WEEKEND_PERIODS = 4;  // 60분 × 4교시
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    loadStudentList();
+    loadStudentFromURL();
 });
 
-// 학생 목록 로드 (이름으로 검색 가능)
-async function loadStudentList() {
-    try {
-        const response = await fetch('tables/students?limit=100');
-        const data = await response.json();
-        
-        // 전역 변수로 저장
-        window.allStudents = data.data;
-        
-    } catch (error) {
-        console.error('학생 목록 로드 오류:', error);
+// URL 파라미터에서 학생 ID 가져오기
+function loadStudentFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get('student');
+    
+    if (studentId) {
+        loadWeeklySchedule(studentId);
+    } else {
+        hideSchedule();
+        alert('학생 정보가 없습니다. 학생 목록에서 다시 선택해주세요.');
+        window.location.href = 'winter-index.html';
     }
 }
 
-// 주간 스케줄 로드 (이름으로 검색)
-async function loadWeeklySchedule() {
-    const studentName = document.getElementById('studentSelect').value.trim();
-    if (!studentName) {
-        hideSchedule();
-        return;
-    }
-    
+// 주간 스케줄 로드 (localStorage에서)
+function loadWeeklySchedule(studentId) {
     try {
-        // 학생 이름으로 검색
-        const studentResponse = await fetch('tables/students?limit=100');
-        const studentData = await studentResponse.json();
-        
-        currentStudent = studentData.data.find(s => s.name === studentName);
+        // localStorage에서 학생 데이터 로드
+        const students = JSON.parse(localStorage.getItem('students') || '[]');
+        currentStudent = students.find(s => s.id === studentId);
         
         if (!currentStudent) {
-            alert('해당 이름의 학생을 찾을 수 없습니다.');
+            alert('학생 정보를 찾을 수 없습니다. 학생 목록으로 돌아갑니다.');
+            window.location.href = 'winter-index.html';
             return;
         }
         
-        // 스케줄 로드
-        const scheduleResponse = await fetch('tables/weekly_schedules?limit=100');
-        const scheduleData = await scheduleResponse.json();
+        // 학생 이름 표시
+        document.getElementById('studentName').textContent = currentStudent.name;
+        document.getElementById('studentInfo').textContent = 
+            `${currentStudent.grade}학년 · 평균 ${Math.round(currentStudent.average_score || 0)}점`;
         
-        currentSchedule = scheduleData.data.find(s => s.student_id === currentStudent.id);
+        // localStorage에서 스케줄 로드
+        const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+        currentSchedule = schedules.find(s => s.student_id === studentId);
         
         if (currentSchedule) {
             displaySchedule();
+            showSchedule();
         } else {
             // 스케줄이 없으면 자동 생성 제안
             if (confirm('이 학생의 주간 스케줄이 없습니다. 자동으로 생성하시겠습니까?')) {
-                await generateAutoSchedule();
+                generateAutoSchedule();
+            } else {
+                hideSchedule();
             }
         }
         
-        showSchedule();
-        
     } catch (error) {
         console.error('스케줄 로드 오류:', error);
+        alert('스케줄을 불러오는데 실패했습니다.');
     }
 }
 
-// 🎯 자동 스케줄 생성 (3과목/일, 210분 평일, 300분 주말)
-async function generateAutoSchedule() {
-    const studentName = document.getElementById('studentSelect').value.trim();
-    if (!studentName) {
-        alert('학생 이름을 먼저 입력해주세요.');
+// 🎯 자동 스케줄 생성 (평일 3시간/09:00~12:00, 주말 4시간)
+function generateAutoSchedule() {
+    if (!currentStudent) {
+        alert('학생 정보를 찾을 수 없습니다.');
         return;
     }
     
-    if (!currentStudent) {
-        const studentResponse = await fetch('tables/students?limit=100');
-        const studentData = await studentResponse.json();
-        currentStudent = studentData.data.find(s => s.name === studentName);
-        
-        if (!currentStudent) {
-            alert('해당 이름의 학생을 찾을 수 없습니다.');
-            return;
-        }
-    }
-    
     try {
-        // 평일 스케줄 생성 (3.5시간 = 210분, 3과목)
+        // 평일 스케줄 생성 (3시간 = 180분, 45분×4교시)
         const weekdaySchedule = generateWeekdaySchedule();
         
-        // 주말 스케줄 생성 (5시간 = 300분, 3과목)
+        // 주말 스케줄 생성 (4시간 = 240분, 오전2h+오후2h)
         const weekendSchedule = generateWeekendSchedule();
         
         // 스케줄 데이터 준비
         const scheduleData = {
+            id: currentSchedule ? currentSchedule.id : Date.now().toString(),
             student_id: currentStudent.id,
             student_name: currentStudent.name,
             student_grade: currentStudent.grade,
@@ -115,26 +103,25 @@ async function generateAutoSchedule() {
             created_date: new Date().toISOString().split('T')[0]
         };
         
-        // 기존 스케줄이 있으면 업데이트, 없으면 새로 생성
-        let response;
+        // localStorage에 저장
+        let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+        
         if (currentSchedule) {
-            response = await fetch(`tables/weekly_schedules/${currentSchedule.id}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({...currentSchedule, ...scheduleData})
-            });
+            // 기존 스케줄 업데이트
+            schedules = schedules.map(s => 
+                s.id === currentSchedule.id ? scheduleData : s
+            );
         } else {
-            response = await fetch('tables/weekly_schedules', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(scheduleData)
-            });
+            // 새 스케줄 추가
+            schedules.push(scheduleData);
         }
         
-        if (response.ok) {
-            alert('✅ 주간 스케줄이 자동으로 생성되었습니다!\n\n평일: 3.5시간 (3과목)\n주말: 5시간 (3과목)\n주간 총 학습 시간: 25시간');
-            await loadWeeklySchedule();
-        }
+        localStorage.setItem('student_schedules', JSON.stringify(schedules));
+        currentSchedule = scheduleData;
+        
+        alert('✅ 주간 스케줄이 자동으로 생성되었습니다!\n\n평일: 3시간 (09:00~12:00, 45분×4교시)\n주말: 4시간 (오전2h+오후2h)\n주간 총 학습 시간: 23시간');
+        displaySchedule();
+        showSchedule();
         
     } catch (error) {
         console.error('스케줄 생성 오류:', error);
@@ -142,18 +129,18 @@ async function generateAutoSchedule() {
     }
 }
 
-// 📅 평일 스케줄 생성 (3.5시간 = 210분, 3과목)
+// 📅 평일 스케줄 생성 (3시간 = 180분, 45분×4교시, 09:00~12:00)
 function generateWeekdaySchedule() {
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
     const schedule = {};
     
-    // 과목 순환 (3과목/일)
+    // 과목 순환 (4교시, 각 45분)
     const subjectRotation = [
-        ['수학', '영어', '국어'],   // 월: 수학 70분, 영어 70분, 국어 70분
-        ['수학', '과학', '영어'],   // 화: 수학 70분, 과학 70분, 영어 70분
-        ['수학', '영어', '사회'],   // 수: 수학 70분, 영어 70분, 사회 70분
-        ['수학', '국어', '과학'],   // 목: 수학 70분, 국어 70분, 과학 70분
-        ['수학', '영어', '복습']    // 금: 수학 70분, 영어 70분, 주간복습 70분
+        ['수학', '영어', '국어', '과학'],   // 월: 수학, 영어, 국어, 과학
+        ['수학', '영어', '과학', '사회'],   // 화: 수학, 영어, 과학, 사회
+        ['수학', '영어', '국어', '사회'],   // 수: 수학, 영어, 국어, 사회
+        ['수학', '영어', '국어', '과학'],   // 목: 수학, 영어, 국어, 과학
+        ['수학', '영어', '과학', '복습']    // 금: 수학, 영어, 과학, 주간복습
     ];
     
     days.forEach((day, index) => {
@@ -161,28 +148,36 @@ function generateWeekdaySchedule() {
         
         schedule[day] = [
             {
-                time: '15:00-16:10',
-                duration: 70,
-                type: '주요과목 학습',
+                time: '09:00-09:45',
+                duration: 45,
+                type: '1교시',
                 subject: subjects[0],
                 content: getSubjectContent(subjects[0], 1),
                 importance: subjects[0] === '수학' ? '높음' : '보통'
             },
             {
-                time: '16:10-17:20',
-                duration: 70,
-                type: '주요과목 학습',
+                time: '09:55-10:40',
+                duration: 45,
+                type: '2교시',
                 subject: subjects[1],
                 content: getSubjectContent(subjects[1], 2),
                 importance: subjects[1] === '영어' ? '높음' : '보통'
             },
             {
-                time: '17:20-18:30',
-                duration: 70,
-                type: subjects[2] === '복습' ? '주간 복습' : '주요과목 학습',
+                time: '10:50-11:35',
+                duration: 45,
+                type: '3교시',
                 subject: subjects[2],
                 content: getSubjectContent(subjects[2], 3),
-                importance: subjects[2] === '복습' ? '높음' : '보통'
+                importance: '보통'
+            },
+            {
+                time: '11:45-12:30',
+                duration: 45,
+                type: subjects[3] === '복습' ? '4교시 (주간복습)' : '4교시',
+                subject: subjects[3],
+                content: getSubjectContent(subjects[3], 4),
+                importance: subjects[3] === '복습' ? '높음' : '보통'
             }
         ];
     });
@@ -190,30 +185,38 @@ function generateWeekdaySchedule() {
     return schedule;
 }
 
-// 🏖️ 주말 스케줄 생성 (5시간 = 300분, 3과목)
+// 🏖️ 주말 스케줄 생성 (4시간 = 240분, 오전 2시간 + 오후 2시간)
 function generateWeekendSchedule() {
     return {
         saturday: [
             {
-                time: '09:00-11:00',
-                duration: 120,
-                type: '주간 총복습',
+                time: '09:00-10:00',
+                duration: 60,
+                type: '오전 1교시',
                 subject: '수학',
-                content: '이번 주 배운 수학 전체 복습 및 문제 풀이',
+                content: '이번 주 배운 수학 전체 복습 및 개념 정리',
                 importance: '높음'
             },
             {
-                time: '11:00-12:40',
-                duration: 100,
-                type: '주간 총복습',
+                time: '10:10-11:10',
+                duration: 60,
+                type: '오전 2교시',
                 subject: '영어',
                 content: '이번 주 배운 영어 전체 복습 (문법, 독해, 단어)',
                 importance: '높음'
             },
             {
-                time: '12:40-14:00',
-                duration: 80,
-                type: '문제풀이',
+                time: '14:00-15:00',
+                duration: 60,
+                type: '오후 1교시',
+                subject: '국어',
+                content: '국어 독해 복습 및 문법 정리',
+                importance: '보통'
+            },
+            {
+                time: '15:10-16:10',
+                duration: 60,
+                type: '오후 2교시',
                 subject: '과학',
                 content: '과학 단원 문제 풀이 및 오답 정리',
                 importance: '보통'
@@ -221,28 +224,36 @@ function generateWeekendSchedule() {
         ],
         sunday: [
             {
-                time: '09:00-11:00',
-                duration: 120,
-                type: '문제풀이',
+                time: '09:00-10:00',
+                duration: 60,
+                type: '오전 1교시',
                 subject: '수학',
                 content: '수학 심화 문제 풀이 및 오답 정리',
                 importance: '높음'
             },
             {
-                time: '11:00-12:40',
-                duration: 100,
-                type: '주간 총복습',
-                subject: '국어',
-                content: '국어 독해 복습 및 문법 정리',
+                time: '10:10-11:10',
+                duration: 60,
+                type: '오전 2교시',
+                subject: '영어',
+                content: '영어 문제 풀이 및 듣기 연습',
+                importance: '높음'
+            },
+            {
+                time: '14:00-15:00',
+                duration: 60,
+                type: '오후 1교시',
+                subject: '사회',
+                content: '사회 단원 복습 및 문제 풀이',
                 importance: '보통'
             },
             {
-                time: '12:40-14:00',
-                duration: 80,
-                type: '다음 주 예습',
-                subject: '다음 주 준비',
-                content: '다음 주에 배울 내용 미리 읽어보기 및 계획 수립',
-                importance: '보통'
+                time: '15:10-16:10',
+                duration: 60,
+                type: '오후 2교시',
+                subject: '주간 복습',
+                content: '이번 주 전체 복습 및 다음 주 학습 계획 수립',
+                importance: '높음'
             }
         ]
     };
