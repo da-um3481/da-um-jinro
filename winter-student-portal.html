@@ -253,8 +253,8 @@
                 <div class="text-right">
                     <p class="text-sm opacity-90 mb-1">오늘 목표</p>
                     <div class="flex items-center space-x-2">
-                        <p class="text-2xl font-bold" id="dailyTarget">3.5시간</p>
-                        <span class="text-xs px-3 py-1 bg-white/20 rounded-full" id="programDay">Day 8</span>
+                        <p class="text-2xl font-bold" id="dailyTarget">학습 시작 전</p>
+                        <span class="text-xs px-3 py-1 bg-white/20 rounded-full" id="programDay">학습 시작 전</span>
                     </div>
                 </div>
             </div>
@@ -267,19 +267,19 @@
                     <i class="fas fa-chart-line text-cyan-500 mr-2"></i>30일 프로그램 진행률
                 </h3>
                 <div class="text-right">
-                    <div class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                        23%
+                    <div class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent" id="progressPercent">
+                        0%
                     </div>
-                    <div class="text-xs text-gray-600">7일 / 30일</div>
+                    <div class="text-xs text-gray-600" id="progressDays">0일 / 30일</div>
                 </div>
             </div>
             <div class="bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
-                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 h-full rounded-full" style="width: 23%"></div>
+                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 h-full rounded-full progress-bar" id="progressBar" style="width: 0%"></div>
             </div>
             <div class="flex justify-between text-xs text-gray-600">
-                <span>시작: 1월 6일</span>
-                <span>D-23</span>
-                <span>종료: 2월 4일</span>
+                <span id="startDate">시작: 미정</span>
+                <span id="dDay">학습 시작 전</span>
+                <span id="endDate">종료: 미정</span>
             </div>
         </div>
 
@@ -575,6 +575,74 @@
         const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 (${days[today.getDay()]})`;
         document.getElementById('todayDate').textContent = dateStr;
 
+        // 중학생 일일 학습 목표 시간 계산
+        function getDailyTargetHours() {
+            const dayOfWeek = today.getDay(); // 0: 일요일, 1-5: 월-금, 6: 토요일
+            
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                // 월-금 (평일): 3시간 권장
+                return { hours: 3, label: '3시간 (평일)' };
+            } else {
+                // 토-일 (주말): 4시간 권장 (오전 2시간 + 오후 2시간)
+                return { hours: 4, label: '4시간 (주말)' };
+            }
+        }
+
+        // 프로그램 진행 상태 관리
+        function initProgramProgress() {
+            const programStart = localStorage.getItem('programStartDate');
+            const targetInfo = getDailyTargetHours();
+            
+            if (!programStart) {
+                // 학습 시작 전 - 초기 상태
+                document.getElementById('dailyTarget').textContent = targetInfo.label;
+                document.getElementById('programDay').textContent = '학습 시작 전';
+                document.getElementById('progressPercent').textContent = '0%';
+                document.getElementById('progressDays').textContent = '0일 / 30일';
+                document.getElementById('progressBar').style.width = '0%';
+                document.getElementById('startDate').textContent = '시작: 미정';
+                document.getElementById('dDay').textContent = '학습 시작 전';
+                document.getElementById('endDate').textContent = '종료: 미정';
+                return false;
+            } else {
+                // 학습 시작됨
+                const startDate = new Date(programStart);
+                const currentDate = new Date();
+                const daysPassed = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+                const daysRemaining = 30 - daysPassed;
+                const progressPercent = Math.min(Math.round((daysPassed / 30) * 100), 100);
+                
+                // 종료일 계산
+                const endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + 29);
+                
+                document.getElementById('dailyTarget').textContent = targetInfo.label;
+                document.getElementById('programDay').textContent = `Day ${daysPassed}`;
+                document.getElementById('progressPercent').textContent = `${progressPercent}%`;
+                document.getElementById('progressDays').textContent = `${daysPassed}일 / 30일`;
+                document.getElementById('progressBar').style.width = `${progressPercent}%`;
+                document.getElementById('startDate').textContent = `시작: ${startDate.getMonth() + 1}월 ${startDate.getDate()}일`;
+                document.getElementById('dDay').textContent = daysRemaining > 0 ? `D-${daysRemaining}` : '완료';
+                document.getElementById('endDate').textContent = `종료: ${endDate.getMonth() + 1}월 ${endDate.getDate()}일`;
+                
+                return true;
+            }
+        }
+        
+        // 학습 시작 함수 (첫 학습 시작 시 호출)
+        function startProgram() {
+            const programStart = localStorage.getItem('programStartDate');
+            if (!programStart) {
+                const targetInfo = getDailyTargetHours();
+                localStorage.setItem('programStartDate', today.toISOString());
+                isProgramStarted = initProgramProgress();
+                alert(`🎉 30일 겨울방학 프로그램이 시작되었습니다!\n\nDay 1부터 시작합니다. 화이팅! 💪\n\n📚 오늘 목표: ${targetInfo.label}\n✨ 추가 학습도 자유롭게 가능합니다!`);
+            }
+        }
+        
+        // 페이지 로드 시 프로그램 진행 상태 초기화
+        let isProgramStarted = initProgramProgress();
+
         // 타이머 변수
         let timers = {
             math: { seconds: 0, interval: null, started: false, completed: false },
@@ -600,6 +668,11 @@
 
         // 타이머 시작 (자유 선택 + 중복 방지)
         function startTimer(subject) {
+            // 0. 첫 학습 시작 시 프로그램 시작
+            if (!isProgramStarted) {
+                startProgram();
+            }
+            
             // 1. 중복 학습 방지
             if (timers[subject].started) {
                 alert(`❌ ${getSubjectName(subject)}는 이미 학습을 시작했습니다.\n\n한 번 시작한 과목은 다시 시작할 수 없습니다.`);
