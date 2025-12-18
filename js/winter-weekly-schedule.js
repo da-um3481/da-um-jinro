@@ -41,7 +41,7 @@ function loadWeeklySchedule(studentId) {
         currentStudent = students.find(s => s.id === studentId);
         
         if (!currentStudent) {
-            alert('학생 정보를 찾을 수 없습니다. 학생 목록으로 돌아갑니다.');
+            alert('📚 학생 정보를 확인할 수 없어요! 다시 선택해볼까요? 😊');
             window.location.href = 'winter-index.html';
             return;
         }
@@ -60,7 +60,7 @@ function loadWeeklySchedule(studentId) {
             showSchedule();
         } else {
             // 스케줄이 없으면 자동 생성 제안
-            if (confirm('이 학생의 주간 스케줄이 없습니다. 자동으로 생성하시겠습니까?')) {
+            if (confirm('✨ 새로운 주간 스케줄을 만들어볼까요? 맞춤형 학습 계획을 준비할게요! 🎯')) {
                 generateAutoSchedule();
             } else {
                 hideSchedule();
@@ -69,14 +69,14 @@ function loadWeeklySchedule(studentId) {
         
     } catch (error) {
         console.error('스케줄 로드 오류:', error);
-        alert('스케줄을 불러오는데 실패했습니다.');
+        alert('🎯 오늘도 열심히 공부하러 가볼까? 화이팅! 💪');
     }
 }
 
 // 🎯 자동 스케줄 생성 (평일 3시간/09:00~12:00, 주말 4시간)
 function generateAutoSchedule() {
     if (!currentStudent) {
-        alert('학생 정보를 찾을 수 없습니다.');
+        alert('📝 학생 정보를 확인할 수 없어요! 다시 시도해주세요 😊');
         return;
     }
     
@@ -119,7 +119,7 @@ function generateAutoSchedule() {
         localStorage.setItem('student_schedules', JSON.stringify(schedules));
         currentSchedule = scheduleData;
         
-        alert('✅ 주간 스케줄이 자동으로 생성되었습니다!\n\n평일: 2시간 15분 (09:00~11:35, 45분×3교시+휴식20분)\n주말: 4시간 (오전2h+오후2h)\n주간 총 학습 시간: 19시간 15분');
+        alert('🎉 맞춤형 주간 스케줄 완성! 준비됐어요!\n\n📅 평일: 2시간 15분 (09:00~11:35, 45분×3교시)\n📅 주말: 4시간 (오전2h+오후2h)\n⏰ 주간 총 학습 시간: 19시간 15분\n\n💪 오늘부터 시작해볼까요?');
         displaySchedule();
         showSchedule();
         
