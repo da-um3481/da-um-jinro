@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 데이터 테스트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">🔍 학생 데이터 확인 및 테스트</h1>
+        
+        <div class="mb-6">
+            <button onclick="checkStudents()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                학생 데이터 확인
+            </button>
+            <button onclick="addSampleStudents()" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-2">
+                샘플 학생 추가
+            </button>
+            <button onclick="clearStudents()" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 ml-2">
+                모든 학생 삭제
+            </button>
+        </div>
+        
+        <div id="result" class="bg-gray-50 p-4 rounded border border-gray-300 font-mono text-sm overflow-auto max-h-96"></div>
+        
+        <div class="mt-6">
+            <h2 class="text-lg font-bold mb-3">테스트 로그인</h2>
+            <div class="flex space-x-3">
+                <input 
+                    type="text" 
+                    id="testName" 
+                    placeholder="학생 이름 입력"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded"
+                >
+                <button onclick="testLogin()" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+                    로그인 테스트
+                </button>
+            </div>
+            <div id="loginResult" class="mt-3 p-3 rounded"></div>
+        </div>
+    </div>
+
+    <script>
+        function checkStudents() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const result = document.getElementById('result');
+            
+            if (students.length === 0) {
+                result.innerHTML = '❌ 등록된 학생이 없습니다!';
+                result.className = 'bg-red-50 p-4 rounded border border-red-300 font-mono text-sm';
+            } else {
+                result.innerHTML = `✅ 총 ${students.length}명의 학생이 등록되어 있습니다.\n\n` + 
+                    JSON.stringify(students, null, 2);
+                result.className = 'bg-green-50 p-4 rounded border border-green-300 font-mono text-sm overflow-auto max-h-96';
+            }
+        }
+        
+        function addSampleStudents() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            
+            // 샘플 학생 데이터
+            const sampleStudents = [
+                {
+                    id: 'student_' + Date.now() + '_1',
+                    school_id: 'school_1',
+                    name: '김민준',
+                    grade: 2,
+                    class_num: 1,
+                    student_num: 5,
+                    student_type: 'regular',
+                    program_type: 'winter_30days',
+                    korean_score: 85,
+                    english_score: 90,
+                    math_score: 88,
+                    science_score: 92,
+                    social_score: 87,
+                    level: '상',
+                    parent_phone: '010-1234-5678',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 'student_' + Date.now() + '_2',
+                    school_id: 'school_1',
+                    name: '이서연',
+                    grade: 2,
+                    class_num: 1,
+                    student_num: 12,
+                    student_type: 'regular',
+                    program_type: 'winter_30days',
+                    korean_score: 92,
+                    english_score: 88,
+                    math_score: 90,
+                    science_score: 85,
+                    social_score: 91,
+                    level: '상',
+                    parent_phone: '010-2345-6789',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 'student_' + Date.now() + '_3',
+                    school_id: 'school_1',
+                    name: '박지훈',
+                    grade: 2,
+                    class_num: 2,
+                    student_num: 8,
+                    student_type: 'regular',
+                    program_type: 'winter_30days',
+                    korean_score: 78,
+                    english_score: 82,
+                    math_score: 85,
+                    science_score: 80,
+                    social_score: 83,
+                    level: '중',
+                    parent_phone: '010-3456-7890',
+                    created_at: new Date().toISOString()
+                }
+            ];
+            
+            // 기존 학생에 샘플 추가 (중복 체크)
+            sampleStudents.forEach(sample => {
+                const exists = students.find(s => s.name === sample.name);
+                if (!exists) {
+                    students.push(sample);
+                }
+            });
+            
+            localStorage.setItem('students', JSON.stringify(students));
+            
+            alert(`✅ 샘플 학생이 추가되었습니다!\n\n김민준, 이서연, 박지훈 (총 ${students.length}명)`);
+            checkStudents();
+        }
+        
+        function clearStudents() {
+            if (confirm('정말로 모든 학생 데이터를 삭제하시겠습니까?')) {
+                localStorage.setItem('students', '[]');
+                alert('✅ 모든 학생 데이터가 삭제되었습니다.');
+                checkStudents();
+            }
+        }
+        
+        function testLogin() {
+            const nameInput = document.getElementById('testName').value.trim();
+            const loginResult = document.getElementById('loginResult');
+            
+            if (!nameInput) {
+                loginResult.innerHTML = '❌ 이름을 입력해주세요!';
+                loginResult.className = 'mt-3 p-3 rounded bg-red-50 border border-red-300 text-red-800';
+                return;
+            }
+            
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const student = students.find(s => s.name === nameInput);
+            
+            if (!student) {
+                loginResult.innerHTML = `❌ "${nameInput}" 학생을 찾을 수 없습니다!<br><br>` +
+                    `등록된 학생: ${students.map(s => s.name).join(', ') || '없음'}`;
+                loginResult.className = 'mt-3 p-3 rounded bg-red-50 border border-red-300 text-red-800';
+            } else {
+                loginResult.innerHTML = `✅ "${nameInput}" 학생을 찾았습니다!<br><br>` +
+                    `<strong>정보:</strong><br>` +
+                    `ID: ${student.id}<br>` +
+                    `학년: ${student.grade}학년 ${student.class_num}반 ${student.student_num}번<br>` +
+                    `프로그램: ${student.program_type}<br>` +
+                    `수준: ${student.level}`;
+                loginResult.className = 'mt-3 p-3 rounded bg-green-50 border border-green-300 text-green-800';
+                
+                // localStorage에 현재 학생 정보 저장 (실제 로그인 시뮬레이션)
+                localStorage.setItem('currentStudentId', student.id);
+                localStorage.setItem('currentStudentName', student.name);
+            }
+        }
+        
+        // 페이지 로드 시 자동 확인
+        window.onload = function() {
+            checkStudents();
+        };
+    </script>
+</body>
+</html>
