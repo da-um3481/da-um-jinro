@@ -1,4 +1,4 @@
-// 주간 학습 스케줄 관리 스크립트
+// 주간 학습 스케줄 관리 스크립트 (localStorage 기반)
 
 let currentStudent = null;
 let currentSchedule = null;
@@ -12,19 +12,18 @@ document.addEventListener('DOMContentLoaded', function() {
     loadStudentList();
 });
 
-// 학생 목록 로드
-async function loadStudentList() {
+// 학생 목록 로드 (localStorage에서)
+function loadStudentList() {
     try {
-        const response = await fetch('tables/students?limit=100');
-        const data = await response.json();
+        const students = JSON.parse(localStorage.getItem('students') || '[]');
         
         const select = document.getElementById('studentSelect');
         select.innerHTML = '<option value="">학생을 선택하세요</option>';
         
-        data.data.forEach(student => {
+        students.forEach(student => {
             const option = document.createElement('option');
             option.value = student.id;
-            option.textContent = `${student.name} (${student.grade}학년 ${student.class_num}반)`;
+            option.textContent = `${student.name} (${student.grade}학년)`;
             select.appendChild(option);
         });
         
@@ -33,8 +32,8 @@ async function loadStudentList() {
     }
 }
 
-// 주간 스케줄 로드
-async function loadWeeklySchedule() {
+// 주간 스케줄 로드 (localStorage에서)
+function loadWeeklySchedule() {
     const studentId = document.getElementById('studentSelect').value;
     if (!studentId) {
         hideSchedule();
@@ -43,33 +42,38 @@ async function loadWeeklySchedule() {
     
     try {
         // 학생 정보 로드
-        const studentResponse = await fetch(`tables/students/${studentId}`);
-        currentStudent = await studentResponse.json();
+        const students = JSON.parse(localStorage.getItem('students') || '[]');
+        currentStudent = students.find(s => s.id === studentId);
         
-        // 스케줄 로드
-        const scheduleResponse = await fetch('tables/weekly_schedules?limit=100');
-        const scheduleData = await scheduleResponse.json();
+        if (!currentStudent) {
+            alert('학생 정보를 찾을 수 없습니다.');
+            return;
+        }
         
-        currentSchedule = scheduleData.data.find(s => s.student_id === studentId);
+        // 스케줄 로드 (student_schedules 키 사용)
+        const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+        currentSchedule = schedules.find(s => s.student_id === studentId);
         
         if (currentSchedule) {
             displaySchedule();
+            showSchedule();
         } else {
             // 스케줄이 없으면 자동 생성 제안
             if (confirm('이 학생의 주간 스케줄이 없습니다. 자동으로 생성하시겠습니까?')) {
-                await generateAutoSchedule();
+                generateAutoSchedule();
+            } else {
+                hideSchedule();
             }
         }
         
-        showSchedule();
-        
     } catch (error) {
         console.error('스케줄 로드 오류:', error);
+        alert('스케줄 로드에 실패했습니다.');
     }
 }
 
 // 자동 스케줄 생성
-async function generateAutoSchedule() {
+function generateAutoSchedule() {
     const studentId = document.getElementById('studentSelect').value;
     if (!studentId) {
         alert('학생을 먼저 선택해주세요.');
@@ -77,16 +81,14 @@ async function generateAutoSchedule() {
     }
     
     if (!currentStudent) {
-        const studentResponse = await fetch(`tables/students/${studentId}`);
-        currentStudent = await studentResponse.json();
+        const students = JSON.parse(localStorage.getItem('students') || '[]');
+        currentStudent = students.find(s => s.id === studentId);
     }
     
     try {
-        // 이번 주 학교 수업 로드
-        const lessonsResponse = await fetch('tables/school_lessons?limit=100');
-        const lessonsData = await lessonsResponse.json();
-        
-        const thisWeekLessons = lessonsData.data.filter(l => 
+        // 이번 주 학교 수업 로드 (lessons 키에서)
+        const lessons = JSON.parse(localStorage.getItem('lessons') || '[]');
+        const thisWeekLessons = lessons.filter(l => 
             l.grade === currentStudent.grade
         );
         
@@ -98,6 +100,7 @@ async function generateAutoSchedule() {
         
         // 스케줄 데이터 준비
         const scheduleData = {
+            id: currentSchedule ? currentSchedule.id : Date.now().toString(),
             student_id: studentId,
             student_name: currentStudent.name,
             student_grade: currentStudent.grade,
@@ -111,26 +114,25 @@ async function generateAutoSchedule() {
             created_date: new Date().toISOString().split('T')[0]
         };
         
-        // 기존 스케줄이 있으면 업데이트, 없으면 새로 생성
-        let response;
+        // localStorage에 저장
+        let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+        
         if (currentSchedule) {
-            response = await fetch(`tables/weekly_schedules/${currentSchedule.id}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({...currentSchedule, ...scheduleData})
-            });
+            // 기존 스케줄 업데이트
+            schedules = schedules.map(s => 
+                s.id === currentSchedule.id ? scheduleData : s
+            );
         } else {
-            response = await fetch('tables/weekly_schedules', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(scheduleData)
-            });
+            // 새 스케줄 추가
+            schedules.push(scheduleData);
         }
         
-        if (response.ok) {
-            alert('주간 스케줄이 자동으로 생성되었습니다!');
-            await loadWeeklySchedule();
-        }
+        localStorage.setItem('student_schedules', JSON.stringify(schedules));
+        currentSchedule = scheduleData;
+        
+        alert('주간 스케줄이 자동으로 생성되었습니다!');
+        displaySchedule();
+        showSchedule();
         
     } catch (error) {
         console.error('스케줄 생성 오류:', error);
@@ -293,6 +295,11 @@ function displaySchedule() {
         const scheduleData = JSON.parse(currentSchedule[day] || '[]');
         const container = document.getElementById(`${day}Schedule`);
         
+        if (!container) {
+            console.warn(`Container for ${day} not found`);
+            return;
+        }
+        
         if (scheduleData.length === 0) {
             container.innerHTML = '<p class="text-gray-500 text-sm">스케줄이 없습니다.</p>';
             return;
@@ -311,7 +318,7 @@ function displaySchedule() {
                         <div class="flex-1">
                             <div class="flex items-center space-x-2 mb-1">
                                 <span class="px-2 py-1 text-xs bg-${typeColor}-100 text-${typeColor}-700 rounded-full font-semibold">
-                                    ${item.type}
+                    ${item.type}
                                 </span>
                                 <span class="text-sm text-gray-600">${item.time}</span>
                                 <span class="text-sm font-semibold text-gray-700">${durationText}</span>
@@ -347,13 +354,19 @@ function getTypeColor(type) {
 
 // 스케줄 표시/숨김
 function showSchedule() {
-    document.getElementById('timeGuideCard').classList.remove('hidden');
-    document.getElementById('scheduleSection').classList.remove('hidden');
+    const timeGuideCard = document.getElementById('timeGuideCard');
+    const scheduleSection = document.getElementById('scheduleSection');
+    
+    if (timeGuideCard) timeGuideCard.classList.remove('hidden');
+    if (scheduleSection) scheduleSection.classList.remove('hidden');
 }
 
 function hideSchedule() {
-    document.getElementById('timeGuideCard').classList.add('hidden');
-    document.getElementById('scheduleSection').classList.add('hidden');
+    const timeGuideCard = document.getElementById('timeGuideCard');
+    const scheduleSection = document.getElementById('scheduleSection');
+    
+    if (timeGuideCard) timeGuideCard.classList.add('hidden');
+    if (scheduleSection) scheduleSection.classList.add('hidden');
 }
 
 // 요일별 스케줄 수정 (추후 구현)
