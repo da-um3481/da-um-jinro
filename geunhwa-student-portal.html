@@ -944,11 +944,23 @@
 
         // 과목 카드 HTML 생성
         function createSubjectCard(subjectName, config) {
+            // 과목별 색상 매핑
+            const colorMap = {
+                'blue': { bg: '#EFF6FF', border: '#BFDBFE', main: '#3B82F6', dark: '#1D4ED8' },
+                'green': { bg: '#F0FDF4', border: '#BBF7D0', main: '#22C55E', dark: '#15803D' },
+                'red': { bg: '#FEF2F2', border: '#FECACA', main: '#EF4444', dark: '#B91C1C' },
+                'purple': { bg: '#FAF5FF', border: '#E9D5FF', main: '#A855F7', dark: '#7E22CE' },
+                'yellow': { bg: '#FEFCE8', border: '#FDE047', main: '#EAB308', dark: '#A16207' },
+                'indigo': { bg: '#EEF2FF', border: '#C7D2FE', main: '#6366F1', dark: '#4338CA' }
+            };
+            
+            const colors = colorMap[config.color] || colorMap['blue'];
+            
             return `
-                <div class="p-4 bg-${config.color}-50 rounded-xl border-2 border-${config.color}-200">
+                <div class="p-4 rounded-xl border-2" style="background-color: ${colors.bg}; border-color: ${colors.border};">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-${config.color}-500 rounded-lg flex items-center justify-center text-white">
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background-color: ${colors.main};">
                                 <i class="fas fa-${config.icon}"></i>
                             </div>
                             <div>
@@ -957,15 +969,15 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="text-2xl font-black text-${config.color}-600 timer-display" id="${config.id}Time">00:00</div>
+                            <div class="text-2xl font-black timer-display" id="${config.id}Time" style="color: ${colors.dark};">00:00</div>
                             <div class="text-xs text-gray-600">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-${config.color}-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                        <div class="h-full rounded-full transition-all" style="width: 0%; background-color: ${colors.main};"></div>
                     </div>
                     <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('${config.id}')" class="flex-1 px-4 py-2 bg-${config.color}-500 text-white rounded-lg hover:bg-${config.color}-600 transition font-bold">
+                        <button onclick="startTimer('${config.id}')" class="flex-1 px-4 py-2 text-white rounded-lg transition font-bold" style="background-color: ${colors.main};" onmouseover="this.style.backgroundColor='${colors.dark}'" onmouseout="this.style.backgroundColor='${colors.main}'">
                             <i class="fas fa-play mr-2"></i>시작
                         </button>
                         <button onclick="stopTimer('${config.id}')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
@@ -975,7 +987,10 @@
                     <div class="mt-2">
                         <textarea id="${config.id}Content" rows="2" 
                                   placeholder="오늘 학습한 내용을 기록하세요"
-                                  class="w-full px-3 py-2 text-sm border-2 border-${config.color}-200 rounded-lg focus:ring-2 focus:ring-${config.color}-500 focus:border-${config.color}-500"
+                                  class="w-full px-3 py-2 text-sm border-2 rounded-lg focus:outline-none"
+                                  style="border-color: ${colors.border};"
+                                  onfocus="this.style.borderColor='${colors.main}'; this.style.boxShadow='0 0 0 3px ${colors.bg}';"
+                                  onblur="this.style.borderColor='${colors.border}'; this.style.boxShadow='none';"
                                   onchange="saveStudyContent('${config.id}', this.value)"></textarea>
                     </div>
                 </div>
