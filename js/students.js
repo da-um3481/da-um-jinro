@@ -19,9 +19,36 @@ async function loadSchools() {
         // 기본 학교 데이터가 없으면 생성
         if (schools.length === 0) {
             const defaultSchools = [
-                {id: 'school_1', school_name: '근화여자중학교', school_type: 'middle_school'},
-                {id: 'school_2', school_name: 'DA.UM 다움학습센터', school_type: 'learning_center'},
-                {id: 'school_3', school_name: '개인 맞춤', school_type: 'individual'}
+                {
+                    id: 'school_1',
+                    school_name: '근화여자중학교',
+                    school_type: 'middle_school',
+                    contract_status: 'active',
+                    main_program: 'winter_30days',
+                    student_count: 30,
+                    monthly_fee: 1500000,
+                    contact_name: '담당선생님',
+                    contact_phone: '010-1234-5678',
+                    contract_start_date: '2025-01-05',
+                    contract_end_date: '2025-02-04',
+                    memo: '겨울방학 30일 프로그램',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+                {
+                    id: 'school_2',
+                    school_name: 'DA.UM 진로진학컨설팅',
+                    school_type: 'learning_center',
+                    contract_status: 'active',
+                    main_program: 'custom',
+                    student_count: 0,
+                    monthly_fee: 0,
+                    contact_name: '김은숙',
+                    contact_phone: '010-9876-5432',
+                    memo: '통합 학습 관리 시스템',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ];
             localStorage.setItem('schools', JSON.stringify(defaultSchools));
             schools.push(...defaultSchools);
