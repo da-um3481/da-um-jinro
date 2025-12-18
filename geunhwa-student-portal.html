@@ -575,13 +575,28 @@
         const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 (${days[today.getDay()]})`;
         document.getElementById('todayDate').textContent = dateStr;
 
+        // 중학생 일일 학습 목표 시간 계산
+        function getDailyTargetHours() {
+            const dayOfWeek = today.getDay(); // 0: 일요일, 1-5: 월-금, 6: 토요일
+            
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                // 월-금 (평일): 3시간 권장
+                return { hours: 3, label: '3시간 (평일)' };
+            } else {
+                // 토-일 (주말): 4시간 권장 (오전 2시간 + 오후 2시간)
+                return { hours: 4, label: '4시간 (주말)' };
+            }
+        }
+
         // 프로그램 진행 상태 관리
         function initProgramProgress() {
             const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
             const programStart = localStorage.getItem('programStartDate');
+            const targetInfo = getDailyTargetHours();
             
             if (!programStart) {
                 // 학습 시작 전 - 초기 상태
+                document.getElementById('dailyTarget').textContent = targetInfo.label;
                 document.getElementById('programDay').textContent = '학습 시작 전';
                 document.getElementById('progressPercent').textContent = '0%';
                 document.getElementById('progressDays').textContent = '0일 / 30일';
@@ -602,6 +617,7 @@
                 const endDate = new Date(startDate);
                 endDate.setDate(endDate.getDate() + 29); // 30일 프로그램
                 
+                document.getElementById('dailyTarget').textContent = targetInfo.label;
                 document.getElementById('programDay').textContent = `Day ${daysPassed}`;
                 document.getElementById('progressPercent').textContent = `${progressPercent}%`;
                 document.getElementById('progressDays').textContent = `${daysPassed}일 / 30일`;
@@ -618,9 +634,10 @@
         function startProgram() {
             const programStart = localStorage.getItem('programStartDate');
             if (!programStart) {
+                const targetInfo = getDailyTargetHours();
                 localStorage.setItem('programStartDate', today.toISOString());
                 isProgramStarted = initProgramProgress();
-                alert('🎉 30일 자기주도학습 프로그램이 시작되었습니다!\n\nDay 1부터 시작합니다. 화이팅! 💪');
+                alert(`🎉 30일 자기주도학습 프로그램이 시작되었습니다!\n\nDay 1부터 시작합니다. 화이팅! 💪\n\n📚 오늘 목표: ${targetInfo.label}\n✨ 추가 학습도 자유롭게 가능합니다!`);
             }
         }
         
