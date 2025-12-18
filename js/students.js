@@ -296,7 +296,14 @@ async function saveStudent() {
             const newStudent = {...studentData, id: newId, created_at: new Date().toISOString()};
             students.push(newStudent);
             localStorage.setItem('students', JSON.stringify(students));
-            alert(`✅ 학생이 등록되었습니다!\n\n이름: ${studentData.name}\n학년: ${studentData.grade}학년 ${studentData.class_num}반 ${studentData.student_num}번\n수준: ${studentData.level}`);
+            
+            // 🎯 학생 레벨에 맞는 교재 자동 할당
+            recommendMaterials(newId, studentData.level);
+            
+            // 🎯 주간 학습 스케줄 자동 생성
+            generateAutoScheduleForStudent(newId, studentData);
+            
+            alert(`✅ 학생이 등록되었습니다!\n\n이름: ${studentData.name}\n학년: ${studentData.grade}학년 ${studentData.class_num}반 ${studentData.student_num}번\n수준: ${studentData.level}\n\n✨ 맞춤형 교재와 학습 스케줄이 자동으로 생성되었습니다!`);
         }
         
         resetForm();
@@ -308,31 +315,70 @@ async function saveStudent() {
     }
 }
 
-// 수준별 교재 자동 추천
-async function recommendMaterials(studentId, level) {
+// 수준별 교재 자동 추천 (localStorage 기반)
+function recommendMaterials(studentId, level) {
     try {
-        // 해당 수준의 교재 가져오기
-        const response = await fetch('tables/materials?limit=100');
-        const data = await response.json();
+        // localStorage에서 교재 데이터 로드
+        const materials = JSON.parse(localStorage.getItem('materials')) || [];
         
-        const recommendedMaterials = data.data.filter(m => m.level === level);
+        // 레벨 매핑 (상급/중상/중하/기초 → 상/중/하)
+        let targetLevel = '중';
+        if (level === '상급' || level === '중상') {
+            targetLevel = '상';
+        } else if (level === '중하' || level === '기초') {
+            targetLevel = '하';
+        }
         
-        // 각 과목별로 1개씩 추천
+        // 해당 레벨의 교재 필터링
+        const recommendedMaterials = materials.filter(m => m.level === targetLevel);
+        
+        // 각 과목별로 교재 1개 + EBS강의 1개씩 추천
         const subjects = ['국어', '영어', '수학', '과학', '사회'];
         const assignments = [];
         
         for (const subject of subjects) {
-            const materialForSubject = recommendedMaterials.find(m => m.subject === subject);
-            if (materialForSubject) {
+            // 교재 추천
+            const bookForSubject = recommendedMaterials.find(m => m.subject === subject && m.type === '교재');
+            if (bookForSubject) {
                 assignments.push({
+                    id: `assign_${Date.now()}_${subject}_book`,
                     student_id: studentId,
-                    material_id: materialForSubject.id,
+                    material_id: bookForSubject.id,
+                    material_title: bookForSubject.title,
+                    material_type: '교재',
+                    subject: subject,
                     assigned_date: new Date().toISOString().split('T')[0],
                     status: '진행중',
-                    progress: 0
+                    progress: 0,
+                    created_at: new Date().toISOString()
+                });
+            }
+            
+            // EBS 강의 추천
+            const lectureForSubject = recommendedMaterials.find(m => m.subject === subject && m.type === 'EBS강의');
+            if (lectureForSubject) {
+                assignments.push({
+                    id: `assign_${Date.now()}_${subject}_lecture`,
+                    student_id: studentId,
+                    material_id: lectureForSubject.id,
+                    material_title: lectureForSubject.title,
+                    material_type: 'EBS강의',
+                    subject: subject,
+                    assigned_date: new Date().toISOString().split('T')[0],
+                    status: '진행중',
+                    progress: 0,
+                    created_at: new Date().toISOString()
                 });
             }
         }
+        
+        // localStorage에 저장
+        const existingAssignments = JSON.parse(localStorage.getItem('student_materials')) || [];
+        existingAssignments.push(...assignments);
+        localStorage.setItem('student_materials', JSON.stringify(existingAssignments));
+        
+        console.log(`✅ ${studentId}에게 ${assignments.length}개의 교재/강의가 자동 할당되었습니다.`);
+        return assignments;
         
         // 추천 교재 배정
         if (assignments.length > 0) {
@@ -474,4 +520,74 @@ function getLevelBadge(level) {
         '하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>'
     };
     return badges[level] || '<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">미정</span>';
+}
+
+// 🎯 학생 등록 시 자동 주간 스케줄 생성
+function generateAutoScheduleForStudent(studentId, studentData) {
+    try {
+        // localStorage에서 할당된 교재 가져오기
+        const studentMaterials = JSON.parse(localStorage.getItem('student_materials')) || [];
+        const myMaterials = studentMaterials.filter(m => m.student_id === studentId);
+        
+        // 30일 프로그램 주간 스케줄 생성
+        const schedules = [];
+        const subjects = ['국어', '영어', '수학', '과학', '사회'];
+        const days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+        
+        // 중학생 학습 시간 규칙: 평일 3시간, 주말 4시간 (2시간 오전 + 2시간 오후)
+        const studyHoursPerDay = {
+            '월요일': 3, '화요일': 3, '수요일': 3, '목요일': 3, '금요일': 3,
+            '토요일': 4, '일요일': 4
+        };
+        
+        // 4주간의 스케줄 생성
+        for (let week = 1; week <= 4; week++) {
+            for (const day of days) {
+                const isWeekend = day === '토요일' || day === '일요일';
+                const dailyHours = studyHoursPerDay[day];
+                
+                // 과목별 학습 시간 배분 (균등 배분)
+                const hoursPerSubject = dailyHours / subjects.length;
+                
+                const schedule = {
+                    id: `schedule_${studentId}_week${week}_${day}`,
+                    student_id: studentId,
+                    week: week,
+                    day: day,
+                    is_weekend: isWeekend,
+                    total_hours: dailyHours,
+                    subjects: {}
+                };
+                
+                // 각 과목별 학습 계획
+                subjects.forEach((subject, index) => {
+                    const material = myMaterials.find(m => m.subject === subject && m.material_type === '교재');
+                    const lecture = myMaterials.find(m => m.subject === subject && m.material_type === 'EBS강의');
+                    
+                    schedule.subjects[subject] = {
+                        hours: parseFloat(hoursPerSubject.toFixed(1)),
+                        material: material ? material.material_title : `${subject} 교재`,
+                        lecture: lecture ? lecture.material_title : `${subject} EBS 강의`,
+                        tasks: isWeekend ? 
+                            [`오전: ${subject} 개념 복습 (1시간)`, `오후: ${subject} 문제 풀이 (1시간)`] :
+                            [`${subject} 학교 수업 복습 및 문제 풀이`]
+                    };
+                });
+                
+                schedules.push(schedule);
+            }
+        }
+        
+        // localStorage에 저장
+        const existingSchedules = JSON.parse(localStorage.getItem('student_schedules')) || [];
+        existingSchedules.push(...schedules);
+        localStorage.setItem('student_schedules', JSON.stringify(existingSchedules));
+        
+        console.log(`✅ ${studentId}의 4주간 주간 스케줄 (${schedules.length}개)이 자동 생성되었습니다.`);
+        return schedules;
+        
+    } catch (error) {
+        console.error('스케줄 생성 오류:', error);
+        return [];
+    }
 }
