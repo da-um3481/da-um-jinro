@@ -1,18 +1,18 @@
 // ❄️ 겨울방학 30일 프로그램 - 주간 학습 스케줄 관리 스크립트 (localStorage 기반)
-// 평일 3시간 (09:00~12:00, 45분×4교시) + 주말 4시간 (오전2h+오후2h)
+// 평일 2시간 15분 (09:00~11:35, 45분×3교시+휴식20분) + 주말 4시간 (오전2h+오후2h)
 
 let currentStudent = null;
 let currentSchedule = null;
 
 // ⏰ 평일/주말 학습 시간 (분 단위)
-const WEEKDAY_HOURS = 3;    // 평일 3시간 (180분) - 09:00~12:00
-const WEEKEND_HOURS = 4;    // 주말 4시간 (240분) - 오전2h+오후2h
-const WEEKDAY_MINUTES = 180;
+const WEEKDAY_HOURS = 2.25;  // 평일 2시간 15분 (135분) - 09:00~11:35
+const WEEKEND_HOURS = 4;     // 주말 4시간 (240분) - 오전2h+오후2h
+const WEEKDAY_MINUTES = 135;
 const WEEKEND_MINUTES = 240;
 
-// 📚 평일 4교시, 주말 4교시 시스템
-const WEEKDAY_PERIODS = 4;  // 45분 × 4교시
-const WEEKEND_PERIODS = 4;  // 60분 × 4교시
+// 📚 평일 3교시, 주말 4교시 시스템
+const WEEKDAY_PERIODS = 3;   // 45분 × 3교시
+const WEEKEND_PERIODS = 4;   // 60분 × 4교시
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
@@ -119,7 +119,7 @@ function generateAutoSchedule() {
         localStorage.setItem('student_schedules', JSON.stringify(schedules));
         currentSchedule = scheduleData;
         
-        alert('✅ 주간 스케줄이 자동으로 생성되었습니다!\n\n평일: 3시간 (09:00~12:00, 45분×4교시)\n주말: 4시간 (오전2h+오후2h)\n주간 총 학습 시간: 23시간');
+        alert('✅ 주간 스케줄이 자동으로 생성되었습니다!\n\n평일: 2시간 15분 (09:00~11:35, 45분×3교시+휴식20분)\n주말: 4시간 (오전2h+오후2h)\n주간 총 학습 시간: 19시간 15분');
         displaySchedule();
         showSchedule();
         
@@ -129,18 +129,18 @@ function generateAutoSchedule() {
     }
 }
 
-// 📅 평일 스케줄 생성 (3시간 = 180분, 45분×4교시, 09:00~12:00)
+// 📅 평일 스케줄 생성 (2시간 15분 = 135분, 45분×3교시, 09:00~11:35)
 function generateWeekdaySchedule() {
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
     const schedule = {};
     
-    // 과목 순환 (4교시, 각 45분)
+    // 과목 순환 (3교시, 각 45분)
     const subjectRotation = [
-        ['수학', '영어', '국어', '과학'],   // 월: 수학, 영어, 국어, 과학
-        ['수학', '영어', '과학', '사회'],   // 화: 수학, 영어, 과학, 사회
-        ['수학', '영어', '국어', '사회'],   // 수: 수학, 영어, 국어, 사회
-        ['수학', '영어', '국어', '과학'],   // 목: 수학, 영어, 국어, 과학
-        ['수학', '영어', '과학', '복습']    // 금: 수학, 영어, 과학, 주간복습
+        ['수학', '영어', '국어'],   // 월: 수학, 영어, 국어
+        ['수학', '영어', '과학'],   // 화: 수학, 영어, 과학
+        ['수학', '영어', '사회'],   // 수: 수학, 영어, 사회
+        ['수학', '국어', '과학'],   // 목: 수학, 국어, 과학
+        ['수학', '영어', '복습']    // 금: 수학, 영어, 주간복습
     ];
     
     days.forEach((day, index) => {
@@ -166,18 +166,10 @@ function generateWeekdaySchedule() {
             {
                 time: '10:50-11:35',
                 duration: 45,
-                type: '3교시',
+                type: subjects[2] === '복습' ? '3교시 (주간복습)' : '3교시',
                 subject: subjects[2],
                 content: getSubjectContent(subjects[2], 3),
-                importance: '보통'
-            },
-            {
-                time: '11:45-12:30',
-                duration: 45,
-                type: subjects[3] === '복습' ? '4교시 (주간복습)' : '4교시',
-                subject: subjects[3],
-                content: getSubjectContent(subjects[3], 4),
-                importance: subjects[3] === '복습' ? '높음' : '보통'
+                importance: subjects[2] === '복습' ? '높음' : '보통'
             }
         ];
     });
