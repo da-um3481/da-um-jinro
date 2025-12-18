@@ -245,16 +245,16 @@
 
         <!-- 오늘의 날짜 & 목표 -->
         <div class="bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl shadow-xl p-6 text-white animate-slide-up">
-            <div class="flex items-center justify-between">
-                <div>
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex-shrink-0">
                     <p class="text-sm opacity-90 mb-1">오늘</p>
-                    <p class="text-2xl font-bold" id="todayDate">2025년 1월 12일 (일)</p>
+                    <p class="text-xl sm:text-2xl font-bold whitespace-nowrap" id="todayDate">2025년 1월 12일 (일)</p>
                 </div>
-                <div class="text-right">
+                <div class="text-right flex-shrink-0">
                     <p class="text-sm opacity-90 mb-1">오늘 목표</p>
-                    <div class="flex items-center space-x-2">
-                        <p class="text-2xl font-bold" id="dailyTarget">3.5시간</p>
-                        <span class="text-xs px-3 py-1 bg-white/20 rounded-full" id="programDay">Day 8</span>
+                    <div class="flex items-center space-x-2 justify-end">
+                        <p class="text-xl sm:text-2xl font-bold whitespace-nowrap" id="dailyTarget">3.5시간</p>
+                        <span class="text-xs px-2 sm:px-3 py-1 bg-white/20 rounded-full whitespace-nowrap" id="programDay">Day 8</span>
                     </div>
                 </div>
             </div>
@@ -510,8 +510,8 @@
 
         <!-- 주간 학습 통계 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-                <i class="fas fa-chart-bar text-purple-500 mr-2"></i>이번 주 학습 통계 (Week 2)
+            <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-bar text-purple-500 mr-2"></i><span class="whitespace-nowrap">이번 주 학습 통계</span> <span class="whitespace-nowrap">(Week 2)</span>
             </h3>
             <div class="grid grid-cols-7 gap-2">
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
