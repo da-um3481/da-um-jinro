@@ -109,25 +109,16 @@
                         id="studentSelect" 
                         placeholder="학생 이름 입력 (예: 김민준)"
                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
-                        onkeypress="if(event.key==='Enter') loadWeeklySchedule()"
                     >
                 </div>
                 <div class="flex items-end">
                     <button 
-                        onclick="loadWeeklySchedule()"
-                        class="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                        onclick="generateAutoSchedule()"
+                        class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                     >
-                        <i class="fas fa-search mr-2"></i>주간 일정 조회
+                        <i class="fas fa-magic mr-2"></i>자동 스케줄 생성
                     </button>
                 </div>
-            </div>
-            <div class="mt-4 flex space-x-3">
-                <button 
-                    onclick="generateAutoSchedule()"
-                    class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
-                >
-                    <i class="fas fa-magic mr-2"></i>자동 스케줄 생성
-                </button>
             </div>
         </div>
 
