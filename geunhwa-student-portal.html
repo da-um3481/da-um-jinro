@@ -349,192 +349,9 @@
                 <i class="fas fa-calendar-day text-purple-500 mr-2"></i>오늘의 학습 현황
             </h3>
             
-            <!-- 과목별 학습 현황 -->
-            <div class="space-y-4">
-                <!-- 수학 -->
-                <div class="p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white">
-                                <i class="fas fa-calculator"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-800">수학</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-black text-purple-700 timer-display" id="mathTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-blue-500 h-full rounded-full transition-all" style="width: 0%"></div>
-                    </div>
-                    <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('math')" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-purple-700 transition font-bold">
-                            <i class="fas fa-play mr-2"></i>시작
-                        </button>
-                        <button onclick="stopTimer('math')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
-                            <i class="fas fa-stop mr-2"></i>완료
-                        </button>
-                    </div>
-                    <!-- 학습 내용 입력 -->
-                    <div class="mt-2">
-                        <textarea id="mathContent" rows="2" 
-                                  placeholder="오늘 학습한 내용을 기록하세요 (예: 이차방정식 풀이, 51~58페이지)"
-                                  class="w-full px-3 py-2 text-sm border-2 border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                  onchange="saveStudyContent('math', this.value)"></textarea>
-                    </div>
-                </div>
-
-                <!-- 영어 -->
-                <div class="p-4 bg-green-50 rounded-xl border-2 border-green-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center text-white">
-                                <i class="fas fa-language"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-800">영어</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-black text-green-600 timer-display" id="englishTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-green-500 h-full rounded-full transition-all" style="width: 0%"></div>
-                    </div>
-                    <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('english')" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-bold">
-                            <i class="fas fa-play mr-2"></i>시작
-                        </button>
-                        <button onclick="stopTimer('english')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
-                            <i class="fas fa-stop mr-2"></i>완료
-                        </button>
-                    </div>
-                    <!-- 학습 내용 입력 -->
-                    <div class="mt-2">
-                        <textarea id="englishContent" rows="2" 
-                                  placeholder="오늘 학습한 내용을 기록하세요 (예: 현재완료 문법, Unit 3 단어 암기)"
-                                  class="w-full px-3 py-2 text-sm border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                  onchange="saveStudyContent('english', this.value)"></textarea>
-                    </div>
-                </div>
-
-                <!-- 국어 -->
-                <div class="p-4 bg-red-50 rounded-xl border-2 border-red-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white">
-                                <i class="fas fa-book"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-800">국어</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-black text-red-600 timer-display" id="koreanTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-red-500 h-full rounded-full transition-all" style="width: 0%"></div>
-                    </div>
-                    <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('korean')" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-bold">
-                            <i class="fas fa-play mr-2"></i>시작
-                        </button>
-                        <button onclick="stopTimer('korean')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
-                            <i class="fas fa-stop mr-2"></i>완료
-                        </button>
-                    </div>
-                    <!-- 학습 내용 입력 -->
-                    <div class="mt-2">
-                        <textarea id="koreanContent" rows="2" 
-                                  placeholder="오늘 학습한 내용을 기록하세요 (예: 문학 작품 분석, 문법 정리)"
-                                  class="w-full px-3 py-2 text-sm border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                  onchange="saveStudyContent('korean', this.value)"></textarea>
-                    </div>
-                </div>
-
-                <!-- 과학 -->
-                <div class="p-4 bg-purple-50 rounded-xl border-2 border-purple-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-white">
-                                <i class="fas fa-flask"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-800">과학</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-black text-purple-600 timer-display" id="scienceTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-purple-500 h-full rounded-full transition-all" style="width: 0%"></div>
-                    </div>
-                    <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('science')" class="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition font-bold">
-                            <i class="fas fa-play mr-2"></i>시작
-                        </button>
-                        <button onclick="stopTimer('science')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
-                            <i class="fas fa-stop mr-2"></i>완료
-                        </button>
-                    </div>
-                    <!-- 학습 내용 입력 -->
-                    <div class="mt-2">
-                        <textarea id="scienceContent" rows="2" 
-                                  placeholder="오늘 학습한 내용을 기록하세요 (예: 화학반응식, 실험 관찰)"
-                                  class="w-full px-3 py-2 text-sm border-2 border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                  onchange="saveStudyContent('science', this.value)"></textarea>
-                    </div>
-                </div>
-
-                <!-- 사회 -->
-                <div class="p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center text-white">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-800">사회</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-black text-yellow-600 timer-display" id="socialTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-yellow-500 h-full rounded-full transition-all" style="width: 0%"></div>
-                    </div>
-                    <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('social')" class="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-bold">
-                            <i class="fas fa-play mr-2"></i>시작
-                        </button>
-                        <button onclick="stopTimer('social')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
-                            <i class="fas fa-stop mr-2"></i>완료
-                        </button>
-                    </div>
-                    <!-- 학습 내용 입력 -->
-                    <div class="mt-2">
-                        <textarea id="socialContent" rows="2" 
-                                  placeholder="오늘 학습한 내용을 기록하세요 (예: 역사 연표, 지리 정리)"
-                                  class="w-full px-3 py-2 text-sm border-2 border-yellow-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
-                                  onchange="saveStudyContent('social', this.value)"></textarea>
-                    </div>
-                </div>
+            <!-- 과목별 학습 현황 (동적 생성) -->
+            <div id="todaySubjectsContainer" class="space-y-4">
+                <!-- 오늘의 과목이 동적으로 표시됩니다 -->
             </div>
 
             <!-- 오늘의 총 학습 시간 -->
@@ -918,7 +735,8 @@
                 'english': '영어',
                 'korean': '국어',
                 'science': '과학',
-                'social': '사회'
+                'social': '사회',
+                'review': '복습'
             };
             return names[subject] || subject;
         }
@@ -1041,6 +859,7 @@
             alert(`✅ ${student.name} 학생으로 로그인되었습니다!\n이제 학습을 시작할 수 있습니다.`);
 
             // 프로그램 진행률 새로고침
+            loadTodaySubjects(); // 오늘의 과목 다시 로드
             initProgramProgress();
         }
 
@@ -1059,7 +878,112 @@
             window.location.href = `winter-weekly-schedule.html?student=${studentId}`;
         }
 
+        // 오늘의 학습 과목 동적 생성
+        function loadTodaySubjects() {
+            const studentId = localStorage.getItem('currentStudentId');
+            if (!studentId) {
+                // 로그인 전에는 기본 과목 표시
+                displayDefaultSubjects();
+                return;
+            }
+
+            // 스케줄에서 오늘의 과목 가져오기
+            const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+            const studentSchedule = schedules.find(s => s.student_id === studentId);
+
+            if (!studentSchedule) {
+                // 스케줄이 없으면 기본 과목 표시
+                displayDefaultSubjects();
+                return;
+            }
+
+            // 오늘 요일 확인
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const today = dayNames[new Date().getDay()];
+            
+            const todaySchedule = studentSchedule.schedule[today];
+
+            if (!todaySchedule || todaySchedule.length === 0) {
+                // 오늘 스케줄이 없으면 기본 과목 표시
+                displayDefaultSubjects();
+                return;
+            }
+
+            // 오늘의 과목 추출 (중복 제거)
+            const subjects = [...new Set(todaySchedule.map(item => item.subject))];
+            displaySubjects(subjects);
+        }
+
+        // 기본 과목 표시 (스케줄이 없을 때)
+        function displayDefaultSubjects() {
+            const defaultSubjects = ['수학', '영어', '국어'];
+            displaySubjects(defaultSubjects);
+        }
+
+        // 과목 카드 동적 생성
+        function displaySubjects(subjects) {
+            const container = document.getElementById('todaySubjectsContainer');
+            container.innerHTML = '';
+
+            // 과목별 설정
+            const subjectConfig = {
+                '수학': { id: 'math', icon: 'calculator', color: 'blue' },
+                '영어': { id: 'english', icon: 'language', color: 'green' },
+                '국어': { id: 'korean', icon: 'book', color: 'red' },
+                '과학': { id: 'science', icon: 'flask', color: 'purple' },
+                '사회': { id: 'social', icon: 'globe', color: 'yellow' },
+                '복습': { id: 'review', icon: 'redo', color: 'indigo' }
+            };
+
+            subjects.forEach(subjectName => {
+                const config = subjectConfig[subjectName] || { id: 'other', icon: 'book-open', color: 'gray' };
+                const subjectCard = createSubjectCard(subjectName, config);
+                container.innerHTML += subjectCard;
+            });
+        }
+
+        // 과목 카드 HTML 생성
+        function createSubjectCard(subjectName, config) {
+            return `
+                <div class="p-4 bg-${config.color}-50 rounded-xl border-2 border-${config.color}-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-${config.color}-500 rounded-lg flex items-center justify-center text-white">
+                                <i class="fas fa-${config.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">${subjectName}</div>
+                                <div class="text-xs text-gray-600">목표: 45분</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-${config.color}-600 timer-display" id="${config.id}Time">00:00</div>
+                            <div class="text-xs text-gray-600">0 / 45분</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div class="bg-${config.color}-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="flex space-x-2 mb-3">
+                        <button onclick="startTimer('${config.id}')" class="flex-1 px-4 py-2 bg-${config.color}-500 text-white rounded-lg hover:bg-${config.color}-600 transition font-bold">
+                            <i class="fas fa-play mr-2"></i>시작
+                        </button>
+                        <button onclick="stopTimer('${config.id}')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
+                            <i class="fas fa-stop mr-2"></i>완료
+                        </button>
+                    </div>
+                    <div class="mt-2">
+                        <textarea id="${config.id}Content" rows="2" 
+                                  placeholder="오늘 학습한 내용을 기록하세요"
+                                  class="w-full px-3 py-2 text-sm border-2 border-${config.color}-200 rounded-lg focus:ring-2 focus:ring-${config.color}-500 focus:border-${config.color}-500"
+                                  onchange="saveStudyContent('${config.id}', this.value)"></textarea>
+                    </div>
+                </div>
+            `;
+        }
+
         // 페이지 로드 시 초기화
+        loadTodaySubjects(); // 오늘의 과목 로드
         initProgramProgress();
         loadTeacherFeedback(); // 피드백 로드
     </script>
