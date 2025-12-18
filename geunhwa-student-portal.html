@@ -962,6 +962,37 @@
             `;
         }
 
+        // 학생 이름으로 로그인
+        function loadStudentByName() {
+            const nameInput = document.getElementById('studentNameInput').value.trim();
+            
+            if (!nameInput) {
+                alert('이름을 입력해주세요!');
+                return;
+            }
+
+            // 학생 목록에서 찾기
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => s.name === nameInput);
+
+            if (!student) {
+                alert('등록된 학생을 찾을 수 없습니다.\n이름을 정확히 입력했는지 확인해주세요.');
+                return;
+            }
+
+            // localStorage에 현재 학생 정보 저장
+            localStorage.setItem('currentStudentId', student.id);
+            localStorage.setItem('currentStudentName', student.name);
+
+            // 학생 정보 표시 업데이트
+            document.getElementById('studentInfo').textContent = `📚 ${student.name} (${student.grade}학년 ${student.class_num}반)`;
+
+            alert(`✅ ${student.name} 학생으로 로그인되었습니다!\n이제 학습을 시작할 수 있습니다.`);
+
+            // 프로그램 진행률 새로고침
+            initProgramProgress();
+        }
+
         // 30일 주간 스케줄 열기
         function openWeeklySchedule() {
             const studentId = localStorage.getItem('currentStudentId');
