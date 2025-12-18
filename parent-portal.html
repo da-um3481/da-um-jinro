@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학부모 조회 페이지 - DA.UM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Malgun Gothic', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+</head>
+<body class="p-4">
+    <div class="max-w-4xl mx-auto">
+        <!-- 헤더 -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-6 mb-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg bg-white p-1" onerror="this.style.display='none'">
+                <div>
+                    <h1 class="text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                        DA.UM 학부모 포털
+                    </h1>
+                    <p class="text-sm text-gray-600">자녀 학습 현황 조회</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 bg-blue-50 border-l-4 border-blue-400 p-3 rounded">
+                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                자녀의 이름을 입력하시면 학습 현황을 확인하실 수 있습니다.
+            </p>
+        </div>
+
+        <!-- 학생 이름 입력 -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-6 mb-6">
+            <label class="block text-lg font-bold text-gray-800 mb-3">
+                <i class="fas fa-user text-purple-600 mr-2"></i>자녀 이름 입력
+            </label>
+            <div class="flex space-x-3">
+                <input type="text" id="studentNameInput" 
+                       placeholder="예: 홍길동"
+                       class="flex-1 px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                       onkeypress="if(event.key==='Enter') searchStudent()">
+                <button onclick="searchStudent()" 
+                        class="px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-xl font-bold hover:from-purple-600 hover:to-blue-700 transition shadow-lg">
+                    <i class="fas fa-search mr-2"></i>조회하기
+                </button>
+            </div>
+        </div>
+
+        <!-- 학생 정보 (숨김) -->
+        <div id="studentInfoCard" class="hidden glass-effect rounded-2xl shadow-2xl p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-user-graduate text-purple-600 mr-2"></i>학생 정보
+                </h2>
+                <span id="studentLevel" class="px-4 py-2 bg-purple-100 text-purple-800 rounded-full font-bold text-sm"></span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">이름</div>
+                    <div class="text-xl font-bold text-blue-900" id="infoName">-</div>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">학년/반</div>
+                    <div class="text-xl font-bold text-green-900" id="infoGrade">-</div>
+                </div>
+                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">평균 점수</div>
+                    <div class="text-xl font-bold text-purple-900" id="infoAvg">-</div>
+                </div>
+                <div class="text-center p-4 bg-orange-50 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">프로그램</div>
+                    <div class="text-xl font-bold text-orange-900" id="infoProgram">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 학습 통계 (숨김) -->
+        <div id="studyStatsCard" class="hidden glass-effect rounded-2xl shadow-2xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-line text-green-600 mr-2"></i>최근 4주 학습 통계
+            </h2>
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-lg">
+                    <div class="text-3xl font-bold mb-2" id="statDays">0일</div>
+                    <div class="text-sm opacity-90">학습일수</div>
+                </div>
+                <div class="text-center p-6 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-lg">
+                    <div class="text-3xl font-bold mb-2" id="statHours">0시간</div>
+                    <div class="text-sm opacity-90">총 학습시간</div>
+                </div>
+                <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-lg">
+                    <div class="text-3xl font-bold mb-2" id="statAvg">0시간</div>
+                    <div class="text-sm opacity-90">일평균</div>
+                </div>
+            </div>
+            
+            <h3 class="font-bold text-gray-700 mb-3">과목별 학습시간</h3>
+            <div id="subjectStats" class="space-y-2">
+                <!-- 동적으로 생성됨 -->
+            </div>
+        </div>
+
+        <!-- 선생님 피드백 (숨김) -->
+        <div id="feedbackCard" class="hidden glass-effect rounded-2xl shadow-2xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-comments text-blue-600 mr-2"></i>선생님 피드백
+            </h2>
+            <div id="feedbackList">
+                <!-- 동적으로 생성됨 -->
+            </div>
+        </div>
+
+        <!-- 기록 없음 메시지 (숨김) -->
+        <div id="noRecordsCard" class="hidden glass-effect rounded-2xl shadow-2xl p-12 text-center">
+            <div class="text-6xl mb-4">📚</div>
+            <p class="text-xl font-bold text-gray-700 mb-2">학습 기록이 없습니다</p>
+            <p class="text-gray-500">아직 학습을 시작하지 않았거나 이름이 정확하지 않습니다</p>
+        </div>
+    </div>
+
+    <script>
+        function searchStudent() {
+            const nameInput = document.getElementById('studentNameInput').value.trim();
+            
+            if (!nameInput) {
+                alert('자녀의 이름을 입력해주세요.');
+                return;
+            }
+
+            // 학생 검색
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => s.name === nameInput);
+
+            if (!student) {
+                alert('등록된 학생을 찾을 수 없습니다.\n이름을 정확히 입력했는지 확인해주세요.');
+                hideAllCards();
+                return;
+            }
+
+            // 학생 정보 표시
+            displayStudentInfo(student);
+            
+            // 학습 통계 표시
+            displayStudyStats(student.id);
+            
+            // 피드백 표시
+            displayFeedback(student.id);
+        }
+
+        function displayStudentInfo(student) {
+            document.getElementById('studentInfoCard').classList.remove('hidden');
+            
+            document.getElementById('infoName').textContent = student.name;
+            document.getElementById('infoGrade').textContent = `${student.grade}학년 ${student.class_num}반`;
+            
+            const avg = (
+                (student.korean_score || 0) +
+                (student.english_score || 0) +
+                (student.math_score || 0) +
+                (student.science_score || 0) +
+                (student.social_score || 0)
+            ) / 5;
+            
+            document.getElementById('infoAvg').textContent = avg.toFixed(1) + '점';
+            document.getElementById('studentLevel').textContent = '📚 ' + student.level;
+            
+            const programNames = {
+                'winter_30days': '겨울방학 30일',
+                'regular_100days': '정규학기 100일',
+                'custom': '맞춤형'
+            };
+            document.getElementById('infoProgram').textContent = programNames[student.program_type] || student.program_type;
+        }
+
+        function displayStudyStats(studentId) {
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const today = new Date();
+            const fourWeeksAgo = new Date(today.getTime() - 28 * 24 * 60 * 60 * 1000);
+            
+            const recentRecords = studyRecords.filter(r => {
+                if (r.student_id !== studentId) return false;
+                const recordDate = new Date(r.date);
+                return recordDate >= fourWeeksAgo && recordDate <= today;
+            });
+
+            if (recentRecords.length === 0) {
+                document.getElementById('studyStatsCard').classList.add('hidden');
+                document.getElementById('noRecordsCard').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('studyStatsCard').classList.remove('hidden');
+            document.getElementById('noRecordsCard').classList.add('hidden');
+
+            // 통계 계산
+            let totalMinutes = 0;
+            const subjectTotals = {};
+            
+            recentRecords.forEach(record => {
+                for (const [subject, data] of Object.entries(record.subjects || {})) {
+                    const time = data.time || 0;
+                    totalMinutes += time;
+                    subjectTotals[subject] = (subjectTotals[subject] || 0) + time;
+                }
+            });
+
+            const totalHours = (totalMinutes / 60).toFixed(1);
+            const avgHours = recentRecords.length > 0 ? (totalMinutes / 60 / recentRecords.length).toFixed(1) : 0;
+
+            document.getElementById('statDays').textContent = recentRecords.length + '일';
+            document.getElementById('statHours').textContent = totalHours + '시간';
+            document.getElementById('statAvg').textContent = avgHours + '시간';
+
+            // 과목별 통계
+            const subjectNames = {
+                'math': '수학', 'english': '영어', 'korean': '국어',
+                'science': '과학', 'social': '사회'
+            };
+            const subjectColors = {
+                'math': 'blue', 'english': 'green', 'korean': 'red',
+                'science': 'purple', 'social': 'yellow'
+            };
+
+            const subjectStatsHTML = Object.entries(subjectTotals)
+                .sort((a, b) => b[1] - a[1])
+                .map(([subject, minutes]) => {
+                    const name = subjectNames[subject] || subject;
+                    const color = subjectColors[subject] || 'gray';
+                    const hours = (minutes / 60).toFixed(1);
+                    const percentage = totalMinutes > 0 ? ((minutes / totalMinutes) * 100).toFixed(0) : 0;
+                    
+                    return `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-20 font-bold text-${color}-700">${name}</div>
+                            <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                <div class="bg-${color}-500 h-full flex items-center justify-end pr-2 text-xs text-white font-bold" style="width: ${percentage}%">
+                                    ${percentage}%
+                                </div>
+                            </div>
+                            <div class="w-24 text-right text-sm font-bold text-gray-700">${hours}시간</div>
+                        </div>
+                    `;
+                }).join('');
+
+            document.getElementById('subjectStats').innerHTML = subjectStatsHTML;
+        }
+
+        function displayFeedback(studentId) {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            const studentFeedbacks = feedbacks.filter(f => f.student_id === studentId);
+            
+            studentFeedbacks.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            if (studentFeedbacks.length === 0) {
+                document.getElementById('feedbackCard').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('feedbackCard').classList.remove('hidden');
+
+            const feedbackHTML = studentFeedbacks.slice(0, 5).map(fb => {
+                const date = new Date(fb.created_at);
+                const dateStr = `${date.getMonth() + 1}월 ${date.getDate()}일`;
+                
+                return `
+                    <div class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-blue-900">📅 ${dateStr} (${fb.week_number}주차)</span>
+                            <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">선생님 피드백</span>
+                        </div>
+                        ${fb.praise ? `<p class="text-sm text-gray-700 mb-2"><strong class="text-yellow-600">⭐ 칭찬:</strong> ${fb.praise}</p>` : ''}
+                        ${fb.improvement ? `<p class="text-sm text-gray-700 mb-2"><strong class="text-orange-600">💡 개선:</strong> ${fb.improvement}</p>` : ''}
+                        ${fb.encouragement ? `<p class="text-sm text-gray-700"><strong class="text-green-600">💪 응원:</strong> ${fb.encouragement}</p>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('feedbackList').innerHTML = feedbackHTML +
+                (studentFeedbacks.length > 5 ? `<p class="text-center text-sm text-gray-500 mt-4">총 ${studentFeedbacks.length}개의 피드백 (최근 5개 표시)</p>` : '');
+        }
+
+        function hideAllCards() {
+            document.getElementById('studentInfoCard').classList.add('hidden');
+            document.getElementById('studyStatsCard').classList.add('hidden');
+            document.getElementById('feedbackCard').classList.add('hidden');
+            document.getElementById('noRecordsCard').classList.remove('hidden');
+        }
+
+        // 초기 상태
+        hideAllCards();
+        document.getElementById('noRecordsCard').classList.add('hidden');
+    </script>
+</body>
+</html>

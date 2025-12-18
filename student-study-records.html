@@ -68,6 +68,83 @@
             </div>
         </div>
 
+        <!-- 주간 요약 & 피드백 섹션 -->
+        <div id="weeklySummaryContainer" class="hidden mb-6">
+            <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg shadow-lg p-6 mb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold">
+                        <i class="fas fa-calendar-week mr-2"></i>이번 주 학습 요약
+                    </h2>
+                    <button onclick="generate4WeekReport()" class="px-6 py-3 bg-white text-green-600 rounded-lg font-bold hover:bg-green-50 transition shadow-lg">
+                        <i class="fas fa-file-pdf mr-2"></i>4주 보고서 생성
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white/20 rounded-lg p-4">
+                        <div class="text-sm opacity-90">총 학습일</div>
+                        <div class="text-3xl font-bold" id="weeklyDays">0일</div>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-4">
+                        <div class="text-sm opacity-90">총 학습시간</div>
+                        <div class="text-3xl font-bold" id="weeklyHours">0시간</div>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-4">
+                        <div class="text-sm opacity-90">일평균</div>
+                        <div class="text-3xl font-bold" id="weeklyAvg">0시간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주간 피드백 작성 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold">
+                        <i class="fas fa-comment-dots text-blue-600 mr-2"></i>주간 피드백 작성
+                    </h3>
+                    <span class="text-sm text-gray-500">학생 포털에서 확인 가능</span>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-star text-yellow-500 mr-1"></i>칭찬할 점
+                        </label>
+                        <textarea id="feedbackPraise" rows="2" 
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  placeholder="이번 주 학생이 잘한 점, 칭찬할 부분을 작성하세요..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lightbulb text-orange-500 mr-1"></i>개선 제안
+                        </label>
+                        <textarea id="feedbackImprovement" rows="2" 
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  placeholder="앞으로 개선하면 좋을 점을 작성하세요..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-heart text-red-500 mr-1"></i>응원 메시지
+                        </label>
+                        <textarea id="feedbackEncouragement" rows="2" 
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  placeholder="학생에게 전하는 응원의 메시지를 작성하세요..."></textarea>
+                    </div>
+                    
+                    <button onclick="saveFeedback()" 
+                            class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-bold hover:from-blue-600 hover:to-purple-700 transition shadow-lg">
+                        <i class="fas fa-save mr-2"></i>피드백 저장하기
+                    </button>
+                </div>
+
+                <!-- 기존 피드백 목록 -->
+                <div id="feedbackHistory" class="mt-6">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+        </div>
+
         <!-- 학습 기록 목록 -->
         <div id="recordsContainer" class="hidden">
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -121,6 +198,7 @@
             
             if (!studentId) {
                 document.getElementById('studentInfo').classList.add('hidden');
+                document.getElementById('weeklySummaryContainer').classList.add('hidden');
                 document.getElementById('recordsContainer').classList.add('hidden');
                 document.getElementById('noRecords').classList.add('hidden');
                 return;
@@ -153,6 +231,7 @@
             const studentRecords = studyRecords.filter(r => r.student_id === studentId);
             
             if (studentRecords.length === 0) {
+                document.getElementById('weeklySummaryContainer').classList.add('hidden');
                 document.getElementById('recordsContainer').classList.add('hidden');
                 document.getElementById('noRecords').classList.remove('hidden');
                 return;
@@ -161,11 +240,153 @@
             // 날짜순 정렬 (최신순)
             studentRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+            document.getElementById('weeklySummaryContainer').classList.remove('hidden');
             document.getElementById('recordsContainer').classList.remove('hidden');
             document.getElementById('noRecords').classList.add('hidden');
             document.getElementById('totalRecords').textContent = studentRecords.length;
 
+            // 주간 요약 계산
+            calculateWeeklySummary(studentRecords);
+            
+            // 기존 피드백 로드
+            loadFeedbackHistory(studentId);
+
             displayRecords(studentRecords);
+        }
+
+        // 주간 요약 계산 (최근 7일)
+        function calculateWeeklySummary(records) {
+            const today = new Date();
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            
+            const weeklyRecords = records.filter(r => {
+                const recordDate = new Date(r.date);
+                return recordDate >= weekAgo && recordDate <= today;
+            });
+
+            let totalMinutes = 0;
+            weeklyRecords.forEach(record => {
+                for (const subject of Object.values(record.subjects || {})) {
+                    totalMinutes += subject.time || 0;
+                }
+            });
+
+            const totalHours = (totalMinutes / 60).toFixed(1);
+            const avgHours = weeklyRecords.length > 0 ? (totalMinutes / 60 / weeklyRecords.length).toFixed(1) : 0;
+
+            document.getElementById('weeklyDays').textContent = `${weeklyRecords.length}일`;
+            document.getElementById('weeklyHours').textContent = `${totalHours}시간`;
+            document.getElementById('weeklyAvg').textContent = `${avgHours}시간`;
+        }
+
+        // 피드백 저장
+        function saveFeedback() {
+            const studentId = document.getElementById('studentSelect').value;
+            if (!studentId) {
+                alert('학생을 선택해주세요.');
+                return;
+            }
+
+            const praise = document.getElementById('feedbackPraise').value.trim();
+            const improvement = document.getElementById('feedbackImprovement').value.trim();
+            const encouragement = document.getElementById('feedbackEncouragement').value.trim();
+
+            if (!praise && !improvement && !encouragement) {
+                alert('피드백 내용을 입력해주세요.');
+                return;
+            }
+
+            const feedback = {
+                id: `feedback_${Date.now()}`,
+                student_id: studentId,
+                date: new Date().toISOString().split('T')[0],
+                created_at: new Date().toISOString(),
+                praise: praise,
+                improvement: improvement,
+                encouragement: encouragement,
+                week_number: getWeekNumber(new Date())
+            };
+
+            // localStorage에 저장
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            feedbacks.push(feedback);
+            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+
+            alert('✅ 피드백이 저장되었습니다! 학생 포털에서 확인할 수 있습니다.');
+
+            // 입력 필드 초기화
+            document.getElementById('feedbackPraise').value = '';
+            document.getElementById('feedbackImprovement').value = '';
+            document.getElementById('feedbackEncouragement').value = '';
+
+            // 피드백 히스토리 새로고침
+            loadFeedbackHistory(studentId);
+        }
+
+        // 피드백 히스토리 로드
+        function loadFeedbackHistory(studentId) {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            const studentFeedbacks = feedbacks.filter(f => f.student_id === studentId);
+            
+            // 최신순 정렬
+            studentFeedbacks.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            const container = document.getElementById('feedbackHistory');
+            
+            if (studentFeedbacks.length === 0) {
+                container.innerHTML = `
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg text-center text-gray-500">
+                        아직 작성된 피드백이 없습니다.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <h4 class="font-bold text-gray-700 mb-3 mt-6">
+                    <i class="fas fa-history mr-2"></i>피드백 이력 (총 ${studentFeedbacks.length}개)
+                </h4>
+                <div class="space-y-3">
+                    ${studentFeedbacks.map(fb => {
+                        const date = new Date(fb.created_at);
+                        const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+                        
+                        return `
+                            <div class="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-blue-900">📅 ${dateStr} (${fb.week_number}주차)</span>
+                                    <button onclick="deleteFeedback('${fb.id}')" class="text-sm text-red-500 hover:text-red-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                ${fb.praise ? `<p class="text-sm text-gray-700 mb-1"><strong>칭찬:</strong> ${fb.praise}</p>` : ''}
+                                ${fb.improvement ? `<p class="text-sm text-gray-700 mb-1"><strong>개선:</strong> ${fb.improvement}</p>` : ''}
+                                ${fb.encouragement ? `<p class="text-sm text-gray-700"><strong>응원:</strong> ${fb.encouragement}</p>` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // 피드백 삭제
+        function deleteFeedback(feedbackId) {
+            if (!confirm('이 피드백을 삭제하시겠습니까?')) return;
+
+            let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            feedbacks = feedbacks.filter(f => f.id !== feedbackId);
+            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+
+            const studentId = document.getElementById('studentSelect').value;
+            loadFeedbackHistory(studentId);
+            alert('피드백이 삭제되었습니다.');
+        }
+
+        // 주차 계산
+        function getWeekNumber(date) {
+            const startOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - startOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
         }
 
         // 학습 기록 표시
@@ -232,6 +453,219 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // 4주 보고서 생성
+        function generate4WeekReport() {
+            const studentId = document.getElementById('studentSelect').value;
+            if (!studentId) {
+                alert('학생을 선택해주세요.');
+                return;
+            }
+
+            // 학생 정보
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => s.id === studentId);
+
+            // 최근 4주 (28일) 데이터 수집
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const today = new Date();
+            const fourWeeksAgo = new Date(today.getTime() - 28 * 24 * 60 * 60 * 1000);
+            
+            const recentRecords = studyRecords.filter(r => {
+                if (r.student_id !== studentId) return false;
+                const recordDate = new Date(r.date);
+                return recordDate >= fourWeeksAgo && recordDate <= today;
+            });
+
+            // 피드백 수집
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            const recentFeedbacks = feedbacks.filter(f => {
+                if (f.student_id !== studentId) return false;
+                const feedbackDate = new Date(f.created_at);
+                return feedbackDate >= fourWeeksAgo && feedbackDate <= today;
+            });
+
+            // 통계 계산
+            let totalMinutes = 0;
+            const subjectTotals = {};
+            
+            recentRecords.forEach(record => {
+                for (const [subject, data] of Object.entries(record.subjects || {})) {
+                    const time = data.time || 0;
+                    totalMinutes += time;
+                    subjectTotals[subject] = (subjectTotals[subject] || 0) + time;
+                }
+            });
+
+            const totalHours = (totalMinutes / 60).toFixed(1);
+            const avgDailyHours = recentRecords.length > 0 ? (totalMinutes / 60 / recentRecords.length).toFixed(1) : 0;
+
+            // 보고서 HTML 생성
+            const reportHTML = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4주 학습 보고서 - ${student.name}</title>
+    <style>
+        @media print {
+            @page { margin: 1cm; }
+            body { margin: 0; }
+            .no-print { display: none !important; }
+        }
+        * { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; padding: 20px; }
+        .report-container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 3px solid #667eea; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; color: #667eea; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 14px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 20px; color: #333; border-left: 4px solid #667eea; padding-left: 12px; margin-bottom: 15px; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .info-box { padding: 15px; background: #f8f9ff; border-radius: 8px; border-left: 3px solid #667eea; }
+        .info-label { font-size: 12px; color: #666; margin-bottom: 5px; }
+        .info-value { font-size: 24px; font-weight: bold; color: #667eea; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; }
+        .stat-number { font-size: 32px; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 14px; opacity: 0.9; }
+        .subject-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .subject-table th, .subject-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        .subject-table th { background: #f8f9ff; color: #667eea; font-weight: bold; }
+        .feedback-box { padding: 15px; background: #fff8e1; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #ffc107; }
+        .feedback-date { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .feedback-content { font-size: 14px; color: #333; line-height: 1.6; }
+        .signature-area { margin-top: 50px; text-align: right; }
+        .signature-line { display: inline-block; width: 200px; border-top: 1px solid #333; padding-top: 10px; margin-top: 20px; }
+        .print-btn { background: #667eea; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin: 20px auto; display: block; }
+        .print-btn:hover { background: #5568d3; }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">📄 인쇄하기 / PDF 저장</button>
+    
+    <div class="report-container">
+        <div class="header">
+            <h1>📊 4주 학습 보고서</h1>
+            <p>${new Date().getFullYear()}년 ${new Date().getMonth() + 1}월 ${new Date().getDate()}일 작성</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">학생 정보</h2>
+            <div class="info-grid">
+                <div class="info-box">
+                    <div class="info-label">학생명</div>
+                    <div class="info-value">${student.name}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">학년/반</div>
+                    <div class="info-value">${student.grade}학년 ${student.class_num}반</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">평균 점수</div>
+                    <div class="info-value">${((student.korean_score || 0) + (student.english_score || 0) + (student.math_score || 0) + (student.science_score || 0) + (student.social_score || 0)) / 5}점</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">학습 레벨</div>
+                    <div class="info-value">${student.level}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">학습 통계 (최근 4주)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">${recentRecords.length}</div>
+                    <div class="stat-label">학습일수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalHours}</div>
+                    <div class="stat-label">총 학습시간</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${avgDailyHours}</div>
+                    <div class="stat-label">일평균 시간</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">과목별 학습 시간</h2>
+            <table class="subject-table">
+                <thead>
+                    <tr>
+                        <th>과목</th>
+                        <th>총 학습시간</th>
+                        <th>비율</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${Object.entries(subjectTotals).map(([subject, minutes]) => {
+                        const subjectNames = {
+                            'math': '수학', 'english': '영어', 'korean': '국어',
+                            'science': '과학', 'social': '사회'
+                        };
+                        const hours = (minutes / 60).toFixed(1);
+                        const percentage = totalMinutes > 0 ? ((minutes / totalMinutes) * 100).toFixed(1) : 0;
+                        return `
+                            <tr>
+                                <td><strong>${subjectNames[subject] || subject}</strong></td>
+                                <td>${hours}시간 (${minutes}분)</td>
+                                <td>${percentage}%</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">선생님 피드백 (총 ${recentFeedbacks.length}회)</h2>
+            ${recentFeedbacks.length === 0 ? 
+                '<p style="color: #999; text-align: center; padding: 20px;">작성된 피드백이 없습니다.</p>' :
+                recentFeedbacks.map(fb => {
+                    const date = new Date(fb.created_at);
+                    const dateStr = `${date.getMonth() + 1}월 ${date.getDate()}일`;
+                    return `
+                        <div class="feedback-box">
+                            <div class="feedback-date">📅 ${dateStr} (${fb.week_number}주차)</div>
+                            ${fb.praise ? `<div class="feedback-content"><strong>✨ 칭찬:</strong> ${fb.praise}</div>` : ''}
+                            ${fb.improvement ? `<div class="feedback-content"><strong>💡 개선:</strong> ${fb.improvement}</div>` : ''}
+                            ${fb.encouragement ? `<div class="feedback-content"><strong>💪 응원:</strong> ${fb.encouragement}</div>` : ''}
+                        </div>
+                    `;
+                }).join('')
+            }
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">종합 의견</h2>
+            <div style="padding: 20px; background: #f8f9ff; border-radius: 8px; line-height: 1.8;">
+                ${student.name} 학생은 최근 4주 동안 총 ${recentRecords.length}일 학습하였으며, 
+                총 ${totalHours}시간의 학습 시간을 기록하였습니다. 
+                일평균 ${avgDailyHours}시간의 꾸준한 학습 패턴을 보이고 있습니다.
+                ${recentFeedbacks.length > 0 ? '선생님의 정기적인 피드백을 통해 지속적인 학습 동기를 유지하고 있습니다.' : ''}
+            </div>
+        </div>
+
+        <div class="signature-area">
+            <div>DA.UM 다움진로진학컨설팅</div>
+            <div class="signature-line">담당 교사 (인)</div>
+        </div>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">📄 인쇄하기 / PDF 저장</button>
+</body>
+</html>
+            `;
+
+            // 새 창에서 보고서 열기
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(reportHTML);
+            reportWindow.document.close();
         }
     </script>
 </body>
