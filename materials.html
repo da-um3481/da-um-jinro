@@ -20,31 +20,40 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- 상단 네비게이션 -->
-    <nav class="bg-indigo-600 text-white shadow-lg">
+    <!-- 상단 헤더 - DA.UM 아이덴티티 -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold">📚 공부를 어떻게 할지 모르겠어요~~</h1>
-                    <p class="text-sm text-indigo-200">교재 및 강의 관리</p>
+                <!-- 로고 및 타이틀 (왼편 배치) -->
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl shadow-lg bg-white p-1" onerror="this.style.display='none'">
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black">DA.UM 교재 관리</h1>
+                        <p class="text-xs sm:text-sm text-indigo-100 font-medium">Materials & Lecture Management</p>
+                    </div>
                 </div>
-                <div class="flex space-x-4">
-                    <a href="index.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                <!-- 네비게이션 -->
+                <nav class="hidden md:flex space-x-2">
+                    <a href="index.html" class="px-4 py-2 hover:bg-white/20 rounded-lg transition">
                         <i class="fas fa-home mr-2"></i>대시보드
                     </a>
-                    <a href="students.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                    <a href="students.html" class="px-4 py-2 hover:bg-white/20 rounded-lg transition">
                         <i class="fas fa-users mr-2"></i>학생 관리
                     </a>
-                    <a href="lessons.html" class="px-4 py-2 hover:bg-indigo-700 rounded-lg transition">
+                    <a href="lessons.html" class="px-4 py-2 hover:bg-white/20 rounded-lg transition">
                         <i class="fas fa-book mr-2"></i>수업 관리
                     </a>
-                    <a href="materials.html" class="px-4 py-2 bg-indigo-700 rounded-lg hover:bg-indigo-800 transition">
+                    <a href="materials.html" class="px-4 py-2 bg-white/30 rounded-lg transition">
                         <i class="fas fa-book-open mr-2"></i>교재 관리
                     </a>
-                </div>
+                </nav>
+                <!-- 모바일 메뉴 -->
+                <button onclick="window.location.href='index.html'" class="md:hidden px-3 py-2 hover:bg-white/20 rounded-lg transition">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- 메인 컨텐츠 -->
     <div class="container mx-auto px-4 py-8">
