@@ -13,9 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
 // 학교 목록 로드
 async function loadSchools() {
     try {
-        const response = await fetch('tables/schools?limit=100');
-        const data = await response.json();
-        const schools = data.data || [];
+        // localStorage에서 학교 데이터 로드
+        const schools = JSON.parse(localStorage.getItem('schools') || '[]');
+        
+        // 기본 학교 데이터가 없으면 생성
+        if (schools.length === 0) {
+            const defaultSchools = [
+                {id: 'school_1', school_name: '근화여자중학교', school_type: 'middle_school'},
+                {id: 'school_2', school_name: 'DA.UM 다움학습센터', school_type: 'learning_center'},
+                {id: 'school_3', school_name: '개인 맞춤', school_type: 'individual'}
+            ];
+            localStorage.setItem('schools', JSON.stringify(defaultSchools));
+            schools.push(...defaultSchools);
+        }
 
         // 등록 폼용
         const schoolSelect = document.getElementById('schoolId');
@@ -49,6 +59,7 @@ async function loadSchools() {
         });
     } catch (error) {
         console.error('학교 목록 로드 오류:', error);
+        alert('학교 목록 로드 실패: ' + error.message);
     }
 }
 
@@ -143,15 +154,14 @@ function getLevelColor(level) {
 // 학생 목록 로드
 async function loadStudents() {
     try {
-        const response = await fetch('tables/students?limit=1000');
-        const data = await response.json();
-        allStudents = data.data || [];
+        // localStorage에서 학생 데이터 로드
+        allStudents = JSON.parse(localStorage.getItem('students') || '[]');
         document.getElementById('totalStudents').textContent = allStudents.length;
         document.getElementById('filteredStudents').textContent = allStudents.length;
         displayStudents(allStudents);
     } catch (error) {
         console.error('학생 목록 로드 오류:', error);
-        alert('학생 목록을 불러오는데 실패했습니다.');
+        alert('학생 목록을 불러오는데 실패했습니다: ' + error.message);
     }
 }
 
@@ -241,33 +251,25 @@ async function saveStudent() {
                                    studentData.math_score + studentData.science_score + 
                                    studentData.social_score;
         
+        // localStorage에서 기존 학생 데이터 로드
+        const students = JSON.parse(localStorage.getItem('students') || '[]');
+        
         if (currentEditId) {
             // 수정
-            const response = await fetch(`tables/students/${currentEditId}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(studentData)
-            });
-            
-            if (response.ok) {
+            const index = students.findIndex(s => s.id === currentEditId);
+            if (index !== -1) {
+                students[index] = {...students[index], ...studentData, id: currentEditId};
+                localStorage.setItem('students', JSON.stringify(students));
                 alert('학생 정보가 수정되었습니다.');
                 currentEditId = null;
             }
         } else {
             // 신규 등록
-            const response = await fetch('tables/students', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(studentData)
-            });
-            
-            if (response.ok) {
-                const newStudent = await response.json();
-                alert('학생이 등록되었습니다.');
-                
-                // 학생 수준에 맞는 교재 자동 추천
-                await recommendMaterials(newStudent.id, studentData.level);
-            }
+            const newId = 'student_' + Date.now();
+            const newStudent = {...studentData, id: newId, created_at: new Date().toISOString()};
+            students.push(newStudent);
+            localStorage.setItem('students', JSON.stringify(students));
+            alert(`✅ 학생이 등록되었습니다!\n\n이름: ${studentData.name}\n학년: ${studentData.grade}학년 ${studentData.class_num}반 ${studentData.student_num}번\n수준: ${studentData.level}`);
         }
         
         resetForm();
@@ -330,9 +332,17 @@ async function recommendMaterials(studentId, level) {
 // 학생 정보 수정
 async function editStudent(studentId) {
     try {
-        const response = await fetch(`tables/students/${studentId}`);
-        const student = await response.json();
+        // localStorage에서 학생 데이터 찾기
+        const students = JSON.parse(localStorage.getItem('students') || '[]');
+        const student = students.find(s => s.id === studentId);
         
+        if (!student) {
+            alert('해당 학생을 찾을 수 없습니다.');
+            return;
+        }
+        
+        document.getElementById('schoolId').value = student.school_id || '';
+        document.getElementById('programType').value = student.program_type || '';
         document.getElementById('name').value = student.name;
         document.getElementById('grade').value = student.grade;
         document.getElementById('classNum').value = student.class_num;
@@ -343,6 +353,7 @@ async function editStudent(studentId) {
         document.getElementById('scienceScore').value = student.science_score || '';
         document.getElementById('socialScore').value = student.social_score || '';
         document.getElementById('level').value = student.level;
+        document.getElementById('level').disabled = false;
         
         currentEditId = studentId;
         
@@ -351,7 +362,7 @@ async function editStudent(studentId) {
         
     } catch (error) {
         console.error('학생 정보 로드 오류:', error);
-        alert('학생 정보를 불러오는데 실패했습니다.');
+        alert('학생 정보를 불러오는데 실패했습니다: ' + error.message);
     }
 }
 
@@ -385,17 +396,21 @@ function closeDeleteModal() {
 // 학생 삭제
 async function deleteStudent(studentId) {
     try {
-        const response = await fetch(`tables/students/${studentId}`, {
-            method: 'DELETE'
-        });
+        // localStorage에서 학생 데이터 로드
+        let students = JSON.parse(localStorage.getItem('students') || '[]');
+        const index = students.findIndex(s => s.id === studentId);
         
-        if (response.ok) {
+        if (index !== -1) {
+            students.splice(index, 1);
+            localStorage.setItem('students', JSON.stringify(students));
             alert('학생이 삭제되었습니다.');
             loadStudents();
+        } else {
+            alert('해당 학생을 찾을 수 없습니다.');
         }
     } catch (error) {
         console.error('학생 삭제 오류:', error);
-        alert('학생 삭제에 실패했습니다.');
+        alert('학생 삭제에 실패했습니다: ' + error.message);
     }
 }
 
