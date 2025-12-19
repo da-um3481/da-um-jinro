@@ -273,6 +273,9 @@
                 
                 <!-- 우측 메뉴 -->
                 <div class="flex items-center space-x-2">
+                    <button onclick="resetStudent()" class="p-2 text-white hover:text-gray-200 transition" title="다른 학생으로 로그인">
+                        <i class="fas fa-sync-alt text-xl"></i>
+                    </button>
                     <a href="student-intro.html" class="p-2 text-white hover:text-gray-200 transition">
                         <i class="fas fa-question-circle text-xl"></i>
                     </a>
@@ -1207,6 +1210,19 @@
             return names[subject] || subject;
         }
 
+        // 학생 초기화 (다른 학생으로 로그인)
+        function resetStudent() {
+            if (confirm('현재 학습 세션을 종료하고 처음 화면으로 돌아가시겠습니까?')) {
+                // 현재 학생 정보만 삭제 (학습 기록은 유지)
+                localStorage.removeItem('currentStudentId');
+                localStorage.removeItem('currentStudentName');
+                localStorage.removeItem('currentStudentGrade');
+                
+                // 페이지 새로고침
+                location.reload();
+            }
+        }
+
         // 선생님 피드백 로드
         function loadTeacherFeedback() {
             const studentId = localStorage.getItem('currentStudentId') || 'default_student';
@@ -1836,7 +1852,9 @@
         initProgramProgress();
         renderCalendar(); // 캘린더 렌더링
         
-        // 로그인 상태 확인
+        // 로그인 상태 확인 (주석 처리 - 자동 로그인 방지)
+        // 사용자가 명시적으로 이름을 입력해야만 로그인되도록 변경
+        /*
         const currentStudentId = localStorage.getItem('currentStudentId');
         if (currentStudentId) {
             const students = JSON.parse(localStorage.getItem('students')) || [];
@@ -1847,6 +1865,7 @@
                 loadTeacherFeedback();
             }
         }
+        */
     </script>
 </body>
 </html>
