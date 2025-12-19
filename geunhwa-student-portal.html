@@ -579,11 +579,11 @@
                 </h2>
                 <p class="text-sm mt-2 opacity-90">
                     <i class="fas fa-info-circle mr-2"></i>
-                    총 20문제 | 제한시간 없음 | 차근차근 풀어보세요
+                    총 50문제 (수학·영어·국어·사회·과학 각 10문제) | 제한시간 없음
                 </p>
                 <div class="mt-3 flex items-center justify-between">
                     <div class="text-sm">
-                        <span id="currentQuestion">1</span> / <span id="totalQuestions">20</span>
+                        <span id="currentQuestion">1</span> / <span id="totalQuestions">50</span>
                     </div>
                     <div class="text-sm opacity-75">
                         정답: <span id="correctCount">0</span>개
@@ -1281,10 +1281,12 @@
         // 진단평가 시작
         function startDiagnosticTest(grade, subject) {
             currentGrade = grade;
-            currentSubject = subject;
-            currentDiagnosticTest = getDiagnosticTest(grade, subject);
+            currentSubject = '종합'; // 5과목 통합
+            
+            // 모든 과목의 문제 가져오기 (50문제)
+            currentDiagnosticTest = getAllDiagnosticTests(grade);
             currentQuestionIndex = 0;
-            studentAnswers = new Array(20).fill(null);
+            studentAnswers = new Array(50).fill(null);
             
             if (!currentDiagnosticTest || currentDiagnosticTest.length === 0) {
                 alert('진단평가 문제를 불러올 수 없습니다.');
@@ -1293,7 +1295,7 @@
             
             // 모달 표시
             document.getElementById('diagnosticModal').classList.remove('hidden');
-            document.getElementById('diagnosticTitle').textContent = `${subject} 진단평가`;
+            document.getElementById('diagnosticTitle').textContent = `종합 진단평가 (수학·영어·국어·사회·과학)`;
             document.getElementById('totalQuestions').textContent = currentDiagnosticTest.length;
             
             // 첫 문제 표시
@@ -1305,6 +1307,17 @@
             currentQuestionIndex = index;
             const question = currentDiagnosticTest[index];
             const body = document.getElementById('diagnosticBody');
+            
+            // 과목별 색상
+            const subjectColors = {
+                '수학': { bg: 'bg-blue-100', text: 'text-blue-800', icon: '🔢' },
+                '영어': { bg: 'bg-green-100', text: 'text-green-800', icon: '🔤' },
+                '국어': { bg: 'bg-red-100', text: 'text-red-800', icon: '✍️' },
+                '사회': { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: '🌏' },
+                '과학': { bg: 'bg-purple-100', text: 'text-purple-800', icon: '🔬' }
+            };
+            
+            const subjectColor = subjectColors[question.subject] || { bg: 'bg-gray-100', text: 'text-gray-800', icon: '📚' };
             
             // 난이도 표시
             let difficultyBadge = '';
@@ -1319,7 +1332,12 @@
             body.innerHTML = `
                 <div class="space-y-4">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">문제 ${index + 1}</h3>
+                        <div class="flex items-center space-x-3">
+                            <span class="${subjectColor.bg} ${subjectColor.text} px-4 py-2 rounded-full text-sm font-bold">
+                                ${subjectColor.icon} ${question.subject}
+                            </span>
+                            <h3 class="text-lg font-bold text-gray-800">문제 ${index + 1}</h3>
+                        </div>
                         ${difficultyBadge}
                     </div>
                     
@@ -1640,13 +1658,13 @@
             // 🎯 진단평가 실행 (최초 1회만)
             // 신규 학생이고 진단평가를 완료하지 않았으면 시작
             const isNewStudent = !students.find(s => s.id === student.id && s.id !== student.id); // 방금 생성된 학생
-            const hasDiagnostic = hasDiagnosticCompleted(student.id, '수학'); // 수학 진단평가 완료 여부
+            const hasDiagnostic = hasDiagnosticCompleted(student.id, '종합'); // 종합 진단평가 완료 여부
             
             if (!hasDiagnostic) {
                 // 진단평가 안내
                 setTimeout(() => {
-                    if (confirm(`👋 ${student.name} 학생 환영합니다!\n\n맞춤형 학습을 위해 간단한 진단평가를 실시합니다.\n\n📝 수학 20문제 (약 15분 소요)\n⏰ 제한시간 없음\n💡 차근차근 풀어주세요\n\n지금 시작하시겠습니까?`)) {
-                        startDiagnosticTest(student.grade, '수학');
+                    if (confirm(`👋 ${student.name} 학생 환영합니다!\n\n맞춤형 학습을 위해 간단한 진단평가를 실시합니다.\n\n📝 총 50문제 (약 30분 소요)\n   • 수학 10문제\n   • 영어 10문제\n   • 국어 10문제\n   • 사회 10문제\n   • 과학 10문제\n\n⏰ 제한시간 없음\n💡 차근차근 풀어주세요\n\n지금 시작하시겠습니까?`)) {
+                        startDiagnosticTest(student.grade, '종합');
                     }
                 }, 1000);
             }
