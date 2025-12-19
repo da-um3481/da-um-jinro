@@ -1226,9 +1226,38 @@
             }, 3000);
         }
 
-        // External Links
+        // External Links - EBS Subject Links
         function openEBS() {
-            window.open('https://www.ebsmath.co.kr', '_blank');
+            showEBSModal();
+        }
+
+        // Show EBS Links Modal
+        function showEBSModal() {
+            const ebsLinks = [
+                { subject: '🔢 수학', name: 'EBS 수학', url: 'https://www.ebsmath.co.kr', color: '#3b82f6' },
+                { subject: '🔤 영어', name: 'EBS 영어', url: 'https://primary.ebs.co.kr/course/view?courseId=10029319&left=course', color: '#ef4444' },
+                { subject: '📝 국어', name: 'EBS 국어', url: 'https://primary.ebs.co.kr/course/view?courseId=10029318&left=course', color: '#f59e0b' },
+                { subject: '🔬 과학', name: 'EBS 과학', url: 'https://primary.ebs.co.kr/course/view?courseId=10029320&left=course', color: '#8b5cf6' },
+                { subject: '🌍 사회', name: 'EBS 사회', url: 'https://primary.ebs.co.kr/course/view?courseId=10029321&left=course', color: '#06b6d4' },
+                { subject: '🎯 중학 프리미엄', name: 'EBS 중학 프리미엄', url: 'https://primary.ebs.co.kr/course/list?courseType=PREMIUM', color: '#15803d' }
+            ];
+
+            let html = '';
+            ebsLinks.forEach(link => {
+                html += `
+                    <div class="book-item" style="border-left: 4px solid ${link.color};">
+                        <span class="book-subject" style="background: ${link.color};">${link.subject}</span>
+                        <div class="book-title">${link.name}</div>
+                        <a href="${link.url}" target="_blank" class="book-link" style="color: ${link.color};">
+                            <i class="fas fa-external-link-alt"></i> 강의 바로가기
+                        </a>
+                    </div>
+                `;
+            });
+
+            document.getElementById('modalTitle').innerHTML = '📺 EBS 과목별 강의';
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('booksModal').classList.add('show');
         }
 
         // Books Data
