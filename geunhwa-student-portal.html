@@ -343,31 +343,44 @@
             </div>
         </div>
 
-        <!-- 오늘의 학습 현황 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-                <i class="fas fa-calendar-day text-purple-500 mr-2"></i>오늘의 학습 현황
-            </h3>
+        <!-- 오늘의 학습 현황 (통합 원스톱) -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="todayStudySection">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-calendar-day text-purple-500 mr-2"></i>오늘의 학습 스케줄
+                </h3>
+                <button 
+                    id="autoScheduleBtn"
+                    onclick="generateAutoScheduleForToday()"
+                    class="hidden px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
+                    <i class="fas fa-magic mr-2"></i>자동 스케줄 생성
+                </button>
+            </div>
             
-            <!-- 과목별 학습 현황 (동적 생성) -->
+            <!-- 과목별 학습 현황 (스케줄+타이머+학습자료 통합) -->
             <div id="todaySubjectsContainer" class="space-y-4">
                 <!-- 오늘의 과목이 동적으로 표시됩니다 -->
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">📅</div>
+                    <p class="text-gray-600 text-lg font-semibold mb-2">이름을 입력하면 자동으로 스케줄이 생성됩니다</p>
+                    <p class="text-gray-500 text-sm">타이머, 학습 자료, 학습 내용 입력이 한 번에!</p>
+                </div>
             </div>
 
             <!-- 오늘의 총 학습 시간 -->
-            <div class="mt-6 p-4 bg-gradient-to-r from-purple-500 to-purple-700 rounded-xl text-white">
+            <div class="mt-6 p-4 bg-gradient-to-r from-purple-500 to-purple-700 rounded-xl text-white" id="totalStudyTimeSection">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-sm opacity-90">오늘의 총 학습 시간</div>
-                        <div class="text-3xl font-black mt-1">0시간 0분</div>
+                        <div class="text-3xl font-black mt-1" id="totalStudyTime">0시간 0분</div>
                     </div>
                     <div class="text-right">
                         <div class="text-sm opacity-90">달성률</div>
-                        <div class="text-3xl font-black mt-1">0%</div>
+                        <div class="text-3xl font-black mt-1" id="achievementRate">0%</div>
                     </div>
                 </div>
                 <div class="bg-white/20 rounded-full h-3 mt-3">
-                    <div class="bg-white h-full rounded-full transition-all" style="width: 0%"></div>
+                    <div class="bg-white h-full rounded-full transition-all" id="achievementBar" style="width: 0%"></div>
                 </div>
             </div>
         </div>
@@ -478,6 +491,9 @@
         </div>
     </main>
 
+    <!-- 학습 자료 DB 로드 -->
+    <script src="js/study-materials-db.js"></script>
+    
     <script>
         // 눈송이 생성
         const snowflakesContainer = document.getElementById('snowflakes');
@@ -628,20 +644,19 @@
             console.log(`✅ ${subject} 학습 내용 저장 완료:`, content);
         }
 
-        // 타이머 관련 변수
+        // ⏱️ 타이머 관련 변수
         const timers = {};
-        const STUDY_DURATION = 45 * 60; // 45분 = 2700초
         let activeSubject = null;
 
         // 타이머 시작
-        function startTimer(subject) {
+        function startTimer(subject, targetMinutes = 45) {
             if (activeSubject && activeSubject !== subject) {
-                alert('다른 과목을 학습 중입니다. 먼저 완료해주세요.');
+                alert('⚠️ 다른 과목을 학습 중입니다. 먼저 완료해주세요!');
                 return;
             }
             
             if (timers[subject] && timers[subject].isRunning) {
-                alert('이미 학습 중입니다.');
+                alert('⏰ 이미 학습 중입니다!');
                 return;
             }
             
@@ -650,28 +665,28 @@
             if (!programStart) {
                 localStorage.setItem('programStartDate', new Date().toISOString().split('T')[0]);
                 initProgramProgress();
-                alert('🎉 프로그램을 시작합니다! Day 1이 시작되었습니다.');
             }
             
             activeSubject = subject;
             
             if (!timers[subject]) {
-                timers[subject] = { seconds: 0, interval: null, isRunning: false };
+                timers[subject] = { seconds: 0, interval: null, isRunning: false, target: targetMinutes * 60 };
             }
             
             timers[subject].isRunning = true;
             timers[subject].interval = setInterval(() => {
                 timers[subject].seconds++;
                 updateTimerDisplay(subject);
+                updateProgressBar(subject);
                 
-                // 45분 달성 시
-                if (timers[subject].seconds >= STUDY_DURATION) {
+                // 목표 시간 달성
+                if (timers[subject].seconds >= timers[subject].target) {
                     stopTimer(subject);
-                    alert(`🎉 ${getSubjectName(subject)} 45분 학습 목표를 달성했습니다!`);
+                    alert(`🎉 목표 시간을 달성했습니다! 정말 멋져요! 💪`);
                 }
             }, 1000);
             
-            console.log(`▶️ ${subject} 학습 시작`);
+            console.log(`▶️ ${subject} 학습 시작 (목표: ${targetMinutes}분)`);
         }
 
         // 타이머 정지 및 기록
@@ -686,6 +701,7 @@
             
             // 학습 시간 저장
             const minutes = Math.floor(timers[subject].seconds / 60);
+            const seconds = timers[subject].seconds % 60;
             const today = new Date().toISOString().split('T')[0];
             const studentId = localStorage.getItem('currentStudentId') || 'default_student';
             
@@ -696,6 +712,7 @@
                 todayRecord = {
                     id: `record_${Date.now()}`,
                     student_id: studentId,
+                    student_name: localStorage.getItem('currentStudentName'),
                     date: today,
                     subjects: {}
                 };
@@ -706,13 +723,22 @@
                 todayRecord.subjects[subject] = { time: 0, content: '' };
             }
             
-            todayRecord.subjects[subject].time = minutes;
+            todayRecord.subjects[subject].time += minutes;
             todayRecord.subjects[subject].completed_at = new Date().toISOString();
+            
+            // 학습 내용도 저장
+            const contentElement = document.getElementById(`${subject}Content`);
+            if (contentElement && contentElement.value) {
+                todayRecord.subjects[subject].content = contentElement.value;
+            }
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
             
-            alert(`✅ ${getSubjectName(subject)} 학습 완료! (${minutes}분)`);
-            console.log(`⏹️ ${subject} 학습 완료: ${minutes}분`);
+            alert(`✅ 학습 완료!\n시간: ${minutes}분 ${seconds}초\n멋진 집중력이에요! 🌟`);
+            console.log(`⏹️ ${subject} 학습 완료: ${minutes}분 ${seconds}초`);
+            
+            // 총 학습 시간 업데이트
+            updateTotalStudyTime();
         }
 
         // 타이머 표시 업데이트
@@ -726,6 +752,43 @@
             if (timerElement) {
                 timerElement.textContent = display;
             }
+        }
+        
+        // 프로그레스 바 업데이트
+        function updateProgressBar(subject) {
+            const progress = Math.min((timers[subject].seconds / timers[subject].target) * 100, 100);
+            const progressElement = document.getElementById(`${subject}Progress`);
+            if (progressElement) {
+                progressElement.style.width = `${progress}%`;
+            }
+        }
+        
+        // 총 학습 시간 업데이트
+        function updateTotalStudyTime() {
+            const today = new Date().toISOString().split('T')[0];
+            const studentId = localStorage.getItem('currentStudentId');
+            
+            if (!studentId) return;
+            
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            if (!todayRecord) return;
+            
+            let totalMinutes = 0;
+            Object.values(todayRecord.subjects).forEach(subj => {
+                totalMinutes += (subj.time || 0);
+            });
+            
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            
+            const targetHours = getDailyTargetHours().hours;
+            const achievement = Math.min(Math.round((totalMinutes / (targetHours * 60)) * 100), 100);
+            
+            document.getElementById('totalStudyTime').textContent = `${hours}시간 ${minutes}분`;
+            document.getElementById('achievementRate').textContent = `${achievement}%`;
+            document.getElementById('achievementBar').style.width = `${achievement}%`;
         }
 
         // 과목 이름 변환
@@ -831,7 +894,7 @@
             `;
         }
 
-        // 학생 이름으로 로그인
+        // 🎯 통합 원스톱: 학생 이름으로 로그인 + 자동 스케줄 생성
         function loadStudentByName() {
             const nameInput = document.getElementById('studentNameInput').value.trim();
             
@@ -852,15 +915,250 @@
             // localStorage에 현재 학생 정보 저장
             localStorage.setItem('currentStudentId', student.id);
             localStorage.setItem('currentStudentName', student.name);
+            localStorage.setItem('currentStudentGrade', student.grade);
 
             // 학생 정보 표시 업데이트
             document.getElementById('studentInfo').textContent = `📚 ${student.name} (${student.grade}학년 ${student.class_num}반)`;
 
-            alert(`✅ ${student.name} 학생으로 로그인되었습니다!\n이제 학습을 시작할 수 있습니다.`);
-
+            // 🎉 원스톱: 자동으로 오늘의 스케줄 생성 및 표시
+            generateAndDisplayTodaySchedule(student);
+            
             // 프로그램 진행률 새로고침
-            loadTodaySubjects(); // 오늘의 과목 다시 로드
             initProgramProgress();
+            loadTeacherFeedback();
+        }
+
+        // 📅 오늘의 스케줄 자동 생성 및 표시 (원스톱)
+        function generateAndDisplayTodaySchedule(student) {
+            // 1. 스케줄 확인 또는 자동 생성
+            let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+            let studentSchedule = schedules.find(s => s.student_id === student.id);
+            
+            if (!studentSchedule) {
+                // 스케줄 없으면 자동 생성
+                studentSchedule = autoGenerateWeeklySchedule(student);
+                schedules.push(studentSchedule);
+                localStorage.setItem('student_schedules', JSON.stringify(schedules));
+            }
+            
+            // 2. 오늘 요일 확인
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const todayName = dayNames[new Date().getDay()];
+            const todaySchedule = JSON.parse(studentSchedule[todayName] || '[]');
+            
+            // 3. 오늘의 과목으로 통합 카드 표시 (타이머 + 학습자료 + 입력란)
+            displayIntegratedSubjectCards(todaySchedule);
+            
+            alert(`✅ ${student.name} 학생 환영합니다!\n📅 오늘의 학습 스케줄이 준비되었습니다!`);
+        }
+
+        // 🤖 주간 스케줄 자동 생성
+        function autoGenerateWeeklySchedule(student) {
+            const subjects = ['수학', '영어', '국어', '과학', '사회'];
+            const schedule = {
+                id: Date.now().toString(),
+                student_id: student.id,
+                student_name: student.name,
+                created_date: new Date().toISOString().split('T')[0]
+            };
+            
+            // 월~금: 3과목 (수학, 영어, 국어/과학/사회 순환)
+            const weekdaySubjects = [
+                ['수학', '영어', '국어'],
+                ['수학', '영어', '과학'],
+                ['수학', '영어', '사회'],
+                ['수학', '국어', '과학'],
+                ['영어', '국어', '사회']
+            ];
+            
+            const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+            dayNames.forEach((day, index) => {
+                schedule[day] = JSON.stringify(
+                    weekdaySubjects[index].map((subj, i) => ({
+                        time: `${9 + i}:00-${9 + i}:45`,
+                        duration: 45,
+                        type: `${i + 1}교시`,
+                        subject: subj,
+                        content: `${subj} 개념 학습 및 문제 풀이`,
+                        importance: subj === '수학' || subj === '영어' ? '높음' : '보통'
+                    }))
+                );
+            });
+            
+            // 토~일: 복습
+            schedule.saturday = JSON.stringify([
+                { time: '9:00-10:00', duration: 60, type: '오전', subject: '수학', content: '주간 복습', importance: '높음' },
+                { time: '10:00-11:00', duration: 60, type: '오전', subject: '영어', content: '주간 복습', importance: '높음' }
+            ]);
+            schedule.sunday = JSON.stringify([
+                { time: '9:00-10:00', duration: 60, type: '오전', subject: '국어', content: '주간 복습', importance: '보통' }
+            ]);
+            
+            return schedule;
+        }
+
+        // 📚 통합 과목 카드 표시 (타이머 + 학습자료 + 입력란)
+        function displayIntegratedSubjectCards(todaySchedule) {
+            const container = document.getElementById('todaySubjectsContainer');
+            
+            if (!todaySchedule || todaySchedule.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-5xl mb-3">🎉</div>
+                        <p class="text-gray-600 font-semibold">오늘은 휴식일입니다!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = todaySchedule.map((item, index) => {
+                const config = getSubjectConfig(item.subject);
+                const subjectId = `${item.subject}_${index}`;
+                
+                return createIntegratedSubjectCard(item, config, subjectId);
+            }).join('');
+        }
+
+        // 🎨 과목 설정 가져오기
+        function getSubjectConfig(subjectName) {
+            const configs = {
+                '수학': { id: 'math', icon: 'calculator', color: 'blue' },
+                '영어': { id: 'english', icon: 'language', color: 'green' },
+                '국어': { id: 'korean', icon: 'book', color: 'red' },
+                '과학': { id: 'science', icon: 'flask', color: 'purple' },
+                '사회': { id: 'social', icon: 'globe', color: 'yellow' }
+            };
+            return configs[subjectName] || { id: 'other', icon: 'book-open', color: 'gray' };
+        }
+
+        // 🎴 통합 카드 생성 (타이머 + 학습자료 + 입력란)
+        function createIntegratedSubjectCard(item, config, subjectId) {
+            const colors = {
+                'blue': { bg: '#EFF6FF', border: '#BFDBFE', main: '#3B82F6', dark: '#1D4ED8' },
+                'green': { bg: '#F0FDF4', border: '#BBF7D0', main: '#22C55E', dark: '#15803D' },
+                'red': { bg: '#FEF2F2', border: '#FECACA', main: '#EF4444', dark: '#B91C1C' },
+                'purple': { bg: '#FAF5FF', border: '#E9D5FF', main: '#A855F7', dark: '#7E22CE' },
+                'yellow': { bg: '#FEFCE8', border: '#FDE047', main: '#EAB308', dark: '#A16207' }
+            }[config.color] || colors.blue;
+            
+            const materials = getStudyMaterialsForSubject(item.subject);
+            
+            return `
+                <div class="rounded-xl border-2 overflow-hidden" style="background-color: ${colors.bg}; border-color: ${colors.border};">
+                    <!-- 과목 헤더 -->
+                    <div class="p-4 bg-gradient-to-r" style="background: linear-gradient(135deg, ${colors.main}, ${colors.dark});">
+                        <div class="flex items-center justify-between text-white">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-${config.icon} text-2xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xl font-black">${item.subject}</div>
+                                    <div class="text-sm opacity-90">${item.time} (${item.duration}분)</div>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-black" id="${subjectId}Time">00:00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 space-y-3">
+                        <!-- 타이머 & 버튼 -->
+                        <div class="flex space-x-2">
+                            <button onclick="startTimer('${subjectId}', ${item.duration})" 
+                                    class="flex-1 px-4 py-3 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                                    style="background-color: ${colors.main};">
+                                <i class="fas fa-play mr-2"></i>시작
+                            </button>
+                            <button onclick="stopTimer('${subjectId}')" 
+                                    class="px-4 py-3 bg-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-400 transition">
+                                <i class="fas fa-stop mr-2"></i>완료
+                            </button>
+                        </div>
+                        
+                        <!-- 프로그레스 바 -->
+                        <div class="bg-gray-200 rounded-full h-3">
+                            <div id="${subjectId}Progress" class="h-full rounded-full transition-all" 
+                                 style="width: 0%; background-color: ${colors.main};"></div>
+                        </div>
+                        
+                        <!-- 학습 내용 입력 -->
+                        <textarea id="${subjectId}Content" rows="3" 
+                                  placeholder="📝 오늘 학습한 내용을 기록하세요"
+                                  class="w-full px-4 py-3 border-2 rounded-lg focus:outline-none text-sm"
+                                  style="border-color: ${colors.border};"
+                                  onfocus="this.style.borderColor='${colors.main}'"
+                                  onblur="this.style.borderColor='${colors.border}'"
+                                  onchange="saveStudyContent('${subjectId}', this.value)"></textarea>
+                        
+                        <!-- 학습 자료 -->
+                        ${materials}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 📚 학습 자료 HTML 생성
+        function getStudyMaterialsForSubject(subjectName) {
+            const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
+            const subjectKey = subjectMap[subjectName];
+            const grade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
+            
+            if (!subjectKey || typeof getStudyMaterials !== 'function') {
+                return '<div class="text-xs text-gray-500">학습 자료 준비 중...</div>';
+            }
+            
+            const materials = getStudyMaterials(subjectKey, grade, 1);
+            if (!materials) return '';
+            
+            let html = '<div class="space-y-2"><div class="text-xs font-bold text-gray-700 mb-2">📚 추천 학습 자료</div>';
+            
+            // EBS
+            if (materials.ebsLectures && materials.ebsLectures[0]) {
+                const ebs = materials.ebsLectures[0];
+                html += `
+                    <a href="${ebs.link}" target="_blank" 
+                       class="block p-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-blue-700">🎓 EBS (무료)</div>
+                                <div class="text-xs text-gray-700">${ebs.name} - ${ebs.teacher}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt text-blue-600"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // 개념서
+            if (materials.conceptBooks && materials.conceptBooks[0]) {
+                const book = materials.conceptBooks[0];
+                html += `
+                    <div class="p-2 bg-purple-50 border border-purple-200 rounded-lg">
+                        <div class="text-xs font-bold text-purple-700">📖 ${book.name}</div>
+                        <div class="text-xs text-gray-600">${book.publisher}</div>
+                    </div>
+                `;
+            }
+            
+            // 유튜브
+            if (materials.youtube && materials.youtube[0]) {
+                const yt = materials.youtube[0];
+                html += `
+                    <a href="${yt.link}" target="_blank" 
+                       class="block p-2 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-red-700">📺 ${yt.channel}</div>
+                                <div class="text-xs text-gray-600">${yt.description}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt text-red-600"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            html += '</div>';
+            return html;
         }
 
         // 30일 주간 스케줄 열기
@@ -878,129 +1176,20 @@
             window.location.href = `winter-weekly-schedule.html?student=${studentId}`;
         }
 
-        // 오늘의 학습 과목 동적 생성
-        function loadTodaySubjects() {
-            const studentId = localStorage.getItem('currentStudentId');
-            if (!studentId) {
-                // 로그인 전에는 기본 과목 표시
-                displayDefaultSubjects();
-                return;
-            }
-
-            // 스케줄에서 오늘의 과목 가져오기
-            const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
-            const studentSchedule = schedules.find(s => s.student_id === studentId);
-
-            if (!studentSchedule) {
-                // 스케줄이 없으면 기본 과목 표시
-                displayDefaultSubjects();
-                return;
-            }
-
-            // 오늘 요일 확인
-            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-            const today = dayNames[new Date().getDay()];
-            
-            const todaySchedule = studentSchedule.schedule[today];
-
-            if (!todaySchedule || todaySchedule.length === 0) {
-                // 오늘 스케줄이 없으면 기본 과목 표시
-                displayDefaultSubjects();
-                return;
-            }
-
-            // 오늘의 과목 추출 (중복 제거)
-            const subjects = [...new Set(todaySchedule.map(item => item.subject))];
-            displaySubjects(subjects);
-        }
-
-        // 기본 과목 표시 (스케줄이 없을 때)
-        function displayDefaultSubjects() {
-            const defaultSubjects = ['수학', '영어', '국어'];
-            displaySubjects(defaultSubjects);
-        }
-
-        // 과목 카드 동적 생성
-        function displaySubjects(subjects) {
-            const container = document.getElementById('todaySubjectsContainer');
-            container.innerHTML = '';
-
-            // 과목별 설정
-            const subjectConfig = {
-                '수학': { id: 'math', icon: 'calculator', color: 'blue' },
-                '영어': { id: 'english', icon: 'language', color: 'green' },
-                '국어': { id: 'korean', icon: 'book', color: 'red' },
-                '과학': { id: 'science', icon: 'flask', color: 'purple' },
-                '사회': { id: 'social', icon: 'globe', color: 'yellow' },
-                '복습': { id: 'review', icon: 'redo', color: 'indigo' }
-            };
-
-            subjects.forEach(subjectName => {
-                const config = subjectConfig[subjectName] || { id: 'other', icon: 'book-open', color: 'gray' };
-                const subjectCard = createSubjectCard(subjectName, config);
-                container.innerHTML += subjectCard;
-            });
-        }
-
-        // 과목 카드 HTML 생성
-        function createSubjectCard(subjectName, config) {
-            // 과목별 색상 매핑
-            const colorMap = {
-                'blue': { bg: '#EFF6FF', border: '#BFDBFE', main: '#3B82F6', dark: '#1D4ED8' },
-                'green': { bg: '#F0FDF4', border: '#BBF7D0', main: '#22C55E', dark: '#15803D' },
-                'red': { bg: '#FEF2F2', border: '#FECACA', main: '#EF4444', dark: '#B91C1C' },
-                'purple': { bg: '#FAF5FF', border: '#E9D5FF', main: '#A855F7', dark: '#7E22CE' },
-                'yellow': { bg: '#FEFCE8', border: '#FDE047', main: '#EAB308', dark: '#A16207' },
-                'indigo': { bg: '#EEF2FF', border: '#C7D2FE', main: '#6366F1', dark: '#4338CA' }
-            };
-            
-            const colors = colorMap[config.color] || colorMap['blue'];
-            
-            return `
-                <div class="p-4 rounded-xl border-2" style="background-color: ${colors.bg}; border-color: ${colors.border};">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background-color: ${colors.main};">
-                                <i class="fas fa-${config.icon}"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-800">${subjectName}</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-black timer-display" id="${config.id}Time" style="color: ${colors.dark};">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="h-full rounded-full transition-all" style="width: 0%; background-color: ${colors.main};"></div>
-                    </div>
-                    <div class="flex space-x-2 mb-3">
-                        <button onclick="startTimer('${config.id}')" class="flex-1 px-4 py-2 text-white rounded-lg transition font-bold" style="background-color: ${colors.main};" onmouseover="this.style.backgroundColor='${colors.dark}'" onmouseout="this.style.backgroundColor='${colors.main}'">
-                            <i class="fas fa-play mr-2"></i>시작
-                        </button>
-                        <button onclick="stopTimer('${config.id}')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
-                            <i class="fas fa-stop mr-2"></i>완료
-                        </button>
-                    </div>
-                    <div class="mt-2">
-                        <textarea id="${config.id}Content" rows="2" 
-                                  placeholder="오늘 학습한 내용을 기록하세요"
-                                  class="w-full px-3 py-2 text-sm border-2 rounded-lg focus:outline-none"
-                                  style="border-color: ${colors.border};"
-                                  onfocus="this.style.borderColor='${colors.main}'; this.style.boxShadow='0 0 0 3px ${colors.bg}';"
-                                  onblur="this.style.borderColor='${colors.border}'; this.style.boxShadow='none';"
-                                  onchange="saveStudyContent('${config.id}', this.value)"></textarea>
-                    </div>
-                </div>
-            `;
-        }
-
         // 페이지 로드 시 초기화
-        loadTodaySubjects(); // 오늘의 과목 로드
         initProgramProgress();
-        loadTeacherFeedback(); // 피드백 로드
+        
+        // 로그인 상태 확인
+        const currentStudentId = localStorage.getItem('currentStudentId');
+        if (currentStudentId) {
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => s.id === currentStudentId);
+            if (student) {
+                document.getElementById('studentInfo').textContent = `📚 ${student.name} (${student.grade}학년 ${student.class_num}반)`;
+                generateAndDisplayTodaySchedule(student);
+                loadTeacherFeedback();
+            }
+        }
     </script>
 </body>
 </html>
