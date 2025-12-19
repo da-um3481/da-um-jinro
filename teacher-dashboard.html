@@ -31,6 +31,14 @@
                 <i class="fas fa-users"></i>
                 <span>학생 목록</span>
             </a>
+            <a href="#" class="nav-item" data-page="diagnostic-results">
+                <i class="fas fa-clipboard-check"></i>
+                <span>진단평가 결과</span>
+            </a>
+            <a href="#" class="nav-item" data-page="level-management">
+                <i class="fas fa-layer-group"></i>
+                <span>수준별 학습 관리</span>
+            </a>
             <a href="#" class="nav-item" data-page="class-stats">
                 <i class="fas fa-chart-pie"></i>
                 <span>학급 통계</span>
@@ -159,6 +167,278 @@
                     <h2 class="section-title">알림 및 주요 일정</h2>
                     <div class="alert-list" id="alertList">
                         <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 진단평가 결과 페이지 -->
+            <div class="page-content" id="page-diagnostic-results">
+                <div class="page-header">
+                    <h2 class="page-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        진단평가 결과
+                    </h2>
+                    <p class="page-description">학생별 진단평가 결과 및 수준 분석</p>
+                </div>
+
+                <!-- 전체 통계 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">진단 완료</p>
+                            <h3 class="stat-value" id="diagnosticCompletedCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info" id="diagnosticCompletedInfo">전체 학생 대비</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">고급 수준</p>
+                            <h3 class="stat-value" id="advancedCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">281점 이상</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">중급 수준</p>
+                            <h3 class="stat-value" id="intermediateCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">201-280점</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">기초 수준</p>
+                            <h3 class="stat-value" id="beginnerCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">0-200점</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 수준별 분포 차트 -->
+                <div class="chart-section">
+                    <h2 class="section-title">수준별 학생 분포</h2>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="levelDistributionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 학생별 진단 결과 테이블 -->
+                <div class="table-section">
+                    <div class="section-header">
+                        <h2 class="section-title">학생별 진단 결과</h2>
+                        <div class="filter-buttons">
+                            <button class="btn-filter active" onclick="filterDiagnosticResults('all')">전체</button>
+                            <button class="btn-filter" onclick="filterDiagnosticResults('advanced')">고급</button>
+                            <button class="btn-filter" onclick="filterDiagnosticResults('intermediate')">중급</button>
+                            <button class="btn-filter" onclick="filterDiagnosticResults('beginner')">기초</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>학년</th>
+                                    <th>학생명</th>
+                                    <th>진단일</th>
+                                    <th>정답수</th>
+                                    <th>총점</th>
+                                    <th>수준</th>
+                                    <th>과목별 점수</th>
+                                    <th>상세</th>
+                                </tr>
+                            </thead>
+                            <tbody id="diagnosticResultsTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center py-8">
+                                        <div class="empty-state">
+                                            <i class="fas fa-clipboard-list fa-3x mb-3 text-gray-400"></i>
+                                            <p>진단평가를 완료한 학생이 없습니다.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 상세 결과 모달 -->
+                <div id="diagnosticDetailModal" class="modal" style="display: none;">
+                    <div class="modal-content" style="max-width: 900px;">
+                        <div class="modal-header">
+                            <h3 id="detailModalTitle">진단평가 상세 결과</h3>
+                            <button class="modal-close" onclick="closeDiagnosticDetailModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="diagnosticDetailBody">
+                            <!-- JavaScript로 동적 생성 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 수준별 학습 관리 페이지 -->
+            <div class="page-content" id="page-level-management">
+                <div class="page-header">
+                    <div>
+                        <h2>
+                            <i class="fas fa-layer-group" style="color: #8b5cf6;"></i>
+                            수준별 학습 관리
+                        </h2>
+                        <p class="page-description">진단평가 결과를 바탕으로 학생별 맞춤형 학습 내용을 자동 조정합니다</p>
+                    </div>
+                    <button class="btn-primary" onclick="applyAllLevelAdjustments()" style="gap: 8px;">
+                        <i class="fas fa-magic"></i>
+                        전체 학생 자동 조정
+                    </button>
+                </div>
+
+                <!-- 수준별 통계 -->
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">고급 수준 학생</p>
+                            <h3 class="stat-value" id="advancedStudentsCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">심화 콘텐츠 제공</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">중급 수준 학생</p>
+                            <h3 class="stat-value" id="intermediateStudentsCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">표준 콘텐츠 제공</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">기초 수준 학생</p>
+                            <h3 class="stat-value" id="beginnerStudentsCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">기본 콘텐츠 제공</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon gray">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">진단 미완료</p>
+                            <h3 class="stat-value" id="notDiagnosedCount">0<span class="stat-unit">명</span></h3>
+                            <p class="stat-info">진단평가 필요</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학생별 학습 내용 조정 테이블 -->
+                <div class="table-section">
+                    <div class="section-header">
+                        <h2 class="section-title">학생별 학습 내용 조정 현황</h2>
+                        <div class="filter-buttons">
+                            <button class="btn-filter active" onclick="filterLevelManagement('all')">전체</button>
+                            <button class="btn-filter" onclick="filterLevelManagement('advanced')">고급</button>
+                            <button class="btn-filter" onclick="filterLevelManagement('intermediate')">중급</button>
+                            <button class="btn-filter" onclick="filterLevelManagement('beginner')">기초</button>
+                            <button class="btn-filter" onclick="filterLevelManagement('not_diagnosed')">진단 미완료</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>학년</th>
+                                    <th>학생명</th>
+                                    <th>현재 수준</th>
+                                    <th>진단 점수</th>
+                                    <th>학습 내용 수준</th>
+                                    <th>자동 조정 상태</th>
+                                    <th>마지막 업데이트</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody id="levelManagementTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center py-8">
+                                        <div class="empty-state">
+                                            <i class="fas fa-user-graduate fa-3x mb-3 text-gray-400"></i>
+                                            <p>학생 데이터를 불러오는 중입니다...</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 학습 내용 수준 설명 -->
+                <div class="info-section" style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); border-radius: 12px;">
+                    <h3 style="color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-info-circle" style="color: #3b82f6;"></i>
+                        수준별 학습 내용 기준
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="padding: 20px; background: white; border-radius: 10px; border-left: 4px solid #10b981;">
+                            <h4 style="color: #10b981; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-star"></i>
+                                고급 (281-362점)
+                            </h4>
+                            <ul style="color: #6b7280; line-height: 1.8; padding-left: 20px;">
+                                <li>심화 개념 및 응용 문제</li>
+                                <li>고난도 교재 추천</li>
+                                <li>경시대회 수준 콘텐츠</li>
+                                <li>자기주도 학습 강화</li>
+                            </ul>
+                        </div>
+                        <div style="padding: 20px; background: white; border-radius: 10px; border-left: 4px solid #8b5cf6;">
+                            <h4 style="color: #8b5cf6; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-chart-line"></i>
+                                중급 (201-280점)
+                            </h4>
+                            <ul style="color: #6b7280; line-height: 1.8; padding-left: 20px;">
+                                <li>표준 교과 과정</li>
+                                <li>교과서 핵심 개념</li>
+                                <li>중간 난이도 문제</li>
+                                <li>단계적 심화 학습</li>
+                            </ul>
+                        </div>
+                        <div style="padding: 20px; background: white; border-radius: 10px; border-left: 4px solid #f59e0b;">
+                            <h4 style="color: #f59e0b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-seedling"></i>
+                                기초 (0-200점)
+                            </h4>
+                            <ul style="color: #6b7280; line-height: 1.8; padding-left: 20px;">
+                                <li>기본 개념 집중 학습</li>
+                                <li>쉬운 교재 및 영상</li>
+                                <li>반복 학습 강화</li>
+                                <li>개념 이해 중심</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -900,6 +1180,618 @@
             // 실제로는 테이블 데이터를 필터링해야 함
             // 여기서는 로그만 출력
         }
+
+        // ==========================================
+        // 진단평가 결과 관리
+        // ==========================================
+        
+        // 진단평가 결과 로드
+        function loadDiagnosticResults() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            console.log('📊 진단평가 결과:', diagnosticResults);
+            
+            // 통계 계산
+            const levelCounts = {
+                advanced: 0,
+                intermediate: 0,
+                beginner: 0
+            };
+            
+            diagnosticResults.forEach(result => {
+                levelCounts[result.level]++;
+            });
+            
+            // 통계 업데이트
+            document.getElementById('diagnosticCompletedCount').innerHTML = `${diagnosticResults.length}<span class="stat-unit">명</span>`;
+            document.getElementById('diagnosticCompletedInfo').textContent = `전체 ${students.length}명 중`;
+            document.getElementById('advancedCount').innerHTML = `${levelCounts.advanced}<span class="stat-unit">명</span>`;
+            document.getElementById('intermediateCount').innerHTML = `${levelCounts.intermediate}<span class="stat-unit">명</span>`;
+            document.getElementById('beginnerCount').innerHTML = `${levelCounts.beginner}<span class="stat-unit">명</span>`;
+            
+            // 차트 업데이트
+            updateLevelDistributionChart(levelCounts);
+            
+            // 테이블 업데이트
+            updateDiagnosticResultsTable(diagnosticResults);
+        }
+        
+        // 수준별 분포 차트
+        let levelDistributionChart = null;
+        
+        function updateLevelDistributionChart(levelCounts) {
+            const ctx = document.getElementById('levelDistributionChart');
+            if (!ctx) return;
+            
+            if (levelDistributionChart) {
+                levelDistributionChart.destroy();
+            }
+            
+            levelDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['고급', '중급', '기초'],
+                    datasets: [{
+                        data: [levelCounts.advanced, levelCounts.intermediate, levelCounts.beginner],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',  // 고급 - 초록
+                            'rgba(168, 85, 247, 0.8)',  // 중급 - 보라
+                            'rgba(251, 146, 60, 0.8)'   // 기초 - 주황
+                        ],
+                        borderColor: [
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(168, 85, 247, 1)',
+                            'rgba(251, 146, 60, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Noto Sans KR', sans-serif",
+                                    size: 14
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    return `${label}: ${value}명 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 진단 결과 테이블 업데이트
+        let currentFilter = 'all';
+        
+        function updateDiagnosticResultsTable(results) {
+            const tbody = document.getElementById('diagnosticResultsTableBody');
+            if (!tbody) return;
+            
+            // 필터링
+            let filteredResults = results;
+            if (currentFilter !== 'all') {
+                filteredResults = results.filter(r => r.level === currentFilter);
+            }
+            
+            if (filteredResults.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-8">
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list fa-3x mb-3 text-gray-400"></i>
+                                <p>조건에 맞는 진단평가 결과가 없습니다.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 테이블 생성
+            tbody.innerHTML = filteredResults.map(result => {
+                const date = new Date(result.testDate);
+                const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+                
+                // 수준별 배지
+                let levelBadge = '';
+                if (result.level === 'advanced') {
+                    levelBadge = '<span class="badge badge-success">고급</span>';
+                } else if (result.level === 'intermediate') {
+                    levelBadge = '<span class="badge badge-primary">중급</span>';
+                } else {
+                    levelBadge = '<span class="badge badge-warning">기초</span>';
+                }
+                
+                // 과목별 점수 계산 (간단히 총점 기준)
+                const subjectScores = `수:${Math.round(result.totalScore * 0.2)} 영:${Math.round(result.totalScore * 0.2)} 국:${Math.round(result.totalScore * 0.2)} 사:${Math.round(result.totalScore * 0.2)} 과:${Math.round(result.totalScore * 0.2)}`;
+                
+                return `
+                    <tr>
+                        <td>중${result.grade}</td>
+                        <td><strong>${result.studentName}</strong></td>
+                        <td>${dateStr}</td>
+                        <td>${result.correctCount}/50</td>
+                        <td><strong>${result.totalScore}점</strong></td>
+                        <td>${levelBadge}</td>
+                        <td class="text-sm">${subjectScores}</td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="showDiagnosticDetail('${result.studentId}')">
+                                <i class="fas fa-eye"></i> 상세
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 필터링
+        function filterDiagnosticResults(level) {
+            currentFilter = level;
+            
+            // 버튼 활성화
+            document.querySelectorAll('.btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 테이블 재로드
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            updateDiagnosticResultsTable(diagnosticResults);
+        }
+        
+        // 상세 결과 모달
+        function showDiagnosticDetail(studentId) {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const result = diagnosticResults.find(r => r.studentId === studentId);
+            
+            if (!result) {
+                alert('진단평가 결과를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 모달 제목
+            document.getElementById('detailModalTitle').textContent = `${result.studentName} 학생 진단평가 상세 결과`;
+            
+            // 모달 내용
+            const modalBody = document.getElementById('diagnosticDetailBody');
+            modalBody.innerHTML = `
+                <div class="diagnostic-detail">
+                    <div class="detail-summary">
+                        <div class="summary-item">
+                            <span class="label">학년:</span>
+                            <span class="value">중${result.grade}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">진단일:</span>
+                            <span class="value">${new Date(result.testDate).toLocaleDateString()}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">정답수:</span>
+                            <span class="value">${result.correctCount}/50 (${Math.round((result.correctCount / 50) * 100)}%)</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">총점:</span>
+                            <span class="value"><strong>${result.totalScore}점</strong></span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">수준:</span>
+                            <span class="value"><strong>${result.levelLabel}</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-description" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                        <h4 style="margin-bottom: 10px;">💡 수준별 학습 방향</h4>
+                        <p>${getLevelDescription(result.level)}</p>
+                    </div>
+                    
+                    ${result.wrongQuestions && result.wrongQuestions.length > 0 ? `
+                    <div class="wrong-questions" style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 15px;">❌ 틀린 문제 분석 (${result.wrongQuestions.length}문제)</h4>
+                        <div class="wrong-list">
+                            ${result.wrongQuestions.map(wq => `
+                                <div class="wrong-item" style="padding: 10px; margin-bottom: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                                    <strong>문제 ${wq.number}:</strong> ${wq.concept}
+                                    <span class="badge badge-${wq.difficulty === 1 ? 'success' : wq.difficulty === 2 ? 'primary' : 'danger'}" style="margin-left: 10px;">
+                                        ${wq.difficulty === 1 ? '기초' : wq.difficulty === 2 ? '중급' : '고급'}
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="detail-actions" style="margin-top: 20px; text-align: right;">
+                        <button class="btn btn-secondary" onclick="closeDiagnosticDetailModal()">닫기</button>
+                    </div>
+                </div>
+            `;
+            
+            // 모달 표시
+            document.getElementById('diagnosticDetailModal').style.display = 'flex';
+        }
+        
+        function closeDiagnosticDetailModal() {
+            document.getElementById('diagnosticDetailModal').style.display = 'none';
+        }
+        
+        function getLevelDescription(level) {
+            const descriptions = {
+                beginner: '기본 개념부터 차근차근 학습이 필요합니다. EBS 기초 강좌와 개념서를 활용한 반복 학습을 권장합니다.',
+                intermediate: '표준 교과 과정을 잘 따라가고 있습니다. 문제 풀이 양을 늘리고 오답 노트를 작성하면 더욱 향상될 것입니다.',
+                advanced: '심화 학습이 가능한 수준입니다. 상위권 문제집과 경시대회 기출문제를 통해 실력을 더욱 발전시키세요.'
+            };
+            return descriptions[level] || '';
+        }
+
+        // ==========================================
+        // 수준별 학습 관리
+        // ==========================================
+        
+        let currentLevelFilter = 'all';
+        
+        // 수준별 학습 관리 데이터 로드
+        function loadLevelManagement() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            let levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
+            
+            console.log('📊 수준별 학습 관리 데이터:', { diagnosticResults, students, levelAdjustments });
+            
+            // 진단 미완료 학생 파악
+            const diagnosedStudentIds = new Set(diagnosticResults.map(r => r.studentId));
+            const allStudents = students.map(s => {
+                const diagnostic = diagnosticResults.find(d => d.studentId === s.id);
+                return {
+                    ...s,
+                    hasDiagnostic: !!diagnostic,
+                    diagnosticResult: diagnostic || null
+                };
+            });
+            
+            // 통계 계산
+            const stats = {
+                advanced: allStudents.filter(s => s.diagnosticResult?.level === 'advanced').length,
+                intermediate: allStudents.filter(s => s.diagnosticResult?.level === 'intermediate').length,
+                beginner: allStudents.filter(s => s.diagnosticResult?.level === 'beginner').length,
+                notDiagnosed: allStudents.filter(s => !s.hasDiagnostic).length
+            };
+            
+            // 통계 업데이트
+            document.getElementById('advancedStudentsCount').innerHTML = `${stats.advanced}<span class="stat-unit">명</span>`;
+            document.getElementById('intermediateStudentsCount').innerHTML = `${stats.intermediate}<span class="stat-unit">명</span>`;
+            document.getElementById('beginnerStudentsCount').innerHTML = `${stats.beginner}<span class="stat-unit">명</span>`;
+            document.getElementById('notDiagnosedCount').innerHTML = `${stats.notDiagnosed}<span class="stat-unit">명</span>`;
+            
+            // 테이블 업데이트
+            updateLevelManagementTable(allStudents, levelAdjustments);
+        }
+        
+        // 수준별 학습 관리 테이블 업데이트
+        function updateLevelManagementTable(students, adjustments) {
+            const tbody = document.getElementById('levelManagementTableBody');
+            if (!tbody) return;
+            
+            // 필터링
+            let filteredStudents = students;
+            if (currentLevelFilter === 'not_diagnosed') {
+                filteredStudents = students.filter(s => !s.hasDiagnostic);
+            } else if (currentLevelFilter !== 'all') {
+                filteredStudents = students.filter(s => s.diagnosticResult?.level === currentLevelFilter);
+            }
+            
+            if (filteredStudents.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-8">
+                            <div class="empty-state">
+                                <i class="fas fa-user-graduate fa-3x mb-3 text-gray-400"></i>
+                                <p>조건에 맞는 학생이 없습니다.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 테이블 생성
+            tbody.innerHTML = filteredStudents.map(student => {
+                const adjustment = adjustments.find(a => a.studentId === student.id);
+                const diagnostic = student.diagnosticResult;
+                
+                // 수준 배지
+                let levelBadge = '<span class="badge badge-secondary">미진단</span>';
+                let scoreDisplay = '-';
+                let contentLevel = '표준';
+                let adjustedStatus = '<span style="color: #9ca3af;">미조정</span>';
+                
+                if (diagnostic) {
+                    scoreDisplay = `${diagnostic.totalScore}/362점`;
+                    
+                    if (diagnostic.level === 'advanced') {
+                        levelBadge = '<span class="badge badge-success">고급</span>';
+                        contentLevel = '심화';
+                    } else if (diagnostic.level === 'intermediate') {
+                        levelBadge = '<span class="badge badge-primary">중급</span>';
+                        contentLevel = '표준';
+                    } else {
+                        levelBadge = '<span class="badge badge-warning">기초</span>';
+                        contentLevel = '기본';
+                    }
+                }
+                
+                if (adjustment) {
+                    adjustedStatus = `<span style="color: #10b981;"><i class="fas fa-check-circle"></i> 자동 조정됨</span>`;
+                    contentLevel = adjustment.contentLevel || contentLevel;
+                }
+                
+                const lastUpdateDate = adjustment?.lastUpdate 
+                    ? new Date(adjustment.lastUpdate).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
+                    : '-';
+                
+                const actionButton = diagnostic 
+                    ? `<button class="btn-sm btn-primary" onclick="applyLevelAdjustment('${student.id}')">
+                           <i class="fas fa-sync-alt"></i> 적용
+                       </button>`
+                    : `<button class="btn-sm btn-secondary" disabled title="진단평가를 먼저 완료해야 합니다">
+                           <i class="fas fa-ban"></i> 진단 필요
+                       </button>`;
+                
+                return `
+                    <tr data-level="${diagnostic?.level || 'not_diagnosed'}">
+                        <td>중${student.grade}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td>${levelBadge}</td>
+                        <td>${scoreDisplay}</td>
+                        <td><span class="badge" style="background: #3b82f6;">${contentLevel}</span></td>
+                        <td>${adjustedStatus}</td>
+                        <td style="color: #6b7280;">${lastUpdateDate}</td>
+                        <td>${actionButton}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 개별 학생 수준별 조정 적용
+        function applyLevelAdjustment(studentId) {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            let levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
+            
+            const diagnostic = diagnosticResults.find(d => d.studentId === studentId);
+            const student = students.find(s => s.id === studentId);
+            
+            if (!diagnostic || !student) {
+                alert('❌ 학생 정보 또는 진단평가 결과를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 수준별 학습 내용 결정
+            let contentLevel = '';
+            let recommendedMaterials = [];
+            
+            if (diagnostic.level === 'advanced') {
+                contentLevel = '심화';
+                recommendedMaterials = [
+                    { subject: '수학', material: '최고수준 중등수학', difficulty: '심화' },
+                    { subject: '영어', material: 'Grammar Zone 고급', difficulty: '심화' },
+                    { subject: '국어', material: '고난도 독해', difficulty: '심화' },
+                    { subject: '과학', material: '과학 올림피아드 기본', difficulty: '심화' },
+                    { subject: '사회', material: '사회 탐구영역 심화', difficulty: '심화' }
+                ];
+            } else if (diagnostic.level === 'intermediate') {
+                contentLevel = '표준';
+                recommendedMaterials = [
+                    { subject: '수학', material: '개념원리 중등수학', difficulty: '표준' },
+                    { subject: '영어', material: 'Grammar Zone 기본편', difficulty: '표준' },
+                    { subject: '국어', material: '비문학 독해 워크북', difficulty: '표준' },
+                    { subject: '과학', material: 'EBS 과학 강좌', difficulty: '표준' },
+                    { subject: '사회', material: 'EBS 사회 강좌', difficulty: '표준' }
+                ];
+            } else {
+                contentLevel = '기본';
+                recommendedMaterials = [
+                    { subject: '수학', material: '개념 클리어 중등수학', difficulty: '기본' },
+                    { subject: '영어', material: 'Grammar Starter', difficulty: '기본' },
+                    { subject: '국어', material: '기초 독해 연습', difficulty: '기본' },
+                    { subject: '과학', material: '쉬운 과학 개념서', difficulty: '기본' },
+                    { subject: '사회', material: '쉬운 사회 개념서', difficulty: '기본' }
+                ];
+            }
+            
+            // 조정 정보 저장
+            const adjustmentData = {
+                studentId: student.id,
+                studentName: student.name,
+                grade: student.grade,
+                diagnosticLevel: diagnostic.level,
+                diagnosticScore: diagnostic.totalScore,
+                contentLevel: contentLevel,
+                recommendedMaterials: recommendedMaterials,
+                lastUpdate: new Date().toISOString(),
+                appliedBy: '김선생님'
+            };
+            
+            // 기존 조정 정보 업데이트 또는 추가
+            const existingIndex = levelAdjustments.findIndex(a => a.studentId === studentId);
+            if (existingIndex >= 0) {
+                levelAdjustments[existingIndex] = adjustmentData;
+            } else {
+                levelAdjustments.push(adjustmentData);
+            }
+            
+            localStorage.setItem('level_adjustments', JSON.stringify(levelAdjustments));
+            
+            // 학생의 학습 스케줄에도 반영 (학생 포털에서 사용)
+            updateStudentScheduleByLevel(studentId, contentLevel);
+            
+            alert(`✅ ${student.name} 학생의 학습 내용이 "${contentLevel}" 수준으로 조정되었습니다.\n\n권장 교재:\n${recommendedMaterials.map(m => `• ${m.subject}: ${m.material}`).join('\n')}`);
+            
+            // 테이블 새로고침
+            loadLevelManagement();
+        }
+        
+        // 전체 학생 자동 조정
+        function applyAllLevelAdjustments() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            
+            if (diagnosticResults.length === 0) {
+                alert('⚠️ 진단평가를 완료한 학생이 없습니다.');
+                return;
+            }
+            
+            const confirmed = confirm(`진단평가를 완료한 ${diagnosticResults.length}명 학생의 학습 내용을 자동으로 조정하시겠습니까?`);
+            if (!confirmed) return;
+            
+            let successCount = 0;
+            
+            diagnosticResults.forEach(diagnostic => {
+                try {
+                    applyLevelAdjustmentSilent(diagnostic.studentId);
+                    successCount++;
+                } catch (error) {
+                    console.error(`❌ ${diagnostic.studentName} 학생 조정 실패:`, error);
+                }
+            });
+            
+            alert(`✅ 총 ${successCount}명의 학생 학습 내용이 수준별로 자동 조정되었습니다.`);
+            loadLevelManagement();
+        }
+        
+        // 조용히 조정 적용 (알림 없이)
+        function applyLevelAdjustmentSilent(studentId) {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            let levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
+            
+            const diagnostic = diagnosticResults.find(d => d.studentId === studentId);
+            const student = students.find(s => s.id === studentId);
+            
+            if (!diagnostic || !student) return;
+            
+            let contentLevel = '';
+            let recommendedMaterials = [];
+            
+            if (diagnostic.level === 'advanced') {
+                contentLevel = '심화';
+                recommendedMaterials = [
+                    { subject: '수학', material: '최고수준 중등수학', difficulty: '심화' },
+                    { subject: '영어', material: 'Grammar Zone 고급', difficulty: '심화' },
+                    { subject: '국어', material: '고난도 독해', difficulty: '심화' },
+                    { subject: '과학', material: '과학 올림피아드 기본', difficulty: '심화' },
+                    { subject: '사회', material: '사회 탐구영역 심화', difficulty: '심화' }
+                ];
+            } else if (diagnostic.level === 'intermediate') {
+                contentLevel = '표준';
+                recommendedMaterials = [
+                    { subject: '수학', material: '개념원리 중등수학', difficulty: '표준' },
+                    { subject: '영어', material: 'Grammar Zone 기본편', difficulty: '표준' },
+                    { subject: '국어', material: '비문학 독해 워크북', difficulty: '표준' },
+                    { subject: '과학', material: 'EBS 과학 강좌', difficulty: '표준' },
+                    { subject: '사회', material: 'EBS 사회 강좌', difficulty: '표준' }
+                ];
+            } else {
+                contentLevel = '기본';
+                recommendedMaterials = [
+                    { subject: '수학', material: '개념 클리어 중등수학', difficulty: '기본' },
+                    { subject: '영어', material: 'Grammar Starter', difficulty: '기본' },
+                    { subject: '국어', material: '기초 독해 연습', difficulty: '기본' },
+                    { subject: '과학', material: '쉬운 과학 개념서', difficulty: '기본' },
+                    { subject: '사회', material: '쉬운 사회 개념서', difficulty: '기본' }
+                ];
+            }
+            
+            const adjustmentData = {
+                studentId: student.id,
+                studentName: student.name,
+                grade: student.grade,
+                diagnosticLevel: diagnostic.level,
+                diagnosticScore: diagnostic.totalScore,
+                contentLevel: contentLevel,
+                recommendedMaterials: recommendedMaterials,
+                lastUpdate: new Date().toISOString(),
+                appliedBy: '김선생님'
+            };
+            
+            const existingIndex = levelAdjustments.findIndex(a => a.studentId === studentId);
+            if (existingIndex >= 0) {
+                levelAdjustments[existingIndex] = adjustmentData;
+            } else {
+                levelAdjustments.push(adjustmentData);
+            }
+            
+            localStorage.setItem('level_adjustments', JSON.stringify(levelAdjustments));
+            updateStudentScheduleByLevel(studentId, contentLevel);
+        }
+        
+        // 학생 스케줄에 수준별 반영
+        function updateStudentScheduleByLevel(studentId, contentLevel) {
+            let studentSchedules = JSON.parse(localStorage.getItem('studentSchedule')) || {};
+            
+            if (!studentSchedules[studentId]) return;
+            
+            // 스케줄의 각 학습 내용에 난이도 정보 추가
+            Object.keys(studentSchedules[studentId]).forEach(date => {
+                const daySchedule = studentSchedules[studentId][date];
+                if (daySchedule && daySchedule.subjects) {
+                    daySchedule.subjects = daySchedule.subjects.map(subject => ({
+                        ...subject,
+                        contentLevel: contentLevel,
+                        adjustedAt: new Date().toISOString()
+                    }));
+                }
+            });
+            
+            localStorage.setItem('studentSchedule', JSON.stringify(studentSchedules));
+        }
+        
+        // 수준별 필터
+        function filterLevelManagement(level) {
+            currentLevelFilter = level;
+            
+            // 필터 버튼 활성화 상태 변경
+            document.querySelectorAll('.filter-buttons .btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 테이블 새로고침
+            loadLevelManagement();
+        }
+        
+        // 페이지 전환 시 진단평가 결과 로드
+        const originalShowPage = window.showPage;
+        window.showPage = function(pageName) {
+            if (originalShowPage) {
+                originalShowPage(pageName);
+            }
+            
+            if (pageName === 'diagnostic-results') {
+                setTimeout(() => {
+                    loadDiagnosticResults();
+                }, 100);
+            } else if (pageName === 'level-management') {
+                setTimeout(() => {
+                    loadLevelManagement();
+                }, 100);
+            }
+        };
     </script>
 </body>
 </html>

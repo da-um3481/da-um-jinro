@@ -1928,20 +1928,72 @@
             `;
         }
         
-        // 📚 학습 자료 HTML 생성
+        // 📚 학습 자료 HTML 생성 (수준별 맞춤)
         function getStudyMaterialsForSubject(subjectName) {
             const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
             const subjectKey = subjectMap[subjectName];
             const grade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
+            const studentId = localStorage.getItem('currentStudentId');
+            
+            // 선생님이 설정한 수준별 조정 정보 가져오기
+            const levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
+            const studentAdjustment = levelAdjustments.find(a => a.studentId === studentId);
+            
+            let difficultyLevel = 2; // 기본값: 표준 (1=기본, 2=표준, 3=심화)
+            let levelBadge = '';
+            
+            if (studentAdjustment) {
+                if (studentAdjustment.contentLevel === '기본') {
+                    difficultyLevel = 1;
+                    levelBadge = '<span class="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">🌱 기본 수준</span>';
+                } else if (studentAdjustment.contentLevel === '심화') {
+                    difficultyLevel = 3;
+                    levelBadge = '<span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">⭐ 심화 수준</span>';
+                } else {
+                    levelBadge = '<span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">📚 표준 수준</span>';
+                }
+            }
             
             if (!subjectKey || typeof getStudyMaterials !== 'function') {
                 return '<div class="text-xs text-gray-500">학습 자료 준비 중...</div>';
             }
             
-            const materials = getStudyMaterials(subjectKey, grade, 1);
+            const materials = getStudyMaterials(subjectKey, grade, difficultyLevel);
             if (!materials) return '';
             
-            let html = '<div class="space-y-2"><div class="text-xs font-bold text-gray-700 mb-2">📚 추천 학습 자료</div>';
+            let html = '<div class="space-y-2">';
+            
+            // 수준 배지 표시
+            if (levelBadge) {
+                html += `<div class="flex items-center justify-between mb-2">
+                    <div class="text-xs font-bold text-gray-700">📚 추천 학습 자료</div>
+                    ${levelBadge}
+                </div>`;
+            } else {
+                html += '<div class="text-xs font-bold text-gray-700 mb-2">📚 추천 학습 자료</div>';
+            }
+            
+            // 선생님의 맞춤 교재 추천 (있는 경우)
+            if (studentAdjustment && studentAdjustment.recommendedMaterials) {
+                const subjectMaterial = studentAdjustment.recommendedMaterials.find(m => 
+                    m.subject === subjectName
+                );
+                
+                if (subjectMaterial) {
+                    html += `
+                        <div class="p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-lg">
+                            <div class="flex items-start gap-2">
+                                <div class="text-xl">👩‍🏫</div>
+                                <div class="flex-1">
+                                    <div class="text-xs font-bold text-purple-700 mb-1">선생님 추천 교재</div>
+                                    <div class="text-sm font-bold text-gray-800">${subjectMaterial.material}</div>
+                                    <div class="text-xs text-gray-600 mt-1">난이도: ${subjectMaterial.difficulty}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
             
             // EBS
             if (materials.ebsLectures && materials.ebsLectures[0]) {
