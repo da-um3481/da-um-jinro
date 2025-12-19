@@ -275,7 +275,7 @@
             <label class="block text-sm font-semibold text-gray-700 mb-3">
                 <i class="fas fa-user-circle mr-2 text-green-800"></i>내 이름 입력
             </label>
-            <div class="flex space-x-3">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <input 
                     type="text" 
                     id="studentNameInput" 
@@ -283,15 +283,23 @@
                     class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-700 focus:border-transparent transition text-base"
                     onkeypress="if(event.key==='Enter') loadStudentByName()"
                 >
+                <select 
+                    id="studentGradeSelect"
+                    class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-700 focus:border-transparent transition text-base font-semibold"
+                >
+                    <option value="1">중1</option>
+                    <option value="2">중2</option>
+                    <option value="3">중3</option>
+                </select>
                 <button 
                     onclick="loadStudentByName()"
-                    class="px-6 py-3 bg-gradient-to-r from-green-800 to-green-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    class="px-6 py-3 bg-gradient-to-r from-green-800 to-green-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
                 >
                     <i class="fas fa-search mr-2"></i>찾기
                 </button>
             </div>
             <p class="text-xs text-gray-500 mt-2">
-                <i class="fas fa-info-circle mr-1"></i>이름을 정확히 입력하고 "찾기" 버튼을 눌러주세요
+                <i class="fas fa-info-circle mr-1"></i>이름과 학년을 선택하고 "찾기" 버튼을 눌러주세요
             </p>
         </div>
 
@@ -488,108 +496,314 @@
     
     <script>
         // ==========================================
-        // 교과 내용 데이터베이스 (중1 기준)
+        // 교과 내용 데이터베이스 (중1~중3 전체)
         // ==========================================
         const curriculumDB = {
-            '수학': {
-                name: '수학',
-                icon: '🔢',
-                units: [{
-                    name: '소인수분해',
-                    time: 8,
-                    concepts: [
-                        '소수와 합성수의 정의',
-                        '거듭제곱 표현하기',
-                        '소인수분해의 뜻과 방법',
-                        '최대공약수(GCD) 구하기',
-                        '최소공배수(LCM) 구하기'
-                    ],
-                    materials: {
-                        textbook: '중학교 수학 1 (1단원)',
-                        ebs: 'EBS 중학 뉴런 수학1 - 1~8강',
-                        concept: '개념원리 중1-1 (p.10~45)'
-                    }
-                }]
+            1: { // 중1
+                '수학': {
+                    name: '수학',
+                    icon: '🔢',
+                    units: [{
+                        name: '소인수분해',
+                        time: 8,
+                        concepts: [
+                            '소수와 합성수의 정의',
+                            '거듭제곱 표현하기',
+                            '소인수분해의 뜻과 방법',
+                            '최대공약수(GCD) 구하기',
+                            '최소공배수(LCM) 구하기'
+                        ],
+                        materials: {
+                            textbook: '중학교 수학 1 (1단원)',
+                            ebs: 'EBS 중학 뉴런 수학1 - 1~8강',
+                            concept: '개념원리 중1-1 (p.10~45)'
+                        }
+                    }]
+                },
+                '영어': {
+                    name: '영어',
+                    icon: '🔤',
+                    units: [{
+                        name: 'be동사와 일반동사',
+                        time: 8,
+                        concepts: [
+                            'be동사의 의미와 쓰임 (am, are, is)',
+                            'be동사 부정문/의문문',
+                            '일반동사의 현재형',
+                            '3인칭 단수 현재형 (-s, -es)',
+                            '빈도부사 (always, usually)'
+                        ],
+                        materials: {
+                            textbook: '중학교 영어 1 (Lesson 1-2)',
+                            ebs: 'EBS 중학 영어 1 - 1~8강',
+                            concept: 'Grammar Zone 입문편 (p.10~60)'
+                        }
+                    }]
+                },
+                '국어': {
+                    name: '국어',
+                    icon: '✍️',
+                    units: [{
+                        name: '문학의 이해',
+                        time: 8,
+                        concepts: [
+                            '시(詩)의 3요소: 운율, 심상, 화자',
+                            '비유법 (직유, 은유, 의인법)',
+                            '소설의 3요소: 인물, 사건, 배경',
+                            '소설의 시점 (1인칭, 3인칭)',
+                            '작품 속 주제 파악하기'
+                        ],
+                        materials: {
+                            textbook: '중학교 국어 1 (문학 영역)',
+                            ebs: 'EBS 중학 국어 1 - 문학편 1~8강',
+                            concept: '완자 중등 국어1 (p.10~80)'
+                        }
+                    }]
+                },
+                '과학': {
+                    name: '과학',
+                    icon: '🔬',
+                    units: [{
+                        name: '지구계와 지권의 변화',
+                        time: 10,
+                        concepts: [
+                            '지구계의 구성 요소',
+                            '지권의 층상 구조',
+                            '암석의 생성과 순환',
+                            '풍화와 침식 작용',
+                            '퇴적 작용'
+                        ],
+                        materials: {
+                            textbook: '중학교 과학 1 (1단원)',
+                            ebs: 'EBS 중학 과학 1 - 1~10강',
+                            concept: '완자 중등 과학1 (p.10~50)'
+                        }
+                    }]
+                },
+                '사회': {
+                    name: '사회',
+                    icon: '🌏',
+                    units: [{
+                        name: '우리와 다른 기후, 다른 생활',
+                        time: 8,
+                        concepts: [
+                            '세계의 다양한 기후',
+                            '열대 기후의 특징과 생활',
+                            '건조 기후의 특징과 생활',
+                            '온대 기후의 특징과 생활',
+                            '한대 기후의 특징과 생활'
+                        ],
+                        materials: {
+                            textbook: '중학교 사회 1 (1단원)',
+                            ebs: 'EBS 중학 사회 1 - 1~8강',
+                            concept: '완자 중등 사회1 (p.10~40)'
+                        }
+                    }]
+                }
             },
-            '영어': {
-                name: '영어',
-                icon: '🔤',
-                units: [{
-                    name: 'be동사와 일반동사',
-                    time: 8,
-                    concepts: [
-                        'be동사의 의미와 쓰임 (am, are, is)',
-                        'be동사 부정문/의문문',
-                        '일반동사의 현재형',
-                        '3인칭 단수 현재형 (-s, -es)',
-                        '빈도부사 (always, usually)'
-                    ],
-                    materials: {
-                        textbook: '중학교 영어 1 (Lesson 1-2)',
-                        ebs: 'EBS 중학 영어 1 - 1~8강',
-                        concept: 'Grammar Zone 입문편 (p.10~60)'
-                    }
-                }]
+            2: { // 중2
+                '수학': {
+                    name: '수학',
+                    icon: '🔢',
+                    units: [{
+                        name: '유리수와 순환소수',
+                        time: 8,
+                        concepts: [
+                            '유리수의 뜻',
+                            '순환소수의 표현',
+                            '유한소수와 순환소수',
+                            '순환소수를 분수로',
+                            '소수의 대소 비교'
+                        ],
+                        materials: {
+                            textbook: '중학교 수학 2 (1단원)',
+                            ebs: 'EBS 중학 뉴런 수학2 - 1~8강',
+                            concept: '개념원리 중2-1 (p.10~45)'
+                        }
+                    }]
+                },
+                '영어': {
+                    name: '영어',
+                    icon: '🔤',
+                    units: [{
+                        name: '현재완료',
+                        time: 12,
+                        concepts: [
+                            '현재완료의 의미 (have/has + p.p.)',
+                            '완료 용법 (just, already, yet)',
+                            '경험 용법 (ever, never, before)',
+                            '계속 용법 (for, since)',
+                            '결과 용법'
+                        ],
+                        materials: {
+                            textbook: '중학교 영어 2 (Lesson 3-4)',
+                            ebs: 'EBS 중학 영어 2 - 9~16강',
+                            concept: 'Grammar Zone 기본편 (p.120~160)'
+                        }
+                    }]
+                },
+                '국어': {
+                    name: '국어',
+                    icon: '✍️',
+                    units: [{
+                        name: '문학과 표현',
+                        time: 10,
+                        concepts: [
+                            '비유와 상징의 효과',
+                            '문학의 갈래 (서정/서사/극/교술)',
+                            '운율의 종류',
+                            '표현 기법',
+                            '작품 감상 및 비평'
+                        ],
+                        materials: {
+                            textbook: '중학교 국어 2 (문학 영역)',
+                            ebs: 'EBS 중학 국어 2 - 1~10강',
+                            concept: '완자 중등 국어2 (p.15~90)'
+                        }
+                    }]
+                },
+                '과학': {
+                    name: '과학',
+                    icon: '🔬',
+                    units: [{
+                        name: '물질의 구성',
+                        time: 10,
+                        concepts: [
+                            '원자의 구조',
+                            '분자의 형성',
+                            '이온의 생성',
+                            '원소 기호',
+                            '화학식의 표현'
+                        ],
+                        materials: {
+                            textbook: '중학교 과학 2 (1단원)',
+                            ebs: 'EBS 중학 과학 2 - 1~10강',
+                            concept: '완자 중등 과학2 (p.10~60)'
+                        }
+                    }]
+                },
+                '사회': {
+                    name: '사회',
+                    icon: '🌏',
+                    units: [{
+                        name: '지역의 의미와 특성',
+                        time: 8,
+                        concepts: [
+                            '지역의 이해',
+                            '지역 조사 방법',
+                            '지역의 특성',
+                            '지역 문제 해결',
+                            '지역 간 교류'
+                        ],
+                        materials: {
+                            textbook: '중학교 사회 2 (1단원)',
+                            ebs: 'EBS 중학 사회 2 - 1~8강',
+                            concept: '완자 중등 사회2 (p.10~50)'
+                        }
+                    }]
+                }
             },
-            '국어': {
-                name: '국어',
-                icon: '✍️',
-                units: [{
-                    name: '문학의 이해',
-                    time: 8,
-                    concepts: [
-                        '시(詩)의 3요소: 운율, 심상, 화자',
-                        '비유법 (직유, 은유, 의인법)',
-                        '소설의 3요소: 인물, 사건, 배경',
-                        '소설의 시점 (1인칭, 3인칭)',
-                        '작품 속 주제 파악하기'
-                    ],
-                    materials: {
-                        textbook: '중학교 국어 1 (문학 영역)',
-                        ebs: 'EBS 중학 국어 1 - 문학편 1~8강',
-                        concept: '완자 중등 국어1 (p.10~80)'
-                    }
-                }]
-            },
-            '과학': {
-                name: '과학',
-                icon: '🔬',
-                units: [{
-                    name: '지구계와 지권의 변화',
-                    time: 10,
-                    concepts: [
-                        '지구계의 구성 요소',
-                        '지권의 층상 구조',
-                        '암석의 생성과 순환',
-                        '풍화와 침식 작용',
-                        '퇴적 작용'
-                    ],
-                    materials: {
-                        textbook: '중학교 과학 1 (1단원)',
-                        ebs: 'EBS 중학 과학 1 - 1~10강',
-                        concept: '완자 중등 과학1 (p.10~50)'
-                    }
-                }]
-            },
-            '사회': {
-                name: '사회',
-                icon: '🌏',
-                units: [{
-                    name: '우리와 다른 기후, 다른 생활',
-                    time: 8,
-                    concepts: [
-                        '세계의 다양한 기후',
-                        '열대 기후의 특징과 생활',
-                        '건조 기후의 특징과 생활',
-                        '온대 기후의 특징과 생활',
-                        '한대 기후의 특징과 생활'
-                    ],
-                    materials: {
-                        textbook: '중학교 사회 1 (1단원)',
-                        ebs: 'EBS 중학 사회 1 - 1~8강',
-                        concept: '완자 중등 사회1 (p.10~40)'
-                    }
-                }]
+            3: { // 중3
+                '수학': {
+                    name: '수학',
+                    icon: '🔢',
+                    units: [{
+                        name: '제곱근과 실수',
+                        time: 10,
+                        concepts: [
+                            '제곱근의 뜻',
+                            '무리수의 개념',
+                            '실수의 대소 관계',
+                            '근호를 포함한 식의 계산',
+                            '제곱근의 성질'
+                        ],
+                        materials: {
+                            textbook: '중학교 수학 3 (1단원)',
+                            ebs: 'EBS 중학 뉴런 수학3 - 1~10강',
+                            concept: '개념원리 중3-1 (p.10~60)'
+                        }
+                    }]
+                },
+                '영어': {
+                    name: '영어',
+                    icon: '🔤',
+                    units: [{
+                        name: '관계대명사',
+                        time: 14,
+                        concepts: [
+                            '주격 관계대명사 (who, which, that)',
+                            '목적격 관계대명사',
+                            '소유격 관계대명사 (whose)',
+                            '관계대명사 what',
+                            '계속적 용법'
+                        ],
+                        materials: {
+                            textbook: '중학교 영어 3 (Lesson 5-6)',
+                            ebs: 'EBS 중학 영어 3 - 15~24강',
+                            concept: 'Grammar Zone 기본편 (p.200~250)'
+                        }
+                    }]
+                },
+                '국어': {
+                    name: '국어',
+                    icon: '✍️',
+                    units: [{
+                        name: '고전문학의 이해',
+                        time: 12,
+                        concepts: [
+                            '고전 시가의 특징',
+                            '고전 소설의 구조',
+                            '한시의 이해',
+                            '고전 작품 감상',
+                            '현대어 풀이'
+                        ],
+                        materials: {
+                            textbook: '중학교 국어 3 (문학 영역)',
+                            ebs: 'EBS 중학 국어 3 - 1~12강',
+                            concept: '완자 중등 국어3 (p.20~110)'
+                        }
+                    }]
+                },
+                '과학': {
+                    name: '과학',
+                    icon: '🔬',
+                    units: [{
+                        name: '화학 반응의 규칙',
+                        time: 12,
+                        concepts: [
+                            '질량 보존 법칙',
+                            '일정 성분비 법칙',
+                            '기체 반응 법칙',
+                            '화학 반응식',
+                            '화학 반응의 양적 관계'
+                        ],
+                        materials: {
+                            textbook: '중학교 과학 3 (1단원)',
+                            ebs: 'EBS 중학 과학 3 - 1~12강',
+                            concept: '완자 중등 과학3 (p.15~70)'
+                        }
+                    }]
+                },
+                '사회': {
+                    name: '사회',
+                    icon: '🌏',
+                    units: [{
+                        name: '인권과 헌법',
+                        time: 10,
+                        concepts: [
+                            '인권의 의미와 발전',
+                            '헌법의 기본 원리',
+                            '기본권의 종류',
+                            '국민의 의무',
+                            '인권 보장과 제도'
+                        ],
+                        materials: {
+                            textbook: '중학교 사회 3 (1단원)',
+                            ebs: 'EBS 중학 사회 3 - 1~10강',
+                            concept: '완자 중등 사회3 (p.10~60)'
+                        }
+                    }]
+                }
             }
         };
         
@@ -1007,6 +1221,8 @@
         // 🎯 통합 원스톱: 학생 이름으로 로그인 + 자동 스케줄 생성
         function loadStudentByName() {
             const nameInput = document.getElementById('studentNameInput').value.trim();
+            const gradeSelect = document.getElementById('studentGradeSelect').value;
+            const selectedGrade = parseInt(gradeSelect);
             
             if (!nameInput) {
                 alert('이름을 입력해주세요!');
@@ -1023,7 +1239,7 @@
                 student = {
                     id: newStudentId,
                     name: nameInput,
-                    grade: 1,  // 기본 중1
+                    grade: selectedGrade,  // 선택한 학년
                     class_num: 1,  // 기본 1반
                     number: 1,  // 기본 1번
                     created_at: new Date().toISOString()
@@ -1032,6 +1248,14 @@
                 // 학생 목록에 추가
                 students.push(student);
                 localStorage.setItem('students', JSON.stringify(students));
+            } else {
+                // 기존 학생이면 학년 업데이트
+                student.grade = selectedGrade;
+                const studentIndex = students.findIndex(s => s.id === student.id);
+                if (studentIndex !== -1) {
+                    students[studentIndex] = student;
+                    localStorage.setItem('students', JSON.stringify(students));
+                }
             }
 
             // localStorage에 현재 학생 정보 저장
@@ -1165,6 +1389,9 @@
             
             const materials = getStudyMaterialsForSubject(item.subject);
             
+            // 현재 학생의 학년 가져오기
+            const studentGrade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
+            
             return `
                 <div class="rounded-xl border-2 overflow-hidden" style="background-color: ${colors.bg}; border-color: ${colors.border};">
                     <!-- 과목 헤더 -->
@@ -1211,7 +1438,7 @@
                         </button>
                         
                         <!-- 학습 내용 (토글) -->
-                        ${getLearningContentHTML(item.subject, colors)}
+                        ${getLearningContentHTML(item.subject, colors, studentGrade)}
                         
                         <!-- 학습 내용 입력 -->
                         <textarea id="${subjectId}Content" rows="3" 
@@ -1230,9 +1457,17 @@
         }
 
         // 📚 학습 내용 HTML 생성
-        function getLearningContentHTML(subjectName, colors) {
-            const curriculum = curriculumDB[subjectName];
+        function getLearningContentHTML(subjectName, colors, studentGrade = 1) {
+            // 학년별 교과 내용 가져오기
+            const gradeData = curriculumDB[studentGrade];
+            if (!gradeData) {
+                console.error('학년 데이터 없음:', studentGrade);
+                return '';
+            }
+            
+            const curriculum = gradeData[subjectName];
             if (!curriculum || !curriculum.units || curriculum.units.length === 0) {
+                console.error('과목 데이터 없음:', subjectName, '학년:', studentGrade);
                 return '';
             }
             
@@ -1243,7 +1478,7 @@
                 <div id="learningContent_${subjectName}" class="hidden p-4 rounded-lg border-2" 
                      style="background-color: ${colors.bg}; border-color: ${colors.border};">
                     <h4 class="text-base font-bold mb-3" style="color: ${colors.dark};">
-                        📖 ${unit.name} (${unit.time}시간)
+                        📖 [중${studentGrade}] ${unit.name} (${unit.time}시간)
                     </h4>
                     <div class="mb-3">
                         <p class="text-sm font-bold text-gray-700 mb-2">✅ 학습 개념:</p>
