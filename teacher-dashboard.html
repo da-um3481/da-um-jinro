@@ -1805,37 +1805,58 @@
         let currentSchoolFilter = 'middle'; // 기본값: 중학생
         
         function setSchoolFilter(schoolType) {
-            currentSchoolFilter = schoolType;
-            
-            // 버튼 스타일 업데이트
-            const middleBtn = document.getElementById('filterMiddle');
-            const highBtn = document.getElementById('filterHigh');
-            
-            if (schoolType === 'middle') {
-                middleBtn.style.background = '#3b82f6';
-                middleBtn.style.color = 'white';
-                highBtn.style.background = 'transparent';
-                highBtn.style.color = '#6b7280';
-            } else {
-                highBtn.style.background = '#3b82f6';
-                highBtn.style.color = 'white';
-                middleBtn.style.background = 'transparent';
-                middleBtn.style.color = '#6b7280';
-            }
-            
-            // 현재 페이지에 따라 데이터 새로고침
-            const activePage = document.querySelector('.page-content.active');
-            if (activePage) {
-                const pageId = activePage.id;
+            try {
+                console.log(`🔄 필터 변경 시도: ${schoolType}`);
                 
-                if (pageId === 'page-diagnostic-results') {
-                    loadDiagnosticResults();
-                } else if (pageId === 'page-level-management') {
-                    loadLevelManagement();
+                currentSchoolFilter = schoolType;
+                
+                // 버튼 스타일 업데이트
+                const middleBtn = document.getElementById('filterMiddle');
+                const highBtn = document.getElementById('filterHigh');
+                
+                if (!middleBtn || !highBtn) {
+                    console.error('❌ 필터 버튼을 찾을 수 없습니다');
+                    return;
                 }
+                
+                if (schoolType === 'middle') {
+                    middleBtn.style.background = '#3b82f6';
+                    middleBtn.style.color = 'white';
+                    highBtn.style.background = 'transparent';
+                    highBtn.style.color = '#6b7280';
+                } else {
+                    highBtn.style.background = '#3b82f6';
+                    highBtn.style.color = 'white';
+                    middleBtn.style.background = 'transparent';
+                    middleBtn.style.color = '#6b7280';
+                }
+                
+                console.log(`✅ 버튼 스타일 업데이트 완료`);
+                
+                // 현재 페이지에 따라 데이터 새로고침
+                const activePage = document.querySelector('.page-content.active');
+                if (activePage) {
+                    const pageId = activePage.id;
+                    console.log(`📄 현재 페이지: ${pageId}`);
+                    
+                    if (pageId === 'page-diagnostic-results') {
+                        console.log(`🔄 진단평가 결과 새로고침 중...`);
+                        loadDiagnosticResults();
+                    } else if (pageId === 'page-level-management') {
+                        console.log(`🔄 수준별 학습 관리 새로고침 중...`);
+                        loadLevelManagement();
+                    } else {
+                        console.log(`ℹ️ 현재 페이지에서는 필터가 작동하지 않습니다`);
+                    }
+                } else {
+                    console.log(`⚠️ 활성 페이지를 찾을 수 없습니다`);
+                }
+                
+                console.log(`📊 학교급 필터 변경 완료: ${schoolType === 'middle' ? '중학생' : '고등학생'}`);
+            } catch (error) {
+                console.error('❌ 필터 변경 중 오류:', error);
+                alert(`필터 변경 중 오류가 발생했습니다: ${error.message}`);
             }
-            
-            console.log(`📊 학교급 필터 변경: ${schoolType === 'middle' ? '중학생' : '고등학생'}`);
         }
         
         // 학년이 중학생인지 고등학생인지 판별
