@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DA.UM 겨울방학 30일 프로그램 - 원스톱 학습 포털</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <title>DA.UM 겨울방학 30일 - 원스톱 학습 포털</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
-        * {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        
         body {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 50%, #d1d5db 100%);
         }
         
         /* 눈송이 애니메이션 */
@@ -28,160 +23,13 @@
         .snowflake {
             position: fixed;
             top: -10vh;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(34, 197, 94, 0.6);
             font-size: 1.5rem;
             z-index: 1;
             pointer-events: none;
             animation: snowfall linear infinite;
         }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-slide-up {
-            animation: slideUp 0.5s ease-out;
-        }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .timer-display {
-            font-variant-numeric: tabular-nums;
-            letter-spacing: 0.05em;
-        }
-        
-        .progress-bar {
-            transition: width 0.3s ease-out;
-        }
-        
-        /* 성공 메시지 스타일 */
-        .success-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            animation: slideUp 0.3s ease-out;
-        }
-        
-        /* 모바일 최적화 */
-        @media (max-width: 768px) {
-            body {
-                font-size: 15px;
-            }
-            
-            nav h1 {
-                font-size: 1rem !important;
-            }
-            
-            nav p {
-                font-size: 0.75rem !important;
-            }
-            
-            main {
-                padding: 0.875rem !important;
-            }
-            
-            .glass-effect {
-                padding: 1.25rem !important;
-                margin-bottom: 1rem !important;
-            }
-            
-            .glass-effect h2,
-            .glass-effect h3 {
-                font-size: 1.2rem !important;
-                margin-bottom: 1rem !important;
-            }
-            
-            .grid-cols-3 {
-                grid-template-columns: 1fr !important;
-                gap: 0.875rem !important;
-            }
-            
-            /* 주간 학습 통계 - 요일 카드 */
-            .grid-cols-7 {
-                grid-template-columns: repeat(7, 1fr) !important;
-                gap: 0.375rem !important;
-            }
-            
-            .grid-cols-7 > div {
-                padding: 0.625rem 0.25rem !important;
-                border-radius: 0.5rem !important;
-                min-height: 85px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
-            
-            .grid-cols-7 .text-xs {
-                font-size: 0.7rem !important;
-                font-weight: 600;
-                margin-bottom: 0.25rem;
-            }
-            
-            .grid-cols-7 .text-lg {
-                font-size: 1.1rem !important;
-                font-weight: 900;
-                margin: 0.125rem 0;
-            }
-            
-            .grid-cols-7 .mt-2 {
-                margin-top: 0.375rem !important;
-                font-size: 1.1rem;
-            }
-            
-            button {
-                padding: 0.875rem !important;
-                font-size: 0.95rem !important;
-            }
-            
-            input {
-                font-size: 0.95rem !important;
-                padding: 0.875rem !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            nav h1 {
-                font-size: 0.95rem !important;
-            }
-            
-            .glass-effect {
-                padding: 1rem !important;
-            }
-            
-            .glass-effect h3 {
-                font-size: 1.1rem !important;
-            }
-            
-            /* 480px 이하에서 요일 카드 더 작게 */
-            .grid-cols-7 {
-                gap: 0.25rem !important;
-            }
-            
-            .grid-cols-7 > div {
-                padding: 0.5rem 0.2rem !important;
-                min-height: 75px;
-            }
-            
-            .grid-cols-7 .text-xs {
-                font-size: 0.65rem !important;
-            }
-            
-            .grid-cols-7 .text-lg {
-                font-size: 1rem !important;
-            }
-            
-            .grid-cols-7 .mt-2 {
-                font-size: 1rem;
-            }
-        }
     </style>
-    <!-- 학생 포털은 보안 불필요 -->
 </head>
 <body>
     <!-- 눈송이 효과 -->
@@ -191,26 +39,21 @@
     <div id="successMessage" class="hidden success-toast"></div>
     
     <!-- 상단 네비게이션 -->
-    <nav class="glass-effect sticky top-0 z-50 shadow-lg border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- 로고 & 인사말 -->
-                <div class="flex items-center space-x-3">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
-                    <div>
-                        <h1 class="text-lg font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                            겨울방학 30일 프로그램 · 원스톱 포털
-                        </h1>
-                        <p class="text-xs text-gray-600" id="studentInfo">❄️ 학생을 선택하세요</p>
-                    </div>
+    <nav class="daum-header">
+        <div class="daum-header-container">
+            <div class="daum-logo-section">
+                <div class="daum-logo">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo">
                 </div>
-                
-                <!-- 우측 메뉴 (대시보드 링크 제거) -->
-                <div class="flex items-center space-x-2">
-                    <a href="student-intro.html" class="p-2 text-gray-600 hover:text-cyan-600 transition">
-                        <i class="fas fa-question-circle text-xl"></i>
-                    </a>
+                <div class="daum-title">
+                    <h1>겨울방학 30일 · 원스톱 포털</h1>
+                    <p id="studentInfo"><i class="fas fa-snowflake"></i> 학생을 선택하세요</p>
                 </div>
+            </div>
+            <div>
+                <a href="student-intro.html" class="daum-btn-secondary" style="text-decoration: none;">
+                    <i class="fas fa-question-circle"></i> 도움말
+                </a>
             </div>
         </div>
     </nav>
