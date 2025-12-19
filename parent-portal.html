@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학부모 조회 페이지 - DA.UM</title>
+    <title>👨‍👩‍👧 학부모 포털 - DA.UM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
         * { font-family: 'Malgun Gothic', sans-serif; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        body { background: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%); min-height: 100vh; }
         .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
     </style>
 </head>
@@ -19,14 +20,14 @@
             <div class="flex items-center space-x-3 mb-4">
                 <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-14 h-14 rounded-xl shadow-lg bg-white p-1" onerror="this.style.display='none'">
                 <div>
-                    <h1 class="text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    <h1 class="text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-700 bg-clip-text text-transparent">
                         DA.UM 학부모 포털
                     </h1>
                     <p class="text-sm text-gray-600">자녀 학습 현황 조회</p>
                 </div>
             </div>
-            <p class="text-sm text-gray-600 bg-blue-50 border-l-4 border-blue-400 p-3 rounded">
-                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+            <p class="text-sm text-gray-600 bg-emerald-50 border-l-4 border-emerald-400 p-3 rounded">
+                <i class="fas fa-info-circle text-emerald-600 mr-2"></i>
                 자녀의 이름을 입력하시면 학습 현황을 확인하실 수 있습니다.
             </p>
         </div>
@@ -34,15 +35,15 @@
         <!-- 학생 이름 입력 -->
         <div class="glass-effect rounded-2xl shadow-2xl p-6 mb-6">
             <label class="block text-lg font-bold text-gray-800 mb-3">
-                <i class="fas fa-user text-purple-600 mr-2"></i>자녀 이름 입력
+                <i class="fas fa-user text-emerald-600 mr-2"></i>자녀 이름 입력
             </label>
             <div class="flex space-x-3">
                 <input type="text" id="studentNameInput" 
                        placeholder="예: 홍길동"
-                       class="flex-1 px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                       class="flex-1 px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                        onkeypress="if(event.key==='Enter') searchStudent()">
                 <button onclick="searchStudent()" 
-                        class="px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-xl font-bold hover:from-purple-600 hover:to-blue-700 transition shadow-lg">
+                        class="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-teal-700 transition shadow-lg">
                     <i class="fas fa-search mr-2"></i>조회하기
                 </button>
             </div>
@@ -52,9 +53,9 @@
         <div id="studentInfoCard" class="hidden glass-effect rounded-2xl shadow-2xl p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-bold text-gray-800">
-                    <i class="fas fa-user-graduate text-purple-600 mr-2"></i>학생 정보
+                    <i class="fas fa-user-graduate text-emerald-600 mr-2"></i>학생 정보
                 </h2>
-                <span id="studentLevel" class="px-4 py-2 bg-purple-100 text-purple-800 rounded-full font-bold text-sm"></span>
+                <span id="studentLevel" class="px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full font-bold text-sm"></span>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="text-center p-4 bg-blue-50 rounded-lg">
@@ -65,9 +66,9 @@
                     <div class="text-sm text-gray-600 mb-1">학년/반</div>
                     <div class="text-xl font-bold text-green-900" id="infoGrade">-</div>
                 </div>
-                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                <div class="text-center p-4 bg-emerald-50 rounded-lg">
                     <div class="text-sm text-gray-600 mb-1">평균 점수</div>
-                    <div class="text-xl font-bold text-purple-900" id="infoAvg">-</div>
+                    <div class="text-xl font-bold text-emerald-900" id="infoAvg">-</div>
                 </div>
                 <div class="text-center p-4 bg-orange-50 rounded-lg">
                     <div class="text-sm text-gray-600 mb-1">프로그램</div>
