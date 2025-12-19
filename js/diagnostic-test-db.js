@@ -622,7 +622,18 @@ function getDiagnosticTest(grade, subject) {
         console.error(`진단평가 문제를 찾을 수 없습니다: 학년=${grade}, 과목=${subject}`);
         return [];
     }
-    return diagnosticTestDB[grade][subject];
+    
+    const questions = diagnosticTestDB[grade][subject];
+    
+    // 문제가 20개 미만이면 중1 문제 사용 (임시 해결책)
+    if (questions.length < 20) {
+        console.warn(`${grade}학년 ${subject} 문제가 부족합니다. 중1 문제를 사용합니다.`);
+        if (diagnosticTestDB[1] && diagnosticTestDB[1][subject]) {
+            return diagnosticTestDB[1][subject];
+        }
+    }
+    
+    return questions;
 }
 
 // 수준 판정
