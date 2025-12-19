@@ -259,16 +259,7 @@
                 
                 <!-- 우측 메뉴 -->
                 <div class="flex items-center space-x-2">
-                    <a href="#" onclick="openWeeklySchedule(); return false;" 
-                       class="hidden md:flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-800 to-green-700 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                        <i class="fas fa-calendar-week"></i>
-                        <span>30일 스케줄</span>
-                    </a>
-                    <a href="#" onclick="openWeeklySchedule(); return false;" 
-                       class="md:hidden p-2 text-white bg-green-700 rounded-lg hover:bg-green-800 transition">
-                        <i class="fas fa-calendar-week text-xl"></i>
-                    </a>
-                    <a href="student-intro.html" class="p-2 text-gray-600 hover:text-green-800 transition">
+                    <a href="student-intro.html" class="p-2 text-white hover:text-gray-200 transition">
                         <i class="fas fa-question-circle text-xl"></i>
                     </a>
                 </div>
@@ -1322,21 +1313,6 @@
             
             html += '</div>';
             return html;
-        }
-
-        // 30일 주간 스케줄 열기
-        function openWeeklySchedule() {
-            const studentId = localStorage.getItem('currentStudentId');
-            const studentName = localStorage.getItem('currentStudentName');
-            
-            if (!studentId || !studentName) {
-                alert('먼저 이름을 입력하여 로그인해주세요!');
-                document.getElementById('studentNameInput').focus();
-                return;
-            }
-
-            // 30일 프로그램 주간 스케줄 페이지로 이동 (학생 ID 포함)
-            window.location.href = `winter-weekly-schedule.html?student=${studentId}`;
         }
 
         // 페이지 로드 시 초기화
