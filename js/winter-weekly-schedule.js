@@ -289,7 +289,115 @@ function getSubjectContent(subject, sessionNumber) {
     return contents[subject] ? contents[subject][sessionNumber - 1] : `${subject} 학습`;
 }
 
-// 📊 스케줄 표시
+// ⏱️ 타이머 관련 변수
+const timers = {};
+let activeSubject = null;
+
+// 타이머 시작
+function startTimer(subject, duration) {
+    if (activeSubject && activeSubject !== subject) {
+        alert('⚠️ 다른 과목을 학습 중입니다. 먼저 완료해주세요!');
+        return;
+    }
+    
+    if (timers[subject] && timers[subject].isRunning) {
+        alert('⏰ 이미 학습 중입니다!');
+        return;
+    }
+    
+    activeSubject = subject;
+    
+    if (!timers[subject]) {
+        timers[subject] = { seconds: 0, interval: null, isRunning: false, targetMinutes: duration };
+    }
+    
+    timers[subject].isRunning = true;
+    timers[subject].interval = setInterval(() => {
+        timers[subject].seconds++;
+        updateTimerDisplay(subject);
+        
+        // 목표 시간 달성 시
+        if (timers[subject].seconds >= duration * 60) {
+            stopTimer(subject);
+            alert(`🎉 ${subject} ${duration}분 학습 목표를 달성했습니다!\n정말 멋져요! 💪`);
+        }
+    }, 1000);
+    
+    console.log(`▶️ ${subject} 학습 시작 (목표: ${duration}분)`);
+}
+
+// 타이머 정지
+function stopTimer(subject) {
+    if (!timers[subject] || !timers[subject].isRunning) {
+        return;
+    }
+    
+    clearInterval(timers[subject].interval);
+    timers[subject].isRunning = false;
+    activeSubject = null;
+    
+    const minutes = Math.floor(timers[subject].seconds / 60);
+    const remainingSeconds = timers[subject].seconds % 60;
+    
+    // 학습 기록 저장
+    saveStudyRecord(subject, minutes);
+    
+    alert(`✅ ${subject} 학습 완료!\n학습 시간: ${minutes}분 ${remainingSeconds}초\n멋진 집중력이에요! 🌟`);
+    console.log(`⏹️ ${subject} 학습 완료: ${minutes}분 ${remainingSeconds}초`);
+}
+
+// 타이머 표시 업데이트
+function updateTimerDisplay(subject) {
+    const seconds = timers[subject].seconds;
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    const display = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    
+    const timerElement = document.getElementById(`timer_${subject}`);
+    if (timerElement) {
+        timerElement.textContent = display;
+    }
+    
+    // 프로그레스 바 업데이트
+    const targetMinutes = timers[subject].targetMinutes;
+    const progress = Math.min((seconds / (targetMinutes * 60)) * 100, 100);
+    const progressBar = document.getElementById(`progress_${subject}`);
+    if (progressBar) {
+        progressBar.style.width = `${progress}%`;
+    }
+}
+
+// 학습 기록 저장
+function saveStudyRecord(subject, minutes) {
+    const today = new Date().toISOString().split('T')[0];
+    const studentId = currentStudent.id;
+    
+    let studyRecords = JSON.parse(localStorage.getItem('study_records') || '[]');
+    let todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+    
+    if (!todayRecord) {
+        todayRecord = {
+            id: `record_${Date.now()}`,
+            student_id: studentId,
+            student_name: currentStudent.name,
+            date: today,
+            subjects: {}
+        };
+        studyRecords.push(todayRecord);
+    }
+    
+    if (!todayRecord.subjects[subject]) {
+        todayRecord.subjects[subject] = { time: 0, content: '' };
+    }
+    
+    todayRecord.subjects[subject].time += minutes;
+    todayRecord.subjects[subject].completed_at = new Date().toISOString();
+    
+    localStorage.setItem('study_records', JSON.stringify(studyRecords));
+    console.log(`💾 ${subject} 학습 기록 저장: ${minutes}분`);
+}
+
+// 📊 스케줄 표시 (타이머 포함)
 function displaySchedule() {
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     
@@ -311,10 +419,11 @@ function displaySchedule() {
             const hours = Math.floor(item.duration / 60);
             const minutes = item.duration % 60;
             const durationText = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
+            const subjectId = `${day}_${index}_${item.subject.replace(/\s+/g, '_')}`;
             
             return `
                 <div class="bg-white rounded-lg p-4 border-l-4 border-${typeColor}-500 hover:shadow-md transition mb-3">
-                    <div class="flex items-start justify-between mb-2">
+                    <div class="flex items-start justify-between mb-3">
                         <div class="flex-1">
                             <div class="flex items-center space-x-2 mb-1">
                                 <span class="px-2 py-1 text-xs bg-${typeColor}-100 text-${typeColor}-700 rounded-full font-semibold">
@@ -330,6 +439,31 @@ function displaySchedule() {
                             ${item.importance === '높음' ? 
                                 '<span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">중요</span>' : 
                                 '<span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">보통</span>'}
+                        </div>
+                    </div>
+                    
+                    <!-- 타이머 섹션 -->
+                    <div class="mt-3 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-2xl font-black text-cyan-600 font-mono" id="timer_${subjectId}">00:00</div>
+                                <div class="text-xs text-gray-500">/ ${item.duration}분</div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button 
+                                    onclick="startTimer('${subjectId}', ${item.duration})"
+                                    class="px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg text-sm font-bold hover:shadow-lg transition-all hover:scale-105 active:scale-95">
+                                    <i class="fas fa-play mr-1"></i>시작
+                                </button>
+                                <button 
+                                    onclick="stopTimer('${subjectId}')"
+                                    class="px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg text-sm font-bold hover:shadow-lg transition-all hover:scale-105 active:scale-95">
+                                    <i class="fas fa-stop mr-1"></i>완료
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-200 rounded-full h-2">
+                            <div id="progress_${subjectId}" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
