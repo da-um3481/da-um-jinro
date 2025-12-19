@@ -83,7 +83,16 @@
                 <h1 id="pageTitle">전체 현황</h1>
                 <p id="pageSubtitle">우리 반 학생들의 학습 현황을 한눈에</p>
             </div>
-            <div class="header-actions">
+            <div class="header-actions" style="display: flex; align-items: center; gap: 15px;">
+                <!-- 중/고 필터 -->
+                <div style="display: flex; gap: 5px; background: #f3f4f6; padding: 4px; border-radius: 8px;">
+                    <button id="filterMiddle" class="btn-school-filter active" onclick="setSchoolFilter('middle')" style="padding: 8px 16px; border: none; background: #3b82f6; color: white; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+                        <i class="fas fa-user-graduate"></i> 중학생
+                    </button>
+                    <button id="filterHigh" class="btn-school-filter" onclick="setSchoolFilter('high')" style="padding: 8px 16px; border: none; background: transparent; color: #6b7280; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+                        <i class="fas fa-graduation-cap"></i> 고등학생
+                    </button>
+                </div>
                 <button class="btn-icon" onclick="showNotifications()">
                     <i class="fas fa-bell"></i>
                     <span class="badge">5</span>
@@ -1187,10 +1196,15 @@
         
         // 진단평가 결과 로드
         function loadDiagnosticResults() {
-            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
-            const students = JSON.parse(localStorage.getItem('students')) || [];
+            let diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            let students = JSON.parse(localStorage.getItem('students')) || [];
             
-            console.log('📊 진단평가 결과:', diagnosticResults);
+            // 학교급 필터 적용
+            students = filterStudentsBySchool(students);
+            const studentIds = new Set(students.map(s => s.id));
+            diagnosticResults = diagnosticResults.filter(r => studentIds.has(r.studentId));
+            
+            console.log(`📊 진단평가 결과 (${currentSchoolFilter === 'middle' ? '중학생' : '고등학생'}):`, diagnosticResults);
             
             // 통계 계산
             const levelCounts = {
@@ -1448,11 +1462,17 @@
         
         // 수준별 학습 관리 데이터 로드
         function loadLevelManagement() {
-            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
-            const students = JSON.parse(localStorage.getItem('students')) || [];
+            let diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            let students = JSON.parse(localStorage.getItem('students')) || [];
             let levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
             
-            console.log('📊 수준별 학습 관리 데이터:', { diagnosticResults, students, levelAdjustments });
+            // 학교급 필터 적용
+            students = filterStudentsBySchool(students);
+            const studentIds = new Set(students.map(s => s.id));
+            diagnosticResults = diagnosticResults.filter(r => studentIds.has(r.studentId));
+            levelAdjustments = levelAdjustments.filter(a => studentIds.has(a.studentId));
+            
+            console.log(`📊 수준별 학습 관리 데이터 (${currentSchoolFilter === 'middle' ? '중학생' : '고등학생'}):`, { diagnosticResults, students, levelAdjustments });
             
             // 진단 미완료 학생 파악
             const diagnosedStudentIds = new Set(diagnosticResults.map(r => r.studentId));
@@ -1773,6 +1793,64 @@
             
             // 테이블 새로고침
             loadLevelManagement();
+        }
+        
+        // ==========================================
+        // 학교급 필터 (중학생 / 고등학생)
+        // ==========================================
+        
+        let currentSchoolFilter = 'middle'; // 기본값: 중학생
+        
+        function setSchoolFilter(schoolType) {
+            currentSchoolFilter = schoolType;
+            
+            // 버튼 스타일 업데이트
+            const middleBtn = document.getElementById('filterMiddle');
+            const highBtn = document.getElementById('filterHigh');
+            
+            if (schoolType === 'middle') {
+                middleBtn.style.background = '#3b82f6';
+                middleBtn.style.color = 'white';
+                highBtn.style.background = 'transparent';
+                highBtn.style.color = '#6b7280';
+            } else {
+                highBtn.style.background = '#3b82f6';
+                highBtn.style.color = 'white';
+                middleBtn.style.background = 'transparent';
+                middleBtn.style.color = '#6b7280';
+            }
+            
+            // 현재 페이지에 따라 데이터 새로고침
+            const activePage = document.querySelector('.page-content.active');
+            if (activePage) {
+                const pageId = activePage.id;
+                
+                if (pageId === 'page-diagnostic-results') {
+                    loadDiagnosticResults();
+                } else if (pageId === 'page-level-management') {
+                    loadLevelManagement();
+                }
+            }
+            
+            console.log(`📊 학교급 필터 변경: ${schoolType === 'middle' ? '중학생' : '고등학생'}`);
+        }
+        
+        // 학년이 중학생인지 고등학생인지 판별
+        function isMiddleSchool(grade) {
+            return grade >= 1 && grade <= 3; // 중1, 중2, 중3
+        }
+        
+        function isHighSchool(grade) {
+            return grade >= 4 && grade <= 6; // 고1(4), 고2(5), 고3(6)
+        }
+        
+        // 학생 데이터 필터링
+        function filterStudentsBySchool(students) {
+            if (currentSchoolFilter === 'middle') {
+                return students.filter(s => isMiddleSchool(s.grade));
+            } else {
+                return students.filter(s => isHighSchool(s.grade));
+            }
         }
         
         // 페이지 전환 시 진단평가 결과 로드
