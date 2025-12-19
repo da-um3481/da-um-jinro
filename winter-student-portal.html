@@ -957,6 +957,37 @@
                         <div class="progress-container" style="height: 0.75rem;">
                             <div class="progress-bar" id="mathProgressBar" style="width: 0%; background: var(--blue-500);"></div>
                         </div>
+                        
+                        <!-- 오늘 학습할 내용 버튼 -->
+                        <button class="btn" onclick="toggleLearningContent('math')" style="width: 100%; margin-top: 0.5rem; background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: var(--blue-600); border: 2px solid #93c5fd; font-weight: 600;">
+                            <i class="fas fa-book-open"></i> 📚 오늘 학습할 내용
+                        </button>
+                        
+                        <!-- 학습 내용 (토글) -->
+                        <div id="mathLearningContent" class="hidden" style="margin-top: 0.75rem; padding: 1rem; background: #f0f9ff; border-radius: 12px; border: 2px solid #93c5fd;">
+                            <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--blue-600); margin-bottom: 0.75rem;">
+                                📖 소인수분해 (8시간)
+                            </h4>
+                            <div style="margin-bottom: 0.75rem;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">✅ 학습 개념:</p>
+                                <ul style="font-size: 0.8125rem; color: var(--gray-700); padding-left: 1.25rem; line-height: 1.6;">
+                                    <li>소수와 합성수의 정의</li>
+                                    <li>거듭제곱 표현하기</li>
+                                    <li>소인수분해의 뜻과 방법</li>
+                                    <li>최대공약수(GCD) 구하기</li>
+                                    <li>최소공배수(LCM) 구하기</li>
+                                </ul>
+                            </div>
+                            <div style="padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #bfdbfe;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.375rem;">📚 학습 교재:</p>
+                                <p style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.5;">
+                                    • 교과서: 중학교 수학 1 (1단원)<br>
+                                    • EBS: 중학 뉴런 수학1 - 1~8강<br>
+                                    • 개념서: 개념원리 중1-1 (p.10~45)
+                                </p>
+                            </div>
+                        </div>
+                        
                         <div class="flex gap-2 mt-2">
                             <button class="btn btn-success" onclick="startTimer('math')" style="flex: 1;">
                                 <i class="fas fa-play"></i> 시작
@@ -987,6 +1018,37 @@
                         <div class="progress-container" style="height: 0.75rem;">
                             <div class="progress-bar" id="englishProgressBar" style="width: 0%; background: var(--green-500);"></div>
                         </div>
+                        
+                        <!-- 오늘 학습할 내용 버튼 -->
+                        <button class="btn" onclick="toggleLearningContent('english')" style="width: 100%; margin-top: 0.5rem; background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #16a34a; border: 2px solid #86efac; font-weight: 600;">
+                            <i class="fas fa-book-open"></i> 📚 오늘 학습할 내용
+                        </button>
+                        
+                        <!-- 학습 내용 (토글) -->
+                        <div id="englishLearningContent" class="hidden" style="margin-top: 0.75rem; padding: 1rem; background: #f0fdf4; border-radius: 12px; border: 2px solid #86efac;">
+                            <h4 style="font-size: 0.9375rem; font-weight: 700; color: #16a34a; margin-bottom: 0.75rem;">
+                                📖 be동사와 일반동사 (8시간)
+                            </h4>
+                            <div style="margin-bottom: 0.75rem;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">✅ 학습 개념:</p>
+                                <ul style="font-size: 0.8125rem; color: var(--gray-700); padding-left: 1.25rem; line-height: 1.6;">
+                                    <li>be동사의 의미와 쓰임 (am, are, is)</li>
+                                    <li>be동사 부정문/의문문</li>
+                                    <li>일반동사의 현재형</li>
+                                    <li>3인칭 단수 현재형 (-s, -es)</li>
+                                    <li>빈도부사 (always, usually)</li>
+                                </ul>
+                            </div>
+                            <div style="padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #bbf7d0;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.375rem;">📚 학습 교재:</p>
+                                <p style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.5;">
+                                    • 교과서: 중학교 영어 1 (Lesson 1-2)<br>
+                                    • EBS: 중학 영어 1 - 1~8강<br>
+                                    • 개념서: Grammar Zone 입문편 (p.10~60)
+                                </p>
+                            </div>
+                        </div>
+                        
                         <div class="flex gap-2 mt-2">
                             <button class="btn btn-success" onclick="startTimer('english')" style="flex: 1;">
                                 <i class="fas fa-play"></i> 시작
@@ -1017,6 +1079,37 @@
                         <div class="progress-container" style="height: 0.75rem;">
                             <div class="progress-bar" id="koreanProgressBar" style="width: 0%; background: var(--red-500);"></div>
                         </div>
+                        
+                        <!-- 오늘 학습할 내용 버튼 -->
+                        <button class="btn" onclick="toggleLearningContent('korean')" style="width: 100%; margin-top: 0.5rem; background: linear-gradient(135deg, #fee2e2, #fecaca); color: #dc2626; border: 2px solid #fca5a5; font-weight: 600;">
+                            <i class="fas fa-book-open"></i> 📚 오늘 학습할 내용
+                        </button>
+                        
+                        <!-- 학습 내용 (토글) -->
+                        <div id="koreanLearningContent" class="hidden" style="margin-top: 0.75rem; padding: 1rem; background: #fef2f2; border-radius: 12px; border: 2px solid #fca5a5;">
+                            <h4 style="font-size: 0.9375rem; font-weight: 700; color: #dc2626; margin-bottom: 0.75rem;">
+                                📖 문학의 이해 (8시간)
+                            </h4>
+                            <div style="margin-bottom: 0.75rem;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">✅ 학습 개념:</p>
+                                <ul style="font-size: 0.8125rem; color: var(--gray-700); padding-left: 1.25rem; line-height: 1.6;">
+                                    <li>시(詩)의 3요소: 운율, 심상, 화자</li>
+                                    <li>비유법 (직유, 은유, 의인법)</li>
+                                    <li>소설의 3요소: 인물, 사건, 배경</li>
+                                    <li>소설의 시점 (1인칭, 3인칭)</li>
+                                    <li>작품 속 주제 파악하기</li>
+                                </ul>
+                            </div>
+                            <div style="padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #fecaca;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.375rem;">📚 학습 교재:</p>
+                                <p style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.5;">
+                                    • 교과서: 중학교 국어 1 (문학 영역)<br>
+                                    • EBS: 중학 국어 1 - 문학편 1~8강<br>
+                                    • 개념서: 완자 중등 국어1 (p.10~80)
+                                </p>
+                            </div>
+                        </div>
+                        
                         <div class="flex gap-2 mt-2">
                             <button class="btn btn-success" onclick="startTimer('korean')" style="flex: 1;">
                                 <i class="fas fa-play"></i> 시작
@@ -1047,6 +1140,37 @@
                         <div class="progress-container" style="height: 0.75rem;">
                             <div class="progress-bar" id="scienceProgressBar" style="width: 0%; background: var(--gray-600);"></div>
                         </div>
+                        
+                        <!-- 오늘 학습할 내용 버튼 -->
+                        <button class="btn" onclick="toggleLearningContent('science')" style="width: 100%; margin-top: 0.5rem; background: linear-gradient(135deg, #f3f4f6, #e5e7eb); color: var(--gray-700); border: 2px solid #d1d5db; font-weight: 600;">
+                            <i class="fas fa-book-open"></i> 📚 오늘 학습할 내용
+                        </button>
+                        
+                        <!-- 학습 내용 (토글) -->
+                        <div id="scienceLearningContent" class="hidden" style="margin-top: 0.75rem; padding: 1rem; background: #f9fafb; border-radius: 12px; border: 2px solid #d1d5db;">
+                            <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--gray-700); margin-bottom: 0.75rem;">
+                                📖 지구계와 지권의 변화 (10시간)
+                            </h4>
+                            <div style="margin-bottom: 0.75rem;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">✅ 학습 개념:</p>
+                                <ul style="font-size: 0.8125rem; color: var(--gray-700); padding-left: 1.25rem; line-height: 1.6;">
+                                    <li>지구계의 구성 요소</li>
+                                    <li>지권의 층상 구조</li>
+                                    <li>암석의 생성과 순환</li>
+                                    <li>풍화와 침식 작용</li>
+                                    <li>퇴적 작용</li>
+                                </ul>
+                            </div>
+                            <div style="padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.375rem;">📚 학습 교재:</p>
+                                <p style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.5;">
+                                    • 교과서: 중학교 과학 1 (1단원)<br>
+                                    • EBS: 중학 과학 1 - 1~10강<br>
+                                    • 개념서: 완자 중등 과학1 (p.10~50)
+                                </p>
+                            </div>
+                        </div>
+                        
                         <div class="flex gap-2 mt-2">
                             <button class="btn btn-success" onclick="startTimer('science')" style="flex: 1;">
                                 <i class="fas fa-play"></i> 시작
@@ -1077,6 +1201,37 @@
                         <div class="progress-container" style="height: 0.75rem;">
                             <div class="progress-bar" id="socialProgressBar" style="width: 0%; background: var(--yellow-500);"></div>
                         </div>
+                        
+                        <!-- 오늘 학습할 내용 버튼 -->
+                        <button class="btn" onclick="toggleLearningContent('social')" style="width: 100%; margin-top: 0.5rem; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706; border: 2px solid #fcd34d; font-weight: 600;">
+                            <i class="fas fa-book-open"></i> 📚 오늘 학습할 내용
+                        </button>
+                        
+                        <!-- 학습 내용 (토글) -->
+                        <div id="socialLearningContent" class="hidden" style="margin-top: 0.75rem; padding: 1rem; background: #fffbeb; border-radius: 12px; border: 2px solid #fcd34d;">
+                            <h4 style="font-size: 0.9375rem; font-weight: 700; color: #d97706; margin-bottom: 0.75rem;">
+                                📖 우리와 다른 기후, 다른 생활 (8시간)
+                            </h4>
+                            <div style="margin-bottom: 0.75rem;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">✅ 학습 개념:</p>
+                                <ul style="font-size: 0.8125rem; color: var(--gray-700); padding-left: 1.25rem; line-height: 1.6;">
+                                    <li>세계의 다양한 기후</li>
+                                    <li>열대 기후의 특징과 생활</li>
+                                    <li>건조 기후의 특징과 생활</li>
+                                    <li>온대 기후의 특징과 생활</li>
+                                    <li>한대 기후의 특징과 생활</li>
+                                </ul>
+                            </div>
+                            <div style="padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #fde68a;">
+                                <p style="font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.375rem;">📚 학습 교재:</p>
+                                <p style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.5;">
+                                    • 교과서: 중학교 사회 1 (1단원)<br>
+                                    • EBS: 중학 사회 1 - 1~8강<br>
+                                    • 개념서: 완자 중등 사회1 (p.10~40)
+                                </p>
+                            </div>
+                        </div>
+                        
                         <div class="flex gap-2 mt-2">
                             <button class="btn btn-success" onclick="startTimer('social')" style="flex: 1;">
                                 <i class="fas fa-play"></i> 시작
@@ -1141,11 +1296,139 @@
         const today = new Date();
         
         // ==========================================
+        // 교과 내용 데이터베이스 (중1 기준)
+        // ==========================================
+        const curriculumDB = {
+            math: {
+                name: '수학',
+                icon: '🔢',
+                units: [
+                    {
+                        name: '소인수분해',
+                        time: 8,
+                        concepts: [
+                            '소수와 합성수의 정의',
+                            '거듭제곱 표현하기',
+                            '소인수분해의 뜻과 방법',
+                            '최대공약수(GCD) 구하기',
+                            '최소공배수(LCM) 구하기'
+                        ],
+                        materials: {
+                            textbook: '중학교 수학 1 (1단원)',
+                            ebs: 'EBS 중학 뉴런 수학1 - 1~8강',
+                            concept: '개념원리 중1-1 (p.10~45)'
+                        }
+                    }
+                ]
+            },
+            english: {
+                name: '영어',
+                icon: '🔤',
+                units: [
+                    {
+                        name: 'be동사와 일반동사',
+                        time: 8,
+                        concepts: [
+                            'be동사의 의미와 쓰임 (am, are, is)',
+                            'be동사 부정문/의문문',
+                            '일반동사의 현재형',
+                            '3인칭 단수 현재형 (-s, -es)',
+                            '빈도부사 (always, usually)'
+                        ],
+                        materials: {
+                            textbook: '중학교 영어 1 (Lesson 1-2)',
+                            ebs: 'EBS 중학 영어 1 - 1~8강',
+                            concept: 'Grammar Zone 입문편 (p.10~60)'
+                        }
+                    }
+                ]
+            },
+            korean: {
+                name: '국어',
+                icon: '✍️',
+                units: [
+                    {
+                        name: '문학의 이해',
+                        time: 8,
+                        concepts: [
+                            '시(詩)의 3요소: 운율, 심상, 화자',
+                            '비유법 (직유, 은유, 의인법)',
+                            '소설의 3요소: 인물, 사건, 배경',
+                            '소설의 시점 (1인칭, 3인칭)',
+                            '작품 속 주제 파악하기'
+                        ],
+                        materials: {
+                            textbook: '중학교 국어 1 (문학 영역)',
+                            ebs: 'EBS 중학 국어 1 - 문학편 1~8강',
+                            concept: '완자 중등 국어1 (p.10~80)'
+                        }
+                    }
+                ]
+            },
+            science: {
+                name: '과학',
+                icon: '🔬',
+                units: [
+                    {
+                        name: '지구계와 지권의 변화',
+                        time: 10,
+                        concepts: [
+                            '지구계의 구성 요소',
+                            '지권의 층상 구조',
+                            '암석의 생성과 순환',
+                            '풍화와 침식 작용',
+                            '퇴적 작용'
+                        ],
+                        materials: {
+                            textbook: '중학교 과학 1 (1단원)',
+                            ebs: 'EBS 중학 과학 1 - 1~10강',
+                            concept: '완자 중등 과학1 (p.10~50)'
+                        }
+                    }
+                ]
+            },
+            social: {
+                name: '사회',
+                icon: '🌏',
+                units: [
+                    {
+                        name: '우리와 다른 기후, 다른 생활',
+                        time: 8,
+                        concepts: [
+                            '세계의 다양한 기후',
+                            '열대 기후의 특징과 생활',
+                            '건조 기후의 특징과 생활',
+                            '온대 기후의 특징과 생활',
+                            '한대 기후의 특징과 생활'
+                        ],
+                        materials: {
+                            textbook: '중학교 사회 1 (1단원)',
+                            ebs: 'EBS 중학 사회 1 - 1~8강',
+                            concept: '완자 중등 사회1 (p.10~40)'
+                        }
+                    }
+                ]
+            }
+        };
+        
+        // ==========================================
         // 모바일 메뉴 토글
         // ==========================================
         function toggleMobileMenu() {
             const navMenu = document.getElementById('navMenu');
             navMenu.classList.toggle('active');
+        }
+        
+        // ==========================================
+        // 학습 내용 토글
+        // ==========================================
+        function toggleLearningContent(subject) {
+            const contentId = `${subject}LearningContent`;
+            const contentDiv = document.getElementById(contentId);
+            
+            if (contentDiv) {
+                contentDiv.classList.toggle('hidden');
+            }
         }
         
         // ==========================================
