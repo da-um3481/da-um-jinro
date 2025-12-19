@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DA.UM 겨울방학 30일 프로그램 - 나의 학습 포털</title>
+    <title>DA.UM 겨울방학 30일 프로그램 - 원스톱 학습 포털</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -199,7 +199,7 @@
                     <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
                     <div>
                         <h1 class="text-lg font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                            겨울방학 30일 프로그램
+                            겨울방학 30일 프로그램 · 원스톱 포털
                         </h1>
                         <p class="text-xs text-gray-600" id="studentInfo">❄️ 학생을 선택하세요</p>
                     </div>
@@ -218,7 +218,7 @@
     <!-- 메인 컨텐츠 -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
-        <!-- 학생 이름 입력 -->
+        <!-- 학생 이름 입력 & 스케줄 생성 -->
         <div class="glass-effect rounded-2xl shadow-lg p-6 animate-slide-up">
             <label class="block text-sm font-semibold text-gray-700 mb-3">
                 <i class="fas fa-user-circle mr-2 text-cyan-600"></i>내 이름 입력
@@ -229,17 +229,17 @@
                     id="studentNameInput" 
                     placeholder="이름을 입력하세요 (예: 김민준)"
                     class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition text-base"
-                    onkeypress="if(event.key==='Enter') loadStudentByName()"
+                    onkeypress="if(event.key==='Enter') loadAndGenerateSchedule()"
                 >
                 <button 
-                    onclick="loadStudentByName()"
-                    class="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    onclick="loadAndGenerateSchedule()"
+                    class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                 >
-                    <i class="fas fa-search mr-2"></i>찾기
+                    <i class="fas fa-magic mr-2"></i>시작하기
                 </button>
             </div>
             <p class="text-xs text-gray-500 mt-2">
-                <i class="fas fa-info-circle mr-1"></i>이름을 정확히 입력하고 "찾기" 버튼을 눌러주세요
+                <i class="fas fa-info-circle mr-1"></i>이름만 입력하면 자동으로 학습 스케줄이 생성됩니다!
             </p>
         </div>
 
@@ -280,6 +280,51 @@
                 <span id="startDate">시작: 미정</span>
                 <span id="dDay">학습 시작 전</span>
                 <span id="endDate">종료: 미정</span>
+            </div>
+        </div>
+
+        <!-- 주간 스케줄 (펼치기/접기) -->
+        <div id="weeklyScheduleSection" class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up hidden">
+            <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleWeeklySchedule()">
+                <h3 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-calendar-week text-purple-500 mr-2"></i>나의 주간 학습 스케줄
+                </h3>
+                <button class="px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm font-bold text-purple-700 transition">
+                    <i id="scheduleToggleIcon" class="fas fa-chevron-down mr-2"></i>
+                    <span id="scheduleToggleText">펼치기</span>
+                </button>
+            </div>
+            
+            <div id="weeklyScheduleContent" class="hidden">
+                <!-- 학습 시간 가이드 -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl p-4 border-2 border-cyan-300">
+                        <div class="text-center">
+                            <div class="text-sm text-gray-600 mb-1">평일 (월~금)</div>
+                            <div class="text-3xl font-black text-cyan-600">2.25h</div>
+                            <div class="text-xs text-gray-500 mt-1">하루 3과목</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 border-2 border-purple-300">
+                        <div class="text-center">
+                            <div class="text-sm text-gray-600 mb-1">주말 (토~일)</div>
+                            <div class="text-3xl font-black text-purple-600">4h</div>
+                            <div class="text-xs text-gray-500 mt-1">하루 4과목</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 border-2 border-indigo-400">
+                        <div class="text-center">
+                            <div class="text-sm text-gray-600 mb-1">주간 총계</div>
+                            <div class="text-3xl font-black text-indigo-600">19.25h</div>
+                            <div class="text-xs text-gray-500 mt-1">집중 학습</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 주간 스케줄 상세 (동적 생성) -->
+                <div id="weeklyScheduleDetails" class="space-y-4">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
             </div>
         </div>
 
@@ -921,17 +966,191 @@
             }
         }
 
-        // 학생 이름으로 로드
-        function loadStudentByName() {
+        // 🎯 통합 함수: 학생 이름 입력 → 자동 스케줄 생성 → 오늘의 과목 표시
+        function loadAndGenerateSchedule() {
             const name = document.getElementById('studentNameInput').value.trim();
             if (!name) {
                 alert('이름을 입력해주세요.');
                 return;
             }
             
+            // 1. 학생 정보 저장 (간단한 형태로)
+            const studentData = {
+                id: `student_${Date.now()}`,
+                name: name,
+                grade: 1, // 기본값
+                average_score: 80
+            };
+            
+            // localStorage에 학생 저장
+            let students = JSON.parse(localStorage.getItem('students') || '[]');
+            const existing = students.find(s => s.name === name);
+            if (!existing) {
+                students.push(studentData);
+                localStorage.setItem('students', JSON.stringify(students));
+            }
+            
+            currentStudent = existing || studentData;
+            
+            // 2. 자동 스케줄 생성
+            generateAutoScheduleIntegrated();
+            
+            // 3. UI 업데이트
             document.getElementById('studentInfo').textContent = `❄️ ${name} 학생의 학습 포털`;
-            showToast(`${name} 학생님, 환영합니다! 오늘도 열심히 공부해요! 💪`);
+            showToast(`${name} 학생님, 환영합니다! 학습 스케줄이 준비되었어요! 💪`);
         }
+        
+        // 🎯 통합 자동 스케줄 생성 (주간 스케줄 표시 포함)
+        function generateAutoScheduleIntegrated() {
+            if (!currentStudent) {
+                return;
+            }
+            
+            try {
+                // 평일 스케줄 생성 (2시간 15분 = 135분, 45분×3교시, 09:00~11:35)
+                const weekdaySchedule = generateWeekdayScheduleData();
+                
+                // 주말 스케줄 생성 (4시간 = 240분, 오전2h+오후2h)
+                const weekendSchedule = generateWeekendScheduleData();
+                
+                // 스케줄 데이터 준비
+                const scheduleData = {
+                    id: Date.now().toString(),
+                    student_id: currentStudent.id,
+                    student_name: currentStudent.name,
+                    monday: JSON.stringify(weekdaySchedule.monday),
+                    tuesday: JSON.stringify(weekdaySchedule.tuesday),
+                    wednesday: JSON.stringify(weekdaySchedule.wednesday),
+                    thursday: JSON.stringify(weekdaySchedule.thursday),
+                    friday: JSON.stringify(weekdaySchedule.friday),
+                    saturday: JSON.stringify(weekendSchedule.saturday),
+                    sunday: JSON.stringify(weekendSchedule.sunday),
+                    created_date: new Date().toISOString().split('T')[0]
+                };
+                
+                // localStorage에 저장
+                let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+                schedules.push(scheduleData);
+                localStorage.setItem('student_schedules', JSON.stringify(schedules));
+                
+                currentSchedule = scheduleData;
+                
+                // 주간 스케줄 섹션 표시
+                displayWeeklySchedule();
+                document.getElementById('weeklyScheduleSection').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('스케줄 생성 오류:', error);
+            }
+        }
+        
+        // 📅 평일 스케줄 데이터 생성
+        function generateWeekdayScheduleData() {
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+            const schedule = {};
+            
+            // 과목 순환 (3교시, 각 45분)
+            const subjectRotation = [
+                ['수학', '영어', '국어'],   // 월
+                ['수학', '영어', '과학'],   // 화
+                ['수학', '영어', '사회'],   // 수
+                ['수학', '국어', '과학'],   // 목
+                ['수학', '영어', '복습']    // 금
+            ];
+            
+            days.forEach((day, index) => {
+                const subjects = subjectRotation[index];
+                schedule[day] = [
+                    { time: '09:00-09:45', duration: 45, type: '1교시', subject: subjects[0], content: `${subjects[0]} 개념 학습 및 문제 풀이`, importance: '높음' },
+                    { time: '09:55-10:40', duration: 45, type: '2교시', subject: subjects[1], content: `${subjects[1]} 개념 학습 및 문제 풀이`, importance: '높음' },
+                    { time: '10:50-11:35', duration: 45, type: '3교시', subject: subjects[2], content: `${subjects[2]} 복습 및 정리`, importance: '보통' }
+                ];
+            });
+            
+            return schedule;
+        }
+        
+        // 🏖️ 주말 스케줄 데이터 생성
+        function generateWeekendScheduleData() {
+            return {
+                saturday: [
+                    { time: '09:00-10:00', duration: 60, type: '오전1교시', subject: '수학', content: '이번 주 수학 전체 복습', importance: '높음' },
+                    { time: '10:10-11:10', duration: 60, type: '오전2교시', subject: '영어', content: '이번 주 영어 전체 복습', importance: '높음' },
+                    { time: '14:00-15:00', duration: 60, type: '오후1교시', subject: '국어', content: '국어 독해 복습', importance: '보통' },
+                    { time: '15:10-16:10', duration: 60, type: '오후2교시', subject: '과학', content: '과학 문제 풀이', importance: '보통' }
+                ],
+                sunday: [
+                    { time: '09:00-10:00', duration: 60, type: '오전1교시', subject: '수학', content: '수학 심화 문제', importance: '높음' },
+                    { time: '10:10-11:10', duration: 60, type: '오전2교시', subject: '영어', content: '영어 듣기 연습', importance: '높음' },
+                    { time: '14:00-15:00', duration: 60, type: '오후1교시', subject: '사회', content: '사회 단원 복습', importance: '보통' },
+                    { time: '15:10-16:10', duration: 60, type: '오후2교시', subject: '주간복습', content: '주간 전체 복습', importance: '높음' }
+                ]
+            };
+        }
+        
+        // 📊 주간 스케줄 표시
+        function displayWeeklySchedule() {
+            const days = {
+                'monday': '월요일', 'tuesday': '화요일', 'wednesday': '수요일', 
+                'thursday': '목요일', 'friday': '금요일', 'saturday': '토요일', 'sunday': '일요일'
+            };
+            
+            let html = '';
+            Object.keys(days).forEach(day => {
+                const scheduleData = JSON.parse(currentSchedule[day] || '[]');
+                if (scheduleData.length === 0) return;
+                
+                const totalMinutes = scheduleData.reduce((sum, item) => sum + item.duration, 0);
+                const totalHours = (totalMinutes / 60).toFixed(1);
+                
+                html += `
+                    <div class="bg-white rounded-xl p-4 border-2 border-gray-200 hover:border-cyan-400 transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-lg font-bold text-gray-800">${days[day]}</h4>
+                            <span class="text-sm font-bold text-cyan-600">${totalHours}시간 (${scheduleData.length}과목)</span>
+                        </div>
+                        <div class="space-y-2">
+                            ${scheduleData.map(item => `
+                                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                                    <div class="flex-1">
+                                        <div class="text-sm font-bold text-gray-800">${item.subject}</div>
+                                        <div class="text-xs text-gray-600">${item.time} (${item.duration}분)</div>
+                                    </div>
+                                    <span class="px-2 py-1 text-xs ${item.importance === '높음' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'} rounded-full font-bold">
+                                        ${item.importance === '높음' ? '중요' : '보통'}
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('weeklyScheduleDetails').innerHTML = html;
+        }
+        
+        // 🔽 주간 스케줄 펼치기/접기
+        function toggleWeeklySchedule() {
+            const content = document.getElementById('weeklyScheduleContent');
+            const icon = document.getElementById('scheduleToggleIcon');
+            const text = document.getElementById('scheduleToggleText');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+                text.textContent = '접기';
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+                text.textContent = '펼치기';
+            }
+        }
+        
+        // 학생 변수
+        let currentStudent = null;
+        let currentSchedule = null;
         
         // 페이지 로드 시 초기화
         window.addEventListener('DOMContentLoaded', function() {
