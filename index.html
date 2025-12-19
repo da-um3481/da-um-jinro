@@ -52,9 +52,15 @@
         
         .stat-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
             margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .stat-cards {
+                grid-template-columns: 1fr;
+            }
         }
         
         .stat-card {
@@ -79,9 +85,23 @@
         
         .section-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             margin-bottom: 2rem;
+        }
+        
+        /* 태블릿 화면 */
+        @media (max-width: 1200px) {
+            .section-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* 모바일 화면 */
+        @media (max-width: 768px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         .program-card {
@@ -91,6 +111,13 @@
             box-shadow: var(--shadow-lg);
             transition: var(--transition-base);
             border-top: 4px solid var(--primary-500);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .program-card .menu-list {
+            flex: 1;
         }
         
         .program-card:hover {
