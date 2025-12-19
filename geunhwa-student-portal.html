@@ -1308,27 +1308,46 @@
                 created_date: new Date().toISOString().split('T')[0]
             };
             
-            // 월~금: 3과목 (수학, 영어, 국어/과학/사회 순환)
+            // 월~금: 2과목 학습 + 1과목 미리보기
+            // 실제 학습(타이머): 2과목 / 학습 내용만 표시: 3과목
             const weekdaySubjects = [
-                ['수학', '영어', '국어'],
-                ['수학', '영어', '과학'],
-                ['수학', '영어', '사회'],
-                ['수학', '국어', '과학'],
-                ['영어', '국어', '사회']
+                { active: ['수학', '영어'], preview: '국어' },
+                { active: ['수학', '영어'], preview: '과학' },
+                { active: ['수학', '영어'], preview: '사회' },
+                { active: ['수학', '국어'], preview: '과학' },
+                { active: ['영어', '국어'], preview: '사회' }
             ];
             
             const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
             dayNames.forEach((day, index) => {
-                schedule[day] = JSON.stringify(
-                    weekdaySubjects[index].map((subj, i) => ({
+                const daySubjects = weekdaySubjects[index];
+                const scheduleItems = [];
+                
+                // 실제 학습 과목 (타이머 활성화)
+                daySubjects.active.forEach((subj, i) => {
+                    scheduleItems.push({
                         time: `${9 + i}:00-${9 + i}:45`,
                         duration: 45,
                         type: `${i + 1}교시`,
                         subject: subj,
                         content: `${subj} 개념 학습 및 문제 풀이`,
-                        importance: subj === '수학' || subj === '영어' ? '높음' : '보통'
-                    }))
-                );
+                        importance: subj === '수학' || subj === '영어' ? '높음' : '보통',
+                        isActive: true  // 타이머 활성화
+                    });
+                });
+                
+                // 미리보기 과목 (학습 내용만 표시)
+                scheduleItems.push({
+                    time: '예습',
+                    duration: 0,
+                    type: '다음 예정',
+                    subject: daySubjects.preview,
+                    content: `${daySubjects.preview} 학습 내용 미리보기`,
+                    importance: '보통',
+                    isActive: false  // 타이머 비활성화 (내용만 표시)
+                });
+                
+                schedule[day] = JSON.stringify(scheduleItems);
             });
             
             // 토~일: 복습
@@ -1392,8 +1411,12 @@
             // 현재 학생의 학년 가져오기
             const studentGrade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
             
+            // 미리보기 모드인지 확인
+            const isPreview = item.isActive === false;
+            const cardOpacity = isPreview ? '0.85' : '1';
+            
             return `
-                <div class="rounded-xl border-2 overflow-hidden" style="background-color: ${colors.bg}; border-color: ${colors.border};">
+                <div class="rounded-xl border-2 overflow-hidden" style="background-color: ${colors.bg}; border-color: ${colors.border}; opacity: ${cardOpacity};">
                     <!-- 과목 헤더 -->
                     <div class="p-4 bg-gradient-to-r" style="background: linear-gradient(135deg, ${colors.main}, ${colors.dark});">
                         <div class="flex items-center justify-between text-white">
@@ -1402,16 +1425,17 @@
                                     <i class="fas fa-${config.icon} text-2xl"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xl font-black">${item.subject}</div>
-                                    <div class="text-sm opacity-90">${item.time} (${item.duration}분)</div>
+                                    <div class="text-xl font-black">${item.subject}${isPreview ? ' 📖' : ''}</div>
+                                    <div class="text-sm opacity-90">${isPreview ? '다음 학습 예정' : item.time + ' (' + item.duration + '분)'}</div>
                                 </div>
                             </div>
-                            <div class="text-2xl font-black" id="${subjectId}Time">00:00</div>
+                            ${!isPreview ? `<div class="text-2xl font-black" id="${subjectId}Time">00:00</div>` : '<span class="text-lg font-semibold">미리보기</span>'}
                         </div>
                     </div>
                     
                     <div class="p-4 space-y-3">
-                        <!-- 타이머 & 버튼 -->
+                        ${!isPreview ? `
+                        <!-- 타이머 & 버튼 (실제 학습 과목만) -->
                         <div class="flex space-x-2">
                             <button onclick="startTimer('${subjectId}', ${item.duration})" 
                                     class="flex-1 px-4 py-3 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
@@ -1429,18 +1453,27 @@
                             <div id="${subjectId}Progress" class="h-full rounded-full transition-all" 
                                  style="width: 0%; background-color: ${colors.main};"></div>
                         </div>
+                        ` : `
+                        <!-- 미리보기 안내 -->
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-lg p-3 text-center">
+                            <p class="text-sm font-semibold text-yellow-800">
+                                <i class="fas fa-eye mr-2"></i>다음에 배울 내용을 미리 확인하세요!
+                            </p>
+                        </div>
+                        `}
                         
                         <!-- 오늘 학습할 내용 버튼 -->
                         <button onclick="toggleLearningContent('${item.subject}')" 
                                 class="w-full px-4 py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all hover:scale-105"
                                 style="background: linear-gradient(135deg, ${colors.bg}, white); color: ${colors.dark}; border: 2px solid ${colors.border};">
-                            <i class="fas fa-book-open mr-2"></i>📚 오늘 학습할 내용
+                            <i class="fas fa-book-open mr-2"></i>📚 ${isPreview ? '학습 내용 미리보기' : '오늘 학습할 내용'}
                         </button>
                         
                         <!-- 학습 내용 (토글) -->
                         ${getLearningContentHTML(item.subject, colors, studentGrade)}
                         
-                        <!-- 학습 내용 입력 -->
+                        ${!isPreview ? `
+                        <!-- 학습 내용 입력 (실제 학습 과목만) -->
                         <textarea id="${subjectId}Content" rows="3" 
                                   placeholder="📝 오늘 학습한 내용을 기록하세요"
                                   class="w-full px-4 py-3 border-2 rounded-lg focus:outline-none text-sm"
@@ -1448,6 +1481,7 @@
                                   onfocus="this.style.borderColor='${colors.main}'"
                                   onblur="this.style.borderColor='${colors.border}'"
                                   onchange="saveStudyContent('${subjectId}', this.value)"></textarea>
+                        ` : ''}
                         
                         <!-- 학습 자료 -->
                         ${materials}
