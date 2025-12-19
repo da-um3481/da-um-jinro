@@ -29,11 +29,18 @@
             background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-medium) 50%, var(--forest-light) 100%);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1600px;
+            width: 100%;
             margin: 0 auto;
+            /* 16:9 aspect ratio optimization for desktop viewing */
+            aspect-ratio: 16 / 9;
+            min-height: 900px;
         }
 
         /* Header */
@@ -564,6 +571,134 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease-out;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--forest-light);
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--forest-dark);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: var(--charcoal-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--forest-dark);
+            transform: rotate(90deg);
+        }
+
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .book-item {
+            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .book-item:hover {
+            border-color: var(--forest-medium);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(15, 81, 50, 0.2);
+        }
+
+        .book-subject {
+            display: inline-block;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            color: white;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--charcoal-dark);
+            margin: 10px 0;
+        }
+
+        .book-description {
+            font-size: 0.9rem;
+            color: var(--charcoal-medium);
+            margin-bottom: 10px;
+        }
+
+        .book-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--forest-medium);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .book-link:hover {
+            color: var(--forest-dark);
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -861,7 +996,7 @@
                         <p style="color: var(--charcoal-medium); font-size: 0.9rem;">
                             과목별 개념 정리를 위한 추천 교재
                         </p>
-                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%; background: linear-gradient(135deg, #d97706, #f59e0b);">
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%; background: linear-gradient(135deg, #d97706, #f59e0b);" onclick="showConceptBooks()">
                             <i class="fas fa-list"></i> 교재 목록
                         </button>
                     </div>
@@ -873,12 +1008,23 @@
                         <p style="color: var(--charcoal-medium); font-size: 0.9rem;">
                             실력 향상을 위한 문제 풀이 교재
                         </p>
-                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%; background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%; background: linear-gradient(135deg, #dc2626, #ef4444);" onclick="showProblemBooks()">
                             <i class="fas fa-list"></i> 문제집 목록
                         </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal for Books -->
+    <div id="booksModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">📚 교재 목록</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody" class="book-list"></div>
         </div>
     </div>
 
@@ -1083,6 +1229,78 @@
         // External Links
         function openEBS() {
             window.open('https://www.ebsmath.co.kr', '_blank');
+        }
+
+        // Books Data
+        const conceptBooks = [
+            { subject: '수학', title: '개념원리 수학', description: '체계적인 개념 학습과 유형별 문제', link: '#' },
+            { subject: '수학', title: '숨마쿰라우데 개념기본서', description: '심화 개념과 상세한 설명', link: '#' },
+            { subject: '영어', title: '능률 VOCA 어원편', description: '어원으로 배우는 체계적 어휘', link: '#' },
+            { subject: '영어', title: 'Grammar Zone 기본편', description: '기초부터 탄탄한 문법 학습', link: '#' },
+            { subject: '국어', title: '고등 국어 완성', description: '문학/비문학 개념 완벽 정리', link: '#' },
+            { subject: '국어', title: '자이스토리 국어 독서', description: '독해력 향상을 위한 지문 분석', link: '#' },
+            { subject: '과학', title: '완자 과학', description: '교과 개념 완벽 정리', link: '#' },
+            { subject: '과학', title: 'EBS 올림포스', description: '내신+수능 대비 통합 개념서', link: '#' },
+            { subject: '사회', title: '완자 사회', description: '핵심 개념과 자료 분석', link: '#' },
+            { subject: '사회', title: '체크체크 사회', description: '개념 확인과 내신 대비', link: '#' }
+        ];
+
+        const problemBooks = [
+            { subject: '수학', title: '쎈 수학', description: '유형별 대표 문제집', link: '#' },
+            { subject: '수학', title: '라이트쎈', description: '기본부터 차근차근', link: '#' },
+            { subject: '수학', title: '개념+유형 파워', description: '개념과 유형을 한번에', link: '#' },
+            { subject: '영어', title: '자이스토리 영어 독해', description: '실전 독해 문제 완성', link: '#' },
+            { subject: '영어', title: '리딩파워 유형편', description: '유형별 독해 전략', link: '#' },
+            { subject: '국어', title: '자이스토리 국어', description: '실전 문제 풀이', link: '#' },
+            { subject: '국어', title: '마더텅 국어', description: '기출 변형 문제', link: '#' },
+            { subject: '과학', title: '오투 과학', description: '개념+실전 문제', link: '#' },
+            { subject: '과학', title: '일등급 과학', description: '심화 문제 대비', link: '#' },
+            { subject: '사회', title: '자이스토리 사회', description: '내신 대비 문제집', link: '#' }
+        ];
+
+        // Show Concept Books
+        function showConceptBooks() {
+            showBooksModal('📖 개념서 목록', conceptBooks);
+        }
+
+        // Show Problem Books
+        function showProblemBooks() {
+            showBooksModal('✏️ 문제집 목록', problemBooks);
+        }
+
+        // Show Books Modal
+        function showBooksModal(title, books) {
+            document.getElementById('modalTitle').innerHTML = title;
+            
+            let html = '';
+            books.forEach(book => {
+                html += `
+                    <div class="book-item">
+                        <span class="book-subject">${book.subject}</span>
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-description">${book.description}</div>
+                        <a href="${book.link}" class="book-link" onclick="return false;">
+                            <i class="fas fa-info-circle"></i> 자세히 보기
+                        </a>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('booksModal').classList.add('show');
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('booksModal').classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('booksModal');
+            if (event.target === modal) {
+                closeModal();
+            }
         }
 
         // Initialize
