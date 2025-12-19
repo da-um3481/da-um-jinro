@@ -39,25 +39,34 @@
     <!-- 성공 메시지 (토스트) -->
     <div id="successMessage" class="hidden success-toast"></div>
     
-    <!-- 상단 네비게이션 -->
-    <nav class="daum-header">
+    <!-- 상단 헤더 -->
+    <header class="daum-header">
         <div class="daum-header-container">
             <div class="daum-logo-section">
                 <div class="daum-logo">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" onerror="this.style.display='none'">
                 </div>
                 <div class="daum-title">
                     <h1>겨울방학 30일 · 원스톱 포털</h1>
                     <p id="studentInfo"><i class="fas fa-snowflake"></i> 학생을 선택하세요</p>
                 </div>
             </div>
-            <div>
-                <a href="student-intro.html" class="daum-btn-secondary" style="text-decoration: none;">
-                    <i class="fas fa-question-circle"></i> 도움말
+            <nav class="daum-nav">
+                <a href="index.html" class="daum-nav-link">
+                    <i class="fas fa-home"></i> 대시보드
                 </a>
-            </div>
+                <a href="winter-student-portal.html" class="daum-nav-link active">
+                    <i class="fas fa-snowflake"></i> 겨울포털
+                </a>
+                <a href="students.html" class="daum-nav-link">
+                    <i class="fas fa-users"></i> 학생관리
+                </a>
+                <a href="materials.html" class="daum-nav-link">
+                    <i class="fas fa-book"></i> 교재관리
+                </a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <!-- 메인 컨텐츠 -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
