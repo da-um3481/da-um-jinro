@@ -60,11 +60,11 @@
     </nav>
 
     <!-- 메인 컨텐츠 -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
         
         <!-- 학생 이름 입력 & 스케줄 생성 -->
         <div class="glass-effect rounded-2xl shadow-lg p-6 animate-slide-up">
-            <label class="block text-sm font-semibold text-gray-700 mb-3">
+            <label class="block text-lg font-bold text-gray-800 mb-3">
                 <i class="fas fa-user-circle mr-2 text-cyan-600"></i>내 이름 입력
             </label>
             <div class="flex space-x-3">
@@ -82,7 +82,7 @@
                     <i class="fas fa-magic mr-2"></i>시작하기
                 </button>
             </div>
-            <p class="text-xs text-gray-500 mt-2">
+            <p class="text-sm text-gray-600 mt-2">
                 <i class="fas fa-info-circle mr-1"></i>이름만 입력하면 자동으로 학습 스케줄이 생성됩니다!
             </p>
         </div>
@@ -91,14 +91,14 @@
         <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl shadow-xl p-6 text-white animate-slide-up">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm opacity-90 mb-1">오늘</p>
-                    <p class="text-2xl font-bold" id="todayDate">2025년 1월 12일 (일)</p>
+                    <p class="text-base opacity-90 mb-1">오늘</p>
+                    <p class="text-3xl font-bold" id="todayDate">2025년 1월 12일 (일)</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-sm opacity-90 mb-1">오늘 목표</p>
+                    <p class="text-base opacity-90 mb-1">오늘 목표</p>
                     <div class="flex items-center space-x-2">
-                        <p class="text-2xl font-bold" id="dailyTarget">학습 시작 전</p>
-                        <span class="text-xs px-3 py-1 bg-white/20 rounded-full" id="programDay">학습 시작 전</span>
+                        <p class="text-3xl font-bold" id="dailyTarget">학습 시작 전</p>
+                        <span class="text-sm px-3 py-1 bg-white/20 rounded-full" id="programDay">학습 시작 전</span>
                     </div>
                 </div>
             </div>
@@ -114,13 +114,13 @@
                     <div class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent" id="progressPercent">
                         0%
                     </div>
-                    <div class="text-xs text-gray-600" id="progressDays">0일 / 30일</div>
+                    <div class="text-base text-gray-700 font-semibold" id="progressDays">0일 / 30일</div>
                 </div>
             </div>
             <div class="bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
                 <div class="bg-gradient-to-r from-cyan-500 to-blue-600 h-full rounded-full progress-bar" id="progressBar" style="width: 0%"></div>
             </div>
-            <div class="flex justify-between text-xs text-gray-600">
+            <div class="flex justify-between text-sm text-gray-700">
                 <span id="startDate">시작: 미정</span>
                 <span id="dDay">학습 시작 전</span>
                 <span id="endDate">종료: 미정</span>
@@ -130,10 +130,10 @@
         <!-- 주간 스케줄 (펼치기/접기) -->
         <div id="weeklyScheduleSection" class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up hidden">
             <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleWeeklySchedule()">
-                <h3 class="text-lg font-bold text-gray-800">
+                <h3 class="text-xl font-bold text-gray-800">
                     <i class="fas fa-calendar-week text-gray-500 mr-2"></i>나의 주간 학습 스케줄
                 </h3>
-                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold text-gray-700 transition">
+                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-base font-bold text-gray-700 transition">
                     <i id="scheduleToggleIcon" class="fas fa-chevron-down mr-2"></i>
                     <span id="scheduleToggleText">펼치기</span>
                 </button>
@@ -144,23 +144,23 @@
                 <div class="grid grid-cols-3 gap-4 mb-6">
                     <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl p-4 border-2 border-cyan-300">
                         <div class="text-center">
-                            <div class="text-sm text-gray-600 mb-1">평일 (월~금)</div>
+                            <div class="text-base text-gray-700 font-semibold mb-2">평일 (월~금)</div>
                             <div class="text-3xl font-black text-cyan-600">2.25h</div>
-                            <div class="text-xs text-gray-500 mt-1">하루 3과목</div>
+                            <div class="text-sm text-gray-600 mt-1">하루 3과목</div>
                         </div>
                     </div>
                     <div class="bg-gradient-to-br from-gray-50 to-indigo-50 rounded-xl p-4 border-2 border-gray-300">
                         <div class="text-center">
-                            <div class="text-sm text-gray-600 mb-1">주말 (토~일)</div>
+                            <div class="text-base text-gray-700 font-semibold mb-2">주말 (토~일)</div>
                             <div class="text-3xl font-black text-gray-600">4h</div>
-                            <div class="text-xs text-gray-500 mt-1">하루 4과목</div>
+                            <div class="text-sm text-gray-600 mt-1">하루 4과목</div>
                         </div>
                     </div>
                     <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 border-2 border-green-8400">
                         <div class="text-center">
-                            <div class="text-sm text-gray-600 mb-1">주간 총계</div>
-                            <div class="text-3xl font-black text-green-8600">19.25h</div>
-                            <div class="text-xs text-gray-500 mt-1">집중 학습</div>
+                            <div class="text-base text-gray-700 font-semibold mb-2">주간 총계</div>
+                            <div class="text-3xl font-black text-green-600">19.25h</div>
+                            <div class="text-sm text-gray-600 mt-1">집중 학습</div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
 
         <!-- 오늘의 학습 현황 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
                 <i class="fas fa-calendar-day text-cyan-500 mr-2"></i>오늘의 학습 현황
             </h3>
             
@@ -189,12 +189,12 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-800">수학</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
+                                <div class="text-sm text-gray-700 font-semibold">목표: 45분</div>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="text-2xl font-black text-green-800 timer-display" id="mathTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
+                            <div class="text-sm text-gray-700 font-semibold">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
@@ -219,12 +219,12 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-800">영어</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
+                                <div class="text-sm text-gray-700 font-semibold">목표: 45분</div>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="text-2xl font-black text-green-600 timer-display" id="englishTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
+                            <div class="text-sm text-gray-700 font-semibold">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
@@ -249,12 +249,12 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-800">국어</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
+                                <div class="text-sm text-gray-700 font-semibold">목표: 45분</div>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="text-2xl font-black text-red-600 timer-display" id="koreanTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
+                            <div class="text-sm text-gray-700 font-semibold">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
@@ -279,12 +279,12 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-800">과학</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
+                                <div class="text-sm text-gray-700 font-semibold">목표: 45분</div>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="text-2xl font-black text-gray-600 timer-display" id="scienceTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
+                            <div class="text-sm text-gray-700 font-semibold">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
@@ -309,12 +309,12 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-800">사회</div>
-                                <div class="text-xs text-gray-600">목표: 45분</div>
+                                <div class="text-sm text-gray-700 font-semibold">목표: 45분</div>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="text-2xl font-black text-yellow-600 timer-display" id="socialTime">00:00</div>
-                            <div class="text-xs text-gray-600">0 / 45분</div>
+                            <div class="text-sm text-gray-700 font-semibold">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
@@ -351,90 +351,90 @@
 
         <!-- 나의 교재 진도 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="progressSection">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
                 <i class="fas fa-book-open text-cyan-500 mr-2"></i>나의 교재 진도
             </h3>
             <div class="space-y-3">
                 <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-2 border-green-200">
                     <div class="flex items-center justify-between mb-2">
                         <div>
-                            <div class="text-sm text-green-800 font-bold">수학</div>
-                            <div class="font-bold text-gray-800">개념원리 중학수학 1-1</div>
+                            <div class="text-base text-green-800 font-bold">수학</div>
+                            <div class="font-bold text-gray-800 text-lg">개념원리 중학수학 1-1</div>
                         </div>
                         <div class="text-2xl font-black text-green-800">15%</div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-2">
                         <div class="bg-blue-500 h-full rounded-full" style="width: 15%"></div>
                     </div>
-                    <div class="text-xs text-gray-600 mt-2">p.45 / 300</div>
+                    <div class="text-sm text-gray-700 font-semibold mt-2">p.45 / 300</div>
                 </div>
                 <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border-2 border-green-200">
                     <div class="flex items-center justify-between mb-2">
                         <div>
-                            <div class="text-sm text-green-600 font-bold">영어</div>
-                            <div class="font-bold text-gray-800">Grammar Zone 기초편</div>
+                            <div class="text-base text-green-600 font-bold">영어</div>
+                            <div class="font-bold text-gray-800 text-lg">Grammar Zone 기초편</div>
                         </div>
                         <div class="text-2xl font-black text-green-600">20%</div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-2">
                         <div class="bg-green-500 h-full rounded-full" style="width: 20%"></div>
                     </div>
-                    <div class="text-xs text-gray-600 mt-2">p.35 / 180</div>
+                    <div class="text-sm text-gray-700 font-semibold mt-2">p.35 / 180</div>
                 </div>
                 <div class="p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-xl border-2 border-red-200">
                     <div class="flex items-center justify-between mb-2">
                         <div>
-                            <div class="text-sm text-red-600 font-bold">국어</div>
-                            <div class="font-bold text-gray-800">비문학 독해 워크북</div>
+                            <div class="text-base text-red-600 font-bold">국어</div>
+                            <div class="font-bold text-gray-800 text-lg">비문학 독해 워크북</div>
                         </div>
                         <div class="text-2xl font-black text-red-600">25%</div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-2">
                         <div class="bg-red-500 h-full rounded-full" style="width: 25%"></div>
                     </div>
-                    <div class="text-xs text-gray-600 mt-2">15지문 / 60지문</div>
+                    <div class="text-sm text-gray-700 font-semibold mt-2">15지문 / 60지문</div>
                 </div>
             </div>
         </div>
 
         <!-- 주간 학습 통계 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="weeklyStatsSection">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
                 <i class="fas fa-chart-bar text-cyan-500 mr-2"></i>이번 주 학습 통계
             </h3>
             <div class="grid grid-cols-7 gap-2">
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
-                    <div class="text-xs text-gray-600 mb-1">월</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">월</div>
                     <div class="text-lg font-black text-green-600">4.2h</div>
                     <div class="mt-2">✅</div>
                 </div>
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
-                    <div class="text-xs text-gray-600 mb-1">화</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">화</div>
                     <div class="text-lg font-black text-green-600">4.0h</div>
                     <div class="mt-2">✅</div>
                 </div>
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
-                    <div class="text-xs text-gray-600 mb-1">수</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">수</div>
                     <div class="text-lg font-black text-green-600">4.5h</div>
                     <div class="mt-2">✅</div>
                 </div>
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
-                    <div class="text-xs text-gray-600 mb-1">목</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">목</div>
                     <div class="text-lg font-black text-green-600">4.0h</div>
                     <div class="mt-2">✅</div>
                 </div>
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
-                    <div class="text-xs text-gray-600 mb-1">금</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">금</div>
                     <div class="text-lg font-black text-green-600">4.3h</div>
                     <div class="mt-2">✅</div>
                 </div>
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
-                    <div class="text-xs text-gray-600 mb-1">토</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">토</div>
                     <div class="text-lg font-black text-green-600">3.7h</div>
                     <div class="mt-2">⚠️</div>
                 </div>
                 <div class="text-center p-3 bg-gray-50 rounded-lg border-2 border-gray-300">
-                    <div class="text-xs text-gray-600 mb-1">일</div>
+                    <div class="text-sm text-gray-700 font-semibold mb-1">일</div>
                     <div class="text-lg font-black text-gray-400">0h</div>
                     <div class="mt-2">⏳</div>
                 </div>
@@ -484,26 +484,26 @@
             
             if (progressSection) {
                 progressSection.innerHTML = `
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
                         <i class="fas fa-book-open text-cyan-500 mr-2"></i>나의 교재 진도
                     </h3>
-                    <div class="text-center py-8">
-                        <div class="text-6xl mb-4">📚</div>
-                        <p class="text-gray-600 text-lg font-semibold mb-2">학습 시작 전입니다</p>
-                        <p class="text-gray-500 text-sm">첫 학습을 시작하면 교재 진도가 기록됩니다</p>
+                    <div class="text-center py-12">
+                        <div class="text-8xl mb-6">📚</div>
+                        <p class="text-gray-700 text-2xl font-bold mb-3">학습 시작 전입니다</p>
+                        <p class="text-gray-600 text-lg">첫 학습을 시작하면 교재 진도가 기록됩니다</p>
                     </div>
                 `;
             }
             
             if (weeklyStatsSection) {
                 weeklyStatsSection.innerHTML = `
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
                         <i class="fas fa-chart-bar text-cyan-500 mr-2"></i>이번 주 학습 통계
                     </h3>
-                    <div class="text-center py-8">
-                        <div class="text-6xl mb-4">📊</div>
-                        <p class="text-gray-600 text-lg font-semibold mb-2">학습 데이터가 없습니다</p>
-                        <p class="text-gray-500 text-sm">학습을 시작하면 일일 학습 시간이 자동으로 기록됩니다</p>
+                    <div class="text-center py-12">
+                        <div class="text-8xl mb-6">📊</div>
+                        <p class="text-gray-700 text-2xl font-bold mb-3">학습 데이터가 없습니다</p>
+                        <p class="text-gray-600 text-lg">학습을 시작하면 일일 학습 시간이 자동으로 기록됩니다</p>
                     </div>
                 `;
             }
