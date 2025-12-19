@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 DA.UM 학습관리 시스템 - 올인원</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        :root {
+            --forest-dark: #0f5132;
+            --forest-medium: #15803d;
+            --forest-light: #16a34a;
+            --charcoal-dark: #2d3748;
+            --charcoal-medium: #4b5563;
+            --charcoal-light: #6b7280;
+            --bg-light: #f9fafb;
+            --white: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-medium) 50%, var(--forest-light) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(15, 81, 50, 0.3);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(15, 81, 50, 0.4);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--forest-dark);
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: var(--charcoal-medium);
+            margin: 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: var(--bg-light);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--charcoal-dark);
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: var(--forest-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            color: white;
+            box-shadow: 0 5px 15px rgba(15, 81, 50, 0.4);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(15, 81, 50, 0.2);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--forest-light);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(15, 81, 50, 0.3);
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--forest-dark);
+            margin: 0;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 700;
+            color: var(--charcoal-dark);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-label i {
+            color: var(--forest-medium);
+            margin-right: 8px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--forest-medium);
+            box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.1);
+        }
+
+        /* EBS Diagnostic Section */
+        .ebs-section {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid var(--forest-light);
+            margin-top: 20px;
+        }
+
+        .ebs-title {
+            font-weight: 800;
+            color: var(--forest-dark);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .level-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .level-item label {
+            font-weight: 600;
+            color: var(--charcoal-dark);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Auto Level Display */
+        .auto-level {
+            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--charcoal-light);
+            margin-top: 20px;
+        }
+
+        .auto-level-title {
+            font-weight: 800;
+            color: var(--charcoal-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            color: white;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(15, 81, 50, 0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 81, 50, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--charcoal-dark);
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: var(--charcoal-light);
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        /* Schedule Display */
+        .schedule-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--forest-medium);
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .schedule-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(15, 81, 50, 0.2);
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .schedule-day {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--forest-dark);
+        }
+
+        .schedule-time {
+            color: var(--charcoal-medium);
+            font-weight: 600;
+        }
+
+        .subject-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .subject-tag {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--forest-dark);
+            border: 1px solid var(--forest-light);
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-top: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--charcoal-dark);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--forest-dark), var(--forest-medium), var(--forest-light));
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(15, 81, 50, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(15, 81, 50, 0.4);
+            display: none;
+            animation: slideInRight 0.5s ease-out;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .nav-tabs {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                width: 100%;
+                text-align: center;
+            }
+
+            .glass-card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .level-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.1rem;
+            }
+
+            .card-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo">🎓</div>
+                <div>
+                    <h1>DA.UM 학습 관리</h1>
+                    <p>📚 Student Management System</p>
+                </div>
+            </div>
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="switchTab('register')">
+                    <i class="fas fa-user-plus"></i> 학생등록
+                </div>
+                <div class="nav-tab" onclick="switchTab('portal')">
+                    <i class="fas fa-chalkboard-teacher"></i> 학습관리
+                </div>
+                <div class="nav-tab" onclick="switchTab('schedule')">
+                    <i class="fas fa-calendar-alt"></i> 교재관리
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 1: Student Registration -->
+        <div id="registerTab" class="tab-content active">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">👥</div>
+                    <h2>학생 정보 등록</h2>
+                </div>
+
+                <form id="studentForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-school"></i> 학교/기관 *
+                            </label>
+                            <select class="form-select" id="school" required>
+                                <option value="">선택하세요</option>
+                                <option value="근화여자중학교">근화여자중학교</option>
+                                <option value="DA.UM진로진학컨설팅">DA.UM 진로진학컨설팅</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-book"></i> 프로그램 *
+                            </label>
+                            <select class="form-select" id="program" required>
+                                <option value="">선택하세요</option>
+                                <option value="겨울방학30일">❄️ 겨울방학 30일</option>
+                                <option value="정규학기100일">📚 정규학기 100일</option>
+                                <option value="맞춤형">✨ 맞춤형</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i> 이름 *
+                            </label>
+                            <input type="text" class="form-input" id="name" placeholder="홍길동" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-graduation-cap"></i> 학년 *
+                            </label>
+                            <select class="form-select" id="grade" required>
+                                <option value="">선택하세요</option>
+                                <option value="중1">중학교 1학년</option>
+                                <option value="중2">중학교 2학년</option>
+                                <option value="중3">중학교 3학년</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-users"></i> 반
+                            </label>
+                            <input type="number" class="form-input" id="class" min="1" placeholder="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-hashtag"></i> 번호
+                            </label>
+                            <input type="number" class="form-input" id="number" min="1" placeholder="1">
+                        </div>
+                    </div>
+
+                    <!-- EBS AI Diagnostic -->
+                    <div class="ebs-section">
+                        <div class="ebs-title">
+                            <i class="fas fa-chart-line"></i>
+                            📊 EBS AI 코스웨어 진단 (학습유형 기반 4단계)
+                        </div>
+                        <p style="color: var(--forest-dark); margin-bottom: 15px; font-size: 0.9rem;">
+                            ✅ 각 과목별 학습 수준을 선택해주세요 (상, 중상, 중하, 기초)
+                        </p>
+
+                        <div class="level-grid">
+                            <div class="level-item">
+                                <label>📝 국어</label>
+                                <select class="form-select" id="korean" onchange="calculateLevel()">
+                                    <option value="">선택</option>
+                                    <option value="상">상급 (85-100)</option>
+                                    <option value="중상">중상 (70-84)</option>
+                                    <option value="중하">중하 (50-69)</option>
+                                    <option value="기초">기초 (0-49)</option>
+                                </select>
+                            </div>
+
+                            <div class="level-item">
+                                <label>🔤 영어</label>
+                                <select class="form-select" id="english" onchange="calculateLevel()">
+                                    <option value="">선택</option>
+                                    <option value="상">상급 (85-100)</option>
+                                    <option value="중상">중상 (70-84)</option>
+                                    <option value="중하">중하 (50-69)</option>
+                                    <option value="기초">기초 (0-49)</option>
+                                </select>
+                            </div>
+
+                            <div class="level-item">
+                                <label>🔢 수학</label>
+                                <select class="form-select" id="math" onchange="calculateLevel()">
+                                    <option value="">선택</option>
+                                    <option value="상">상급 (85-100)</option>
+                                    <option value="중상">중상 (70-84)</option>
+                                    <option value="중하">중하 (50-69)</option>
+                                    <option value="기초">기초 (0-49)</option>
+                                </select>
+                            </div>
+
+                            <div class="level-item">
+                                <label>🔬 과학</label>
+                                <select class="form-select" id="science" onchange="calculateLevel()">
+                                    <option value="">선택</option>
+                                    <option value="상">상급 (85-100)</option>
+                                    <option value="중상">중상 (70-84)</option>
+                                    <option value="중하">중하 (50-69)</option>
+                                    <option value="기초">기초 (0-49)</option>
+                                </select>
+                            </div>
+
+                            <div class="level-item">
+                                <label>🌍 사회</label>
+                                <select class="form-select" id="social" onchange="calculateLevel()">
+                                    <option value="">선택</option>
+                                    <option value="상">상급 (85-100)</option>
+                                    <option value="중상">중상 (70-84)</option>
+                                    <option value="중하">중하 (50-69)</option>
+                                    <option value="기초">기초 (0-49)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Auto Level Display -->
+                        <div class="auto-level">
+                            <div class="auto-level-title">
+                                <i class="fas fa-robot"></i>
+                                종합 학습 수준 (자동 판정)
+                            </div>
+                            <div id="autoLevel" class="level-badge" style="background: linear-gradient(135deg, var(--charcoal-medium), var(--charcoal-light));">
+                                수준 미설정
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-redo"></i> 초기화
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 저장하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 2: Learning Portal -->
+        <div id="portalTab" class="tab-content">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">❄️</div>
+                    <h2>겨울방학 30일 · 원스톱 포털</h2>
+                </div>
+
+                <!-- Name Input -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user-circle"></i> 내 이름 입력
+                    </label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="form-input" id="studentName" placeholder="김민준" style="flex: 1;">
+                        <button class="btn btn-primary" onclick="loadStudent()">
+                            <i class="fas fa-search"></i> 찾기
+                        </button>
+                    </div>
+                    <p style="color: var(--charcoal-medium); margin-top: 8px; font-size: 0.85rem;">
+                        <i class="fas fa-info-circle"></i> 이름을 입력하면 자동으로 학습 스케줄이 생성됩니다
+                    </p>
+                </div>
+
+                <!-- Student Info Display -->
+                <div id="studentInfo" style="display: none;">
+                    <!-- Progress Section -->
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span><strong>30일 프로그램 진행률</strong></span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill" style="width: 0%;">
+                                0%
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem; color: var(--charcoal-medium);">
+                            <span>시작: <span id="startDate">-</span></span>
+                            <span id="daysInfo">0일 / 30일</span>
+                            <span>종료: <span id="endDate">-</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number" id="statDay">Day 0</span>
+                            <span class="stat-label">학습 일수</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="statTime">0시간</span>
+                            <span class="stat-label">총 학습시간</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="statGoal">0%</span>
+                            <span class="stat-label">목표 달성률</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auto Schedule Button -->
+                <div id="scheduleSection" style="display: none; margin-top: 30px;">
+                    <div class="card-header">
+                        <div class="card-icon">📅</div>
+                        <h2>오늘의 주간 학습 스케줄</h2>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="generateSchedule()" style="width: 100%; margin-bottom: 20px;">
+                        <i class="fas fa-magic"></i> 자동 스케줄 생성
+                    </button>
+
+                    <div id="scheduleDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Materials -->
+        <div id="scheduleTab" class="tab-content">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">📚</div>
+                    <h2>학습 교재 & 자료</h2>
+                </div>
+
+                <div class="level-grid">
+                    <div class="level-item" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-color: var(--forest-light);">
+                        <h3 style="color: var(--forest-dark); margin-bottom: 10px; font-weight: 800;">
+                            <i class="fas fa-video"></i> EBS 강의
+                        </h3>
+                        <p style="color: var(--charcoal-medium); font-size: 0.9rem;">
+                            무료로 제공되는 양질의 EBS 인터넷 강의
+                        </p>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="openEBS()">
+                            <i class="fas fa-external-link-alt"></i> EBS 바로가기
+                        </button>
+                    </div>
+
+                    <div class="level-item" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-color: #fbbf24;">
+                        <h3 style="color: #92400e; margin-bottom: 10px; font-weight: 800;">
+                            <i class="fas fa-book"></i> 개념서
+                        </h3>
+                        <p style="color: var(--charcoal-medium); font-size: 0.9rem;">
+                            과목별 개념 정리를 위한 추천 교재
+                        </p>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%; background: linear-gradient(135deg, #d97706, #f59e0b);">
+                            <i class="fas fa-list"></i> 교재 목록
+                        </button>
+                    </div>
+
+                    <div class="level-item" style="background: linear-gradient(135deg, #fee2e2, #fecaca); border-color: #f87171;">
+                        <h3 style="color: #991b1b; margin-bottom: 10px; font-weight: 800;">
+                            <i class="fas fa-pen"></i> 문제집
+                        </h3>
+                        <p style="color: var(--charcoal-medium); font-size: 0.9rem;">
+                            실력 향상을 위한 문제 풀이 교재
+                        </p>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%; background: linear-gradient(135deg, #dc2626, #ef4444);">
+                            <i class="fas fa-list"></i> 문제집 목록
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            if (tabName === 'register') {
+                document.getElementById('registerTab').classList.add('active');
+                document.querySelectorAll('.nav-tab')[0].classList.add('active');
+            } else if (tabName === 'portal') {
+                document.getElementById('portalTab').classList.add('active');
+                document.querySelectorAll('.nav-tab')[1].classList.add('active');
+            } else if (tabName === 'schedule') {
+                document.getElementById('scheduleTab').classList.add('active');
+                document.querySelectorAll('.nav-tab')[2].classList.add('active');
+            }
+        }
+
+        // Calculate Level
+        function calculateLevel() {
+            const subjects = ['korean', 'english', 'math', 'science', 'social'];
+            let totalScore = 0;
+            let count = 0;
+
+            const levelToScore = {
+                '상': 4,
+                '중상': 3,
+                '중하': 2,
+                '기초': 1
+            };
+
+            subjects.forEach(subject => {
+                const value = document.getElementById(subject).value;
+                if (value) {
+                    totalScore += levelToScore[value];
+                    count++;
+                }
+            });
+
+            if (count > 0) {
+                const avg = totalScore / count;
+                let level = '';
+                let bgColor = '';
+
+                if (avg >= 3.5) {
+                    level = '상급';
+                    bgColor = 'linear-gradient(135deg, #15803d, #16a34a)';
+                } else if (avg >= 2.5) {
+                    level = '중상';
+                    bgColor = 'linear-gradient(135deg, #16a34a, #22c55e)';
+                } else if (avg >= 1.5) {
+                    level = '중하';
+                    bgColor = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+                } else {
+                    level = '기초';
+                    bgColor = 'linear-gradient(135deg, #f87171, #ef4444)';
+                }
+
+                const badge = document.getElementById('autoLevel');
+                badge.textContent = level;
+                badge.style.background = bgColor;
+            }
+        }
+
+        // Form Submit
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentData = {
+                school: document.getElementById('school').value,
+                program: document.getElementById('program').value,
+                name: document.getElementById('name').value,
+                grade: document.getElementById('grade').value,
+                class: document.getElementById('class').value,
+                number: document.getElementById('number').value,
+                korean: document.getElementById('korean').value,
+                english: document.getElementById('english').value,
+                math: document.getElementById('math').value,
+                science: document.getElementById('science').value,
+                social: document.getElementById('social').value,
+                level: document.getElementById('autoLevel').textContent
+            };
+
+            // Save to localStorage
+            let students = JSON.parse(localStorage.getItem('students') || '[]');
+            students.push(studentData);
+            localStorage.setItem('students', JSON.stringify(students));
+
+            showToast('✅ 학생 정보가 성공적으로 저장되었습니다!');
+            setTimeout(() => {
+                resetForm();
+            }, 1500);
+        });
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('autoLevel').textContent = '수준 미설정';
+            document.getElementById('autoLevel').style.background = 'linear-gradient(135deg, var(--charcoal-medium), var(--charcoal-light))';
+        }
+
+        // Load Student
+        function loadStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            if (!name) {
+                showToast('⚠️ 이름을 입력해주세요!');
+                return;
+            }
+
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const student = students.find(s => s.name === name);
+
+            if (student) {
+                document.getElementById('studentInfo').style.display = 'block';
+                document.getElementById('scheduleSection').style.display = 'block';
+                
+                // Simulate progress (30% for demo)
+                updateProgress(30);
+                
+                showToast('✅ ' + name + ' 학생 정보를 불러왔습니다!');
+            } else {
+                showToast('❌ 등록된 학생을 찾을 수 없습니다.');
+            }
+        }
+
+        // Update Progress
+        function updateProgress(percent) {
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressFill').textContent = percent + '%';
+            
+            const days = Math.floor(percent * 30 / 100);
+            document.getElementById('daysInfo').textContent = days + '일 / 30일';
+            document.getElementById('statDay').textContent = 'Day ' + days;
+            document.getElementById('statTime').textContent = (days * 2.25).toFixed(1) + '시간';
+            document.getElementById('statGoal').textContent = percent + '%';
+
+            // Dates
+            const today = new Date();
+            const start = new Date(today.getTime() - days * 24 * 60 * 60 * 1000);
+            const end = new Date(start.getTime() + 30 * 24 * 60 * 60 * 1000);
+            
+            document.getElementById('startDate').textContent = formatDate(start);
+            document.getElementById('endDate').textContent = formatDate(end);
+        }
+
+        // Format Date
+        function formatDate(date) {
+            return (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
+        }
+
+        // Generate Schedule
+        function generateSchedule() {
+            const schedules = [
+                { day: '월요일', time: '평일 2.25h', subjects: ['수학', '영어', '국어'] },
+                { day: '화요일', time: '평일 2.25h', subjects: ['수학', '영어', '과학'] },
+                { day: '수요일', time: '평일 2.25h', subjects: ['수학', '영어', '사회'] },
+                { day: '목요일', time: '평일 2.25h', subjects: ['수학', '국어', '과학'] },
+                { day: '금요일', time: '평일 2.25h', subjects: ['영어', '국어', '사회'] },
+                { day: '토요일', time: '주말 4h', subjects: ['수학', '영어', '복습', '문제풀이'] },
+                { day: '일요일', time: '주말 4h', subjects: ['국어', '과학', '사회', '총정리'] }
+            ];
+
+            let html = '';
+            schedules.forEach(schedule => {
+                html += `
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <div class="schedule-day">${schedule.day}</div>
+                            <div class="schedule-time">${schedule.time}</div>
+                        </div>
+                        <div class="subject-list">
+                            ${schedule.subjects.map(subject => `<span class="subject-tag">${subject}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('scheduleDisplay').innerHTML = html;
+            showToast('📅 주간 학습 스케줄이 생성되었습니다!');
+        }
+
+        // Show Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // External Links
+        function openEBS() {
+            window.open('https://www.ebsmath.co.kr', '_blank');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎓 DA.UM 학습관리 시스템이 시작되었습니다!');
+        });
+    </script>
+</body>
+</html>
