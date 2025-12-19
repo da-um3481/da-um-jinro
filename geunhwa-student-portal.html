@@ -69,6 +69,20 @@
             animation: slideUp 0.3s ease-out;
         }
         
+        /* 캘린더 스타일 */
+        #calendarDays > div {
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #calendarDays > div:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
         /* 모바일 최적화 */
         @media (max-width: 768px) {
             body {
@@ -477,6 +491,66 @@
             </div>
             <div class="mt-4 text-center text-sm text-gray-600">
                 <span class="font-bold text-green-800">이번 주 학습 시간:</span> 총 24.7시간 🎉
+            </div>
+        </div>
+
+        <!-- 📅 학습 달성 캘린더 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="achievementCalendar">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">
+                    <i class="fas fa-calendar-check text-green-700 mr-2"></i>📅 나의 학습 캘린더
+                </h3>
+                <div class="flex space-x-2">
+                    <button onclick="changeMonth(-1)" class="px-3 py-1 bg-green-100 hover:bg-green-200 rounded-lg transition">
+                        <i class="fas fa-chevron-left text-green-700"></i>
+                    </button>
+                    <button onclick="changeMonth(1)" class="px-3 py-1 bg-green-100 hover:bg-green-200 rounded-lg transition">
+                        <i class="fas fa-chevron-right text-green-700"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="text-center mb-4">
+                <span id="calendarYearMonth" class="text-2xl font-bold text-gray-800"></span>
+            </div>
+            
+            <!-- 캘린더 그리드 -->
+            <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
+                <!-- 요일 헤더 -->
+                <div class="text-center py-2 font-bold text-sm text-red-500">일</div>
+                <div class="text-center py-2 font-bold text-sm text-gray-700">월</div>
+                <div class="text-center py-2 font-bold text-sm text-gray-700">화</div>
+                <div class="text-center py-2 font-bold text-sm text-gray-700">수</div>
+                <div class="text-center py-2 font-bold text-sm text-gray-700">목</div>
+                <div class="text-center py-2 font-bold text-sm text-gray-700">금</div>
+                <div class="text-center py-2 font-bold text-sm text-blue-500">토</div>
+            </div>
+            
+            <div id="calendarDays" class="grid grid-cols-7 gap-1 sm:gap-2">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+            
+            <!-- 범례 -->
+            <div class="mt-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border-2 border-green-200">
+                <h4 class="text-sm font-bold text-gray-700 mb-2">🏆 달성도 기준</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">🌟</span>
+                        <span class="text-gray-700">100% 완벽!</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">🎯</span>
+                        <span class="text-gray-700">80% 이상</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">💪</span>
+                        <span class="text-gray-700">60% 이상</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">📝</span>
+                        <span class="text-gray-700">60% 미만</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1063,6 +1137,11 @@
             
             // 총 학습 시간 업데이트
             updateTotalStudyTime();
+            
+            // 캘린더 업데이트
+            if (typeof renderCalendar === 'function') {
+                renderCalendar();
+            }
         }
 
         // 타이머 표시 업데이트
@@ -1596,8 +1675,166 @@
             return html;
         }
 
+        // ==========================================
+        // 📅 학습 달성 캘린더 기능
+        // ==========================================
+        
+        let currentCalendarYear = new Date().getFullYear();
+        let currentCalendarMonth = new Date().getMonth(); // 0-11
+        
+        // 캘린더 렌더링
+        function renderCalendar() {
+            const yearMonthElement = document.getElementById('calendarYearMonth');
+            const daysElement = document.getElementById('calendarDays');
+            
+            if (!yearMonthElement || !daysElement) return;
+            
+            // 년월 표시
+            yearMonthElement.textContent = `${currentCalendarYear}년 ${currentCalendarMonth + 1}월`;
+            
+            // 해당 월의 첫날과 마지막날
+            const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
+            const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+            const firstDayOfWeek = firstDay.getDay(); // 0(일) ~ 6(토)
+            const daysInMonth = lastDay.getDate();
+            
+            // 캘린더 초기화
+            daysElement.innerHTML = '';
+            
+            // 빈 칸 채우기 (이전 달)
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'text-center py-2 sm:py-3';
+                daysElement.appendChild(emptyDiv);
+            }
+            
+            // 날짜 채우기
+            const today = new Date();
+            const isCurrentMonth = currentCalendarYear === today.getFullYear() && 
+                                   currentCalendarMonth === today.getMonth();
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // 해당 날짜의 학습 기록 가져오기
+                const achievement = getAchievementForDate(dateStr);
+                const emoji = getEmojiForAchievement(achievement);
+                
+                // 오늘 날짜 확인
+                const isToday = isCurrentMonth && day === today.getDate();
+                
+                // 날짜 스타일
+                let bgColor = 'bg-white';
+                let borderColor = 'border-gray-200';
+                let textColor = 'text-gray-800';
+                
+                if (isToday) {
+                    bgColor = 'bg-gradient-to-br from-green-100 to-blue-100';
+                    borderColor = 'border-green-500';
+                }
+                
+                if (achievement > 0) {
+                    bgColor = achievement >= 100 ? 'bg-gradient-to-br from-yellow-50 to-yellow-100' :
+                              achievement >= 80 ? 'bg-gradient-to-br from-green-50 to-green-100' :
+                              achievement >= 60 ? 'bg-gradient-to-br from-blue-50 to-blue-100' :
+                              'bg-gradient-to-br from-gray-50 to-gray-100';
+                    borderColor = achievement >= 80 ? 'border-green-300' : 'border-gray-300';
+                }
+                
+                dayDiv.className = `text-center py-2 sm:py-3 rounded-lg border-2 ${bgColor} ${borderColor} hover:shadow-md transition cursor-pointer`;
+                dayDiv.innerHTML = `
+                    <div class="text-xs sm:text-sm font-bold ${textColor}">${day}</div>
+                    ${emoji ? `<div class="text-lg sm:text-2xl mt-1">${emoji}</div>` : ''}
+                    ${achievement > 0 ? `<div class="text-xs text-gray-600 mt-1">${achievement}%</div>` : ''}
+                `;
+                
+                // 클릭 이벤트 (날짜별 상세 정보)
+                dayDiv.onclick = () => showDayDetail(dateStr, achievement);
+                
+                daysElement.appendChild(dayDiv);
+            }
+        }
+        
+        // 날짜별 달성도 가져오기
+        function getAchievementForDate(dateStr) {
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const record = studyRecords.find(r => r.date === dateStr);
+            
+            if (!record) return 0;
+            
+            // 해당 날짜의 목표 시간 계산 (평일: 2.25시간, 주말: 4시간)
+            const date = new Date(dateStr);
+            const dayOfWeek = date.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            const targetMinutes = isWeekend ? 240 : 135; // 2.25시간 = 135분
+            
+            // 총 학습 시간 계산
+            let totalMinutes = 0;
+            if (record.subjects) {
+                Object.values(record.subjects).forEach(subject => {
+                    totalMinutes += subject.time || 0;
+                });
+            }
+            
+            // 달성률 계산
+            const achievement = Math.round((totalMinutes / targetMinutes) * 100);
+            return Math.min(achievement, 150); // 최대 150%까지 표시
+        }
+        
+        // 달성도에 따른 이모지 반환
+        function getEmojiForAchievement(achievement) {
+            if (achievement === 0) return '';
+            if (achievement >= 100) return '🌟'; // 완벽!
+            if (achievement >= 80) return '🎯';  // 우수!
+            if (achievement >= 60) return '💪';  // 양호!
+            return '📝'; // 노력 필요
+        }
+        
+        // 월 변경
+        function changeMonth(delta) {
+            currentCalendarMonth += delta;
+            
+            if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            } else if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            
+            renderCalendar();
+        }
+        
+        // 날짜 상세 정보 표시
+        function showDayDetail(dateStr, achievement) {
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const record = studyRecords.find(r => r.date === dateStr);
+            
+            if (!record || !record.subjects) {
+                alert(`📅 ${dateStr}\n\n아직 학습 기록이 없습니다.`);
+                return;
+            }
+            
+            let detail = `📅 ${dateStr}\n달성률: ${achievement}%\n\n`;
+            
+            Object.entries(record.subjects).forEach(([subject, data]) => {
+                detail += `📚 ${subject}: ${data.time}분\n`;
+                if (data.content) {
+                    detail += `   └ ${data.content.substring(0, 50)}${data.content.length > 50 ? '...' : ''}\n`;
+                }
+            });
+            
+            alert(detail);
+        }
+
+        // ==========================================
+        // 페이지 로드 시 초기화
+        // ==========================================
+
         // 페이지 로드 시 초기화
         initProgramProgress();
+        renderCalendar(); // 캘린더 렌더링
         
         // 로그인 상태 확인
         const currentStudentId = localStorage.getItem('currentStudentId');
