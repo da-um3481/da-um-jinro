@@ -121,49 +121,55 @@ function setupFormHandler() {
         await saveStudent();
     });
     
-    // 점수 입력 시 자동 수준 판정
-    const scoreInputs = ['koreanScore', 'englishScore', 'mathScore', 'scienceScore', 'socialScore'];
-    scoreInputs.forEach(inputId => {
-        document.getElementById(inputId).addEventListener('input', autoCalculateLevel);
+    // 과목별 수준 선택 시 자동 종합 수준 판정
+    const levelSelects = ['koreanLevel', 'englishLevel', 'mathLevel', 'scienceLevel', 'socialLevel'];
+    levelSelects.forEach(selectId => {
+        document.getElementById(selectId).addEventListener('change', autoCalculateOverallLevel);
     });
 }
 
-// 점수 평균 기반 자동 수준 판정
-function autoCalculateLevel() {
-    const korean = parseFloat(document.getElementById('koreanScore').value) || 0;
-    const english = parseFloat(document.getElementById('englishScore').value) || 0;
-    const math = parseFloat(document.getElementById('mathScore').value) || 0;
-    const science = parseFloat(document.getElementById('scienceScore').value) || 0;
-    const social = parseFloat(document.getElementById('socialScore').value) || 0;
+// 과목별 수준 기반 자동 종합 수준 판정
+function autoCalculateOverallLevel() {
+    const koreanLevel = document.getElementById('koreanLevel').value;
+    const englishLevel = document.getElementById('englishLevel').value;
+    const mathLevel = document.getElementById('mathLevel').value;
+    const scienceLevel = document.getElementById('scienceLevel').value;
+    const socialLevel = document.getElementById('socialLevel').value;
     
-    const scores = [korean, english, math, science, social].filter(s => s > 0);
+    const levels = [koreanLevel, englishLevel, mathLevel, scienceLevel, socialLevel].filter(l => l !== '');
     
-    if (scores.length === 0) {
+    if (levels.length === 0) {
         document.getElementById('level').value = '';
         document.getElementById('level').selectedIndex = 0;
         return;
     }
     
-    const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+    // 수준을 숫자로 변환 (상=4, 중상=3, 중하=2, 기초=1)
+    const levelToNumber = {
+        '상': 4,
+        '중상': 3,
+        '중하': 2,
+        '기초': 1
+    };
+    
+    const numberToLevel = {
+        4: '상',
+        3: '중상',
+        2: '중하',
+        1: '기초'
+    };
+    
+    const levelNumbers = levels.map(l => levelToNumber[l]);
+    const avgLevel = Math.round(levelNumbers.reduce((a, b) => a + b, 0) / levelNumbers.length);
+    
+    const overallLevel = numberToLevel[avgLevel] || '기초';
     const levelSelect = document.getElementById('level');
     
-    // EBS AI 코스웨어 진단평가 점수 기반 수준 판정
-    let level = '';
-    if (avgScore >= 85) {
-        level = '상급'; // 85-100점: 상급
-    } else if (avgScore >= 70) {
-        level = '중상'; // 70-84점: 중상
-    } else if (avgScore >= 50) {
-        level = '중하'; // 50-69점: 중하
-    } else {
-        level = '기초'; // 0-49점: 기초
-    }
-    
-    levelSelect.value = level;
+    levelSelect.value = overallLevel;
     levelSelect.disabled = false;
     
     // 시각적 피드백 (배경색 변경)
-    levelSelect.style.backgroundColor = getLevelColor(level);
+    levelSelect.style.backgroundColor = getLevelColor(overallLevel);
     levelSelect.style.fontWeight = 'bold';
 }
 
@@ -173,7 +179,7 @@ function getLevelColor(level) {
         '기초': '#dcfce7', // Green-100
         '중하': '#dbeafe', // Blue-100
         '중상': '#fef3c7', // Yellow-100
-        '상급': '#fee2e2'  // Red-100
+        '상': '#fee2e2'  // Red-100
     };
     return colors[level] || '#f3f4f6';
 }
@@ -208,7 +214,6 @@ function displayStudents(students) {
     }
     
     tbody.innerHTML = students.map(student => {
-        const avgScore = calculateAverageScore(student);
         const levelBadge = getLevelBadge(student.level);
         
         return `
@@ -218,12 +223,12 @@ function displayStudents(students) {
                     ${student.grade}학년 ${student.class_num}반 ${student.student_num}번
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">${levelBadge}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${student.korean_score || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${student.english_score || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${student.math_score || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${student.science_score || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${student.social_score || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap font-semibold">${avgScore.toFixed(1)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${getLevelIcon(student.korean_level)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${getLevelIcon(student.english_level)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${getLevelIcon(student.math_level)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${getLevelIcon(student.science_level)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${getLevelIcon(student.social_level)}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold">-</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                     <button onclick="viewStudentDetail('${student.id}')" class="text-indigo-600 hover:text-indigo-900" title="상세보기">
                         <i class="fas fa-eye"></i>
@@ -243,15 +248,26 @@ function displayStudents(students) {
     }).join('');
 }
 
+// 수준 아이콘 반환
+function getLevelIcon(level) {
+    const icons = {
+        '상': '🔴 상',
+        '중상': '🟡 중상',
+        '중하': '🔵 중하',
+        '기초': '🟢 기초'
+    };
+    return icons[level] || '-';
+}
+
 // 학생 저장
 async function saveStudent() {
     try {
         // 수준이 비어있으면 자동 계산
-        autoCalculateLevel();
+        autoCalculateOverallLevel();
         
         const levelValue = document.getElementById('level').value;
         if (!levelValue) {
-            alert('EBS AI 코스웨어 진단평가 점수를 입력해주세요.');
+            alert('과목별 학습 수준을 선택해주세요.');
             return;
         }
         
@@ -261,22 +277,17 @@ async function saveStudent() {
             grade: grade,
             class_num: parseInt(document.getElementById('classNum').value),
             student_num: parseInt(document.getElementById('studentNum').value),
-            korean_score: parseFloat(document.getElementById('koreanScore').value) || 0,
-            english_score: parseFloat(document.getElementById('englishScore').value) || 0,
-            math_score: parseFloat(document.getElementById('mathScore').value) || 0,
-            science_score: parseFloat(document.getElementById('scienceScore').value) || 0,
-            social_score: parseFloat(document.getElementById('socialScore').value) || 0,
+            korean_level: document.getElementById('koreanLevel').value || '',
+            english_level: document.getElementById('englishLevel').value || '',
+            math_level: document.getElementById('mathLevel').value || '',
+            science_level: document.getElementById('scienceLevel').value || '',
+            social_level: document.getElementById('socialLevel').value || '',
             level: levelValue,
             status: '활동중',
             school_id: document.getElementById('schoolId').value,
             program_type: document.getElementById('programType').value,
             student_type: grade <= 3 ? 'middle' : 'high'
         };
-        
-        // 총점 계산
-        studentData.total_score = studentData.korean_score + studentData.english_score + 
-                                   studentData.math_score + studentData.science_score + 
-                                   studentData.social_score;
         
         // localStorage에서 기존 학생 데이터 로드
         const students = JSON.parse(localStorage.getItem('students') || '[]');
@@ -404,11 +415,11 @@ async function editStudent(studentId) {
         document.getElementById('grade').value = student.grade;
         document.getElementById('classNum').value = student.class_num;
         document.getElementById('studentNum').value = student.student_num;
-        document.getElementById('koreanScore').value = student.korean_score || '';
-        document.getElementById('englishScore').value = student.english_score || '';
-        document.getElementById('mathScore').value = student.math_score || '';
-        document.getElementById('scienceScore').value = student.science_score || '';
-        document.getElementById('socialScore').value = student.social_score || '';
+        document.getElementById('koreanLevel').value = student.korean_level || '';
+        document.getElementById('englishLevel').value = student.english_level || '';
+        document.getElementById('mathLevel').value = student.math_level || '';
+        document.getElementById('scienceLevel').value = student.science_level || '';
+        document.getElementById('socialLevel').value = student.social_level || '';
         document.getElementById('level').value = student.level;
         document.getElementById('level').disabled = false;
         
@@ -497,9 +508,9 @@ function getLevelBadge(level) {
         '기초': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800 border-2 border-green-300">🟢 기초</span>',
         '중하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>',
         '중상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 border-2 border-yellow-300">🟡 중상</span>',
-        '상급': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상급</span>',
-        // 기존 3단계 호환성 유지
-        '상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상급</span>',
+        '상': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상</span>',
+        // 기존 호환성 유지
+        '상급': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-300">🔴 상</span>',
         '중': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 border-2 border-yellow-300">🟡 중상</span>',
         '하': '<span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-300">🔵 중하</span>'
     };

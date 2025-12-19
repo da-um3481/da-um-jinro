@@ -114,43 +114,68 @@
                     <input type="number" id="studentNum" required min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
                 
-                <!-- EBS AI 코스웨어 진단평가 점수 -->
+                <!-- EBS AI 코스웨어 학습 수준 진단 -->
                 <div class="md:col-span-2">
                     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border-2 border-blue-200">
                         <h3 class="text-sm font-bold text-blue-800 mb-3 flex items-center">
-                            <i class="fas fa-robot mr-2"></i>🤖 EBS AI 코스웨어 진단평가 점수
+                            <i class="fas fa-robot mr-2"></i>🤖 EBS AI 코스웨어 진단 (학습유형 기반)
                         </h3>
-                        <p class="text-xs text-blue-700 mb-4">✅ EBS AI 코스웨어에서 받은 진단평가 점수를 입력하세요 (0-100점)</p>
+                        <p class="text-xs text-blue-700 mb-4">✅ 학습유형 및 기초학습설문을 통해 상, 중상, 중하, 기초 의 4단계 수준으로 구분됩니다</p>
                         
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">📚 국어</label>
-                                <input type="number" id="koreanScore" min="0" max="100" placeholder="0-100" 
-                                       class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select id="koreanLevel" class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
+                                </select>
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">🗣️ 영어</label>
-                                <input type="number" id="englishScore" min="0" max="100" placeholder="0-100" 
-                                       class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select id="englishLevel" class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
+                                </select>
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">🔢 수학</label>
-                                <input type="number" id="mathScore" min="0" max="100" placeholder="0-100" 
-                                       class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select id="mathLevel" class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
+                                </select>
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">🔬 과학</label>
-                                <input type="number" id="scienceScore" min="0" max="100" placeholder="0-100" 
-                                       class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select id="scienceLevel" class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
+                                </select>
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">🌏 사회</label>
-                                <input type="number" id="socialScore" min="0" max="100" placeholder="0-100" 
-                                       class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select id="socialLevel" class="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -159,27 +184,27 @@
                 <div class="md:col-span-2">
                     <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border-2 border-purple-200">
                         <label class="block text-sm font-bold text-purple-800 mb-2 flex items-center">
-                            <i class="fas fa-chart-line mr-2"></i>📊 학습 수준 (자동 판정) *
+                            <i class="fas fa-chart-line mr-2"></i>📊 종합 학습 수준 (자동 판정) *
                         </label>
-                        <p class="text-xs text-purple-700 mb-3">✅ EBS AI 진단평가 점수 평균을 기준으로 자동 판정됩니다</p>
+                        <p class="text-xs text-purple-700 mb-3">✅ 과목별 수준을 기준으로 종합 학습 수준이 자동 판정됩니다</p>
                         
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <select id="level" disabled class="w-full px-4 py-2 border-2 border-purple-300 bg-gray-50 rounded-lg text-gray-700 font-medium">
-                                    <option value="">점수 입력 후 자동 판정</option>
-                                    <option value="기초">🟢 기초 (0-49점)</option>
-                                    <option value="중하">🔵 중하 (50-69점)</option>
-                                    <option value="중상">🟡 중상 (70-84점)</option>
-                                    <option value="상급">🔴 상급 (85-100점)</option>
+                                    <option value="">과목별 수준 선택 후 자동 판정</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
                                 </select>
                             </div>
                             
                             <div class="bg-white p-3 rounded-lg border-2 border-purple-200">
                                 <div class="text-xs text-gray-600 space-y-1">
-                                    <p><strong class="text-green-600">🟢 기초:</strong> 0-49점 (기본 개념 학습)</p>
-                                    <p><strong class="text-blue-600">🔵 중하:</strong> 50-69점 (개념 강화)</p>
-                                    <p><strong class="text-yellow-600">🟡 중상:</strong> 70-84점 (실력 향상)</p>
-                                    <p><strong class="text-red-600">🔴 상급:</strong> 85-100점 (심화 학습)</p>
+                                    <p><strong class="text-red-600">🔴 상:</strong> 심화 학습 (고급 개념 + 실전 문제)</p>
+                                    <p><strong class="text-yellow-600">🟡 중상:</strong> 실력 향상 (응용 문제 중심)</p>
+                                    <p><strong class="text-blue-600">🔵 중하:</strong> 개념 강화 (기본 + 응용)</p>
+                                    <p><strong class="text-green-600">🟢 기초:</strong> 기본 개념 학습 (기초 탄탄)</p>
                                 </div>
                             </div>
                         </div>
