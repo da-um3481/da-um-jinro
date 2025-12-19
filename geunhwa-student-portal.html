@@ -496,6 +496,124 @@
     <script src="js/study-materials-db.js"></script>
     
     <script>
+        // ==========================================
+        // 교과 내용 데이터베이스 (중1 기준)
+        // ==========================================
+        const curriculumDB = {
+            '수학': {
+                name: '수학',
+                icon: '🔢',
+                units: [{
+                    name: '소인수분해',
+                    time: 8,
+                    concepts: [
+                        '소수와 합성수의 정의',
+                        '거듭제곱 표현하기',
+                        '소인수분해의 뜻과 방법',
+                        '최대공약수(GCD) 구하기',
+                        '최소공배수(LCM) 구하기'
+                    ],
+                    materials: {
+                        textbook: '중학교 수학 1 (1단원)',
+                        ebs: 'EBS 중학 뉴런 수학1 - 1~8강',
+                        concept: '개념원리 중1-1 (p.10~45)'
+                    }
+                }]
+            },
+            '영어': {
+                name: '영어',
+                icon: '🔤',
+                units: [{
+                    name: 'be동사와 일반동사',
+                    time: 8,
+                    concepts: [
+                        'be동사의 의미와 쓰임 (am, are, is)',
+                        'be동사 부정문/의문문',
+                        '일반동사의 현재형',
+                        '3인칭 단수 현재형 (-s, -es)',
+                        '빈도부사 (always, usually)'
+                    ],
+                    materials: {
+                        textbook: '중학교 영어 1 (Lesson 1-2)',
+                        ebs: 'EBS 중학 영어 1 - 1~8강',
+                        concept: 'Grammar Zone 입문편 (p.10~60)'
+                    }
+                }]
+            },
+            '국어': {
+                name: '국어',
+                icon: '✍️',
+                units: [{
+                    name: '문학의 이해',
+                    time: 8,
+                    concepts: [
+                        '시(詩)의 3요소: 운율, 심상, 화자',
+                        '비유법 (직유, 은유, 의인법)',
+                        '소설의 3요소: 인물, 사건, 배경',
+                        '소설의 시점 (1인칭, 3인칭)',
+                        '작품 속 주제 파악하기'
+                    ],
+                    materials: {
+                        textbook: '중학교 국어 1 (문학 영역)',
+                        ebs: 'EBS 중학 국어 1 - 문학편 1~8강',
+                        concept: '완자 중등 국어1 (p.10~80)'
+                    }
+                }]
+            },
+            '과학': {
+                name: '과학',
+                icon: '🔬',
+                units: [{
+                    name: '지구계와 지권의 변화',
+                    time: 10,
+                    concepts: [
+                        '지구계의 구성 요소',
+                        '지권의 층상 구조',
+                        '암석의 생성과 순환',
+                        '풍화와 침식 작용',
+                        '퇴적 작용'
+                    ],
+                    materials: {
+                        textbook: '중학교 과학 1 (1단원)',
+                        ebs: 'EBS 중학 과학 1 - 1~10강',
+                        concept: '완자 중등 과학1 (p.10~50)'
+                    }
+                }]
+            },
+            '사회': {
+                name: '사회',
+                icon: '🌏',
+                units: [{
+                    name: '우리와 다른 기후, 다른 생활',
+                    time: 8,
+                    concepts: [
+                        '세계의 다양한 기후',
+                        '열대 기후의 특징과 생활',
+                        '건조 기후의 특징과 생활',
+                        '온대 기후의 특징과 생활',
+                        '한대 기후의 특징과 생활'
+                    ],
+                    materials: {
+                        textbook: '중학교 사회 1 (1단원)',
+                        ebs: 'EBS 중학 사회 1 - 1~8강',
+                        concept: '완자 중등 사회1 (p.10~40)'
+                    }
+                }]
+            }
+        };
+        
+        // ==========================================
+        // 학습 내용 토글 함수
+        // ==========================================
+        function toggleLearningContent(subjectName) {
+            const contentId = `learningContent_${subjectName}`;
+            const contentDiv = document.getElementById(contentId);
+            
+            if (contentDiv) {
+                contentDiv.classList.toggle('hidden');
+            }
+        }
+        
         // 눈송이 생성
         const snowflakesContainer = document.getElementById('snowflakes');
         for (let i = 0; i < 15; i++) {
@@ -1082,6 +1200,16 @@
                                  style="width: 0%; background-color: ${colors.main};"></div>
                         </div>
                         
+                        <!-- 오늘 학습할 내용 버튼 -->
+                        <button onclick="toggleLearningContent('${item.subject}')" 
+                                class="w-full px-4 py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all hover:scale-105"
+                                style="background: linear-gradient(135deg, ${colors.bg}, white); color: ${colors.dark}; border: 2px solid ${colors.border};">
+                            <i class="fas fa-book-open mr-2"></i>📚 오늘 학습할 내용
+                        </button>
+                        
+                        <!-- 학습 내용 (토글) -->
+                        ${getLearningContentHTML(item.subject, colors)}
+                        
                         <!-- 학습 내용 입력 -->
                         <textarea id="${subjectId}Content" rows="3" 
                                   placeholder="📝 오늘 학습한 내용을 기록하세요"
@@ -1098,6 +1226,40 @@
             `;
         }
 
+        // 📚 학습 내용 HTML 생성
+        function getLearningContentHTML(subjectName, colors) {
+            const curriculum = curriculumDB[subjectName];
+            if (!curriculum || !curriculum.units || curriculum.units.length === 0) {
+                return '';
+            }
+            
+            const unit = curriculum.units[0];
+            const conceptsList = unit.concepts.map(c => `<li>${c}</li>`).join('');
+            
+            return `
+                <div id="learningContent_${subjectName}" class="hidden p-4 rounded-lg border-2" 
+                     style="background-color: ${colors.bg}; border-color: ${colors.border};">
+                    <h4 class="text-base font-bold mb-3" style="color: ${colors.dark};">
+                        📖 ${unit.name} (${unit.time}시간)
+                    </h4>
+                    <div class="mb-3">
+                        <p class="text-sm font-bold text-gray-700 mb-2">✅ 학습 개념:</p>
+                        <ul class="text-sm text-gray-700 pl-5 space-y-1 list-disc">
+                            ${conceptsList}
+                        </ul>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg border" style="border-color: ${colors.border};">
+                        <p class="text-sm font-bold text-gray-700 mb-2">📚 학습 교재:</p>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            • 교과서: ${unit.materials.textbook}<br>
+                            • EBS: ${unit.materials.ebs}<br>
+                            • 개념서: ${unit.materials.concept}
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        
         // 📚 학습 자료 HTML 생성
         function getStudyMaterialsForSubject(subjectName) {
             const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
