@@ -806,62 +806,62 @@
                             📊 EBS AI 코스웨어 진단 (학습유형 기반 4단계)
                         </div>
                         <p style="color: var(--forest-dark); margin-bottom: 15px; font-size: 0.9rem;">
-                            ✅ 각 과목별 학습 수준을 선택해주세요 (상, 중상, 중하, 기초)
+                            ✅ 학습유형 및 기초학습설문을 통해 상, 중상, 중하, 기초 의 4단계 수준으로 구분됩니다
                         </p>
 
                         <div class="level-grid">
                             <div class="level-item">
                                 <label>📝 국어</label>
                                 <select class="form-select" id="korean" onchange="calculateLevel()">
-                                    <option value="">선택</option>
-                                    <option value="상">상급 (85-100)</option>
-                                    <option value="중상">중상 (70-84)</option>
-                                    <option value="중하">중하 (50-69)</option>
-                                    <option value="기초">기초 (0-49)</option>
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
                                 </select>
                             </div>
 
                             <div class="level-item">
                                 <label>🔤 영어</label>
                                 <select class="form-select" id="english" onchange="calculateLevel()">
-                                    <option value="">선택</option>
-                                    <option value="상">상급 (85-100)</option>
-                                    <option value="중상">중상 (70-84)</option>
-                                    <option value="중하">중하 (50-69)</option>
-                                    <option value="기초">기초 (0-49)</option>
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
                                 </select>
                             </div>
 
                             <div class="level-item">
                                 <label>🔢 수학</label>
                                 <select class="form-select" id="math" onchange="calculateLevel()">
-                                    <option value="">선택</option>
-                                    <option value="상">상급 (85-100)</option>
-                                    <option value="중상">중상 (70-84)</option>
-                                    <option value="중하">중하 (50-69)</option>
-                                    <option value="기초">기초 (0-49)</option>
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
                                 </select>
                             </div>
 
                             <div class="level-item">
                                 <label>🔬 과학</label>
                                 <select class="form-select" id="science" onchange="calculateLevel()">
-                                    <option value="">선택</option>
-                                    <option value="상">상급 (85-100)</option>
-                                    <option value="중상">중상 (70-84)</option>
-                                    <option value="중하">중하 (50-69)</option>
-                                    <option value="기초">기초 (0-49)</option>
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
                                 </select>
                             </div>
 
                             <div class="level-item">
                                 <label>🌍 사회</label>
                                 <select class="form-select" id="social" onchange="calculateLevel()">
-                                    <option value="">선택</option>
-                                    <option value="상">상급 (85-100)</option>
-                                    <option value="중상">중상 (70-84)</option>
-                                    <option value="중하">중하 (50-69)</option>
-                                    <option value="기초">기초 (0-49)</option>
+                                    <option value="">선택하세요</option>
+                                    <option value="상">🔴 상 (상급 수준)</option>
+                                    <option value="중상">🟡 중상 (중상 수준)</option>
+                                    <option value="중하">🔵 중하 (중하 수준)</option>
+                                    <option value="기초">🟢 기초 (기초 수준)</option>
                                 </select>
                             </div>
                         </div>
@@ -870,10 +870,21 @@
                         <div class="auto-level">
                             <div class="auto-level-title">
                                 <i class="fas fa-robot"></i>
-                                종합 학습 수준 (자동 판정)
+                                📊 종합 학습 수준 (자동 판정)
                             </div>
+                            <p style="color: var(--charcoal-medium); margin-bottom: 10px; font-size: 0.85rem;">
+                                ✅ 과목별 수준을 기준으로 종합 학습 수준이 자동 판정됩니다
+                            </p>
                             <div id="autoLevel" class="level-badge" style="background: linear-gradient(135deg, var(--charcoal-medium), var(--charcoal-light));">
                                 수준 미설정
+                            </div>
+                            <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 10px; border: 2px solid #e5e7eb;">
+                                <div style="color: var(--charcoal-medium); font-size: 0.85rem; line-height: 1.6;">
+                                    <p><strong style="color: #dc2626;">🔴 상:</strong> 심화 학습 (고급 개념 + 실전 문제)</p>
+                                    <p><strong style="color: #fbbf24;">🟡 중상:</strong> 실력 향상 (응용 문제 중심)</p>
+                                    <p><strong style="color: #3b82f6;">🔵 중하:</strong> 개념 강화 (기본 + 응용)</p>
+                                    <p><strong style="color: #22c55e;">🟢 기초:</strong> 기본 개념 학습 (기초 탄탄)</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1052,7 +1063,7 @@
             }
         }
 
-        // Calculate Level
+        // Calculate Level (학습유형 기반 4단계)
         function calculateLevel() {
             const subjects = ['korean', 'english', 'math', 'science', 'social'];
             let totalScore = 0;
@@ -1077,23 +1088,28 @@
                 const avg = totalScore / count;
                 let level = '';
                 let bgColor = '';
+                let emoji = '';
 
                 if (avg >= 3.5) {
                     level = '상급';
-                    bgColor = 'linear-gradient(135deg, #15803d, #16a34a)';
+                    emoji = '🔴';
+                    bgColor = 'linear-gradient(135deg, #dc2626, #ef4444)';
                 } else if (avg >= 2.5) {
                     level = '중상';
-                    bgColor = 'linear-gradient(135deg, #16a34a, #22c55e)';
+                    emoji = '🟡';
+                    bgColor = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
                 } else if (avg >= 1.5) {
                     level = '중하';
-                    bgColor = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+                    emoji = '🔵';
+                    bgColor = 'linear-gradient(135deg, #3b82f6, #2563eb)';
                 } else {
                     level = '기초';
-                    bgColor = 'linear-gradient(135deg, #f87171, #ef4444)';
+                    emoji = '🟢';
+                    bgColor = 'linear-gradient(135deg, #22c55e, #16a34a)';
                 }
 
                 const badge = document.getElementById('autoLevel');
-                badge.textContent = level;
+                badge.textContent = `${emoji} ${level}`;
                 badge.style.background = bgColor;
             }
         }
