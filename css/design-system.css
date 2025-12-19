@@ -1,48 +1,63 @@
 /* 
  * DA.UM 통합 디자인 시스템
- * 세련된 그린/회색 톤 전문 교육 플랫폼
- * Version 2.0
+ * 짙은 녹색 & 차콜 그레이 전문 교육 플랫폼
+ * Version 3.0 - Dark Green & Charcoal
  */
 
 /* ============================================
-   1. 브랜드 컬러 시스템 (그린/회색 톤)
+   1. 브랜드 컬러 시스템 (Dark Green & Charcoal)
    ============================================ */
 :root {
-    /* Primary Green Colors */
-    --primary-50: #f0fdf4;
-    --primary-100: #dcfce7;
-    --primary-200: #bbf7d0;
-    --primary-300: #86efac;
-    --primary-400: #4ade80;
-    --primary-500: #22c55e;
-    --primary-600: #16a34a;
-    --primary-700: #15803d;
-    --primary-800: #166534;
-    --primary-900: #14532d;
+    /* Dark Forest Green Colors */
+    --forest-50: #f0fdf4;
+    --forest-100: #dcfce7;
+    --forest-200: #bbf7d0;
+    --forest-300: #86efac;
+    --forest-400: #4ade80;
+    --forest-500: #22c55e;
+    --forest-600: #16a34a;
+    --forest-700: #15803d;
+    --forest-800: #166534;
+    --forest-900: #14532d;
+    --forest-950: #052e16;
     
-    /* Gray Colors */
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
+    /* Deep Pine Green */
+    --pine-600: #0f5132;
+    --pine-700: #0a3622;
+    --pine-800: #052e16;
+    --pine-900: #031b0d;
+    
+    /* Charcoal Gray Colors */
+    --charcoal-50: #f9fafb;
+    --charcoal-100: #f3f4f6;
+    --charcoal-200: #e5e7eb;
+    --charcoal-300: #d1d5db;
+    --charcoal-400: #9ca3af;
+    --charcoal-500: #6b7280;
+    --charcoal-600: #4b5563;
+    --charcoal-700: #374151;
+    --charcoal-800: #2d3748;
+    --charcoal-900: #1a202c;
+    --charcoal-950: #0f1419;
+    
+    /* Primary Brand Colors */
+    --brand-dark-green: #0f5132;
+    --brand-forest: #15803d;
+    --brand-charcoal: #2d3748;
+    --brand-slate: #475569;
     
     /* Semantic Colors */
-    --success: #10b981;
-    --warning: #f59e0b;
-    --error: #ef4444;
-    --info: #3b82f6;
+    --success: #15803d;
+    --warning: #d97706;
+    --error: #dc2626;
+    --info: #0f5132;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
-    --gradient-secondary: linear-gradient(135deg, #4b5563 0%, #6b7280 50%, #9ca3af 100%);
+    /* Gradients - Dark Green & Charcoal */
+    --gradient-primary: linear-gradient(135deg, #0f5132 0%, #15803d 50%, #16a34a 100%);
+    --gradient-dark: linear-gradient(135deg, #0f1419 0%, #2d3748 50%, #4b5563 100%);
+    --gradient-hero: linear-gradient(135deg, #052e16 0%, #0f5132 30%, #15803d 70%, #16a34a 100%);
     --gradient-subtle: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-    --gradient-dark: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    --gradient-charcoal: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
     
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -50,7 +65,8 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    --shadow-green: 0 10px 30px rgba(16, 185, 129, 0.3);
+    --shadow-green: 0 10px 30px rgba(15, 81, 50, 0.4);
+    --shadow-charcoal: 0 10px 30px rgba(26, 32, 44, 0.5);
     
     /* Spacing */
     --space-xs: 0.5rem;
@@ -86,19 +102,19 @@
 body {
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
     background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 50%, #d1d5db 100%);
-    color: var(--gray-900);
+    color: var(--charcoal-900);
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
 }
 
 /* ============================================
-   3. 통일된 헤더 스타일
+   3. 통일된 헤더 스타일 (Dark Green Gradient)
    ============================================ */
 .daum-header {
     background: var(--gradient-primary);
     padding: 1.5rem 2rem;
-    box-shadow: var(--shadow-green);
+    box-shadow: var(--shadow-lg);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -109,46 +125,36 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-}
-
-.daum-logo-section {
-    display: flex;
     align-items: center;
-    gap: 1rem;
 }
 
 .daum-logo {
-    width: 50px;
-    height: 50px;
-    background: white;
-    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 8px;
-    box-shadow: var(--shadow-lg);
+    gap: 1rem;
+    color: white;
+    text-decoration: none;
 }
 
 .daum-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
-.daum-title h1 {
-    font-size: 1.5rem;
-    font-weight: 800;
+.daum-logo-text h1 {
+    font-size: 1.75rem;
+    font-weight: 900;
     color: white;
-    margin-bottom: 0.25rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
 }
 
-.daum-title p {
+.daum-logo-text p {
     font-size: 0.875rem;
     color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
+    margin: 0;
 }
 
 .daum-nav {
@@ -157,12 +163,11 @@ body {
 }
 
 .daum-nav-link {
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
     color: white;
     text-decoration: none;
-    border-radius: var(--radius-lg);
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 500;
     transition: var(--transition-base);
     display: flex;
     align-items: center;
@@ -170,75 +175,66 @@ body {
 }
 
 .daum-nav-link:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
 }
 
 .daum-nav-link.active {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /* ============================================
-   4. 카드 & 컨테이너 스타일
+   4. 카드 스타일 (Glass Effect + Dark Green Accent)
    ============================================ */
-.daum-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
 .daum-card {
-    background: white;
-    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-2xl);
     padding: 2rem;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(15, 81, 50, 0.1);
     transition: var(--transition-base);
-    border: 1px solid var(--gray-200);
 }
 
 .daum-card:hover {
-    box-shadow: var(--shadow-xl);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-green);
 }
 
 .daum-card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid var(--gray-100);
+    border-bottom: 2px solid var(--forest-100);
+}
+
+.daum-card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: white;
+    box-shadow: var(--shadow-green);
 }
 
 .daum-card-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--gray-900);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.daum-card-title i {
-    color: var(--primary-600);
-    font-size: 1.75rem;
-}
-
-/* Glass Effect Card */
-.daum-glass-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-xl);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--pine-800);
+    margin: 0;
 }
 
 /* ============================================
-   5. 버튼 스타일
+   5. 버튼 스타일 (Dark Green Primary)
    ============================================ */
 .daum-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 2rem;
     border-radius: var(--radius-lg);
     font-weight: 600;
     font-size: 1rem;
@@ -263,24 +259,25 @@ body {
 }
 
 .daum-btn-secondary {
-    background: var(--gray-100);
-    color: var(--gray-700);
-    border: 2px solid var(--gray-300);
+    background: var(--gradient-charcoal);
+    color: white;
+    box-shadow: var(--shadow-charcoal);
 }
 
 .daum-btn-secondary:hover {
-    background: var(--gray-200);
-    border-color: var(--gray-400);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
 }
 
 .daum-btn-outline {
     background: transparent;
-    color: var(--primary-600);
-    border: 2px solid var(--primary-600);
+    border: 2px solid var(--brand-dark-green);
+    color: var(--brand-dark-green);
 }
 
 .daum-btn-outline:hover {
-    background: var(--primary-50);
+    background: var(--brand-dark-green);
+    color: white;
 }
 
 /* ============================================
@@ -291,8 +288,8 @@ body {
 .daum-textarea {
     width: 100%;
     padding: 0.875rem 1rem;
-    border: 2px solid var(--gray-200);
-    border-radius: var(--radius-lg);
+    border: 2px solid var(--charcoal-200);
+    border-radius: var(--radius-md);
     font-size: 1rem;
     font-family: inherit;
     transition: var(--transition-base);
@@ -303,25 +300,16 @@ body {
 .daum-select:focus,
 .daum-textarea:focus {
     outline: none;
-    border-color: var(--primary-500);
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-}
-
-.daum-label {
-    display: block;
-    font-weight: 600;
-    color: var(--gray-700);
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
+    border-color: var(--brand-dark-green);
+    box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.1);
 }
 
 /* ============================================
-   7. 배지 & 태그
+   7. 배지 스타일
    ============================================ */
 .daum-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
     padding: 0.375rem 0.875rem;
     border-radius: var(--radius-full);
     font-size: 0.875rem;
@@ -329,8 +317,8 @@ body {
 }
 
 .daum-badge-success {
-    background: var(--primary-100);
-    color: var(--primary-700);
+    background: var(--forest-100);
+    color: var(--pine-800);
 }
 
 .daum-badge-warning {
@@ -344,19 +332,76 @@ body {
 }
 
 .daum-badge-info {
-    background: #dbeafe;
-    color: #1e40af;
+    background: var(--forest-100);
+    color: var(--pine-700);
 }
 
 /* ============================================
-   8. 푸터 스타일
+   8. 애니메이션
+   ============================================ */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.daum-animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+}
+
+.daum-animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ============================================
+   9. 유틸리티 클래스
+   ============================================ */
+.daum-text-primary {
+    color: var(--brand-dark-green);
+}
+
+.daum-text-charcoal {
+    color: var(--brand-charcoal);
+}
+
+.daum-bg-primary {
+    background: var(--gradient-primary);
+}
+
+.daum-bg-charcoal {
+    background: var(--gradient-charcoal);
+}
+
+.daum-shadow-green {
+    box-shadow: var(--shadow-green);
+}
+
+.daum-shadow-charcoal {
+    box-shadow: var(--shadow-charcoal);
+}
+
+/* ============================================
+   10. 푸터 스타일 (Charcoal)
    ============================================ */
 .daum-footer {
-    background: var(--gray-900);
-    color: white;
+    background: var(--gradient-dark);
+    color: var(--charcoal-100);
     padding: 3rem 2rem 2rem;
     margin-top: 4rem;
-    border-top: 4px solid var(--primary-600);
 }
 
 .daum-footer-container {
@@ -372,152 +417,69 @@ body {
 }
 
 .daum-footer-section h4 {
-    font-size: 1.125rem;
-    font-weight: 700;
+    color: white;
     margin-bottom: 1rem;
-    color: var(--primary-400);
+    font-size: 1.125rem;
 }
 
-.daum-footer-copyright {
-    border-top: 1px solid var(--gray-700);
+.daum-footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 2rem;
     text-align: center;
-    color: var(--gray-400);
+    color: var(--charcoal-300);
 }
 
 /* ============================================
-   9. 애니메이션
-   ============================================ */
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.daum-animate-slide-up {
-    animation: slideUp 0.5s ease-out;
-}
-
-.daum-animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* ============================================
-   10. 반응형 디자인
+   11. 반응형 디자인
    ============================================ */
 @media (max-width: 768px) {
     .daum-header {
         padding: 1rem;
     }
     
-    .daum-header-container {
-        flex-direction: column;
-        gap: 1rem;
+    .daum-logo-text h1 {
+        font-size: 1.25rem;
     }
     
     .daum-nav {
-        width: 100%;
-        flex-direction: column;
-    }
-    
-    .daum-nav-link {
-        justify-content: center;
-    }
-    
-    .daum-container {
-        padding: 1rem;
+        display: none;
     }
     
     .daum-card {
         padding: 1.5rem;
     }
     
-    .daum-title h1 {
-        font-size: 1.25rem;
-    }
-    
-    .daum-footer-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .daum-logo {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .daum-title h1 {
-        font-size: 1.125rem;
-    }
-    
-    .daum-title p {
-        font-size: 0.75rem;
+    .daum-card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
     
     .daum-card-title {
         font-size: 1.25rem;
     }
+    
+    .daum-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+    }
 }
 
-/* ============================================
-   11. 유틸리티 클래스
-   ============================================ */
-.daum-grid {
-    display: grid;
-    gap: 1.5rem;
+@media (max-width: 480px) {
+    .daum-logo-text h1 {
+        font-size: 1rem;
+    }
+    
+    .daum-logo img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .daum-card {
+        padding: 1rem;
+    }
+    
+    .daum-footer {
+        padding: 2rem 1rem 1rem;
+    }
 }
-
-.daum-grid-2 {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.daum-grid-3 {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.daum-flex {
-    display: flex;
-}
-
-.daum-flex-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.daum-flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.daum-text-center {
-    text-align: center;
-}
-
-.daum-text-muted {
-    color: var(--gray-500);
-}
-
-.daum-mb-1 { margin-bottom: var(--space-xs); }
-.daum-mb-2 { margin-bottom: var(--space-sm); }
-.daum-mb-3 { margin-bottom: var(--space-md); }
-.daum-mb-4 { margin-bottom: var(--space-lg); }
-.daum-mb-5 { margin-bottom: var(--space-xl); }
-
-.daum-mt-1 { margin-top: var(--space-xs); }
-.daum-mt-2 { margin-top: var(--space-sm); }
-.daum-mt-3 { margin-top: var(--space-md); }
-.daum-mt-4 { margin-top: var(--space-lg); }
-.daum-mt-5 { margin-top: var(--space-xl); }

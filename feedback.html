@@ -23,18 +23,18 @@
 </head>
 <body class="bg-gray-50">
     <!-- 상단 네비게이션 -->
-    <nav class="bg-emerald-600 text-white shadow-lg">
+    <nav class="bg-green-800 text-white shadow-lg">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold">📚 DA.UM 학습관리</h1>
-                    <p class="text-sm text-emerald-200">주간 피드백 작성</p>
+                    <p class="text-sm text-green-200">주간 피드백 작성</p>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="index.html" class="px-4 py-2 hover:bg-emerald-700 rounded-lg transition">
+                    <a href="index.html" class="px-4 py-2 hover:bg-green-800 rounded-lg transition">
                         <i class="fas fa-home mr-2"></i>대시보드
                     </a>
-                    <a href="students.html" class="px-4 py-2 hover:bg-emerald-700 rounded-lg transition">
+                    <a href="students.html" class="px-4 py-2 hover:bg-green-800 rounded-lg transition">
                         <i class="fas fa-users mr-2"></i>학생 관리
                     </a>
                 </div>
@@ -65,7 +65,7 @@
                     <input type="date" id="weekEnd" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
             </div>
-            <button onclick="loadWeeklyData()" class="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+            <button onclick="loadWeeklyData()" class="mt-4 px-6 py-2 bg-green-800 text-white rounded-lg hover:bg-green-800">
                 <i class="fas fa-sync-alt mr-2"></i>주간 데이터 불러오기
             </button>
         </div>
@@ -113,7 +113,7 @@
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">학습시간 달성률 (%)</label>
                 <input type="number" id="achievement" min="0" max="100" step="0.1" required 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" readonly>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700" readonly>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -160,7 +160,7 @@
                 <button type="button" onclick="location.href='index.html'" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                     취소
                 </button>
-                <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                <button type="submit" class="px-6 py-2 bg-green-800 text-white rounded-lg hover:bg-green-900">
                     <i class="fas fa-save mr-2"></i>피드백 저장
                 </button>
             </div>

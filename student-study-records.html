@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- 상단 헤더 - DA.UM 아이덴티티 -->
-    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg sticky top-0 z-50">
+    <header class="bg-gradient-to-r from-indigo-600 to-gray-600 text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- 로고 및 타이틀 (왼편 배치) -->
@@ -17,7 +17,7 @@
                     <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl shadow-lg bg-white p-1" onerror="this.style.display='none'">
                     <div>
                         <h1 class="text-xl sm:text-2xl font-black">DA.UM 학습 기록</h1>
-                        <p class="text-xs sm:text-sm text-indigo-100 font-medium">Study Records Management</p>
+                        <p class="text-xs sm:text-sm text-green-8100 font-medium">Study Records Management</p>
                     </div>
                 </div>
                 <!-- 네비게이션 -->
@@ -44,16 +44,16 @@
         <!-- 학생 선택 -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">
-                <i class="fas fa-user-graduate text-blue-600 mr-2"></i>학생 선택
+                <i class="fas fa-user-graduate text-green-800 mr-2"></i>학생 선택
             </h2>
             <select id="studentSelect" onchange="loadStudentRecords()" 
-                    class="w-full md:w-1/2 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    class="w-full md:w-1/2 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-800">
                 <option value="">학생을 선택하세요</option>
             </select>
         </div>
 
         <!-- 학생 정보 -->
-        <div id="studentInfo" class="hidden bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-lg p-6 mb-6">
+        <div id="studentInfo" class="hidden bg-gradient-to-r from-blue-500 to-gray-600 text-white rounded-lg shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="text-sm opacity-90">학생 정보</div>
@@ -99,7 +99,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-bold">
-                        <i class="fas fa-comment-dots text-blue-600 mr-2"></i>주간 피드백 작성
+                        <i class="fas fa-comment-dots text-green-800 mr-2"></i>주간 피드백 작성
                     </h3>
                     <span class="text-sm text-gray-500">학생 포털에서 확인 가능</span>
                 </div>
@@ -110,7 +110,7 @@
                             <i class="fas fa-star text-yellow-500 mr-1"></i>칭찬할 점
                         </label>
                         <textarea id="feedbackPraise" rows="2" 
-                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-800"
                                   placeholder="이번 주 학생이 잘한 점, 칭찬할 부분을 작성하세요..."></textarea>
                     </div>
                     
@@ -119,7 +119,7 @@
                             <i class="fas fa-lightbulb text-orange-500 mr-1"></i>개선 제안
                         </label>
                         <textarea id="feedbackImprovement" rows="2" 
-                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-800"
                                   placeholder="앞으로 개선하면 좋을 점을 작성하세요..."></textarea>
                     </div>
                     
@@ -128,12 +128,12 @@
                             <i class="fas fa-heart text-red-500 mr-1"></i>응원 메시지
                         </label>
                         <textarea id="feedbackEncouragement" rows="2" 
-                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-800"
                                   placeholder="학생에게 전하는 응원의 메시지를 작성하세요..."></textarea>
                     </div>
                     
                     <button onclick="saveFeedback()" 
-                            class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-bold hover:from-blue-600 hover:to-purple-700 transition shadow-lg">
+                            class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-gray-600 text-white rounded-lg font-bold hover:from-blue-600 hover:to-gray-700 transition shadow-lg">
                         <i class="fas fa-save mr-2"></i>피드백 저장하기
                     </button>
                 </div>
@@ -150,10 +150,10 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold">
-                        <i class="fas fa-clipboard-list text-purple-600 mr-2"></i>학습 기록
+                        <i class="fas fa-clipboard-list text-gray-600 mr-2"></i>학습 기록
                     </h2>
                     <div class="text-sm text-gray-600">
-                        총 <span id="totalRecords" class="font-bold text-purple-600">0</span>일 기록
+                        총 <span id="totalRecords" class="font-bold text-gray-600">0</span>일 기록
                     </div>
                 </div>
 
@@ -352,7 +352,7 @@
                         const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
                         
                         return `
-                            <div class="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                            <div class="p-4 bg-blue-50 border-2 border-green-200 rounded-lg">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="font-bold text-blue-900">📅 ${dateStr} (${fb.week_number}주차)</span>
                                     <button onclick="deleteFeedback('${fb.id}')" class="text-sm text-red-500 hover:text-red-700">
@@ -440,7 +440,7 @@
                             <div>
                                 <div class="text-lg font-bold text-gray-800">${dateStr} (${dayOfWeek})</div>
                                 <div class="text-sm text-gray-600 mt-1">
-                                    총 학습 시간: <span class="font-bold text-purple-600">${totalTime}분 (${(totalTime / 60).toFixed(1)}시간)</span>
+                                    총 학습 시간: <span class="font-bold text-gray-600">${totalTime}분 (${(totalTime / 60).toFixed(1)}시간)</span>
                                 </div>
                             </div>
                             <div class="text-right">

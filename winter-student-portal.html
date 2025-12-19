@@ -76,7 +76,7 @@
                 >
                 <button 
                     onclick="loadAndGenerateSchedule()"
-                    class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    class="px-6 py-3 bg-gradient-to-r from-gray-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                 >
                     <i class="fas fa-magic mr-2"></i>시작하기
                 </button>
@@ -130,9 +130,9 @@
         <div id="weeklyScheduleSection" class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up hidden">
             <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleWeeklySchedule()">
                 <h3 class="text-lg font-bold text-gray-800">
-                    <i class="fas fa-calendar-week text-purple-500 mr-2"></i>나의 주간 학습 스케줄
+                    <i class="fas fa-calendar-week text-gray-500 mr-2"></i>나의 주간 학습 스케줄
                 </h3>
-                <button class="px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm font-bold text-purple-700 transition">
+                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold text-gray-700 transition">
                     <i id="scheduleToggleIcon" class="fas fa-chevron-down mr-2"></i>
                     <span id="scheduleToggleText">펼치기</span>
                 </button>
@@ -148,17 +148,17 @@
                             <div class="text-xs text-gray-500 mt-1">하루 3과목</div>
                         </div>
                     </div>
-                    <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 border-2 border-purple-300">
+                    <div class="bg-gradient-to-br from-gray-50 to-indigo-50 rounded-xl p-4 border-2 border-gray-300">
                         <div class="text-center">
                             <div class="text-sm text-gray-600 mb-1">주말 (토~일)</div>
-                            <div class="text-3xl font-black text-purple-600">4h</div>
+                            <div class="text-3xl font-black text-gray-600">4h</div>
                             <div class="text-xs text-gray-500 mt-1">하루 4과목</div>
                         </div>
                     </div>
-                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 border-2 border-indigo-400">
+                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 border-2 border-green-8400">
                         <div class="text-center">
                             <div class="text-sm text-gray-600 mb-1">주간 총계</div>
-                            <div class="text-3xl font-black text-indigo-600">19.25h</div>
+                            <div class="text-3xl font-black text-green-8600">19.25h</div>
                             <div class="text-xs text-gray-500 mt-1">집중 학습</div>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
             <!-- 과목별 학습 현황 -->
             <div class="space-y-4">
                 <!-- 수학 -->
-                <div class="p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+                <div class="p-4 bg-blue-50 rounded-xl border-2 border-green-200">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center space-x-2">
                             <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white">
@@ -192,7 +192,7 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="text-2xl font-black text-blue-600 timer-display" id="mathTime">00:00</div>
+                            <div class="text-2xl font-black text-green-800 timer-display" id="mathTime">00:00</div>
                             <div class="text-xs text-gray-600">0 / 45분</div>
                         </div>
                     </div>
@@ -270,10 +270,10 @@
                 </div>
 
                 <!-- 과학 -->
-                <div class="p-4 bg-purple-50 rounded-xl border-2 border-purple-200">
+                <div class="p-4 bg-gray-50 rounded-xl border-2 border-gray-200">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-white">
+                            <div class="w-10 h-10 bg-gray-500 rounded-lg flex items-center justify-center text-white">
                                 <i class="fas fa-flask"></i>
                             </div>
                             <div>
@@ -282,15 +282,15 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="text-2xl font-black text-purple-600 timer-display" id="scienceTime">00:00</div>
+                            <div class="text-2xl font-black text-gray-600 timer-display" id="scienceTime">00:00</div>
                             <div class="text-xs text-gray-600">0 / 45분</div>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-purple-500 h-full rounded-full transition-all" style="width: 0%"></div>
+                        <div class="bg-gray-500 h-full rounded-full transition-all" style="width: 0%"></div>
                     </div>
                     <div class="flex space-x-2">
-                        <button onclick="startTimer('science')" class="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition font-bold">
+                        <button onclick="startTimer('science')" class="flex-1 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-bold">
                             <i class="fas fa-play mr-2"></i>시작
                         </button>
                         <button onclick="stopTimer('science')" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-bold">
@@ -354,13 +354,13 @@
                 <i class="fas fa-book-open text-cyan-500 mr-2"></i>나의 교재 진도
             </h3>
             <div class="space-y-3">
-                <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
+                <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-2 border-green-200">
                     <div class="flex items-center justify-between mb-2">
                         <div>
-                            <div class="text-sm text-blue-600 font-bold">수학</div>
+                            <div class="text-sm text-green-800 font-bold">수학</div>
                             <div class="font-bold text-gray-800">개념원리 중학수학 1-1</div>
                         </div>
-                        <div class="text-2xl font-black text-blue-600">15%</div>
+                        <div class="text-2xl font-black text-green-800">15%</div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-2">
                         <div class="bg-blue-500 h-full rounded-full" style="width: 15%"></div>

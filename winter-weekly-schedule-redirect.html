@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통합 학생 포털로 이동 중...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .redirect-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .redirect-container h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .redirect-container p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            margin: 2rem auto;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .info {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 2rem;
+        }
+        
+        .manual-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .manual-link:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-container">
+        <h1>🚀 통합 학생 포털로 이동</h1>
+        <p>더 편리한 원스톱 시스템으로 업그레이드되었습니다!</p>
+        
+        <div class="spinner"></div>
+        
+        <p style="font-size: 0.95rem; color: #667eea; font-weight: bold;">
+            ✨ 이제 한 페이지에서 모든 것을!<br>
+            이름 입력 → 스케줄 생성 → 타이머 → 학습 자료
+        </p>
+        
+        <div class="info">
+            자동으로 이동하지 않으면 아래 버튼을 클릭하세요
+        </div>
+        
+        <a href="geunhwa-student-portal.html" class="manual-link">
+            통합 포털로 이동 →
+        </a>
+    </div>
+    
+    <script>
+        // 2초 후 자동 리다이렉트
+        setTimeout(() => {
+            window.location.href = 'geunhwa-student-portal.html';
+        }, 2000);
+    </script>
+</body>
+</html>

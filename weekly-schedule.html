@@ -22,7 +22,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- 상단 헤더 - DA.UM 아이덴티티 -->
-    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg sticky top-0 z-50">
+    <header class="bg-gradient-to-r from-green-800 to-green-700 text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- 로고 및 타이틀 (왼편 배치) -->
@@ -30,7 +30,7 @@
                     <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl shadow-lg bg-white p-1" onerror="this.style.display='none'">
                     <div>
                         <h1 class="text-xl sm:text-2xl font-black">DA.UM 주간 스케줄</h1>
-                        <p class="text-xs sm:text-sm text-emerald-100 font-medium">Weekly Study Schedule</p>
+                        <p class="text-xs sm:text-sm text-green-100 font-medium">Weekly Study Schedule</p>
                     </div>
                 </div>
                 <!-- 네비게이션 -->
@@ -60,14 +60,14 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-user-graduate mr-2 text-emerald-600"></i>학생 선택
+                        <i class="fas fa-user-graduate mr-2 text-green-800"></i>학생 선택
                     </label>
-                    <select id="studentSelect" onchange="loadWeeklySchedule()" class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                    <select id="studentSelect" onchange="loadWeeklySchedule()" class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700">
                         <option value="">학생을 선택하세요</option>
                     </select>
                 </div>
                 <div>
-                    <button onclick="generateAutoSchedule()" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold">
+                    <button onclick="generateAutoSchedule()" class="px-6 py-3 bg-green-800 text-white rounded-lg hover:bg-green-800 transition font-semibold">
                         <i class="fas fa-magic mr-2"></i>자동 스케줄 생성
                     </button>
                 </div>
@@ -76,7 +76,7 @@
 
         <!-- 주간 학습 시간 안내 -->
         <div id="timeGuideCard" class="hidden mb-6">
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg shadow-lg p-6 text-white">
+            <div class="bg-gradient-to-r from-green-800 to-green-700 rounded-lg shadow-lg p-6 text-white">
                 <h3 class="text-xl font-bold mb-4">📊 주간 학습 시간 구성</h3>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div class="bg-white bg-opacity-20 rounded-lg p-4 backdrop-blur-sm">
@@ -112,14 +112,14 @@
         <div id="scheduleSection" class="hidden">
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-xl font-bold mb-6 flex items-center">
-                    <i class="fas fa-calendar-week text-emerald-600 mr-2"></i>
+                    <i class="fas fa-calendar-week text-green-800 mr-2"></i>
                     이번 주 학습 스케줄
                 </h3>
 
                 <!-- 요일별 스케줄 -->
                 <div class="space-y-6">
                     <!-- 월요일 -->
-                    <div class="border-l-4 border-blue-500 bg-blue-50 rounded-r-lg p-6">
+                    <div class="border-l-4 border-green-800 bg-blue-50 rounded-r-lg p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-3">
                                 <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
@@ -182,10 +182,10 @@
                     </div>
 
                     <!-- 목요일 -->
-                    <div class="border-l-4 border-purple-500 bg-purple-50 rounded-r-lg p-6">
+                    <div class="border-l-4 border-gray-500 bg-gray-50 rounded-r-lg p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                                <div class="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center text-white font-bold">
                                     목
                                 </div>
                                 <div>
@@ -193,7 +193,7 @@
                                     <div class="text-sm text-gray-600">평일 학습 | 4시간</div>
                                 </div>
                             </div>
-                            <button onclick="editDaySchedule('thursday')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm">
+                            <button onclick="editDaySchedule('thursday')" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm">
                                 <i class="fas fa-edit mr-1"></i>수정
                             </button>
                         </div>
@@ -203,10 +203,10 @@
                     </div>
 
                     <!-- 금요일 -->
-                    <div class="border-l-4 border-pink-500 bg-pink-50 rounded-r-lg p-6">
+                    <div class="border-l-4 border-pink-500 bg-gray-50 rounded-r-lg p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                                <div class="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center text-white font-bold">
                                     금
                                 </div>
                                 <div>
@@ -214,7 +214,7 @@
                                     <div class="text-sm text-gray-600">평일 학습 마무리 | 4시간</div>
                                 </div>
                             </div>
-                            <button onclick="editDaySchedule('friday')" class="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition text-sm">
+                            <button onclick="editDaySchedule('friday')" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm">
                                 <i class="fas fa-edit mr-1"></i>수정
                             </button>
                         </div>
