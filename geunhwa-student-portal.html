@@ -1015,11 +1015,25 @@
 
             // 학생 목록에서 찾기
             const students = JSON.parse(localStorage.getItem('students')) || [];
-            const student = students.find(s => s.name === nameInput);
+            let student = students.find(s => s.name === nameInput);
 
+            // 학생이 없으면 자동으로 생성
             if (!student) {
-                alert('등록된 학생을 찾을 수 없습니다.\n이름을 정확히 입력했는지 확인해주세요.');
-                return;
+                const newStudentId = 'student_' + Date.now();
+                student = {
+                    id: newStudentId,
+                    name: nameInput,
+                    grade: 1,  // 기본 중1
+                    class_num: 1,  // 기본 1반
+                    number: 1,  // 기본 1번
+                    created_at: new Date().toISOString()
+                };
+                
+                // 학생 목록에 추가
+                students.push(student);
+                localStorage.setItem('students', JSON.stringify(students));
+                
+                console.log(`✅ 새 학생 자동 생성: ${student.name}`);
             }
 
             // localStorage에 현재 학생 정보 저장
