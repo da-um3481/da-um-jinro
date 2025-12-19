@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>📚 중학교 교과 마스터 - 공교육 완전 정복 시스템</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #15803d;
+            --primary-dark: #0f5132;
+            --primary-light: #16a34a;
+            --secondary: #0891b2;
+            --accent: #dc2626;
+            --warning: #ea580c;
+            --success: #059669;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #2d3748;
+            --gray-900: #1a202c;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%);
+            color: var(--gray-900);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* ========== 헤더 ========== */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .title h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 0.25rem;
+        }
+        
+        .title p {
+            font-size: 0.875rem;
+            opacity: 0.95;
+        }
+        
+        .grade-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .grade-btn {
+            padding: 0.625rem 1.25rem;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            transition: all 0.3s ease;
+        }
+        
+        .grade-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .grade-btn.active {
+            background: white;
+            color: var(--primary);
+            border-color: white;
+        }
+        
+        /* ========== 메인 컨테이너 ========== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* ========== 탭 네비게이션 ========== */
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-nav::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .tab-nav::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .tab-btn {
+            padding: 0.875rem 1.5rem;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tab-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ========== 카드 스타일 ========== */
+        .card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            border: 2px solid var(--gray-100);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+            border-color: var(--primary-light);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .card-icon {
+            font-size: 1.75rem;
+        }
+        
+        /* ========== 과목 카드 ========== */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        
+        .subject-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 2px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        .subject-card.math { border-color: #3b82f6; background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+        .subject-card.korean { border-color: #ef4444; background: linear-gradient(135deg, #fee2e2, #fecaca); }
+        .subject-card.english { border-color: #10b981; background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+        .subject-card.science { border-color: #8b5cf6; background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+        .subject-card.social { border-color: #f59e0b; background: linear-gradient(135deg, #fef3c7, #fde68a); }
+        .subject-card.history { border-color: #ec4899; background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+        
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subject-icon-box {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .subject-card.math .subject-icon-box { background: #3b82f6; }
+        .subject-card.korean .subject-icon-box { background: #ef4444; }
+        .subject-card.english .subject-icon-box { background: #10b981; }
+        .subject-card.science .subject-icon-box { background: #8b5cf6; }
+        .subject-card.social .subject-icon-box { background: #f59e0b; }
+        .subject-card.history .subject-icon-box { background: #ec4899; }
+        
+        .subject-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gray-900);
+        }
+        
+        .subject-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+        
+        .progress-bar-container {
+            background: rgba(255,255,255,0.6);
+            height: 0.5rem;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+        }
+        
+        /* ========== 단원 아코디언 ========== */
+        .unit-accordion {
+            border: 2px solid var(--gray-200);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .unit-header {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            gap: 1rem;
+        }
+        
+        .unit-header:hover {
+            background: var(--gray-50);
+        }
+        
+        .unit-header.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+        
+        .unit-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+        
+        .unit-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .unit-badge {
+            padding: 0.375rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        .badge-time {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-difficulty-easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-difficulty-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-difficulty-hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .unit-content {
+            display: none;
+            padding: 1.5rem;
+            background: var(--gray-50);
+            border-top: 2px solid var(--gray-200);
+        }
+        
+        .unit-content.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 1000px; }
+        }
+        
+        .concept-list {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .concept-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .concept-icon {
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .concept-text {
+            flex: 1;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .materials-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .material-card {
+            padding: 1rem;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .material-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .material-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .material-name {
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .material-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .material-link:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        /* ========== 학습 일정 생성기 ========== */
+        .schedule-generator {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            border: 3px solid #3b82f6;
+        }
+        
+        .generator-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .generator-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .generator-subtitle {
+            font-size: 1.125rem;
+            color: #1e40af;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-label {
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 0.9375rem;
+        }
+        
+        .form-select, .form-input {
+            padding: 0.875rem 1rem;
+            border: 2px solid white;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-generate {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1.25rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-generate:active {
+            transform: translateY(-2px);
+        }
+        
+        /* ========== 생성된 스케줄 ========== */
+        .schedule-result {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 1.25rem;
+            border: 3px solid var(--success);
+        }
+        
+        .schedule-result.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .schedule-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px dashed var(--gray-200);
+        }
+        
+        .schedule-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+        
+        .schedule-info {
+            font-size: 1rem;
+            color: var(--gray-700);
+        }
+        
+        .week-container {
+            margin-bottom: 2rem;
+        }
+        
+        .week-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .day-card {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .day-name {
+            font-size: 1.125rem;
+            font-weight: 900;
+            color: var(--gray-900);
+        }
+        
+        .study-time {
+            padding: 0.375rem 0.875rem;
+            background: linear-gradient(135deg, var(--secondary), #0e7490);
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+        
+        .subject-schedule {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .schedule-item:hover {
+            border-color: var(--primary);
+            transform: translateX(8px);
+        }
+        
+        .schedule-subject {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            color: white;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .schedule-subject.math { background: #3b82f6; }
+        .schedule-subject.korean { background: #ef4444; }
+        .schedule-subject.english { background: #10b981; }
+        .schedule-subject.science { background: #8b5cf6; }
+        .schedule-subject.social { background: #f59e0b; }
+        
+        .schedule-content {
+            flex: 1;
+        }
+        
+        .schedule-unit {
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .schedule-material {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        /* ========== 통계 카드 ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+        
+        /* ========== 모달 ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--gray-200);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        /* ========== 반응형 ========== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .title h1 {
+                font-size: 1.125rem;
+            }
+            
+            .title p {
+                font-size: 0.75rem;
+            }
+            
+            .grade-selector {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .grade-btn {
+                flex: 1;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+            }
+            
+            .container {
+                padding: 1rem 0.75rem;
+            }
+            
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .card {
+                padding: 1.25rem;
+            }
+            
+            .card-title {
+                font-size: 1.25rem;
+            }
+            
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .materials-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .unit-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ========== 유틸리티 ========== */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo">📚</div>
+                <div class="title">
+                    <h1>중학교 교과 마스터</h1>
+                    <p>🎯 공교육 완전 정복 · 자기주도학습 지원 시스템</p>
+                </div>
+            </div>
+            <div class="grade-selector">
+                <button class="grade-btn active" onclick="selectGrade(1)">중1</button>
+                <button class="grade-btn" onclick="selectGrade(2)">중2</button>
+                <button class="grade-btn" onclick="selectGrade(3)">중3</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 메인 컨테이너 -->
+    <main class="container">
+        <!-- 탭 네비게이션 -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('overview')">
+                <i class="fas fa-chart-pie"></i> 전체 개요
+            </button>
+            <button class="tab-btn" onclick="switchTab('subjects')">
+                <i class="fas fa-book"></i> 과목별 학습
+            </button>
+            <button class="tab-btn" onclick="switchTab('schedule')">
+                <i class="fas fa-calendar-alt"></i> 일정 생성
+            </button>
+            <button class="tab-btn" onclick="switchTab('materials')">
+                <i class="fas fa-bookmark"></i> 교재 연동
+            </button>
+        </nav>
+        
+        <!-- 탭 1: 전체 개요 -->
+        <div id="tab-overview" class="tab-content active">
+            <!-- 통계 카드 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📖</div>
+                    <div class="stat-value" id="totalUnits">0</div>
+                    <div class="stat-label">전체 단원 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-value" id="totalHours">0</div>
+                    <div class="stat-label">총 학습 시간</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="totalConcepts">0</div>
+                    <div class="stat-label">핵심 개념 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-value" id="totalMaterials">0</div>
+                    <div class="stat-label">추천 교재 수</div>
+                </div>
+            </div>
+            
+            <!-- 과목별 진행률 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">📊</span>
+                        과목별 학습 현황
+                    </h2>
+                </div>
+                <div class="subject-grid" id="subjectOverview">
+                    <!-- 동적 생성 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 탭 2: 과목별 학습 -->
+        <div id="tab-subjects" class="tab-content">
+            <div id="subjectContent">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+        
+        <!-- 탭 3: 일정 생성 -->
+        <div id="tab-schedule" class="tab-content">
+            <div class="schedule-generator">
+                <div class="generator-header">
+                    <h2 class="generator-title">🗓️ 맞춤형 학습 일정 자동 생성</h2>
+                    <p class="generator-subtitle">내 목표와 시간에 맞춘 완벽한 공부 계획!</p>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">📅 학습 기간</label>
+                        <select class="form-select" id="schedulePeriod">
+                            <option value="30">30일 (집중 학습)</option>
+                            <option value="60">60일 (안정적 학습)</option>
+                            <option value="100">100일 (심화 학습)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">⏰ 일일 학습 시간</label>
+                        <select class="form-select" id="dailyHours">
+                            <option value="2">2시간 (기본)</option>
+                            <option value="3">3시간 (표준)</option>
+                            <option value="4">4시간 (집중)</option>
+                            <option value="5">5시간 (심화)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📚 포함 과목 선택</label>
+                        <select class="form-select" id="subjectSelection" multiple>
+                            <option value="all" selected>전 과목</option>
+                            <option value="math">수학</option>
+                            <option value="korean">국어</option>
+                            <option value="english">영어</option>
+                            <option value="science">과학</option>
+                            <option value="social">사회</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📍 시작일</label>
+                        <input type="date" class="form-input" id="startDate">
+                    </div>
+                </div>
+                
+                <button class="btn-generate" onclick="generateSchedule()">
+                    <i class="fas fa-magic"></i>
+                    <span>맞춤 학습 일정 생성하기</span>
+                </button>
+            </div>
+            
+            <!-- 생성된 스케줄 -->
+            <div class="schedule-result" id="scheduleResult">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+        
+        <!-- 탭 4: 교재 연동 -->
+        <div id="tab-materials" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">📖</span>
+                        EBS 교재 & 교과서 연동
+                    </h2>
+                </div>
+                <div id="materialsContent">
+                    <!-- 동적 생성 -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 모달 -->
+    <div class="modal" id="unitModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalContent">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 데이터베이스 ====================
+        const curriculumDatabase = {
+            1: { // 중1
+                math: {
+                    name: '수학',
+                    icon: '🔢',
+                    color: 'math',
+                    units: [
+                        {
+                            id: 1,
+                            name: '소인수분해',
+                            time: 8,
+                            difficulty: 'easy',
+                            concepts: ['소수와 합성수', '소인수분해', '최대공약수', '최소공배수'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (상)',
+                                concept: '개념원리 중1-1',
+                                workbook: '쎈 중등수학 1-1'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        },
+                        {
+                            id: 2,
+                            name: '정수와 유리수',
+                            time: 10,
+                            difficulty: 'medium',
+                            concepts: ['정수', '유리수', '절댓값', '사칙연산'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (상)',
+                                concept: '개념원리 중1-1',
+                                workbook: '쎈 중등수학 1-1'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        },
+                        {
+                            id: 3,
+                            name: '문자와 식',
+                            time: 12,
+                            difficulty: 'medium',
+                            concepts: ['문자의 사용', '식의 값', '일차식의 계산', '일차방정식'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (하)',
+                                concept: '개념원리 중1-2',
+                                workbook: '쎈 중등수학 1-2'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        },
+                        {
+                            id: 4,
+                            name: '좌표평면과 그래프',
+                            time: 10,
+                            difficulty: 'hard',
+                            concepts: ['순서쌍', '좌표평면', '정비례와 반비례', '그래프'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (하)',
+                                concept: '개념원리 중1-2',
+                                workbook: '쎈 중등수학 1-2'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        },
+                        {
+                            id: 5,
+                            name: '기본 도형',
+                            time: 8,
+                            difficulty: 'easy',
+                            concepts: ['점, 선, 면', '각', '위치관계', '작도와 합동'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (하)',
+                                concept: '개념원리 중1-2',
+                                workbook: '쎈 중등수학 1-2'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        },
+                        {
+                            id: 6,
+                            name: '평면도형',
+                            time: 10,
+                            difficulty: 'medium',
+                            concepts: ['다각형', '원과 부채꼴', '다면체와 회전체'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (하)',
+                                concept: '개념원리 중1-2',
+                                workbook: '쎈 중등수학 1-2'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        },
+                        {
+                            id: 7,
+                            name: '통계',
+                            time: 6,
+                            difficulty: 'easy',
+                            concepts: ['자료의 정리', '대푯값', '산포도', '상관관계'],
+                            materials: {
+                                textbook: '중학교 수학 1',
+                                ebs: 'EBS 중학 뉴런 수학1 (하)',
+                                concept: '개념원리 중1-2',
+                                workbook: '쎈 중등수학 1-2'
+                            },
+                            ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs'
+                        }
+                    ]
+                },
+                korean: {
+                    name: '국어',
+                    icon: '✍️',
+                    color: 'korean',
+                    units: [
+                        {
+                            id: 1,
+                            name: '문학의 이해',
+                            time: 8,
+                            difficulty: 'medium',
+                            concepts: ['시의 이해', '소설의 이해', '수필과 극', '문학적 표현'],
+                            materials: {
+                                textbook: '중학교 국어 1',
+                                ebs: 'EBS 중학 국어 1',
+                                concept: '완자 중등 국어1',
+                                workbook: '우공비 국어 1-1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006'
+                        },
+                        {
+                            id: 2,
+                            name: '독서와 쓰기',
+                            time: 10,
+                            difficulty: 'medium',
+                            concepts: ['독서의 방법', '글의 구조', '요약하기', '주장하는 글쓰기'],
+                            materials: {
+                                textbook: '중학교 국어 1',
+                                ebs: 'EBS 중학 국어 1',
+                                concept: '완자 중등 국어1',
+                                workbook: '우공비 국어 1-1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006'
+                        },
+                        {
+                            id: 3,
+                            name: '문법의 기초',
+                            time: 8,
+                            difficulty: 'easy',
+                            concepts: ['음운', '단어의 형성', '품사', '문장의 구조'],
+                            materials: {
+                                textbook: '중학교 국어 1',
+                                ebs: 'EBS 중학 국어 1',
+                                concept: '완자 중등 국어1',
+                                workbook: '우공비 국어 1-2'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006'
+                        },
+                        {
+                            id: 4,
+                            name: '듣기와 말하기',
+                            time: 6,
+                            difficulty: 'easy',
+                            concepts: ['경청의 자세', '발표와 토의', '설득하기', '면접과 대화'],
+                            materials: {
+                                textbook: '중학교 국어 1',
+                                ebs: 'EBS 중학 국어 1',
+                                concept: '완자 중등 국어1',
+                                workbook: '우공비 국어 1-2'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006'
+                        },
+                        {
+                            id: 5,
+                            name: '매체와 언어',
+                            time: 6,
+                            difficulty: 'medium',
+                            concepts: ['매체의 특성', '정보의 활용', '디지털 문해력', '비판적 읽기'],
+                            materials: {
+                                textbook: '중학교 국어 1',
+                                ebs: 'EBS 중학 국어 1',
+                                concept: '완자 중등 국어1',
+                                workbook: '우공비 국어 1-2'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006'
+                        }
+                    ]
+                },
+                english: {
+                    name: '영어',
+                    icon: '🔤',
+                    color: 'english',
+                    units: [
+                        {
+                            id: 1,
+                            name: 'be동사와 일반동사',
+                            time: 8,
+                            difficulty: 'easy',
+                            concepts: ['be동사의 형태', '일반동사 현재형', '의문문과 부정문', '시제 이해'],
+                            materials: {
+                                textbook: '중학교 영어 1',
+                                ebs: 'EBS 중학 영어 1',
+                                concept: 'Grammar Zone 입문편',
+                                workbook: '중학 영문법 3800제'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007'
+                        },
+                        {
+                            id: 2,
+                            name: '명사와 관사',
+                            time: 6,
+                            difficulty: 'easy',
+                            concepts: ['셀 수 있는 명사', '셀 수 없는 명사', '정관사와 부정관사', '명사의 복수형'],
+                            materials: {
+                                textbook: '중학교 영어 1',
+                                ebs: 'EBS 중학 영어 1',
+                                concept: 'Grammar Zone 입문편',
+                                workbook: '중학 영문법 3800제'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007'
+                        },
+                        {
+                            id: 3,
+                            name: '대명사',
+                            time: 7,
+                            difficulty: 'medium',
+                            concepts: ['인칭대명사', '지시대명사', '부정대명사', '재귀대명사'],
+                            materials: {
+                                textbook: '중학교 영어 1',
+                                ebs: 'EBS 중학 영어 1',
+                                concept: 'Grammar Zone 입문편',
+                                workbook: '중학 영문법 3800제'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007'
+                        },
+                        {
+                            id: 4,
+                            name: '시제',
+                            time: 10,
+                            difficulty: 'medium',
+                            concepts: ['현재시제', '과거시제', '미래시제', '진행형'],
+                            materials: {
+                                textbook: '중학교 영어 1',
+                                ebs: 'EBS 중학 영어 1',
+                                concept: 'Grammar Zone 기본편',
+                                workbook: '중학 영문법 3800제'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007'
+                        },
+                        {
+                            id: 5,
+                            name: '조동사',
+                            time: 8,
+                            difficulty: 'medium',
+                            concepts: ['can/could', 'will/would', 'may/might', 'must/should'],
+                            materials: {
+                                textbook: '중학교 영어 1',
+                                ebs: 'EBS 중학 영어 1',
+                                concept: 'Grammar Zone 기본편',
+                                workbook: '중학 영문법 3800제'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007'
+                        },
+                        {
+                            id: 6,
+                            name: '문장의 형식',
+                            time: 9,
+                            difficulty: 'hard',
+                            concepts: ['1형식', '2형식', '3형식', '4형식', '5형식'],
+                            materials: {
+                                textbook: '중학교 영어 1',
+                                ebs: 'EBS 중학 영어 1',
+                                concept: 'Grammar Zone 기본편',
+                                workbook: '중학 영문법 3800제'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007'
+                        }
+                    ]
+                },
+                science: {
+                    name: '과학',
+                    icon: '🔬',
+                    color: 'science',
+                    units: [
+                        {
+                            id: 1,
+                            name: '지권의 변화',
+                            time: 10,
+                            difficulty: 'medium',
+                            concepts: ['지구의 구조', '판 구조론', '화산과 지진', '암석의 순환'],
+                            materials: {
+                                textbook: '중학교 과학 1',
+                                ebs: 'EBS 중학 과학 1',
+                                concept: '완자 중등 과학1',
+                                workbook: '오투 중등 과학1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008'
+                        },
+                        {
+                            id: 2,
+                            name: '여러 가지 힘',
+                            time: 8,
+                            difficulty: 'medium',
+                            concepts: ['중력', '탄성력', '마찰력', '부력'],
+                            materials: {
+                                textbook: '중학교 과학 1',
+                                ebs: 'EBS 중학 과학 1',
+                                concept: '완자 중등 과학1',
+                                workbook: '오투 중등 과학1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008'
+                        },
+                        {
+                            id: 3,
+                            name: '생물의 다양성',
+                            time: 9,
+                            difficulty: 'easy',
+                            concepts: ['생물의 분류', '식물의 구조', '동물의 구조', '생태계'],
+                            materials: {
+                                textbook: '중학교 과학 1',
+                                ebs: 'EBS 중학 과학 1',
+                                concept: '완자 중등 과학1',
+                                workbook: '오투 중등 과학1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008'
+                        },
+                        {
+                            id: 4,
+                            name: '기체의 성질',
+                            time: 8,
+                            difficulty: 'medium',
+                            concepts: ['기체의 압력', '보일의 법칙', '샤를의 법칙', '기체의 확산'],
+                            materials: {
+                                textbook: '중학교 과학 1',
+                                ebs: 'EBS 중학 과학 1',
+                                concept: '완자 중등 과학1',
+                                workbook: '오투 중등 과학1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008'
+                        },
+                        {
+                            id: 5,
+                            name: '물질의 상태변화',
+                            time: 7,
+                            difficulty: 'easy',
+                            concepts: ['상태변화와 열', '입자 모형', '증발과 끓음', '융해와 응고'],
+                            materials: {
+                                textbook: '중학교 과학 1',
+                                ebs: 'EBS 중학 과학 1',
+                                concept: '완자 중등 과학1',
+                                workbook: '오투 중등 과학1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008'
+                        },
+                        {
+                            id: 6,
+                            name: '빛과 파동',
+                            time: 10,
+                            difficulty: 'hard',
+                            concepts: ['빛의 반사', '빛의 굴절', '파동의 성질', '소리'],
+                            materials: {
+                                textbook: '중학교 과학 1',
+                                ebs: 'EBS 중학 과학 1',
+                                concept: '완자 중등 과학1',
+                                workbook: '오투 중등 과학1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008'
+                        }
+                    ]
+                },
+                social: {
+                    name: '사회',
+                    icon: '🌍',
+                    color: 'social',
+                    units: [
+                        {
+                            id: 1,
+                            name: '내가 사는 세계',
+                            time: 6,
+                            difficulty: 'easy',
+                            concepts: ['지도와 지구본', '위치 표현', '세계의 다양성', '지역 이해'],
+                            materials: {
+                                textbook: '중학교 사회 1',
+                                ebs: 'EBS 중학 사회 1',
+                                concept: '완자 중등 사회1',
+                                workbook: '오투 중등 사회1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009'
+                        },
+                        {
+                            id: 2,
+                            name: '우리와 다른 기후',
+                            time: 8,
+                            difficulty: 'medium',
+                            concepts: ['기후 요소', '열대 기후', '건조 기후', '온대 기후'],
+                            materials: {
+                                textbook: '중학교 사회 1',
+                                ebs: 'EBS 중학 사회 1',
+                                concept: '완자 중등 사회1',
+                                workbook: '오투 중등 사회1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009'
+                        },
+                        {
+                            id: 3,
+                            name: '자연으로 떠나는 여행',
+                            time: 7,
+                            difficulty: 'easy',
+                            concepts: ['산지 지형', '해안 지형', '하천 지형', '카르스트 지형'],
+                            materials: {
+                                textbook: '중학교 사회 1',
+                                ebs: 'EBS 중학 사회 1',
+                                concept: '완자 중등 사회1',
+                                workbook: '오투 중등 사회1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009'
+                        },
+                        {
+                            id: 4,
+                            name: '다양한 세계, 다양한 문화',
+                            time: 8,
+                            difficulty: 'medium',
+                            concepts: ['문화의 이해', '종교와 문화', '의식주 문화', '문화 변동'],
+                            materials: {
+                                textbook: '중학교 사회 1',
+                                ebs: 'EBS 중학 사회 1',
+                                concept: '완자 중등 사회1',
+                                workbook: '오투 중등 사회1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009'
+                        },
+                        {
+                            id: 5,
+                            name: '지구 곳곳에서 일어나는 자연재해',
+                            time: 7,
+                            difficulty: 'medium',
+                            concepts: ['지진과 화산', '태풍', '홍수와 가뭄', '재해 대응'],
+                            materials: {
+                                textbook: '중학교 사회 1',
+                                ebs: 'EBS 중학 사회 1',
+                                concept: '완자 중등 사회1',
+                                workbook: '오투 중등 사회1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009'
+                        },
+                        {
+                            id: 6,
+                            name: '인구 변화와 인구 문제',
+                            time: 8,
+                            difficulty: 'hard',
+                            concepts: ['인구 분포', '인구 구조', '인구 이동', '인구 문제'],
+                            materials: {
+                                textbook: '중학교 사회 1',
+                                ebs: 'EBS 중학 사회 1',
+                                concept: '완자 중등 사회1',
+                                workbook: '오투 중등 사회1'
+                            },
+                            ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009'
+                        }
+                    ]
+                }
+            },
+            2: { // 중2 (간략 버전)
+                math: {
+                    name: '수학',
+                    icon: '🔢',
+                    color: 'math',
+                    units: [
+                        { id: 1, name: '유리수와 순환소수', time: 8, difficulty: 'medium', concepts: ['유리수', '순환소수', '소수의 표현'], materials: { textbook: '중학교 수학 2', ebs: 'EBS 중학 뉴런 수학2', concept: '개념원리 중2-1', workbook: '쎈 중등수학 2-1' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 2, name: '식의 계산', time: 10, difficulty: 'medium', concepts: ['단항식의 계산', '다항식의 계산'], materials: { textbook: '중학교 수학 2', ebs: 'EBS 중학 뉴런 수학2', concept: '개념원리 중2-1', workbook: '쎈 중등수학 2-1' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 3, name: '일차부등식', time: 9, difficulty: 'hard', concepts: ['부등식의 성질', '일차부등식의 풀이'], materials: { textbook: '중학교 수학 2', ebs: 'EBS 중학 뉴런 수학2', concept: '개념원리 중2-1', workbook: '쎈 중등수학 2-1' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 4, name: '연립방정식', time: 12, difficulty: 'hard', concepts: ['연립방정식의 풀이', '활용문제'], materials: { textbook: '중학교 수학 2', ebs: 'EBS 중학 뉴런 수학2', concept: '개념원리 중2-2', workbook: '쎈 중등수학 2-2' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 5, name: '일차함수', time: 14, difficulty: 'hard', concepts: ['일차함수의 그래프', '일차함수의 활용'], materials: { textbook: '중학교 수학 2', ebs: 'EBS 중학 뉴런 수학2', concept: '개념원리 중2-2', workbook: '쎈 중등수학 2-2' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' }
+                    ]
+                },
+                korean: { name: '국어', icon: '✍️', color: 'korean', units: [{ id: 1, name: '문학과 표현', time: 10, difficulty: 'medium', concepts: ['비유와 상징', '문학의 갈래'], materials: { textbook: '중학교 국어 2', ebs: 'EBS 중학 국어 2', concept: '완자 중등 국어2', workbook: '우공비 국어 2-1' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006' }] },
+                english: { name: '영어', icon: '🔤', color: 'english', units: [{ id: 1, name: '현재완료', time: 12, difficulty: 'hard', concepts: ['완료', '경험', '계속', '결과'], materials: { textbook: '중학교 영어 2', ebs: 'EBS 중학 영어 2', concept: 'Grammar Zone 기본편', workbook: '중학 영문법 3800제' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007' }] },
+                science: { name: '과학', icon: '🔬', color: 'science', units: [{ id: 1, name: '물질의 구성', time: 10, difficulty: 'medium', concepts: ['원자', '분자', '이온'], materials: { textbook: '중학교 과학 2', ebs: 'EBS 중학 과학 2', concept: '완자 중등 과학2', workbook: '오투 중등 과학2' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008' }] },
+                social: { name: '사회', icon: '🌍', color: 'social', units: [{ id: 1, name: '지역의 의미와 특성', time: 8, difficulty: 'easy', concepts: ['지역의 이해', '지역 조사'], materials: { textbook: '중학교 사회 2', ebs: 'EBS 중학 사회 2', concept: '완자 중등 사회2', workbook: '오투 중등 사회2' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009' }] }
+            },
+            3: { // 중3 (간략 버전)
+                math: {
+                    name: '수학',
+                    icon: '🔢',
+                    color: 'math',
+                    units: [
+                        { id: 1, name: '제곱근과 실수', time: 10, difficulty: 'medium', concepts: ['제곱근', '무리수', '실수'], materials: { textbook: '중학교 수학 3', ebs: 'EBS 중학 뉴런 수학3', concept: '개념원리 중3-1', workbook: '쎈 중등수학 3-1' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 2, name: '다항식의 곱셈과 인수분해', time: 12, difficulty: 'hard', concepts: ['곱셈공식', '인수분해'], materials: { textbook: '중학교 수학 3', ebs: 'EBS 중학 뉴런 수학3', concept: '개념원리 중3-1', workbook: '쎈 중등수학 3-1' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 3, name: '이차방정식', time: 14, difficulty: 'hard', concepts: ['이차방정식의 풀이', '근의 공식', '활용'], materials: { textbook: '중학교 수학 3', ebs: 'EBS 중학 뉴런 수학3', concept: '개념원리 중3-2', workbook: '쎈 중등수학 3-2' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 4, name: '이차함수', time: 16, difficulty: 'hard', concepts: ['이차함수의 그래프', '최댓값과 최솟값'], materials: { textbook: '중학교 수학 3', ebs: 'EBS 중학 뉴런 수학3', concept: '개념원리 중3-2', workbook: '쎈 중등수학 3-2' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' },
+                        { id: 5, name: '삼각비', time: 12, difficulty: 'medium', concepts: ['삼각비의 뜻', '삼각비의 활용'], materials: { textbook: '중학교 수학 3', ebs: 'EBS 중학 뉴런 수학3', concept: '개념원리 중3-2', workbook: '쎈 중등수학 3-2' }, ebsLink: 'https://www.ebsmath.co.kr/ebs/mathCourseMatSelect.ebs' }
+                    ]
+                },
+                korean: { name: '국어', icon: '✍️', color: 'korean', units: [{ id: 1, name: '고전문학의 이해', time: 12, difficulty: 'hard', concepts: ['고전 시가', '고전 소설'], materials: { textbook: '중학교 국어 3', ebs: 'EBS 중학 국어 3', concept: '완자 중등 국어3', workbook: '우공비 국어 3-1' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000006' }] },
+                english: { name: '영어', icon: '🔤', color: 'english', units: [{ id: 1, name: '관계대명사', time: 14, difficulty: 'hard', concepts: ['주격', '목적격', '소유격', '계속적 용법'], materials: { textbook: '중학교 영어 3', ebs: 'EBS 중학 영어 3', concept: 'Grammar Zone 기본편', workbook: '중학 영문법 3800제' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000007' }] },
+                science: { name: '과학', icon: '🔬', color: 'science', units: [{ id: 1, name: '화학 반응의 규칙', time: 12, difficulty: 'hard', concepts: ['질량 보존', '일정 성분비'], materials: { textbook: '중학교 과학 3', ebs: 'EBS 중학 과학 3', concept: '완자 중등 과학3', workbook: '오투 중등 과학3' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000008' }] },
+                social: { name: '사회', icon: '🌍', color: 'social', units: [{ id: 1, name: '인권과 헌법', time: 10, difficulty: 'medium', concepts: ['인권의 의미', '헌법의 기본 원리'], materials: { textbook: '중학교 사회 3', ebs: 'EBS 중학 사회 3', concept: '완자 중등 사회3', workbook: '오투 중등 사회3' }, ebsLink: 'https://primary.ebs.co.kr/course/view?courseId=BP0PAPB0000000009' }] }
+            }
+        };
+        
+        // ==================== 전역 변수 ====================
+        let currentGrade = 1;
+        let currentTab = 'overview';
+        
+        // ==================== 학년 선택 ====================
+        function selectGrade(grade) {
+            currentGrade = grade;
+            
+            // 버튼 활성화 상태 변경
+            document.querySelectorAll('.grade-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', index + 1 === grade);
+            });
+            
+            // 데이터 다시 로드
+            loadOverview();
+            loadSubjects();
+            loadMaterials();
+            updateStats();
+        }
+        
+        // ==================== 탭 전환 ====================
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            // 탭 버튼 상태
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.tab-btn').classList.add('active');
+            
+            // 탭 컨텐츠 표시
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+        
+        // ==================== 통계 업데이트 ====================
+        function updateStats() {
+            const data = curriculumDatabase[currentGrade];
+            let totalUnits = 0;
+            let totalHours = 0;
+            let totalConcepts = 0;
+            let totalMaterials = 0;
+            
+            Object.keys(data).forEach(subject => {
+                totalUnits += data[subject].units.length;
+                data[subject].units.forEach(unit => {
+                    totalHours += unit.time;
+                    totalConcepts += unit.concepts.length;
+                    totalMaterials += Object.keys(unit.materials).length;
+                });
+            });
+            
+            document.getElementById('totalUnits').textContent = totalUnits;
+            document.getElementById('totalHours').textContent = totalHours + 'h';
+            document.getElementById('totalConcepts').textContent = totalConcepts;
+            document.getElementById('totalMaterials').textContent = totalMaterials;
+        }
+        
+        // ==================== 전체 개요 로드 ====================
+        function loadOverview() {
+            const data = curriculumDatabase[currentGrade];
+            const container = document.getElementById('subjectOverview');
+            
+            container.innerHTML = Object.keys(data).map(subjectKey => {
+                const subject = data[subjectKey];
+                const totalTime = subject.units.reduce((sum, unit) => sum + unit.time, 0);
+                const totalUnits = subject.units.length;
+                
+                return `
+                    <div class="subject-card ${subject.color}" onclick="viewSubject('${subjectKey}')">
+                        <div class="subject-header">
+                            <div class="subject-icon-box">${subject.icon}</div>
+                            <div class="subject-name">${subject.name}</div>
+                        </div>
+                        <div class="subject-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-book"></i>
+                                <span>${totalUnits}개 단원</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${totalTime}시간</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <p style="text-align: center; color: var(--gray-600); font-size: 0.875rem; margin-top: 0.5rem;">
+                            <i class="fas fa-arrow-right"></i> 클릭하여 상세 보기
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // ==================== 과목별 학습 로드 ====================
+        function loadSubjects() {
+            const data = curriculumDatabase[currentGrade];
+            const container = document.getElementById('subjectContent');
+            
+            container.innerHTML = Object.keys(data).map(subjectKey => {
+                const subject = data[subjectKey];
+                
+                return `
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <span class="card-icon">${subject.icon}</span>
+                                ${subject.name}
+                            </h2>
+                        </div>
+                        ${subject.units.map(unit => `
+                            <div class="unit-accordion">
+                                <div class="unit-header" onclick="toggleUnit(this)">
+                                    <div class="unit-title">
+                                        <i class="fas fa-chevron-right"></i>
+                                        <span>${unit.id}. ${unit.name}</span>
+                                    </div>
+                                    <div class="unit-meta">
+                                        <span class="unit-badge badge-time">
+                                            <i class="fas fa-clock"></i> ${unit.time}시간
+                                        </span>
+                                        <span class="unit-badge badge-difficulty-${unit.difficulty}">
+                                            ${unit.difficulty === 'easy' ? '🟢 쉬움' : unit.difficulty === 'medium' ? '🟡 보통' : '🔴 어려움'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="unit-content">
+                                    <h4 style="font-weight: 700; color: var(--gray-800); margin-bottom: 1rem; font-size: 1.125rem;">
+                                        📌 핵심 개념
+                                    </h4>
+                                    <div class="concept-list">
+                                        ${unit.concepts.map((concept, index) => `
+                                            <div class="concept-item">
+                                                <div class="concept-icon">${index + 1}</div>
+                                                <div class="concept-text">${concept}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    
+                                    <h4 style="font-weight: 700; color: var(--gray-800); margin: 1.5rem 0 1rem; font-size: 1.125rem;">
+                                        📚 연계 교재
+                                    </h4>
+                                    <div class="materials-section">
+                                        <div class="material-card">
+                                            <div class="material-icon">📖</div>
+                                            <div class="material-name">교과서</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray-600);">${unit.materials.textbook}</div>
+                                        </div>
+                                        <div class="material-card">
+                                            <div class="material-icon">📺</div>
+                                            <div class="material-name">EBS 강의</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray-600);">${unit.materials.ebs}</div>
+                                            <a href="${unit.ebsLink}" target="_blank" class="material-link">
+                                                <i class="fas fa-external-link-alt"></i> 강의 보기
+                                            </a>
+                                        </div>
+                                        <div class="material-card">
+                                            <div class="material-icon">💡</div>
+                                            <div class="material-name">개념서</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray-600);">${unit.materials.concept}</div>
+                                        </div>
+                                        <div class="material-card">
+                                            <div class="material-icon">✍️</div>
+                                            <div class="material-name">문제집</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray-600);">${unit.materials.workbook}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // ==================== 단원 토글 ====================
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.fa-chevron-right');
+            
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(90deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // ==================== 과목 상세 보기 ====================
+        function viewSubject(subjectKey) {
+            switchTab('subjects');
+            
+            setTimeout(() => {
+                const subjectCard = document.querySelector(`#subjectContent .card:nth-child(${['math', 'korean', 'english', 'science', 'social'].indexOf(subjectKey) + 1})`);
+                if (subjectCard) {
+                    subjectCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 300);
+        }
+        
+        // ==================== 학습 일정 생성 ====================
+        function generateSchedule() {
+            const period = parseInt(document.getElementById('schedulePeriod').value);
+            const dailyHours = parseInt(document.getElementById('dailyHours').value);
+            const startDateInput = document.getElementById('startDate').value;
+            
+            if (!startDateInput) {
+                alert('⚠️ 시작일을 선택해주세요!');
+                return;
+            }
+            
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + period - 1);
+            
+            // 스케줄 생성 로직
+            const data = curriculumDatabase[currentGrade];
+            const subjects = Object.keys(data);
+            
+            // 총 학습 시간 계산
+            let totalRequiredHours = 0;
+            subjects.forEach(subjectKey => {
+                data[subjectKey].units.forEach(unit => {
+                    totalRequiredHours += unit.time;
+                });
+            });
+            
+            const totalAvailableHours = period * dailyHours;
+            
+            // 결과 표시
+            const resultDiv = document.getElementById('scheduleResult');
+            resultDiv.innerHTML = `
+                <div class="schedule-header">
+                    <h3 class="schedule-title">✅ 맞춤 학습 일정이 생성되었습니다!</h3>
+                    <div class="schedule-info">
+                        <p><strong>📅 기간:</strong> ${formatDate(startDate)} ~ ${formatDate(endDate)} (${period}일)</p>
+                        <p><strong>⏰ 일일 학습:</strong> ${dailyHours}시간</p>
+                        <p><strong>📊 총 학습 시간:</strong> ${totalAvailableHours}시간 (필요: ${totalRequiredHours}시간)</p>
+                    </div>
+                </div>
+                
+                ${generateWeeklySchedule(period, dailyHours, data, startDate)}
+            `;
+            
+            resultDiv.classList.add('active');
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // ==================== 주간 스케줄 생성 ====================
+        function generateWeeklySchedule(period, dailyHours, data, startDate) {
+            const weeks = Math.ceil(period / 7);
+            let html = '';
+            let currentDay = new Date(startDate);
+            
+            const subjects = Object.keys(data);
+            let subjectIndex = 0;
+            let unitIndex = 0;
+            
+            for (let week = 1; week <= weeks; week++) {
+                html += `
+                    <div class="week-container">
+                        <div class="week-header">
+                            <i class="fas fa-calendar-week"></i>
+                            ${week}주차
+                        </div>
+                `;
+                
+                for (let day = 1; day <= 7; day++) {
+                    const dayOfWeek = currentDay.getDay();
+                    const dayName = ['일', '월', '화', '수', '목', '금', '토'][dayOfWeek];
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    
+                    // 해당 날짜의 과목 배정
+                    const subjectsToday = [];
+                    const hoursToday = isWeekend ? Math.min(dailyHours + 1, 5) : dailyHours;
+                    
+                    for (let i = 0; i < Math.min(hoursToday / 1.5, 4); i++) {
+                        if (subjectIndex >= subjects.length) {
+                            subjectIndex = 0;
+                            unitIndex++;
+                        }
+                        
+                        const currentSubject = subjects[subjectIndex];
+                        const currentUnit = data[currentSubject].units[unitIndex % data[currentSubject].units.length];
+                        
+                        subjectsToday.push({
+                            subject: currentSubject,
+                            subjectName: data[currentSubject].name,
+                            unit: currentUnit
+                        });
+                        
+                        subjectIndex++;
+                    }
+                    
+                    html += `
+                        <div class="day-card">
+                            <div class="day-header">
+                                <div class="day-name">
+                                    <i class="fas fa-calendar-day"></i>
+                                    ${formatDate(currentDay)} (${dayName})
+                                </div>
+                                <div class="study-time">
+                                    <i class="fas fa-clock"></i> ${hoursToday}시간
+                                </div>
+                            </div>
+                            <div class="subject-schedule">
+                                ${subjectsToday.map(item => `
+                                    <div class="schedule-item">
+                                        <div class="schedule-subject ${item.subject}">
+                                            ${item.subjectName}
+                                        </div>
+                                        <div class="schedule-content">
+                                            <div class="schedule-unit">${item.unit.name}</div>
+                                            <div class="schedule-material">
+                                                📖 ${item.unit.materials.textbook} · 📺 ${item.unit.materials.ebs}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    currentDay.setDate(currentDay.getDate() + 1);
+                    
+                    if ((week - 1) * 7 + day >= period) break;
+                }
+                
+                html += `</div>`;
+                
+                if ((week - 1) * 7 + 7 >= period) break;
+            }
+            
+            return html;
+        }
+        
+        // ==================== 교재 연동 로드 ====================
+        function loadMaterials() {
+            const data = curriculumDatabase[currentGrade];
+            const container = document.getElementById('materialsContent');
+            
+            const materialsMap = {};
+            
+            Object.keys(data).forEach(subjectKey => {
+                data[subjectKey].units.forEach(unit => {
+                    Object.keys(unit.materials).forEach(type => {
+                        const materialName = unit.materials[type];
+                        if (!materialsMap[materialName]) {
+                            materialsMap[materialName] = {
+                                name: materialName,
+                                type: type,
+                                subject: data[subjectKey].name,
+                                units: []
+                            };
+                        }
+                        materialsMap[materialName].units.push(unit.name);
+                    });
+                });
+            });
+            
+            container.innerHTML = Object.values(materialsMap).map(material => `
+                <div class="material-card" style="margin-bottom: 1rem;">
+                    <div class="material-icon">
+                        ${material.type === 'textbook' ? '📖' : material.type === 'ebs' ? '📺' : material.type === 'concept' ? '💡' : '✍️'}
+                    </div>
+                    <div class="material-name" style="font-size: 1.125rem;">${material.name}</div>
+                    <div style="font-size: 0.875rem; color: var(--gray-600); margin: 0.5rem 0;">
+                        ${material.subject} · ${material.units.length}개 단원
+                    </div>
+                    <div style="font-size: 0.8125rem; color: var(--gray-500);">
+                        ${material.units.slice(0, 3).join(', ')}${material.units.length > 3 ? '...' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ==================== 유틸리티 함수 ====================
+        function formatDate(date) {
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+        }
+        
+        function closeModal() {
+            document.getElementById('unitModal').classList.remove('active');
+        }
+        
+        // ==================== 초기화 ====================
+        window.addEventListener('DOMContentLoaded', function() {
+            // 오늘 날짜를 시작일 기본값으로 설정
+            const today = new Date();
+            document.getElementById('startDate').valueAsDate = today;
+            
+            // 초기 데이터 로드
+            loadOverview();
+            loadSubjects();
+            loadMaterials();
+            updateStats();
+            
+            console.log('📚 중학교 교과 마스터 시스템 v1.0');
+            console.log('✅ 공교육 중심 자기주도학습 지원 시스템');
+        });
+    </script>
+</body>
+</html>
