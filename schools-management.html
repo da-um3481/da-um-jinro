@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학교/기관 관리 - DA.UM 학습관리</title>
+    <title>🏫 학교/기관 관리 - DA.UM 학습관리</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
         /* 모바일 최적화 */
         @media (max-width: 768px) {
@@ -97,7 +98,7 @@
 <body class="bg-gray-50">
     <!-- 상단 네비게이션 -->
     <!-- 상단 헤더 - DA.UM 아이덴티티 -->
-    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg sticky top-0 z-50">
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- 로고 및 타이틀 (왼편 배치) -->
@@ -130,23 +131,23 @@
 
     <div class="container mx-auto px-4 py-8 max-w-7xl">
         <!-- 안내 배너 -->
-        <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl shadow-2xl p-8 mb-8">
+        <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl shadow-2xl p-8 mb-8">
             <div class="flex items-start justify-between">
                 <div class="flex-1">
                     <h2 class="text-3xl font-bold mb-3">🎯 학교별 독립 관리 시스템</h2>
-                    <p class="text-lg text-blue-100 mb-4">여러 학교와 개별 학생을 동시에 관리할 수 있습니다</p>
+                    <p class="text-lg text-emerald-100 mb-4">여러 학교와 개별 학생을 동시에 관리할 수 있습니다</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div class="bg-white bg-opacity-20 rounded-lg p-4">
                             <div class="text-2xl font-bold">📚 중학교</div>
-                            <div class="text-sm text-blue-100 mt-1">중1, 중2, 중3</div>
+                            <div class="text-sm text-emerald-100 mt-1">중1, 중2, 중3</div>
                         </div>
                         <div class="bg-white bg-opacity-20 rounded-lg p-4">
                             <div class="text-2xl font-bold">🎓 고등학교</div>
-                            <div class="text-sm text-blue-100 mt-1">고1, 고2, 고3</div>
+                            <div class="text-sm text-emerald-100 mt-1">고1, 고2, 고3</div>
                         </div>
                         <div class="bg-white bg-opacity-20 rounded-lg p-4">
                             <div class="text-2xl font-bold">👤 개별학생</div>
-                            <div class="text-sm text-blue-100 mt-1">1:1 맞춤 관리</div>
+                            <div class="text-sm text-emerald-100 mt-1">1:1 맞춤 관리</div>
                         </div>
                     </div>
                 </div>
@@ -159,7 +160,7 @@
         <!-- 학교 등록 폼 -->
         <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-plus-circle text-blue-600 mr-3"></i>
+                <i class="fas fa-plus-circle text-emerald-600 mr-3"></i>
                 새 학교/기관 등록
             </h2>
 
@@ -168,20 +169,20 @@
                     <!-- 학교명 -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fas fa-school mr-2 text-blue-600"></i>학교/기관명 *
+                            <i class="fas fa-school mr-2 text-emerald-600"></i>학교/기관명 *
                         </label>
                         <input type="text" id="schoolName" required 
                                placeholder="예: A중학교, B고등학교, 개별학생"
-                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                     </div>
 
                     <!-- 학교 유형 -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fas fa-tag mr-2 text-purple-600"></i>유형 *
+                            <i class="fas fa-tag mr-2 text-teal-600"></i>유형 *
                         </label>
                         <select id="schoolType" required 
-                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                             <option value="">선택하세요</option>
                             <option value="middle_school">🏫 중학교</option>
                             <option value="high_school">🎓 고등학교</option>
@@ -264,10 +265,10 @@
                     <!-- 프로그램 유형 -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fas fa-clipboard-list mr-2 text-blue-600"></i>주 프로그램
+                            <i class="fas fa-clipboard-list mr-2 text-emerald-600"></i>주 프로그램
                         </label>
                         <select id="mainProgram"
-                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                             <option value="">선택하세요</option>
                             <option value="winter_30days">❄️ 겨울방학 30일</option>
                             <option value="regular_100days">📚 정규학기 100일</option>
@@ -293,7 +294,7 @@
                         <i class="fas fa-redo mr-2"></i>초기화
                     </button>
                     <button type="submit" 
-                            class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition font-bold shadow-lg">
+                            class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:from-emerald-600 hover:to-teal-700 transition font-bold shadow-lg">
                         <i class="fas fa-save mr-2"></i>저장
                     </button>
                 </div>
@@ -308,14 +309,14 @@
                     등록된 학교/기관 목록
                 </span>
                 <span class="text-sm font-normal text-gray-600">
-                    총 <span id="totalCount" class="text-blue-600 font-bold">0</span>개
+                    총 <span id="totalCount" class="text-emerald-600 font-bold">0</span>개
                 </span>
             </h2>
 
             <!-- 필터 -->
             <div class="mb-6 flex flex-wrap gap-4">
                 <select id="filterType" onchange="filterSchools()" 
-                        class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
                     <option value="">전체 유형</option>
                     <option value="middle_school">🏫 중학교</option>
                     <option value="high_school">🎓 고등학교</option>
@@ -335,7 +336,7 @@
             <!-- 테이블 -->
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+                    <thead class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white">
                         <tr>
                             <th class="px-6 py-4 text-left text-xs font-bold uppercase">학교/기관명</th>
                             <th class="px-6 py-4 text-left text-xs font-bold uppercase">유형</th>
@@ -491,7 +492,7 @@
                         <td class="px-6 py-4 font-bold text-gray-900">${school.school_name}</td>
                         <td class="px-6 py-4 text-sm">${typeEmoji[school.school_type] || school.school_type}</td>
                         <td class="px-6 py-4 text-sm">${school.student_count || 0}명</td>
-                        <td class="px-6 py-4 text-sm font-semibold text-blue-600">${monthlyFee}</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-emerald-600">${monthlyFee}</td>
                         <td class="px-6 py-4 text-sm text-gray-600">${contractPeriod}</td>
                         <td class="px-6 py-4 text-sm">
                             ${school.contact_name || '-'}<br>
@@ -500,7 +501,7 @@
                         <td class="px-6 py-4">${statusBadge[school.contract_status] || '-'}</td>
                         <td class="px-6 py-4 text-sm space-x-2">
                             <button onclick="editSchool('${school.id}')" 
-                                    class="text-blue-600 hover:text-blue-900" title="수정">
+                                    class="text-emerald-600 hover:text-blue-900" title="수정">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button onclick="showDeleteModal('${school.id}')" 

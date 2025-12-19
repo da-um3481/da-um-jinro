@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>근화여중 자기주도학습UP 챌린지 - 나의 학습 포털</title>
+    <title>🚀 근화여중 자기주도학습UP 챌린지 - 나의 학습 포털</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
         * {
             font-family: 'Noto Sans KR', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 50%, #AB47BC 100%);
+            background: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
             min-height: 100vh;
         }
         
@@ -249,7 +250,7 @@
                 <div class="flex items-center space-x-3">
                     <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
                     <div>
-                        <h1 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                        <h1 class="text-lg font-bold bg-gradient-to-r from-emerald-600 to-teal-700 bg-clip-text text-transparent">
                             🚀 자기주도학습UP 챌린지
                         </h1>
                         <p class="text-xs text-gray-600" id="studentInfo">📚 경주 근화여자중학교</p>
@@ -259,15 +260,15 @@
                 <!-- 우측 메뉴 -->
                 <div class="flex items-center space-x-2">
                     <a href="#" onclick="openWeeklySchedule(); return false;" 
-                       class="hidden md:flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                       class="hidden md:flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
                         <i class="fas fa-calendar-week"></i>
                         <span>30일 스케줄</span>
                     </a>
                     <a href="#" onclick="openWeeklySchedule(); return false;" 
-                       class="md:hidden p-2 text-white bg-green-500 rounded-lg hover:bg-green-600 transition">
+                       class="md:hidden p-2 text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 transition">
                         <i class="fas fa-calendar-week text-xl"></i>
                     </a>
-                    <a href="student-intro.html" class="p-2 text-gray-600 hover:text-purple-600 transition">
+                    <a href="student-intro.html" class="p-2 text-gray-600 hover:text-emerald-600 transition">
                         <i class="fas fa-question-circle text-xl"></i>
                     </a>
                 </div>
@@ -281,19 +282,19 @@
         <!-- 학생 이름 입력 -->
         <div class="glass-effect rounded-2xl shadow-lg p-6 animate-slide-up">
             <label class="block text-sm font-semibold text-gray-700 mb-3">
-                <i class="fas fa-user-circle mr-2 text-purple-600"></i>내 이름 입력
+                <i class="fas fa-user-circle mr-2 text-emerald-600"></i>내 이름 입력
             </label>
             <div class="flex space-x-3">
                 <input 
                     type="text" 
                     id="studentNameInput" 
                     placeholder="이름을 입력하세요 (예: 김민준)"
-                    class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition text-base"
+                    class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition text-base"
                     onkeypress="if(event.key==='Enter') loadStudentByName()"
                 >
                 <button 
                     onclick="loadStudentByName()"
-                    class="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                    class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                 >
                     <i class="fas fa-search mr-2"></i>찾기
                 </button>
@@ -304,7 +305,7 @@
         </div>
 
         <!-- 오늘의 날짜 & 목표 -->
-        <div class="bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl shadow-xl p-6 text-white animate-slide-up">
+        <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-xl p-6 text-white animate-slide-up">
             <div class="text-center space-y-3">
                 <div>
                     <p class="text-sm opacity-90 mb-1">오늘</p>
@@ -324,17 +325,17 @@
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">
-                    <i class="fas fa-chart-line text-purple-500 mr-2"></i>30일 프로그램 진행률
+                    <i class="fas fa-chart-line text-emerald-500 mr-2"></i>30일 프로그램 진행률
                 </h3>
                 <div class="text-right">
-                    <div class="text-2xl font-black bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent" id="progressPercent">
+                    <div class="text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-700 bg-clip-text text-transparent" id="progressPercent">
                         0%
                     </div>
                     <div class="text-xs text-gray-600" id="progressDays">0일 / 30일</div>
                 </div>
             </div>
             <div class="bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
-                <div class="bg-gradient-to-r from-purple-500 to-purple-700 h-full rounded-full progress-bar" id="progressBar" style="width: 0%"></div>
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full progress-bar" id="progressBar" style="width: 0%"></div>
             </div>
             <div class="flex justify-between text-xs text-gray-600">
                 <span id="startDate">시작: 미정</span>
@@ -347,12 +348,12 @@
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="todayStudySection">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">
-                    <i class="fas fa-calendar-day text-purple-500 mr-2"></i>오늘의 학습 스케줄
+                    <i class="fas fa-calendar-day text-emerald-500 mr-2"></i>오늘의 학습 스케줄
                 </h3>
                 <button 
                     id="autoScheduleBtn"
                     onclick="generateAutoScheduleForToday()"
-                    class="hidden px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
+                    class="hidden px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
                     <i class="fas fa-magic mr-2"></i>자동 스케줄 생성
                 </button>
             </div>
@@ -368,7 +369,7 @@
             </div>
 
             <!-- 오늘의 총 학습 시간 -->
-            <div class="mt-6 p-4 bg-gradient-to-r from-purple-500 to-purple-700 rounded-xl text-white" id="totalStudyTimeSection">
+            <div class="mt-6 p-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl text-white" id="totalStudyTimeSection">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-sm opacity-90">오늘의 총 학습 시간</div>
@@ -388,16 +389,16 @@
         <!-- 나의 교재 진도 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="progressSection">
             <h3 class="text-lg font-bold text-gray-800 mb-4">
-                <i class="fas fa-book-open text-purple-500 mr-2"></i>나의 교재 진도
+                <i class="fas fa-book-open text-emerald-500 mr-2"></i>나의 교재 진도
             </h3>
             <div class="space-y-3">
                 <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
                     <div class="flex items-center justify-between mb-2">
                         <div>
-                            <div class="text-sm text-purple-700 font-bold">수학</div>
+                            <div class="text-sm text-emerald-700 font-bold">수학</div>
                             <div class="font-bold text-gray-800">개념원리 중학수학 1-1</div>
                         </div>
-                        <div class="text-2xl font-black text-purple-700">15%</div>
+                        <div class="text-2xl font-black text-emerald-700">15%</div>
                     </div>
                     <div class="bg-gray-200 rounded-full h-2">
                         <div class="bg-blue-500 h-full rounded-full" style="width: 15%"></div>
@@ -436,7 +437,7 @@
         <!-- 주간 학습 통계 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="weeklyStatsSection">
             <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-4">
-                <i class="fas fa-chart-bar text-purple-500 mr-2"></i>이번 주 학습 통계
+                <i class="fas fa-chart-bar text-emerald-500 mr-2"></i>이번 주 학습 통계
             </h3>
             <div class="grid grid-cols-7 gap-2">
                 <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-300">
@@ -476,7 +477,7 @@
                 </div>
             </div>
             <div class="mt-4 text-center text-sm text-gray-600">
-                <span class="font-bold text-purple-600">이번 주 학습 시간:</span> 총 24.7시간 🎉
+                <span class="font-bold text-emerald-600">이번 주 학습 시간:</span> 총 24.7시간 🎉
             </div>
         </div>
 

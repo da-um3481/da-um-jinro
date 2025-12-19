@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학교 수업 관리 - 공부를 어떻게 할지 모르겠어요~~</title>
+    <title>📝 수업 관리 - DA.UM 학습관리</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
         @media (max-width: 768px) {
             body { font-size: 14px; }
@@ -21,7 +22,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- 상단 헤더 - DA.UM 아이덴티티 -->
-    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg sticky top-0 z-50">
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- 로고 및 타이틀 (왼편 배치) -->
@@ -63,12 +64,12 @@
             <form id="lessonForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">날짜 *</label>
-                    <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">학년 *</label>
-                    <select id="grade" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <select id="grade" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
                         <option value="">선택하세요</option>
                         <option value="1">1학년</option>
                         <option value="2">2학년</option>
@@ -78,7 +79,7 @@
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">과목 *</label>
-                    <select id="subject" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <select id="subject" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
                         <option value="">선택하세요</option>
                         <option value="국어">국어</option>
                         <option value="영어">영어</option>
@@ -90,13 +91,13 @@
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">단원/챕터</label>
-                    <input type="text" id="chapter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" 
+                    <input type="text" id="chapter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" 
                         placeholder="예: 2단원. 문학의 이해">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">중요도 *</label>
-                    <select id="importance" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <select id="importance" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
                         <option value="보통">보통</option>
                         <option value="높음">높음 (시험 출제 가능성 높음)</option>
                         <option value="낮음">낮음</option>
@@ -105,7 +106,7 @@
                 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">수업 내용 *</label>
-                    <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" 
+                    <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" 
                         placeholder="오늘 배운 내용을 자세히 입력해주세요.&#10;예: 일차함수의 그래프 그리기, y=ax+b 형태의 그래프 특징 학습"></textarea>
                 </div>
                 
@@ -113,7 +114,7 @@
                     <button type="button" onclick="resetForm()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
                         <i class="fas fa-redo mr-2"></i>초기화
                     </button>
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <button type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition">
                         <i class="fas fa-save mr-2"></i>저장
                     </button>
                 </div>
@@ -125,7 +126,7 @@
             <h2 class="text-xl font-bold mb-4">📅 날짜별 조회</h2>
             <div class="flex space-x-4">
                 <input type="date" id="searchDate" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg">
-                <button onclick="searchByDate()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                <button onclick="searchByDate()" class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
                     <i class="fas fa-search mr-2"></i>검색
                 </button>
             </div>
