@@ -315,6 +315,34 @@
                     </div>
                 </section>
 
+                <!-- 📚 오늘의 학습 (2과목 능동학습 + 1과목 미리보기) -->
+                <section class="today-study-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-book-open"></i> 📚 오늘의 학습
+                        </h2>
+                        <div class="study-info">
+                            <span class="info-badge"><i class="fas fa-fire"></i> 능동학습 2과목</span>
+                            <span class="info-badge"><i class="fas fa-eye"></i> 미리보기 1과목</span>
+                        </div>
+                    </div>
+
+                    <div id="todaySubjectsContainer" class="subjects-grid">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+
+                    <!-- 학습 안내 -->
+                    <div class="study-guide">
+                        <h4><i class="fas fa-lightbulb"></i> 학습 가이드</h4>
+                        <ul>
+                            <li><strong>능동학습 과목:</strong> 타이머를 활용하여 집중적으로 학습하세요 (각 45-60분)</li>
+                            <li><strong>미리보기 과목:</strong> 다음에 학습할 내용을 미리 확인하세요 (15-20분)</li>
+                            <li><strong>학습 순서:</strong> 능동학습 1 → 휴식 10분 → 능동학습 2 → 미리보기</li>
+                            <li><strong>목표 시간:</strong> 평일 3시간, 주말 5시간</li>
+                        </ul>
+                    </div>
+                </section>
+
                 <!-- 최근 활동 -->
                 <section class="recent-activity">
                     <h2 class="section-title">최근 활동</h2>
@@ -2331,6 +2359,258 @@
             justify-content: center;
         }
 
+        /* 오늘의 학습 스타일 */
+        .today-study-section {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 32px;
+        }
+
+        .study-info {
+            display: flex;
+            gap: 12px;
+        }
+
+        .info-badge {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #bfdbfe;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .subject-card {
+            border-radius: 16px;
+            border: 3px solid;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .subject-card.preview {
+            opacity: 0.9;
+            border-style: dashed;
+        }
+
+        .subject-header {
+            padding: 20px;
+            color: white;
+            background: linear-gradient(135deg, var(--subject-main), var(--subject-dark));
+        }
+
+        .subject-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subject-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .subject-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subject-time-display {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .subject-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .subject-body {
+            padding: 20px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .timer-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .timer-btn.start {
+            background: linear-gradient(135deg, var(--subject-main), var(--subject-dark));
+            color: white;
+        }
+
+        .timer-btn.start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .timer-btn.stop {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .timer-btn.stop:hover {
+            background: #cbd5e1;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            border-radius: 999px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--subject-main), var(--subject-dark));
+            transition: width 0.3s;
+            border-radius: 999px;
+        }
+
+        .study-content-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .study-content-section h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content-list li {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-list li i {
+            color: var(--subject-main);
+        }
+
+        .study-guide {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dbeafe 100%);
+            border: 2px solid #d1fae5;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .study-guide h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .study-guide h4 i {
+            color: #fbbf24;
+        }
+
+        .study-guide ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .study-guide li {
+            padding-left: 24px;
+            position: relative;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .study-guide li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .study-guide strong {
+            color: #1e293b;
+        }
+
+        @media (max-width: 768px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .study-info {
+                flex-direction: column;
+            }
+
+            .today-study-section {
+                padding: 20px;
+            }
+        }
+
         @media (max-width: 768px) {
             .result-stats {
                 grid-template-columns: 1fr;
@@ -2752,7 +3032,245 @@
         // 페이지 로드 시 캘린더 렌더링
         document.addEventListener('DOMContentLoaded', () => {
             renderCalendar();
+            displayTodayStudy();
         });
+
+        // ==========================================
+        // 📚 오늘의 학습 (2과목 능동학습 + 1과목 미리보기)
+        // ==========================================
+
+        // 과목 설정
+        const subjectConfigs = {
+            '수학': { icon: 'calculator', colorMain: '#3b82f6', colorDark: '#1e40af', colorBg: '#eff6ff', colorBorder: '#bfdbfe' },
+            '영어': { icon: 'language', colorMain: '#22c55e', colorDark: '#15803d', colorBg: '#f0fdf4', colorBorder: '#bbf7d0' },
+            '국어': { icon: 'book', colorMain: '#ef4444', colorDark: '#b91c1c', colorBg: '#fef2f2', colorBorder: '#fecaca' },
+            '과학': { icon: 'flask', colorMain: '#a855f7', colorDark: '#7e22ce', colorBg: '#faf5ff', colorBorder: '#e9d5ff' },
+            '사회': { icon: 'globe', colorMain: '#eab308', colorDark: '#a16207', colorBg: '#fefce8', colorBorder: '#fde047' }
+        };
+
+        // 요일별 학습 스케줄 (고등학생용)
+        const weeklySchedule = {
+            0: [], // 일요일 - 휴식
+            1: [
+                { subject: '수학', duration: 60, isActive: true },
+                { subject: '영어', duration: 60, isActive: true },
+                { subject: '국어', duration: 20, isActive: false }
+            ],
+            2: [
+                { subject: '수학', duration: 60, isActive: true },
+                { subject: '과학', duration: 60, isActive: true },
+                { subject: '사회', duration: 20, isActive: false }
+            ],
+            3: [
+                { subject: '영어', duration: 60, isActive: true },
+                { subject: '국어', duration: 60, isActive: true },
+                { subject: '과학', duration: 20, isActive: false }
+            ],
+            4: [
+                { subject: '수학', duration: 60, isActive: true },
+                { subject: '국어', duration: 60, isActive: true },
+                { subject: '영어', duration: 20, isActive: false }
+            ],
+            5: [
+                { subject: '영어', duration: 60, isActive: true },
+                { subject: '사회', duration: 60, isActive: true },
+                { subject: '과학', duration: 20, isActive: false }
+            ],
+            6: [] // 토요일 - 휴식 or 복습
+        };
+
+        // 타이머 관련 변수
+        const timers = {};
+
+        // 오늘의 학습 표시
+        function displayTodayStudy() {
+            const container = document.getElementById('todaySubjectsContainer');
+            if (!container) return;
+
+            const today = new Date().getDay();
+            const todaySchedule = weeklySchedule[today] || [];
+
+            if (todaySchedule.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px;">
+                        <div style="font-size: 4rem; margin-bottom: 16px;">🎉</div>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 8px;">오늘은 휴식일입니다!</h3>
+                        <p style="color: #64748b;">재충전의 시간을 가지세요. 내일 다시 시작합니다!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = todaySchedule.map((item, index) => createSubjectCard(item, index)).join('');
+        }
+
+        // 과목 카드 생성
+        function createSubjectCard(item, index) {
+            const config = subjectConfigs[item.subject];
+            const subjectId = `subject_${index}`;
+            const isPreview = !item.isActive;
+
+            return `
+                <div class="subject-card ${isPreview ? 'preview' : ''}" 
+                     style="--subject-main: ${config.colorMain}; --subject-dark: ${config.colorDark}; 
+                            background-color: ${config.colorBg}; border-color: ${config.colorBorder};">
+                    <div class="subject-header">
+                        <div class="subject-title">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="subject-icon">
+                                    <i class="fas fa-${config.icon}"></i>
+                                </div>
+                                <div>
+                                    <div class="subject-name">
+                                        ${item.subject}
+                                        ${isPreview ? '<span style="font-size: 1.2rem;">📖</span>' : ''}
+                                    </div>
+                                    <div class="subject-subtitle">
+                                        ${isPreview ? '다음 학습 예정 (미리보기)' : item.duration + '분 집중 학습'}
+                                    </div>
+                                </div>
+                            </div>
+                            ${!isPreview ? `<div class="subject-time-display" id="${subjectId}Time">00:00</div>` : 
+                              '<div style="font-size: 1.2rem; font-weight: 700;">미리보기</div>'}
+                        </div>
+                    </div>
+
+                    <div class="subject-body">
+                        ${!isPreview ? `
+                        <div class="timer-controls">
+                            <button class="timer-btn start" onclick="startSubjectTimer('${subjectId}', ${item.duration})">
+                                <i class="fas fa-play"></i> 시작
+                            </button>
+                            <button class="timer-btn stop" onclick="stopSubjectTimer('${subjectId}', '${item.subject}', ${item.duration})">
+                                <i class="fas fa-check"></i> 완료
+                            </button>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="${subjectId}Progress" style="width: 0%"></div>
+                        </div>
+                        ` : ''}
+
+                        <div class="study-content-section">
+                            <h4>
+                                <i class="fas fa-book-open"></i>
+                                ${isPreview ? '미리보기 내용' : '학습 내용'}
+                            </h4>
+                            <ul class="content-list">
+                                ${getStudyContent(item.subject, isPreview).map(content => 
+                                    `<li><i class="fas fa-check-circle"></i> ${content}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 과목별 학습 내용
+        function getStudyContent(subject, isPreview) {
+            const contents = {
+                '수학': isPreview ? 
+                    ['다음 단원: 미적분 기초', '주요 개념: 극한과 연속', '예습 문제: 3문제'] :
+                    ['개념 학습: 함수의 극한', '예제 풀이: 극한값 계산', '연습 문제: 10문제', '심화 문제: 3문제'],
+                '영어': isPreview ?
+                    ['다음 단원: Reading Comprehension', '주요 어휘: 30개', '예상 지문: 2개'] :
+                    ['어휘 학습: 오늘의 단어 50개', '문법: 가정법 심화', '독해: 지문 3개', '쓰기: 에세이 작성'],
+                '국어': isPreview ?
+                    ['다음 단원: 현대 소설', '작품: 무진기행', '감상 포인트: 3가지'] :
+                    ['문학: 현대시 감상', '문법: 문장 성분', '독서: 논설문 분석', '쓰기: 논술형 문제'],
+                '과학': isPreview ?
+                    ['다음 단원: 화학 반응', '주요 개념: 산화환원', '실험 내용 미리보기'] :
+                    ['개념: 화학 평형', '실험: 중화 적정', '문제 풀이: 15문제', '탐구 활동'],
+                '사회': isPreview ?
+                    ['다음 단원: 경제 체제', '주요 개념: 시장경제', '사례 연구: 2건'] :
+                    ['경제: 시장 메커니즘', '사례 분석: 최근 경제 동향', '토론 주제', '문제 풀이: 10문제']
+            };
+            return contents[subject] || ['학습 내용을 준비중입니다.'];
+        }
+
+        // 과목 타이머 시작
+        function startSubjectTimer(subjectId, duration) {
+            if (timers[subjectId]) {
+                clearInterval(timers[subjectId].interval);
+            }
+
+            const targetTime = duration * 60; // 분을 초로 변환
+            let elapsedTime = 0;
+
+            timers[subjectId] = {
+                interval: setInterval(() => {
+                    elapsedTime++;
+                    const minutes = Math.floor(elapsedTime / 60);
+                    const seconds = elapsedTime % 60;
+
+                    const timeDisplay = document.getElementById(`${subjectId}Time`);
+                    if (timeDisplay) {
+                        timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    }
+
+                    const progress = (elapsedTime / targetTime) * 100;
+                    const progressBar = document.getElementById(`${subjectId}Progress`);
+                    if (progressBar) {
+                        progressBar.style.width = Math.min(progress, 100) + '%';
+                    }
+
+                    if (elapsedTime >= targetTime) {
+                        clearInterval(timers[subjectId].interval);
+                        alert('⏰ 학습 시간이 완료되었습니다!');
+                    }
+                }, 1000),
+                startTime: Date.now(),
+                elapsedTime: 0
+            };
+        }
+
+        // 과목 타이머 정지
+        function stopSubjectTimer(subjectId, subject, duration) {
+            if (timers[subjectId]) {
+                clearInterval(timers[subjectId].interval);
+                
+                const timeDisplay = document.getElementById(`${subjectId}Time`);
+                const studiedTime = timeDisplay ? timeDisplay.textContent : '00:00';
+                
+                // 학습 기록 저장
+                saveStudyRecord(subject, studiedTime);
+                
+                delete timers[subjectId];
+                
+                // 초기화
+                if (timeDisplay) timeDisplay.textContent = '00:00';
+                const progressBar = document.getElementById(`${subjectId}Progress`);
+                if (progressBar) progressBar.style.width = '0%';
+                
+                alert(`✅ ${subject} 학습을 완료했습니다!\n학습 시간: ${studiedTime}`);
+                
+                // 캘린더 업데이트
+                renderCalendar();
+            }
+        }
+
+        // 학습 기록 저장
+        function saveStudyRecord(subject, timeStr) {
+            const [minutes, seconds] = timeStr.split(':').map(Number);
+            const totalMinutes = minutes + (seconds / 60);
+            
+            const today = new Date().toISOString().split('T')[0];
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            
+            let todayRecord = studyRecords.find(r => r.date === today);
+            if (!todayRecord) {
+                todayRecord = { date: today, subjects: {} };
+                studyRecords.push(todayRecord);
+            }
+            
+            if (!todayRecord.subjects[subject]) {
+                todayRecord.subjects[subject] = { time: 0 };
+            }
+            
+            todayRecord.subjects[subject].time += totalMinutes;
+            
+            localStorage.setItem('study_records', JSON.stringify(studyRecords));
+        }
     </script>
 </body>
 </html>
