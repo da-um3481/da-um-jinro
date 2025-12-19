@@ -86,10 +86,10 @@
             <div class="header-actions" style="display: flex; align-items: center; gap: 15px;">
                 <!-- 중/고 필터 -->
                 <div style="display: flex; gap: 5px; background: #f3f4f6; padding: 4px; border-radius: 8px;">
-                    <button id="filterMiddle" class="btn-school-filter active" onclick="setSchoolFilter('middle')" style="padding: 8px 16px; border: none; background: #3b82f6; color: white; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+                    <button type="button" id="filterMiddle" class="btn-school-filter active" onclick="setSchoolFilter('middle'); return false;" style="padding: 8px 16px; border: none; background: #3b82f6; color: white; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
                         <i class="fas fa-user-graduate"></i> 중학생
                     </button>
-                    <button id="filterHigh" class="btn-school-filter" onclick="setSchoolFilter('high')" style="padding: 8px 16px; border: none; background: transparent; color: #6b7280; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+                    <button type="button" id="filterHigh" class="btn-school-filter" onclick="setSchoolFilter('high'); return false;" style="padding: 8px 16px; border: none; background: transparent; color: #6b7280; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
                         <i class="fas fa-graduation-cap"></i> 고등학생
                     </button>
                 </div>
