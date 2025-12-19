@@ -462,9 +462,12 @@ function displaySchedule() {
                                 </button>
                             </div>
                         </div>
-                        <div class="bg-gray-200 rounded-full h-2">
+                        <div class="bg-gray-200 rounded-full h-2 mb-3">
                             <div id="progress_${subjectId}" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all" style="width: 0%"></div>
                         </div>
+                        
+                        <!-- 학습 자료 섹션 -->
+                        ${getStudyMaterialsHTML(item.subject)}
                     </div>
                 </div>
             `;
@@ -522,6 +525,116 @@ function getDayKorean(day) {
         'sunday': '일요일'
     };
     return days[day] || day;
+}
+
+// 📚 학습 자료 HTML 생성
+function getStudyMaterialsHTML(subject) {
+    // 과목명을 영어 키로 변환
+    const subjectMap = {
+        '수학': 'math',
+        '영어': 'English',
+        '국어': 'korean',
+        '과학': 'science',
+        '사회': 'social',
+        '복습': 'math' // 기본값
+    };
+    
+    const subjectKey = subjectMap[subject] || 'math';
+    const grade = currentStudent.grade || 1;
+    
+    // 학습 자료 DB에서 데이터 가져오기
+    const materials = typeof getStudyMaterials === 'function' ? 
+        getStudyMaterials(subjectKey, grade, 1) : null;
+    
+    if (!materials) {
+        return '<div class="text-xs text-gray-500 mt-2">📚 학습 자료 준비 중...</div>';
+    }
+    
+    let html = '<div class="mt-3 pt-3 border-t border-gray-300"><div class="text-xs font-bold text-gray-700 mb-2">📚 추천 학습 자료</div>';
+    
+    // EBS 강의
+    if (materials.ebsLectures && materials.ebsLectures.length > 0) {
+        const ebs = materials.ebsLectures[0];
+        html += `
+            <div class="mb-2 p-2 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-1 mb-1">
+                            <span class="text-xs font-bold text-blue-700">🎓 EBS</span>
+                            <span class="px-1.5 py-0.5 text-xs bg-green-100 text-green-700 rounded">무료</span>
+                        </div>
+                        <div class="text-xs font-semibold text-gray-800">${ebs.name}</div>
+                        <div class="text-xs text-gray-600">${ebs.teacher} 선생님</div>
+                    </div>
+                    <a href="${ebs.link}" target="_blank" 
+                       class="px-2 py-1 bg-blue-600 text-white rounded text-xs font-bold hover:bg-blue-700 transition">
+                        강의보기
+                    </a>
+                </div>
+            </div>
+        `;
+    }
+    
+    // 개념서
+    if (materials.conceptBooks && materials.conceptBooks.length > 0) {
+        const book = materials.conceptBooks[0];
+        html += `
+            <div class="mb-2 p-2 bg-purple-50 rounded-lg border border-purple-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="text-xs font-bold text-purple-700 mb-1">📖 개념서</div>
+                        <div class="text-xs font-semibold text-gray-800">${book.name}</div>
+                        <div class="text-xs text-gray-600">${book.publisher}</div>
+                    </div>
+                    <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-bold">
+                        ${book.difficulty}
+                    </span>
+                </div>
+            </div>
+        `;
+    }
+    
+    // 유튜브
+    if (materials.youtube && materials.youtube.length > 0) {
+        const yt = materials.youtube[0];
+        html += `
+            <div class="mb-2 p-2 bg-red-50 rounded-lg border border-red-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="text-xs font-bold text-red-700 mb-1">📺 유튜브</div>
+                        <div class="text-xs font-semibold text-gray-800">${yt.channel}</div>
+                        <div class="text-xs text-gray-600">${yt.description}</div>
+                    </div>
+                    <a href="${yt.link}" target="_blank" 
+                       class="px-2 py-1 bg-red-600 text-white rounded text-xs font-bold hover:bg-red-700 transition">
+                        채널보기
+                    </a>
+                </div>
+            </div>
+        `;
+    }
+    
+    // 문제집
+    if (materials.workbooks && materials.workbooks.length > 0) {
+        const workbook = materials.workbooks[0];
+        html += `
+            <div class="p-2 bg-green-50 rounded-lg border border-green-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="text-xs font-bold text-green-700 mb-1">📝 문제집</div>
+                        <div class="text-xs font-semibold text-gray-800">${workbook.name}</div>
+                        <div class="text-xs text-gray-600">${workbook.publisher}</div>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">
+                        ${workbook.difficulty}
+                    </span>
+                </div>
+            </div>
+        `;
+    }
+    
+    html += '</div>';
+    return html;
 }
 
 // 📌 학습 시간 통계 정보
