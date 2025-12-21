@@ -1708,19 +1708,35 @@
                 return;
             }
 
-            // 학생 목록에서 찾기
-            const students = JSON.parse(localStorage.getItem('students')) || [];
-            let student = students.find(s => s.name === nameInput);
+            // ✅ 학생 관리 시스템에서 등록된 학생 확인
+            const registeredStudents = JSON.parse(localStorage.getItem('student_list')) || [];
+            const registeredStudent = registeredStudents.find(s => 
+                s.name === nameInput && 
+                s.grade === String(selectedGrade)
+            );
 
-            // 학생이 없으면 자동으로 생성
+            // ❌ 등록되지 않은 학생
+            if (!registeredStudent) {
+                alert(`❌ 등록되지 않은 학생입니다.\n\n📝 입력 정보:\n   • 이름: ${nameInput}\n   • 학년: 중${selectedGrade}\n\n💡 학생 관리 시스템에 먼저 등록해주세요.\n\n🔗 학생 관리 시스템:\n   https://da-um3481.github.io/da-um-jinro/student-management.html\n\n또는 선생님께 문의하세요.`);
+                return;
+            }
+
+            // ✅ 등록된 학생 - 기존 로직 계속
+            // 학생 목록에서 찾기 (기존 students 구조와 호환)
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            let student = students.find(s => s.name === nameInput && s.grade === selectedGrade);
+
+            // 학생이 없으면 생성 (등록된 학생 정보 기반)
             if (!student) {
                 const newStudentId = 'student_' + Date.now();
                 student = {
                     id: newStudentId,
                     name: nameInput,
-                    grade: selectedGrade,  // 선택한 학년
-                    class_num: 1,  // 기본 1반
-                    number: 1,  // 기본 1번
+                    grade: selectedGrade,
+                    class_num: parseInt(registeredStudent.class) || 1,
+                    number: parseInt(registeredStudent.number) || 1,
+                    phone: registeredStudent.phone || '',
+                    email: registeredStudent.email || '',
                     created_at: new Date().toISOString()
                 };
                 
@@ -1728,8 +1744,13 @@
                 students.push(student);
                 localStorage.setItem('students', JSON.stringify(students));
             } else {
-                // 기존 학생이면 학년 업데이트
+                // 기존 학생이면 학년 및 등록 정보 업데이트
                 student.grade = selectedGrade;
+                student.class_num = parseInt(registeredStudent.class) || student.class_num;
+                student.number = parseInt(registeredStudent.number) || student.number;
+                student.phone = registeredStudent.phone || student.phone;
+                student.email = registeredStudent.email || student.email;
+                
                 const studentIndex = students.findIndex(s => s.id === student.id);
                 if (studentIndex !== -1) {
                     students[studentIndex] = student;
@@ -1743,7 +1764,10 @@
             localStorage.setItem('currentStudentGrade', student.grade);
 
             // 학생 정보 표시 업데이트
-            document.getElementById('studentInfo').textContent = `📚 ${student.name} (${student.grade}학년 ${student.class_num}반)`;
+            document.getElementById('studentInfo').textContent = `📚 ${student.name} (${student.grade}학년 ${student.class_num}반 ${student.number}번)`;
+
+            // 환영 메시지
+            showWelcomeMessage(student.name);
 
             // 🎉 원스톱: 자동으로 오늘의 스케줄 생성 및 표시
             generateAndDisplayTodaySchedule(student);
@@ -1753,9 +1777,7 @@
             loadTeacherFeedback();
             
             // 🎯 진단평가 실행 (최초 1회만)
-            // 신규 학생이고 진단평가를 완료하지 않았으면 시작
-            const isNewStudent = !students.find(s => s.id === student.id && s.id !== student.id); // 방금 생성된 학생
-            const hasDiagnostic = hasDiagnosticCompleted(student.id, '종합'); // 종합 진단평가 완료 여부
+            const hasDiagnostic = hasDiagnosticCompleted(student.id, '종합');
             
             if (!hasDiagnostic) {
                 // 진단평가 안내
@@ -1763,8 +1785,56 @@
                     if (confirm(`👋 ${student.name} 학생 환영합니다!\n\n맞춤형 학습을 위해 간단한 진단평가를 실시합니다.\n\n📝 총 50문제 (약 30분 소요)\n   • 수학 10문제\n   • 영어 10문제\n   • 국어 10문제\n   • 사회 10문제\n   • 과학 10문제\n\n⏰ 제한시간 없음\n💡 차근차근 풀어주세요\n\n지금 시작하시겠습니까?`)) {
                         startDiagnosticTest(student.grade, '종합');
                     }
-                }, 1000);
+                }, 1500);
             }
+        }
+
+        // 환영 메시지 표시
+        function showWelcomeMessage(name) {
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                color: white;
+                padding: 2rem 3rem;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                z-index: 10000;
+                text-align: center;
+                animation: fadeInScale 0.5s ease-out;
+            `;
+            message.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                <div style="font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem;">환영합니다!</div>
+                <div style="font-size: 1.2rem; opacity: 0.9;">${name} 학생</div>
+            `;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.animation = 'fadeOutScale 0.5s ease-out';
+                setTimeout(() => message.remove(), 500);
+            }, 2000);
+        }
+
+        // 애니메이션 스타일 추가
+        if (!document.getElementById('welcomeAnimationStyles')) {
+            const style = document.createElement('style');
+            style.id = 'welcomeAnimationStyles';
+            style.textContent = `
+                @keyframes fadeInScale {
+                    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                }
+                @keyframes fadeOutScale {
+                    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    to { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                }
+            `;
+            document.head.appendChild(style);
         }
 
         // 📅 오늘의 스케줄 자동 생성 및 표시 (원스톱)
