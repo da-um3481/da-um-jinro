@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자기주도학습UP 챌린지 프로그램 보고서 - 경주 근화여자중학교</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #6ee7b7 0%, #10b981 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- 헤더 -->
+        <div class="text-center mb-12">
+            <div class="inline-block bg-green-600 text-white px-6 py-2 rounded-full mb-4">
+                <span class="text-sm font-bold">교육 혁신 프로그램</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-black text-gray-800 mb-4">
+                🚀 자기주도학습UP 챌린지
+            </h1>
+            <p class="text-xl text-gray-600 mb-2">
+                디지털 기반 맞춤형 학습 관리 시스템
+            </p>
+            <p class="text-lg text-green-600 font-bold">
+                경주 근화여자중학교 시범 운영 보고서
+            </p>
+            <div class="mt-4 text-sm text-gray-500">
+                작성일: 2025년 12월 21일
+            </div>
+        </div>
+
+        <!-- 1. 개발 취지 -->
+        <div class="section-card">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">🎯</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">1. 개발 취지</h2>
+            </div>
+
+            <div class="space-y-4 text-gray-700 leading-relaxed">
+                <div class="highlight-box">
+                    <h3 class="text-xl font-bold mb-3">💡 핵심 문제 인식</h3>
+                    <ul class="space-y-2">
+                        <li>✓ 중학생의 <strong>자기주도학습 역량 부족</strong> 및 학습 동기 저하</li>
+                        <li>✓ 교사의 <strong>개별 학습 관리 및 피드백 한계</strong></li>
+                        <li>✓ 학습 시간과 성과에 대한 <strong>객관적 데이터 부재</strong></li>
+                        <li>✓ 학부모의 자녀 학습 현황 파악 어려움</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-6">🌟 개발 배경</h3>
+                <p class="text-base">
+                    경상북도 교육청의 자기주도학습 역량 강화 정책에 발맞춰, <strong>디지털 기술을 활용한 과학적 학습 관리 시스템</strong>의 필요성이 대두되었습니다. 
+                    특히 근화여자중학교의 경우, 40명의 시범 학생을 대상으로 <strong>체계적인 학습 습관 형성과 데이터 기반 학습 관리</strong>를 목표로 본 프로그램을 개발하였습니다.
+                </p>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-6">🎓 교육적 철학</h3>
+                <div class="grid md:grid-cols-3 gap-4 mt-4">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <div class="text-3xl mb-2">⏰</div>
+                        <h4 class="font-bold text-green-800 mb-2">학습 시간 관리</h4>
+                        <p class="text-sm text-gray-600">과목별 45분 타이머로 집중력 향상</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="text-3xl mb-2">📊</div>
+                        <h4 class="font-bold text-blue-800 mb-2">데이터 기반 학습</h4>
+                        <p class="text-sm text-gray-600">학습 기록 분석을 통한 개선</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <div class="text-3xl mb-2">🎯</div>
+                        <h4 class="font-bold text-purple-800 mb-2">맞춤형 피드백</h4>
+                        <p class="text-sm text-gray-600">교사의 실시간 학습 지도</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 프로그램 개요 -->
+        <div class="section-card">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">📋</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">2. 프로그램 개요</h2>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="stat-card">
+                        <div class="text-4xl font-black mb-2">40명</div>
+                        <div class="text-sm opacity-90">시범 참여 학생</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-4xl font-black mb-2">30일</div>
+                        <div class="text-sm opacity-90">프로그램 운영 기간</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-4xl font-black mb-2">5과목</div>
+                        <div class="text-sm opacity-90">수학·영어·국어·과학·사회</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-4xl font-black mb-2">135분</div>
+                        <div class="text-sm opacity-90">일일 평일 학습 목표 (3과목 × 45분)</div>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-6">📱 시스템 구성</h3>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-gray-300">
+                                <th class="text-left py-3 px-4 font-bold text-gray-700">구분</th>
+                                <th class="text-left py-3 px-4 font-bold text-gray-700">기능</th>
+                                <th class="text-left py-3 px-4 font-bold text-gray-700">특징</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600">
+                            <tr class="border-b border-gray-200">
+                                <td class="py-3 px-4 font-semibold">학생 포털</td>
+                                <td class="py-3 px-4">일일 학습 관리</td>
+                                <td class="py-3 px-4">3과목 동시 표시, 45분 타이머, 학습 기록</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="py-3 px-4 font-semibold">교사 대시보드</td>
+                                <td class="py-3 px-4">학생 모니터링</td>
+                                <td class="py-3 px-4">실시간 학습 현황, 피드백 작성, 성과 분석</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="py-3 px-4 font-semibold">학습 캘린더</td>
+                                <td class="py-3 px-4">달성률 시각화</td>
+                                <td class="py-3 px-4">월별 학습 이력, 이모지 성취 표시</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold">데이터 분석</td>
+                                <td class="py-3 px-4">학습 패턴 분석</td>
+                                <td class="py-3 px-4">과목별 학습 시간, 완료율, 주간 통계</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-6">🎯 학습 설계 원칙</h3>
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3 bg-green-50 p-4 rounded-lg">
+                        <span class="text-2xl">1️⃣</span>
+                        <div>
+                            <h4 class="font-bold text-green-800">최소 학습 시간 보장</h4>
+                            <p class="text-sm text-gray-600">과목당 45분 집중 학습으로 학습 밀도 향상 (중학생 최적 집중 시간 고려)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-blue-50 p-4 rounded-lg">
+                        <span class="text-2xl">2️⃣</span>
+                        <div>
+                            <h4 class="font-bold text-blue-800">유연한 학습 순서</h4>
+                            <p class="text-sm text-gray-600">3과목 중 원하는 과목부터 학습 가능 (학생 자율성 존중)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-purple-50 p-4 rounded-lg">
+                        <span class="text-2xl">3️⃣</span>
+                        <div>
+                            <h4 class="font-bold text-purple-800">즉각적 피드백</h4>
+                            <p class="text-sm text-gray-600">학습 완료 시 시간 기반 맞춤 메시지 제공 (40분 이상: 칭찬, 30분 미만: 경고)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-orange-50 p-4 rounded-lg">
+                        <span class="text-2xl">4️⃣</span>
+                        <div>
+                            <h4 class="font-bold text-orange-800">시각적 성취감</h4>
+                            <p class="text-sm text-gray-600">학습 캘린더를 통한 누적 성과 확인 및 동기부여</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 운영 방법 -->
+        <div class="section-card">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">⚙️</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">3. 운영 방법</h2>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-gray-800">🔄 일일 학습 프로세스</h3>
+                <div class="relative">
+                    <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-green-200"></div>
+                    
+                    <div class="relative pl-12 pb-6">
+                        <div class="absolute left-0 top-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                        <h4 class="font-bold text-lg mb-2">학생 로그인 (이름 입력)</h4>
+                        <p class="text-gray-600">학생이 포털에 접속하여 이름과 학년 입력 → 자동으로 오늘의 학습 스케줄 생성</p>
+                    </div>
+                    
+                    <div class="relative pl-12 pb-6">
+                        <div class="absolute left-0 top-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                        <h4 class="font-bold text-lg mb-2">3과목 동시 표시</h4>
+                        <p class="text-gray-600">평일: 5개 과목 중 3과목 자동 배정 (순환 방식) / 주말: 주간 복습 과목 배정</p>
+                    </div>
+                    
+                    <div class="relative pl-12 pb-6">
+                        <div class="absolute left-0 top-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                        <h4 class="font-bold text-lg mb-2">과목 선택 및 학습 시작</h4>
+                        <p class="text-gray-600">원하는 과목 카드에서 "▶ 시작" 버튼 클릭 → 45분 타이머 가동 및 학습 시작</p>
+                    </div>
+                    
+                    <div class="relative pl-12 pb-6">
+                        <div class="absolute left-0 top-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                        <h4 class="font-bold text-lg mb-2">학습 내용 기록</h4>
+                        <p class="text-gray-600">학습 중 "오늘 배운 내용" 텍스트 박스에 요약 작성 (선택사항)</p>
+                    </div>
+                    
+                    <div class="relative pl-12 pb-6">
+                        <div class="absolute left-0 top-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+                        <h4 class="font-bold text-lg mb-2">학습 완료</h4>
+                        <p class="text-gray-600">최소 30분 이상 학습 후 "✓ 완료" 버튼 활성화 → 클릭 시 기록 저장 및 피드백 제공</p>
+                    </div>
+                    
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 top-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">6</div>
+                        <h4 class="font-bold text-lg mb-2">다음 과목 자동 안내</h4>
+                        <p class="text-gray-600">완료한 과목 카드 페이드아웃 → 다음 과목 카드 펄스 효과로 강조 표시</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-8">👨‍🏫 교사 관리 프로세스</h3>
+                <div class="bg-blue-50 p-6 rounded-lg space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-xl">📊</span>
+                        <div>
+                            <h4 class="font-bold text-blue-800">실시간 모니터링</h4>
+                            <p class="text-sm text-gray-600">교사 대시보드에서 전체 학생의 학습 현황 조회 (과목별 학습 시간, 완료율)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-xl">💬</span>
+                        <div>
+                            <h4 class="font-bold text-blue-800">개별 피드백 작성</h4>
+                            <p class="text-sm text-gray-600">학생별 학습 데이터를 기반으로 맞춤형 코멘트 및 격려 메시지 전달</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-xl">📈</span>
+                        <div>
+                            <h4 class="font-bold text-blue-800">주간 성과 분석</h4>
+                            <p class="text-sm text-gray-600">학급/학년 단위 학습 통계 확인 및 우수 학생 선정</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-xl">🎯</span>
+                        <div>
+                            <h4 class="font-bold text-blue-800">학습 부진 학생 관리</h4>
+                            <p class="text-sm text-gray-600">학습 시간 부족 또는 완료율 저조 학생 조기 발견 및 개별 상담</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-8">📅 주간 운영 스케줄</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-green-600 text-white">
+                                <th class="py-3 px-4 text-left">요일</th>
+                                <th class="py-3 px-4 text-left">학습 과목</th>
+                                <th class="py-3 px-4 text-left">목표 시간</th>
+                                <th class="py-3 px-4 text-left">비고</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            <tr class="border-b">
+                                <td class="py-3 px-4 font-semibold">월요일</td>
+                                <td class="py-3 px-4">수학, 영어, 국어</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">주간 시작, 핵심 과목 집중</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4 font-semibold">화요일</td>
+                                <td class="py-3 px-4">수학, 과학, 사회</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">이과 계열 강화</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4 font-semibold">수요일</td>
+                                <td class="py-3 px-4">영어, 국어, 과학</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">언어·논리 사고력 향상</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4 font-semibold">목요일</td>
+                                <td class="py-3 px-4">수학, 영어, 사회</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">문과 계열 강화</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4 font-semibold">금요일</td>
+                                <td class="py-3 px-4">국어, 과학, 사회</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">주간 마무리</td>
+                            </tr>
+                            <tr class="border-b bg-blue-50">
+                                <td class="py-3 px-4 font-semibold">토요일</td>
+                                <td class="py-3 px-4">수학, 영어, 국어 (복습)</td>
+                                <td class="py-3 px-4 text-blue-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">주간 복습 및 보충</td>
+                            </tr>
+                            <tr class="bg-purple-50">
+                                <td class="py-3 px-4 font-semibold">일요일</td>
+                                <td class="py-3 px-4">과학, 사회, 수학 (복습)</td>
+                                <td class="py-3 px-4 text-purple-600 font-bold">135분 (3과목)</td>
+                                <td class="py-3 px-4 text-sm text-gray-500">주간 어려운 부분 집중 복습</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 핵심 기능 및 기술적 특징 -->
+        <div class="section-card">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">💻</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">4. 핵심 기능 및 기술적 특징</h2>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-gray-800">✨ 학생 포털 주요 기능</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="border-2 border-green-200 rounded-lg p-4 hover:bg-green-50 transition">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-3">⏱️</span>
+                            <h4 class="font-bold text-green-800">스마트 타이머</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">과목별 45분 타이머 자동 작동, 일시정지/재개 기능, 실시간 진행률 표시</p>
+                    </div>
+                    <div class="border-2 border-blue-200 rounded-lg p-4 hover:bg-blue-50 transition">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-3">📝</span>
+                            <h4 class="font-bold text-blue-800">학습 내용 기록</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">학습한 내용 텍스트 입력, 자동 저장, 교사 피드백 연동</p>
+                    </div>
+                    <div class="border-2 border-purple-200 rounded-lg p-4 hover:bg-purple-50 transition">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-3">📅</span>
+                            <h4 class="font-bold text-purple-800">학습 달성 캘린더</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">월별 학습 이력 시각화, 달성률 이모지 표시 (100%: ✅, 80%+: 💪, 60%+: 👍)</p>
+                    </div>
+                    <div class="border-2 border-orange-200 rounded-lg p-4 hover:bg-orange-50 transition">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-3">🎯</span>
+                            <h4 class="font-bold text-orange-800">자동 진도 안내</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">과목 완료 시 다음 과목 자동 하이라이트, 펄스 애니메이션으로 주의 환기</p>
+                    </div>
+                    <div class="border-2 border-pink-200 rounded-lg p-4 hover:bg-pink-50 transition">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-3">💬</span>
+                            <h4 class="font-bold text-pink-800">맞춤형 피드백</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">학습 시간 기반 메시지 (40분+: 칭찬, 30분 미만: 재학습 권장)</p>
+                    </div>
+                    <div class="border-2 border-teal-200 rounded-lg p-4 hover:bg-teal-50 transition">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-3">📊</span>
+                            <h4 class="font-bold text-teal-800">30일 프로그램 진행률</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">누적 학습 일수, 전체 프로그램 달성률 실시간 표시</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-8">🔐 기술적 특징</h3>
+                <div class="bg-gray-50 p-6 rounded-lg space-y-4">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2">✅ 반응형 디자인 (Responsive Design)</h4>
+                        <p class="text-sm text-gray-600 mb-2">모바일, 태블릿, 데스크톱 모든 기기에서 최적화된 화면 제공</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge bg-blue-500">📱 모바일 최적화</span>
+                            <span class="badge bg-purple-500">💻 PC 지원</span>
+                            <span class="badge bg-green-500">🖥️ 태블릿 지원</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2">✅ LocalStorage 기반 데이터 저장</h4>
+                        <p class="text-sm text-gray-600 mb-2">별도 서버 없이 브라우저 내 학습 데이터 안전 저장, 재접속 시 자동 복원</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge bg-yellow-500">⚡ 빠른 로딩</span>
+                            <span class="badge bg-red-500">🔒 개인정보 보호</span>
+                            <span class="badge bg-indigo-500">💾 자동 저장</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2">✅ GitHub Pages 호스팅</h4>
+                        <p class="text-sm text-gray-600 mb-2">무료 웹 호스팅으로 비용 절감, HTTPS 보안 연결 기본 제공</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge bg-green-600">💰 무료</span>
+                            <span class="badge bg-blue-600">🌐 글로벌 접근</span>
+                            <span class="badge bg-purple-600">🔐 HTTPS 보안</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2">✅ 단일 HTML 파일 구조</h4>
+                        <p class="text-sm text-gray-600 mb-2">HTML, CSS, JavaScript 통합으로 유지보수 용이, 빠른 배포 가능</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge bg-orange-500">🚀 빠른 배포</span>
+                            <span class="badge bg-teal-500">🔧 간편 수정</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 기대 효과 -->
+        <div class="section-card">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">🌟</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">5. 기대 효과</h2>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-gray-800">📈 정량적 효과</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-gradient-to-br from-green-400 to-green-600 text-white p-6 rounded-lg text-center">
+                        <div class="text-5xl font-black mb-2">90%+</div>
+                        <div class="text-sm opacity-90">학습 완료율 목표</div>
+                        <div class="text-xs mt-2 opacity-75">(기존 60% → 30%p ↑)</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 text-white p-6 rounded-lg text-center">
+                        <div class="text-5xl font-black mb-2">2.25h</div>
+                        <div class="text-sm opacity-90">일일 평균 학습 시간</div>
+                        <div class="text-xs mt-2 opacity-75">(평일 135분 기준)</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 text-white p-6 rounded-lg text-center">
+                        <div class="text-5xl font-black mb-2">67.5h</div>
+                        <div class="text-sm opacity-90">30일 누적 학습 시간</div>
+                        <div class="text-xs mt-2 opacity-75">(1인당 목표)</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-400 to-orange-600 text-white p-6 rounded-lg text-center">
+                        <div class="text-5xl font-black mb-2">5과목</div>
+                        <div class="text-sm opacity-90">균형 잡힌 학습</div>
+                        <div class="text-xs mt-2 opacity-75">(순환 배정 시스템)</div>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-8">💎 정성적 효과</h3>
+                <div class="space-y-3">
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <h4 class="font-bold text-green-800 mb-1">🎯 학생</h4>
+                        <ul class="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                            <li><strong>자기주도학습 습관 형성:</strong> 매일 정해진 시간 학습으로 루틴 확립</li>
+                            <li><strong>시간 관리 능력 향상:</strong> 45분 집중 학습으로 효율적 시간 활용</li>
+                            <li><strong>학습 동기 부여:</strong> 시각적 성취 피드백으로 지속적 동기 제공</li>
+                            <li><strong>메타인지 강화:</strong> 학습 내용 기록 및 복습으로 자기 학습 점검</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h4 class="font-bold text-blue-800 mb-1">👨‍🏫 교사</h4>
+                        <ul class="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                            <li><strong>효율적 학습 관리:</strong> 40명 학생 개별 모니터링 및 피드백 가능</li>
+                            <li><strong>데이터 기반 지도:</strong> 객관적 학습 데이터로 맞춤형 상담 가능</li>
+                            <li><strong>시간 절약:</strong> 자동화된 학습 기록으로 행정 업무 감소</li>
+                            <li><strong>성과 가시화:</strong> 학급 단위 학습 통계로 교육 효과 입증</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-4">
+                        <h4 class="font-bold text-purple-800 mb-1">👨‍👩‍👧 학부모</h4>
+                        <ul class="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                            <li><strong>자녀 학습 현황 투명 공개:</strong> 실시간 학습 시간 및 진도 확인</li>
+                            <li><strong>신뢰 형성:</strong> 교사 피드백 확인으로 학교-가정 소통 강화</li>
+                            <li><strong>안심 학습:</strong> 체계적 프로그램으로 자녀 학습 안정감</li>
+                        </ul>
+                    </div>
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-4">
+                        <h4 class="font-bold text-orange-800 mb-1">🏫 학교</h4>
+                        <ul class="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                            <li><strong>교육 혁신 사례 확보:</strong> 디지털 기반 학습 관리 모델 구축</li>
+                            <li><strong>대외 평가 제고:</strong> 자기주도학습 우수 학교 입지 강화</li>
+                            <li><strong>확장 가능성:</strong> 전교생 대상 확대 운영 기반 마련</li>
+                            <li><strong>비용 효율성:</strong> 무료 플랫폼 활용으로 예산 절감</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-8">🚀 중장기 효과 (3~6개월)</h3>
+                <div class="highlight-box">
+                    <ul class="space-y-2">
+                        <li>✅ <strong>학업 성취도 향상:</strong> 규칙적 학습으로 학교 시험 성적 개선 예상 (평균 10~20% 상승)</li>
+                        <li>✅ <strong>학습 격차 해소:</strong> 학습 부진 학생 조기 발견 및 맞춤 지도로 격차 축소</li>
+                        <li>✅ <strong>학습 문화 조성:</strong> 자기주도학습 문화 확산으로 학교 전체 분위기 개선</li>
+                        <li>✅ <strong>진로 역량 강화:</strong> 꾸준한 학습 습관으로 고등학교 진학 대비 완성</li>
+                        <li>✅ <strong>지역 확산 가능:</strong> 경주 근화여중 성공 사례를 경상북도 전역으로 확대</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 성공 지표 및 평가 계획 -->
+        <div class="section-card">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">📊</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">6. 성공 지표 및 평가 계획</h2>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-gray-800">🎯 핵심 성과 지표 (KPI)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-green-600 text-white">
+                                <th class="py-3 px-4 text-left">평가 항목</th>
+                                <th class="py-3 px-4 text-left">측정 방법</th>
+                                <th class="py-3 px-4 text-left">목표 수치</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="py-3 px-4 font-semibold">프로그램 참여율</td>
+                                <td class="py-3 px-4">30일 중 25일 이상 접속 학생 비율</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">85% 이상</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold">일일 학습 완료율</td>
+                                <td class="py-3 px-4">3과목 중 2과목 이상 완료 학생 비율</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">75% 이상</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold">1인당 평균 학습 시간</td>
+                                <td class="py-3 px-4">30일 누적 학습 시간 / 참여 학생 수</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">60시간 이상</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold">학생 만족도</td>
+                                <td class="py-3 px-4">프로그램 종료 후 설문조사 (5점 척도)</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">4.0점 이상</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold">교사 활용도</td>
+                                <td class="py-3 px-4">교사 대시보드 주간 접속 및 피드백 횟수</td>
+                                <td class="py-3 px-4 text-green-600 font-bold">주 3회 이상</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mt-8">📅 평가 일정</h3>
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3 bg-blue-50 p-4 rounded-lg">
+                        <span class="text-xl font-bold text-blue-600">1주차</span>
+                        <div>
+                            <h4 class="font-bold text-blue-800">시스템 안정화 점검</h4>
+                            <p class="text-sm text-gray-600">학생 접속률, 기술적 오류 확인, 초기 피드백 수집</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-green-50 p-4 rounded-lg">
+                        <span class="text-xl font-bold text-green-600">2주차</span>
+                        <div>
+                            <h4 class="font-bold text-green-800">중간 점검</h4>
+                            <p class="text-sm text-gray-600">학습 시간 통계 분석, 학습 부진 학생 파악 및 개별 상담</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-purple-50 p-4 rounded-lg">
+                        <span class="text-xl font-bold text-purple-600">4주차</span>
+                        <div>
+                            <h4 class="font-bold text-purple-800">최종 평가</h4>
+                            <p class="text-sm text-gray-600">전체 학습 데이터 분석, 학생·교사 만족도 조사, 개선 방안 도출</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. 결론 및 향후 계획 -->
+        <div class="section-card bg-gradient-to-br from-green-50 to-blue-50">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">🎓</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">7. 결론 및 향후 계획</h2>
+            </div>
+
+            <div class="space-y-6">
+                <div class="highlight-box">
+                    <h3 class="text-xl font-bold mb-3">💡 핵심 메시지</h3>
+                    <p class="text-base leading-relaxed">
+                        <strong>'자기주도학습UP 챌린지'</strong>는 단순한 학습 시간 기록을 넘어, 
+                        <strong>학생의 자기주도학습 역량을 체계적으로 키우는 교육 혁신 프로그램</strong>입니다. 
+                        디지털 기술을 활용하여 <strong>학생·교사·학부모가 함께 성장하는 선순환 학습 생태계</strong>를 만들어갑니다.
+                    </p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800">🔮 향후 계획</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-lg shadow-md">
+                        <h4 class="font-bold text-green-700 mb-3">📌 단기 계획 (1~3개월)</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li>✓ 40명 시범 운영 완료 및 성과 데이터 분석</li>
+                            <li>✓ 학생·교사 피드백 수렴 및 시스템 개선</li>
+                            <li>✓ 우수 학생 시상 및 학습 사례 공유</li>
+                            <li>✓ 학부모 대상 성과 보고회 개최</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md">
+                        <h4 class="font-bold text-blue-700 mb-3">🚀 중기 계획 (3~6개월)</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li>✓ 근화여중 전교생 대상 확대 운영 (약 300명)</li>
+                            <li>✓ 학부모 앱 또는 웹페이지 추가 개발</li>
+                            <li>✓ AI 기반 학습 추천 시스템 도입 검토</li>
+                            <li>✓ 경상북도 교육청 우수 사례 발표</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md">
+                        <h4 class="font-bold text-purple-700 mb-3">🌟 장기 계획 (6개월~1년)</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li>✓ 경상북도 내 타 중학교 보급 (10개교 목표)</li>
+                            <li>✓ 고등학교 버전 개발 및 운영</li>
+                            <li>✓ 학습 데이터 기반 맞춤형 교재 추천 기능</li>
+                            <li>✓ 전국 단위 확산 및 교육부 인증 추진</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md">
+                        <h4 class="font-bold text-orange-700 mb-3">💎 미래 비전</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li>✓ 전국 1,000개 중학교 도입 (10만 명 학생)</li>
+                            <li>✓ 교육부 공식 인정 자기주도학습 플랫폼</li>
+                            <li>✓ 해외 한인학교 및 국제학교 수출</li>
+                            <li>✓ 국가 교육 데이터 분석 허브로 성장</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 부록: 시스템 접속 정보 -->
+        <div class="section-card bg-gray-50">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gray-700 text-white rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl">🔗</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800">부록: 시스템 접속 정보</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-white p-5 rounded-lg border-2 border-green-500">
+                    <h4 class="font-bold text-green-700 mb-3">🎓 학생 포털 (메인)</h4>
+                    <a href="https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html" 
+                       class="text-blue-600 hover:text-blue-800 underline break-all text-sm">
+                        https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html
+                    </a>
+                    <p class="text-xs text-gray-500 mt-2">학생이 직접 접속하여 학습을 진행하는 메인 페이지</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-lg border-2 border-blue-500">
+                    <h4 class="font-bold text-blue-700 mb-3">👨‍🏫 교사 대시보드</h4>
+                    <a href="https://da-um3481.github.io/da-um-jinro/middle-teacher-dashboard.html" 
+                       class="text-blue-600 hover:text-blue-800 underline break-all text-sm">
+                        https://da-um3481.github.io/da-um-jinro/middle-teacher-dashboard.html
+                    </a>
+                    <p class="text-xs text-gray-500 mt-2">교사가 학생 학습 현황을 모니터링하고 피드백을 작성하는 페이지</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-lg border-2 border-purple-500">
+                    <h4 class="font-bold text-purple-700 mb-3">🏫 프로그램 소개</h4>
+                    <a href="https://da-um3481.github.io/da-um-jinro/geunhwa_index.html" 
+                       class="text-blue-600 hover:text-blue-800 underline break-all text-sm">
+                        https://da-um3481.github.io/da-um-jinro/geunhwa_index.html
+                    </a>
+                    <p class="text-xs text-gray-500 mt-2">학교 및 프로그램 소개 랜딩 페이지</p>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-lg border-2 border-yellow-400">
+                    <h4 class="font-bold text-yellow-800 mb-2">⚠️ 접속 유의사항</h4>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                        <li>• 모든 페이지는 <strong>모바일, 태블릿, PC 모두 지원</strong>합니다.</li>
+                        <li>• 학생 포털은 <strong>학생 이름과 학년만 입력하면 즉시 이용</strong> 가능합니다.</li>
+                        <li>• 학습 데이터는 <strong>브라우저에 자동 저장</strong>되며, 같은 기기에서 재접속 시 복원됩니다.</li>
+                        <li>• 최적 브라우저: <strong>Chrome, Edge, Safari</strong> 최신 버전 권장</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="text-center mt-12 pb-8">
+            <div class="text-gray-500 text-sm mb-4">
+                <p>본 보고서는 2025년 12월 21일 작성되었으며, 실제 운영 결과에 따라 내용이 업데이트될 수 있습니다.</p>
+            </div>
+            <div class="flex justify-center space-x-4 text-sm">
+                <button onclick="window.print()" 
+                        class="no-print px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
+                    📄 보고서 인쇄
+                </button>
+                <a href="https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html" 
+                   class="no-print px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+                    🚀 학생 포털 바로가기
+                </a>
+            </div>
+            <div class="mt-6 text-gray-400 text-xs">
+                <p>Powered by DA.UM Education Platform</p>
+                <p class="mt-1">© 2025 Gyeongju Geunhwa Girls' Middle School. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
