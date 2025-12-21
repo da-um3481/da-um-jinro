@@ -261,6 +261,18 @@
             }
         }
         
+        /* 과목 카드 강조 애니메이션 */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3), 0 0 40px rgba(34, 197, 94, 0.2);
+            }
+        }
+        
         .schedule-regenerate-btn {
             animation: pulse-glow 2s ease-in-out infinite;
         }
@@ -310,64 +322,42 @@
     <!-- 성공 메시지 (토스트) -->
     <div id="successMessage" class="hidden success-toast"></div>
     
-    <!-- 상단 네비게이션 -->
-    <nav class="glass-effect sticky top-0 z-50 shadow-lg border-b border-gray-200">
+    <!-- 상단 네비게이션 (단순화) -->
+    <nav class="bg-gradient-to-r from-green-700 to-green-600 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- 로고 & 인사말 -->
-                <div class="flex items-center space-x-3 group cursor-pointer" onclick="location.reload()" title="홈으로 돌아가기">
-                    <div class="relative">
-                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                        <!-- 로고 주변 빛나는 효과 -->
-                        <div class="absolute inset-0 rounded-full bg-green-400/20 blur-md scale-0 group-hover:scale-150 transition-transform duration-300"></div>
-                    </div>
+            <div class="flex items-center justify-between h-14">
+                <!-- 로고 & 타이틀 -->
+                <div class="flex items-center space-x-3">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-8 h-8">
                     <div>
-                        <h1 class="text-lg font-bold bg-gradient-to-r from-green-800 via-green-600 to-blue-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:via-green-600 group-hover:to-green-800 transition-all duration-500">
-                            🚀 자기주도학습UP 챌린지
+                        <h1 class="text-base font-bold text-white">
+                            자기주도학습UP 챌린지
                         </h1>
-                        <p class="text-xs text-gray-600 group-hover:text-green-700 transition-colors duration-300" id="studentInfo">
-                            📚 경주 근화여자중학교
+                        <p class="text-xs text-green-100" id="studentInfo">
+                            경주 근화여자중학교
                         </p>
                     </div>
                 </div>
                 
                 <!-- 우측 메뉴 -->
-<div class="flex items-center space-x-2">
-                    <!-- 🔄 스케줄 재생성 버튼 (개선된 대비 + 애니메이션) -->
+                <div class="flex items-center space-x-2">
+                    <!-- 스케줄 재생성 버튼 -->
                     <button 
                         onclick="regenerateSchedule()" 
-                        class="schedule-regenerate-btn group relative px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500" 
-                        title="과목이 1개만 나오면 클릭하세요!"
-                        aria-label="학습 스케줄 재생성">
-                        <span class="flex items-center">
-                            <i class="fas fa-sync-alt mr-2 group-hover:rotate-180 transition-transform duration-500"></i>
-                            <span class="hidden sm:inline">스케줄 재생성</span>
-                            <span class="sm:hidden">재생성</span>
-                        </span>
-                        <!-- 펄스 효과 -->
-                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
-                        </span>
+                        class="px-3 py-1.5 bg-white text-green-700 rounded-lg text-sm font-semibold hover:bg-green-50 transition-all" 
+                        title="3과목 다시 생성">
+                        <i class="fas fa-sync-alt mr-1"></i>
+                        <span class="hidden sm:inline">스케줄 재생성</span>
+                        <span class="sm:hidden">재생성</span>
                     </button>
                     
-                    <!-- 🔄 학생 로그아웃 버튼 -->
+                    <!-- 로그아웃 버튼 -->
                     <button 
                         onclick="resetStudent()" 
-                        class="p-2 text-white hover:text-yellow-300 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95" 
-                        title="다른 학생으로 로그인"
-                        aria-label="학생 로그아웃">
-                        <i class="fas fa-user-slash text-xl"></i>
+                        class="p-2 text-white hover:bg-green-600 rounded-lg transition" 
+                        title="다른 학생으로 로그인">
+                        <i class="fas fa-sign-out-alt"></i>
                     </button>
-                    
-                    <!-- ❓ 도움말 버튼 -->
-                    <a 
-                        href="student-intro.html" 
-                        class="p-2 text-white hover:text-yellow-300 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
-                        title="사용 방법 안내"
-                        aria-label="도움말">
-                        <i class="fas fa-question-circle text-xl"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -1235,13 +1225,22 @@
                 return;
             }
             
+            // 학습 시간 체크 (30분 미만이면 경고)
+            const totalSeconds = timers[subject].seconds;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            if (minutes < 30) {
+                alert(`⚠️ 학습 시간이 부족합니다!\n\n현재 학습 시간: ${minutes}분 ${seconds}초\n권장 학습 시간: 최소 30분\n\n조금 더 집중해서 학습해주세요! 💪`);
+                console.log(`⚠️ ${subject} 학습 시간 부족: ${minutes}분 ${seconds}초 (최소 30분 필요)`);
+                return; // 완료 버튼 동작 취소
+            }
+            
             clearInterval(timers[subject].interval);
             timers[subject].isRunning = false;
             activeSubject = null;
             
             // 학습 시간 저장
-            const minutes = Math.floor(timers[subject].seconds / 60);
-            const seconds = timers[subject].seconds % 60;
             const today = new Date().toISOString().split('T')[0];
             const studentId = localStorage.getItem('currentStudentId') || 'default_student';
             
@@ -1274,7 +1273,15 @@
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
             
-            alert(`✅ 학습 완료!\n시간: ${minutes}분 ${seconds}초\n멋진 집중력이에요! 🌟`);
+            // 학습 시간에 따른 메시지 표시
+            let message = '';
+            if (minutes >= 40) {
+                message = `✅ 학습 완료!\n\n시간: ${minutes}분 ${seconds}초\n\n멋진 집중력이에요! 🌟\n정말 잘했어요! 👏`;
+            } else {
+                message = `✅ 학습 완료!\n\n시간: ${minutes}분 ${seconds}초\n\n좋아요! 조금 더 집중하면 더 좋겠어요! 💪`;
+            }
+            
+            alert(message);
             console.log(`⏹️ ${subject} 학습 완료: ${minutes}분 ${seconds}초`);
             
             // 총 학습 시간 업데이트
@@ -1284,6 +1291,70 @@
             if (typeof renderCalendar === 'function') {
                 renderCalendar();
             }
+            
+            // 다음 과목 자동 표시
+            showNextSubject(subject);
+        }
+
+        // 📚 다음 과목 자동 표시
+        function showNextSubject(completedSubject) {
+            console.log(`🎯 다음 과목 찾기... (완료한 과목: ${completedSubject})`);
+            
+            // 오늘의 전체 스케줄 가져오기
+            const studentId = localStorage.getItem('currentStudentId');
+            const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+            const studentSchedule = schedules.find(s => s.student_id === studentId);
+            
+            if (!studentSchedule) {
+                console.log('⚠️ 학생 스케줄을 찾을 수 없습니다.');
+                return;
+            }
+            
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const todayName = dayNames[new Date().getDay()];
+            const todayScheduleStr = studentSchedule[todayName];
+            const todaySchedule = JSON.parse(todayScheduleStr || '[]');
+            
+            if (!todaySchedule || todaySchedule.length === 0) {
+                console.log('⚠️ 오늘 스케줄이 비어있습니다.');
+                return;
+            }
+            
+            // 완료한 과목의 인덱스 찾기
+            const completedIndex = todaySchedule.findIndex(item => item.subject === completedSubject);
+            console.log(`   현재 과목 인덱스: ${completedIndex}`);
+            
+            // 다음 과목 찾기 (능동학습 과목만)
+            for (let i = completedIndex + 1; i < todaySchedule.length; i++) {
+                const nextItem = todaySchedule[i];
+                if (nextItem.isActive === true) {
+                    console.log(`✅ 다음 과목 발견: ${nextItem.subject}`);
+                    
+                    // 완료한 과목 카드를 숨기기
+                    const completedCards = document.querySelectorAll(`[data-subject="${completedSubject}"]`);
+                    completedCards.forEach(card => {
+                        card.style.opacity = '0.5';
+                        card.style.pointerEvents = 'none';
+                    });
+                    
+                    // 다음 과목 카드 강조
+                    setTimeout(() => {
+                        const nextCards = document.querySelectorAll(`[data-subject="${nextItem.subject}"]`);
+                        nextCards.forEach(card => {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            card.style.animation = 'pulse 1s ease-in-out 3';
+                        });
+                    }, 500);
+                    
+                    return;
+                }
+            }
+            
+            // 모든 능동학습 과목 완료
+            console.log('🎉 오늘의 모든 능동학습 과목을 완료했습니다!');
+            setTimeout(() => {
+                alert('🎉 축하합니다!\n\n오늘의 모든 학습 과목을 완료했습니다!\n정말 훌륭해요! 🌟');
+            }, 500);
         }
 
         // 타이머 표시 업데이트
@@ -1907,10 +1978,10 @@
                 console.warn('⚠️ 스케줄이 비어있습니다!');
                 container.innerHTML = `
                     <div class="text-center py-8">
-                        <div class="text-5xl mb-3">🎉</div>
-                        <p class="text-gray-600 font-semibold">오늘은 휴식일입니다!</p>
-                        <button onclick="regenerateSchedule()" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            🔄 스케줄 새로 생성
+                        <div class="text-5xl mb-3">📚</div>
+                        <p class="text-gray-600 font-semibold mb-4">학습 스케줄을 생성해주세요</p>
+                        <button onclick="regenerateSchedule()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            <i class="fas fa-sync-alt mr-2"></i>스케줄 생성
                         </button>
                     </div>
                 `;
@@ -1968,7 +2039,7 @@
             const cardOpacity = isPreview ? '0.85' : '1';
             
             return `
-                <div class="rounded-xl border-2 overflow-hidden" style="background-color: ${colors.bg}; border-color: ${colors.border}; opacity: ${cardOpacity};">
+                <div class="rounded-xl border-2 overflow-hidden" data-subject="${item.subject}" style="background-color: ${colors.bg}; border-color: ${colors.border}; opacity: ${cardOpacity}; transition: all 0.3s ease;">
                     <!-- 과목 헤더 -->
                     <div class="p-4 bg-gradient-to-r" style="background: linear-gradient(135deg, ${colors.main}, ${colors.dark});">
                         <div class="flex items-center justify-between text-white">
