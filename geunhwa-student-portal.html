@@ -1883,6 +1883,11 @@
             const todaySchedule = JSON.parse(todayScheduleStr || '[]');
             console.log(`📚 파싱된 오늘 스케줄 (${todaySchedule.length}개 과목):`, todaySchedule);
             
+            // 🔴 긴급 디버깅: 화면에 표시
+            if (todaySchedule.length === 0) {
+                alert(`⚠️ 오늘(${todayName})은 스케줄이 비어있습니다!\n\n토요일/일요일이면 정상입니다.\n평일인데 비어있으면 오류입니다.`);
+            }
+            
             // 3. 오늘의 과목으로 통합 카드 표시 (타이머 + 학습자료 + 입력란)
             displayIntegratedSubjectCards(todaySchedule);
             
