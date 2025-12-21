@@ -646,6 +646,131 @@
                 opacity: 1;
             }
         }
+
+        /* 네비게이션 탭 */
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .nav-tab.active {
+            color: var(--text);
+            border-bottom-color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* 섹션 컨테이너 */
+        .section-container {
+            display: none;
+        }
+
+        .section-container.active {
+            display: block;
+        }
+
+        /* 데이터 테이블 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .data-table thead {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .data-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        .data-table tbody tr {
+            transition: all 0.3s;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 수준 배지 */
+        .level-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .level-advanced {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary);
+        }
+
+        .level-intermediate {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent);
+        }
+
+        .level-beginner {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        /* 버튼 스타일 */
+        .btn-filter {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+        }
+
+        .btn-filter:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-filter.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+
+        /* 차트 컨테이너 */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -675,6 +800,26 @@
 
     <!-- 메인 컨텐츠 -->
     <div class="container">
+        <!-- 네비게이션 탭 -->
+        <div class="section" style="padding: 1rem 2rem; margin-bottom: 1rem;">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 1rem;">
+                <button class="nav-tab active" onclick="showSection('dashboard')" id="tab-dashboard">
+                    📊 전체 현황
+                </button>
+                <button class="nav-tab" onclick="showSection('diagnostic')" id="tab-diagnostic">
+                    📝 진단평가 결과
+                </button>
+                <button class="nav-tab" onclick="showSection('level-management')" id="tab-level-management">
+                    📚 수준별 학습관리
+                </button>
+                <button class="nav-tab" onclick="showSection('students')" id="tab-students">
+                    👨‍🎓 학생 목록
+                </button>
+            </div>
+        </div>
+
+        <!-- 전체 현황 섹션 -->
+        <div class="section-container" id="section-dashboard">
         <!-- 전체 통계 -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -817,14 +962,508 @@
                 <!-- 최근 기록 동적 생성 -->
             </div>
         </div>
+        </div>
+        <!-- /전체 현황 섹션 끝 -->
+
+        <!-- 진단평가 결과 섹션 -->
+        <div class="section-container" id="section-diagnostic">
+            <!-- 전체 통계 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">진단 완료</span>
+                        <span class="stat-icon">✅</span>
+                    </div>
+                    <div class="stat-value" id="diagnosticCompletedCount">0</div>
+                    <div class="stat-change positive">
+                        <span id="diagnosticCompletedInfo">전체 학생 대비</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">고급 수준</span>
+                        <span class="stat-icon">⭐</span>
+                    </div>
+                    <div class="stat-value" id="advancedCount">0</div>
+                    <div class="stat-change positive">
+                        <span>281점 이상</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">중급 수준</span>
+                        <span class="stat-icon">📈</span>
+                    </div>
+                    <div class="stat-value" id="intermediateCount">0</div>
+                    <div class="stat-change positive">
+                        <span>201-280점</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">기초 수준</span>
+                        <span class="stat-icon">🌱</span>
+                    </div>
+                    <div class="stat-value" id="beginnerCount">0</div>
+                    <div class="stat-change positive">
+                        <span>0-200점</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 수준별 분포 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">📊</span>
+                        수준별 학생 분포
+                    </h2>
+                </div>
+                <div class="chart-container" style="height: 300px; background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 16px;">
+                    <div style="display: flex; justify-content: space-around; align-items: flex-end; height: 100%;">
+                        <div style="text-align: center;">
+                            <div id="advancedBar" style="width: 80px; background: var(--primary); border-radius: 8px 8px 0 0; margin: 0 auto;"></div>
+                            <div style="margin-top: 1rem; font-weight: 600;">고급</div>
+                            <div style="color: var(--text-muted); font-size: 0.875rem;" id="advancedPercent">0%</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div id="intermediateBar" style="width: 80px; background: var(--accent); border-radius: 8px 8px 0 0; margin: 0 auto;"></div>
+                            <div style="margin-top: 1rem; font-weight: 600;">중급</div>
+                            <div style="color: var(--text-muted); font-size: 0.875rem;" id="intermediatePercent">0%</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div id="beginnerBar" style="width: 80px; background: var(--warning); border-radius: 8px 8px 0 0; margin: 0 auto;"></div>
+                            <div style="margin-top: 1rem; font-weight: 600;">기초</div>
+                            <div style="color: var(--text-muted); font-size: 0.875rem;" id="beginnerPercent">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학생별 진단 결과 테이블 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">📋</span>
+                        학생별 진단 결과
+                    </h2>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn-filter active" onclick="filterDiagnosticResults('all')">전체</button>
+                        <button class="btn-filter" onclick="filterDiagnosticResults('advanced')">고급</button>
+                        <button class="btn-filter" onclick="filterDiagnosticResults('intermediate')">중급</button>
+                        <button class="btn-filter" onclick="filterDiagnosticResults('beginner')">기초</button>
+                    </div>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>학년</th>
+                                <th>학생명</th>
+                                <th>진단일</th>
+                                <th>정답수</th>
+                                <th>총점</th>
+                                <th>수준</th>
+                                <th>과목별 점수</th>
+                            </tr>
+                        </thead>
+                        <tbody id="diagnosticResultsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 3rem;">
+                                    <div class="empty-icon">📝</div>
+                                    <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /진단평가 결과 섹션 끝 -->
+
+        <!-- 수준별 학습관리 섹션 -->
+        <div class="section-container" id="section-level-management">
+            <!-- 수준별 통계 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">고급 수준 학생</span>
+                        <span class="stat-icon">⭐</span>
+                    </div>
+                    <div class="stat-value" id="advancedStudentsCount">0</div>
+                    <div class="stat-change positive">
+                        <span>심화 콘텐츠 제공</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">중급 수준 학생</span>
+                        <span class="stat-icon">📈</span>
+                    </div>
+                    <div class="stat-value" id="intermediateStudentsCount">0</div>
+                    <div class="stat-change positive">
+                        <span>표준 콘텐츠 제공</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">기초 수준 학생</span>
+                        <span class="stat-icon">🌱</span>
+                    </div>
+                    <div class="stat-value" id="beginnerStudentsCount">0</div>
+                    <div class="stat-change positive">
+                        <span>기본 콘텐츠 제공</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">진단 미완료</span>
+                        <span class="stat-icon">❓</span>
+                    </div>
+                    <div class="stat-value" id="notDiagnosedCount">0</div>
+                    <div class="stat-change positive">
+                        <span>진단평가 필요</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학생별 학습 내용 조정 테이블 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">⚙️</span>
+                        학생별 학습 내용 조정 현황
+                    </h2>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn-filter active" onclick="filterLevelManagement('all')">전체</button>
+                        <button class="btn-filter" onclick="filterLevelManagement('advanced')">고급</button>
+                        <button class="btn-filter" onclick="filterLevelManagement('intermediate')">중급</button>
+                        <button class="btn-filter" onclick="filterLevelManagement('beginner')">기초</button>
+                        <button class="btn-filter" onclick="filterLevelManagement('not_diagnosed')">진단 미완료</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>학년</th>
+                                <th>학생명</th>
+                                <th>현재 수준</th>
+                                <th>진단 점수</th>
+                                <th>학습 내용 수준</th>
+                                <th>자동 조정 상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="levelManagementTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 3rem;">
+                                    <div class="empty-icon">👨‍🎓</div>
+                                    <div class="empty-title">학생 데이터를 불러오는 중입니다</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 수준별 학습 내용 설명 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">💡</span>
+                        수준별 학습 내용 기준
+                    </h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--primary); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            ⭐ 고급 (281-362점)
+                        </h4>
+                        <ul style="color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem; font-size: 0.875rem;">
+                            <li>심화 개념 및 응용 문제</li>
+                            <li>고난도 교재 추천</li>
+                            <li>경시대회 수준 콘텐츠</li>
+                            <li>자기주도 학습 강화</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(139, 92, 246, 0.1); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            📈 중급 (201-280점)
+                        </h4>
+                        <ul style="color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem; font-size: 0.875rem;">
+                            <li>표준 교과 과정</li>
+                            <li>교과서 핵심 개념</li>
+                            <li>중간 난이도 문제</li>
+                            <li>단계적 심화 학습</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--warning); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            🌱 기초 (0-200점)
+                        </h4>
+                        <ul style="color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem; font-size: 0.875rem;">
+                            <li>기본 개념 집중 학습</li>
+                            <li>쉬운 교재 및 영상</li>
+                            <li>반복 학습 강화</li>
+                            <li>개념 이해 중심</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /수준별 학습관리 섹션 끝 -->
+
+        <!-- 학생 목록 섹션 -->
+        <div class="section-container" id="section-students">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">👥</span>
+                        전체 학생 목록
+                    </h2>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">🚧</div>
+                    <div class="empty-title">개발 중인 기능입니다</div>
+                    <div class="empty-text">학생 상세 관리 기능은 추후 추가될 예정입니다</div>
+                </div>
+            </div>
+        </div>
+        <!-- /학생 목록 섹션 끝 -->
     </div>
 
     <script>
+        // 탭 전환
+        function showSection(sectionName) {
+            // 모든 섹션 숨기기
+            document.querySelectorAll('.section-container').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 모든 탭 비활성화
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 선택된 섹션 표시
+            document.getElementById(`section-${sectionName}`).classList.add('active');
+            document.getElementById(`tab-${sectionName}`).classList.add('active');
+            
+            // 섹션별 데이터 로드
+            if (sectionName === 'diagnostic') {
+                loadDiagnosticData();
+            } else if (sectionName === 'level-management') {
+                loadLevelManagementData();
+            }
+        }
+
+        // 진단평가 데이터 로드
+        function loadDiagnosticData() {
+            const students = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('student_')) {
+                    try {
+                        const studentData = JSON.parse(localStorage.getItem(key));
+                        students.push(studentData);
+                    } catch (e) {
+                        console.warn('학생 데이터 파싱 오류:', key);
+                    }
+                }
+            }
+
+            // 임시 진단평가 데이터 (실제로는 서버나 localStorage에서 가져와야 함)
+            const diagnosticData = students.map(student => ({
+                ...student,
+                diagnosticDate: '2025-01-15',
+                correctAnswers: Math.floor(Math.random() * 72) + 1,
+                totalScore: Math.floor(Math.random() * 362),
+                subjects: {
+                    '수학': Math.floor(Math.random() * 72) + 1,
+                    '영어': Math.floor(Math.random() * 72) + 1,
+                    '국어': Math.floor(Math.random() * 72) + 1,
+                    '과학': Math.floor(Math.random() * 72) + 1,
+                    '사회': Math.floor(Math.random() * 72) + 1
+                }
+            }));
+
+            // 통계 업데이트
+            const completed = diagnosticData.length;
+            const advanced = diagnosticData.filter(d => d.totalScore >= 281).length;
+            const intermediate = diagnosticData.filter(d => d.totalScore >= 201 && d.totalScore < 281).length;
+            const beginner = diagnosticData.filter(d => d.totalScore < 201).length;
+
+            document.getElementById('diagnosticCompletedCount').textContent = completed;
+            document.getElementById('advancedCount').textContent = advanced;
+            document.getElementById('intermediateCount').textContent = intermediate;
+            document.getElementById('beginnerCount').textContent = beginner;
+
+            // 차트 업데이트
+            const total = Math.max(completed, 1);
+            document.getElementById('advancedBar').style.height = `${(advanced / total) * 200}px`;
+            document.getElementById('intermediateBar').style.height = `${(intermediate / total) * 200}px`;
+            document.getElementById('beginnerBar').style.height = `${(beginner / total) * 200}px`;
+            document.getElementById('advancedPercent').textContent = `${Math.round((advanced / total) * 100)}%`;
+            document.getElementById('intermediatePercent').textContent = `${Math.round((intermediate / total) * 100)}%`;
+            document.getElementById('beginnerPercent').textContent = `${Math.round((beginner / total) * 100)}%`;
+
+            // 테이블 업데이트
+            displayDiagnosticResults(diagnosticData);
+        }
+
+        // 진단평가 결과 표시
+        function displayDiagnosticResults(data) {
+            const tbody = document.getElementById('diagnosticResultsTableBody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">📝</div>
+                            <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = data.map(student => {
+                const level = student.totalScore >= 281 ? '고급' : 
+                             student.totalScore >= 201 ? '중급' : '기초';
+                const levelClass = student.totalScore >= 281 ? 'level-advanced' : 
+                                  student.totalScore >= 201 ? 'level-intermediate' : 'level-beginner';
+                
+                const subjectScores = Object.entries(student.subjects || {})
+                    .map(([subject, score]) => `${subject}:${score}`)
+                    .join(', ');
+
+                return `
+                    <tr>
+                        <td>${student.grade || 'N/A'}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td>${student.diagnosticDate || 'N/A'}</td>
+                        <td>${student.correctAnswers}/72</td>
+                        <td><strong>${student.totalScore}</strong></td>
+                        <td><span class="level-badge ${levelClass}">${level}</span></td>
+                        <td style="font-size: 0.875rem;">${subjectScores}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 수준별 학습관리 데이터 로드
+        function loadLevelManagementData() {
+            const students = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('student_')) {
+                    try {
+                        const studentData = JSON.parse(localStorage.getItem(key));
+                        students.push(studentData);
+                    } catch (e) {
+                        console.warn('학생 데이터 파싱 오류:', key);
+                    }
+                }
+            }
+
+            // 임시 데이터
+            const managementData = students.map(student => {
+                const score = Math.floor(Math.random() * 362);
+                const level = score >= 281 ? '고급' : score >= 201 ? '중급' : '기초';
+                return {
+                    ...student,
+                    totalScore: score,
+                    level: level,
+                    contentLevel: level,
+                    autoAdjusted: Math.random() > 0.3 ? '✅ 조정 완료' : '⏳ 대기 중'
+                };
+            });
+
+            // 통계 업데이트
+            const advanced = managementData.filter(d => d.level === '고급').length;
+            const intermediate = managementData.filter(d => d.level === '중급').length;
+            const beginner = managementData.filter(d => d.level === '기초').length;
+            const notDiagnosed = 0; // 진단 미완료는 0으로 가정
+
+            document.getElementById('advancedStudentsCount').textContent = advanced;
+            document.getElementById('intermediateStudentsCount').textContent = intermediate;
+            document.getElementById('beginnerStudentsCount').textContent = beginner;
+            document.getElementById('notDiagnosedCount').textContent = notDiagnosed;
+
+            // 테이블 업데이트
+            displayLevelManagement(managementData);
+        }
+
+        // 수준별 학습관리 표시
+        function displayLevelManagement(data) {
+            const tbody = document.getElementById('levelManagementTableBody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">👨‍🎓</div>
+                            <div class="empty-title">학생 데이터가 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = data.map(student => {
+                const levelClass = student.level === '고급' ? 'level-advanced' : 
+                                  student.level === '중급' ? 'level-intermediate' : 'level-beginner';
+
+                return `
+                    <tr>
+                        <td>${student.grade || 'N/A'}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td><span class="level-badge ${levelClass}">${student.level}</span></td>
+                        <td><strong>${student.totalScore}</strong>점</td>
+                        <td>${student.contentLevel} 콘텐츠</td>
+                        <td>${student.autoAdjusted}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 필터 함수들
+        function filterDiagnosticResults(filterType) {
+            document.querySelectorAll('#section-diagnostic .btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadDiagnosticData(); // 실제로는 필터링 로직 추가 필요
+            showToast(`📊 ${filterType} 필터 적용됨`);
+        }
+
+        function filterLevelManagement(filterType) {
+            document.querySelectorAll('#section-level-management .btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadLevelManagementData(); // 실제로는 필터링 로직 추가 필요
+            showToast(`⚙️ ${filterType} 필터 적용됨`);
+        }
+
         let allStudents = [];
         let studyRecords = [];
 
         // 페이지 로드
         window.addEventListener('DOMContentLoaded', () => {
+            // 기본 섹션 표시
+            document.getElementById('section-dashboard').classList.add('active');
+            
             loadDashboardData();
             setInterval(loadDashboardData, 30000); // 30초마다 자동 새로고침
         });
