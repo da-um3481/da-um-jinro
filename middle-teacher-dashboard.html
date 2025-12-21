@@ -3,267 +3,866 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👨‍🏫 교사 관리 대시보드 - 자기주도학습UP 챌린지</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <title>👨‍🏫 교사 대시보드 - 자기주도학습UP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-lighter: #1e293b;
+            --dark-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
         * {
-            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #0f5132 0%, #052e16 50%, #0a3622 100%);
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+
+        /* 애니메이션 배경 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
         }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
         }
-        
-        .animate-slide-up {
-            animation: slideUp 0.5s ease-out;
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
         }
-        
-        .student-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 5s;
         }
-        
-        .stat-card {
-            transition: all 0.3s ease;
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 10s;
         }
-        
-        .stat-card:hover {
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        /* 헤더 */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
             transform: scale(1.05);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-4);
+            color: var(--dark);
+            box-shadow: 0 4px 20px rgba(67, 233, 123, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(67, 233, 123, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 메인 컨텐츠 */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 통계 카드 그리드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-4);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-change.positive {
+            color: var(--primary);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* 섹션 */
+        .section {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-4);
+            border-radius: 12px;
+            font-size: 1.25rem;
+        }
+
+        /* 필터 컨트롤 */
+        .filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .select {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .select:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* 과목 통계 */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .subject-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .subject-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .subject-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .subject-time {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 0.25rem;
+        }
+
+        .subject-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* 학생 카드 */
+        .students-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .student-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .student-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+            transform: translateX(8px);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .student-details {
+            flex: 1;
+        }
+
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .student-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-grade {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--secondary);
+        }
+
+        .badge-status {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary);
+        }
+
+        .student-stats {
+            text-align: right;
+        }
+
+        .student-hours {
+            font-size: 1.75rem;
+            font-weight: 900;
+            background: var(--gradient-4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .student-days {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* 최근 기록 */
+        .record-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .record-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .record-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .record-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gradient-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .record-name {
+            font-weight: 600;
+        }
+
+        .record-date {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .record-subjects {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .subject-tag {
+            padding: 0.375rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: var(--text-muted);
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .student-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .student-stats {
+                text-align: center;
+            }
+
+            .filters {
+                width: 100%;
+            }
+
+            .select {
+                flex: 1;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 토스트 알림 */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
-<body class="p-4 sm:p-6">
+<body>
+    <!-- 배경 애니메이션 -->
+    <div class="bg-animation">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+    </div>
+
     <!-- 헤더 -->
-    <nav class="bg-gradient-to-r from-emerald-600 to-green-500 sticky top-0 z-50 shadow-xl rounded-xl mb-6">
-        <div class="max-w-full mx-auto px-3 sm:px-6">
-            <div class="flex items-center justify-between h-14 sm:h-16">
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-7 h-7 sm:w-10 sm:h-10">
-                    <div>
-                        <h1 class="text-sm sm:text-xl font-bold text-white">
-                            👨‍🏫 교사 관리 대시보드
-                        </h1>
-                        <p class="text-xs text-green-50 hidden sm:block">
-                            자기주도학습UP 챌린지
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="flex items-center space-x-2">
-                    <button 
-                        onclick="refreshData()" 
-                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-white text-green-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-50 transition">
-                        <i class="fas fa-sync-alt"></i>
-                        <span class="hidden sm:inline ml-1">새로고침</span>
-                    </button>
-                    <button 
-                        onclick="window.location.href='geunhwa-student-portal.html'" 
-                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-500 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-600 transition">
-                        <i class="fas fa-user"></i>
-                        <span class="hidden sm:inline ml-1">학생 포털</span>
-                    </button>
-                </div>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" onclick="location.reload()">
+                👨‍🏫 교사 대시보드
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="refreshData()">
+                    🔄 <span class="refresh-text">새로고침</span>
+                </button>
+                <button class="btn btn-primary" onclick="window.location.href='geunhwa-student-portal.html'">
+                    🎓 학생 포털
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- 메인 컨텐츠 -->
-    <main class="max-w-7xl mx-auto space-y-6">
-        
+    <div class="container">
         <!-- 전체 통계 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-chart-line text-green-600 mr-3"></i>
-                전체 학습 현황
-            </h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl text-center">
-                    <div class="text-4xl font-black mb-2" id="totalStudents">0</div>
-                    <div class="text-sm opacity-90">전체 학생</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">전체 학생</span>
+                    <span class="stat-icon">👥</span>
                 </div>
-                <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl text-center">
-                    <div class="text-4xl font-black mb-2" id="activeStudents">0</div>
-                    <div class="text-sm opacity-90">활동 학생 (7일 내)</div>
+                <div class="stat-value" id="totalStudents">0</div>
+                <div class="stat-change positive">
+                    <span id="newStudents">📈 데이터 로딩 중...</span>
                 </div>
-                <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl text-center">
-                    <div class="text-4xl font-black mb-2" id="avgStudyTime">0h</div>
-                    <div class="text-sm opacity-90">평균 학습 시간</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">활동 학생 (7일)</span>
+                    <span class="stat-icon">✅</span>
                 </div>
-                <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl text-center">
-                    <div class="text-4xl font-black mb-2" id="completionRate">0%</div>
-                    <div class="text-sm opacity-90">평균 완료율</div>
+                <div class="stat-value" id="activeStudents">0</div>
+                <div class="stat-change positive">
+                    <span id="activeRate">-</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">평균 학습시간</span>
+                    <span class="stat-icon">⏱️</span>
+                </div>
+                <div class="stat-value" id="avgStudyTime">0h</div>
+                <div class="stat-change positive">
+                    <span id="timeChange">1인당 평균</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">완료율</span>
+                    <span class="stat-icon">🎯</span>
+                </div>
+                <div class="stat-value" id="completionRate">0%</div>
+                <div class="stat-change positive">
+                    <span id="completionChange">30일 목표 대비</span>
                 </div>
             </div>
         </div>
 
-        <!-- 과목별 학습 현황 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-book text-green-600 mr-3"></i>
-                과목별 학습 통계
-            </h2>
-            
-            <div class="grid md:grid-cols-5 gap-4">
-                <div class="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-blue-800">수학</h3>
-                        <i class="fas fa-calculator text-blue-600"></i>
+        <!-- 과목별 통계 -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-title-icon">📚</span>
+                    과목별 학습 통계
+                </h2>
+            </div>
+            <div class="subjects-grid">
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <span class="subject-name">수학</span>
+                        <span>🧮</span>
                     </div>
-                    <div class="text-2xl font-black text-blue-700" id="mathTime">0h</div>
-                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                    <div class="subject-time" id="mathTime">0h</div>
+                    <div class="subject-label">총 학습 시간</div>
                 </div>
-                
-                <div class="bg-green-50 p-4 rounded-lg border-2 border-green-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-green-800">영어</h3>
-                        <i class="fas fa-language text-green-600"></i>
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <span class="subject-name">영어</span>
+                        <span>🌏</span>
                     </div>
-                    <div class="text-2xl font-black text-green-700" id="englishTime">0h</div>
-                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                    <div class="subject-time" id="englishTime">0h</div>
+                    <div class="subject-label">총 학습 시간</div>
                 </div>
-                
-                <div class="bg-red-50 p-4 rounded-lg border-2 border-red-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-red-800">국어</h3>
-                        <i class="fas fa-book-open text-red-600"></i>
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <span class="subject-name">국어</span>
+                        <span>📖</span>
                     </div>
-                    <div class="text-2xl font-black text-red-700" id="koreanTime">0h</div>
-                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                    <div class="subject-time" id="koreanTime">0h</div>
+                    <div class="subject-label">총 학습 시간</div>
                 </div>
-                
-                <div class="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-purple-800">과학</h3>
-                        <i class="fas fa-flask text-purple-600"></i>
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <span class="subject-name">과학</span>
+                        <span>🔬</span>
                     </div>
-                    <div class="text-2xl font-black text-purple-700" id="scienceTime">0h</div>
-                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                    <div class="subject-time" id="scienceTime">0h</div>
+                    <div class="subject-label">총 학습 시간</div>
                 </div>
-                
-                <div class="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-yellow-800">사회</h3>
-                        <i class="fas fa-globe text-yellow-600"></i>
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <span class="subject-name">사회</span>
+                        <span>🌍</span>
                     </div>
-                    <div class="text-2xl font-black text-yellow-700" id="socialTime">0h</div>
-                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                    <div class="subject-time" id="socialTime">0h</div>
+                    <div class="subject-label">총 학습 시간</div>
                 </div>
             </div>
         </div>
 
         <!-- 학생 목록 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-                    <i class="fas fa-users text-green-600 mr-3"></i>
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-title-icon">👨‍🎓</span>
                     학생 학습 현황
                 </h2>
-                <div class="flex space-x-2">
-                    <select id="filterGrade" onchange="filterStudents()" 
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                <div class="filters">
+                    <select class="select" id="filterGrade" onchange="filterStudents()">
                         <option value="all">전체 학년</option>
                         <option value="중1">중1</option>
                         <option value="중2">중2</option>
                         <option value="중3">중3</option>
                     </select>
-                    <select id="sortBy" onchange="sortStudents()" 
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <select class="select" id="sortBy" onchange="sortStudents()">
                         <option value="name">이름순</option>
                         <option value="time">학습시간순</option>
                         <option value="recent">최근활동순</option>
                     </select>
                 </div>
             </div>
-            
-            <div id="studentsList" class="space-y-3">
-                <!-- 학생 카드들이 여기에 동적으로 생성됩니다 -->
+            <div class="students-grid" id="studentsList">
+                <!-- 학생 카드 동적 생성 -->
             </div>
-            
-            <div id="noStudentsMessage" class="text-center py-12 hidden">
-                <i class="fas fa-users text-gray-300 text-6xl mb-4"></i>
-                <p class="text-gray-500 text-lg">등록된 학생이 없습니다</p>
-                <p class="text-gray-400 text-sm mt-2">학생이 학생 포털에서 로그인하면 자동으로 표시됩니다</p>
+            <div id="noStudentsMessage" class="empty-state" style="display: none;">
+                <div class="empty-icon">👥</div>
+                <div class="empty-title">등록된 학생이 없습니다</div>
+                <div class="empty-text">학생이 학생 포털에서 로그인하면 자동으로 표시됩니다</div>
             </div>
         </div>
 
-        <!-- 상세 학습 데이터 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-clipboard-list text-green-600 mr-3"></i>
-                최근 학습 기록
-            </h2>
-            
-            <div id="recentRecords" class="space-y-3">
-                <!-- 최근 학습 기록이 여기에 표시됩니다 -->
+        <!-- 최근 학습 기록 -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-title-icon">📝</span>
+                    최근 학습 기록
+                </h2>
+            </div>
+            <div id="recentRecords">
+                <!-- 최근 기록 동적 생성 -->
             </div>
         </div>
-
-    </main>
+    </div>
 
     <script>
-        // 전역 변수
         let allStudents = [];
-        let filteredStudents = [];
+        let studyRecords = [];
 
-        // 페이지 로드 시 데이터 불러오기
+        // 페이지 로드
         window.addEventListener('DOMContentLoaded', () => {
             loadDashboardData();
             setInterval(loadDashboardData, 30000); // 30초마다 자동 새로고침
         });
 
-        // 대시보드 데이터 로드
+        // 데이터 로드
         function loadDashboardData() {
-            console.log('📊 대시보드 데이터 로딩 시작...');
+            console.log('🔄 데이터 로딩 중...');
             
-            // localStorage에서 모든 학생 데이터 수집
             const students = [];
-            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
             
-            // 저장된 모든 학생 정보 가져오기
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith('student_')) {
-                    const studentData = JSON.parse(localStorage.getItem(key));
-                    students.push(studentData);
+                    try {
+                        const studentData = JSON.parse(localStorage.getItem(key));
+                        students.push(studentData);
+                    } catch (e) {
+                        console.warn('학생 데이터 파싱 오류:', key);
+                    }
                 }
             }
             
-            console.log(`✅ 발견된 학생: ${students.length}명`);
             allStudents = students;
+            console.log(`✅ ${students.length}명 학생 발견`);
             
-            // 통계 업데이트
             updateStatistics(students, studyRecords);
-            
-            // 과목별 통계
             updateSubjectStatistics(studyRecords);
-            
-            // 학생 목록 표시
             displayStudents(students, studyRecords);
-            
-            // 최근 기록 표시
             displayRecentRecords(studyRecords);
         }
 
-        // 전체 통계 업데이트
+        // 통계 업데이트
         function updateStatistics(students, records) {
             const totalStudents = students.length;
+            document.getElementById('totalStudents').textContent = totalStudents;
             
-            // 최근 7일 내 활동 학생
+            // 최근 7일 활동
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             const activeStudents = students.filter(s => {
@@ -271,89 +870,81 @@
                 return studentRecords.some(r => new Date(r.date) >= sevenDaysAgo);
             }).length;
             
-            // 평균 학습 시간 계산
-            let totalMinutes = 0;
-            let recordCount = 0;
+            document.getElementById('activeStudents').textContent = activeStudents;
+            document.getElementById('activeRate').textContent = totalStudents > 0 
+                ? `📊 ${Math.round(activeStudents/totalStudents*100)}% 활동률`
+                : '-';
             
+            // 평균 학습 시간
+            let totalMinutes = 0;
             records.forEach(record => {
                 if (record.subjects) {
                     Object.values(record.subjects).forEach(subject => {
                         totalMinutes += subject.time || 0;
-                        recordCount++;
                     });
                 }
             });
             
-            const avgStudyTime = recordCount > 0 ? (totalMinutes / 60 / recordCount).toFixed(1) : 0;
+            const avgTime = students.length > 0 ? totalMinutes / 60 / students.length : 0;
+            document.getElementById('avgStudyTime').textContent = avgTime.toFixed(1) + 'h';
             
-            // 완료율 계산 (30일 기준)
+            // 완료율
             const targetDays = 30;
-            const targetMinutesPerDay = 135; // 3과목 × 45분
-            const totalTargetMinutes = students.length * targetDays * targetMinutesPerDay;
-            const completionRate = totalTargetMinutes > 0 ? Math.min(100, Math.round((totalMinutes / totalTargetMinutes) * 100)) : 0;
+            const targetMinutes = students.length * targetDays * 135;
+            const completion = targetMinutes > 0 ? Math.min(100, Math.round(totalMinutes/targetMinutes*100)) : 0;
+            document.getElementById('completionRate').textContent = completion + '%';
             
-            // DOM 업데이트
-            document.getElementById('totalStudents').textContent = totalStudents;
-            document.getElementById('activeStudents').textContent = activeStudents;
-            document.getElementById('avgStudyTime').textContent = avgStudyTime + 'h';
-            document.getElementById('completionRate').textContent = completionRate + '%';
+            // 신규 학생
+            document.getElementById('newStudents').innerHTML = totalStudents > 0 
+                ? `📈 전체 ${totalStudents}명`
+                : '📊 데이터 없음';
         }
 
-        // 과목별 통계 업데이트
+        // 과목별 통계
         function updateSubjectStatistics(records) {
-            const subjectTimes = {
-                '수학': 0,
-                '영어': 0,
-                '국어': 0,
-                '과학': 0,
-                '사회': 0
-            };
+            const subjects = { '수학': 0, '영어': 0, '국어': 0, '과학': 0, '사회': 0 };
             
             records.forEach(record => {
                 if (record.subjects) {
                     Object.entries(record.subjects).forEach(([subject, data]) => {
-                        if (subjectTimes.hasOwnProperty(subject)) {
-                            subjectTimes[subject] += data.time || 0;
+                        if (subjects.hasOwnProperty(subject)) {
+                            subjects[subject] += data.time || 0;
                         }
                     });
                 }
             });
             
-            // 시간으로 변환 및 표시
-            document.getElementById('mathTime').textContent = (subjectTimes['수학'] / 60).toFixed(1) + 'h';
-            document.getElementById('englishTime').textContent = (subjectTimes['영어'] / 60).toFixed(1) + 'h';
-            document.getElementById('koreanTime').textContent = (subjectTimes['국어'] / 60).toFixed(1) + 'h';
-            document.getElementById('scienceTime').textContent = (subjectTimes['과학'] / 60).toFixed(1) + 'h';
-            document.getElementById('socialTime').textContent = (subjectTimes['사회'] / 60).toFixed(1) + 'h';
+            document.getElementById('mathTime').textContent = (subjects['수학'] / 60).toFixed(1) + 'h';
+            document.getElementById('englishTime').textContent = (subjects['영어'] / 60).toFixed(1) + 'h';
+            document.getElementById('koreanTime').textContent = (subjects['국어'] / 60).toFixed(1) + 'h';
+            document.getElementById('scienceTime').textContent = (subjects['과학'] / 60).toFixed(1) + 'h';
+            document.getElementById('socialTime').textContent = (subjects['사회'] / 60).toFixed(1) + 'h';
         }
 
         // 학생 목록 표시
         function displayStudents(students, records) {
             const container = document.getElementById('studentsList');
-            const noStudentsMsg = document.getElementById('noStudentsMessage');
+            const noMsg = document.getElementById('noStudentsMessage');
             
             if (students.length === 0) {
                 container.innerHTML = '';
-                noStudentsMsg.classList.remove('hidden');
+                noMsg.style.display = 'block';
                 return;
             }
             
-            noStudentsMsg.classList.add('hidden');
+            noMsg.style.display = 'none';
             
-            // 학생별 학습 데이터 계산
             const studentsWithStats = students.map(student => {
                 const studentRecords = records.filter(r => r.student_id === student.id);
-                
                 let totalMinutes = 0;
                 let lastActivity = null;
                 
                 studentRecords.forEach(record => {
                     if (record.subjects) {
-                        Object.values(record.subjects).forEach(subject => {
-                            totalMinutes += subject.time || 0;
+                        Object.values(record.subjects).forEach(s => {
+                            totalMinutes += s.time || 0;
                         });
                     }
-                    
                     if (!lastActivity || new Date(record.date) > new Date(lastActivity)) {
                         lastActivity = record.date;
                     }
@@ -362,8 +953,8 @@
                 return {
                     ...student,
                     totalHours: (totalMinutes / 60).toFixed(1),
-                    totalMinutes: totalMinutes,
-                    lastActivity: lastActivity,
+                    totalMinutes,
+                    lastActivity,
                     recordCount: studentRecords.length
                 };
             });
@@ -371,103 +962,76 @@
             // 정렬
             const sortBy = document.getElementById('sortBy').value;
             studentsWithStats.sort((a, b) => {
-                if (sortBy === 'time') {
-                    return b.totalMinutes - a.totalMinutes;
-                } else if (sortBy === 'recent') {
-                    return new Date(b.lastActivity || 0) - new Date(a.lastActivity || 0);
-                } else {
-                    return a.name.localeCompare(b.name);
-                }
+                if (sortBy === 'time') return b.totalMinutes - a.totalMinutes;
+                if (sortBy === 'recent') return new Date(b.lastActivity || 0) - new Date(a.lastActivity || 0);
+                return a.name.localeCompare(b.name);
             });
             
-            // 필터링
+            // 필터
             const filterGrade = document.getElementById('filterGrade').value;
-            const filtered = filterGrade === 'all' 
-                ? studentsWithStats 
-                : studentsWithStats.filter(s => s.grade === filterGrade);
-            
-            filteredStudents = filtered;
+            const filtered = filterGrade === 'all' ? studentsWithStats : studentsWithStats.filter(s => s.grade === filterGrade);
             
             // HTML 생성
-            container.innerHTML = filtered.map((student, index) => {
-                const badgeColor = student.totalMinutes >= 60*60 ? 'bg-green-100 text-green-800' :
-                                   student.totalMinutes >= 30*60 ? 'bg-blue-100 text-blue-800' :
-                                   student.totalMinutes > 0 ? 'bg-yellow-100 text-yellow-800' :
-                                   'bg-gray-100 text-gray-800';
-                
-                const activityText = student.lastActivity 
-                    ? `최근 활동: ${new Date(student.lastActivity).toLocaleDateString()}`
-                    : '활동 기록 없음';
+            container.innerHTML = filtered.map(s => {
+                const badge = s.totalMinutes >= 3600 ? '🏆' :
+                             s.totalMinutes >= 1800 ? '⭐' :
+                             s.totalMinutes > 0 ? '📚' : '💤';
+                             
+                const status = s.totalMinutes >= 3600 ? '우수' :
+                              s.totalMinutes >= 1800 ? '양호' :
+                              s.totalMinutes > 0 ? '학습중' : '시작 전';
+                              
+                const lastActivity = s.lastActivity 
+                    ? new Date(s.lastActivity).toLocaleDateString()
+                    : '활동 없음';
                 
                 return `
-                    <div class="student-card bg-white p-4 rounded-lg border-2 border-gray-200 hover:border-green-400 transition cursor-pointer"
-                         onclick="viewStudentDetail('${student.id}')">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    ${student.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-gray-800 text-lg">${student.name}</h3>
-                                    <div class="flex items-center space-x-2 text-sm text-gray-600">
-                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded">${student.grade}</span>
-                                        <span class="text-xs text-gray-500">${activityText}</span>
-                                    </div>
+                    <div class="student-card" onclick="viewStudent('${s.id}')">
+                        <div class="student-info">
+                            <div class="student-avatar">${s.name.charAt(0)}</div>
+                            <div class="student-details">
+                                <div class="student-name">${s.name}</div>
+                                <div class="student-meta">
+                                    <span class="badge badge-grade">${s.grade}</span>
+                                    <span class="badge badge-status">${badge} ${status}</span>
+                                    <span>📅 ${lastActivity}</span>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-black text-green-600">${student.totalHours}h</div>
-                                <div class="text-xs text-gray-500">${student.recordCount}일 학습</div>
-                                <span class="inline-block mt-1 px-2 py-1 ${badgeColor} rounded text-xs font-semibold">
-                                    ${student.totalMinutes >= 60*60 ? '🏆 우수' :
-                                      student.totalMinutes >= 30*60 ? '👍 양호' :
-                                      student.totalMinutes > 0 ? '📝 학습중' : '⏳ 시작 전'}
-                                </span>
-                            </div>
+                        </div>
+                        <div class="student-stats">
+                            <div class="student-hours">${s.totalHours}h</div>
+                            <div class="student-days">${s.recordCount}일 학습</div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        // 최근 학습 기록 표시
+        // 최근 기록
         function displayRecentRecords(records) {
             const container = document.getElementById('recentRecords');
+            const recent = records.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 15);
             
-            // 최근 10개 기록만
-            const recentRecords = records
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .slice(0, 10);
-            
-            if (recentRecords.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-8">아직 학습 기록이 없습니다</p>';
+            if (recent.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">학습 기록이 없습니다</div></div>';
                 return;
             }
             
-            container.innerHTML = recentRecords.map(record => {
-                const student = allStudents.find(s => s.id === record.student_id);
-                const studentName = student ? student.name : '알 수 없음';
-                
-                const subjects = record.subjects ? Object.entries(record.subjects) : [];
+            container.innerHTML = recent.map(r => {
+                const student = allStudents.find(s => s.id === r.student_id);
+                const name = student ? student.name : '알 수 없음';
+                const subjects = r.subjects ? Object.entries(r.subjects) : [];
                 
                 return `
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex items-center justify-between mb-2">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                    ${studentName.charAt(0)}
-                                </div>
-                                <div>
-                                    <span class="font-bold text-gray-800">${studentName}</span>
-                                    <span class="text-sm text-gray-500 ml-2">${record.date}</span>
-                                </div>
-                            </div>
+                    <div class="record-item">
+                        <div class="record-header">
+                            <div class="record-avatar">${name.charAt(0)}</div>
+                            <span class="record-name">${name}</span>
+                            <span class="record-date">${r.date}</span>
                         </div>
-                        <div class="flex flex-wrap gap-2 mt-2">
+                        <div class="record-subjects">
                             ${subjects.map(([subject, data]) => `
-                                <span class="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm">
-                                    ${subject}: <strong>${data.time}분</strong>
-                                </span>
+                                <span class="subject-tag">${subject} <strong>${data.time}분</strong></span>
                             `).join('')}
                         </div>
                     </div>
@@ -475,12 +1039,7 @@
             }).join('');
         }
 
-        // 학생 상세 보기
-        function viewStudentDetail(studentId) {
-            alert(`학생 상세 페이지는 추후 추가됩니다.\n학생 ID: ${studentId}`);
-        }
-
-        // 필터 및 정렬
+        // 필터 & 정렬
         function filterStudents() {
             loadDashboardData();
         }
@@ -489,10 +1048,28 @@
             loadDashboardData();
         }
 
-        // 데이터 새로고침
+        // 새로고침
         function refreshData() {
+            showToast('🔄 데이터를 새로고침했습니다');
             loadDashboardData();
-            alert('✅ 데이터를 새로고침했습니다!');
+        }
+
+        // 학생 상세
+        function viewStudent(id) {
+            showToast('📊 학생 상세 기능은 추후 추가됩니다');
+        }
+
+        // 토스트 알림
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
     </script>
 </body>
