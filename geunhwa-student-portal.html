@@ -323,18 +323,18 @@
     <div id="successMessage" class="hidden success-toast"></div>
     
     <!-- 상단 네비게이션 (단순화) -->
-    <nav class="bg-gradient-to-r from-green-700 to-green-600 sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-14">
+    <nav class="bg-gradient-to-r from-emerald-600 to-green-500 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-full mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-16">
                 <!-- 로고 & 타이틀 -->
-                <div class="flex items-center space-x-3">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-8 h-8">
-                    <div>
-                        <h1 class="text-base font-bold text-white">
+                <div class="flex items-center space-x-4">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
+                    <div class="flex items-center space-x-6">
+                        <h1 class="text-xl font-bold text-white tracking-wide">
                             자기주도학습UP 챌린지
                         </h1>
-                        <p class="text-xs text-green-100" id="studentInfo">
-                            경주 근화여자중학교
+                        <p class="text-base text-green-50 border-l border-green-300 pl-6" id="studentInfo">
+                            📚 경주 근화여자중학교
                         </p>
                     </div>
                 </div>
@@ -589,10 +589,10 @@
             </div>
         </div>
 
-        <!-- 📅 학습 달성 캘린더 (축소) -->
-        <div class="glass-effect rounded-xl shadow-lg p-4 animate-slide-up" id="achievementCalendar">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-sm font-bold text-gray-800">
+        <!-- 📅 학습 달성 캘린더 (더욱 축소) -->
+        <div class="glass-effect rounded-xl shadow-lg p-3 animate-slide-up" id="achievementCalendar">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-xs font-bold text-gray-800">
                     <i class="fas fa-calendar-check text-green-700 mr-1"></i>학습 캘린더
                 </h3>
                 <div class="flex space-x-1">
@@ -606,19 +606,19 @@
                 </div>
             </div>
             
-            <!-- 캘린더 그리드 (축소) -->
-            <div class="grid grid-cols-7 gap-1 mb-2">
+            <!-- 캘린더 그리드 (더욱 축소) -->
+            <div class="grid grid-cols-7 gap-0.5 mb-1">
                 <!-- 요일 헤더 -->
-                <div class="text-center py-1 font-bold text-xs text-red-500">일</div>
-                <div class="text-center py-1 font-bold text-xs text-gray-700">월</div>
-                <div class="text-center py-1 font-bold text-xs text-gray-700">화</div>
-                <div class="text-center py-1 font-bold text-xs text-gray-700">수</div>
-                <div class="text-center py-1 font-bold text-xs text-gray-700">목</div>
-                <div class="text-center py-1 font-bold text-xs text-gray-700">금</div>
-                <div class="text-center py-1 font-bold text-xs text-blue-500">토</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-red-500">일</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-gray-700">월</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-gray-700">화</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-gray-700">수</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-gray-700">목</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-gray-700">금</div>
+                <div class="text-center py-0.5 font-bold text-[10px] text-blue-500">토</div>
             </div>
             
-            <div id="calendarDays" class="grid grid-cols-7 gap-1">
+            <div id="calendarDays" class="grid grid-cols-7 gap-0.5">
                 <!-- JavaScript로 동적 생성 -->
             </div>
             
@@ -2282,7 +2282,7 @@
             // 빈 칸 채우기 (이전 달)
             for (let i = 0; i < firstDayOfWeek; i++) {
                 const emptyDiv = document.createElement('div');
-                emptyDiv.className = 'text-center py-1';
+                emptyDiv.className = 'text-center py-0.5';
                 daysElement.appendChild(emptyDiv);
             }
             
@@ -2320,11 +2320,11 @@
                     borderColor = achievement >= 80 ? 'border-green-300' : 'border-gray-300';
                 }
                 
-                dayDiv.className = `text-center py-1 rounded border ${bgColor} ${borderColor} hover:shadow transition cursor-pointer`;
+                dayDiv.className = `text-center py-0.5 px-1 rounded border ${bgColor} ${borderColor} hover:shadow transition cursor-pointer`;
                 dayDiv.innerHTML = `
-                    <div class="text-xs font-bold ${textColor}">${day}</div>
-                    ${emoji ? `<div class="text-sm mt-0.5">${emoji}</div>` : ''}
-                    ${achievement > 0 ? `<div class="text-xs text-gray-600">${achievement}%</div>` : ''}
+                    <div class="text-[10px] font-bold ${textColor}">${day}</div>
+                    ${emoji ? `<div class="text-xs mt-0.5">${emoji}</div>` : ''}
+                    ${achievement > 0 ? `<div class="text-[9px] text-gray-600">${achievement}%</div>` : ''}
                 `;
                 
                 // 클릭 이벤트 (날짜별 상세 정보)
