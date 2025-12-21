@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 자기주도학습UP 통합 포털 - DA.UM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --dark-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 애니메이션 배경 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            top: 50%;
+            left: 50%;
+            animation-delay: 14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, -100px) scale(1.1); }
+            66% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        /* 컨테이너 */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* 헤더 */
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 검색 바 */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.25rem 3.5rem 1.25rem 1.5rem;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 탭 버튼 */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .tab-btn {
+            padding: 0.875rem 2rem;
+            background: rgba(30, 41, 59, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* 카드 그리드 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.7s both;
+        }
+
+        /* 카드 */
+        .card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+
+        .card:hover::before {
+            opacity: 0.1;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.375rem 0.875rem;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .tag.new {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 카테고리별 색상 */
+        .card.management { border-color: rgba(139, 92, 246, 0.3); }
+        .card.management:hover { border-color: var(--secondary); box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3); }
+
+        .card.student { border-color: rgba(16, 185, 129, 0.3); }
+        .card.student:hover { border-color: var(--success); box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3); }
+
+        .card.parent { border-color: rgba(236, 72, 153, 0.3); }
+        .card.parent:hover { border-color: var(--accent); box-shadow: 0 20px 60px rgba(236, 72, 153, 0.3); }
+
+        .card.teacher { border-color: rgba(245, 158, 11, 0.3); }
+        .card.teacher:hover { border-color: var(--warning); box-shadow: 0 20px 60px rgba(245, 158, 11, 0.3); }
+
+        .card.document { border-color: rgba(59, 130, 246, 0.3); }
+        .card.document:hover { border-color: #3b82f6; box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3); }
+
+        /* 푸터 */
+        .footer {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                justify-content: flex-start;
+            }
+
+            .tab-btn {
+                font-size: 0.85rem;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+
+        .empty-state.active {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- 배경 애니메이션 -->
+    <div class="bg-animation">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <div class="header-logo">🚀</div>
+            <h1 class="header-title">자기주도학습UP 통합 포털</h1>
+            <p class="header-subtitle">경주 근화여자중학교 × DA.UM 다움진로진학컨설팅</p>
+        </header>
+
+        <!-- 검색 -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="포털 또는 자료 검색... (예: 학생, 교사, 보고서)" />
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <!-- 탭 -->
+        <div class="tabs">
+            <button class="tab-btn active" data-category="all">🌟 전체</button>
+            <button class="tab-btn" data-category="management">📊 관리 시스템</button>
+            <button class="tab-btn" data-category="student">🎓 학생용</button>
+            <button class="tab-btn" data-category="teacher">👨‍🏫 교사용</button>
+            <button class="tab-btn" data-category="parent">👨‍👩‍👧 학부모용</button>
+            <button class="tab-btn" data-category="document">📄 자료실</button>
+        </div>
+
+        <!-- 로딩 -->
+        <div class="loading" id="loading">
+            <div>⏳ 로딩 중...</div>
+        </div>
+
+        <!-- 카드 그리드 -->
+        <div class="cards-grid" id="cardsGrid">
+            <!-- JavaScript로 동적 생성 -->
+        </div>
+
+        <!-- 빈 상태 -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">🔍</div>
+            <p class="empty-text">검색 결과가 없습니다</p>
+        </div>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p class="footer-text">© 2025 DA.UM 다움진로진학컨설팅. All rights reserved.</p>
+            <p class="footer-logo">자기주도학습UP 챌린지</p>
+        </footer>
+    </div>
+
+    <script>
+        // 포털 데이터
+        const portals = [
+            // 관리 시스템
+            {
+                icon: '🌐',
+                title: '통합 관리 대시보드',
+                desc: '학생 추가/삭제, 학습 기록, 실시간 통계 - 올인원 관리 시스템',
+                tags: ['NEW', '학생관리', '통계', '실시간'],
+                category: 'management',
+                url: 'index.html'
+            },
+            
+            // 교사용
+            {
+                icon: '👨‍🏫',
+                title: '중학생 교사 대시보드',
+                desc: '성취도 평가 기반 학습 관리 - 진단평가 결과 반영',
+                tags: ['중학생', '성취도', '진단평가'],
+                category: 'teacher',
+                url: 'middle-teacher-dashboard.html'
+            },
+            {
+                icon: '🎓',
+                title: '고등학생 교사 대시보드',
+                desc: '내신 등급 관리 시스템 - 입시 지도 및 학생부 관리',
+                tags: ['고등학생', '내신등급', '입시'],
+                category: 'teacher',
+                url: 'teacher-dashboard.html'
+            },
+            
+            // 학생용
+            {
+                icon: '📚',
+                title: '학생 포털 (30일)',
+                desc: '일일 학습 관리 및 기록 - 3과목 동시 학습, 45분 타이머',
+                tags: ['30일', '학습기록', '타이머'],
+                category: 'student',
+                url: 'geunhwa-student-portal.html'
+            },
+            {
+                icon: '📖',
+                title: '학생 포털 (100일)',
+                desc: '100일 장기 프로그램 - 심화 학습 및 성취도 관리',
+                tags: ['100일', '장기', '심화'],
+                category: 'student',
+                url: 'student-portal-100days.html'
+            },
+            
+            // 학부모용
+            {
+                icon: '👨‍👩‍👧',
+                title: '학부모 대시보드',
+                desc: '자녀 학습 현황 실시간 조회 - 30일 캘린더, 과목별 통계',
+                tags: ['학습현황', '통계', '실시간'],
+                category: 'parent',
+                url: 'parent-dashboard.html'
+            },
+            
+            // 자료실
+            {
+                icon: '📊',
+                title: '프로그램 보고서',
+                desc: '개발 취지, 운영 방법, 기대 효과 - 30일/100일 플랜 포함',
+                tags: ['보고서', '계획', '효과'],
+                category: 'document',
+                url: 'program-report.html'
+            },
+            {
+                icon: '📄',
+                title: '2페이지 제안서',
+                desc: 'A4 인쇄 최적화 홍보 제안서 - 학교 제안용 간결 버전',
+                tags: ['제안서', 'A4', '인쇄'],
+                category: 'document',
+                url: 'geunhwa-proposal.html'
+            },
+            {
+                icon: '🎬',
+                title: '100일 프로그램 프레젠테이션',
+                desc: '100일 프로그램 상세 발표 자료 - 비전 및 로드맵',
+                tags: ['100일', '발표', '비전'],
+                category: 'document',
+                url: 'presentation-proposal-100days.html'
+            }
+        ];
+
+        // 카드 렌더링
+        function renderCards(filteredPortals) {
+            const grid = document.getElementById('cardsGrid');
+            const empty = document.getElementById('emptyState');
+            
+            if (filteredPortals.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.add('active');
+                return;
+            }
+            
+            empty.classList.remove('active');
+            
+            grid.innerHTML = filteredPortals.map(portal => `
+                <div class="card ${portal.category}" onclick="window.location.href='${portal.url}'">
+                    <div class="card-content">
+                        <div class="card-icon">${portal.icon}</div>
+                        <h3 class="card-title">${portal.title}</h3>
+                        <p class="card-desc">${portal.desc}</p>
+                        <div class="card-tags">
+                            ${portal.tags.map(tag => 
+                                `<span class="tag ${tag === 'NEW' ? 'new' : ''}">${tag}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 탭 필터링
+        function filterByCategory(category) {
+            const filtered = category === 'all' 
+                ? portals 
+                : portals.filter(p => p.category === category);
+            renderCards(filtered);
+        }
+
+        // 검색
+        function search(query) {
+            const filtered = portals.filter(p => 
+                p.title.toLowerCase().includes(query.toLowerCase()) ||
+                p.desc.toLowerCase().includes(query.toLowerCase()) ||
+                p.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+            );
+            renderCards(filtered);
+        }
+
+        // 이벤트 리스너
+        document.addEventListener('DOMContentLoaded', () => {
+            // 초기 렌더링
+            renderCards(portals);
+            
+            // 탭 클릭
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    filterByCategory(e.target.dataset.category);
+                });
+            });
+            
+            // 검색
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                if (query === '') {
+                    const activeTab = document.querySelector('.tab-btn.active');
+                    filterByCategory(activeTab.dataset.category);
+                } else {
+                    search(query);
+                }
+            });
+            
+            // 엔터키 검색
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    search(e.target.value.trim());
+                }
+            });
+        });
+    </script>
+</body>
+</html>
