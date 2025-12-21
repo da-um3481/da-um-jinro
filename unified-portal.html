@@ -797,7 +797,7 @@
         </aside>
 
         <!-- 메인 콘텐츠 -->
-        <main class="main-content">
+        <main class="main-content" id="mainContent">
             <!-- 상단 바 -->
             <div class="top-bar">
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">
@@ -1087,8 +1087,17 @@
 
             document.getElementById('pageTitle').textContent = titles[pageName] || '자기주도학습UP';
 
+            // 홈 페이지인 경우 사이드바 보이기 (데스크톱)
+            if (pageName === 'home' && window.innerWidth > 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                sidebar.classList.remove('hidden');
+                mainContent.classList.remove('expanded');
+                document.getElementById('sidebarToggleText').textContent = '사이드바 숨기기';
+                document.getElementById('sidebarToggleIcon').className = 'fas fa-times';
+            }
             // 홈 페이지가 아닌 경우 사이드바 자동 숨김 (데스크톱)
-            if (pageName !== 'home' && window.innerWidth > 1024) {
+            else if (pageName !== 'home' && window.innerWidth > 1024) {
                 const sidebar = document.getElementById('sidebar');
                 const mainContent = document.getElementById('mainContent');
                 sidebar.classList.add('hidden');
@@ -1147,6 +1156,19 @@
         // 초기 로드
         window.addEventListener('DOMContentLoaded', () => {
             console.log('🎓 자기주도학습UP 통합 시스템 로드 완료');
+            
+            // 초기 상태: 홈 페이지에서는 사이드바 보이기
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('hidden');
+                mainContent.classList.remove('expanded');
+                if (document.getElementById('sidebarToggleText')) {
+                    document.getElementById('sidebarToggleText').textContent = '사이드바 숨기기';
+                    document.getElementById('sidebarToggleIcon').className = 'fas fa-times';
+                }
+            }
         });
 
         // 반응형 처리
