@@ -324,37 +324,36 @@
     
     <!-- 상단 네비게이션 (단순화) -->
     <nav class="bg-gradient-to-r from-emerald-600 to-green-500 sticky top-0 z-50 shadow-xl">
-        <div class="max-w-full mx-auto px-6 lg:px-12">
-            <div class="flex items-center justify-between h-16">
+        <div class="max-w-full mx-auto px-3 sm:px-6 lg:px-12">
+            <div class="flex items-center justify-between h-14 sm:h-16">
                 <!-- 로고 & 타이틀 -->
-                <div class="flex items-center space-x-4">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
-                    <div class="flex items-center space-x-6">
-                        <h1 class="text-xl font-bold text-white tracking-wide">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-7 h-7 sm:w-10 sm:h-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                        <h1 class="text-sm sm:text-xl font-bold text-white tracking-wide">
                             자기주도학습UP 챌린지
                         </h1>
-                        <p class="text-base text-green-50 border-l border-green-300 pl-6" id="studentInfo">
+                        <p class="text-xs sm:text-base text-green-50 sm:border-l sm:border-green-300 sm:pl-4 hidden sm:block" id="studentInfo">
                             📚 경주 근화여자중학교
                         </p>
                     </div>
                 </div>
                 
                 <!-- 우측 메뉴 -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1 sm:space-x-2">
                     <!-- 스케줄 재생성 버튼 -->
                     <button 
                         onclick="regenerateSchedule()" 
-                        class="px-3 py-1.5 bg-white text-green-700 rounded-lg text-sm font-semibold hover:bg-green-50 transition-all" 
+                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-white text-green-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-50 transition-all" 
                         title="3과목 다시 생성">
-                        <i class="fas fa-sync-alt mr-1"></i>
-                        <span class="hidden sm:inline">스케줄 재생성</span>
-                        <span class="sm:hidden">재생성</span>
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="hidden md:inline ml-1">재생성</span>
                     </button>
                     
                     <!-- 🧪 테스트: 전체 초기화 버튼 -->
                     <button 
                         onclick="if(confirm('모든 데이터를 삭제하고 처음부터 시작하시겠습니까?')) { localStorage.clear(); location.reload(); }" 
-                        class="px-2 py-1.5 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-all" 
+                        class="px-2 py-1 sm:px-2 sm:py-1.5 bg-red-500 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-600 transition-all" 
                         title="전체 초기화">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -362,7 +361,7 @@
                     <!-- 로그아웃 버튼 -->
                     <button 
                         onclick="resetStudent()" 
-                        class="p-2 text-white hover:bg-green-600 rounded-lg transition" 
+                        class="p-1.5 sm:p-2 text-white hover:bg-green-600 rounded-lg transition" 
                         title="다른 학생으로 로그인">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
