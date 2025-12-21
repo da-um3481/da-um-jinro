@@ -42,10 +42,6 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
         
-        .hero-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
         .card-gradient-1 {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
@@ -69,20 +65,48 @@
         .stat-card:hover {
             transform: scale(1.05);
         }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
     <!-- 헤더 -->
     <header class="glass-effect rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 animate-slide-up">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center gap-4">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-12 h-12 sm:w-16 sm:h-16">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white text-2xl font-black">
+                        DA
+                    </div>
                     <div>
                         <h1 class="text-2xl sm:text-4xl font-black text-gray-800">
-                            🎓 자기주도학습UP 챌린지
+                            🎓 통합 관리 시스템
                         </h1>
-                        <p class="text-gray-600 mt-1">경주 근화여자중학교 통합 관리 시스템</p>
+                        <p class="text-gray-600 mt-1">경주 근화여자중학교 자기주도학습UP 챌린지</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -93,199 +117,298 @@
         </div>
     </header>
 
+    <!-- 탭 메뉴 -->
+    <div class="max-w-7xl mx-auto mb-8 animate-slide-up">
+        <div class="glass-effect rounded-2xl p-2 flex gap-2 overflow-x-auto">
+            <button class="tab-button active flex-1 min-w-[120px] px-6 py-3 rounded-xl font-bold transition" onclick="switchTab('dashboard')">
+                <i class="fas fa-chart-line mr-2"></i>대시보드
+            </button>
+            <button class="tab-button flex-1 min-w-[120px] px-6 py-3 rounded-xl font-bold transition" onclick="switchTab('students')">
+                <i class="fas fa-users mr-2"></i>학생 관리
+            </button>
+            <button class="tab-button flex-1 min-w-[120px] px-6 py-3 rounded-xl font-bold transition" onclick="switchTab('records')">
+                <i class="fas fa-clipboard-list mr-2"></i>학습 기록
+            </button>
+            <button class="tab-button flex-1 min-w-[120px] px-6 py-3 rounded-xl font-bold transition" onclick="switchTab('portals')">
+                <i class="fas fa-th-large mr-2"></i>포털
+            </button>
+        </div>
+    </div>
+
     <!-- 메인 컨텐츠 -->
-    <main class="max-w-6xl mx-auto space-y-8">
+    <main class="max-w-7xl mx-auto space-y-8">
         
-        <!-- 전체 통계 -->
-        <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-chart-line text-purple-600 mr-3"></i>
-                전체 프로그램 현황
-            </h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl text-center">
-                    <i class="fas fa-users text-3xl mb-3 opacity-80"></i>
-                    <div class="text-4xl font-black mb-2" id="totalStudents">0</div>
-                    <div class="text-sm opacity-90">참여 학생</div>
-                </div>
+        <!-- 대시보드 탭 -->
+        <div id="dashboard-tab" class="tab-content">
+            <!-- 전체 통계 -->
+            <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-purple-600 mr-3"></i>
+                    전체 프로그램 현황
+                </h2>
                 
-                <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl text-center">
-                    <i class="fas fa-check-circle text-3xl mb-3 opacity-80"></i>
-                    <div class="text-4xl font-black mb-2" id="activeStudents">0</div>
-                    <div class="text-sm opacity-90">활동 학생 (7일)</div>
-                </div>
-                
-                <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl text-center">
-                    <i class="fas fa-clock text-3xl mb-3 opacity-80"></i>
-                    <div class="text-4xl font-black mb-2" id="totalHours">0h</div>
-                    <div class="text-sm opacity-90">총 학습시간</div>
-                </div>
-                
-                <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl text-center">
-                    <i class="fas fa-percentage text-3xl mb-3 opacity-80"></i>
-                    <div class="text-4xl font-black mb-2" id="completionRate">0%</div>
-                    <div class="text-sm opacity-90">평균 완료율</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 주요 포털 -->
-        <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-th-large text-purple-600 mr-3"></i>
-                주요 포털 바로가기
-            </h2>
-            
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- 학생 포털 -->
-                <div class="portal-card card-gradient-1 rounded-2xl p-8 text-white shadow-lg"
-                     onclick="window.location.href='geunhwa-student-portal.html'">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <div class="text-5xl mb-4">🎓</div>
-                            <h3 class="text-2xl font-bold mb-2">학생 포털</h3>
-                            <p class="text-sm opacity-90 mb-4">일일 학습 관리 및 기록</p>
-                        </div>
-                        <i class="fas fa-arrow-right text-2xl opacity-70"></i>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl text-center">
+                        <i class="fas fa-users text-3xl mb-3 opacity-80"></i>
+                        <div class="text-4xl font-black mb-2" id="totalStudents">0</div>
+                        <div class="text-sm opacity-90">참여 학생</div>
                     </div>
-                    <div class="flex items-center gap-4 text-sm">
-                        <div class="flex items-center gap-1">
-                            <i class="fas fa-book"></i>
-                            <span>3과목 동시 학습</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <i class="fas fa-clock"></i>
-                            <span>45분 타이머</span>
-                        </div>
+                    
+                    <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl text-center">
+                        <i class="fas fa-check-circle text-3xl mb-3 opacity-80"></i>
+                        <div class="text-4xl font-black mb-2" id="activeStudents">0</div>
+                        <div class="text-sm opacity-90">활동 학생 (7일)</div>
+                    </div>
+                    
+                    <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl text-center">
+                        <i class="fas fa-clock text-3xl mb-3 opacity-80"></i>
+                        <div class="text-4xl font-black mb-2" id="totalHours">0h</div>
+                        <div class="text-sm opacity-90">총 학습시간</div>
+                    </div>
+                    
+                    <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl text-center">
+                        <i class="fas fa-percentage text-3xl mb-3 opacity-80"></i>
+                        <div class="text-4xl font-black mb-2" id="completionRate">0%</div>
+                        <div class="text-sm opacity-90">평균 완료율</div>
                     </div>
                 </div>
+            </section>
 
-                <!-- 학부모 관리 -->
-                <div class="portal-card card-gradient-2 rounded-2xl p-8 text-white shadow-lg"
-                     onclick="window.location.href='parent-dashboard.html'">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <div class="text-5xl mb-4">👨‍👩‍👧</div>
-                            <h3 class="text-2xl font-bold mb-2">학부모 관리</h3>
-                            <p class="text-sm opacity-90 mb-4">자녀 학습 현황 조회</p>
-                        </div>
-                        <i class="fas fa-arrow-right text-2xl opacity-70"></i>
+            <!-- 과목별 통계 -->
+            <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-book text-purple-600 mr-3"></i>
+                    과목별 학습 통계
+                </h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 text-center">
+                        <div class="text-3xl mb-2">🧮</div>
+                        <div class="font-bold text-blue-800 mb-1">수학</div>
+                        <div class="text-2xl font-black text-blue-700" id="mathTime">0h</div>
                     </div>
-                    <div class="flex items-center gap-4 text-sm">
-                        <div class="flex items-center gap-1">
-                            <i class="fas fa-chart-line"></i>
-                            <span>실시간 현황</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <i class="fas fa-calendar"></i>
-                            <span>30일 캘린더</span>
-                        </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 text-center">
+                        <div class="text-3xl mb-2">🌏</div>
+                        <div class="font-bold text-green-800 mb-1">영어</div>
+                        <div class="text-2xl font-black text-green-700" id="englishTime">0h</div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 추가 자료 -->
-        <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-file-alt text-purple-600 mr-3"></i>
-                프로그램 자료
-            </h2>
-            
-            <div class="grid md:grid-cols-2 gap-4">
-                <!-- 프로그램 보고서 -->
-                <div class="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-purple-400 transition cursor-pointer"
-                     onclick="window.location.href='program-report.html'">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-2xl">
-                            📊
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-gray-800 mb-1">프로그램 보고서</h3>
-                            <p class="text-sm text-gray-600">개발 취지, 운영 방법, 기대 효과</p>
-                        </div>
-                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    
+                    <div class="bg-red-50 p-4 rounded-xl border-2 border-red-200 text-center">
+                        <div class="text-3xl mb-2">📖</div>
+                        <div class="font-bold text-red-800 mb-1">국어</div>
+                        <div class="text-2xl font-black text-red-700" id="koreanTime">0h</div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-xl border-2 border-purple-200 text-center">
+                        <div class="text-3xl mb-2">🔬</div>
+                        <div class="font-bold text-purple-800 mb-1">과학</div>
+                        <div class="text-2xl font-black text-purple-700" id="scienceTime">0h</div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 text-center">
+                        <div class="text-3xl mb-2">🌍</div>
+                        <div class="font-bold text-yellow-800 mb-1">사회</div>
+                        <div class="text-2xl font-black text-yellow-700" id="socialTime">0h</div>
                     </div>
                 </div>
+            </section>
 
-                <!-- 학생 가이드 -->
-                <div class="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-blue-400 transition cursor-pointer"
-                     onclick="window.location.href='student-guide.html'">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
-                            📖
+            <!-- 최근 활동 -->
+            <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-history text-purple-600 mr-3"></i>
+                    최근 학습 활동
+                </h2>
+                
+                <div id="recentActivity" class="space-y-3">
+                    <!-- 동적 생성 -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 학생 관리 탭 -->
+        <div id="students-tab" class="tab-content" style="display: none;">
+            <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-users text-purple-600 mr-3"></i>
+                        학생 관리
+                    </h2>
+                    <button onclick="showAddStudentModal()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition">
+                        <i class="fas fa-plus mr-2"></i>학생 추가
+                    </button>
+                </div>
+
+                <div id="studentsList" class="space-y-3">
+                    <!-- 동적 생성 -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 학습 기록 탭 -->
+        <div id="records-tab" class="tab-content" style="display: none;">
+            <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-clipboard-list text-purple-600 mr-3"></i>
+                    전체 학습 기록
+                </h2>
+
+                <div id="allRecords" class="space-y-3">
+                    <!-- 동적 생성 -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 포털 탭 -->
+        <div id="portals-tab" class="tab-content" style="display: none;">
+            <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-th-large text-purple-600 mr-3"></i>
+                    주요 포털 바로가기
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- 학생 포털 -->
+                    <div class="portal-card card-gradient-1 rounded-2xl p-8 text-white shadow-lg"
+                         onclick="window.location.href='geunhwa-student-portal.html'">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-5xl mb-4">🎓</div>
+                                <h3 class="text-2xl font-bold mb-2">학생 포털</h3>
+                                <p class="text-sm opacity-90 mb-4">일일 학습 관리 및 기록</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-2xl opacity-70"></i>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-gray-800 mb-1">학생 가이드</h3>
-                            <p class="text-sm text-gray-600">프로그램 사용 설명서</p>
+                        <div class="flex items-center gap-4 text-sm">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-book"></i>
+                                <span>3과목 동시 학습</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-clock"></i>
+                                <span>45분 타이머</span>
+                            </div>
                         </div>
-                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+
+                    <!-- 학부모 관리 -->
+                    <div class="portal-card card-gradient-2 rounded-2xl p-8 text-white shadow-lg"
+                         onclick="window.location.href='parent-dashboard.html'">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-5xl mb-4">👨‍👩‍👧</div>
+                                <h3 class="text-2xl font-bold mb-2">학부모 대시보드</h3>
+                                <p class="text-sm opacity-90 mb-4">자녀 학습 현황 조회</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-2xl opacity-70"></i>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-chart-line"></i>
+                                <span>실시간 현황</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-calendar"></i>
+                                <span>30일 캘린더</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- 최근 활동 -->
-        <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-history text-purple-600 mr-3"></i>
-                최근 학습 활동
-            </h2>
-            
-            <div id="recentActivity" class="space-y-3">
-                <!-- 동적 생성 -->
-            </div>
-        </section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-file-alt text-purple-600 mr-3"></i>
+                    프로그램 자료
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- 프로그램 보고서 -->
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-purple-400 transition cursor-pointer"
+                         onclick="window.location.href='program-report.html'">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-2xl">
+                                📊
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 mb-1">프로그램 보고서</h3>
+                                <p class="text-sm text-gray-600">개발 취지, 운영 방법, 기대 효과</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
 
-        <!-- 과목별 통계 -->
-        <section class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-book text-purple-600 mr-3"></i>
-                과목별 학습 통계
-            </h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 text-center">
-                    <div class="text-3xl mb-2">🧮</div>
-                    <div class="font-bold text-blue-800 mb-1">수학</div>
-                    <div class="text-2xl font-black text-blue-700" id="mathTime">0h</div>
+                    <!-- 홍보 제안서 -->
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-blue-400 transition cursor-pointer"
+                         onclick="window.location.href='geunhwa-proposal.html'">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
+                                📄
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 mb-1">2페이지 제안서</h3>
+                                <p class="text-sm text-gray-600">학교 홍보용 간결한 제안서</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 text-center">
-                    <div class="text-3xl mb-2">🌏</div>
-                    <div class="font-bold text-green-800 mb-1">영어</div>
-                    <div class="text-2xl font-black text-green-700" id="englishTime">0h</div>
-                </div>
-                
-                <div class="bg-red-50 p-4 rounded-xl border-2 border-red-200 text-center">
-                    <div class="text-3xl mb-2">📖</div>
-                    <div class="font-bold text-red-800 mb-1">국어</div>
-                    <div class="text-2xl font-black text-red-700" id="koreanTime">0h</div>
-                </div>
-                
-                <div class="bg-purple-50 p-4 rounded-xl border-2 border-purple-200 text-center">
-                    <div class="text-3xl mb-2">🔬</div>
-                    <div class="font-bold text-purple-800 mb-1">과학</div>
-                    <div class="text-2xl font-black text-purple-700" id="scienceTime">0h</div>
-                </div>
-                
-                <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 text-center">
-                    <div class="text-3xl mb-2">🌍</div>
-                    <div class="font-bold text-yellow-800 mb-1">사회</div>
-                    <div class="text-2xl font-black text-yellow-700" id="socialTime">0h</div>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
     </main>
 
+    <!-- 학생 추가 모달 -->
+    <div id="addStudentModal" class="modal">
+        <div class="glass-effect rounded-2xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-user-plus text-purple-600 mr-2"></i>
+                학생 추가
+            </h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">학생 이름 *</label>
+                    <input type="text" id="studentName" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none" placeholder="예: 김다음">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">학년 *</label>
+                    <select id="studentGrade" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none">
+                        <option value="">학년 선택</option>
+                        <option value="1">1학년</option>
+                        <option value="2">2학년</option>
+                        <option value="3">3학년</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">반 (선택)</label>
+                    <input type="number" id="studentClass" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none" placeholder="예: 1" min="1" max="10">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">번호 (선택)</label>
+                    <input type="number" id="studentNumber" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none" placeholder="예: 5" min="1" max="40">
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-8">
+                <button onclick="closeAddStudentModal()" class="flex-1 px-6 py-3 bg-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-400 transition">
+                    취소
+                </button>
+                <button onclick="addStudent()" class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-lg transition">
+                    추가
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 푸터 -->
-    <footer class="max-w-6xl mx-auto mt-12 mb-8 text-center text-white">
+    <footer class="max-w-7xl mx-auto mt-12 mb-8 text-center">
         <div class="glass-effect rounded-xl p-6">
-            <p class="font-semibold mb-2">자기주도학습UP 챌린지</p>
-            <p class="text-sm opacity-80">경주 근화여자중학교 × DA.UM 다움진로진학컨설팅</p>
-            <p class="text-xs opacity-60 mt-2">© 2025 All rights reserved.</p>
+            <p class="font-semibold mb-2 text-gray-800">자기주도학습UP 챌린지 통합 관리 시스템</p>
+            <p class="text-sm text-gray-600">경주 근화여자중학교 × DA.UM 다움진로진학컨설팅</p>
+            <p class="text-xs text-gray-500 mt-2">© 2025 All rights reserved.</p>
         </div>
     </footer>
 
@@ -297,6 +420,32 @@
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             document.getElementById('currentDate').textContent = `${year}.${month}.${day}`;
+        }
+
+        // 탭 전환
+        function switchTab(tabName) {
+            // 모든 탭 버튼 비활성화
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 모든 탭 컨텐츠 숨기기
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 선택한 탭 활성화
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).style.display = 'block';
+            
+            // 데이터 로드
+            if (tabName === 'students') {
+                loadStudentsList();
+            } else if (tabName === 'records') {
+                loadAllRecords();
+            } else if (tabName === 'dashboard') {
+                loadStatistics();
+            }
         }
 
         // 통계 로드
@@ -415,14 +564,195 @@
             }).join('');
         }
 
+        // 학생 목록 로드
+        function loadStudentsList() {
+            const students = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('student_')) {
+                    try {
+                        const studentData = JSON.parse(localStorage.getItem(key));
+                        students.push(studentData);
+                    } catch (e) {
+                        console.warn('데이터 파싱 오류:', key);
+                    }
+                }
+            }
+
+            const container = document.getElementById('studentsList');
+            
+            if (students.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-user-plus text-5xl mb-3 opacity-30"></i>
+                        <p class="text-lg font-semibold">등록된 학생이 없습니다</p>
+                        <p class="text-sm mt-2">"학생 추가" 버튼을 눌러 학생을 등록하세요</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = students.map(student => `
+                <div class="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-purple-400 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                                ${student.name.charAt(0)}
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">${student.name}</h3>
+                                <div class="flex gap-3 mt-1 text-sm text-gray-600">
+                                    <span><i class="fas fa-graduation-cap mr-1"></i>${student.grade}학년</span>
+                                    ${student.class ? `<span><i class="fas fa-users mr-1"></i>${student.class}반</span>` : ''}
+                                    ${student.number ? `<span><i class="fas fa-hashtag mr-1"></i>${student.number}번</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="deleteStudent('${student.id}')" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                            <i class="fas fa-trash mr-1"></i>삭제
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 전체 학습 기록 로드
+        function loadAllRecords() {
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const students = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('student_')) {
+                    try {
+                        const studentData = JSON.parse(localStorage.getItem(key));
+                        students.push(studentData);
+                    } catch (e) {}
+                }
+            }
+
+            const container = document.getElementById('allRecords');
+            const sortedRecords = studyRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (sortedRecords.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-clipboard-list text-5xl mb-3 opacity-30"></i>
+                        <p class="text-lg font-semibold">아직 학습 기록이 없습니다</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = sortedRecords.map(record => {
+                const student = students.find(s => s.id === record.student_id);
+                const name = student ? student.name : '알 수 없음';
+                const subjects = record.subjects ? Object.entries(record.subjects) : [];
+                const totalTime = subjects.reduce((sum, [_, data]) => sum + (data.time || 0), 0);
+
+                return `
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-purple-400 transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                                    ${name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">${name}</h3>
+                                    <p class="text-sm text-gray-500">${record.date}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-black text-purple-600">${totalTime}분</div>
+                                <div class="text-sm text-gray-500">${subjects.length}과목 완료</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                            ${subjects.map(([subject, data]) => `
+                                <div class="bg-gray-50 p-3 rounded-lg text-center">
+                                    <div class="font-bold text-gray-800 mb-1">${subject}</div>
+                                    <div class="text-lg font-black text-purple-600">${data.time}분</div>
+                                    ${data.content ? `<div class="text-xs text-gray-500 mt-1 truncate">${data.content}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 학생 추가 모달
+        function showAddStudentModal() {
+            document.getElementById('addStudentModal').classList.add('active');
+        }
+
+        function closeAddStudentModal() {
+            document.getElementById('addStudentModal').classList.remove('active');
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentGrade').value = '';
+            document.getElementById('studentClass').value = '';
+            document.getElementById('studentNumber').value = '';
+        }
+
+        function addStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const grade = document.getElementById('studentGrade').value;
+            const classNum = document.getElementById('studentClass').value;
+            const number = document.getElementById('studentNumber').value;
+
+            if (!name || !grade) {
+                alert('이름과 학년은 필수 입력 항목입니다.');
+                return;
+            }
+
+            const studentId = `student_${Date.now()}`;
+            const studentData = {
+                id: studentId,
+                name: name,
+                grade: grade,
+                class: classNum || '',
+                number: number || '',
+                created_at: new Date().toISOString()
+            };
+
+            localStorage.setItem(studentId, JSON.stringify(studentData));
+            alert(`${name} 학생이 등록되었습니다!`);
+            closeAddStudentModal();
+            loadStudentsList();
+            loadStatistics();
+        }
+
+        function deleteStudent(studentId) {
+            const studentData = JSON.parse(localStorage.getItem(studentId));
+            if (confirm(`${studentData.name} 학생을 삭제하시겠습니까?`)) {
+                localStorage.removeItem(studentId);
+                alert('삭제되었습니다.');
+                loadStudentsList();
+                loadStatistics();
+            }
+        }
+
         // 페이지 로드 시 실행
         window.addEventListener('DOMContentLoaded', () => {
             updateCurrentDate();
             loadStatistics();
             
             // 30초마다 자동 새로고침
-            setInterval(loadStatistics, 30000);
+            setInterval(() => {
+                const currentTab = document.querySelector('.tab-button.active').textContent;
+                if (currentTab.includes('대시보드')) {
+                    loadStatistics();
+                }
+            }, 30000);
         });
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('addStudentModal');
+            if (event.target == modal) {
+                closeAddStudentModal();
+            }
+        }
     </script>
 </body>
 </html>
