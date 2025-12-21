@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👨‍👩‍👧 학부모 관리 - 자녀 학습 현황</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 캘린더 스타일 */
+        .calendar-day {
+            transition: all 0.2s;
+        }
+        
+        .calendar-day:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+    <!-- 헤더 -->
+    <nav class="glass-effect sticky top-0 z-50 shadow-xl rounded-xl mb-6">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6">
+            <div class="flex items-center justify-between h-14 sm:h-16">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-7 h-7 sm:w-10 sm:h-10">
+                    <div>
+                        <h1 class="text-sm sm:text-xl font-bold text-purple-900">
+                            👨‍👩‍👧 학부모 관리
+                        </h1>
+                        <p class="text-xs text-purple-600 hidden sm:block">
+                            자녀 학습 현황 조회
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <button 
+                        onclick="refreshData()" 
+                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-purple-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-purple-700 transition">
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="hidden sm:inline ml-1">새로고침</span>
+                    </button>
+                    <button 
+                        onclick="window.location.href='geunhwa-student-portal.html'" 
+                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-500 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-600 transition">
+                        <i class="fas fa-user-graduate"></i>
+                        <span class="hidden sm:inline ml-1">학생 포털</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- 자녀 검색 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-search text-purple-600 mr-3"></i>
+                자녀 찾기
+            </h2>
+            
+            <div class="flex gap-3">
+                <input 
+                    type="text" 
+                    id="studentName" 
+                    placeholder="자녀 이름을 입력하세요 (예: 김은숙)"
+                    class="flex-1 px-4 py-3 border-2 border-purple-200 rounded-xl focus:outline-none focus:border-purple-500 text-lg"
+                    onkeypress="if(event.key==='Enter') searchStudent()">
+                <button 
+                    onclick="searchStudent()" 
+                    class="px-6 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 transition">
+                    <i class="fas fa-search mr-2"></i>검색
+                </button>
+            </div>
+            
+            <p class="text-sm text-gray-500 mt-3">
+                💡 학생 포털에 등록된 자녀의 이름을 정확히 입력해주세요
+            </p>
+        </div>
+
+        <!-- 자녀 정보 (검색 후 표시) -->
+        <div id="studentInfoSection" class="hidden">
+            <!-- 기본 정보 -->
+            <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold" id="studentAvatar">
+                            학
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800" id="studentNameDisplay">-</h2>
+                            <p class="text-gray-600" id="studentGradeDisplay">-</p>
+                        </div>
+                    </div>
+                    <button 
+                        onclick="clearStudent()" 
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                        <i class="fas fa-times mr-2"></i>다른 자녀 찾기
+                    </button>
+                </div>
+
+                <!-- 오늘의 학습 현황 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-xl text-center">
+                        <div class="text-3xl font-black mb-1" id="todayStudyTime">0분</div>
+                        <div class="text-sm opacity-90">오늘 학습시간</div>
+                    </div>
+                    <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-xl text-center">
+                        <div class="text-3xl font-black mb-1" id="todaySubjects">0과목</div>
+                        <div class="text-sm opacity-90">완료한 과목</div>
+                    </div>
+                    <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-xl text-center">
+                        <div class="text-3xl font-black mb-1" id="totalDays">0일</div>
+                        <div class="text-sm opacity-90">총 학습일수</div>
+                    </div>
+                    <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 text-white p-4 rounded-xl text-center">
+                        <div class="text-3xl font-black mb-1" id="totalHours">0h</div>
+                        <div class="text-sm opacity-90">누적 학습시간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 과목별 학습 현황 -->
+            <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-book text-purple-600 mr-3"></i>
+                    과목별 학습 현황
+                </h3>
+                
+                <div class="grid md:grid-cols-5 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-blue-800">수학</span>
+                            <span class="text-2xl">🧮</span>
+                        </div>
+                        <div class="text-2xl font-black text-blue-700" id="mathTime">0h</div>
+                        <div class="text-xs text-gray-600 mt-1">총 학습시간</div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-green-800">영어</span>
+                            <span class="text-2xl">🌏</span>
+                        </div>
+                        <div class="text-2xl font-black text-green-700" id="englishTime">0h</div>
+                        <div class="text-xs text-gray-600 mt-1">총 학습시간</div>
+                    </div>
+                    
+                    <div class="bg-red-50 p-4 rounded-xl border-2 border-red-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-red-800">국어</span>
+                            <span class="text-2xl">📖</span>
+                        </div>
+                        <div class="text-2xl font-black text-red-700" id="koreanTime">0h</div>
+                        <div class="text-xs text-gray-600 mt-1">총 학습시간</div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-xl border-2 border-purple-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-purple-800">과학</span>
+                            <span class="text-2xl">🔬</span>
+                        </div>
+                        <div class="text-2xl font-black text-purple-700" id="scienceTime">0h</div>
+                        <div class="text-xs text-gray-600 mt-1">총 학습시간</div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-yellow-800">사회</span>
+                            <span class="text-2xl">🌍</span>
+                        </div>
+                        <div class="text-2xl font-black text-yellow-700" id="socialTime">0h</div>
+                        <div class="text-xs text-gray-600 mt-1">총 학습시간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 30일 학습 캘린더 -->
+            <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-calendar-alt text-purple-600 mr-3"></i>
+                    30일 학습 캘린더
+                </h3>
+                
+                <div class="mb-4 flex items-center justify-between">
+                    <button onclick="changeMonth(-1)" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg transition">
+                        <i class="fas fa-chevron-left text-purple-700"></i>
+                    </button>
+                    <span id="calendarYearMonth" class="text-lg font-bold text-gray-800"></span>
+                    <button onclick="changeMonth(1)" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg transition">
+                        <i class="fas fa-chevron-right text-purple-700"></i>
+                    </button>
+                </div>
+                
+                <!-- 요일 헤더 -->
+                <div class="grid grid-cols-7 gap-1 mb-2">
+                    <div class="text-center py-2 font-bold text-sm text-red-600">일</div>
+                    <div class="text-center py-2 font-bold text-sm text-gray-700">월</div>
+                    <div class="text-center py-2 font-bold text-sm text-gray-700">화</div>
+                    <div class="text-center py-2 font-bold text-sm text-gray-700">수</div>
+                    <div class="text-center py-2 font-bold text-sm text-gray-700">목</div>
+                    <div class="text-center py-2 font-bold text-sm text-gray-700">금</div>
+                    <div class="text-center py-2 font-bold text-sm text-blue-600">토</div>
+                </div>
+                
+                <!-- 날짜 그리드 -->
+                <div id="calendarDays" class="grid grid-cols-7 gap-1"></div>
+                
+                <!-- 범례 -->
+                <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-gradient-to-br from-green-400 to-green-500 rounded"></div>
+                        <span>3과목 완료</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-gradient-to-br from-blue-400 to-blue-500 rounded"></div>
+                        <span>2과목 완료</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded"></div>
+                        <span>1과목 완료</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-gray-200 rounded"></div>
+                        <span>미학습</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 최근 학습 기록 -->
+            <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-history text-purple-600 mr-3"></i>
+                    최근 학습 기록
+                </h3>
+                
+                <div id="recentRecords" class="space-y-3">
+                    <!-- 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 학습 내용 상세 -->
+            <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-file-alt text-purple-600 mr-3"></i>
+                    학습 내용 상세
+                </h3>
+                
+                <div id="studyContents" class="space-y-4">
+                    <!-- 동적 생성 -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        let currentStudent = null;
+        let currentCalendarYear = new Date().getFullYear();
+        let currentCalendarMonth = new Date().getMonth();
+
+        // 학생 검색
+        function searchStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            
+            if (!name) {
+                alert('자녀 이름을 입력해주세요.');
+                return;
+            }
+
+            // localStorage에서 해당 이름의 학생 찾기
+            let foundStudent = null;
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('student_')) {
+                    try {
+                        const studentData = JSON.parse(localStorage.getItem(key));
+                        if (studentData.name === name) {
+                            foundStudent = studentData;
+                            break;
+                        }
+                    } catch (e) {
+                        console.warn('데이터 파싱 오류:', key);
+                    }
+                }
+            }
+
+            if (!foundStudent) {
+                alert('❌ "' + name + '" 학생을 찾을 수 없습니다.\n\n학생 포털에서 먼저 로그인했는지 확인해주세요.');
+                return;
+            }
+
+            currentStudent = foundStudent;
+            displayStudentInfo(foundStudent);
+            document.getElementById('studentInfoSection').classList.remove('hidden');
+            
+            // 스크롤
+            setTimeout(() => {
+                document.getElementById('studentInfoSection').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // 학생 정보 표시
+        function displayStudentInfo(student) {
+            document.getElementById('studentAvatar').textContent = student.name.charAt(0);
+            document.getElementById('studentNameDisplay').textContent = student.name;
+            document.getElementById('studentGradeDisplay').textContent = student.grade;
+
+            // 학습 데이터 로드
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const studentRecords = studyRecords.filter(r => r.student_id === student.id);
+
+            // 오늘 학습
+            const today = new Date().toISOString().split('T')[0];
+            const todayRecord = studentRecords.find(r => r.date === today);
+            
+            let todayMinutes = 0;
+            let todaySubjectsCount = 0;
+            
+            if (todayRecord && todayRecord.subjects) {
+                Object.values(todayRecord.subjects).forEach(subject => {
+                    todayMinutes += subject.time || 0;
+                    todaySubjectsCount++;
+                });
+            }
+            
+            document.getElementById('todayStudyTime').textContent = todayMinutes + '분';
+            document.getElementById('todaySubjects').textContent = todaySubjectsCount + '과목';
+
+            // 전체 통계
+            let totalMinutes = 0;
+            const subjectTimes = { '수학': 0, '영어': 0, '국어': 0, '과학': 0, '사회': 0 };
+            
+            studentRecords.forEach(record => {
+                if (record.subjects) {
+                    Object.entries(record.subjects).forEach(([subject, data]) => {
+                        const time = data.time || 0;
+                        totalMinutes += time;
+                        if (subjectTimes.hasOwnProperty(subject)) {
+                            subjectTimes[subject] += time;
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('totalDays').textContent = studentRecords.length + '일';
+            document.getElementById('totalHours').textContent = (totalMinutes / 60).toFixed(1) + 'h';
+
+            // 과목별 시간
+            document.getElementById('mathTime').textContent = (subjectTimes['수학'] / 60).toFixed(1) + 'h';
+            document.getElementById('englishTime').textContent = (subjectTimes['영어'] / 60).toFixed(1) + 'h';
+            document.getElementById('koreanTime').textContent = (subjectTimes['국어'] / 60).toFixed(1) + 'h';
+            document.getElementById('scienceTime').textContent = (subjectTimes['과학'] / 60).toFixed(1) + 'h';
+            document.getElementById('socialTime').textContent = (subjectTimes['사회'] / 60).toFixed(1) + 'h';
+
+            // 캘린더 렌더링
+            renderCalendar(studentRecords);
+
+            // 최근 기록
+            displayRecentRecords(studentRecords);
+
+            // 학습 내용
+            displayStudyContents(studentRecords);
+        }
+
+        // 캘린더 렌더링
+        function renderCalendar(records) {
+            const year = currentCalendarYear;
+            const month = currentCalendarMonth;
+            
+            document.getElementById('calendarYearMonth').textContent = `${year}년 ${month + 1}월`;
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const firstDayOfWeek = firstDay.getDay();
+            
+            const daysElement = document.getElementById('calendarDays');
+            daysElement.innerHTML = '';
+            
+            // 빈 칸
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                const emptyDiv = document.createElement('div');
+                daysElement.appendChild(emptyDiv);
+            }
+            
+            // 날짜
+            const today = new Date();
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const record = records.find(r => r.date === dateStr);
+                
+                const isToday = year === today.getFullYear() && month === today.getMonth() && day === today.getDate();
+                
+                let subjectCount = 0;
+                if (record && record.subjects) {
+                    subjectCount = Object.keys(record.subjects).length;
+                }
+                
+                let bgColor = 'bg-gray-100';
+                let emoji = '';
+                
+                if (subjectCount >= 3) {
+                    bgColor = 'bg-gradient-to-br from-green-400 to-green-500 text-white';
+                    emoji = '✅';
+                } else if (subjectCount === 2) {
+                    bgColor = 'bg-gradient-to-br from-blue-400 to-blue-500 text-white';
+                    emoji = '💪';
+                } else if (subjectCount === 1) {
+                    bgColor = 'bg-gradient-to-br from-yellow-400 to-yellow-500 text-white';
+                    emoji = '📝';
+                }
+                
+                const borderClass = isToday ? 'border-4 border-purple-600' : '';
+                
+                const dayDiv = document.createElement('div');
+                dayDiv.className = `calendar-day text-center p-2 rounded-lg ${bgColor} ${borderClass} cursor-pointer`;
+                dayDiv.innerHTML = `
+                    <div class="text-sm font-bold">${day}</div>
+                    ${emoji ? `<div class="text-lg">${emoji}</div>` : ''}
+                `;
+                
+                if (record) {
+                    dayDiv.onclick = () => showDayDetail(dateStr, record);
+                }
+                
+                daysElement.appendChild(dayDiv);
+            }
+        }
+
+        // 월 변경
+        function changeMonth(delta) {
+            currentCalendarMonth += delta;
+            if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            } else if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            
+            if (currentStudent) {
+                const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+                const studentRecords = studyRecords.filter(r => r.student_id === currentStudent.id);
+                renderCalendar(studentRecords);
+            }
+        }
+
+        // 날짜 상세
+        function showDayDetail(date, record) {
+            let details = `📅 ${date}\n\n`;
+            
+            if (record.subjects) {
+                details += '📚 학습 과목:\n';
+                Object.entries(record.subjects).forEach(([subject, data]) => {
+                    details += `• ${subject}: ${data.time}분\n`;
+                    if (data.content) {
+                        details += `  내용: ${data.content}\n`;
+                    }
+                });
+            }
+            
+            alert(details);
+        }
+
+        // 최근 기록
+        function displayRecentRecords(records) {
+            const container = document.getElementById('recentRecords');
+            const recent = records.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 7);
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">아직 학습 기록이 없습니다</p>';
+                return;
+            }
+            
+            container.innerHTML = recent.map(record => {
+                const subjects = record.subjects ? Object.entries(record.subjects) : [];
+                const totalTime = subjects.reduce((sum, [_, data]) => sum + (data.time || 0), 0);
+                
+                return `
+                    <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-gray-800">📅 ${record.date}</span>
+                            <span class="text-purple-600 font-bold">${totalTime}분</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            ${subjects.map(([subject, data]) => `
+                                <span class="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm">
+                                    ${subject} <strong>${data.time}분</strong>
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 학습 내용
+        function displayStudyContents(records) {
+            const container = document.getElementById('studyContents');
+            const withContent = records.filter(r => {
+                if (!r.subjects) return false;
+                return Object.values(r.subjects).some(s => s.content);
+            }).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+            
+            if (withContent.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">작성된 학습 내용이 없습니다</p>';
+                return;
+            }
+            
+            container.innerHTML = withContent.map(record => {
+                const contents = Object.entries(record.subjects)
+                    .filter(([_, data]) => data.content)
+                    .map(([subject, data]) => ({ subject, ...data }));
+                
+                return `
+                    <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-200">
+                        <div class="font-bold text-gray-800 mb-3">📅 ${record.date}</div>
+                        ${contents.map(item => `
+                            <div class="mb-3">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm font-semibold">
+                                        ${item.subject}
+                                    </span>
+                                    <span class="text-sm text-gray-500">${item.time}분</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-sm text-gray-700">
+                                    ${item.content}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 다른 자녀 찾기
+        function clearStudent() {
+            currentStudent = null;
+            document.getElementById('studentInfoSection').classList.add('hidden');
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentName').focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 새로고침
+        function refreshData() {
+            if (currentStudent) {
+                displayStudentInfo(currentStudent);
+                alert('✅ 데이터를 새로고침했습니다!');
+            } else {
+                alert('❌ 먼저 자녀를 검색해주세요.');
+            }
+        }
+
+        // 엔터키 검색
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('studentName').focus();
+        });
+    </script>
+</body>
+</html>
