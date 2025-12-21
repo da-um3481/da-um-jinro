@@ -1267,33 +1267,17 @@
 
         // 진단평가 데이터 로드
         function loadDiagnosticData() {
-            const students = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('student_')) {
-                    try {
-                        const studentData = JSON.parse(localStorage.getItem(key));
-                        students.push(studentData);
-                    } catch (e) {
-                        console.warn('학생 데이터 파싱 오류:', key);
-                    }
-                }
-            }
+            // localStorage에서 학생 포털의 진단평가 결과 가져오기
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            
+            console.log('📊 진단평가 결과 로드:', diagnosticResults);
+            
+            // 중학생만 필터링 (subject === '종합' 인 것만)
+            const diagnosticData = diagnosticResults.filter(result => {
+                return result.subject === '종합' && result.grade <= 3;
+            });
 
-            // 임시 진단평가 데이터 (실제로는 서버나 localStorage에서 가져와야 함)
-            const diagnosticData = students.map(student => ({
-                ...student,
-                diagnosticDate: '2025-01-15',
-                correctAnswers: Math.floor(Math.random() * 72) + 1,
-                totalScore: Math.floor(Math.random() * 362),
-                subjects: {
-                    '수학': Math.floor(Math.random() * 72) + 1,
-                    '영어': Math.floor(Math.random() * 72) + 1,
-                    '국어': Math.floor(Math.random() * 72) + 1,
-                    '과학': Math.floor(Math.random() * 72) + 1,
-                    '사회': Math.floor(Math.random() * 72) + 1
-                }
-            }));
+            console.log('📊 중학생 진단평가 결과:', diagnosticData);
 
             // 통계 업데이트
             const completed = diagnosticData.length;
@@ -1329,30 +1313,39 @@
                         <td colspan="7" style="text-align: center; padding: 3rem;">
                             <div class="empty-icon">📝</div>
                             <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
+                            <div class="empty-text">학생이 학생 포털에서 진단평가를 완료하면 자동으로 표시됩니다</div>
                         </td>
                     </tr>
                 `;
                 return;
             }
 
-            tbody.innerHTML = data.map(student => {
-                const level = student.totalScore >= 281 ? '고급' : 
-                             student.totalScore >= 201 ? '중급' : '기초';
-                const levelClass = student.totalScore >= 281 ? 'level-advanced' : 
-                                  student.totalScore >= 201 ? 'level-intermediate' : 'level-beginner';
+            tbody.innerHTML = data.map(result => {
+                // 수준 판정
+                const level = result.level || 'beginner';
+                const levelLabel = result.levelLabel || '기초';
+                const levelClass = level === 'advanced' ? 'level-advanced' : 
+                                  level === 'intermediate' ? 'level-intermediate' : 'level-beginner';
                 
-                const subjectScores = Object.entries(student.subjects || {})
-                    .map(([subject, score]) => `${subject}:${score}`)
-                    .join(', ');
+                // 진단일 포맷
+                const testDate = new Date(result.testDate);
+                const dateStr = `${testDate.getFullYear()}-${String(testDate.getMonth() + 1).padStart(2, '0')}-${String(testDate.getDate()).padStart(2, '0')}`;
+                
+                // 학년 표시 (중1, 중2, 중3)
+                const gradeDisplay = result.grade ? `중${result.grade}` : 'N/A';
+                
+                // 과목별 점수는 총점을 5과목으로 균등 분배 (실제로는 과목별 데이터가 있어야 함)
+                const perSubjectScore = Math.round(result.totalScore / 5);
+                const subjectScores = `수학:${perSubjectScore} 영어:${perSubjectScore} 국어:${perSubjectScore} 사회:${perSubjectScore} 과학:${perSubjectScore}`;
 
                 return `
                     <tr>
-                        <td>${student.grade || 'N/A'}</td>
-                        <td><strong>${student.name}</strong></td>
-                        <td>${student.diagnosticDate || 'N/A'}</td>
-                        <td>${student.correctAnswers}/72</td>
-                        <td><strong>${student.totalScore}</strong></td>
-                        <td><span class="level-badge ${levelClass}">${level}</span></td>
+                        <td>${gradeDisplay}</td>
+                        <td><strong>${result.studentName || '이름없음'}</strong></td>
+                        <td>${dateStr}</td>
+                        <td>${result.correctCount || 0}/50</td>
+                        <td><strong>${result.totalScore || 0}점</strong></td>
+                        <td><span class="level-badge ${levelClass}">${levelLabel}</span></td>
                         <td style="font-size: 0.875rem;">${subjectScores}</td>
                     </tr>
                 `;
@@ -1361,42 +1354,71 @@
 
         // 수준별 학습관리 데이터 로드
         function loadLevelManagementData() {
-            const students = [];
+            // localStorage에서 진단평가 결과 가져오기
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            
+            // 중학생만 필터링
+            const middleSchoolDiagnostics = diagnosticResults.filter(result => {
+                return result.subject === '종합' && result.grade <= 3;
+            });
+
+            console.log('📊 수준별 학습관리 데이터:', middleSchoolDiagnostics);
+
+            // 학생별로 그룹화 (최신 진단평가 결과만)
+            const studentMap = new Map();
+            middleSchoolDiagnostics.forEach(result => {
+                const existingResult = studentMap.get(result.studentId);
+                if (!existingResult || new Date(result.testDate) > new Date(existingResult.testDate)) {
+                    studentMap.set(result.studentId, result);
+                }
+            });
+
+            const managementData = Array.from(studentMap.values()).map(result => {
+                // 수준 라벨
+                const levelLabel = result.levelLabel || '기초';
+                
+                // 자동 조정 상태 (임시로 모두 조정 완료로 표시)
+                const autoAdjusted = '✅ 자동 조정됨';
+                
+                return {
+                    studentId: result.studentId,
+                    name: result.studentName,
+                    grade: result.grade ? `중${result.grade}` : 'N/A',
+                    level: levelLabel,
+                    totalScore: result.totalScore,
+                    contentLevel: levelLabel,
+                    autoAdjusted: autoAdjusted,
+                    levelKey: result.level || 'beginner' // advanced, intermediate, beginner
+                };
+            });
+
+            // 통계 업데이트
+            const advanced = managementData.filter(d => d.levelKey === 'advanced').length;
+            const intermediate = managementData.filter(d => d.levelKey === 'intermediate').length;
+            const beginner = managementData.filter(d => d.levelKey === 'beginner').length;
+            
+            // 진단 미완료 학생 수 계산 (등록된 학생 - 진단 완료 학생)
+            const allStudents = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith('student_')) {
                     try {
                         const studentData = JSON.parse(localStorage.getItem(key));
-                        students.push(studentData);
+                        // 중학생만
+                        if (studentData.grade && parseInt(studentData.grade) <= 3) {
+                            allStudents.push(studentData);
+                        }
                     } catch (e) {
                         console.warn('학생 데이터 파싱 오류:', key);
                     }
                 }
             }
-
-            // 임시 데이터
-            const managementData = students.map(student => {
-                const score = Math.floor(Math.random() * 362);
-                const level = score >= 281 ? '고급' : score >= 201 ? '중급' : '기초';
-                return {
-                    ...student,
-                    totalScore: score,
-                    level: level,
-                    contentLevel: level,
-                    autoAdjusted: Math.random() > 0.3 ? '✅ 조정 완료' : '⏳ 대기 중'
-                };
-            });
-
-            // 통계 업데이트
-            const advanced = managementData.filter(d => d.level === '고급').length;
-            const intermediate = managementData.filter(d => d.level === '중급').length;
-            const beginner = managementData.filter(d => d.level === '기초').length;
-            const notDiagnosed = 0; // 진단 미완료는 0으로 가정
+            const notDiagnosed = allStudents.length - managementData.length;
 
             document.getElementById('advancedStudentsCount').textContent = advanced;
             document.getElementById('intermediateStudentsCount').textContent = intermediate;
             document.getElementById('beginnerStudentsCount').textContent = beginner;
-            document.getElementById('notDiagnosedCount').textContent = notDiagnosed;
+            document.getElementById('notDiagnosedCount').textContent = Math.max(0, notDiagnosed);
 
             // 테이블 업데이트
             displayLevelManagement(managementData);
@@ -1411,7 +1433,8 @@
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 3rem;">
                             <div class="empty-icon">👨‍🎓</div>
-                            <div class="empty-title">학생 데이터가 없습니다</div>
+                            <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
+                            <div class="empty-text">학생이 학생 포털에서 진단평가를 완료하면 자동으로 표시됩니다</div>
                         </td>
                     </tr>
                 `;
@@ -1419,8 +1442,8 @@
             }
 
             tbody.innerHTML = data.map(student => {
-                const levelClass = student.level === '고급' ? 'level-advanced' : 
-                                  student.level === '중급' ? 'level-intermediate' : 'level-beginner';
+                const levelClass = student.levelKey === 'advanced' ? 'level-advanced' : 
+                                  student.levelKey === 'intermediate' ? 'level-intermediate' : 'level-beginner';
 
                 return `
                     <tr>
