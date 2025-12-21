@@ -736,10 +736,6 @@
                 <span>학생 목록</span>
             </a>
 
-            <a href="#" class="nav-item" data-page="class-stats">
-                <i class="fas fa-chart-pie"></i>
-                <span>학급 통계</span>
-            </a>
             <a href="#" class="nav-item" data-page="admission-guide">
                 <i class="fas fa-university"></i>
                 <span>입시 지도</span>
@@ -924,67 +920,6 @@
                 </div>
             </div>
 
-            <!-- 학급 통계 페이지 -->
-            <div class="page-content" id="page-class-stats">
-                <div class="page-header">
-                    <h2>학급 통계 분석</h2>
-                    <p>다양한 지표로 학급 현황을 분석합니다</p>
-                </div>
-
-                <!-- 학급 선택 -->
-                <div style="margin-bottom: 30px; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <label style="font-weight: 600; color: #374151;">
-                            <i class="fas fa-users" style="color: #3b82f6; margin-right: 8px;"></i>
-                            학급 선택:
-                        </label>
-                        <select class="filter-select" id="statsClassFilter" onchange="updateClassStats()" style="min-width: 200px; padding: 10px 15px;">
-                            <option value="all">전체 학년</option>
-                            <option value="1">1반</option>
-                            <option value="2">2반</option>
-                            <option value="3">3반</option>
-                            <option value="4">4반</option>
-                            <option value="5">5반</option>
-                            <option value="6">6반</option>
-                            <option value="7">7반</option>
-                            <option value="8">8반</option>
-                        </select>
-                        <span id="classStudentCount" style="color: #6b7280; margin-left: 10px;">
-                            전체 학생 수: <strong style="color: #3b82f6;">32명</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="stats-dashboard">
-                    <div class="stat-chart-card">
-                        <h3>전공 계열별 분포</h3>
-                        <div class="chart-container" style="height: 300px;">
-                            <canvas id="majorDistributionChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="stat-chart-card">
-                        <h3>입시 전형 유형</h3>
-                        <div class="chart-container" style="height: 300px;">
-                            <canvas id="admissionTypeChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="stat-chart-card">
-                        <h3>성적 추이 (학기별)</h3>
-                        <div class="chart-container" style="height: 300px;">
-                            <canvas id="gradeTrendChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="stat-chart-card">
-                        <h3>비교과 활동 현황</h3>
-                        <div class="chart-container" style="height: 300px;">
-                            <canvas id="activityStatsChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- 입시 지도 페이지 -->
             <div class="page-content" id="page-admission-guide">
