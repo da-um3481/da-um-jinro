@@ -1352,9 +1352,7 @@
             
             // 모든 능동학습 과목 완료
             console.log('🎉 오늘의 모든 능동학습 과목을 완료했습니다!');
-            setTimeout(() => {
-                alert('🎉 축하합니다!\n\n오늘의 모든 학습 과목을 완료했습니다!\n정말 훌륭해요! 🌟');
-            }, 500);
+            // 축하 메시지 제거 (조용히 완료)
         }
 
         // 타이머 표시 업데이트
@@ -1435,10 +1433,6 @@
 
         // 스케줄 강제 재생성
         function regenerateSchedule() {
-            if (!confirm('스케줄을 새로 생성하시겠습니까?\n(기존 스케줄이 삭제됩니다)')) {
-                return;
-            }
-
             const studentId = localStorage.getItem('currentStudentId');
             const studentName = localStorage.getItem('currentStudentName');
             const studentGrade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
@@ -1450,14 +1444,14 @@
 
             const student = { id: studentId, name: studentName, grade: studentGrade };
 
-            // 기존 스케줄 삭제
-            let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
-            schedules = schedules.filter(s => s.student_id !== student.id);
-
-            // 새 스케줄 생성
+            // 기존 스케줄 완전 삭제
+            localStorage.removeItem('student_schedules');
+            
             console.log('🔄 스케줄 강제 재생성 시작');
+            
+            // 새 스케줄 생성
             const newSchedule = autoGenerateWeeklySchedule(student);
-            schedules.push(newSchedule);
+            const schedules = [newSchedule];
             localStorage.setItem('student_schedules', JSON.stringify(schedules));
             
             console.log('✅ 스케줄 재생성 완료');
