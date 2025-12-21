@@ -1255,21 +1255,183 @@
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title">
-                        <span class="section-title-icon">👥</span>
-                        전체 학생 목록
+                        <span class="section-title-icon">📊</span>
+                        학생 상세 관리
                     </h2>
-                    <a href="student-detail-management.html" class="btn-primary" style="text-decoration: none;">
-                        <i class="fas fa-chart-line"></i> 상세 관리 페이지로 이동
-                    </a>
+                    <button class="btn-primary" onclick="generateFeedbacksForStudent()" style="border: none; cursor: pointer;">
+                        <i class="fas fa-magic"></i> 피드백 자동 생성
+                    </button>
                 </div>
                 
-                <div class="alert" style="background: rgba(59, 130, 246, 0.2); border: 2px solid #3b82f6; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                    <i class="fas fa-info-circle"></i>
-                    <strong>학생 상세 관리 기능</strong>: 각 학생의 학습 현황을 상세히 확인하고, 일일/주간/월간 피드백을 자동으로 생성할 수 있습니다.
+                <!-- 학생 선택 -->
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">학생 선택</label>
+                    <select id="studentDetailSelect" onchange="loadStudentDetailData()" style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                        <option value="">학생을 선택하세요</option>
+                    </select>
                 </div>
 
-                <div id="studentListGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                    <!-- 학생 목록이 여기에 동적으로 추가됩니다 -->
+                <!-- 학생 정보 카드 -->
+                <div id="selectedStudentInfo" style="display: none; background: rgba(16, 185, 129, 0.1); border: 2px solid var(--primary); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <h3 id="selectedStudentName" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem;"></h3>
+                            <p id="selectedStudentClass" style="color: var(--text-muted); font-size: 0.95rem;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 네비게이션 -->
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem;">
+                    <button class="student-detail-tab active" onclick="switchStudentDetailTab('overview')" data-tab="overview" style="padding: 0.75rem 1.5rem; background: rgba(30, 41, 59, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; white-space: nowrap; color: var(--text); transition: all 0.3s;">
+                        <i class="fas fa-chart-line"></i> 학습 현황
+                    </button>
+                    <button class="student-detail-tab" onclick="switchStudentDetailTab('daily')" data-tab="daily" style="padding: 0.75rem 1.5rem; background: rgba(30, 41, 59, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; white-space: nowrap; color: var(--text); transition: all 0.3s;">
+                        <i class="fas fa-calendar-day"></i> 일일 피드백
+                    </button>
+                    <button class="student-detail-tab" onclick="switchStudentDetailTab('weekly')" data-tab="weekly" style="padding: 0.75rem 1.5rem; background: rgba(30, 41, 59, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; white-space: nowrap; color: var(--text); transition: all 0.3s;">
+                        <i class="fas fa-calendar-week"></i> 주간 피드백
+                    </button>
+                    <button class="student-detail-tab" onclick="switchStudentDetailTab('monthly')" data-tab="monthly" style="padding: 0.75rem 1.5rem; background: rgba(30, 41, 59, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; white-space: nowrap; color: var(--text); transition: all 0.3s;">
+                        <i class="fas fa-calendar-alt"></i> 월간 보고서
+                    </button>
+                    <button class="student-detail-tab" onclick="switchStudentDetailTab('records')" data-tab="records" style="padding: 0.75rem 1.5rem; background: rgba(30, 41, 59, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; white-space: nowrap; color: var(--text); transition: all 0.3s;">
+                        <i class="fas fa-history"></i> 학습 기록
+                    </button>
+                </div>
+
+                <!-- 탭 컨텐츠: 학습 현황 -->
+                <div id="student-detail-tab-overview" class="student-detail-tab-content" style="display: block;">
+                    <!-- 통계 카드 -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <div style="width: 50px; height: 50px; background: rgba(34, 197, 94, 0.2); color: var(--success); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div id="stat-totalDays" style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">0일</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">총 학습 일수</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <div style="width: 50px; height: 50px; background: rgba(59, 130, 246, 0.2); color: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div id="stat-totalHours" style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">0시간</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">총 학습 시간</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <div style="width: 50px; height: 50px; background: rgba(245, 158, 11, 0.2); color: var(--warning); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div id="stat-completionRate" style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">0%</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">학습 완료율</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <div style="width: 50px; height: 50px; background: rgba(139, 92, 246, 0.2); color: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div id="stat-avgScore" style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">0점</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">평균 점수</div>
+                        </div>
+                    </div>
+
+                    <!-- 차트 -->
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 2rem; border-radius: 15px; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">
+                            <i class="fas fa-chart-bar"></i> 주간 학습 시간 추이
+                        </h3>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 15px;">
+                            <canvas id="weeklyStudentChart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 2rem; border-radius: 15px;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">
+                            <i class="fas fa-book"></i> 과목별 학습 현황
+                        </h3>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 15px;">
+                            <canvas id="subjectStudentChart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 컨텐츠: 일일 피드백 -->
+                <div id="student-detail-tab-daily" class="student-detail-tab-content" style="display: none;">
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 2px solid var(--success); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <i class="fas fa-robot"></i>
+                        <strong>자동 생성:</strong> 학생의 매일 학습 활동을 분석하여 자동으로 생성됩니다. 학생 포털의 피드백란에 표시됩니다.
+                    </div>
+                    <div id="dailyFeedbackContent">
+                        <div style="text-align: center; padding: 4rem 2rem;">
+                            <i class="fas fa-comment-dots" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p style="color: var(--text-muted); font-size: 1.1rem;">학생을 선택하고 피드백을 생성해주세요</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 컨텐츠: 주간 피드백 -->
+                <div id="student-detail-tab-weekly" class="student-detail-tab-content" style="display: none;">
+                    <div style="background: rgba(245, 158, 11, 0.1); border: 2px solid var(--warning); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <i class="fas fa-robot"></i>
+                        <strong>자동 생성:</strong> 일일 피드백을 통합하여 매주 자동으로 생성됩니다. 한 주간의 학습 패턴을 요약합니다.
+                    </div>
+                    <div id="weeklyFeedbackContent">
+                        <div style="text-align: center; padding: 4rem 2rem;">
+                            <i class="fas fa-comment-medical" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p style="color: var(--text-muted); font-size: 1.1rem;">학생을 선택하고 피드백을 생성해주세요</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 컨텐츠: 월간 보고서 -->
+                <div id="student-detail-tab-monthly" class="student-detail-tab-content" style="display: none;">
+                    <div style="background: rgba(139, 92, 246, 0.1); border: 2px solid var(--accent); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <i class="fas fa-robot"></i>
+                        <strong>자동 생성:</strong> 주간 피드백을 통합하여 매월 자동으로 생성됩니다. 한 달간의 전체 학습 성과를 분석합니다.
+                    </div>
+                    <div id="monthlyReportContent">
+                        <div style="text-align: center; padding: 4rem 2rem;">
+                            <i class="fas fa-file-alt" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p style="color: var(--text-muted); font-size: 1.1rem;">학생을 선택하고 피드백을 생성해주세요</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 컨텐츠: 학습 기록 -->
+                <div id="student-detail-tab-records" class="student-detail-tab-content" style="display: none;">
+                    <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700;">
+                            <i class="fas fa-history"></i> 전체 학습 기록
+                        </h3>
+                        <button class="btn-secondary" onclick="exportStudentRecords()" style="border: none; cursor: pointer; padding: 0.75rem 1.5rem; border-radius: 12px;">
+                            <i class="fas fa-download"></i> 엑셀 다운로드
+                        </button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                            <thead>
+                                <tr style="background: rgba(16, 185, 129, 0.2);">
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">날짜</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">요일</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">학습 시간</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">완료 과목</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">완료율</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">평균 점수</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">피드백</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentRecordsTableBody">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 3rem;">
+                                        <i class="fas fa-inbox" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 1rem;"></i>
+                                        학생을 선택해주세요
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1299,7 +1461,7 @@
             } else if (sectionName === 'level-management') {
                 loadLevelManagementData();
             } else if (sectionName === 'students') {
-                loadStudentList();
+                initStudentDetailManagement();
             }
         }
 
@@ -1586,6 +1748,598 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // ===== 학생 상세 관리 함수들 =====
+        let currentDetailStudent = null;
+        let weeklyStudentChart = null;
+        let subjectStudentChart = null;
+
+        // 학생 상세 관리 초기화
+        function initStudentDetailManagement() {
+            const students = JSON.parse(localStorage.getItem('student_list')) || [];
+            const select = document.getElementById('studentDetailSelect');
+            
+            // 기존 옵션 제거 (첫 번째 옵션 제외)
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+            
+            // 학생 목록 추가
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify(student);
+                option.textContent = `${student.name} (${student.grade}학년 ${student.class}반 ${student.number}번)`;
+                select.appendChild(option);
+            });
+        }
+
+        // 학생 상세 데이터 로드
+        function loadStudentDetailData() {
+            const select = document.getElementById('studentDetailSelect');
+            const selectedValue = select.value;
+            
+            if (!selectedValue) {
+                currentDetailStudent = null;
+                document.getElementById('selectedStudentInfo').style.display = 'none';
+                return;
+            }
+            
+            currentDetailStudent = JSON.parse(selectedValue);
+            
+            // 학생 정보 표시
+            document.getElementById('selectedStudentInfo').style.display = 'block';
+            document.getElementById('selectedStudentName').textContent = currentDetailStudent.name;
+            document.getElementById('selectedStudentClass').textContent = 
+                `${currentDetailStudent.grade}학년 ${currentDetailStudent.class}반 ${currentDetailStudent.number}번`;
+            
+            // 모든 데이터 로드
+            loadStudentStats();
+            loadStudentDailyFeedbacks();
+            loadStudentWeeklyFeedbacks();
+            loadStudentMonthlyReports();
+            loadStudentRecords();
+        }
+
+        // 탭 전환
+        function switchStudentDetailTab(tabName) {
+            // 모든 탭 버튼 비활성화
+            document.querySelectorAll('.student-detail-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.background = 'rgba(30, 41, 59, 0.6)';
+                tab.style.borderColor = 'transparent';
+                tab.style.color = 'var(--text)';
+            });
+            
+            // 모든 탭 컨텐츠 숨기기
+            document.querySelectorAll('.student-detail-tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 선택된 탭 활성화
+            const selectedTab = document.querySelector(`[data-tab="${tabName}"]`);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+                selectedTab.style.background = 'rgba(16, 185, 129, 0.2)';
+                selectedTab.style.borderColor = 'var(--primary)';
+                selectedTab.style.color = 'var(--primary)';
+            }
+            
+            // 선택된 컨텐츠 표시
+            const content = document.getElementById(`student-detail-tab-${tabName}`);
+            if (content) {
+                content.style.display = 'block';
+            }
+        }
+
+        // 학습 통계 로드
+        function loadStudentStats() {
+            if (!currentDetailStudent) return;
+            
+            const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+            const records = JSON.parse(localStorage.getItem(`learning_records_${studentKey}`)) || [];
+            
+            // 통계 계산
+            const uniqueDays = new Set(records.map(r => r.date)).size;
+            document.getElementById('stat-totalDays').textContent = `${uniqueDays}일`;
+            
+            const totalMinutes = records.reduce((sum, r) => sum + (r.studyTime || 0), 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            document.getElementById('stat-totalHours').textContent = `${totalHours}시간`;
+            
+            const completedTasks = records.filter(r => r.completed).length;
+            const completionRate = records.length > 0 ? Math.round((completedTasks / records.length) * 100) : 0;
+            document.getElementById('stat-completionRate').textContent = `${completionRate}%`;
+            
+            const scores = records.filter(r => r.score).map(r => r.score);
+            const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            document.getElementById('stat-avgScore').textContent = `${avgScore}점`;
+            
+            // 차트 업데이트
+            updateWeeklyStudentChart(records);
+            updateSubjectStudentChart(records);
+        }
+
+        // 주간 학습 시간 차트
+        function updateWeeklyStudentChart(records) {
+            const ctx = document.getElementById('weeklyStudentChart');
+            if (!ctx) return;
+            
+            const last7Days = [];
+            const studyTimes = [];
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                last7Days.push(`${date.getMonth() + 1}/${date.getDate()}`);
+                
+                const dayRecords = records.filter(r => r.date === dateStr);
+                const dayTime = dayRecords.reduce((sum, r) => sum + (r.studyTime || 0), 0);
+                studyTimes.push(Math.round(dayTime / 60 * 10) / 10);
+            }
+            
+            if (weeklyStudentChart) {
+                weeklyStudentChart.destroy();
+            }
+            
+            weeklyStudentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last7Days,
+                    datasets: [{
+                        label: '학습 시간 (시간)',
+                        data: studyTimes,
+                        borderColor: 'rgb(16, 185, 129)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f1f5f9' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 과목별 학습 차트
+        function updateSubjectStudentChart(records) {
+            const ctx = document.getElementById('subjectStudentChart');
+            if (!ctx) return;
+            
+            const subjects = {};
+            records.forEach(r => {
+                if (r.subject) {
+                    subjects[r.subject] = (subjects[r.subject] || 0) + (r.studyTime || 0);
+                }
+            });
+            
+            const subjectNames = Object.keys(subjects);
+            const subjectTimes = Object.values(subjects).map(t => Math.round(t / 60 * 10) / 10);
+            
+            if (subjectStudentChart) {
+                subjectStudentChart.destroy();
+            }
+            
+            subjectStudentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: subjectNames,
+                    datasets: [{
+                        label: '학습 시간 (시간)',
+                        data: subjectTimes,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f1f5f9' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 일일 피드백 로드
+        function loadStudentDailyFeedbacks() {
+            if (!currentDetailStudent) return;
+            
+            const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+            const feedbacks = JSON.parse(localStorage.getItem(`daily_feedbacks_${studentKey}`)) || [];
+            
+            const container = document.getElementById('dailyFeedbackContent');
+            
+            if (feedbacks.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 2rem;">
+                        <i class="fas fa-comment-dots" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">아직 일일 피드백이 없습니다</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            '피드백 자동 생성' 버튼을 클릭하면 생성됩니다
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            feedbacks.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = feedbacks.map(fb => `
+                <div style="background: rgba(34, 197, 94, 0.1); border: 2px solid var(--success); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="padding: 0.5rem 1rem; background: var(--success); color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">
+                            <i class="fas fa-calendar-day"></i> 일일 피드백
+                        </span>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">
+                            <i class="fas fa-clock"></i> ${new Date(fb.date).toLocaleDateString('ko-KR')}
+                        </span>
+                    </div>
+                    <div style="font-size: 1rem; line-height: 1.6; white-space: pre-line;">${fb.content}</div>
+                    ${fb.autoGenerated ? '<div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent);"><i class="fas fa-robot"></i> 자동 생성</div>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // 주간 피드백 로드
+        function loadStudentWeeklyFeedbacks() {
+            if (!currentDetailStudent) return;
+            
+            const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+            const feedbacks = JSON.parse(localStorage.getItem(`weekly_feedbacks_${studentKey}`)) || [];
+            
+            const container = document.getElementById('weeklyFeedbackContent');
+            
+            if (feedbacks.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 2rem;">
+                        <i class="fas fa-comment-medical" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">아직 주간 피드백이 없습니다</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            '피드백 자동 생성' 버튼을 클릭하면 생성됩니다
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            feedbacks.sort((a, b) => new Date(b.weekStart) - new Date(a.weekStart));
+            
+            container.innerHTML = feedbacks.map(fb => `
+                <div style="background: rgba(245, 158, 11, 0.1); border: 2px solid var(--warning); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="padding: 0.5rem 1rem; background: var(--warning); color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">
+                            <i class="fas fa-calendar-week"></i> 주간 피드백 ${fb.weekNumber}주차
+                        </span>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">
+                            <i class="fas fa-calendar"></i> ${new Date(fb.weekStart).toLocaleDateString('ko-KR')} ~ ${new Date(fb.weekEnd).toLocaleDateString('ko-KR')}
+                        </span>
+                    </div>
+                    <div style="font-size: 1rem; line-height: 1.6; white-space: pre-line;">${fb.content}</div>
+                    ${fb.autoGenerated ? '<div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent);"><i class="fas fa-robot"></i> 자동 생성</div>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // 월간 보고서 로드
+        function loadStudentMonthlyReports() {
+            if (!currentDetailStudent) return;
+            
+            const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+            const reports = JSON.parse(localStorage.getItem(`monthly_reports_${studentKey}`)) || [];
+            
+            const container = document.getElementById('monthlyReportContent');
+            
+            if (reports.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 2rem;">
+                        <i class="fas fa-file-alt" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">아직 월간 보고서가 없습니다</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            '피드백 자동 생성' 버튼을 클릭하면 생성됩니다
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            reports.sort((a, b) => new Date(b.year, b.month - 1) - new Date(a.year, a.month - 1));
+            
+            container.innerHTML = reports.map(report => `
+                <div style="background: rgba(139, 92, 246, 0.1); border: 2px solid var(--accent); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="padding: 0.5rem 1rem; background: var(--accent); color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">
+                            <i class="fas fa-calendar-alt"></i> ${report.year}년 ${report.month}월 보고서
+                        </span>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">
+                            <i class="fas fa-clock"></i> ${new Date(report.createdAt).toLocaleDateString('ko-KR')}
+                        </span>
+                    </div>
+                    <div style="font-size: 1rem; line-height: 1.6; white-space: pre-line;">${report.content}</div>
+                    ${report.autoGenerated ? '<div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent);"><i class="fas fa-robot"></i> 자동 생성</div>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // 학습 기록 로드
+        function loadStudentRecords() {
+            if (!currentDetailStudent) return;
+            
+            const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+            const records = JSON.parse(localStorage.getItem(`learning_records_${studentKey}`)) || [];
+            
+            const tbody = document.getElementById('studentRecordsTableBody');
+            
+            if (records.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 3rem;">
+                            <i class="fas fa-inbox" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 1rem;"></i>
+                            학습 기록이 없습니다
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            records.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            tbody.innerHTML = records.slice(0, 50).map(record => {
+                const date = new Date(record.date);
+                const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                const dayName = dayNames[date.getDay()];
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 1rem;">${date.toLocaleDateString('ko-KR')}</td>
+                        <td style="padding: 1rem;">${dayName}요일</td>
+                        <td style="padding: 1rem;">${Math.round(record.studyTime / 60)}분</td>
+                        <td style="padding: 1rem;">${record.subject || '-'}</td>
+                        <td style="padding: 1rem;">${record.completed ? '<span style="color: var(--success);">✅ 완료</span>' : '<span style="color: var(--text-muted);">⏳ 진행중</span>'}</td>
+                        <td style="padding: 1rem;">${record.score || '-'}점</td>
+                        <td style="padding: 1rem;">
+                            ${record.hasFeedback ? 
+                                '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> 작성됨</span>' : 
+                                '<span style="color: var(--text-muted);"><i class="fas fa-clock"></i> 대기중</span>'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 피드백 자동 생성 (student-detail-management.html의 함수 통합)
+        async function generateFeedbacksForStudent() {
+            if (!currentDetailStudent) {
+                alert('학생을 먼저 선택해주세요.');
+                return;
+            }
+            
+            if (!confirm(`${currentDetailStudent.name} 학생의 피드백을 자동으로 생성하시겠습니까?\n\n일일/주간/월간 피드백이 학습 기록을 바탕으로 생성됩니다.`)) {
+                return;
+            }
+            
+            showToast('⏳ 피드백 생성 중...');
+            
+            try {
+                const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+                const records = JSON.parse(localStorage.getItem(`learning_records_${studentKey}`)) || [];
+                
+                if (records.length === 0) {
+                    alert('학습 기록이 없어 피드백을 생성할 수 없습니다.');
+                    return;
+                }
+                
+                // 일일 피드백 생성 (간단 버전)
+                await generateSimpleDailyFeedbacks(studentKey, records);
+                
+                // 주간 피드백 생성
+                await generateSimpleWeeklyFeedbacks(studentKey);
+                
+                // 월간 보고서 생성
+                await generateSimpleMonthlyReports(studentKey);
+                
+                // 학생 포털 피드백 동기화
+                await syncToStudentPortalSimple(studentKey);
+                
+                showToast('✅ 피드백이 성공적으로 생성되었습니다!');
+                
+                // 데이터 새로고침
+                loadStudentDetailData();
+                
+            } catch (error) {
+                console.error('피드백 생성 오류:', error);
+                showToast('❌ 피드백 생성 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 간단한 일일 피드백 생성
+        async function generateSimpleDailyFeedbacks(studentKey, records) {
+            const dailyFeedbacks = [];
+            const recordsByDate = {};
+            
+            records.forEach(record => {
+                if (!recordsByDate[record.date]) {
+                    recordsByDate[record.date] = [];
+                }
+                recordsByDate[record.date].push(record);
+            });
+            
+            Object.keys(recordsByDate).forEach(date => {
+                const dayRecords = recordsByDate[date];
+                const totalTime = dayRecords.reduce((sum, r) => sum + (r.studyTime || 0), 0);
+                const completedCount = dayRecords.filter(r => r.completed).length;
+                const scores = dayRecords.filter(r => r.score).map(r => r.score);
+                const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+                
+                let feedback = `📅 ${new Date(date).toLocaleDateString('ko-KR')} 학습 피드백\n\n`;
+                feedback += `⏰ 총 학습 시간: ${Math.round(totalTime / 60)}분\n`;
+                feedback += `✅ 완료한 학습: ${completedCount}개\n`;
+                if (avgScore > 0) {
+                    feedback += `📊 평균 점수: ${avgScore}점\n\n`;
+                }
+                
+                if (totalTime >= 120) {
+                    feedback += `💪 오늘도 열심히 공부했네요! 꾸준함이 빛을 발하고 있어요.`;
+                } else if (totalTime >= 60) {
+                    feedback += `👍 좋은 학습 시간이에요! 내일도 이 페이스를 유지해봐요.`;
+                } else {
+                    feedback += `🌱 오늘은 조금 부족했지만, 내일은 더 열심히 해볼까요?`;
+                }
+                
+                if (avgScore >= 80) {
+                    feedback += `\n🌟 점수도 훌륭해요! 이 실력을 계속 유지하세요.`;
+                } else if (avgScore >= 60) {
+                    feedback += `\n📈 점수가 괜찮아요! 조금만 더 노력하면 더 좋아질 거예요.`;
+                }
+                
+                dailyFeedbacks.push({
+                    date: date,
+                    content: feedback,
+                    autoGenerated: true,
+                    createdAt: new Date().toISOString(),
+                    stats: { totalTime, completedCount, avgScore }
+                });
+            });
+            
+            localStorage.setItem(`daily_feedbacks_${studentKey}`, JSON.stringify(dailyFeedbacks));
+            return dailyFeedbacks;
+        }
+
+        // 간단한 주간 피드백 생성
+        async function generateSimpleWeeklyFeedbacks(studentKey) {
+            const dailyFeedbacks = JSON.parse(localStorage.getItem(`daily_feedbacks_${studentKey}`)) || [];
+            if (dailyFeedbacks.length === 0) return;
+            
+            const weeklyFeedbacks = [{
+                weekNumber: 1,
+                year: new Date().getFullYear(),
+                weekStart: dailyFeedbacks[0].date,
+                weekEnd: dailyFeedbacks[dailyFeedbacks.length - 1].date,
+                content: `📊 주간 학습 종합 피드백\n\n이번 주 ${dailyFeedbacks.length}일 동안 열심히 학습했어요!\n계속 이렇게 꾸준히 해봐요! 💪`,
+                autoGenerated: true,
+                createdAt: new Date().toISOString(),
+                stats: {
+                    totalTime: dailyFeedbacks.reduce((sum, fb) => sum + fb.stats.totalTime, 0),
+                    studyDays: dailyFeedbacks.length
+                }
+            }];
+            
+            localStorage.setItem(`weekly_feedbacks_${studentKey}`, JSON.stringify(weeklyFeedbacks));
+            return weeklyFeedbacks;
+        }
+
+        // 간단한 월간 보고서 생성
+        async function generateSimpleMonthlyReports(studentKey) {
+            const dailyFeedbacks = JSON.parse(localStorage.getItem(`daily_feedbacks_${studentKey}`)) || [];
+            if (dailyFeedbacks.length === 0) return;
+            
+            const monthlyReports = [{
+                year: new Date().getFullYear(),
+                month: new Date().getMonth() + 1,
+                content: `📋 월간 학습 종합 보고서\n\n이번 달 총 ${dailyFeedbacks.length}일 학습했어요!\n정말 열심히 했어요! 🏆`,
+                autoGenerated: true,
+                createdAt: new Date().toISOString(),
+                stats: {
+                    totalDays: dailyFeedbacks.length
+                }
+            }];
+            
+            localStorage.setItem(`monthly_reports_${studentKey}`, JSON.stringify(monthlyReports));
+            return monthlyReports;
+        }
+
+        // 학생 포털 동기화
+        async function syncToStudentPortalSimple(studentKey) {
+            const dailyFeedbacks = JSON.parse(localStorage.getItem(`daily_feedbacks_${studentKey}`)) || [];
+            const existingFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => 
+                `student_${s.grade}_${s.class_num}_${s.number}` === studentKey
+            );
+            
+            if (!student) return;
+            
+            const otherFeedbacks = existingFeedbacks.filter(fb => fb.student_id !== student.id);
+            
+            const newFeedbacks = dailyFeedbacks.slice(0, 5).map((fb, index) => ({
+                student_id: student.id,
+                week_number: 1,
+                content: fb.content,
+                created_at: fb.createdAt,
+                type: 'daily'
+            }));
+            
+            localStorage.setItem('feedbacks', JSON.stringify([...otherFeedbacks, ...newFeedbacks]));
+        }
+
+        // 엑셀 내보내기
+        function exportStudentRecords() {
+            if (!currentDetailStudent) {
+                alert('학생을 먼저 선택해주세요.');
+                return;
+            }
+            
+            const studentKey = `student_${currentDetailStudent.grade}_${currentDetailStudent.class}_${currentDetailStudent.number}`;
+            const records = JSON.parse(localStorage.getItem(`learning_records_${studentKey}`)) || [];
+            
+            if (records.length === 0) {
+                alert('내보낼 학습 기록이 없습니다.');
+                return;
+            }
+            
+            let csv = '날짜,요일,학습시간(분),과목,완료여부,점수\n';
+            records.forEach(record => {
+                const date = new Date(record.date);
+                const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                csv += `${date.toLocaleDateString('ko-KR')},${dayNames[date.getDay()]},`;
+                csv += `${Math.round(record.studyTime / 60)},${record.subject || '-'},`;
+                csv += `${record.completed ? '완료' : '진행중'},${record.score || '-'}\n`;
+            });
+            
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${currentDetailStudent.name}_학습기록_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            showToast('✅ 엑셀 다운로드 완료!');
         }
 
         let allStudents = [];
