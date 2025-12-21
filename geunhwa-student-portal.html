@@ -273,6 +273,9 @@
                 
                 <!-- 우측 메뉴 -->
                 <div class="flex items-center space-x-2">
+                    <button onclick="regenerateSchedule()" class="p-2 text-white hover:text-gray-200 transition" title="스케줄 새로고침">
+                        <i class="fas fa-redo text-xl"></i>
+                    </button>
                     <button onclick="resetStudent()" class="p-2 text-white hover:text-gray-200 transition" title="다른 학생으로 로그인">
                         <i class="fas fa-sync-alt text-xl"></i>
                     </button>
@@ -1268,6 +1271,40 @@
             }
         }
 
+        // 스케줄 강제 재생성
+        function regenerateSchedule() {
+            if (!confirm('스케줄을 새로 생성하시겠습니까?\n(기존 스케줄이 삭제됩니다)')) {
+                return;
+            }
+
+            const studentId = localStorage.getItem('currentStudentId');
+            const studentName = localStorage.getItem('currentStudentName');
+            const studentGrade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
+
+            if (!studentId || !studentName) {
+                alert('로그인된 학생이 없습니다.');
+                return;
+            }
+
+            const student = { id: studentId, name: studentName, grade: studentGrade };
+
+            // 기존 스케줄 삭제
+            let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+            schedules = schedules.filter(s => s.student_id !== student.id);
+
+            // 새 스케줄 생성
+            console.log('🔄 스케줄 강제 재생성 시작');
+            const newSchedule = autoGenerateWeeklySchedule(student);
+            schedules.push(newSchedule);
+            localStorage.setItem('student_schedules', JSON.stringify(schedules));
+            
+            console.log('✅ 스케줄 재생성 완료');
+            alert('✅ 스케줄이 새로 생성되었습니다!\n페이지를 새로고침합니다.');
+            
+            // 페이지 새로고침
+            location.reload();
+        }
+
         // ==========================================
         // 🎯 진단평가 시스템
         // ==========================================
@@ -1678,15 +1715,25 @@
             
             if (!studentSchedule) {
                 // 스케줄 없으면 자동 생성
+                console.log('🔄 스케줄 없음 - 자동 생성 시작');
                 studentSchedule = autoGenerateWeeklySchedule(student);
                 schedules.push(studentSchedule);
                 localStorage.setItem('student_schedules', JSON.stringify(schedules));
+                console.log('✅ 새 스케줄 생성 완료');
+            } else {
+                console.log('📋 기존 스케줄 발견');
             }
             
             // 2. 오늘 요일 확인
             const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
             const todayName = dayNames[new Date().getDay()];
-            const todaySchedule = JSON.parse(studentSchedule[todayName] || '[]');
+            const todayScheduleStr = studentSchedule[todayName];
+            
+            console.log(`📅 오늘 요일: ${todayName}`);
+            console.log(`📋 오늘 스케줄 문자열:`, todayScheduleStr);
+            
+            const todaySchedule = JSON.parse(todayScheduleStr || '[]');
+            console.log(`📚 파싱된 오늘 스케줄 (${todaySchedule.length}개 과목):`, todaySchedule);
             
             // 3. 오늘의 과목으로 통합 카드 표시 (타이머 + 학습자료 + 입력란)
             displayIntegratedSubjectCards(todaySchedule);
