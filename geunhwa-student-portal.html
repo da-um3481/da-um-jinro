@@ -1934,13 +1934,16 @@
                 schedule[day] = JSON.stringify(scheduleItems);
             });
             
-            // 토~일: 복습
+            // 토~일: 3과목 복습
             schedule.saturday = JSON.stringify([
-                { time: '9:00-10:00', duration: 60, type: '오전', subject: '수학', content: '주간 복습', importance: '높음' },
-                { time: '10:00-11:00', duration: 60, type: '오전', subject: '영어', content: '주간 복습', importance: '높음' }
+                { time: '9:00-10:00', duration: 60, type: '1교시', subject: '수학', content: '주간 복습', importance: '높음', isActive: true },
+                { time: '10:00-11:00', duration: 60, type: '2교시', subject: '영어', content: '주간 복습', importance: '높음', isActive: true },
+                { time: '11:00-12:00', duration: 60, type: '3교시', subject: '국어', content: '주간 복습', importance: '보통', isActive: true }
             ]);
             schedule.sunday = JSON.stringify([
-                { time: '9:00-10:00', duration: 60, type: '오전', subject: '국어', content: '주간 복습', importance: '보통' }
+                { time: '9:00-10:00', duration: 60, type: '1교시', subject: '과학', content: '주간 복습', importance: '보통', isActive: true },
+                { time: '10:00-11:00', duration: 60, type: '2교시', subject: '사회', content: '주간 복습', importance: '보통', isActive: true },
+                { time: '11:00-12:00', duration: 60, type: '3교시', subject: '수학', content: '주간 복습', importance: '높음', isActive: true }
             ]);
             
             return schedule;
