@@ -3,435 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>중학생 100일 교사 관리시스템</title>
+    <title>👨‍🏫 교사 관리 대시보드 - 자기주도학습UP 챌린지</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        .sidebar-nav .nav-item.removed {
-            display: none;
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f5132 0%, #052e16 50%, #0a3622 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
-<body>
-    <!-- 사이드바 -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <h2>교사<span>관리시스템</span></h2>
+<body class="p-4 sm:p-6">
+    <!-- 헤더 -->
+    <nav class="bg-gradient-to-r from-emerald-600 to-green-500 sticky top-0 z-50 shadow-xl rounded-xl mb-6">
+        <div class="max-w-full mx-auto px-3 sm:px-6">
+            <div class="flex items-center justify-between h-14 sm:h-16">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-7 h-7 sm:w-10 sm:h-10">
+                    <div>
+                        <h1 class="text-sm sm:text-xl font-bold text-white">
+                            👨‍🏫 교사 관리 대시보드
+                        </h1>
+                        <p class="text-xs text-green-50 hidden sm:block">
+                            자기주도학습UP 챌린지
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <button 
+                        onclick="refreshData()" 
+                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-white text-green-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-50 transition">
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="hidden sm:inline ml-1">새로고침</span>
+                    </button>
+                    <button 
+                        onclick="window.location.href='geunhwa-student-portal.html'" 
+                        class="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-500 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-600 transition">
+                        <i class="fas fa-user"></i>
+                        <span class="hidden sm:inline ml-1">학생 포털</span>
+                    </button>
+                </div>
             </div>
-            <button class="sidebar-toggle" id="sidebarToggle">
-                <i class="fas fa-times"></i>
-            </button>
         </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-7xl mx-auto space-y-6">
         
-        <nav class="sidebar-nav">
-            <a href="#" class="nav-item active" data-page="overview">
-                <i class="fas fa-home"></i>
-                <span>전체 현황</span>
-            </a>
-            <a href="#" class="nav-item" data-page="students-list">
-                <i class="fas fa-users"></i>
-                <span>학생 목록</span>
-            </a>
-            <a href="#" class="nav-item" data-page="diagnostic-results">
-                <i class="fas fa-clipboard-check"></i>
-                <span>진단평가 결과</span>
-            </a>
-            <a href="#" class="nav-item" data-page="level-management">
-                <i class="fas fa-layer-group"></i>
-                <span>수준별 학습 관리</span>
-            </a>
-            <a href="#" class="nav-item" data-page="career-counsel">
-                <i class="fas fa-comments"></i>
-                <span>진로 상담</span>
-            </a>
-            <a href="#" class="nav-item" data-page="learning-management">
-                <i class="fas fa-book-reader"></i>
-                <span>학습부 관리</span>
-            </a>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <div class="user-info">
-                <div class="user-avatar" style="background: #3b82f6;">
-                    <i class="fas fa-chalkboard-teacher"></i>
+        <!-- 전체 통계 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-chart-line text-green-600 mr-3"></i>
+                전체 학습 현황
+            </h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl text-center">
+                    <div class="text-4xl font-black mb-2" id="totalStudents">0</div>
+                    <div class="text-sm opacity-90">전체 학생</div>
                 </div>
-                <div class="user-details">
-                    <p class="user-name">선생님</p>
-                    <p class="user-grade">중학생 100일 프로그램</p>
+                <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl text-center">
+                    <div class="text-4xl font-black mb-2" id="activeStudents">0</div>
+                    <div class="text-sm opacity-90">활동 학생 (7일 내)</div>
                 </div>
-            </div>
-            <button class="btn-logout" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> 로그아웃
-            </button>
-        </div>
-    </aside>
-
-    <!-- 메인 콘텐츠 -->
-    <main class="main-content">
-        <header class="header">
-            <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="header-title">
-                <h1 id="pageTitle">전체 현황</h1>
-                <p id="pageSubtitle">중학생 100일 프로그램 학습 현황</p>
-            </div>
-            <div class="header-actions">
-                <button class="btn-icon" onclick="showNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
-                </button>
-                <button class="btn-icon" onclick="window.location.href='index.html'">
-                    <i class="fas fa-home"></i>
-                </button>
-            </div>
-        </header>
-
-        <div class="content-container" id="contentContainer">
-            <!-- 전체 현황 페이지 -->
-            <div class="page-content active" id="page-overview">
-                <!-- 안내 배너 -->
-                <div class="alert-info" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <i class="fas fa-info-circle" style="font-size: 2rem;"></i>
-                        <div>
-                            <h3 style="margin: 0 0 5px 0; font-size: 1.2rem;">중학생 100일 프로그램 교사 시스템</h3>
-                            <p style="margin: 0; opacity: 0.9;">학습 관리 및 진로 상담에 집중된 중학생 맞춤형 관리 시스템입니다</p>
-                        </div>
-                    </div>
+                <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl text-center">
+                    <div class="text-4xl font-black mb-2" id="avgStudyTime">0h</div>
+                    <div class="text-sm opacity-90">평균 학습 시간</div>
                 </div>
-
-                <!-- 주요 통계 -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-content">
-                            <p class="stat-label">전체 학생</p>
-                            <h3 class="stat-value">30<span class="stat-unit">명</span></h3>
-                            <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> 신규 5명
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon green">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <div class="stat-content">
-                            <p class="stat-label">평균 출석률</p>
-                            <h3 class="stat-value">94<span class="stat-unit">%</span></h3>
-                            <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> +2% 향상
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon orange">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-content">
-                            <p class="stat-label">평균 학습시간</p>
-                            <h3 class="stat-value">4.2<span class="stat-unit">시간/일</span></h3>
-                            <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> 목표 달성
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon purple">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <div class="stat-content">
-                            <p class="stat-label">과제 완료율</p>
-                            <h3 class="stat-value">87<span class="stat-unit">%</span></h3>
-                            <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> 우수
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 최근 활동 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-clock"></i> 최근 활동</h2>
-                        <button class="btn-secondary" onclick="refreshActivities()">
-                            <i class="fas fa-sync-alt"></i> 새로고침
-                        </button>
-                    </div>
-                    <div class="activity-list" id="activityList">
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: #3b82f6;">
-                                <i class="fas fa-book"></i>
-                            </div>
-                            <div class="activity-content">
-                                <p class="activity-title">김민준 학생이 수학 학습 완료</p>
-                                <p class="activity-time">5분 전</p>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: #10b981;">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="activity-content">
-                                <p class="activity-title">박서연 학생이 영어 과제 제출</p>
-                                <p class="activity-time">12분 전</p>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: #f59e0b;">
-                                <i class="fas fa-comments"></i>
-                            </div>
-                            <div class="activity-content">
-                                <p class="activity-title">이지우 학생 진로 상담 예약</p>
-                                <p class="activity-time">25분 전</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 학생 목록 페이지 -->
-            <div class="page-content" id="page-students-list">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-users"></i> 학생 목록</h2>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn-primary" onclick="addStudent()">
-                                <i class="fas fa-user-plus"></i> 학생 추가
-                            </button>
-                            <button class="btn-secondary" onclick="window.location.href='students-bulk-upload.html'">
-                                <i class="fas fa-file-excel"></i> 일괄 등록
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>번호</th>
-                                    <th>이름</th>
-                                    <th>학년</th>
-                                    <th>출석률</th>
-                                    <th>학습시간</th>
-                                    <th>과제완료율</th>
-                                    <th>관리</th>
-                                </tr>
-                            </thead>
-                            <tbody id="studentTableBody">
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민준</td>
-                                    <td>중2</td>
-                                    <td><span class="badge success">95%</span></td>
-                                    <td>4.5시간</td>
-                                    <td>90%</td>
-                                    <td>
-                                        <button class="btn-icon" onclick="viewStudent(1)">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>박서연</td>
-                                    <td>중2</td>
-                                    <td><span class="badge success">98%</span></td>
-                                    <td>5.2시간</td>
-                                    <td>95%</td>
-                                    <td>
-                                        <button class="btn-icon" onclick="viewStudent(2)">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>이지우</td>
-                                    <td>중1</td>
-                                    <td><span class="badge warning">88%</span></td>
-                                    <td>3.8시간</td>
-                                    <td>82%</td>
-                                    <td>
-                                        <button class="btn-icon" onclick="viewStudent(3)">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 진로 상담 페이지 -->
-            <div class="page-content" id="page-career-counsel">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-comments"></i> 진로 상담</h2>
-                        <button class="btn-primary" onclick="newCareerCounsel()">
-                            <i class="fas fa-plus"></i> 상담 기록 작성
-                        </button>
-                    </div>
-                    <div class="career-counsel-grid">
-                        <div class="counsel-card">
-                            <div class="counsel-header">
-                                <h3>김민준 학생</h3>
-                                <span class="badge primary">중2</span>
-                            </div>
-                            <div class="counsel-content">
-                                <p><strong>관심 분야:</strong> IT, 프로그래밍</p>
-                                <p><strong>강점:</strong> 논리적 사고력, 수학</p>
-                                <p><strong>추천 진로:</strong> 소프트웨어 개발자, 데이터 분석가</p>
-                                <p class="counsel-date">최근 상담: 2024-12-15</p>
-                            </div>
-                            <button class="btn-secondary btn-block" onclick="viewCounsel(1)">
-                                <i class="fas fa-eye"></i> 상담 기록 보기
-                            </button>
-                        </div>
-
-                        <div class="counsel-card">
-                            <div class="counsel-header">
-                                <h3>박서연 학생</h3>
-                                <span class="badge primary">중2</span>
-                            </div>
-                            <div class="counsel-content">
-                                <p><strong>관심 분야:</strong> 의료, 생명과학</p>
-                                <p><strong>강점:</strong> 탐구력, 과학</p>
-                                <p><strong>추천 진로:</strong> 의사, 약사, 연구원</p>
-                                <p class="counsel-date">최근 상담: 2024-12-14</p>
-                            </div>
-                            <button class="btn-secondary btn-block" onclick="viewCounsel(2)">
-                                <i class="fas fa-eye"></i> 상담 기록 보기
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 학습부 관리 페이지 -->
-            <div class="page-content" id="page-learning-management">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-book-reader"></i> 학습부 관리</h2>
-                        <button class="btn-primary" onclick="exportLearningRecords()">
-                            <i class="fas fa-download"></i> 내보내기
-                        </button>
-                    </div>
-                    <div class="alert-info" style="margin-bottom: 20px;">
-                        <i class="fas fa-info-circle"></i>
-                        학생별 학습 활동 기록을 관리합니다. 성적, 과제, 출석, 특기사항을 종합적으로 기록할 수 있습니다.
-                    </div>
-                    <div class="learning-records-grid">
-                        <div class="record-summary-card">
-                            <h3>최근 학습 활동</h3>
-                            <div class="record-item">
-                                <div class="record-icon" style="background: #3b82f6;">
-                                    <i class="fas fa-book"></i>
-                                </div>
-                                <div>
-                                    <p class="record-title">수학 - 2차 방정식 학습</p>
-                                    <p class="record-detail">김민준, 박서연 외 8명</p>
-                                </div>
-                            </div>
-                            <div class="record-item">
-                                <div class="record-icon" style="background: #10b981;">
-                                    <i class="fas fa-language"></i>
-                                </div>
-                                <div>
-                                    <p class="record-title">영어 - 독해 연습</p>
-                                    <p class="record-detail">이지우, 최예은 외 12명</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl text-center">
+                    <div class="text-4xl font-black mb-2" id="completionRate">0%</div>
+                    <div class="text-sm opacity-90">평균 완료율</div>
                 </div>
             </div>
         </div>
+
+        <!-- 과목별 학습 현황 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-book text-green-600 mr-3"></i>
+                과목별 학습 통계
+            </h2>
+            
+            <div class="grid md:grid-cols-5 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-blue-800">수학</h3>
+                        <i class="fas fa-calculator text-blue-600"></i>
+                    </div>
+                    <div class="text-2xl font-black text-blue-700" id="mathTime">0h</div>
+                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg border-2 border-green-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-green-800">영어</h3>
+                        <i class="fas fa-language text-green-600"></i>
+                    </div>
+                    <div class="text-2xl font-black text-green-700" id="englishTime">0h</div>
+                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-lg border-2 border-red-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-red-800">국어</h3>
+                        <i class="fas fa-book-open text-red-600"></i>
+                    </div>
+                    <div class="text-2xl font-black text-red-700" id="koreanTime">0h</div>
+                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-purple-800">과학</h3>
+                        <i class="fas fa-flask text-purple-600"></i>
+                    </div>
+                    <div class="text-2xl font-black text-purple-700" id="scienceTime">0h</div>
+                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-yellow-800">사회</h3>
+                        <i class="fas fa-globe text-yellow-600"></i>
+                    </div>
+                    <div class="text-2xl font-black text-yellow-700" id="socialTime">0h</div>
+                    <div class="text-xs text-gray-600 mt-1">총 학습 시간</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 학생 목록 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-users text-green-600 mr-3"></i>
+                    학생 학습 현황
+                </h2>
+                <div class="flex space-x-2">
+                    <select id="filterGrade" onchange="filterStudents()" 
+                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                        <option value="all">전체 학년</option>
+                        <option value="중1">중1</option>
+                        <option value="중2">중2</option>
+                        <option value="중3">중3</option>
+                    </select>
+                    <select id="sortBy" onchange="sortStudents()" 
+                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                        <option value="name">이름순</option>
+                        <option value="time">학습시간순</option>
+                        <option value="recent">최근활동순</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="studentsList" class="space-y-3">
+                <!-- 학생 카드들이 여기에 동적으로 생성됩니다 -->
+            </div>
+            
+            <div id="noStudentsMessage" class="text-center py-12 hidden">
+                <i class="fas fa-users text-gray-300 text-6xl mb-4"></i>
+                <p class="text-gray-500 text-lg">등록된 학생이 없습니다</p>
+                <p class="text-gray-400 text-sm mt-2">학생이 학생 포털에서 로그인하면 자동으로 표시됩니다</p>
+            </div>
+        </div>
+
+        <!-- 상세 학습 데이터 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-clipboard-list text-green-600 mr-3"></i>
+                최근 학습 기록
+            </h2>
+            
+            <div id="recentRecords" class="space-y-3">
+                <!-- 최근 학습 기록이 여기에 표시됩니다 -->
+            </div>
+        </div>
+
     </main>
 
-    <script src="js/teacher-dashboard.js"></script>
     <script>
-        // 페이지 전환
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const page = this.dataset.page;
-                
-                // 활성 메뉴 변경
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-                
-                // 페이지 전환
-                document.querySelectorAll('.page-content').forEach(content => content.classList.remove('active'));
-                document.getElementById(`page-${page}`).classList.add('active');
-                
-                // 제목 변경
-                const titles = {
-                    'overview': { title: '전체 현황', subtitle: '중학생 100일 프로그램 학습 현황' },
-                    'students-list': { title: '학생 목록', subtitle: '등록된 학생 관리' },
-                    'career-counsel': { title: '진로 상담', subtitle: '학생별 진로 지도 기록' },
-                    'learning-management': { title: '학습부 관리', subtitle: '학습 활동 종합 기록' }
-                };
-                
-                if (titles[page]) {
-                    document.getElementById('pageTitle').textContent = titles[page].title;
-                    document.getElementById('pageSubtitle').textContent = titles[page].subtitle;
+        // 전역 변수
+        let allStudents = [];
+        let filteredStudents = [];
+
+        // 페이지 로드 시 데이터 불러오기
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+            setInterval(loadDashboardData, 30000); // 30초마다 자동 새로고침
+        });
+
+        // 대시보드 데이터 로드
+        function loadDashboardData() {
+            console.log('📊 대시보드 데이터 로딩 시작...');
+            
+            // localStorage에서 모든 학생 데이터 수집
+            const students = [];
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            
+            // 저장된 모든 학생 정보 가져오기
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('student_')) {
+                    const studentData = JSON.parse(localStorage.getItem(key));
+                    students.push(studentData);
+                }
+            }
+            
+            console.log(`✅ 발견된 학생: ${students.length}명`);
+            allStudents = students;
+            
+            // 통계 업데이트
+            updateStatistics(students, studyRecords);
+            
+            // 과목별 통계
+            updateSubjectStatistics(studyRecords);
+            
+            // 학생 목록 표시
+            displayStudents(students, studyRecords);
+            
+            // 최근 기록 표시
+            displayRecentRecords(studyRecords);
+        }
+
+        // 전체 통계 업데이트
+        function updateStatistics(students, records) {
+            const totalStudents = students.length;
+            
+            // 최근 7일 내 활동 학생
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const activeStudents = students.filter(s => {
+                const studentRecords = records.filter(r => r.student_id === s.id);
+                return studentRecords.some(r => new Date(r.date) >= sevenDaysAgo);
+            }).length;
+            
+            // 평균 학습 시간 계산
+            let totalMinutes = 0;
+            let recordCount = 0;
+            
+            records.forEach(record => {
+                if (record.subjects) {
+                    Object.values(record.subjects).forEach(subject => {
+                        totalMinutes += subject.time || 0;
+                        recordCount++;
+                    });
                 }
             });
-        });
+            
+            const avgStudyTime = recordCount > 0 ? (totalMinutes / 60 / recordCount).toFixed(1) : 0;
+            
+            // 완료율 계산 (30일 기준)
+            const targetDays = 30;
+            const targetMinutesPerDay = 135; // 3과목 × 45분
+            const totalTargetMinutes = students.length * targetDays * targetMinutesPerDay;
+            const completionRate = totalTargetMinutes > 0 ? Math.min(100, Math.round((totalMinutes / totalTargetMinutes) * 100)) : 0;
+            
+            // DOM 업데이트
+            document.getElementById('totalStudents').textContent = totalStudents;
+            document.getElementById('activeStudents').textContent = activeStudents;
+            document.getElementById('avgStudyTime').textContent = avgStudyTime + 'h';
+            document.getElementById('completionRate').textContent = completionRate + '%';
+        }
 
-        // 모바일 메뉴 토글
-        document.getElementById('mobileMenuToggle')?.addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-        });
+        // 과목별 통계 업데이트
+        function updateSubjectStatistics(records) {
+            const subjectTimes = {
+                '수학': 0,
+                '영어': 0,
+                '국어': 0,
+                '과학': 0,
+                '사회': 0
+            };
+            
+            records.forEach(record => {
+                if (record.subjects) {
+                    Object.entries(record.subjects).forEach(([subject, data]) => {
+                        if (subjectTimes.hasOwnProperty(subject)) {
+                            subjectTimes[subject] += data.time || 0;
+                        }
+                    });
+                }
+            });
+            
+            // 시간으로 변환 및 표시
+            document.getElementById('mathTime').textContent = (subjectTimes['수학'] / 60).toFixed(1) + 'h';
+            document.getElementById('englishTime').textContent = (subjectTimes['영어'] / 60).toFixed(1) + 'h';
+            document.getElementById('koreanTime').textContent = (subjectTimes['국어'] / 60).toFixed(1) + 'h';
+            document.getElementById('scienceTime').textContent = (subjectTimes['과학'] / 60).toFixed(1) + 'h';
+            document.getElementById('socialTime').textContent = (subjectTimes['사회'] / 60).toFixed(1) + 'h';
+        }
 
-        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
-            document.getElementById('sidebar').classList.remove('active');
-        });
-
-        // 간단한 함수들
-        function logout() {
-            if (confirm('로그아웃하시겠습니까?')) {
-                window.location.href = 'index.html';
+        // 학생 목록 표시
+        function displayStudents(students, records) {
+            const container = document.getElementById('studentsList');
+            const noStudentsMsg = document.getElementById('noStudentsMessage');
+            
+            if (students.length === 0) {
+                container.innerHTML = '';
+                noStudentsMsg.classList.remove('hidden');
+                return;
             }
+            
+            noStudentsMsg.classList.add('hidden');
+            
+            // 학생별 학습 데이터 계산
+            const studentsWithStats = students.map(student => {
+                const studentRecords = records.filter(r => r.student_id === student.id);
+                
+                let totalMinutes = 0;
+                let lastActivity = null;
+                
+                studentRecords.forEach(record => {
+                    if (record.subjects) {
+                        Object.values(record.subjects).forEach(subject => {
+                            totalMinutes += subject.time || 0;
+                        });
+                    }
+                    
+                    if (!lastActivity || new Date(record.date) > new Date(lastActivity)) {
+                        lastActivity = record.date;
+                    }
+                });
+                
+                return {
+                    ...student,
+                    totalHours: (totalMinutes / 60).toFixed(1),
+                    totalMinutes: totalMinutes,
+                    lastActivity: lastActivity,
+                    recordCount: studentRecords.length
+                };
+            });
+            
+            // 정렬
+            const sortBy = document.getElementById('sortBy').value;
+            studentsWithStats.sort((a, b) => {
+                if (sortBy === 'time') {
+                    return b.totalMinutes - a.totalMinutes;
+                } else if (sortBy === 'recent') {
+                    return new Date(b.lastActivity || 0) - new Date(a.lastActivity || 0);
+                } else {
+                    return a.name.localeCompare(b.name);
+                }
+            });
+            
+            // 필터링
+            const filterGrade = document.getElementById('filterGrade').value;
+            const filtered = filterGrade === 'all' 
+                ? studentsWithStats 
+                : studentsWithStats.filter(s => s.grade === filterGrade);
+            
+            filteredStudents = filtered;
+            
+            // HTML 생성
+            container.innerHTML = filtered.map((student, index) => {
+                const badgeColor = student.totalMinutes >= 60*60 ? 'bg-green-100 text-green-800' :
+                                   student.totalMinutes >= 30*60 ? 'bg-blue-100 text-blue-800' :
+                                   student.totalMinutes > 0 ? 'bg-yellow-100 text-yellow-800' :
+                                   'bg-gray-100 text-gray-800';
+                
+                const activityText = student.lastActivity 
+                    ? `최근 활동: ${new Date(student.lastActivity).toLocaleDateString()}`
+                    : '활동 기록 없음';
+                
+                return `
+                    <div class="student-card bg-white p-4 rounded-lg border-2 border-gray-200 hover:border-green-400 transition cursor-pointer"
+                         onclick="viewStudentDetail('${student.id}')">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    ${student.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-800 text-lg">${student.name}</h3>
+                                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded">${student.grade}</span>
+                                        <span class="text-xs text-gray-500">${activityText}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-black text-green-600">${student.totalHours}h</div>
+                                <div class="text-xs text-gray-500">${student.recordCount}일 학습</div>
+                                <span class="inline-block mt-1 px-2 py-1 ${badgeColor} rounded text-xs font-semibold">
+                                    ${student.totalMinutes >= 60*60 ? '🏆 우수' :
+                                      student.totalMinutes >= 30*60 ? '👍 양호' :
+                                      student.totalMinutes > 0 ? '📝 학습중' : '⏳ 시작 전'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function showNotifications() {
-            alert('알림 기능은 준비 중입니다.');
+        // 최근 학습 기록 표시
+        function displayRecentRecords(records) {
+            const container = document.getElementById('recentRecords');
+            
+            // 최근 10개 기록만
+            const recentRecords = records
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 10);
+            
+            if (recentRecords.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">아직 학습 기록이 없습니다</p>';
+                return;
+            }
+            
+            container.innerHTML = recentRecords.map(record => {
+                const student = allStudents.find(s => s.id === record.student_id);
+                const studentName = student ? student.name : '알 수 없음';
+                
+                const subjects = record.subjects ? Object.entries(record.subjects) : [];
+                
+                return `
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                    ${studentName.charAt(0)}
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">${studentName}</span>
+                                    <span class="text-sm text-gray-500 ml-2">${record.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            ${subjects.map(([subject, data]) => `
+                                <span class="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm">
+                                    ${subject}: <strong>${data.time}분</strong>
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function refreshActivities() {
-            alert('활동 내역을 새로고침했습니다.');
+        // 학생 상세 보기
+        function viewStudentDetail(studentId) {
+            alert(`학생 상세 페이지는 추후 추가됩니다.\n학생 ID: ${studentId}`);
         }
 
-        function addStudent() {
-            window.location.href = 'students.html';
+        // 필터 및 정렬
+        function filterStudents() {
+            loadDashboardData();
         }
 
-        function viewStudent(id) {
-            alert(`학생 ${id}번의 상세 정보를 확인합니다.`);
+        function sortStudents() {
+            loadDashboardData();
         }
 
-        function newCareerCounsel() {
-            alert('새 상담 기록 작성 기능은 준비 중입니다.');
-        }
-
-        function viewCounsel(id) {
-            alert(`상담 기록 ${id}를 확인합니다.`);
-        }
-
-        function exportLearningRecords() {
-            alert('학습부 내보내기 기능은 준비 중입니다.');
+        // 데이터 새로고침
+        function refreshData() {
+            loadDashboardData();
+            alert('✅ 데이터를 새로고침했습니다!');
         }
     </script>
 </body>
