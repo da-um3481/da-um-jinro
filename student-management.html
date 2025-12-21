@@ -589,11 +589,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">학생 ID <span class="required">*</span></label>
-                        <input type="text" class="form-input" id="studentId" placeholder="예: GH010115" required>
-                    </div>
-
-                    <div class="form-group">
                         <label class="form-label">연락처</label>
                         <input type="tel" class="form-input" id="phone" placeholder="예: 010-1234-5678">
                     </div>
@@ -640,7 +635,7 @@
                     엑셀 양식 안내
                 </div>
                 <div class="info-content">
-                    <strong>필수 컬럼:</strong> 학년, 반, 번호, 이름, 학생ID<br>
+                    <strong>필수 컬럼:</strong> 학년, 반, 번호, 이름<br>
                     <strong>선택 컬럼:</strong> 성별, 연락처, 이메일, 학부모연락처, 특이사항<br>
                     <strong>지원 형식:</strong> .xlsx, .xls, .csv
                 </div>
@@ -724,7 +719,7 @@
 
             <!-- 검색 & 필터 -->
             <div class="search-bar">
-                <input type="text" class="form-input search-input" id="searchInput" placeholder="🔍 이름, 학생ID로 검색...">
+                <input type="text" class="form-input search-input" id="searchInput" placeholder="🔍 이름으로 검색...">
                 <select class="form-select" id="gradeFilter" onchange="filterStudents()">
                     <option value="">전체 학년</option>
                     <option value="1">중1</option>
@@ -750,7 +745,7 @@
                             <th>반</th>
                             <th>번호</th>
                             <th>이름</th>
-                            <th>학생ID</th>
+
                             <th>성별</th>
                             <th>연락처</th>
                             <th>상태</th>
@@ -831,7 +826,6 @@
                 class: document.getElementById('class').value,
                 number: document.getElementById('number').value,
                 name: document.getElementById('name').value,
-                studentId: document.getElementById('studentId').value,
                 gender: document.getElementById('gender').value || '-',
                 phone: document.getElementById('phone').value || '-',
                 email: document.getElementById('email').value || '-',
@@ -840,10 +834,14 @@
                 registeredDate: new Date().toISOString()
             };
 
-            // 중복 체크
-            const existing = students.find(s => s.studentId === student.studentId);
+            // 중복 체크 (학년, 반, 번호 기준)
+            const existing = students.find(s => 
+                s.grade === student.grade && 
+                s.class === student.class && 
+                s.number === student.number
+            );
             if (existing) {
-                showToast('이미 등록된 학생ID입니다.', 'error');
+                showToast('이미 등록된 학생입니다. (학년, 반, 번호 중복)', 'error');
                 return;
             }
 
@@ -930,7 +928,7 @@
 
             excelData.forEach(row => {
                 // 필수 필드 확인
-                if (!row['학년'] || !row['반'] || !row['번호'] || !row['이름'] || !row['학생ID']) {
+                if (!row['학년'] || !row['반'] || !row['번호'] || !row['이름']) {
                     return;
                 }
 
@@ -939,7 +937,6 @@
                     class: String(row['반']),
                     number: String(row['번호']),
                     name: String(row['이름']),
-                    studentId: String(row['학생ID']),
                     gender: String(row['성별'] || '-'),
                     phone: String(row['연락처'] || '-'),
                     email: String(row['이메일'] || '-'),
@@ -948,8 +945,12 @@
                     registeredDate: new Date().toISOString()
                 };
 
-                // 중복 체크
-                const existing = students.find(s => s.studentId === student.studentId);
+                // 중복 체크 (학년, 반, 번호 기준)
+                const existing = students.find(s => 
+                    s.grade === student.grade && 
+                    s.class === student.class && 
+                    s.number === student.number
+                );
                 if (existing) {
                     duplicateCount++;
                     return;
@@ -987,7 +988,6 @@
                     '반': '1',
                     '번호': '1',
                     '이름': '홍길동',
-                    '학생ID': 'GH010101',
                     '성별': 'M',
                     '연락처': '010-1234-5678',
                     '이메일': 'student@example.com',
@@ -999,7 +999,6 @@
                     '반': '1',
                     '번호': '2',
                     '이름': '김다움',
-                    '학생ID': 'GH020102',
                     '성별': 'F',
                     '연락처': '010-2345-6789',
                     '이메일': 'daum@example.com',
@@ -1031,7 +1030,6 @@
                             '반': cls,
                             '번호': num,
                             '이름': names[nameIndex],
-                            '학생ID': `GH${grade}${cls}${String(num).padStart(2, '0')}${Math.floor(Math.random() * 99).toString().padStart(2, '0')}`,
                             '성별': Math.random() > 0.5 ? 'F' : 'M',
                             '연락처': `010-${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`,
                             '이메일': `student${num}@example.com`,
@@ -1070,7 +1068,7 @@
                     <td>${student.class}반</td>
                     <td>${student.number}번</td>
                     <td>${student.name}</td>
-                    <td>${student.studentId}</td>
+
                     <td>${student.gender === 'M' ? '남' : student.gender === 'F' ? '여' : '-'}</td>
                     <td>${student.phone}</td>
                     <td><span class="badge badge-success">등록완료</span></td>
@@ -1101,8 +1099,7 @@
             // 검색어 필터
             if (searchTerm) {
                 filtered = filtered.filter(s => 
-                    s.name.toLowerCase().includes(searchTerm) ||
-                    s.studentId.toLowerCase().includes(searchTerm)
+                    s.name.toLowerCase().includes(searchTerm)
                 );
             }
 
@@ -1131,7 +1128,6 @@
                 document.getElementById('class').value = student.class;
                 document.getElementById('number').value = student.number;
                 document.getElementById('name').value = student.name;
-                document.getElementById('studentId').value = student.studentId;
                 document.getElementById('gender').value = student.gender !== '-' ? student.gender : '';
                 document.getElementById('phone').value = student.phone !== '-' ? student.phone : '';
                 document.getElementById('email').value = student.email !== '-' ? student.email : '';
@@ -1187,7 +1183,6 @@
                 '반': `${s.class}반`,
                 '번호': `${s.number}번`,
                 '이름': s.name,
-                '학생ID': s.studentId,
                 '성별': s.gender === 'M' ? '남' : s.gender === 'F' ? '여' : '-',
                 '연락처': s.phone,
                 '이메일': s.email,
