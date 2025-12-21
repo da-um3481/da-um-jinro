@@ -114,6 +114,10 @@
             overflow-y: auto;
         }
 
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
         .sidebar.mobile-hidden {
             transform: translateX(-100%);
         }
@@ -192,6 +196,11 @@
             position: relative;
             z-index: 1;
             min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
         }
 
         .top-bar {
@@ -205,6 +214,26 @@
             justify-content: space-between;
             align-items: center;
             z-index: 100;
+        }
+
+        .sidebar-toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .mobile-menu-toggle {
@@ -516,6 +545,10 @@
                 margin-left: 0;
             }
 
+            .sidebar-toggle-btn {
+                display: none;
+            }
+
             .mobile-menu-toggle {
                 display: block;
             }
@@ -771,9 +804,10 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <h1 class="page-title" id="pageTitle">다움진로진학컨설팅 통합 포털</h1>
-                <div class="user-info">
-                    <div class="user-avatar">👤</div>
-                </div>
+                <button class="sidebar-toggle-btn" onclick="toggleSidebarVisibility()">
+                    <i class="fas fa-bars" id="sidebarToggleIcon"></i>
+                    <span id="sidebarToggleText">사이드바 숨기기</span>
+                </button>
             </div>
 
             <!-- 콘텐츠 영역 -->
@@ -1053,6 +1087,16 @@
 
             document.getElementById('pageTitle').textContent = titles[pageName] || '자기주도학습UP';
 
+            // 홈 페이지가 아닌 경우 사이드바 자동 숨김 (데스크톱)
+            if (pageName !== 'home' && window.innerWidth > 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                sidebar.classList.add('hidden');
+                mainContent.classList.add('expanded');
+                document.getElementById('sidebarToggleText').textContent = '사이드바 보이기';
+                document.getElementById('sidebarToggleIcon').className = 'fas fa-bars';
+            }
+
             // 모바일에서 사이드바 닫기
             if (window.innerWidth <= 1024) {
                 document.getElementById('sidebar').classList.remove('mobile-visible');
@@ -1066,6 +1110,25 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('mobile-visible');
+        }
+
+        // 사이드바 보이기/숨기기 토글 (데스크톱)
+        function toggleSidebarVisibility() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleText = document.getElementById('sidebarToggleText');
+            const toggleIcon = document.getElementById('sidebarToggleIcon');
+            
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('expanded');
+            
+            if (sidebar.classList.contains('hidden')) {
+                toggleText.textContent = '사이드바 보이기';
+                toggleIcon.className = 'fas fa-bars';
+            } else {
+                toggleText.textContent = '사이드바 숨기기';
+                toggleIcon.className = 'fas fa-times';
+            }
         }
 
         // 토스트 알림
