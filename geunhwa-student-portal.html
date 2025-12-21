@@ -1865,20 +1865,12 @@
 
         // 📅 오늘의 스케줄 자동 생성 및 표시 (원스톱)
         function generateAndDisplayTodaySchedule(student) {
-            // 1. 스케줄 확인 또는 자동 생성
-            let schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
-            let studentSchedule = schedules.find(s => s.student_id === student.id);
-            
-            if (!studentSchedule) {
-                // 스케줄 없으면 자동 생성
-                console.log('🔄 스케줄 없음 - 자동 생성 시작');
-                studentSchedule = autoGenerateWeeklySchedule(student);
-                schedules.push(studentSchedule);
-                localStorage.setItem('student_schedules', JSON.stringify(schedules));
-                console.log('✅ 새 스케줄 생성 완료');
-            } else {
-                console.log('📋 기존 스케줄 발견');
-            }
+            // 1. 스케줄 확인 - 무조건 재생성! (테스트용)
+            console.log('🔄 스케줄 자동 생성 시작');
+            const studentSchedule = autoGenerateWeeklySchedule(student);
+            const schedules = [studentSchedule];
+            localStorage.setItem('student_schedules', JSON.stringify(schedules));
+            console.log('✅ 새 스케줄 생성 완료');
             
             // 2. 오늘 요일 확인
             const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
