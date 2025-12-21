@@ -924,35 +924,262 @@
             <!-- 입시 지도 페이지 -->
             <div class="page-content" id="page-admission-guide">
                 <div class="page-header">
-                    <h2>입시 지도</h2>
-                    <p>학생별 맞춤형 입시 전략 수립을 지원합니다</p>
+                    <h2>📊 입시 지도</h2>
+                    <p>2027/2028학년도 대입 전형 분석 및 학생별 맞춤 전략 수립</p>
                 </div>
 
-                <div class="guidance-section">
-                    <h3>전형별 적합 학생 분석</h3>
-                    <div class="track-analysis">
-                        <div class="track-group">
-                            <h4><i class="fas fa-book" style="color: #3b82f6;"></i> 학생부교과 적합</h4>
-                            <p class="track-desc">내신 성적 우수 학생 (1~2등급대)</p>
+                <!-- 2027/2028 입시 핵심 정보 -->
+                <div class="admission-info-cards">
+                    <div class="info-card info-2027">
+                        <div class="info-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>2027학년도 주요 트렌드</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <span class="label">총 모집인원</span>
+                                <span class="value">345,717명 <small>(전년 대비 ↑)</small></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">수시모집 비율</span>
+                                <span class="value highlight-blue">80.3%</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">정시모집 비율</span>
+                                <span class="value">19.7%</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">지역인재 특별전형</span>
+                                <span class="value">952명 증가</span>
+                            </div>
+                            <div class="info-alert">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <strong>학교폭력 조치사항</strong> 모든 전형 필수 반영
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card info-2028">
+                        <div class="info-header">
+                            <i class="fas fa-star"></i>
+                            <h3>2028학년도 개편사항 (중2 적용)</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="reform-section">
+                                <h4>🎓 내신 5등급제 도입</h4>
+                                <div class="grade-table">
+                                    <div class="grade-row">
+                                        <span>1등급: 10%</span>
+                                        <span>2등급: 24%</span>
+                                        <span>3등급: 32%</span>
+                                    </div>
+                                    <div class="grade-row">
+                                        <span>4등급: 24%</span>
+                                        <span>5등급: 10%</span>
+                                    </div>
+                                </div>
+                                <p class="note">※ 체육·예술·교양·사회/과학 통합선택은 절대평가(A~E)만 기재</p>
+                            </div>
+                            <div class="reform-section">
+                                <h4>📝 수능 통합/융합형 전환</h4>
+                                <ul class="reform-list">
+                                    <li>국어·수학: 선택과목 폐지</li>
+                                    <li>사회/과학: 통합사회·통합과학 공통 응시</li>
+                                    <li>심화수학(미적분Ⅱ, 기하) 수능 제외</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 전형별 전략 가이드 -->
+                <div class="strategy-guide">
+                    <h3>📌 전형유형별 합격 전략</h3>
+                    <div class="strategy-tabs">
+                        <button class="strategy-tab active" data-tab="gyogwa">학생부교과</button>
+                        <button class="strategy-tab" data-tab="jonghap">학생부종합</button>
+                        <button class="strategy-tab" data-tab="jeongsi">정시(수능)</button>
+                        <button class="strategy-tab" data-tab="regional">지역인재</button>
+                    </div>
+
+                    <div class="strategy-content active" id="strategy-gyogwa">
+                        <div class="strategy-detail">
+                            <h4>🎯 학생부교과 전형 포인트</h4>
+                            <div class="point-grid">
+                                <div class="point-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h5>핵심 선발 기준</h5>
+                                    <p>내신 교과 성적 (1~2등급 집중)</p>
+                                    <p>수능최저 충족 여부 확인 필수</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <h5>적합 학생 유형</h5>
+                                    <p>내신 관리가 철저한 학생</p>
+                                    <p>주요과목 성적 우수자</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <h5>대학별 특징</h5>
+                                    <p>지방 국립대: 수능최저 완화</p>
+                                    <p>서울권: 수능최저 엄격</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <h5>주의사항</h5>
+                                    <p>수능최저 미충족 시 불합격</p>
+                                    <p>학교폭력 조치사항 반영</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="student-match">
+                            <h5>✅ 적합 학생 명단</h5>
                             <div class="student-chips" id="gyogwaStudents">
-                                <!-- JavaScript로 동적 생성 -->
+                                <span class="chip">내신 성적 우수 학생이 표시됩니다</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="track-group">
-                            <h4><i class="fas fa-users" style="color: #10b981;"></i> 학생부종합 적합</h4>
-                            <p class="track-desc">비교과 활동 풍부 + 전공 적합성</p>
+                    <div class="strategy-content" id="strategy-jonghap">
+                        <div class="strategy-detail">
+                            <h4>🎯 학생부종합 전형 포인트</h4>
+                            <div class="point-grid">
+                                <div class="point-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h5>평가 요소</h5>
+                                    <p>학업역량 + 진로역량</p>
+                                    <p>공동체역량 + 전공 적합성</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <h5>적합 학생 유형</h5>
+                                    <p>교과+비교과 균형 발전</p>
+                                    <p>진로 탐색 활동이 뚜렷한 학생</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-book-open"></i>
+                                    <h5>세특 관리 포인트</h5>
+                                    <p>과목별 심화 학습 기록</p>
+                                    <p>전공 연계 활동 강조</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-users"></i>
+                                    <h5>면접 대비</h5>
+                                    <p>학생부 기반 질문 예상</p>
+                                    <p>전공 관련 심층 질문 대비</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="student-match">
+                            <h5>✅ 적합 학생 명단</h5>
                             <div class="student-chips" id="jonghapStudents">
-                                <!-- JavaScript로 동적 생성 -->
+                                <span class="chip">비교과 활동 우수 학생이 표시됩니다</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="track-group">
-                            <h4><i class="fas fa-pencil-alt" style="color: #f59e0b;"></i> 정시(수능) 적합</h4>
-                            <p class="track-desc">모의고사 성적 우수 학생</p>
-                            <div class="student-chips" id="jeongsiStudents">
-                                <!-- JavaScript로 동적 생성 -->
+                    <div class="strategy-content" id="strategy-jeongsi">
+                        <div class="strategy-detail">
+                            <h4>🎯 정시(수능) 전형 포인트</h4>
+                            <div class="point-grid">
+                                <div class="point-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h5>선발 비율</h5>
+                                    <p>2027: 19.7% (전년 대비 감소)</p>
+                                    <p>가/나/다군 복수 지원 전략</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <h5>적합 학생 유형</h5>
+                                    <p>모의고사 상위 등급 유지</p>
+                                    <p>안정적 실력 발휘형</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-calculator"></i>
+                                    <h5>영역별 반영비율</h5>
+                                    <p>인문: 국어·영어 높은 반영</p>
+                                    <p>자연: 수학·과탐 높은 반영</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-chart-line"></i>
+                                    <h5>2028 개편 대비</h5>
+                                    <p>통합수능 체제 준비</p>
+                                    <p>선택과목 없음 (국수)</p>
+                                </div>
                             </div>
+                        </div>
+                        <div class="student-match">
+                            <h5>✅ 적합 학생 명단</h5>
+                            <div class="student-chips" id="jeongsiStudents">
+                                <span class="chip">모의고사 성적 우수 학생이 표시됩니다</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="strategy-content" id="strategy-regional">
+                        <div class="strategy-detail">
+                            <h4>🎯 지역인재 특별전형 포인트</h4>
+                            <div class="point-grid">
+                                <div class="point-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h5>2027 확대 정책</h5>
+                                    <p>전년 대비 952명 증원</p>
+                                    <p>지방 국립대 중심 확대</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <h5>지원 자격</h5>
+                                    <p>해당 지역 고교 3년 재학</p>
+                                    <p>지역 거주 조건 확인 필수</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <h5>전략적 활용</h5>
+                                    <p>교과/종합 중복 지원 가능</p>
+                                    <p>수능최저 완화 경향</p>
+                                </div>
+                                <div class="point-card">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <h5>졸업 후 의무사항</h5>
+                                    <p>일부 대학: 지역 취업 의무</p>
+                                    <p>모집요강 필수 확인</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 입시 일정 체크리스트 -->
+                <div class="schedule-checklist">
+                    <h3>📅 입시 준비 체크리스트 (2027학년도 기준)</h3>
+                    <div class="checklist-grid">
+                        <div class="checklist-period">
+                            <h4>🌸 3월~5월 (고3 1학기)</h4>
+                            <label><input type="checkbox"> 학생부 1차 점검 (교과·비교과)</label>
+                            <label><input type="checkbox"> 3월/4월 학력평가 성적 분석</label>
+                            <label><input type="checkbox"> 희망 전공·계열 결정</label>
+                            <label><input type="checkbox"> 대학별 전형 방법 조사</label>
+                        </div>
+                        <div class="checklist-period">
+                            <h4>☀️ 6월~8월 (여름방학)</h4>
+                            <label><input type="checkbox"> 6월 모평 성적 분석</label>
+                            <label><input type="checkbox"> 수시 지원 대학 1차 선정</label>
+                            <label><input type="checkbox"> 자소서/면접 준비 시작</label>
+                            <label><input type="checkbox"> 학생부 최종 마감 (8월말)</label>
+                        </div>
+                        <div class="checklist-period">
+                            <h4>🍂 9월~11월 (수시)</h4>
+                            <label><input type="checkbox"> 9월 모평 → 수시 최종 결정</label>
+                            <label><input type="checkbox"> 수시 원서 접수 (9월)</label>
+                            <label><input type="checkbox"> 대학별 고사/면접 준비</label>
+                            <label><input type="checkbox"> 수능 최저 충족 전략 수립</label>
+                        </div>
+                        <div class="checklist-period">
+                            <h4>❄️ 12월~1월 (정시)</h4>
+                            <label><input type="checkbox"> 수능 성적 분석</label>
+                            <label><input type="checkbox"> 정시 지원 가능 대학 탐색</label>
+                            <label><input type="checkbox"> 가/나/다군 배치 전략</label>
+                            <label><input type="checkbox"> 최종 합격·등록</label>
                         </div>
                     </div>
                 </div>
@@ -961,13 +1188,14 @@
             <!-- 진로 상담 페이지 -->
             <div class="page-content" id="page-career-counsel">
                 <div class="page-header">
-                    <h2>진로 상담 관리</h2>
-                    <p>학생별 진로 상담 기록 및 계획을 관리합니다</p>
+                    <h2>🗣️ 진로 상담 관리</h2>
+                    <p>학생별 진로 탐색 및 입시 상담 기록 관리</p>
                 </div>
 
+                <!-- 상담 현황 대시보드 -->
                 <div class="counsel-dashboard">
                     <div class="counsel-status">
-                        <h3>상담 현황</h3>
+                        <h3>📊 상담 현황</h3>
                         <div class="status-grid">
                             <div class="status-item">
                                 <span class="status-label">상담 완료</span>
@@ -984,33 +1212,605 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 진로 상담 체크리스트 -->
+                <div class="counsel-checklist-section">
+                    <h3>📋 진로 상담 필수 체크리스트</h3>
+                    <div class="checklist-categories">
+                        <div class="category-card">
+                            <h4><i class="fas fa-user"></i> 1단계: 학생 이해</h4>
+                            <div class="checklist-items">
+                                <label><input type="checkbox"> 학업 성취 수준 (내신/모의고사)</label>
+                                <label><input type="checkbox"> 흥미·적성 파악</label>
+                                <label><input type="checkbox"> 희망 진로 및 전공 계열</label>
+                                <label><input type="checkbox"> 학습 태도 및 자기주도성</label>
+                                <label><input type="checkbox"> 가정환경 및 경제적 여건</label>
+                            </div>
+                        </div>
+
+                        <div class="category-card">
+                            <h4><i class="fas fa-book-open"></i> 2단계: 학생부 점검</h4>
+                            <div class="checklist-items">
+                                <label><input type="checkbox"> 교과 성적 추이 분석</label>
+                                <label><input type="checkbox"> 세특(세부능력 특기사항) 질적 수준</label>
+                                <label><input type="checkbox"> 독서 활동 기록 충실도</label>
+                                <label><input type="checkbox"> 창의적 체험활동 내용</label>
+                                <label><input type="checkbox"> 행동특성 및 종합의견</label>
+                            </div>
+                        </div>
+
+                        <div class="category-card">
+                            <h4><i class="fas fa-graduation-cap"></i> 3단계: 전형 매칭</h4>
+                            <div class="checklist-items">
+                                <label><input type="checkbox"> 교과/종합/정시 적합도 판단</label>
+                                <label><input type="checkbox"> 수능최저 충족 가능성</label>
+                                <label><input type="checkbox"> 지원 가능 대학 범위 설정</label>
+                                <label><input type="checkbox"> 안정/적정/상향 대학 선정</label>
+                                <label><input type="checkbox"> 수시 6개 포트폴리오 구성</label>
+                            </div>
+                        </div>
+
+                        <div class="category-card">
+                            <h4><i class="fas fa-clipboard-check"></i> 4단계: 실행 계획</h4>
+                            <div class="checklist-items">
+                                <label><input type="checkbox"> 남은 학기 학습 전략</label>
+                                <label><input type="checkbox"> 면접/논술 준비 일정</label>
+                                <label><input type="checkbox"> 수능 영역별 학습 계획</label>
+                                <label><input type="checkbox"> 학부모 상담 및 동의</label>
+                                <label><input type="checkbox"> 추후 상담 일정 예약</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 계열별 진로 로드맵 -->
+                <div class="career-roadmap">
+                    <h3>🗺️ 계열별 진로 로드맵</h3>
+                    <div class="roadmap-tabs">
+                        <button class="roadmap-tab active" data-roadmap="humanities">인문계열</button>
+                        <button class="roadmap-tab" data-roadmap="social">사회계열</button>
+                        <button class="roadmap-tab" data-roadmap="science">자연계열</button>
+                        <button class="roadmap-tab" data-roadmap="engineering">공학계열</button>
+                        <button class="roadmap-tab" data-roadmap="medical">의약계열</button>
+                    </div>
+
+                    <div class="roadmap-content active" id="roadmap-humanities">
+                        <div class="roadmap-detail">
+                            <h4>📚 인문계열 (어문학, 철학, 역사학 등)</h4>
+                            <div class="roadmap-grid">
+                                <div class="roadmap-step">
+                                    <h5>🎯 적합 학생 특성</h5>
+                                    <ul>
+                                        <li>언어·문학에 대한 깊은 관심</li>
+                                        <li>독서량이 풍부하고 사고력 우수</li>
+                                        <li>국어·영어·제2외국어 성적 우수</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>📖 추천 비교과 활동</h5>
+                                    <ul>
+                                        <li>인문학 독서 토론 동아리</li>
+                                        <li>교내 논술·글쓰기 대회</li>
+                                        <li>외국어 관련 심화 활동</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>🏫 주요 진학 대학/학과</h5>
+                                    <ul>
+                                        <li>국어국문학과, 영어영문학과</li>
+                                        <li>사학과, 철학과</li>
+                                        <li>불어불문학, 중어중문학 등</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>💼 졸업 후 진로</h5>
+                                    <ul>
+                                        <li>교사, 교수, 연구원</li>
+                                        <li>작가, 번역가, 출판 편집</li>
+                                        <li>문화콘텐츠 기획, 큐레이터</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-content" id="roadmap-social">
+                        <div class="roadmap-detail">
+                            <h4>💼 사회계열 (경영, 경제, 법학, 행정 등)</h4>
+                            <div class="roadmap-grid">
+                                <div class="roadmap-step">
+                                    <h5>🎯 적합 학생 특성</h5>
+                                    <ul>
+                                        <li>사회 현상에 대한 관심</li>
+                                        <li>논리적 사고와 분석 능력</li>
+                                        <li>수학·사회 과목 성적 우수</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>📖 추천 비교과 활동</h5>
+                                    <ul>
+                                        <li>경제·경영 동아리</li>
+                                        <li>모의 법정, 토론 대회</li>
+                                        <li>사회 이슈 탐구 프로젝트</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>🏫 주요 진학 대학/학과</h5>
+                                    <ul>
+                                        <li>경영학과, 경제학과</li>
+                                        <li>법학과, 행정학과</li>
+                                        <li>정치외교학과, 사회학과</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>💼 졸업 후 진로</h5>
+                                    <ul>
+                                        <li>기업 경영·기획·마케팅</li>
+                                        <li>공무원, 공기업</li>
+                                        <li>변호사, 회계사, 금융 전문가</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-content" id="roadmap-science">
+                        <div class="roadmap-detail">
+                            <h4>🔬 자연계열 (수학, 물리, 화학, 생명과학 등)</h4>
+                            <div class="roadmap-grid">
+                                <div class="roadmap-step">
+                                    <h5>🎯 적합 학생 특성</h5>
+                                    <ul>
+                                        <li>수학·과학에 대한 흥미</li>
+                                        <li>탐구 실험 활동 적극 참여</li>
+                                        <li>수학·과학 성적 상위권</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>📖 추천 비교과 활동</h5>
+                                    <ul>
+                                        <li>과학 실험·탐구 동아리</li>
+                                        <li>수학·과학 올림피아드</li>
+                                        <li>과학 관련 세특 심화 활동</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>🏫 주요 진학 대학/학과</h5>
+                                    <ul>
+                                        <li>수학과, 통계학과</li>
+                                        <li>물리학과, 화학과</li>
+                                        <li>생명과학과, 의생명공학과</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>💼 졸업 후 진로</h5>
+                                    <ul>
+                                        <li>연구원 (대학·정부출연연)</li>
+                                        <li>제약·바이오 기업</li>
+                                        <li>교사, 데이터 사이언티스트</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-content" id="roadmap-engineering">
+                        <div class="roadmap-detail">
+                            <h4>⚙️ 공학계열 (전기전자, 기계, 컴퓨터, 건축 등)</h4>
+                            <div class="roadmap-grid">
+                                <div class="roadmap-step">
+                                    <h5>🎯 적합 학생 특성</h5>
+                                    <ul>
+                                        <li>수학·물리 실력 우수</li>
+                                        <li>문제 해결력과 창의성</li>
+                                        <li>기술·공학 분야 관심</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>📖 추천 비교과 활동</h5>
+                                    <ul>
+                                        <li>로봇·코딩·메이커 동아리</li>
+                                        <li>발명·창작 대회 참여</li>
+                                        <li>공학 관련 프로젝트 수행</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>🏫 주요 진학 대학/학과</h5>
+                                    <ul>
+                                        <li>전기전자공학, 기계공학</li>
+                                        <li>컴퓨터공학, 소프트웨어학과</li>
+                                        <li>건축학, 산업공학, 화공학</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>💼 졸업 후 진로</h5>
+                                    <ul>
+                                        <li>삼성·현대·LG 등 대기업</li>
+                                        <li>IT·소프트웨어 기업</li>
+                                        <li>건설·설계 사무소, 연구소</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-content" id="roadmap-medical">
+                        <div class="roadmap-detail">
+                            <h4>⚕️ 의약계열 (의학, 치의학, 한의학, 약학, 간호학 등)</h4>
+                            <div class="roadmap-grid">
+                                <div class="roadmap-step">
+                                    <h5>🎯 적합 학생 특성</h5>
+                                    <ul>
+                                        <li>최상위권 내신·모의고사</li>
+                                        <li>생명과학·화학 우수</li>
+                                        <li>봉사정신과 인성 중시</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>📖 추천 비교과 활동</h5>
+                                    <ul>
+                                        <li>의료 관련 독서·탐구</li>
+                                        <li>병원 봉사활동</li>
+                                        <li>생명과학 심화 실험</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>🏫 주요 진학 대학/학과</h5>
+                                    <ul>
+                                        <li>의예과, 치의예과, 한의예과</li>
+                                        <li>약학과, 수의예과</li>
+                                        <li>간호학과, 물리치료학과</li>
+                                    </ul>
+                                </div>
+                                <div class="roadmap-step">
+                                    <h5>💼 졸업 후 진로</h5>
+                                    <ul>
+                                        <li>의사, 치과의사, 한의사</li>
+                                        <li>약사, 수의사</li>
+                                        <li>간호사, 물리치료사, 연구원</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 상담 기록 양식 -->
+                <div class="counsel-form-section">
+                    <h3>📝 진로 상담 기록 양식</h3>
+                    <div class="form-card">
+                        <div class="form-row">
+                            <label>학생명</label>
+                            <input type="text" placeholder="학생 이름">
+                        </div>
+                        <div class="form-row">
+                            <label>상담 일시</label>
+                            <input type="datetime-local">
+                        </div>
+                        <div class="form-row">
+                            <label>희망 진로/전공</label>
+                            <input type="text" placeholder="예: 경영학과">
+                        </div>
+                        <div class="form-row">
+                            <label>내신 등급 (평균)</label>
+                            <input type="text" placeholder="예: 2.5">
+                        </div>
+                        <div class="form-row">
+                            <label>모의고사 등급 (평균)</label>
+                            <input type="text" placeholder="예: 3등급">
+                        </div>
+                        <div class="form-row full-width">
+                            <label>상담 내용</label>
+                            <textarea rows="5" placeholder="학생의 학업 상황, 진로 고민, 전형 추천 내용 등을 기록하세요."></textarea>
+                        </div>
+                        <div class="form-row full-width">
+                            <label>실행 계획</label>
+                            <textarea rows="3" placeholder="학생이 실천해야 할 구체적 행동 계획을 기록하세요."></textarea>
+                        </div>
+                        <div class="form-row full-width">
+                            <label>차기 상담 일정</label>
+                            <input type="date">
+                        </div>
+                        <button class="btn-primary btn-large">💾 상담 기록 저장</button>
+                    </div>
+                </div>
             </div>
 
             <!-- 학생부 관리 페이지 -->
             <div class="page-content" id="page-records-management">
                 <div class="page-header">
-                    <h2>학생부 기록 관리</h2>
-                    <p>학생별 학생부 작성 현황 및 지원 도구</p>
+                    <h2>📝 학생부 기록 관리</h2>
+                    <p>2028 개편 5등급제 대비 학생부 종합 관리</p>
                 </div>
 
+                <!-- 2028 개편사항 안내 -->
+                <div class="reform-alert">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <h3>2028학년도 학생부 기재 방식 변경</h3>
+                        <div class="reform-points">
+                            <div class="reform-point">
+                                <strong>■ 5등급제 도입</strong>
+                                <p>1등급 10% / 2등급 24% / 3등급 32% / 4등급 24% / 5등급 10%</p>
+                            </div>
+                            <div class="reform-point">
+                                <strong>■ 절대평가(A~E) + 상대평가(1~5등급) 병기</strong>
+                                <p>체육·예술·교양·사회/과학 통합선택은 절대평가(A~E)만 기재</p>
+                            </div>
+                            <div class="reform-point">
+                                <strong>■ 세특 중요성 증대</strong>
+                                <p>서술형·논술형 평가 확대 → 세부능력 특기사항 질적 관리 필수</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학생부 관리 도구 -->
                 <div class="records-tools">
                     <div class="tool-card">
                         <i class="fas fa-pencil-alt"></i>
                         <h3>세특 작성 도우미</h3>
-                        <p>과목별 세부능력 및 특기사항 작성을 지원합니다</p>
+                        <p>과목별 세부능력 특기사항 작성 가이드</p>
                         <button class="btn-primary">사용하기</button>
                     </div>
                     <div class="tool-card">
                         <i class="fas fa-check-square"></i>
                         <h3>작성 현황 점검</h3>
-                        <p>학생부 작성 완료 여부를 확인합니다</p>
+                        <p>학생별 학생부 작성 완료 여부 확인</p>
                         <button class="btn-primary">확인하기</button>
                     </div>
                     <div class="tool-card">
                         <i class="fas fa-file-export"></i>
                         <h3>학생부 내보내기</h3>
-                        <p>작성된 학생부를 문서로 내보냅니다</p>
+                        <p>작성된 학생부를 문서로 내보내기</p>
                         <button class="btn-primary">내보내기</button>
+                    </div>
+                </div>
+
+                <!-- 세특 작성 가이드 -->
+                <div class="setuk-guide-section">
+                    <h3>📖 세특(세부능력 특기사항) 작성 가이드</h3>
+                    
+                    <div class="guide-tabs">
+                        <button class="guide-tab active" data-guide="principles">작성 원칙</button>
+                        <button class="guide-tab" data-guide="structure">기본 구조</button>
+                        <button class="guide-tab" data-guide="examples">과목별 예시</button>
+                        <button class="guide-tab" data-guide="nono">NG 예시</button>
+                    </div>
+
+                    <div class="guide-content active" id="guide-principles">
+                        <div class="principles-grid">
+                            <div class="principle-card">
+                                <h4>✅ 1. 구체성</h4>
+                                <p class="do"><strong>O:</strong> "확률과 통계 단원에서 베이지안 정리를 활용하여 불확실성을 수치화하는 방법을 탐구함"</p>
+                                <p class="dont"><strong>X:</strong> "확률과 통계 단원을 잘 이해함"</p>
+                            </div>
+                            <div class="principle-card">
+                                <h4>✅ 2. 개별성</h4>
+                                <p class="do"><strong>O:</strong> "물체의 운동 분석 실험에서 <u>경사면의 각도에 따른 가속도 변화</u>를 총 5회 측정하여 평균값 도출"</p>
+                                <p class="dont"><strong>X:</strong> "물체의 운동을 분석하는 실험을 수행함"</p>
+                            </div>
+                            <div class="principle-card">
+                                <h4>✅ 3. 성장 과정</h4>
+                                <p class="do"><strong>O:</strong> "초기에는 확률 개념을 어려워했으나, 동아리 활동에서 <u>다양한 게임 상황에 확률을 적용</u>하며 점차 이해도 향상"</p>
+                                <p class="dont"><strong>X:</strong> "확률 과목을 열심히 공부함"</p>
+                            </div>
+                            <div class="principle-card">
+                                <h4>✅ 4. 전공 적합성</h4>
+                                <p class="do"><strong>O:</strong> "통계학과 진학 희망을 바탕으로 <u>데이터 분석 경시대회</u>에 참가하여 우수상 수상"</p>
+                                <p class="dont"><strong>X:</strong> "여러 경시대회에 참가하여 상을 받음"</p>
+                            </div>
+                            <div class="principle-card">
+                                <h4>✅ 5. 교과 연계성</h4>
+                                <p class="do"><strong>O:</strong> "경제 과목에서 학습한 <u>수요-공급 법칙</u>을 수학 시간의 함수 관계식으로 표현하며 통합 이해"</p>
+                                <p class="dont"><strong>X:</strong> "경제와 수학을 연결하여 공부함"</p>
+                            </div>
+                            <div class="principle-card">
+                                <h4>✅ 6. 탐구 능력</h4>
+                                <p class="do"><strong>O:</strong> "'인공지능 윤리' 주제 독서토론에서 <u>자율주행차 사고 시 윤리적 판단 기준</u>에 대한 개인 의견 발표"</p>
+                                <p class="dont"><strong>X:</strong> "독서토론에 적극 참여하여 의견을 말함"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-content" id="guide-structure">
+                        <div class="structure-card">
+                            <h4>📑 세특 기본 구조 (3단 논법)</h4>
+                            <div class="structure-steps">
+                                <div class="step">
+                                    <div class="step-num">1</div>
+                                    <div class="step-content">
+                                        <h5>학습 내용 (무엇을)</h5>
+                                        <p>"∼ 단원/주제에서 ∼ 개념/이론을 학습함"</p>
+                                        <p class="example">예: "확률과 통계 단원에서 베이지안 정리를 학습하며"</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-num">2</div>
+                                    <div class="step-content">
+                                        <h5>구체적 활동 (어떻게)</h5>
+                                        <p>"∼ 활동/방법을 통해 ∼ 과정을 수행함"</p>
+                                        <p class="example">예: "의료 진단 확률 문제를 3가지 상황으로 나누어 분석하고"</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-num">3</div>
+                                    <div class="step-content">
+                                        <h5>결과/성장 (결과는)</h5>
+                                        <p>"∼ 성과/결과를 도출하며 ∼ 역량/태도를 향상시킴"</p>
+                                        <p class="example">예: "불확실성 수치화 방법을 습든하며 수학적 모델링 역량을 키움"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-content" id="guide-examples">
+                        <div class="examples-section">
+                            <h4>📚 과목별 우수 세특 예시</h4>
+                            
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="subject-badge math">수학</span>
+                                    <span class="rating excellent">⭐ 우수</span>
+                                </div>
+                                <p class="example-text">
+                                    <strong>[확률과 통계 단원]</strong><br>
+                                    베이지안 정리를 활용하여 의료 진단의 정확도를 분석하는 문제에서, 사전확률과 사후확률의 관계를 3가지 상황(질병 O/X, 양성/음성)으로 나누어 수치화하였음. 특히 거짓 양성률과 거짓 음성률의 트레이드오프 관계를 그래프로 시각화하며 확률적 사고를 통계학과 연결하여 이해하는 능력을 발휘함.
+                                </p>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="subject-badge science">물리학</span>
+                                    <span class="rating excellent">⭐ 우수</span>
+                                </div>
+                                <p class="example-text">
+                                    <strong>[운동과 에너지 단원]</strong><br>
+                                    에너지 보존 법칙을 적용하여 롯데월드 타워 놓이에서 물체를 떨어뜨렸을 때의 도착 속도를 예측하는 프로젝트를 수행함. 높이(554m)와 중력가속도(9.8m/s²)를 대입하여 v²=2gh 공식으로 최종 속도를 계산하고, 공기 저항을 고려한 보정값까지 도출하며 이론과 현실의 차이를 분석하는 탐구 능력을 보여줌.
+                                </p>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="subject-badge korean">국어</span>
+                                    <span class="rating good">✅ 양호</span>
+                                </div>
+                                <p class="example-text">
+                                    <strong>[현대문학 단원]</strong><br>
+                                    이상 시인의 '오감도' 작품을 분석하면서, 1930년대 식민지 조선의 어두운 현실을 '기도' '십자가' 등의 종교적 이미지로 표현한 방식을 탐구함. 동아리 발표에서 다른 모더니즘 시인(김소월, 백석)과 비교하며 저항문학의 특성을 분석하는 비평적 읽기 능력을 키움.
+                                </p>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="subject-badge english">영어</span>
+                                    <span class="rating excellent">⭐ 우수</span>
+                                </div>
+                                <p class="example-text">
+                                    <strong>[Debate & Discussion]</strong><br>
+                                    'Climate Change Policy' 주제 토론에서 찬성측 대표로 참여하여, carbon tax와 cap-and-trade 정책의 경제적 효과를 비교 분석한 영어 에세이를 작성함. IPCC 보고서의 데이터를 인용하여 논리를 구축하고, 반대 측 주장에 대한 rebuttal을 영어로 편성하며 논리적 사고와 영어 표현력을 동시에 발전시킴.
+                                </p>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="subject-badge social">통합사회</span>
+                                    <span class="rating good">✅ 양호</span>
+                                </div>
+                                <p class="example-text">
+                                    <strong>[지속가능한 발전 단원]</strong><br>
+                                    대한민국의 탄소중립 2050 목표를 분석하면서, 에너지 전환 정책(재생에너지 확대, 원전 감축)이 경제(일자리), 환경(탄소배출), 사회(에너지 비용)에 미치는 다차원적 영향을 통합적으로 탐구함. 지리·경제·환경 개념을 융합하여 사회 문제를 다각도로 분석하는 통합적 사고력을 기름.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-content" id="guide-nono">
+                        <div class="nono-section">
+                            <h4>❌ 피해야 할 세특 작성 사례</h4>
+                            
+                            <div class="nono-card bad">
+                                <div class="nono-header">
+                                    <span class="badge-ng">❌ NG 1번</span>
+                                    <h5>추상적·포괄적 표현</h5>
+                                </div>
+                                <p class="bad-example">
+                                    <strong>X:</strong> "수학 과목의 학습 내용을 잘 이해하고 문제 해결 능력이 뛰어남."
+                                </p>
+                                <p class="reason">→ <u>구체적인 단원/주제/활동</u>이 없어 한개인의 특성을 파악할 수 없음</p>
+                            </div>
+
+                            <div class="nono-card bad">
+                                <div class="nono-header">
+                                    <span class="badge-ng">❌ NG 2번</span>
+                                    <h5>성적 평가적 표현</h5>
+                                </div>
+                                <p class="bad-example">
+                                    <strong>X:</strong> "중간고사 1등급, 기말고사 1등급으로 교과 성적이 우수함."
+                                </p>
+                                <p class="reason">→ 세특은 <u>성적을 기록하는 곳이 아님</u>, 학습 과정과 성장을 기술해야 함</p>
+                            </div>
+
+                            <div class="nono-card bad">
+                                <div class="nono-header">
+                                    <span class="badge-ng">❌ NG 3번</span>
+                                    <h5>행동 나열식 기술</h5>
+                                </div>
+                                <p class="bad-example">
+                                    <strong>X:</strong> "과학 실험을 하고, 발표를 하고, 보고서를 작성함."
+                                </p>
+                                <p class="reason">→ <u>각 활동의 구체적 내용과 의미</u>가 빠져있어 깊이가 없음</p>
+                            </div>
+
+                            <div class="nono-card bad">
+                                <div class="nono-header">
+                                    <span class="badge-ng">❌ NG 4번</span>
+                                    <h5>교외 활동 언급</h5>
+                                </div>
+                                <p class="bad-example">
+                                    <strong>X:</strong> "학원에서 수학 경시대회에 참가하여 대상을 수상함."
+                                </p>
+                                <p class="reason">→ 학생부에는 <u>교내 활동만 기재</u> 가능, 교외 활동은 기재 불가</p>
+                            </div>
+
+                            <div class="nono-card bad">
+                                <div class="nono-header">
+                                    <span class="badge-ng">❌ NG 5번</span>
+                                    <h5>수동태 표현</h5>
+                                </div>
+                                <p class="bad-example">
+                                    <strong>X:</strong> "교사의 지도를 받아 프로젝트를 수행하였으며 좋은 결과를 얻음."
+                                </p>
+                                <p class="reason">→ 학생의 <u>능동적인 행동과 주도성</u>이 드러나지 않음</p>
+                            </div>
+
+                            <div class="nono-card bad">
+                                <div class="nono-header">
+                                    <span class="badge-ng">❌ NG 6번</span>
+                                    <h5>불필요한 수식/전문용어 나열</h5>
+                                </div>
+                                <p class="bad-example">
+                                    <strong>X:</strong> "확률밀도함수 f(x), 누적분포함수 F(x), 표준편차 σ, Z-score 등을 활용..."
+                                </p>
+                                <p class="reason">→ 세특은 논문이 아님. <u>전문 용어를 나열하기보다 활동과 과정 중심</u>으로 기술</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학생부 체크리스트 -->
+                <div class="records-checklist">
+                    <h3>✔️ 학생부 종합 체크리스트</h3>
+                    <div class="checklist-sections">
+                        <div class="checklist-section">
+                            <h4>📘 교과 학습발달상황</h4>
+                            <label><input type="checkbox"> 과목별 성취 수준 기입 (1~5등급)</label>
+                            <label><input type="checkbox"> 세특 500자 이내 작성</label>
+                            <label><input type="checkbox"> 구체적 학습 내용 포함</label>
+                            <label><input type="checkbox"> 학생 개별 특성 반영</label>
+                        </div>
+                        <div class="checklist-section">
+                            <h4>📚 독서활동상황</h4>
+                            <label><input type="checkbox"> 도서명 및 저자 기록</label>
+                            <label><input type="checkbox"> 인상 깊은 내용 기술</label>
+                            <label><input type="checkbox"> 전공/진로와의 연계성</label>
+                            <label><input type="checkbox"> 비판적 사고 과정 포함</label>
+                        </div>
+                        <div class="checklist-section">
+                            <h4>🎨 창의적 체험활동</h4>
+                            <label><input type="checkbox"> 동아리/팀 프로젝트 기록</label>
+                            <label><input type="checkbox"> 개인 역할과 기여도</label>
+                            <label><input type="checkbox"> 탐구 과정 상세 기술</label>
+                            <label><input type="checkbox"> 결과물과 성찰 기록</label>
+                        </div>
+                        <div class="checklist-section">
+                            <h4>🤝 행동특성 및 종합의견</h4>
+                            <label><input type="checkbox"> 학습 태도 긍정적 평가</label>
+                            <label><input type="checkbox"> 협동 능력 기술</label>
+                            <label><input type="checkbox"> 리더십·공동체역량</label>
+                            <label><input type="checkbox"> 학교폭력 조치사항 확인</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1506,6 +2306,992 @@
             padding-top: 20px;
             border-top: 1px solid #e2e8f0;
         }
+
+        /* ============================================ */
+        /* 입시 지도 페이지 스타일 */
+        /* ============================================ */
+        .admission-info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-card.info-2028 {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-header i {
+            font-size: 1.8rem;
+            color: #3b82f6;
+        }
+
+        .info-card.info-2028 .info-header i {
+            color: #10b981;
+        }
+
+        .info-header h3 {
+            font-size: 1.3rem;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .info-item .label {
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .info-item .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .info-item .value.highlight-blue {
+            color: #3b82f6;
+            font-size: 1.3rem;
+        }
+
+        .info-alert {
+            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(251, 146, 60, 0.1) 100%);
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+        }
+
+        .info-alert i {
+            color: #ef4444;
+            margin-right: 8px;
+        }
+
+        .reform-section {
+            margin-top: 20px;
+        }
+
+        .reform-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .grade-table {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .grade-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .grade-row span {
+            flex: 1;
+            padding: 8px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .reform-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reform-list li {
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #10b981;
+        }
+
+        .reform-list li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* 전형별 전략 가이드 */
+        .strategy-guide {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 40px;
+        }
+
+        .strategy-guide h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .strategy-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .strategy-tab {
+            padding: 12px 24px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .strategy-tab:hover {
+            background: #e2e8f0;
+        }
+
+        .strategy-tab.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .strategy-content {
+            display: none;
+        }
+
+        .strategy-content.active {
+            display: block;
+        }
+
+        .point-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .point-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .point-card i {
+            font-size: 2rem;
+            color: #3b82f6;
+            margin-bottom: 12px;
+        }
+
+        .point-card h5 {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #1e293b;
+        }
+
+        .point-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .student-match {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+        }
+
+        .student-match h5 {
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .student-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        /* 입시 일정 체크리스트 */
+        .schedule-checklist {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .schedule-checklist h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .checklist-period {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #fbbf24;
+        }
+
+        .checklist-period h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #78350f;
+        }
+
+        .checklist-period label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .checklist-period label:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .checklist-period input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* ============================================ */
+        /* 진로 상담 페이지 스타일 */
+        /* ============================================ */
+        .counsel-checklist-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 40px;
+        }
+
+        .counsel-checklist-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .checklist-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #0ea5e9;
+        }
+
+        .category-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #0c4a6e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-card i {
+            color: #0ea5e9;
+        }
+
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checklist-items label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .checklist-items label:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+
+        .checklist-items input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* 계열별 진로 로드맵 */
+        .career-roadmap {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 40px;
+        }
+
+        .career-roadmap h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .roadmap-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .roadmap-tab {
+            padding: 12px 24px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .roadmap-tab:hover {
+            background: #e2e8f0;
+        }
+
+        .roadmap-tab.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .roadmap-content {
+            display: none;
+        }
+
+        .roadmap-content.active {
+            display: block;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .roadmap-step {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .roadmap-step h5 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #78350f;
+        }
+
+        .roadmap-step ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .roadmap-step li {
+            padding: 6px 0;
+            color: #92400e;
+            font-size: 0.9rem;
+        }
+
+        .roadmap-step li:before {
+            content: "▸ ";
+            color: #f59e0b;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        /* 상담 기록 양식 */
+        .counsel-form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .counsel-form-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .form-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-row label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .form-row input,
+        .form-row textarea {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-row input:focus,
+        .form-row textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .btn-large {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* ============================================ */
+        /* 학생부 관리 페이지 스타일 */
+        /* ============================================ */
+        .reform-alert {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(251, 146, 60, 0.1) 100%);
+            border: 2px solid #ef4444;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            font-size: 3rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #991b1b;
+        }
+
+        .reform-points {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .reform-point {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .reform-point strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .reform-point p {
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* 세특 가이드 섹션 */
+        .setuk-guide-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 40px;
+        }
+
+        .setuk-guide-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .guide-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .guide-tab {
+            padding: 12px 24px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .guide-tab:hover {
+            background: #e2e8f0;
+        }
+
+        .guide-tab.active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .guide-content {
+            display: none;
+        }
+
+        .guide-content.active {
+            display: block;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .principle-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #10b981;
+        }
+
+        .principle-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #065f46;
+        }
+
+        .principle-card .do {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid #10b981;
+        }
+
+        .principle-card .dont {
+            background: #fef2f2;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid #ef4444;
+        }
+
+        .structure-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .structure-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .structure-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .step-content h5 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+
+        .step-content p {
+            color: #64748b;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .step-content .example {
+            background: #f0f9ff;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border-left: 3px solid #0ea5e9;
+            font-style: italic;
+        }
+
+        /* 과목별 예시 카드 */
+        .examples-section h4 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .example-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .example-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .example-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .subject-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .subject-badge.math {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+        }
+
+        .subject-badge.science {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+
+        .subject-badge.korean {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+            color: #9f1239;
+        }
+
+        .subject-badge.english {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #78350f;
+        }
+
+        .subject-badge.social {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #3730a3;
+        }
+
+        .rating {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .rating.excellent {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #78350f;
+        }
+
+        .rating.good {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+
+        .example-text {
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .example-text strong {
+            color: #1e293b;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* NG 예시 카드 */
+        .nono-section h4 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #991b1b;
+        }
+
+        .nono-card {
+            background: white;
+            border: 2px solid #fecaca;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .nono-card.bad {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .nono-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .badge-ng {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .nono-header h5 {
+            font-size: 1.1rem;
+            color: #991b1b;
+            margin: 0;
+        }
+
+        .bad-example {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+            margin: 10px 0;
+        }
+
+        .bad-example strong {
+            color: #dc2626;
+        }
+
+        .reason {
+            margin-top: 10px;
+            padding: 12px;
+            background: #fef3c7;
+            border-radius: 8px;
+            border-left: 3px solid #f59e0b;
+            color: #78350f;
+        }
+
+        .reason u {
+            text-decoration: underline;
+            text-decoration-color: #f59e0b;
+            text-decoration-thickness: 2px;
+        }
+
+        /* 학생부 체크리스트 */
+        .records-checklist {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .records-checklist h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .checklist-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .checklist-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #10b981;
+        }
+
+        .checklist-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #065f46;
+        }
+
+        .checklist-section label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .checklist-section label:hover {
+            background: #f0fdf4;
+            transform: translateX(5px);
+        }
+
+        .checklist-section input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .admission-info-cards,
+            .point-grid,
+            .checklist-grid,
+            .checklist-categories,
+            .roadmap-grid,
+            .principles-grid,
+            .checklist-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .strategy-tabs,
+            .roadmap-tabs,
+            .guide-tabs {
+                flex-direction: column;
+            }
+
+            .strategy-tab,
+            .roadmap-tab,
+            .guide-tab {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 
     <script src="js/teacher-dashboard.js"></script>
@@ -1629,6 +3415,78 @@
             }
             
         };
+
+        // ============================================
+        // 입시 지도 페이지 - 전략 탭 전환
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // 전략 탭 전환
+            const strategyTabs = document.querySelectorAll('.strategy-tab');
+            strategyTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // 모든 탭 비활성화
+                    strategyTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.strategy-content').forEach(c => c.classList.remove('active'));
+                    
+                    // 선택된 탭 활성화
+                    this.classList.add('active');
+                    document.getElementById(`strategy-${targetTab}`).classList.add('active');
+                });
+            });
+
+            // 로드맵 탭 전환
+            const roadmapTabs = document.querySelectorAll('.roadmap-tab');
+            roadmapTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-roadmap');
+                    
+                    // 모든 탭 비활성화
+                    roadmapTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.roadmap-content').forEach(c => c.classList.remove('active'));
+                    
+                    // 선택된 탭 활성화
+                    this.classList.add('active');
+                    document.getElementById(`roadmap-${targetTab}`).classList.add('active');
+                });
+            });
+
+            // 가이드 탭 전환
+            const guideTabs = document.querySelectorAll('.guide-tab');
+            guideTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-guide');
+                    
+                    // 모든 탭 비활성화
+                    guideTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('active'));
+                    
+                    // 선택된 탭 활성화
+                    this.classList.add('active');
+                    document.getElementById(`guide-${targetTab}`).classList.add('active');
+                });
+            });
+
+            // 체크리스트 항목 체크 시 로컬 스토리지 저장
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                // 저장된 상태 불러오기
+                const savedState = localStorage.getItem(checkbox.id || checkbox.name);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+
+                // 체크박스 변경 시 저장
+                checkbox.addEventListener('change', function() {
+                    if (this.id || this.name) {
+                        localStorage.setItem(this.id || this.name, this.checked);
+                    }
+                });
+            });
+
+            console.log('✅ 입시 지도, 진로 상담, 학생부 관리 페이지 초기화 완료');
+        });
     </script>
 </body>
 </html>
