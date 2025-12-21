@@ -1225,14 +1225,19 @@
                 return;
             }
             
-            // 학습 시간 체크 (30분 미만이면 경고)
+            // 학습 시간 체크
+            // 🧪 테스트 모드: 30초 (브리핑 전에 30분으로 변경 필요!)
+            const TEST_MODE = true;  // 🔴 브리핑 전 false로 변경!
+            const MIN_SECONDS = TEST_MODE ? 30 : 1800;  // 30초 or 30분
+            const MIN_DISPLAY = TEST_MODE ? '30초' : '30분';
+            
             const totalSeconds = timers[subject].seconds;
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
             
-            if (minutes < 30) {
-                alert(`⚠️ 학습 시간이 부족합니다!\n\n현재 학습 시간: ${minutes}분 ${seconds}초\n권장 학습 시간: 최소 30분\n\n조금 더 집중해서 학습해주세요! 💪`);
-                console.log(`⚠️ ${subject} 학습 시간 부족: ${minutes}분 ${seconds}초 (최소 30분 필요)`);
+            if (totalSeconds < MIN_SECONDS) {
+                alert(`⚠️ 학습 시간이 부족합니다!\n\n현재 학습 시간: ${minutes}분 ${seconds}초\n권장 학습 시간: 최소 ${MIN_DISPLAY}\n\n조금 더 집중해서 학습해주세요! 💪`);
+                console.log(`⚠️ ${subject} 학습 시간 부족: ${minutes}분 ${seconds}초 (최소 ${MIN_DISPLAY} 필요)`);
                 return; // 완료 버튼 동작 취소
             }
             
@@ -1274,8 +1279,11 @@
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
             
             // 학습 시간에 따른 메시지 표시
+            // 🧪 테스트 모드: 40초 기준 (브리핑 전에 40분으로 변경!)
+            const EXCELLENT_SECONDS = TEST_MODE ? 40 : 2400;  // 40초 or 40분
+            
             let message = '';
-            if (minutes >= 40) {
+            if (totalSeconds >= EXCELLENT_SECONDS) {
                 message = `✅ 학습 완료!\n\n시간: ${minutes}분 ${seconds}초\n\n멋진 집중력이에요! 🌟\n정말 잘했어요! 👏`;
             } else {
                 message = `✅ 학습 완료!\n\n시간: ${minutes}분 ${seconds}초\n\n좋아요! 조금 더 집중하면 더 좋겠어요! 💪`;
