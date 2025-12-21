@@ -742,6 +742,11 @@
                     <span>근화여중 겨울방학 자기주도학습UP 챌린지</span>
                 </a>
 
+                <a class="nav-item" onclick="showPage('student-management')" data-page="student-management">
+                    <i class="fas fa-users-cog"></i>
+                    <span>학생 관리 시스템</span>
+                </a>
+
                 <div class="nav-category">자료</div>
                 <a class="nav-item" onclick="showPage('report')" data-page="report">
                     <i class="fas fa-file-alt"></i>
@@ -930,6 +935,25 @@
                     </div>
                 </div>
 
+                <!-- 학생 관리 시스템 -->
+                <div class="page-section" id="page-student-management">
+                    <div class="info-box">
+                        <div class="info-box-header">
+                            <span class="info-box-icon">👥</span>
+                            <h3 class="info-box-title">학생 관리 시스템</h3>
+                        </div>
+                        <div class="info-box-content">
+                            학생 정보를 개별 입력하거나 엑셀로 일괄 등록할 수 있는 관리 시스템입니다.
+                            <br><strong>주요 기능:</strong> 개별 학생 입력, 엑셀 일괄 업로드, 학생 목록 관리, 데이터 내보내기
+                            <br><strong>지원 형식:</strong> 엑셀(.xlsx, .xls), CSV 파일
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <iframe src="student-management.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
                 <!-- 프로그램 보고서 -->
                 <div class="page-section" id="page-report">
                     <div class="info-box">
@@ -1021,6 +1045,7 @@
                 'teacher-high': '고등학생 교사 대시보드',
                 'parent': '학부모 대시보드',
                 'admin': '근화여중 겨울방학 자기주도학습UP 챌린지',
+                'student-management': '학생 관리 시스템',
                 'report': '프로그램 보고서',
                 'proposal': '근화여중 제안서',
                 'presentation': '100일 프로그램 발표'
