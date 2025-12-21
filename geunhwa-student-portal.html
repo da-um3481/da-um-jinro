@@ -246,6 +246,60 @@
                 font-size: 1rem;
             }
         }
+
+        /* ===========================
+           🎨 인터랙티브 버튼 애니메이션
+           =========================== */
+        
+        /* 스케줄 재생성 버튼 펄스 효과 */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.5);
+            }
+        }
+        
+        .schedule-regenerate-btn {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .schedule-regenerate-btn:hover {
+            animation: none;
+        }
+        
+        /* 로고 회전 애니메이션 */
+        @keyframes gentle-bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* 반응형 텍스트 크기 조정 */
+        @media (max-width: 640px) {
+            .schedule-regenerate-btn {
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem;
+            }
+        }
+        
+        /* 접근성: 키보드 포커스 강조 */
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #FCD34D;
+            outline-offset: 2px;
+        }
+        
+        /* 터치 디바이스 최적화 */
+        @media (hover: none) {
+            button, a {
+                -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+            }
+        }
     </style>
     <!-- 학생 포털은 보안 불필요 -->
 </head>
@@ -261,25 +315,57 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- 로고 & 인사말 -->
-                <div class="flex items-center space-x-3">
-                    <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10">
+                <div class="flex items-center space-x-3 group cursor-pointer" onclick="location.reload()" title="홈으로 돌아가기">
+                    <div class="relative">
+                        <img src="images/daum-logo-transparent.png" alt="DA.UM Logo" class="w-10 h-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                        <!-- 로고 주변 빛나는 효과 -->
+                        <div class="absolute inset-0 rounded-full bg-green-400/20 blur-md scale-0 group-hover:scale-150 transition-transform duration-300"></div>
+                    </div>
                     <div>
-                        <h1 class="text-lg font-bold bg-gradient-to-r from-green-800 to-green-700 bg-clip-text text-transparent">
+                        <h1 class="text-lg font-bold bg-gradient-to-r from-green-800 via-green-600 to-blue-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:via-green-600 group-hover:to-green-800 transition-all duration-500">
                             🚀 자기주도학습UP 챌린지
                         </h1>
-                        <p class="text-xs text-gray-600" id="studentInfo">📚 경주 근화여자중학교</p>
+                        <p class="text-xs text-gray-600 group-hover:text-green-700 transition-colors duration-300" id="studentInfo">
+                            📚 경주 근화여자중학교
+                        </p>
                     </div>
                 </div>
                 
                 <!-- 우측 메뉴 -->
-                <div class="flex items-center space-x-2">
-                    <button onclick="regenerateSchedule()" class="px-3 py-2 text-white bg-yellow-500/20 hover:bg-yellow-500/30 rounded-lg transition font-semibold border border-yellow-400/50" title="과목이 1개만 나오면 클릭하세요!">
-                        <i class="fas fa-redo mr-1"></i>스케줄 재생성
+<div class="flex items-center space-x-2">
+                    <!-- 🔄 스케줄 재생성 버튼 (개선된 대비 + 애니메이션) -->
+                    <button 
+                        onclick="regenerateSchedule()" 
+                        class="schedule-regenerate-btn group relative px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500" 
+                        title="과목이 1개만 나오면 클릭하세요!"
+                        aria-label="학습 스케줄 재생성">
+                        <span class="flex items-center">
+                            <i class="fas fa-sync-alt mr-2 group-hover:rotate-180 transition-transform duration-500"></i>
+                            <span class="hidden sm:inline">스케줄 재생성</span>
+                            <span class="sm:hidden">재생성</span>
+                        </span>
+                        <!-- 펄스 효과 -->
+                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+                        </span>
                     </button>
-                    <button onclick="resetStudent()" class="p-2 text-white hover:text-gray-200 transition" title="다른 학생으로 로그인">
-                        <i class="fas fa-sync-alt text-xl"></i>
+                    
+                    <!-- 🔄 학생 로그아웃 버튼 -->
+                    <button 
+                        onclick="resetStudent()" 
+                        class="p-2 text-white hover:text-yellow-300 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95" 
+                        title="다른 학생으로 로그인"
+                        aria-label="학생 로그아웃">
+                        <i class="fas fa-user-slash text-xl"></i>
                     </button>
-                    <a href="student-intro.html" class="p-2 text-white hover:text-gray-200 transition">
+                    
+                    <!-- ❓ 도움말 버튼 -->
+                    <a 
+                        href="student-intro.html" 
+                        class="p-2 text-white hover:text-yellow-300 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                        title="사용 방법 안내"
+                        aria-label="도움말">
                         <i class="fas fa-question-circle text-xl"></i>
                     </a>
                 </div>
