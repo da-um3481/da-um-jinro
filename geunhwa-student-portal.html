@@ -1708,53 +1708,50 @@
                 return;
             }
 
-            // ✅ 학생 관리 시스템에서 등록된 학생 확인
+            // ✅ 학생 관리 시스템에서 등록된 학생 확인 (선택적)
             const registeredStudents = JSON.parse(localStorage.getItem('student_list')) || [];
             const registeredStudent = registeredStudents.find(s => 
                 s.name === nameInput && 
                 s.grade === String(selectedGrade)
             );
 
-            // ❌ 등록되지 않은 학생
-            if (!registeredStudent) {
-                alert(`❌ 등록되지 않은 학생입니다.\n\n📝 입력 정보:\n   • 이름: ${nameInput}\n   • 학년: 중${selectedGrade}\n\n💡 학생 관리 시스템에 먼저 등록해주세요.\n\n🔗 학생 관리 시스템:\n   https://da-um3481.github.io/da-um-jinro/student-management.html\n\n또는 선생님께 문의하세요.`);
-                return;
-            }
-
-            // ✅ 등록된 학생 - 기존 로직 계속
             // 학생 목록에서 찾기 (기존 students 구조와 호환)
             const students = JSON.parse(localStorage.getItem('students')) || [];
             let student = students.find(s => s.name === nameInput && s.grade === selectedGrade);
 
-            // 학생이 없으면 생성 (등록된 학생 정보 기반)
+            // 학생이 없으면 생성 (등록된 학생이 있으면 그 정보 활용, 없으면 기본값 사용)
             if (!student) {
                 const newStudentId = 'student_' + Date.now();
                 student = {
                     id: newStudentId,
                     name: nameInput,
                     grade: selectedGrade,
-                    class_num: parseInt(registeredStudent.class) || 1,
-                    number: parseInt(registeredStudent.number) || 1,
-                    phone: registeredStudent.phone || '',
-                    email: registeredStudent.email || '',
+                    class_num: registeredStudent ? parseInt(registeredStudent.class) || 1 : 1,
+                    number: registeredStudent ? parseInt(registeredStudent.number) || 1 : 1,
+                    phone: registeredStudent ? registeredStudent.phone || '' : '',
+                    email: registeredStudent ? registeredStudent.email || '' : '',
                     created_at: new Date().toISOString()
                 };
                 
                 // 학생 목록에 추가
                 students.push(student);
                 localStorage.setItem('students', JSON.stringify(students));
-            } else {
-                // 기존 학생이면 학년 및 등록 정보 업데이트
-                student.grade = selectedGrade;
-                student.class_num = parseInt(registeredStudent.class) || student.class_num;
-                student.number = parseInt(registeredStudent.number) || student.number;
-                student.phone = registeredStudent.phone || student.phone;
-                student.email = registeredStudent.email || student.email;
                 
-                const studentIndex = students.findIndex(s => s.id === student.id);
-                if (studentIndex !== -1) {
-                    students[studentIndex] = student;
-                    localStorage.setItem('students', JSON.stringify(students));
+                console.log(`✅ 새 학생 계정 생성: ${nameInput} (${selectedGrade}학년)`);
+            } else {
+                // 기존 학생이면 등록 정보가 있을 경우 업데이트
+                if (registeredStudent) {
+                    student.grade = selectedGrade;
+                    student.class_num = parseInt(registeredStudent.class) || student.class_num;
+                    student.number = parseInt(registeredStudent.number) || student.number;
+                    student.phone = registeredStudent.phone || student.phone;
+                    student.email = registeredStudent.email || student.email;
+                    
+                    const studentIndex = students.findIndex(s => s.id === student.id);
+                    if (studentIndex !== -1) {
+                        students[studentIndex] = student;
+                        localStorage.setItem('students', JSON.stringify(students));
+                    }
                 }
             }
 
