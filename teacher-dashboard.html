@@ -711,6 +711,578 @@
                 display: block;
             }
         }
+
+        /* 진로 매칭 도구 */
+        .career-matching-tool, .mock-exam-analysis {
+            margin-top: 2rem;
+        }
+
+        .matching-card, .analysis-card {
+            background: var(--dark-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .matching-input-section h4, .exam-input-section h4, .analysis-result h4 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group select, .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .btn-analyze {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .matching-result-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .result-card.recommended {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: var(--primary);
+            color: white;
+        }
+
+        .result-badge.secondary {
+            background: var(--secondary);
+        }
+
+        .result-body p {
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .match-score {
+            color: var(--warning);
+            font-weight: 700;
+        }
+
+        /* 모의고사 분석 */
+        .analysis-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .analysis-tab {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .analysis-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .subject-input {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .subject-input label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .subject-input input {
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text);
+        }
+
+        .trend-chart {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .improvement-tips {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid var(--secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .improvement-tips h5 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .improvement-tips ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .improvement-tips li {
+            margin-bottom: 0.75rem;
+            padding-left: 1rem;
+            position: relative;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .improvement-tips li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+
+        /* 세특 작성 도우미 */
+        .setak-helper-section, .records-status-section {
+            margin-top: 2rem;
+        }
+
+        .helper-card {
+            background: var(--dark-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .setak-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setak-tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .setak-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .setak-content {
+            display: none;
+        }
+
+        .setak-content.active {
+            display: block;
+        }
+
+        .template-structure {
+            margin-top: 1.5rem;
+        }
+
+        .structure-step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h5 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content .example {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .step-content textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .character-counter {
+            margin-top: 1rem;
+            text-align: right;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .character-counter #char-count {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .example-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .example-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .example-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .subject-badge, .quality-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .subject-badge {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .quality-badge {
+            background: var(--warning);
+            color: white;
+        }
+
+        .example-text {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .example-analysis {
+            padding: 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        .checklist-section {
+            margin-bottom: 2rem;
+        }
+
+        .checklist-section h5 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .checklist-section label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .checklist-section label:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .checklist-section input[type="checkbox"] {
+            margin-top: 0.25rem;
+        }
+
+        /* 학생부 작성 현황 */
+        .status-overview {
+            margin-top: 1.5rem;
+        }
+
+        .overview-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .overview-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .overview-card.warning {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .overview-card .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .overview-card .card-info h4 {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .overview-card .big-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .overview-card.warning .big-number {
+            color: var(--warning);
+        }
+
+        .overview-card .sub-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* 타임라인 */
+        .records-timeline {
+            margin-top: 2rem;
+            background: var(--dark-card);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .records-timeline h4 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-items {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline-items:before {
+            content: "";
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -2.5rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .timeline-item.active .timeline-marker {
+            background: var(--warning);
+            border-color: var(--warning);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .timeline-content h5 {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* 추가 반응형 */
+        @media (max-width: 768px) {
+            .input-row, .subject-grid, .overview-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .result-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .setak-tabs {
+                flex-direction: column;
+            }
+
+            .analysis-tabs {
+                flex-direction: column;
+            }
+
+            .structure-step {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step-number {
+                align-self: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -926,6 +1498,14 @@
                 <div class="page-header">
                     <h2>📊 입시 지도</h2>
                     <p>2027/2028학년도 대입 전형 분석 및 학생별 맞춤 전략 수립</p>
+                    <div class="page-tools">
+                        <button class="btn-primary" onclick="window.open('https://adiga.kr', '_blank')">
+                            <i class="fas fa-external-link-alt"></i> 대학어디가 바로가기
+                        </button>
+                        <button class="btn-primary" onclick="window.open('/student-management.html', '_blank')">
+                            <i class="fas fa-users"></i> 학생 명단 보기
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 2027/2028 입시 핵심 정보 -->
@@ -1042,19 +1622,43 @@
 
                     <div class="strategy-content" id="strategy-jonghap">
                         <div class="strategy-detail">
-                            <h4>🎯 학생부종합 전형 포인트</h4>
-                            <div class="point-grid">
-                                <div class="point-card">
-                                    <i class="fas fa-check-circle"></i>
-                                    <h5>평가 요소</h5>
-                                    <p>학업역량 + 진로역량</p>
-                                    <p>공동체역량 + 전공 적합성</p>
+                            <h4>🎯 학생부종합 전형 포인트 (5개 대학 공동연구 기반)</h4>
+                            <div class="evaluation-overview">
+                                <div class="eval-card">
+                                    <h5>📚 학업역량 (40%)</h5>
+                                    <ul>
+                                        <li><strong>학업성취도:</strong> 교과 성적 수준 및 발전 정도</li>
+                                        <li><strong>학업태도:</strong> 수업 참여도, 자기주도 학습</li>
+                                        <li><strong>탐구력:</strong> 교과 내 탐구활동 깊이</li>
+                                    </ul>
+                                    <p class="tip">💡 세특에 탐구과정·결과 구체적 기록 필수</p>
                                 </div>
+                                <div class="eval-card">
+                                    <h5>🎯 진로역량 (30%)</h5>
+                                    <ul>
+                                        <li><strong>전공 관련 교과 이수:</strong> 필수·권장 과목 선택</li>
+                                        <li><strong>전공 관련 활동:</strong> 동아리, 진로활동 연계</li>
+                                        <li><strong>진로 탐색:</strong> 지속성 있는 관심 분야 활동</li>
+                                    </ul>
+                                    <p class="tip">💡 1학년부터 계열 관련 활동 일관성 유지</p>
+                                </div>
+                                <div class="eval-card">
+                                    <h5>🤝 공동체역량 (30%)</h5>
+                                    <ul>
+                                        <li><strong>협업능력:</strong> 팀 프로젝트, 학급 활동</li>
+                                        <li><strong>나눔·배려:</strong> 봉사활동, 교우관계</li>
+                                        <li><strong>성실성:</strong> 출결, 학습태도</li>
+                                    </ul>
+                                    <p class="tip">💡 창체·행특에 구체적 역할 기록</p>
+                                </div>
+                            </div>
+                            <div class="point-grid">
                                 <div class="point-card">
                                     <i class="fas fa-lightbulb"></i>
                                     <h5>적합 학생 유형</h5>
-                                    <p>교과+비교과 균형 발전</p>
+                                    <p>내신 2.5등급 이내 + 비교과 우수</p>
                                     <p>진로 탐색 활동이 뚜렷한 학생</p>
+                                    <p>세특 내용이 풍부한 학생</p>
                                 </div>
                                 <div class="point-card">
                                     <i class="fas fa-book-open"></i>
@@ -1475,6 +2079,154 @@
                     </div>
                 </div>
 
+                <!-- 진로-전공-입시 매칭 도구 -->
+                <div class="career-matching-tool">
+                    <h3>🎯 진로-전공-입시 매칭 도구</h3>
+                    <div class="matching-card">
+                        <div class="matching-input-section">
+                            <h4>학생 정보 입력</h4>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label>내신 평균 등급</label>
+                                    <select id="internal-grade">
+                                        <option value="">선택</option>
+                                        <option value="1.0">1등급 (1.0~1.5)</option>
+                                        <option value="2.0">2등급 (1.51~2.5)</option>
+                                        <option value="3.0">3등급 (2.51~3.5)</option>
+                                        <option value="4.0">4등급 (3.51~4.5)</option>
+                                        <option value="5.0">5등급 이하</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>모의고사 평균 등급</label>
+                                    <select id="mock-grade">
+                                        <option value="">선택</option>
+                                        <option value="1">1등급</option>
+                                        <option value="2">2등급</option>
+                                        <option value="3">3등급</option>
+                                        <option value="4">4등급</option>
+                                        <option value="5">5등급 이하</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>희망 계열</label>
+                                    <select id="career-field">
+                                        <option value="">선택</option>
+                                        <option value="humanities">인문계열</option>
+                                        <option value="social">사회계열</option>
+                                        <option value="science">자연계열</option>
+                                        <option value="engineering">공학계열</option>
+                                        <option value="medical">의약계열</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label>학생부 강점</label>
+                                    <div class="checkbox-group">
+                                        <label><input type="checkbox" value="grades"> 교과 성적 우수</label>
+                                        <label><input type="checkbox" value="activities"> 비교과 활동 우수</label>
+                                        <label><input type="checkbox" value="setak"> 세특 기록 우수</label>
+                                        <label><input type="checkbox" value="reading"> 독서 활동 풍부</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn-primary btn-analyze">🔍 입시 전형 분석하기</button>
+                        </div>
+                        
+                        <div class="matching-result-section" style="display:none;">
+                            <h4>추천 입시 전형</h4>
+                            <div class="result-cards">
+                                <div class="result-card recommended">
+                                    <div class="result-header">
+                                        <span class="result-badge">최적</span>
+                                        <h5>교과전형</h5>
+                                    </div>
+                                    <div class="result-body">
+                                        <p><strong>적합도:</strong> <span class="match-score">★★★★★ 95%</span></p>
+                                        <p><strong>이유:</strong> 내신 성적 우수, 수능최저 충족 가능</p>
+                                        <p><strong>전략:</strong> 수능최저 있는 대학 위주 지원</p>
+                                        <p><strong>추천 대학:</strong> 서울 주요 15개 대학 교과전형</p>
+                                    </div>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-header">
+                                        <span class="result-badge secondary">고려</span>
+                                        <h5>종합전형</h5>
+                                    </div>
+                                    <div class="result-body">
+                                        <p><strong>적합도:</strong> <span class="match-score">★★★☆☆ 70%</span></p>
+                                        <p><strong>이유:</strong> 세특 기록 보완 필요</p>
+                                        <p><strong>전략:</strong> 2학기 세특 집중 관리</p>
+                                        <p><strong>추천 대학:</strong> 학종 비중 높은 중위권 대학</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 모의고사 성적 분석 도구 -->
+                <div class="mock-exam-analysis">
+                    <h3>📊 모의고사 성적 분석 및 목표 설정</h3>
+                    <div class="analysis-card">
+                        <div class="analysis-tabs">
+                            <button class="analysis-tab active" data-exam="march">3월 모의고사</button>
+                            <button class="analysis-tab" data-exam="june">6월 모의고사</button>
+                            <button class="analysis-tab" data-exam="september">9월 모의고사</button>
+                            <button class="analysis-tab" data-exam="suneung">수능</button>
+                        </div>
+                        
+                        <div class="exam-input-section">
+                            <h4>성적 입력</h4>
+                            <div class="subject-grid">
+                                <div class="subject-input">
+                                    <label>국어</label>
+                                    <input type="number" placeholder="등급" min="1" max="9">
+                                    <input type="number" placeholder="백분위" min="0" max="100">
+                                </div>
+                                <div class="subject-input">
+                                    <label>수학</label>
+                                    <input type="number" placeholder="등급" min="1" max="9">
+                                    <input type="number" placeholder="백분위" min="0" max="100">
+                                </div>
+                                <div class="subject-input">
+                                    <label>영어</label>
+                                    <input type="number" placeholder="등급" min="1" max="9">
+                                    <input type="number" placeholder="백분위" min="0" max="100">
+                                </div>
+                                <div class="subject-input">
+                                    <label>탐구1</label>
+                                    <input type="number" placeholder="등급" min="1" max="9">
+                                    <input type="number" placeholder="백분위" min="0" max="100">
+                                </div>
+                                <div class="subject-input">
+                                    <label>탐구2</label>
+                                    <input type="number" placeholder="등급" min="1" max="9">
+                                    <input type="number" placeholder="백분위" min="0" max="100">
+                                </div>
+                            </div>
+                            <button class="btn-primary">💾 성적 저장 및 분석</button>
+                        </div>
+                        
+                        <div class="analysis-result">
+                            <h4>성적 추이 분석</h4>
+                            <div class="trend-chart">
+                                <p class="placeholder-text">📈 성적을 입력하면 추이 그래프가 표시됩니다</p>
+                            </div>
+                            <div class="improvement-tips">
+                                <h5>📌 과목별 학습 전략</h5>
+                                <ul>
+                                    <li><strong>국어:</strong> 독서 지문 분석 능력 강화 (비문학 집중)</li>
+                                    <li><strong>수학:</strong> 기본 개념 재정립 및 유형별 반복 학습</li>
+                                    <li><strong>영어:</strong> 어휘력 확장 + 빈칸추론 집중 훈련</li>
+                                    <li><strong>탐구:</strong> 개념 정리 후 기출문제 풀이</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 상담 기록 양식 -->
                 <div class="counsel-form-section">
                     <h3>📝 진로 상담 기록 양식</h3>
@@ -1564,8 +2316,188 @@
                         </div>
                     </div>
 
+                    <!-- 세특 작성 도우미 -->
+                    <div class="setak-helper-section">
+                        <h3>✍️ 세특 작성 도우미 (Subject-specific Records Assistant)</h3>
+                        <div class="helper-card">
+                            <div class="setak-tabs">
+                                <button class="setak-tab active" data-type="template">작성 템플릿</button>
+                                <button class="setak-tab" data-type="examples">우수 사례</button>
+                                <button class="setak-tab" data-type="checklist">점검 체크리스트</button>
+                            </div>
+                            
+                            <div class="setak-content active" id="setak-template">
+                                <h4>📋 세특 작성 기본 템플릿</h4>
+                                <div class="template-structure">
+                                    <div class="structure-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h5>학습 내용 (WHAT)</h5>
+                                            <p class="example">예: "○○ 단원에서 △△ 개념을 학습하며..."</p>
+                                            <textarea placeholder="학생이 배운 구체적 내용을 기재하세요" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="structure-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h5>탐구 과정 (HOW)</h5>
+                                            <p class="example">예: "...를 활용하여 □□ 현상을 분석하고..."</p>
+                                            <textarea placeholder="학생의 탐구 활동 및 사고 과정을 기재하세요" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="structure-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h5>역량 발현 (ABILITY)</h5>
+                                            <p class="example">예: "...를 통해 ◇◇ 역량을 발휘함"</p>
+                                            <textarea placeholder="학생의 성장, 역량, 태도를 기재하세요" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="character-counter">
+                                    <span id="char-count">0</span> / 500자
+                                    <span class="counter-status"></span>
+                                </div>
+                                <button class="btn-primary">💾 임시 저장</button>
+                                <button class="btn-secondary">📋 복사하기</button>
+                            </div>
+                            
+                            <div class="setak-content" id="setak-examples">
+                                <h4>⭐ 우수 세특 작성 사례</h4>
+                                <div class="example-cards">
+                                    <div class="example-card">
+                                        <div class="example-header">
+                                            <span class="subject-badge">수학</span>
+                                            <span class="quality-badge">우수</span>
+                                        </div>
+                                        <p class="example-text">
+                                            "삼각함수 단원에서 주기함수의 그래프 변환을 학습하며, 실생활의 주기적 현상(조석 간만의 차, 기온 변화 등)을 수학적 모델로 표현하는 탐구 활동을 수행함. 진폭과 주기의 변화가 그래프에 미치는 영향을 분석하고, 이를 기반으로 'A시의 월별 평균 기온 예측 모델' 보고서를 작성하여 발표함. 실제 데이터와 수학적 모델을 연결하는 과정에서 수학적 모델링 역량과 창의적 문제해결력을 발휘함."
+                                        </p>
+                                        <div class="example-analysis">
+                                            <strong>✓ 강점:</strong> 구체적 활동 + 실생활 연결 + 역량 드러남
+                                        </div>
+                                    </div>
+                                    <div class="example-card">
+                                        <div class="example-header">
+                                            <span class="subject-badge">과학</span>
+                                            <span class="quality-badge">우수</span>
+                                        </div>
+                                        <p class="example-text">
+                                            "DNA 구조와 복제 단원을 학습하며 유전정보의 전달 과정에 관심을 가지고, CRISPR 유전자 가위 기술의 원리와 윤리적 쟁점을 주제로 심화 탐구를 진행함. 과학 저널 논문 3편을 분석하여 기술의 의학적 활용 가능성과 생명윤리적 한계를 비교 정리한 보고서를 작성함. 과학 기술의 사회적 책임과 윤리에 대한 성찰을 바탕으로 과학적 사고력과 윤리적 판단 능력을 함양함."
+                                        </p>
+                                        <div class="example-analysis">
+                                            <strong>✓ 강점:</strong> 심화 탐구 + 자료 분석 + 윤리적 성찰
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setak-content" id="setak-checklist">
+                                <h4>✅ 세특 작성 품질 점검 체크리스트</h4>
+                                <div class="checklist-section">
+                                    <h5>🔍 필수 요소 확인</h5>
+                                    <label><input type="checkbox"> 구체적인 학습 내용 기재</label>
+                                    <label><input type="checkbox"> 학생의 탐구/사고 과정 포함</label>
+                                    <label><input type="checkbox"> 학생 개인의 역량·성장 드러남</label>
+                                    <label><input type="checkbox"> 과목과 연계된 활동</label>
+                                    <label><input type="checkbox"> 500자 제한 준수</label>
+                                </div>
+                                <div class="checklist-section">
+                                    <h5>⚠️ 피해야 할 표현</h5>
+                                    <label><input type="checkbox"> 추상적·모호한 표현 지양 ("열심히", "적극적으로" 등)</label>
+                                    <label><input type="checkbox"> 단순 참여 사실만 나열 금지</label>
+                                    <label><input type="checkbox"> 교사의 주관적 평가 배제</label>
+                                    <label><input type="checkbox"> 수상 실적, 외부 활동 언급 금지</label>
+                                </div>
+                                <div class="checklist-section">
+                                    <h5>✨ 차별화 포인트</h5>
+                                    <label><input type="checkbox"> 전공 적합성 드러나는 활동</label>
+                                    <label><input type="checkbox"> 실생활/사회 이슈 연계</label>
+                                    <label><input type="checkbox"> 독서 활동 연결</label>
+                                    <label><input type="checkbox"> 깊이 있는 탐구 과정</label>
+                                    <label><input type="checkbox"> 학생 고유의 관점·해석</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 학생부 기록 현황 관리 -->
+                    <div class="records-status-section">
+                        <h3>📊 학생부 작성 현황 점검</h3>
+                        <div class="status-overview">
+                            <div class="overview-cards">
+                                <div class="overview-card">
+                                    <div class="card-icon">📝</div>
+                                    <div class="card-info">
+                                        <h4>세특 작성률</h4>
+                                        <p class="big-number">85%</p>
+                                        <p class="sub-text">17/20 과목 완료</p>
+                                    </div>
+                                </div>
+                                <div class="overview-card">
+                                    <div class="card-icon">📚</div>
+                                    <div class="card-info">
+                                        <h4>독서 활동</h4>
+                                        <p class="big-number">12권</p>
+                                        <p class="sub-text">목표: 15권</p>
+                                    </div>
+                                </div>
+                                <div class="overview-card">
+                                    <div class="card-icon">🏃</div>
+                                    <div class="card-info">
+                                        <h4>창체 활동</h4>
+                                        <p class="big-number">28시간</p>
+                                        <p class="sub-text">목표: 30시간</p>
+                                    </div>
+                                </div>
+                                <div class="overview-card warning">
+                                    <div class="card-icon">⚠️</div>
+                                    <div class="card-info">
+                                        <h4>미작성 항목</h4>
+                                        <p class="big-number">3개</p>
+                                        <p class="sub-text">마감: 2주 남음</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="records-timeline">
+                            <h4>📅 학생부 작성 일정</h4>
+                            <div class="timeline-items">
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">✓</div>
+                                    <div class="timeline-content">
+                                        <h5>1학기 중간고사 (4월)</h5>
+                                        <p>세특 초안 작성 완료</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">✓</div>
+                                    <div class="timeline-content">
+                                        <h5>1학기 기말고사 (7월)</h5>
+                                        <p>1학기 세특 최종 확정</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item active">
+                                    <div class="timeline-marker">⏳</div>
+                                    <div class="timeline-content">
+                                        <h5>2학기 중간고사 (10월)</h5>
+                                        <p>진행 중 - 세특 작성 중</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">○</div>
+                                    <div class="timeline-content">
+                                        <h5>학생부 마감 (8월말)</h5>
+                                        <p>최종 검토 및 제출</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- 2027 등급 분포 상세표 -->
-                    <div class="grade-comparison-section\">
+                    <div class="grade-comparison-section">
                         <h3>📊 2027학년도 등급 분포표 (9등급제)</h3>
                         <div class="grade-table-card">
                             <table class="grade-distribution-table">
@@ -4038,6 +4970,105 @@
                     if (this.id || this.name) {
                         localStorage.setItem(this.id || this.name, this.checked);
                     }
+                });
+            });
+
+            // 세특 작성 도우미 탭 전환
+            const setakTabs = document.querySelectorAll('.setak-tab');
+            setakTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetType = this.getAttribute('data-type');
+                    
+                    // 모든 탭 비활성화
+                    setakTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.setak-content').forEach(c => c.classList.remove('active'));
+                    
+                    // 선택된 탭 활성화
+                    this.classList.add('active');
+                    document.getElementById(`setak-${targetType}`).classList.add('active');
+                });
+            });
+
+            // 세특 작성 글자 수 카운터
+            const setakTextareas = document.querySelectorAll('.step-content textarea');
+            const charCountElement = document.getElementById('char-count');
+            
+            function updateCharCount() {
+                let totalChars = 0;
+                setakTextareas.forEach(textarea => {
+                    totalChars += textarea.value.length;
+                });
+                
+                if (charCountElement) {
+                    charCountElement.textContent = totalChars;
+                    
+                    // 글자 수에 따른 상태 표시
+                    const statusElement = charCountElement.nextElementSibling;
+                    if (statusElement && statusElement.classList.contains('counter-status')) {
+                        if (totalChars > 500) {
+                            statusElement.textContent = ' ⚠️ 500자 초과';
+                            statusElement.style.color = 'var(--danger)';
+                        } else if (totalChars > 450) {
+                            statusElement.textContent = ' ⚠️ 거의 다 참';
+                            statusElement.style.color = 'var(--warning)';
+                        } else if (totalChars > 0) {
+                            statusElement.textContent = ' ✓ 적정';
+                            statusElement.style.color = 'var(--primary)';
+                        } else {
+                            statusElement.textContent = '';
+                        }
+                    }
+                }
+            }
+            
+            setakTextareas.forEach(textarea => {
+                textarea.addEventListener('input', updateCharCount);
+            });
+
+            // 진로-전공-입시 매칭 도구
+            const btnAnalyze = document.querySelector('.btn-analyze');
+            if (btnAnalyze) {
+                btnAnalyze.addEventListener('click', function() {
+                    const internalGrade = document.getElementById('internal-grade')?.value;
+                    const mockGrade = document.getElementById('mock-grade')?.value;
+                    const careerField = document.getElementById('career-field')?.value;
+                    
+                    if (!internalGrade || !mockGrade || !careerField) {
+                        alert('모든 필수 항목을 입력해주세요.');
+                        return;
+                    }
+                    
+                    // 결과 섹션 표시
+                    const resultSection = document.querySelector('.matching-result-section');
+                    if (resultSection) {
+                        resultSection.style.display = 'block';
+                        
+                        // 스크롤 애니메이션
+                        resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                    
+                    // 실제로는 서버에서 데이터를 가져와야 하지만, 데모용 로그
+                    console.log('진로 매칭 분석 완료:', {
+                        내신등급: internalGrade,
+                        모의고사등급: mockGrade,
+                        희망계열: careerField
+                    });
+                });
+            }
+
+            // 모의고사 분석 탭 전환
+            const analysisTabButtons = document.querySelectorAll('.analysis-tab');
+            analysisTabButtons.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const examType = this.getAttribute('data-exam');
+                    
+                    // 모든 탭 비활성화
+                    analysisTabButtons.forEach(t => t.classList.remove('active'));
+                    
+                    // 선택된 탭 활성화
+                    this.classList.add('active');
+                    
+                    console.log(`${examType} 모의고사 선택됨`);
                 });
             });
 
