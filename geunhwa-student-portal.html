@@ -375,9 +375,14 @@
         
         <!-- 학생 이름 입력 -->
         <div class="glass-effect rounded-2xl shadow-lg p-6 animate-slide-up">
-            <label class="block text-sm font-semibold text-gray-700 mb-3">
-                <i class="fas fa-user-circle mr-2 text-green-800"></i>내 이름 입력
-            </label>
+            <div class="flex items-center justify-between mb-3">
+                <label class="block text-sm font-semibold text-gray-700">
+                    <i class="fas fa-user-circle mr-2 text-green-800"></i>내 이름 입력
+                </label>
+                <span class="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full font-semibold">
+                    <i class="fas fa-check-circle mr-1"></i>등록 불필요 · 누구나 사용 가능
+                </span>
+            </div>
             <div class="flex flex-col sm:flex-row gap-3">
                 <input 
                     type="text" 
@@ -398,12 +403,34 @@
                     onclick="loadStudentByName()"
                     class="px-6 py-3 bg-gradient-to-r from-green-800 to-green-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
                 >
-                    <i class="fas fa-search mr-2"></i>찾기
+                    <i class="fas fa-sign-in-alt mr-2"></i>시작하기
                 </button>
             </div>
-            <p class="text-xs text-gray-500 mt-2">
-                <i class="fas fa-info-circle mr-1"></i>이름과 학년을 선택하고 "찾기" 버튼을 눌러주세요
-            </p>
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-xs text-gray-600 mb-3">
+                    <i class="fas fa-info-circle mr-1 text-blue-500"></i>이름과 학년을 입력하고 시작하거나, 아래 게스트 모드로 빠르게 체험해보세요
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <button 
+                        onclick="loadGuestStudent('게스트', 1)"
+                        class="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 text-sm"
+                    >
+                        <i class="fas fa-user-secret mr-2"></i>게스트로 시작 (중1)
+                    </button>
+                    <button 
+                        onclick="loadGuestStudent('게스트', 2)"
+                        class="px-4 py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 text-sm"
+                    >
+                        <i class="fas fa-user-secret mr-2"></i>게스트로 시작 (중2)
+                    </button>
+                    <button 
+                        onclick="loadGuestStudent('게스트', 3)"
+                        class="px-4 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 text-sm"
+                    >
+                        <i class="fas fa-user-secret mr-2"></i>게스트로 시작 (중3)
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- 오늘의 날짜 & 목표 -->
@@ -1708,29 +1735,45 @@
                 return;
             }
 
+            performLogin(nameInput, selectedGrade);
+        }
+
+        // 🚀 게스트 로그인 (빠른 시작)
+        function loadGuestStudent(guestName, grade) {
+            // 고유한 게스트 이름 생성 (중복 방지)
+            const timestamp = Date.now().toString().slice(-6);
+            const uniqueGuestName = `${guestName}_${timestamp}`;
+            
+            performLogin(uniqueGuestName, grade, true);
+        }
+
+        // 🔐 공통 로그인 처리 함수
+        function performLogin(studentName, selectedGrade, isGuest = false) {
+
             // ✅ 학생 관리 시스템에서 등록된 학생 확인 (선택적)
             const registeredStudents = JSON.parse(localStorage.getItem('student_list')) || [];
             const registeredStudent = registeredStudents.find(s => 
-                s.name === nameInput && 
+                s.name === studentName && 
                 s.grade === String(selectedGrade)
             );
 
             // 학생 목록에서 찾기 (기존 students 구조와 호환)
             const students = JSON.parse(localStorage.getItem('students')) || [];
-            let student = students.find(s => s.name === nameInput && s.grade === selectedGrade);
+            let student = students.find(s => s.name === studentName && s.grade === selectedGrade);
 
             // 학생이 없으면 생성 (등록된 학생이 있으면 그 정보 활용, 없으면 기본값 사용)
             if (!student) {
                 const newStudentId = 'student_' + Date.now();
                 student = {
                     id: newStudentId,
-                    name: nameInput,
+                    name: studentName,
                     grade: selectedGrade,
                     class_num: registeredStudent ? parseInt(registeredStudent.class) || 1 : 1,
                     number: registeredStudent ? parseInt(registeredStudent.number) || 1 : 1,
                     phone: registeredStudent ? registeredStudent.phone || '' : '',
                     email: registeredStudent ? registeredStudent.email || '' : '',
-                    created_at: new Date().toISOString()
+                    created_at: new Date().toISOString(),
+                    isGuest: isGuest
                 };
                 
                 // 학생 목록에 추가
@@ -1760,11 +1803,15 @@
             localStorage.setItem('currentStudentName', student.name);
             localStorage.setItem('currentStudentGrade', student.grade);
 
-            // 학생 정보 표시 업데이트
-            document.getElementById('studentInfo').textContent = `📚 ${student.name} (${student.grade}학년 ${student.class_num}반 ${student.number}번)`;
+            // 학생 정보 표시 업데이트 (게스트 모드 고려)
+            const displayName = isGuest ? '게스트' : student.name;
+            const displayInfo = isGuest 
+                ? `🚀 ${displayName} (${student.grade}학년 체험 모드)` 
+                : `📚 ${student.name} (${student.grade}학년 ${student.class_num}반 ${student.number}번)`;
+            document.getElementById('studentInfo').textContent = displayInfo;
 
             // 환영 메시지
-            showWelcomeMessage(student.name);
+            showWelcomeMessage(student.name, isGuest);
 
             // 🎉 원스톱: 자동으로 오늘의 스케줄 생성 및 표시
             generateAndDisplayTodaySchedule(student);
@@ -1773,28 +1820,35 @@
             initProgramProgress();
             loadTeacherFeedback();
             
-            // 🎯 진단평가 실행 (최초 1회만)
-            const hasDiagnostic = hasDiagnosticCompleted(student.id, '종합');
-            
-            if (!hasDiagnostic) {
-                // 진단평가 안내
+            // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
+            if (!isGuest) {
+                const hasDiagnostic = hasDiagnosticCompleted(student.id, '종합');
+                
+                if (!hasDiagnostic) {
+                    // 진단평가 안내
+                    setTimeout(() => {
+                        if (confirm(`👋 ${student.name} 학생 환영합니다!\n\n맞춤형 학습을 위해 간단한 진단평가를 실시합니다.\n\n📝 총 50문제 (약 30분 소요)\n   • 수학 10문제\n   • 영어 10문제\n   • 국어 10문제\n   • 사회 10문제\n   • 과학 10문제\n\n⏰ 제한시간 없음\n💡 차근차근 풀어주세요\n\n지금 시작하시겠습니까?`)) {
+                            startDiagnosticTest(student.grade, '종합');
+                        }
+                    }, 1500);
+                }
+            } else {
+                // 게스트 모드 안내
                 setTimeout(() => {
-                    if (confirm(`👋 ${student.name} 학생 환영합니다!\n\n맞춤형 학습을 위해 간단한 진단평가를 실시합니다.\n\n📝 총 50문제 (약 30분 소요)\n   • 수학 10문제\n   • 영어 10문제\n   • 국어 10문제\n   • 사회 10문제\n   • 과학 10문제\n\n⏰ 제한시간 없음\n💡 차근차근 풀어주세요\n\n지금 시작하시겠습니까?`)) {
-                        startDiagnosticTest(student.grade, '종합');
-                    }
-                }, 1500);
+                    showSuccessMessage('🚀 게스트 모드로 시작합니다! 자유롭게 체험해보세요.');
+                }, 800);
             }
         }
 
         // 환영 메시지 표시
-        function showWelcomeMessage(name) {
+        function showWelcomeMessage(name, isGuest = false) {
             const message = document.createElement('div');
             message.style.cssText = `
                 position: fixed;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                background: linear-gradient(135deg, ${isGuest ? '#3b82f6 0%, #2563eb 100%' : '#059669 0%, #047857 100%'});
                 color: white;
                 padding: 2rem 3rem;
                 border-radius: 20px;
@@ -1803,10 +1857,14 @@
                 text-align: center;
                 animation: fadeInScale 0.5s ease-out;
             `;
+            
+            const displayName = name.includes('게스트_') ? '게스트' : name;
+            const emoji = isGuest ? '🚀' : '🎉';
+            
             message.innerHTML = `
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                <div style="font-size: 3rem; margin-bottom: 1rem;">${emoji}</div>
                 <div style="font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem;">환영합니다!</div>
-                <div style="font-size: 1.2rem; opacity: 0.9;">${name} 학생</div>
+                <div style="font-size: 1.2rem; opacity: 0.9;">${displayName}${isGuest ? ' 모드' : ' 학생'}</div>
             `;
             
             document.body.appendChild(message);
