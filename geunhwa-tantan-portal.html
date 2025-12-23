@@ -674,11 +674,7 @@
                 <div class="nav-category">학생</div>
                 <a class="nav-item" onclick="showPage('student-30day')" data-page="student-30day">
                     <i class="fas fa-user-graduate"></i>
-                    <span>학생 포털 (30일)</span>
-                </a>
-                <a class="nav-item" onclick="showPage('student-100day')" data-page="student-100day">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>학생 포털 (100일)</span>
+                    <span>학생 포털</span>
                 </a>
 
                 <div class="nav-category">교사</div>
@@ -735,7 +731,7 @@
                             <div class="quick-link-card" onclick="showPage('student-30day')">
                                 <div class="quick-link-icon">👨‍🎓</div>
                                 <h3 class="quick-link-title">학생 포털</h3>
-                                <p class="quick-link-desc">30일/100일 학습 프로그램</p>
+                                <p class="quick-link-desc">30일 학습 프로그램</p>
                             </div>
 
                             <div class="quick-link-card" onclick="showPage('teacher-dashboard')">
@@ -766,7 +762,6 @@
                             </div>
                             <div style="color: var(--text-muted); line-height: 1.8;">
                                 <p><strong style="color: var(--primary);">✅ 30일 겨울방학 프로그램</strong> - 5과목, 하루 135분, 집중 학습</p>
-                                <p><strong style="color: var(--secondary);">✅ 100일 장기 프로그램</strong> - 체계적 장기 학습 관리</p>
                                 <p><strong style="color: var(--accent);">✅ 진단평가 시스템</strong> - 수준별 맞춤 학습 제공</p>
                                 <p><strong style="color: var(--primary);">✅ 실시간 모니터링</strong> - 교사/학부모 대시보드 연동</p>
                                 <p><strong style="color: var(--warning);">✅ 학습 캘린더</strong> - 직관적인 학습 기록 시각화</p>
@@ -802,13 +797,6 @@
                 <div class="page-section" id="page-student-30day">
                     <div class="card">
                         <iframe src="geunhwa-student-portal.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
-                    </div>
-                </div>
-
-                <!-- 학생 포털 (100일) -->
-                <div class="page-section" id="page-student-100day">
-                    <div class="card">
-                        <iframe src="student-portal-100days.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
                     </div>
                 </div>
 
@@ -878,8 +866,7 @@
             // 페이지 제목 업데이트
             const titles = {
                 'home': '근화여자중학교 탄탄',
-                'student-30day': '학생 포털 (30일 프로그램)',
-                'student-100day': '학생 포털 (100일 프로그램)',
+                'student-30day': '학생 포털',
                 'teacher-dashboard': '교사 대시보드',
                 'parent': '학부모 대시보드',
                 'admin': '관리 시스템',
