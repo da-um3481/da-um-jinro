@@ -61,9 +61,18 @@
                     <p class="text-xs text-gray-600">초등 1~4학년 기초 개념 학습</p>
                 </div>
             </div>
-            <div class="text-right">
-                <p class="text-sm font-bold text-gray-800" id="studentName">학생 이름</p>
-                <p class="text-xs text-gray-600" id="currentDay">DAY 1/30</p>
+            <div class="flex items-center gap-3">
+                <button 
+                    id="resetBtn"
+                    onclick="resetStudentData()"
+                    class="hidden px-3 py-2 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-all"
+                    title="학생 정보 초기화">
+                    <i class="fas fa-redo mr-1"></i>초기화
+                </button>
+                <div class="text-right">
+                    <p class="text-sm font-bold text-gray-800" id="studentName">학생 이름</p>
+                    <p class="text-xs text-gray-600" id="currentDay">DAY 1/30</p>
+                </div>
             </div>
         </div>
     </nav>
@@ -323,10 +332,66 @@
         function init() {
             loadStudentData();
             if (studentData.name) {
+                // 학생 정보가 있으면 학습 화면 표시
                 document.getElementById('nameInputSection').classList.add('hidden');
                 document.getElementById('todayLearningSection').classList.remove('hidden');
                 document.getElementById('calendarSection').classList.remove('hidden');
+                document.getElementById('resetBtn').classList.remove('hidden');
                 updateUI();
+            } else {
+                // 학생 정보가 없으면 입력 화면 표시
+                document.getElementById('nameInputSection').classList.remove('hidden');
+                document.getElementById('todayLearningSection').classList.add('hidden');
+                document.getElementById('calendarSection').classList.add('hidden');
+                document.getElementById('resetBtn').classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // 학생 데이터 초기화
+        // ==========================================
+        function resetStudentData() {
+            const confirmMsg = `
+정말로 학습 데이터를 초기화하시겠습니까?
+
+⚠️ 경고:
+- 모든 학습 기록이 삭제됩니다
+- 이 작업은 되돌릴 수 없습니다
+
+새로운 학생으로 시작하려면 '확인'을 누르세요.
+            `;
+            
+            if (confirm(confirmMsg)) {
+                // localStorage 완전 삭제
+                localStorage.removeItem('tantan_student_data');
+                
+                // studentData 초기화
+                studentData = {
+                    name: '',
+                    grade: 1,
+                    currentDay: 1,
+                    studyLog: {},
+                    timers: {},
+                    totalMinutes: 0
+                };
+                
+                // 모든 타이머 정지
+                Object.keys(activeTimers).forEach(key => {
+                    clearInterval(activeTimers[key]);
+                });
+                activeTimers = {};
+                
+                // 입력 폼 초기화
+                document.getElementById('nameInput').value = '';
+                document.getElementById('gradeInput').value = '1';
+                
+                // 화면 전환
+                document.getElementById('nameInputSection').classList.remove('hidden');
+                document.getElementById('todayLearningSection').classList.add('hidden');
+                document.getElementById('calendarSection').classList.add('hidden');
+                document.getElementById('resetBtn').classList.add('hidden');
+                
+                alert('✅ 학습 데이터가 초기화되었습니다.\n새로운 학생 정보를 입력해주세요.');
             }
         }
 
@@ -349,6 +414,7 @@
             document.getElementById('nameInputSection').classList.add('hidden');
             document.getElementById('todayLearningSection').classList.remove('hidden');
             document.getElementById('calendarSection').classList.remove('hidden');
+            document.getElementById('resetBtn').classList.remove('hidden');
             
             updateUI();
         }
