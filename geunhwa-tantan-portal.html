@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 근화여자중학교 탄탄 - 통합 학습 시스템</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-lighter: #1e293b;
+            --dark-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 애니메이션 배경 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        /* 레이아웃 */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .school-name {
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .program-name {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-category {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            padding-left: 2rem;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, transparent 100%);
+            border-left: 3px solid var(--primary);
+            color: var(--text);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 메인 콘텐츠 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .sidebar-toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .content-area {
+            padding: 2rem;
+        }
+
+        /* 페이지 섹션 */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 카드 */
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-4);
+            border-radius: 12px;
+            font-size: 1.25rem;
+        }
+
+        /* 통계 그리드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-4);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 버튼 */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-4);
+            color: var(--dark);
+            box-shadow: 0 4px 20px rgba(67, 233, 123, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(67, 233, 123, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 웰컴 섹션 */
+        .welcome-section {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .quick-link-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .quick-link-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-link-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-link-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* 정보 박스 */
+        .info-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .info-box-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-box-icon {
+            font-size: 2rem;
+        }
+
+        .info-box-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .info-box-content {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle-btn {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .top-bar {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 알림 토스트 */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.3s ease-out;
+            z-index: 2000;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 애니메이션 배경 -->
+    <div class="bg-animation">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+    </div>
+
+    <!-- 앱 컨테이너 -->
+    <div class="app-container">
+        <!-- 사이드바 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo" onclick="showPage('home')">
+                    <div class="logo-title">🎓 근화여자중학교</div>
+                    <div class="school-name">탄탄 학습 프로그램</div>
+                    <div class="program-name">통합 학습 관리 시스템</div>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-category">메인</div>
+                <a class="nav-item active" onclick="showPage('home')" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>홈</span>
+                </a>
+
+                <div class="nav-category">학생</div>
+                <a class="nav-item" onclick="showPage('student-30day')" data-page="student-30day">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>학생 포털 (30일)</span>
+                </a>
+                <a class="nav-item" onclick="showPage('student-100day')" data-page="student-100day">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>학생 포털 (100일)</span>
+                </a>
+
+                <div class="nav-category">교사</div>
+                <a class="nav-item" onclick="showPage('teacher-dashboard')" data-page="teacher-dashboard">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>교사 대시보드</span>
+                </a>
+
+                <div class="nav-category">학부모</div>
+                <a class="nav-item" onclick="showPage('parent')" data-page="parent">
+                    <i class="fas fa-users"></i>
+                    <span>학부모 대시보드</span>
+                </a>
+
+                <div class="nav-category">관리</div>
+                <a class="nav-item" onclick="showPage('admin')" data-page="admin">
+                    <i class="fas fa-cog"></i>
+                    <span>관리 시스템</span>
+                </a>
+                <a class="nav-item" onclick="showPage('student-management')" data-page="student-management">
+                    <i class="fas fa-users-cog"></i>
+                    <span>학생 관리</span>
+                </a>
+                <a class="nav-item" onclick="showPage('student-detail')" data-page="student-detail">
+                    <i class="fas fa-chart-line"></i>
+                    <span>학생 상세 관리</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="main-content" id="mainContent">
+            <!-- 상단 바 -->
+            <div class="top-bar">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">근화여자중학교 탄탄</h1>
+                <button class="sidebar-toggle-btn" onclick="toggleSidebarVisibility()">
+                    <i class="fas fa-bars" id="sidebarToggleIcon"></i>
+                    <span id="sidebarToggleText">사이드바 숨기기</span>
+                </button>
+            </div>
+
+            <!-- 콘텐츠 영역 -->
+            <div class="content-area">
+                <!-- 홈 페이지 -->
+                <div class="page-section active" id="page-home">
+                    <div class="welcome-section">
+                        <h1 class="welcome-title">🎓 근화여자중학교 탄탄</h1>
+                        <p class="welcome-subtitle">체계적인 자기주도학습 관리 시스템</p>
+
+                        <div class="quick-links">
+                            <div class="quick-link-card" onclick="showPage('student-30day')">
+                                <div class="quick-link-icon">👨‍🎓</div>
+                                <h3 class="quick-link-title">학생 포털</h3>
+                                <p class="quick-link-desc">30일/100일 학습 프로그램</p>
+                            </div>
+
+                            <div class="quick-link-card" onclick="showPage('teacher-dashboard')">
+                                <div class="quick-link-icon">👩‍🏫</div>
+                                <h3 class="quick-link-title">교사 대시보드</h3>
+                                <p class="quick-link-desc">학생 학습 현황 관리</p>
+                            </div>
+
+                            <div class="quick-link-card" onclick="showPage('parent')">
+                                <div class="quick-link-icon">👨‍👩‍👧</div>
+                                <h3 class="quick-link-title">학부모 대시보드</h3>
+                                <p class="quick-link-desc">자녀 학습 모니터링</p>
+                            </div>
+
+                            <div class="quick-link-card" onclick="showPage('admin')">
+                                <div class="quick-link-icon">⚙️</div>
+                                <h3 class="quick-link-title">관리 시스템</h3>
+                                <p class="quick-link-desc">통합 데이터 관리</p>
+                            </div>
+                        </div>
+
+                        <div class="card" style="max-width: 800px; margin: 3rem auto; text-align: left;">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <span class="card-icon">📊</span>
+                                    시스템 개요
+                                </h2>
+                            </div>
+                            <div style="color: var(--text-muted); line-height: 1.8;">
+                                <p><strong style="color: var(--primary);">✅ 30일 겨울방학 프로그램</strong> - 5과목, 하루 135분, 집중 학습</p>
+                                <p><strong style="color: var(--secondary);">✅ 100일 장기 프로그램</strong> - 체계적 장기 학습 관리</p>
+                                <p><strong style="color: var(--accent);">✅ 진단평가 시스템</strong> - 수준별 맞춤 학습 제공</p>
+                                <p><strong style="color: var(--primary);">✅ 실시간 모니터링</strong> - 교사/학부모 대시보드 연동</p>
+                                <p><strong style="color: var(--warning);">✅ 학습 캘린더</strong> - 직관적인 학습 기록 시각화</p>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="max-width: 800px; margin: 2rem auto;">
+                            <div class="info-box-header">
+                                <div class="info-box-icon">🏫</div>
+                                <div class="info-box-title">근화여자중학교 탄탄 프로그램 소개</div>
+                            </div>
+                            <div class="info-box-content">
+                                <p style="margin-bottom: 1rem;">
+                                    <strong>탄탄</strong>은 근화여자중학교 학생들의 학업 성취도 향상을 위한 
+                                    체계적인 자기주도학습 프로그램입니다.
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    • 개별 맞춤형 학습 계획<br>
+                                    • 실시간 학습 진도 관리<br>
+                                    • 교사-학생-학부모 삼자간 소통 시스템<br>
+                                    • 데이터 기반 학습 분석 및 피드백
+                                </p>
+                                <p>
+                                    체계적인 관리를 통해 학생들의 자기주도학습 능력을 
+                                    <strong style="color: var(--primary);">탄탄</strong>하게 키워갑니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학생 포털 (30일) -->
+                <div class="page-section" id="page-student-30day">
+                    <div class="card">
+                        <iframe src="geunhwa-student-portal.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- 학생 포털 (100일) -->
+                <div class="page-section" id="page-student-100day">
+                    <div class="card">
+                        <iframe src="student-portal-100days.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- 교사 대시보드 -->
+                <div class="page-section" id="page-teacher-dashboard">
+                    <div class="card">
+                        <iframe src="middle-teacher-dashboard.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- 학부모 대시보드 -->
+                <div class="page-section" id="page-parent">
+                    <div class="card">
+                        <iframe src="parent-dashboard.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- 관리 시스템 -->
+                <div class="page-section" id="page-admin">
+                    <div class="card">
+                        <iframe src="index.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- 학생 관리 -->
+                <div class="page-section" id="page-student-management">
+                    <div class="card">
+                        <iframe src="student-management.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- 학생 상세 관리 -->
+                <div class="page-section" id="page-student-detail">
+                    <div class="card">
+                        <iframe src="student-detail-management.html" style="width: 100%; height: 80vh; border: none; border-radius: 12px;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 페이지 전환
+        function showPage(pageName) {
+            // 모든 페이지 숨기기
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 모든 네비게이션 비활성화
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 선택된 페이지 표시
+            const targetPage = document.getElementById(`page-${pageName}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // 선택된 네비게이션 활성화
+            const targetNav = document.querySelector(`[data-page="${pageName}"]`);
+            if (targetNav) {
+                targetNav.classList.add('active');
+            }
+
+            // 페이지 제목 업데이트
+            const titles = {
+                'home': '근화여자중학교 탄탄',
+                'student-30day': '학생 포털 (30일 프로그램)',
+                'student-100day': '학생 포털 (100일 프로그램)',
+                'teacher-dashboard': '교사 대시보드',
+                'parent': '학부모 대시보드',
+                'admin': '관리 시스템',
+                'student-management': '학생 관리',
+                'student-detail': '학생 상세 관리'
+            };
+
+            document.getElementById('pageTitle').textContent = titles[pageName] || '근화여자중학교 탄탄';
+
+            // 홈 페이지인 경우 사이드바 보이기 (데스크톱)
+            if (pageName === 'home' && window.innerWidth > 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                sidebar.classList.remove('hidden');
+                mainContent.classList.remove('expanded');
+                document.getElementById('sidebarToggleText').textContent = '사이드바 숨기기';
+                document.getElementById('sidebarToggleIcon').className = 'fas fa-times';
+            }
+            // 홈 페이지가 아닌 경우 사이드바 자동 숨김 (데스크톱)
+            else if (pageName !== 'home' && window.innerWidth > 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                sidebar.classList.add('hidden');
+                mainContent.classList.add('expanded');
+                document.getElementById('sidebarToggleText').textContent = '사이드바 보이기';
+                document.getElementById('sidebarToggleIcon').className = 'fas fa-bars';
+            }
+
+            // 모바일에서 사이드바 닫기
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.remove('mobile-visible');
+            }
+
+            // 스크롤 상단으로
+            window.scrollTo(0, 0);
+        }
+
+        // 사이드바 토글
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-visible');
+        }
+
+        // 사이드바 보이기/숨기기 토글 (데스크톱)
+        function toggleSidebarVisibility() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleText = document.getElementById('sidebarToggleText');
+            const toggleIcon = document.getElementById('sidebarToggleIcon');
+            
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('expanded');
+            
+            if (sidebar.classList.contains('hidden')) {
+                toggleText.textContent = '사이드바 보이기';
+                toggleIcon.className = 'fas fa-bars';
+            } else {
+                toggleText.textContent = '사이드바 숨기기';
+                toggleIcon.className = 'fas fa-times';
+            }
+        }
+
+        // 토스트 알림
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 초기 로드
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🎓 근화여자중학교 탄탄 시스템 로드 완료');
+            
+            // 초기 상태: 홈 페이지에서는 사이드바 보이기
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('hidden');
+                mainContent.classList.remove('expanded');
+                if (document.getElementById('sidebarToggleText')) {
+                    document.getElementById('sidebarToggleText').textContent = '사이드바 숨기기';
+                    document.getElementById('sidebarToggleIcon').className = 'fas fa-times';
+                }
+            }
+            
+            // 환영 메시지
+            showToast('🎓 근화여자중학교 탄탄에 오신 것을 환영합니다!');
+        });
+
+        // 반응형 처리
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                document.getElementById('sidebar').classList.remove('mobile-visible');
+            }
+        });
+    </script>
+</body>
+</html>
