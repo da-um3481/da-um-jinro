@@ -583,6 +583,10 @@
     <script src="js/study-materials-db.js"></script>
     <!-- 진단평가 DB 로드 -->
     <script src="js/diagnostic-test-db.js"></script>
+    <!-- 교과서 교육과정 DB 로드 -->
+    <script src="js/textbook-curriculum.js"></script>
+    <!-- 교과서 단원 데이터베이스 로드 -->
+    <script src="js/curriculum-database.js"></script>
     
     <script>
         // ==========================================
@@ -2165,20 +2169,9 @@
                 html += '<div class="text-xs font-bold text-gray-700 mb-2">📚 공교육 학습 자료 (무료)</div>';
             }
             
-            // 1️⃣ 교과서 학습 (기본)
-            html += `
-                <div class="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg">
-                    <div class="flex items-start gap-2">
-                        <div class="text-2xl">📖</div>
-                        <div class="flex-1">
-                            <div class="text-xs font-bold text-green-700 mb-1">1단계: 교과서 학습 (필수)</div>
-                            <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 교과서</div>
-                            <div class="text-xs text-gray-600 mt-1">✓ 학교에서 배우는 교과서로 개념 이해</div>
-                            <div class="text-xs text-gray-600">✓ 교과서 문제 풀이로 기본기 다지기</div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            // 1️⃣ 교과서 학습 (기본) - 단원 선택 가능
+            const textbookCard = generateTextbookCard(subjectName, grade, difficultyLevel);
+            html += textbookCard;
             
             // 2️⃣ EBS 중학 프리미엄 (무료 강의)
             const ebsLinks = getEBSLinksBySubject(subjectName, grade);
@@ -2254,6 +2247,136 @@
                 premium: premiumBase,
                 aiDantchu: aiDantchuBase
             };
+        }
+        
+        // 교과서 학습 카드 생성 함수 (단원 선택 포함)
+        function generateTextbookCard(subjectName, grade, level) {
+            const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
+            const subjectKey = subjectMap[subjectName];
+            const levelMap = { 1: 'basic', 2: 'standard', 3: 'advanced' };
+            const levelName = levelMap[level] || 'standard';
+            
+            // 현재 학기 계산 (1~6월: 1학기, 7~12월: 2학기)
+            const currentMonth = new Date().getMonth() + 1;
+            const semester = currentMonth <= 6 ? 1 : 2;
+            
+            let html = `
+                <div class="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg textbook-card">
+                    <div class="flex items-start gap-2 mb-3">
+                        <div class="text-2xl">📖</div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold text-green-700 mb-1">1단계: 교과서 학습 (필수)</div>
+                            <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 교과서</div>
+                        </div>
+                    </div>
+            `;
+            
+            // curriculum-database.js가 로드되어 있으면 단원 선택 기능 추가
+            if (typeof CURRICULUM_DB !== 'undefined' && typeof getUnits === 'function') {
+                const units = getUnits(`middle${grade}`, subjectKey, semester);
+                
+                if (units && units.length > 0) {
+                    html += `
+                        <div class="mb-3">
+                            <select class="w-full px-3 py-2 text-sm border-2 border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" 
+                                    onchange="showUnitDetail(this.value, '${subjectName}', ${grade}, '${subjectKey}', ${semester}, '${levelName}')">
+                                <option value="">📚 학습할 단원을 선택하세요</option>
+                    `;
+                    
+                    units.forEach((unit, index) => {
+                        html += `<option value="${index}">${unit.unit}</option>`;
+                    });
+                    
+                    html += `
+                            </select>
+                        </div>
+                        <div id="unit-detail-${subjectKey}" class="unit-detail-container"></div>
+                    `;
+                } else {
+                    // 단원 정보가 없을 경우 기본 안내
+                    html += `
+                        <div class="text-xs text-gray-600 space-y-1">
+                            <div>✓ 학교에서 배우는 교과서로 개념 이해</div>
+                            <div>✓ 교과서 문제 풀이로 기본기 다지기</div>
+                        </div>
+                    `;
+                }
+            } else {
+                // curriculum-database.js가 로드되지 않은 경우
+                html += `
+                    <div class="text-xs text-gray-600 space-y-1">
+                        <div>✓ 학교에서 배우는 교과서로 개념 이해</div>
+                        <div>✓ 교과서 문제 풀이로 기본기 다지기</div>
+                    </div>
+                `;
+            }
+            
+            html += `
+                </div>
+            `;
+            
+            return html;
+        }
+        
+        // 단원 상세 정보 표시 함수
+        function showUnitDetail(unitIndex, subjectName, grade, subjectKey, semester, level) {
+            const container = document.getElementById(`unit-detail-${subjectKey}`);
+            if (!container) return;
+            
+            if (!unitIndex) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const unitData = getUnitDetail(`middle${grade}`, subjectKey, semester, parseInt(unitIndex));
+            if (!unitData) {
+                container.innerHTML = '<div class="text-xs text-red-500">단원 정보를 불러올 수 없습니다.</div>';
+                return;
+            }
+            
+            let html = `
+                <div class="mt-3 p-3 bg-white border-2 border-green-200 rounded-lg">
+                    <div class="text-sm font-bold text-green-800 mb-3">${unitData.unit}</div>
+                    <div class="space-y-2">
+            `;
+            
+            unitData.chapters.forEach((chapter, idx) => {
+                const concepts = getConceptsByLevel(chapter, level);
+                
+                html += `
+                    <div class="p-2 bg-gray-50 rounded-lg">
+                        <div class="text-xs font-bold text-gray-700 mb-1">${idx + 1}. ${chapter.name}</div>
+                        <ul class="text-xs space-y-0.5 ml-4">
+                `;
+                
+                concepts.forEach(concept => {
+                    html += `<li class="flex items-start gap-1">
+                        <span class="text-green-600 text-xs">✓</span>
+                        <span class="text-gray-600">${concept}</span>
+                    </li>`;
+                });
+                
+                html += `
+                        </ul>
+                        <div class="mt-2 flex flex-wrap gap-1">
+                `;
+                
+                chapter.keywords.forEach(keyword => {
+                    html += `<span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full">#${keyword}</span>`;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
         }
 
         // ==========================================
