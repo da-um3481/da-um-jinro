@@ -2127,7 +2127,7 @@
             `;
         }
         
-        // 📚 학습 자료 HTML 생성 (수준별 맞춤)
+        // 📚 학습 자료 HTML 생성 (공교육 자원 활용 - EBS 중학 + AI 단추)
         function getStudyMaterialsForSubject(subjectName) {
             const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
             const subjectKey = subjectMap[subjectName];
@@ -2153,24 +2153,68 @@
                 }
             }
             
-            if (!subjectKey || typeof getStudyMaterials !== 'function') {
-                return '<div class="text-xs text-gray-500">학습 자료 준비 중...</div>';
-            }
-            
-            const materials = getStudyMaterials(subjectKey, grade, difficultyLevel);
-            if (!materials) return '';
-            
             let html = '<div class="space-y-2">';
             
             // 수준 배지 표시
             if (levelBadge) {
                 html += `<div class="flex items-center justify-between mb-2">
-                    <div class="text-xs font-bold text-gray-700">📚 추천 학습 자료</div>
+                    <div class="text-xs font-bold text-gray-700">📚 공교육 학습 자료 (무료)</div>
                     ${levelBadge}
                 </div>`;
             } else {
-                html += '<div class="text-xs font-bold text-gray-700 mb-2">📚 추천 학습 자료</div>';
+                html += '<div class="text-xs font-bold text-gray-700 mb-2">📚 공교육 학습 자료 (무료)</div>';
             }
+            
+            // 1️⃣ 교과서 학습 (기본)
+            html += `
+                <div class="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg">
+                    <div class="flex items-start gap-2">
+                        <div class="text-2xl">📖</div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold text-green-700 mb-1">1단계: 교과서 학습 (필수)</div>
+                            <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 교과서</div>
+                            <div class="text-xs text-gray-600 mt-1">✓ 학교에서 배우는 교과서로 개념 이해</div>
+                            <div class="text-xs text-gray-600">✓ 교과서 문제 풀이로 기본기 다지기</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 2️⃣ EBS 중학 프리미엄 (무료 강의)
+            const ebsLinks = getEBSLinksBySubject(subjectName, grade);
+            html += `
+                <a href="${ebsLinks.premium}" target="_blank" 
+                   class="block p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-400 rounded-lg hover:shadow-lg transition-all group">
+                    <div class="flex items-start gap-2">
+                        <div class="text-2xl group-hover:scale-110 transition-transform">🎓</div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold text-blue-700 mb-1">2단계: EBS 중학 프리미엄 강의</div>
+                            <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 무료 강의</div>
+                            <div class="text-xs text-blue-600 mt-1 font-semibold">✓ 2025년 전 강좌 무료 (프리패스)</div>
+                            <div class="text-xs text-gray-600">✓ 개념 설명 + 문제 풀이 동영상</div>
+                        </div>
+                        <i class="fas fa-external-link-alt text-blue-600 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+            `;
+            
+            // 3️⃣ EBS AI 단추 (문제 풀이)
+            html += `
+                <a href="${ebsLinks.aiDantchu}" target="_blank" 
+                   class="block p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-400 rounded-lg hover:shadow-lg transition-all group">
+                    <div class="flex items-start gap-2">
+                        <div class="text-2xl group-hover:scale-110 transition-transform">🤖</div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold text-purple-700 mb-1">3단계: EBS AI 단추 문제풀이</div>
+                            <div class="text-sm font-semibold text-gray-800">AI 맞춤형 문제 추천</div>
+                            <div class="text-xs text-purple-600 mt-1 font-semibold">✓ 진단평가 → AI 문제 추천</div>
+                            <div class="text-xs text-gray-600">✓ 내 수준에 맞는 문제 자동 생성</div>
+                            <div class="text-xs text-gray-600">✓ 실력 향상까지 단계별 학습</div>
+                        </div>
+                        <i class="fas fa-external-link-alt text-purple-600 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+            `;
             
             // 선생님의 맞춤 교재 추천 (있는 경우)
             if (studentAdjustment && studentAdjustment.recommendedMaterials) {
@@ -2180,11 +2224,11 @@
                 
                 if (subjectMaterial) {
                     html += `
-                        <div class="p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-lg">
+                        <div class="p-3 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-400 rounded-lg">
                             <div class="flex items-start gap-2">
-                                <div class="text-xl">👩‍🏫</div>
+                                <div class="text-2xl">👩‍🏫</div>
                                 <div class="flex-1">
-                                    <div class="text-xs font-bold text-purple-700 mb-1">선생님 추천 교재</div>
+                                    <div class="text-xs font-bold text-amber-700 mb-1">선생님 추천 자료</div>
                                     <div class="text-sm font-bold text-gray-800">${subjectMaterial.material}</div>
                                     <div class="text-xs text-gray-600 mt-1">난이도: ${subjectMaterial.difficulty}</div>
                                 </div>
@@ -2194,53 +2238,22 @@
                 }
             }
             
-            // EBS
-            if (materials.ebsLectures && materials.ebsLectures[0]) {
-                const ebs = materials.ebsLectures[0];
-                html += `
-                    <a href="${ebs.link}" target="_blank" 
-                       class="block p-2 bg-blue-50 hover:bg-blue-100 border border-green-200 rounded-lg transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <div class="text-xs font-bold text-blue-700">🎓 EBS (무료)</div>
-                                <div class="text-xs text-gray-700">${ebs.name} - ${ebs.teacher}</div>
-                            </div>
-                            <i class="fas fa-external-link-alt text-green-800"></i>
-                        </div>
-                    </a>
-                `;
-            }
-            
-            // 개념서
-            if (materials.conceptBooks && materials.conceptBooks[0]) {
-                const book = materials.conceptBooks[0];
-                html += `
-                    <div class="p-2 bg-gray-50 border border-gray-200 rounded-lg">
-                        <div class="text-xs font-bold text-gray-700">📖 ${book.name}</div>
-                        <div class="text-xs text-gray-600">${book.publisher}</div>
-                    </div>
-                `;
-            }
-            
-            // 유튜브
-            if (materials.youtube && materials.youtube[0]) {
-                const yt = materials.youtube[0];
-                html += `
-                    <a href="${yt.link}" target="_blank" 
-                       class="block p-2 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <div class="text-xs font-bold text-red-700">📺 ${yt.channel}</div>
-                                <div class="text-xs text-gray-600">${yt.description}</div>
-                            </div>
-                            <i class="fas fa-external-link-alt text-red-600"></i>
-                        </div>
-                    </a>
-                `;
-            }
-            
             html += '</div>';
             return html;
+        }
+        
+        // EBS 링크 생성 함수
+        function getEBSLinksBySubject(subject, grade) {
+            // EBS 중학 프리미엄 메인 페이지
+            const premiumBase = 'https://mid.ebs.co.kr/';
+            
+            // EBS AI 단추 중학생 페이지
+            const aiDantchuBase = 'https://ai-plus.ebs.co.kr/mid/';
+            
+            return {
+                premium: premiumBase,
+                aiDantchu: aiDantchuBase
+            };
         }
 
         // ==========================================
