@@ -265,6 +265,8 @@
                 name: '수학',
                 icon: '🔢',
                 color: 'blue',
+                ebsUrl: 'https://primary.ebs.co.kr/main/primary',
+                ebsKeyword: '초등 수해력',
                 topics: [
                     // 초등 수해력 2학년 (1~8일차)
                     { day: 1, title: 'EBS 초등 수해력 2학년 1강', content: '📺 primary.ebs.co.kr - 초등 수해력 2학년 1강 청취' },
@@ -305,6 +307,8 @@
                 name: '영어',
                 icon: '🔤',
                 color: 'purple',
+                ebsUrl: 'https://primary.ebs.co.kr/main/primary',
+                ebsKeyword: 'Touch 초등영어 파닉스',
                 topics: [
                     { day: 1, title: 'Touch 초등영어-파닉스 1일차', content: '📺 primary.ebs.co.kr - Touch 초등영어-파닉스 강의 청취' },
                     { day: 2, title: 'Touch 초등영어-파닉스 2일차', content: '📺 primary.ebs.co.kr - Touch 초등영어-파닉스 강의 청취' },
@@ -342,6 +346,8 @@
                 name: '국어',
                 icon: '✍️',
                 color: 'indigo',
+                ebsUrl: 'https://primary.ebs.co.kr/main/primary',
+                ebsKeyword: '어휘가 답이다 3단계',
                 topics: [
                     { day: 1, title: '어휘가 답이다 3단계 1강', content: '📺 primary.ebs.co.kr - 어휘가 답이다 3단계 1강 청취' },
                     { day: 2, title: '어휘가 답이다 3단계 2강', content: '📺 primary.ebs.co.kr - 어휘가 답이다 3단계 2강 청취' },
@@ -575,13 +581,32 @@
                     <div class="space-y-4">
                         <!-- 오늘의 학습 주제 -->
                         <div class="p-4 bg-white rounded-lg border-2 border-gray-300">
-                            <div class="flex items-start space-x-2">
-                                <span class="text-xl">📚</span>
-                                <div class="flex-1">
-                                    <p class="font-bold text-gray-800 mb-1">Day ${topic.day}: ${topic.title}</p>
-                                    <p class="text-sm text-gray-600 leading-relaxed">${topic.content}</p>
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-2 flex-1">
+                                    <span class="text-xl">📚</span>
+                                    <div class="flex-1">
+                                        <p class="font-bold text-gray-800 mb-1">Day ${topic.day}: ${topic.title}</p>
+                                        <p class="text-sm text-gray-600 leading-relaxed">${topic.content}</p>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="mt-3 flex gap-2">
+                                <a href="${subject.ebsUrl}" 
+                                   target="_blank"
+                                   class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-bold rounded-lg hover:shadow-lg transition-all transform hover:scale-105 text-center"
+                                   title="EBS 초등 사이트에서 '${subject.ebsKeyword}' 검색">
+                                    🎥 EBS 강의 듣기
+                                </a>
+                                <button 
+                                    onclick="copySearchKeyword('${subject.ebsKeyword}')"
+                                    class="px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-bold rounded-lg hover:shadow-lg transition-all transform hover:scale-105"
+                                    title="검색어 복사: ${subject.ebsKeyword}">
+                                    📋 검색어 복사
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 text-center">
+                                💡 EBS 사이트에서 "<span class="font-bold text-blue-600">${subject.ebsKeyword}</span>" 검색하세요!
+                            </p>
                         </div>
                         
                         <!-- 타이머 영역 - 더 크고 명확하게 -->
@@ -625,6 +650,24 @@
                 }
             });
             console.log(`=== renderSubjects END (${cardCount} cards created) ===`);
+        }
+
+        // ==========================================
+        // 검색어 복사 기능
+        // ==========================================
+        function copySearchKeyword(keyword) {
+            // 클립보드에 복사
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(keyword).then(() => {
+                    alert(`✅ 검색어가 복사되었습니다!\n\n"${keyword}"\n\nEBS 사이트에서 붙여넣기(Ctrl+V)하세요! 📋`);
+                }).catch(err => {
+                    // 폴백: 수동 복사 안내
+                    alert(`검색어: "${keyword}"\n\n위 검색어를 복사해서 EBS 사이트에서 검색하세요! 🔍`);
+                });
+            } else {
+                // 구형 브라우저 폴백
+                alert(`검색어: "${keyword}"\n\n위 검색어를 복사해서 EBS 사이트에서 검색하세요! 🔍`);
+            }
         }
 
         // ==========================================
