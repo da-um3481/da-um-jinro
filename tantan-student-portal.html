@@ -340,6 +340,9 @@
         // UI 업데이트
         // ==========================================
         function updateUI() {
+            console.log('updateUI called');
+            console.log('studentData:', studentData);
+            
             // 학생 정보
             document.getElementById('studentName').textContent = `${studentData.name} (중${studentData.grade})`;
             document.getElementById('currentDay').textContent = `DAY ${studentData.currentDay}/30`;
@@ -351,7 +354,9 @@
                 `${today.getMonth() + 1}월 ${today.getDate()}일`;
             
             // 과목 카드 생성
+            console.log('About to call renderSubjects()');
             renderSubjects();
+            console.log('renderSubjects() completed');
             
             // 캘린더 생성
             renderCalendar();
@@ -364,18 +369,25 @@
         // 과목 카드 렌더링
         // ==========================================
         function renderSubjects() {
+            console.log('=== renderSubjects START ===');
             const container = document.getElementById('subjectsContainer');
+            console.log('container:', container);
+            
             if (!container) {
-                console.error('subjectsContainer not found');
+                console.error('❌ subjectsContainer not found');
                 return;
             }
             container.innerHTML = '';
             
+            console.log('subjects object:', subjects);
             console.log('Rendering subjects for day:', studentData.currentDay);
             console.log('Subjects:', Object.keys(subjects));
             
+            let cardCount = 0;
             Object.values(subjects).forEach(subject => {
+                console.log(`Processing subject: ${subject.name}`);
                 const topic = subject.topics[studentData.currentDay - 1] || subject.topics[0];
+                console.log(`Topic for ${subject.name}:`, topic);
                 const dayKey = `${studentData.currentDay}_${subject.name}`;
                 const isCompleted = studentData.studyLog[studentData.currentDay]?.[subject.name]?.completed || false;
                 const timerData = studentData.timers[dayKey] || { elapsed: 0, running: false };
@@ -440,13 +452,17 @@
                         </button>
                     </div>
                 `;
+                console.log(`✅ Card created for ${subject.name}`);
                 container.appendChild(card);
+                cardCount++;
+                console.log(`✅ Card appended (total: ${cardCount})`);
                 
                 // 타이머가 실행 중이면 재시작
                 if (timerData.running) {
                     startTimer(subject.name, true);
                 }
             });
+            console.log(`=== renderSubjects END (${cardCount} cards created) ===`);
         }
 
         // ==========================================
