@@ -631,9 +631,11 @@
             if (saved) {
                 studentData = JSON.parse(saved);
                 // running 플래그 초기화 (페이지 새로고침 시)
-                Object.keys(studentData.timers).forEach(key => {
-                    studentData.timers[key].running = false;
-                });
+                if (studentData.timers && typeof studentData.timers === 'object') {
+                    Object.keys(studentData.timers).forEach(key => {
+                        studentData.timers[key].running = false;
+                    });
+                }
             }
         }
 
