@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
+    <!-- Confetti 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
             font-family: 'Noto Sans KR', sans-serif;
@@ -310,6 +312,115 @@
         @media (hover: none) {
             button, a {
                 -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+            }
+        }
+        
+        /* ===========================
+           🎉 학습 완료 축하 모달
+           =========================== */
+        
+        /* 모달 배경 */
+        .celebration-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .celebration-modal-backdrop.show {
+            opacity: 1;
+        }
+        
+        /* 모달 컨테이너 */
+        .celebration-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            max-width: 90%;
+            width: 500px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .celebration-modal.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .celebration-modal.show-final {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        /* 축하 애니메이션 */
+        @keyframes celebrate {
+            0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        .celebration-emoji {
+            animation: celebrate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        /* 프로그레스 바 애니메이션 */
+        @keyframes fillProgress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        
+        .progress-bar-fill {
+            animation: fillProgress 0.5s ease-out forwards;
+        }
+        
+        /* 펄스 애니메이션 (버튼) */
+        @keyframes pulse-button {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+        }
+        
+        .celebration-button {
+            animation: pulse-button 2s infinite;
+        }
+        
+        /* 반짝이는 효과 */
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        .sparkle {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 640px) {
+            .celebration-modal {
+                padding: 1.5rem;
+                width: 95%;
+                max-width: 400px;
+            }
+            
+            .celebration-modal h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .celebration-modal .text-6xl {
+                font-size: 3rem !important;
             }
         }
     </style>
@@ -1166,18 +1277,9 @@
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
             
-            // 학습 시간에 따른 메시지 표시
-            // 🧪 테스트 모드: 40초 기준 (브리핑 전에 40분으로 변경!)
-            const EXCELLENT_SECONDS = TEST_MODE ? 40 : 2400;  // 40초 or 40분
+            // 🎉 축하 모달 표시 (기존 alert 대체)
+            showCelebrationModal(subject, minutes);
             
-            let message = '';
-            if (totalSeconds >= EXCELLENT_SECONDS) {
-                message = `✅ 학습 완료!\n\n시간: ${minutes}분 ${seconds}초\n\n멋진 집중력이에요! 🌟\n정말 잘했어요! 👏`;
-            } else {
-                message = `✅ 학습 완료!\n\n시간: ${minutes}분 ${seconds}초\n\n좋아요! 조금 더 집중하면 더 좋겠어요! 💪`;
-            }
-            
-            alert(message);
             console.log(`⏹️ ${subject} 학습 완료: ${minutes}분 ${seconds}초`);
             
             // 총 학습 시간 업데이트
@@ -1188,8 +1290,10 @@
                 renderCalendar();
             }
             
-            // 다음 과목 자동 표시
-            showNextSubject(subject);
+            // 다음 과목 자동 표시 (모달 닫힌 후 실행될 수 있도록)
+            setTimeout(() => {
+                showNextSubject(subject);
+            }, 500);
         }
 
         // 📚 다음 과목 자동 표시
@@ -2622,6 +2726,266 @@
             
             alert(detail);
         }
+        
+        // ==========================================
+        // 🎉 학습 완료 축하 시스템
+        // ==========================================
+        
+        // 레벨 및 XP 계산
+        function calculateLevel(totalXP) {
+            // 레벨당 필요 XP: 100, 200, 300, 400, 500... (레벨 * 100)
+            let level = 1;
+            let xpForCurrentLevel = 0;
+            let xpForNextLevel = 100;
+            
+            while (totalXP >= xpForNextLevel) {
+                xpForCurrentLevel = xpForNextLevel;
+                level++;
+                xpForNextLevel += level * 100;
+            }
+            
+            return {
+                level: level,
+                currentXP: totalXP - xpForCurrentLevel,
+                nextLevelXP: xpForNextLevel - xpForCurrentLevel,
+                totalXP: totalXP,
+                progress: ((totalXP - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100
+            };
+        }
+        
+        // 연속 달성 계산 (Streak)
+        function calculateStreak() {
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const studentId = localStorage.getItem('currentStudentId');
+            
+            // 학생의 기록만 필터링 및 날짜별 정렬
+            const studentRecords = studyRecords
+                .filter(r => r.student_id === studentId)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (studentRecords.length === 0) return 1;
+            
+            let streak = 1;
+            const today = new Date().toISOString().split('T')[0];
+            let checkDate = new Date(today);
+            
+            // 오늘부터 역순으로 연속 학습일 체크
+            for (let i = 0; i < studentRecords.length; i++) {
+                const recordDate = studentRecords[i].date;
+                const expectedDate = checkDate.toISOString().split('T')[0];
+                
+                if (recordDate === expectedDate) {
+                    if (i > 0) streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+        
+        // 축하 메시지 생성 (랜덤)
+        function generateCelebrationMessage(streak, studyMinutes, totalDays, completionPercent) {
+            const messages = [
+                {
+                    emoji: '🎉',
+                    title: '오늘도 해냈어!',
+                    message: `${streak}일 연속 달성 중!`
+                },
+                {
+                    emoji: '🔥',
+                    title: '불타오르는 열정!',
+                    message: `30일 중 ${totalDays}일째! 벌써 ${completionPercent}%나 완료했어!`
+                },
+                {
+                    emoji: '⭐',
+                    title: '정말 멋져!',
+                    message: `오늘 ${studyMinutes}분 학습! 목표 달성!`
+                },
+                {
+                    emoji: '💪',
+                    title: '최고의 집중력!',
+                    message: `${streak}일 연속! 이 기세를 이어가자!`
+                },
+                {
+                    emoji: '🌟',
+                    title: '완벽한 하루!',
+                    message: `오늘도 스스로에게 박수를! 👏`
+                },
+                {
+                    emoji: '🚀',
+                    title: '날아오르는 성장!',
+                    message: `계속 이렇게만 하면 목표 달성! 🎯`
+                }
+            ];
+            
+            // 특별한 날 (10일, 20일, 30일째)
+            if (totalDays === 10) {
+                return { emoji: '🎊', title: '10일 돌파!', message: '벌써 3분의 1을 완료했어요!' };
+            } else if (totalDays === 20) {
+                return { emoji: '🏆', title: '20일 달성!', message: '이제 3분의 2! 거의 다 왔어요!' };
+            } else if (totalDays === 30) {
+                return { emoji: '👑', title: '30일 완주!', message: '축하합니다! 모든 과정을 완료했어요!' };
+            }
+            
+            // 연속 달성 특별 메시지
+            if (streak >= 7) {
+                return { emoji: '🔥', title: '7일 연속!', message: '일주일 연속 달성! 정말 대단해요!' };
+            } else if (streak >= 14) {
+                return { emoji: '💎', title: '2주 연속!', message: '2주 연속 달성! 최고예요!' };
+            } else if (streak >= 21) {
+                return { emoji: '🏅', title: '3주 연속!', message: '3주 연속! 습관이 되었어요!' };
+            }
+            
+            // 랜덤 메시지
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+        
+        // 내일 과목 가져오기
+        function getTomorrowSubjects() {
+            const studentId = localStorage.getItem('currentStudentId');
+            const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+            const studentSchedule = schedules.find(s => s.student_id === studentId);
+            
+            if (!studentSchedule) return '수학, 영어, 국어';
+            
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowName = dayNames[tomorrow.getDay()];
+            
+            const tomorrowScheduleStr = studentSchedule[tomorrowName];
+            const tomorrowSchedule = JSON.parse(tomorrowScheduleStr || '[]');
+            
+            if (tomorrowSchedule.length === 0) return '오늘은 복습하는 날!';
+            
+            const subjects = tomorrowSchedule.map(item => item.subject);
+            return subjects.join(', ');
+        }
+        
+        // Confetti 애니메이션 실행
+        function fireConfetti() {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000 };
+            
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+            
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                
+                const particleCount = 50 * (timeLeft / duration);
+                
+                // 왼쪽에서
+                confetti({
+                    ...defaults,
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                });
+                
+                // 오른쪽에서
+                confetti({
+                    ...defaults,
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                });
+            }, 250);
+        }
+        
+        // 축하 모달 표시
+        function showCelebrationModal(subject, studyMinutes) {
+            const studentId = localStorage.getItem('currentStudentId');
+            
+            // XP 계산 및 저장
+            const xpGain = 50; // 과목 완료당 50 XP
+            let studentXP = JSON.parse(localStorage.getItem('student_xp')) || {};
+            if (!studentXP[studentId]) studentXP[studentId] = 0;
+            studentXP[studentId] += xpGain;
+            localStorage.setItem('student_xp', JSON.stringify(studentXP));
+            
+            const levelInfo = calculateLevel(studentXP[studentId]);
+            const streak = calculateStreak();
+            
+            // 프로그램 진행도 계산
+            const programStart = localStorage.getItem(`program_start_${studentId}`) || new Date().toISOString().split('T')[0];
+            const startDate = new Date(programStart);
+            const today = new Date();
+            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            const completionPercent = Math.round((daysPassed / 30) * 100);
+            
+            // 오늘 총 학습 시간 계산
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const todayStr = today.toISOString().split('T')[0];
+            const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === todayStr);
+            let totalMinutesToday = 0;
+            if (todayRecord && todayRecord.subjects) {
+                Object.values(todayRecord.subjects).forEach(subj => {
+                    totalMinutesToday += subj.time || 0;
+                });
+            }
+            
+            const hours = Math.floor(totalMinutesToday / 60);
+            const minutes = totalMinutesToday % 60;
+            const timeStr = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
+            
+            // 축하 메시지 생성
+            const celebrationMsg = generateCelebrationMessage(streak, studyMinutes, daysPassed, completionPercent);
+            
+            // 모달 내용 업데이트
+            document.getElementById('celebrationEmoji').textContent = celebrationMsg.emoji;
+            document.getElementById('celebrationTitle').textContent = celebrationMsg.title;
+            document.getElementById('celebrationMessage').textContent = celebrationMsg.message;
+            document.getElementById('xpGained').textContent = `+${xpGain} XP`;
+            document.getElementById('levelInfo').textContent = `Level ${levelInfo.level} (${levelInfo.currentXP}/${levelInfo.nextLevelXP} XP)`;
+            document.getElementById('totalTimeToday').textContent = timeStr;
+            document.getElementById('streakDays').textContent = `${streak}일 연속`;
+            document.getElementById('tomorrowSubjects').textContent = getTomorrowSubjects();
+            
+            // XP 프로그레스 바 애니메이션
+            const progressBar = document.getElementById('xpProgressBar');
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = `${levelInfo.progress}%`;
+            }, 300);
+            
+            // 모달 표시 애니메이션
+            const backdrop = document.getElementById('celebrationModalBackdrop');
+            const modal = document.getElementById('celebrationModal');
+            
+            backdrop.classList.remove('hidden');
+            
+            setTimeout(() => {
+                backdrop.classList.add('show');
+                modal.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                modal.classList.add('show-final');
+            }, 300);
+            
+            // Confetti 애니메이션
+            fireConfetti();
+        }
+        
+        // 축하 모달 닫기
+        function closeCelebrationModal() {
+            const backdrop = document.getElementById('celebrationModalBackdrop');
+            const modal = document.getElementById('celebrationModal');
+            
+            modal.classList.remove('show', 'show-final');
+            backdrop.classList.remove('show');
+            
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+            }, 300);
+        }
 
         // ==========================================
         // 페이지 로드 시 초기화
@@ -2646,5 +3010,73 @@
         }
         */
     </script>
+    
+    <!-- 🎉 학습 완료 축하 모달 -->
+    <div id="celebrationModalBackdrop" class="celebration-modal-backdrop hidden">
+        <div id="celebrationModal" class="celebration-modal">
+            <!-- 축하 이모지 -->
+            <div class="text-center mb-6">
+                <div class="celebration-emoji text-6xl mb-3" id="celebrationEmoji">🎉</div>
+                <h2 class="text-3xl font-black text-white mb-2" id="celebrationTitle">오늘도 해냈어!</h2>
+                <p class="text-xl text-green-100 font-semibold" id="celebrationMessage">3일 연속 달성 중!</p>
+            </div>
+            
+            <!-- 획득 보상 -->
+            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5 mb-5 space-y-4">
+                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
+                    <span class="sparkle mr-2">✨</span> 오늘 얻은 것
+                </h3>
+                
+                <!-- 경험치 -->
+                <div class="flex items-center justify-between text-white">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">🏆</span>
+                        <span class="font-semibold">경험치</span>
+                    </div>
+                    <span class="text-2xl font-black text-yellow-300" id="xpGained">+50 XP</span>
+                </div>
+                
+                <!-- XP 프로그레스 바 -->
+                <div class="relative">
+                    <div class="bg-white/30 rounded-full h-4 overflow-hidden">
+                        <div class="progress-bar-fill bg-gradient-to-r from-yellow-400 to-orange-500 h-full rounded-full" 
+                             id="xpProgressBar" style="width: 0%;"></div>
+                    </div>
+                    <div class="text-xs text-white text-center mt-1" id="levelInfo">Level 5 (450/500 XP)</div>
+                </div>
+                
+                <!-- 누적 시간 -->
+                <div class="flex items-center justify-between text-white">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">⏱️</span>
+                        <span class="font-semibold">누적 시간</span>
+                    </div>
+                    <span class="text-xl font-bold" id="totalTimeToday">2시간 30분</span>
+                </div>
+                
+                <!-- 연속 달성 (Streak) -->
+                <div class="flex items-center justify-between text-white">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">🔥</span>
+                        <span class="font-semibold">연속 달성</span>
+                    </div>
+                    <span class="text-xl font-bold text-orange-300" id="streakDays">3일 연속</span>
+                </div>
+            </div>
+            
+            <!-- 다음 단계 -->
+            <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-4 mb-5">
+                <h4 class="text-sm font-bold text-green-100 mb-2">📅 내일 학습 과목</h4>
+                <p class="text-white font-semibold text-base" id="tomorrowSubjects">수학, 영어, 과학</p>
+            </div>
+            
+            <!-- 확인 버튼 -->
+            <button 
+                onclick="closeCelebrationModal()" 
+                class="celebration-button w-full py-4 bg-white text-green-600 font-black text-lg rounded-xl hover:bg-green-50 transition-all transform hover:scale-105">
+                멋져! 계속 가자! 💪
+            </button>
+        </div>
+    </div>
 </body>
 </html>
