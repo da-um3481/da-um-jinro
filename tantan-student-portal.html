@@ -379,41 +379,50 @@
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-2">
                             <span class="text-3xl">${subject.icon}</span>
-                            <h4 class="font-bold text-gray-800">${subject.name}</h4>
+                            <h4 class="font-bold text-gray-800 text-lg">${subject.name}</h4>
                         </div>
-                        <div class="text-2xl">${isCompleted ? '✅' : '⏸️'}</div>
+                        <div class="text-3xl">${isCompleted ? '✅' : '📝'}</div>
                     </div>
-                    <div class="space-y-3">
-                        <div>
-                            <p class="text-sm font-bold text-gray-700">📚 Day ${topic.day}: ${topic.title}</p>
-                            <p class="text-xs text-gray-600 mt-1">${topic.content}</p>
-                        </div>
-                        
-                        <!-- 타이머 영역 -->
-                        <div class="p-4 bg-white rounded-lg border border-gray-200">
-                            <div class="text-center">
-                                <div class="text-xs text-gray-500 mb-2">학습 시간</div>
-                                <div class="timer-display text-${subject.color}-600" id="timer_${subject.name}">
-                                    ${formatTime(timerData.elapsed)}
+                    
+                    <div class="space-y-4">
+                        <!-- 오늘의 학습 주제 -->
+                        <div class="p-4 bg-white rounded-lg border-2 border-gray-300">
+                            <div class="flex items-start space-x-2">
+                                <span class="text-xl">📚</span>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-800 mb-1">Day ${topic.day}: ${topic.title}</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">${topic.content}</p>
                                 </div>
                             </div>
-                            <div class="flex gap-2 mt-3">
+                        </div>
+                        
+                        <!-- 타이머 영역 - 더 크고 명확하게 -->
+                        <div class="p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-300 shadow-md">
+                            <div class="text-center mb-4">
+                                <div class="text-sm font-bold text-gray-700 mb-2">⏱️ 학습 시간 측정</div>
+                                <div class="timer-display text-5xl font-black" style="color: ${subject.color === 'blue' ? '#2563eb' : subject.color === 'purple' ? '#9333ea' : '#4f46e5'};" id="timer_${subject.name}">
+                                    ${formatTime(timerData.elapsed)}
+                                </div>
+                                <div class="text-xs text-gray-500 mt-2">최소 1분 이상 학습 필요</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
                                 <button onclick="startTimer('${subject.name}')" 
                                     id="startBtn_${subject.name}"
-                                    class="flex-1 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all ${timerData.running ? 'opacity-50' : ''}">
-                                    <i class="fas fa-play mr-1"></i>시작
+                                    class="py-3 px-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all shadow-md ${timerData.running ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'}">
+                                    <i class="fas fa-play mr-2"></i>시작
                                 </button>
                                 <button onclick="stopTimer('${subject.name}')" 
                                     id="stopBtn_${subject.name}"
-                                    class="flex-1 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-all ${!timerData.running ? 'opacity-50' : ''}">
-                                    <i class="fas fa-stop mr-1"></i>정지
+                                    class="py-3 px-4 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-all shadow-md ${!timerData.running ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'}">
+                                    <i class="fas fa-stop mr-2"></i>정지
                                 </button>
                             </div>
                         </div>
                         
+                        <!-- 완료 버튼 -->
                         <button onclick="completeSubject('${subject.name}')" 
-                            class="w-full py-3 bg-${subject.color}-600 text-white font-bold rounded-lg hover:bg-${subject.color}-700 transition-all ${isCompleted ? 'opacity-50' : ''}">
-                            ${isCompleted ? '✅ 완료됨' : '학습 완료 체크'}
+                            class="w-full py-4 font-black text-lg rounded-xl transition-all shadow-md hover:shadow-lg ${isCompleted ? 'bg-gray-400 text-white cursor-not-allowed' : subject.color === 'blue' ? 'bg-blue-600 hover:bg-blue-700 text-white' : subject.color === 'purple' ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}">
+                            ${isCompleted ? '✅ 학습 완료됨' : '✓ 학습 완료 체크'}
                         </button>
                     </div>
                 `;
