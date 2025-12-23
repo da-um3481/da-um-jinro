@@ -1888,7 +1888,7 @@
             alert(`✅ ${student.name} 학생 환영합니다!\n📅 오늘의 학습 스케줄이 준비되었습니다!`);
         }
 
-        // 🤖 주간 스케줄 자동 생성
+        // 🤖 주간 스케줄 자동 생성 (4주 단계별 학습 적용)
         function autoGenerateWeeklySchedule(student) {
             const subjects = ['수학', '영어', '국어', '과학', '사회'];
             const schedule = {
@@ -1897,6 +1897,18 @@
                 student_name: student.name,
                 created_date: new Date().toISOString().split('T')[0]
             };
+            
+            // 프로그램 시작일 확인 (30일 프로그램의 현재 주차 계산)
+            const programStartDate = localStorage.getItem(`program_start_${student.id}`) || new Date().toISOString().split('T')[0];
+            const startDate = new Date(programStartDate);
+            const today = new Date();
+            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            const currentWeek = Math.min(Math.floor(daysPassed / 7) + 1, 4); // 1~4주차
+            
+            // 주차별 학습 내용 결정
+            // 1~2주차: 개념 집중 (교과서 + 기초 개념)
+            // 3~4주차: 강의 + 문제풀이 집중
+            const isConceptPhase = currentWeek <= 2;
             
             // 월~금: 3과목 모두 능동학습 (순서 상관없음)
             const weekdaySubjects = [
@@ -1914,14 +1926,26 @@
                 
                 // 모든 과목 능동학습 (타이머 활성화)
                 daySubjects.forEach((subj, i) => {
+                    // 주차별 학습 내용 차별화
+                    let content = '';
+                    if (isConceptPhase) {
+                        // 1~2주: 개념 집중
+                        content = `${subj} 교과서 개념 학습`;
+                    } else {
+                        // 3~4주: 강의 + 문제풀이
+                        content = `${subj} EBS 강의 수강 + 문제풀이`;
+                    }
+                    
                     scheduleItems.push({
                         time: `${9 + i}:00-${9 + i}:45`,
                         duration: 45,
                         type: `${i + 1}교시`,
                         subject: subj,
-                        content: `${subj} 개념 학습 및 문제 풀이`,
+                        content: content,
                         importance: subj === '수학' || subj === '영어' ? '높음' : '보통',
-                        isActive: true  // 모두 타이머 활성화
+                        isActive: true,  // 모두 타이머 활성화
+                        week: currentWeek,  // 현재 주차 정보 추가
+                        phase: isConceptPhase ? 'concept' : 'practice'  // 학습 단계
                     });
                 });
                 
@@ -1930,14 +1954,14 @@
             
             // 토~일: 3과목 복습 (각 45분)
             schedule.saturday = JSON.stringify([
-                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true },
-                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true },
-                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true }
+                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
+                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
+                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' }
             ]);
             schedule.sunday = JSON.stringify([
-                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true },
-                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true },
-                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true }
+                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
+                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
+                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' }
             ]);
             
             return schedule;
@@ -2132,11 +2156,20 @@
         }
         
         // 📚 학습 자료 HTML 생성 (공교육 자원 활용 - EBS 중학 + AI 단추)
+        // 🆕 4주 단계별 학습 반영: 1~2주(개념), 3~4주(강의+문제풀이)
         function getStudyMaterialsForSubject(subjectName) {
             const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
             const subjectKey = subjectMap[subjectName];
             const grade = parseInt(localStorage.getItem('currentStudentGrade')) || 1;
             const studentId = localStorage.getItem('currentStudentId');
+            
+            // 🆕 프로그램 주차 계산 (1~4주)
+            const programStartDate = localStorage.getItem(`program_start_${studentId}`) || new Date().toISOString().split('T')[0];
+            const startDate = new Date(programStartDate);
+            const today = new Date();
+            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            const currentWeek = Math.min(Math.floor(daysPassed / 7) + 1, 4);
+            const isConceptPhase = currentWeek <= 2; // 1~2주: 개념 집중
             
             // 선생님이 설정한 수준별 조정 정보 가져오기
             const levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
@@ -2159,57 +2192,115 @@
             
             let html = '<div class="space-y-2">';
             
-            // 수준 배지 표시
-            if (levelBadge) {
-                html += `<div class="flex items-center justify-between mb-2">
-                    <div class="text-xs font-bold text-gray-700">📚 공교육 학습 자료 (무료)</div>
-                    ${levelBadge}
-                </div>`;
-            } else {
-                html += '<div class="text-xs font-bold text-gray-700 mb-2">📚 공교육 학습 자료 (무료)</div>';
-            }
+            // 🆕 주차별 학습 단계 배지 추가
+            const phaseBadge = isConceptPhase 
+                ? `<span class="text-xs px-2 py-1 bg-teal-100 text-teal-700 rounded-full font-bold">📖 ${currentWeek}주차: 개념 집중 단계</span>`
+                : `<span class="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full font-bold">🎯 ${currentWeek}주차: 강의+문제풀이 단계</span>`;
             
-            // 1️⃣ 교과서 학습 (기본) - 단원 선택 가능
+            // 수준 배지 + 주차 배지 표시
+            html += `<div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+                <div class="text-xs font-bold text-gray-700">📚 공교육 학습 자료 (무료)</div>
+                <div class="flex gap-2">
+                    ${phaseBadge}
+                    ${levelBadge}
+                </div>
+            </div>`;
+            
+            // 1️⃣ 교과서 학습 (기본) - 단원 선택 가능 [항상 표시]
             const textbookCard = generateTextbookCard(subjectName, grade, difficultyLevel);
             html += textbookCard;
             
-            // 2️⃣ EBS 중학 프리미엄 (무료 강의)
-            const ebsLinks = getEBSLinksBySubject(subjectName, grade);
-            html += `
-                <a href="${ebsLinks.premium}" target="_blank" 
-                   class="block p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-400 rounded-lg hover:shadow-lg transition-all group">
-                    <div class="flex items-start gap-2">
-                        <div class="text-2xl group-hover:scale-110 transition-transform">🎓</div>
-                        <div class="flex-1">
-                            <div class="text-xs font-bold text-blue-700 mb-1">2단계: EBS 중학 프리미엄 강의</div>
-                            <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 무료 강의</div>
-                            <div class="text-xs text-blue-600 mt-1 font-semibold">✓ 2025년 전 강좌 무료 (프리패스)</div>
-                            <div class="text-xs text-gray-600">✓ 개념 설명 + 문제 풀이 동영상</div>
+            // 🆕 주차별 학습 자료 필터링
+            if (isConceptPhase) {
+                // 1~2주차: 개념 집중 - 교과서만 강조, EBS는 선택사항으로
+                html += `
+                    <div class="p-3 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-300 rounded-lg">
+                        <div class="flex items-start gap-2">
+                            <div class="text-xl">💡</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-amber-700 mb-1">1~2주 학습 가이드</div>
+                                <div class="text-xs text-gray-700">
+                                    ✓ <strong>교과서 개념</strong>을 충분히 이해하는 데 집중하세요<br>
+                                    ✓ 천천히 읽고, 모르는 개념은 선생님께 질문하세요<br>
+                                    ✓ EBS 강의는 <strong>이해가 어려울 때만</strong> 참고하세요
+                                </div>
+                            </div>
                         </div>
-                        <i class="fas fa-external-link-alt text-blue-600 group-hover:translate-x-1 transition-transform"></i>
                     </div>
-                </a>
-            `;
-            
-            // 3️⃣ EBS AI 단추 (문제 풀이)
-            html += `
-                <a href="${ebsLinks.aiDantchu}" target="_blank" 
-                   class="block p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-400 rounded-lg hover:shadow-lg transition-all group">
-                    <div class="flex items-start gap-2">
-                        <div class="text-2xl group-hover:scale-110 transition-transform">🤖</div>
-                        <div class="flex-1">
-                            <div class="text-xs font-bold text-purple-700 mb-1">3단계: EBS AI 단추 문제풀이</div>
-                            <div class="text-sm font-semibold text-gray-800">AI 맞춤형 문제 추천</div>
-                            <div class="text-xs text-purple-600 mt-1 font-semibold">✓ 진단평가 → AI 문제 추천</div>
-                            <div class="text-xs text-gray-600">✓ 내 수준에 맞는 문제 자동 생성</div>
-                            <div class="text-xs text-gray-600">✓ 실력 향상까지 단계별 학습</div>
+                `;
+                
+                // EBS 강의 (선택사항으로 표시)
+                const ebsLinks = getEBSLinksBySubject(subjectName, grade);
+                html += `
+                    <a href="${ebsLinks.premium}" target="_blank" 
+                       class="block p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-lg hover:shadow-lg transition-all group opacity-75">
+                        <div class="flex items-start gap-2">
+                            <div class="text-2xl group-hover:scale-110 transition-transform">🎓</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-blue-700 mb-1">(선택) EBS 중학 프리미엄 강의</div>
+                                <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 무료 강의</div>
+                                <div class="text-xs text-gray-600 mt-1">✓ 개념이 어려울 때 참고용으로 활용</div>
+                            </div>
+                            <i class="fas fa-external-link-alt text-blue-600 group-hover:translate-x-1 transition-transform"></i>
                         </div>
-                        <i class="fas fa-external-link-alt text-purple-600 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                `;
+            } else {
+                // 3~4주차: 강의 + 문제풀이 집중
+                html += `
+                    <div class="p-3 bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-300 rounded-lg">
+                        <div class="flex items-start gap-2">
+                            <div class="text-xl">🚀</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-indigo-700 mb-1">3~4주 학습 가이드</div>
+                                <div class="text-xs text-gray-700">
+                                    ✓ <strong>EBS 강의</strong>로 개념을 다시 정리하세요<br>
+                                    ✓ <strong>EBS AI 단추</strong>로 충분한 문제를 풀어보세요<br>
+                                    ✓ 틀린 문제는 다시 풀어보고 이해하세요
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </a>
-            `;
+                `;
+                
+                // 2️⃣ EBS 중학 프리미엄 (무료 강의) - 강조 표시
+                const ebsLinks = getEBSLinksBySubject(subjectName, grade);
+                html += `
+                    <a href="${ebsLinks.premium}" target="_blank" 
+                       class="block p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-400 rounded-lg hover:shadow-lg transition-all group">
+                        <div class="flex items-start gap-2">
+                            <div class="text-2xl group-hover:scale-110 transition-transform">🎓</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-blue-700 mb-1">2단계: EBS 중학 프리미엄 강의</div>
+                                <div class="text-sm font-semibold text-gray-800">중${grade} ${subjectName} 무료 강의</div>
+                                <div class="text-xs text-blue-600 mt-1 font-semibold">✓ 2025년 전 강좌 무료 (프리패스)</div>
+                                <div class="text-xs text-gray-600">✓ 개념 설명 + 문제 풀이 동영상</div>
+                            </div>
+                            <i class="fas fa-external-link-alt text-blue-600 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                `;
+                
+                // 3️⃣ EBS AI 단추 (문제 풀이) - 강조 표시
+                html += `
+                    <a href="${ebsLinks.aiDantchu}" target="_blank" 
+                       class="block p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-400 rounded-lg hover:shadow-lg transition-all group">
+                        <div class="flex items-start gap-2">
+                            <div class="text-2xl group-hover:scale-110 transition-transform">🤖</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-purple-700 mb-1">3단계: EBS AI 단추 문제풀이</div>
+                                <div class="text-sm font-semibold text-gray-800">AI 맞춤형 문제 추천</div>
+                                <div class="text-xs text-purple-600 mt-1 font-semibold">✓ 진단평가 → AI 문제 추천</div>
+                                <div class="text-xs text-gray-600">✓ 내 수준에 맞는 문제 자동 생성</div>
+                                <div class="text-xs text-gray-600">✓ 실력 향상까지 단계별 학습</div>
+                            </div>
+                            <i class="fas fa-external-link-alt text-purple-600 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                `;
+            }
             
-            // 선생님의 맞춤 교재 추천 (있는 경우)
+            // 선생님의 맞춤 교재 추천 (있는 경우) - 항상 표시
             if (studentAdjustment && studentAdjustment.recommendedMaterials) {
                 const subjectMaterial = studentAdjustment.recommendedMaterials.find(m => 
                     m.subject === subjectName
