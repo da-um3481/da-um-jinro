@@ -316,6 +316,156 @@
         }
         
         /* ===========================
+           🗺️ 30일 비주얼 로드맵
+           =========================== */
+        
+        /* 로드맵 컨테이너 */
+        .roadmap-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #10b981 #e5e7eb;
+        }
+        
+        .roadmap-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .roadmap-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+        
+        .roadmap-container::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+        }
+        
+        /* 로드맵 타임라인 */
+        .roadmap-timeline {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem 1rem;
+            min-width: max-content;
+        }
+        
+        /* 단계별 스테이지 */
+        .roadmap-stage {
+            position: relative;
+            min-width: 200px;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 3px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .roadmap-stage.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+        
+        .roadmap-stage.active {
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+            transform: scale(1.05);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .roadmap-stage.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+        
+        /* 스테이지 아이콘 */
+        .stage-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .stage-icon.pulse {
+            animation: icon-bounce 1s ease-in-out infinite;
+        }
+        
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+        
+        /* 잠금 아이콘 */
+        .lock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #9ca3af;
+        }
+        
+        /* 동기부여 메시지 배너 */
+        .motivation-banner {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            animation: slideInFromLeft 0.5s ease-out;
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* 통계 대시보드 카드 */
+        .stats-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #d1d5db;
+        }
+        
+        .stats-card.highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+        
+        /* 보상 배지 */
+        .reward-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+            animation: badge-shine 2s ease-in-out infinite;
+        }
+        
+        @keyframes badge-shine {
+            0%, 100% { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 4px 24px rgba(245, 158, 11, 0.8); }
+        }
+        
+        /* 반응형 */
+        @media (max-width: 640px) {
+            .roadmap-stage {
+                min-width: 160px;
+                padding: 1rem;
+            }
+            
+            .stage-icon {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* ===========================
            🎉 학습 완료 축하 모달
            =========================== */
         
@@ -522,26 +672,54 @@
             </div>
         </div>
 
-        <!-- 30일 프로그램 진행률 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-gray-800">
-                    <i class="fas fa-chart-line text-green-700 mr-2"></i>30일 프로그램 진행률
-                </h3>
-                <div class="text-right">
-                    <div class="text-2xl font-black bg-gradient-to-r from-green-800 to-green-700 bg-clip-text text-transparent" id="progressPercent">
-                        0%
+        <!-- 🗺️ 30일 비주얼 로드맵 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="visualRoadmap">
+            <!-- 헤더: 진행률 + 동기부여 메시지 -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-black text-gray-800">
+                        <i class="fas fa-map-marked-alt text-green-700 mr-2"></i>30일 학습 여정
+                    </h3>
+                    <div class="text-right">
+                        <div class="text-3xl font-black bg-gradient-to-r from-green-800 to-green-700 bg-clip-text text-transparent" id="roadmapProgressPercent">
+                            0%
+                        </div>
+                        <div class="text-xs text-gray-600" id="roadmapProgressDays">0일 / 30일</div>
                     </div>
-                    <div class="text-xs text-gray-600" id="progressDays">0일 / 30일</div>
+                </div>
+                
+                <!-- 동기부여 메시지 배너 -->
+                <div class="motivation-banner" id="motivationBanner">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm opacity-90">현재 상태</div>
+                            <div class="text-lg font-bold" id="motivationMessage">시작이 반이야! 지금 너는 상위 30%에 속해!</div>
+                        </div>
+                        <div class="text-4xl" id="motivationEmoji">🚀</div>
+                    </div>
+                </div>
+                
+                <!-- 기본 프로그레스 바 -->
+                <div class="bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-800 to-green-700 h-full rounded-full transition-all duration-500" id="roadmapProgressBar" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span id="roadmapStartDate">시작: 미정</span>
+                    <span id="roadmapDDay" class="font-bold text-green-700">학습 시작 전</span>
+                    <span id="roadmapEndDate">종료: 미정</span>
                 </div>
             </div>
-            <div class="bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
-                <div class="bg-gradient-to-r from-green-800 to-green-700 h-full rounded-full progress-bar" id="progressBar" style="width: 0%"></div>
+            
+            <!-- 비주얼 로드맵 타임라인 (가로 스크롤) -->
+            <div class="roadmap-container" id="roadmapContainer">
+                <div class="roadmap-timeline" id="roadmapTimeline">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
             </div>
-            <div class="flex justify-between text-xs text-gray-600">
-                <span id="startDate">시작: 미정</span>
-                <span id="dDay">학습 시작 전</span>
-                <span id="endDate">종료: 미정</span>
+            
+            <!-- 통계 대시보드 -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4" id="statsDashboard">
+                <!-- 통계 카드들이 여기에 표시됩니다 -->
             </div>
         </div>
 
@@ -1102,12 +1280,23 @@
                 // 학습 시작 전 - 초기 상태
                 document.getElementById('dailyTarget').textContent = targetInfo.label;
                 document.getElementById('programDay').textContent = '학습 시작 전';
-                document.getElementById('progressPercent').textContent = '0%';
-                document.getElementById('progressDays').textContent = '0일 / 30일';
-                document.getElementById('progressBar').style.width = '0%';
-                document.getElementById('startDate').textContent = '시작: 미정';
-                document.getElementById('dDay').textContent = '학습 시작 전';
-                document.getElementById('endDate').textContent = '종료: 미정';
+                
+                // 🆕 로드맵 초기 상태
+                document.getElementById('roadmapProgressPercent').textContent = '0%';
+                document.getElementById('roadmapProgressDays').textContent = '0일 / 30일';
+                document.getElementById('roadmapProgressBar').style.width = '0%';
+                document.getElementById('roadmapStartDate').textContent = '시작: 미정';
+                document.getElementById('roadmapDDay').textContent = '학습 시작 전';
+                document.getElementById('roadmapEndDate').textContent = '종료: 미정';
+                
+                // 기본 동기부여 메시지
+                updateMotivationMessage(0);
+                
+                // 로드맵 타임라인 생성 (잠금 상태)
+                generateVisualRoadmap(0, false);
+                
+                // 통계 대시보드 초기화
+                generateStatsDashboard(0, false);
                 
                 // 교재 진도 및 주간 통계 섹션 숨기기
                 hideProgressSections();
@@ -1123,19 +1312,210 @@
                 
                 // 종료일 계산
                 const endDate = new Date(startDate);
-                            endDate.setDate(startDate.getDate() + 29);
+                endDate.setDate(startDate.getDate() + 29);
                 
                 document.getElementById('dailyTarget').textContent = targetInfo.label;
                 document.getElementById('programDay').textContent = `Day ${daysPassed}`;
-                document.getElementById('progressPercent').textContent = `${progressPercent}%`;
-                document.getElementById('progressDays').textContent = `${daysPassed}일 / 30일`;
-                document.getElementById('progressBar').style.width = `${progressPercent}%`;
-                document.getElementById('startDate').textContent = `시작: ${startDate.getMonth() + 1}월 ${startDate.getDate()}일`;
-                document.getElementById('dDay').textContent = daysRemaining > 0 ? `D-${daysRemaining}` : '완료!';
-                document.getElementById('endDate').textContent = `종료: ${endDate.getMonth() + 1}월 ${endDate.getDate()}일`;
+                
+                // 🆕 로드맵 업데이트
+                document.getElementById('roadmapProgressPercent').textContent = `${progressPercent}%`;
+                document.getElementById('roadmapProgressDays').textContent = `${daysPassed}일 / 30일`;
+                document.getElementById('roadmapProgressBar').style.width = `${progressPercent}%`;
+                document.getElementById('roadmapStartDate').textContent = `시작: ${startDate.getMonth() + 1}월 ${startDate.getDate()}일`;
+                document.getElementById('roadmapDDay').textContent = daysRemaining > 0 ? `D-${daysRemaining}` : '🎉 완료!';
+                document.getElementById('roadmapEndDate').textContent = `종료: ${endDate.getMonth() + 1}월 ${endDate.getDate()}일`;
+                
+                // 동기부여 메시지 업데이트
+                updateMotivationMessage(progressPercent);
+                
+                // 로드맵 타임라인 생성 (진행 상태 반영)
+                generateVisualRoadmap(daysPassed, true);
+                
+                // 통계 대시보드 생성
+                generateStatsDashboard(daysPassed, true);
                 
                 return true;
             }
+        }
+        
+        // 🆕 동기부여 메시지 업데이트
+        function updateMotivationMessage(progressPercent) {
+            const messages = [
+                { range: [0, 20], emoji: '🚀', text: '시작이 반이야! 지금 너는 상위 30%에 속해!' },
+                { range: [21, 50], emoji: '🔥', text: '중간 지점 돌파! 여기까지 온 사람은 10명 중 2명뿐!' },
+                { range: [51, 80], emoji: '💪', text: '거의 다 왔어! 이제 포기하면 너무 아까워!' },
+                { range: [81, 100], emoji: '👑', text: '완주까지 D-3일! 역대 최강 학습자 등극 직전!' }
+            ];
+            
+            const message = messages.find(m => progressPercent >= m.range[0] && progressPercent <= m.range[1]);
+            
+            if (message) {
+                document.getElementById('motivationMessage').textContent = message.text;
+                document.getElementById('motivationEmoji').textContent = message.emoji;
+            }
+        }
+        
+        // 🆕 비주얼 로드맵 생성
+        function generateVisualRoadmap(daysPassed, hasStarted) {
+            const stages = [
+                { 
+                    id: 1, 
+                    name: '시작 단계', 
+                    emoji: '🌱', 
+                    days: [1, 6], 
+                    description: '씨앗 단계',
+                    color: { bg: '#dcfce7', border: '#22c55e' },
+                    reward: '🏅 첫걸음 배지'
+                },
+                { 
+                    id: 2, 
+                    name: '습관 형성', 
+                    emoji: '🌿', 
+                    days: [7, 12], 
+                    description: '새싹 단계',
+                    color: { bg: '#d1fae5', border: '#10b981' },
+                    reward: '🌟 습관왕 배지'
+                },
+                { 
+                    id: 3, 
+                    name: '가속 구간', 
+                    emoji: '🌳', 
+                    days: [13, 18], 
+                    description: '성장 단계',
+                    color: { bg: '#bfdbfe', border: '#3b82f6' },
+                    reward: '🚀 가속러 배지'
+                },
+                { 
+                    id: 4, 
+                    name: '정착 구간', 
+                    emoji: '🌺', 
+                    days: [19, 24], 
+                    description: '개화 단계',
+                    color: { bg: '#fae8ff', border: '#a855f7' },
+                    reward: '💐 개화 배지'
+                },
+                { 
+                    id: 5, 
+                    name: '완성 구간', 
+                    emoji: '🏆', 
+                    days: [25, 30], 
+                    description: '결실 단계',
+                    color: { bg: '#fef3c7', border: '#f59e0b' },
+                    reward: '👑 완주 트로피'
+                }
+            ];
+            
+            const timeline = document.getElementById('roadmapTimeline');
+            timeline.innerHTML = '';
+            
+            stages.forEach((stage, index) => {
+                const isCompleted = daysPassed > stage.days[1];
+                const isActive = daysPassed >= stage.days[0] && daysPassed <= stage.days[1];
+                const isLocked = daysPassed < stage.days[0];
+                
+                let stateClass = '';
+                if (isCompleted) stateClass = 'completed';
+                else if (isActive) stateClass = 'active';
+                else if (isLocked) stateClass = 'locked';
+                
+                const stageHTML = `
+                    <div class="roadmap-stage ${stateClass}" 
+                         style="background-color: ${stage.color.bg}; border-color: ${stage.color.border};">
+                        ${isLocked ? '<div class="lock-overlay"><i class="fas fa-lock"></i></div>' : ''}
+                        
+                        <div class="stage-icon ${isActive ? 'pulse' : ''}">${stage.emoji}</div>
+                        
+                        <div class="text-center">
+                            <div class="font-bold text-gray-800 text-sm mb-1">${stage.name}</div>
+                            <div class="text-xs text-gray-600 mb-2">${stage.description}</div>
+                            <div class="text-xs font-semibold text-gray-700 mb-2">${stage.days[0]}-${stage.days[1]}일차</div>
+                            
+                            ${!isLocked ? `
+                                <div class="mt-3 pt-3 border-t border-gray-300">
+                                    <div class="text-xs font-bold text-gray-700 mb-1">보상</div>
+                                    <div class="reward-badge text-xs">${stage.reward}</div>
+                                </div>
+                            ` : ''}
+                            
+                            ${isCompleted ? `
+                                <div class="mt-2 text-green-600 font-bold text-sm">
+                                    <i class="fas fa-check-circle mr-1"></i>완료!
+                                </div>
+                            ` : ''}
+                            
+                            ${isActive ? `
+                                <div class="mt-2 text-blue-600 font-bold text-sm animate-pulse">
+                                    <i class="fas fa-play-circle mr-1"></i>진행 중
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                timeline.innerHTML += stageHTML;
+            });
+            
+            // 활성 단계로 자동 스크롤
+            if (hasStarted) {
+                setTimeout(() => {
+                    const activeStage = timeline.querySelector('.roadmap-stage.active');
+                    if (activeStage) {
+                        activeStage.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                }, 300);
+            }
+        }
+        
+        // 🆕 통계 대시보드 생성
+        function generateStatsDashboard(daysPassed, hasStarted) {
+            const dashboard = document.getElementById('statsDashboard');
+            
+            if (!hasStarted) {
+                dashboard.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <i class="fas fa-chart-bar text-4xl mb-2"></i>
+                        <p class="text-sm">학습을 시작하면 통계가 표시됩니다</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 가상 데이터 (실제로는 서버에서 가져와야 함)
+            const avgProgress = Math.max(10, daysPassed - 2); // 평균보다 약간 앞서도록
+            const userRank = Math.min(Math.floor(daysPassed / 3) + 1, 5);
+            const expectedCompletionDate = new Date();
+            expectedCompletionDate.setDate(expectedCompletionDate.getDate() + (30 - daysPassed));
+            
+            const cards = [
+                {
+                    title: '내 진행률 vs 평균',
+                    value: `${daysPassed}일 vs ${avgProgress}일`,
+                    description: daysPassed > avgProgress ? '평균보다 앞서고 있어요! 🎉' : '평균 수준으로 잘하고 있어요!',
+                    highlight: daysPassed > avgProgress
+                },
+                {
+                    title: '같은 날짜 시작한 친구들',
+                    value: `${userRank}등`,
+                    description: userRank === 1 ? '🏆 1등! 최고예요!' : `${userRank}등! 조금만 더 힘내요!`,
+                    highlight: userRank <= 3
+                },
+                {
+                    title: '예상 완료 날짜',
+                    value: `${expectedCompletionDate.getMonth() + 1}월 ${expectedCompletionDate.getDate()}일`,
+                    description: `${30 - daysPassed}일 남았어요!`,
+                    highlight: false
+                }
+            ];
+            
+            dashboard.innerHTML = cards.map(card => `
+                <div class="stats-card ${card.highlight ? 'highlight' : ''}">
+                    <div class="text-xs text-gray-600 mb-1">${card.title}</div>
+                    <div class="text-2xl font-black text-gray-800 mb-2">${card.value}</div>
+                    <div class="text-xs font-semibold ${card.highlight ? 'text-amber-700' : 'text-gray-600'}">
+                        ${card.description}
+                    </div>
+                </div>
+            `).join('');
         }
 
         // 학습 내용 저장 함수
