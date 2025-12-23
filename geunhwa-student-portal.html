@@ -1172,6 +1172,64 @@
             
             console.log(`✅ ${subject} 학습 내용 저장 완료:`, content);
         }
+        
+        // 🆕 수동 저장 함수 (저장 버튼 클릭 시)
+        function saveStudyContentManually(subject) {
+            const contentElement = document.getElementById(`${subject}Content`);
+            const saveBtn = document.getElementById(`${subject}SaveBtn`);
+            const statusElement = document.getElementById(`${subject}SaveStatus`);
+            
+            if (!contentElement) {
+                console.error('학습 내용 입력란을 찾을 수 없습니다.');
+                return;
+            }
+            
+            const content = contentElement.value.trim();
+            
+            if (!content) {
+                // 내용이 비어있을 때
+                statusElement.innerHTML = '<span class="text-orange-500 font-semibold">⚠️ 내용을 입력해주세요</span>';
+                setTimeout(() => {
+                    statusElement.innerHTML = '';
+                }, 2000);
+                return;
+            }
+            
+            // 저장 실행
+            saveStudyContent(subject, content);
+            
+            // 버튼 애니메이션
+            saveBtn.classList.add('animate-pulse');
+            saveBtn.innerHTML = '<i class="fas fa-check"></i><span>저장 완료!</span>';
+            saveBtn.classList.remove('from-green-500', 'to-emerald-600');
+            saveBtn.classList.add('from-blue-500', 'to-indigo-600');
+            
+            // 상태 메시지
+            const now = new Date();
+            const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+            statusElement.innerHTML = `<span class="text-green-600 font-semibold flex items-center space-x-1">
+                <i class="fas fa-check-circle"></i>
+                <span>${timeStr} 저장됨</span>
+            </span>`;
+            
+            // 성공 토스트 메시지
+            showSuccessMessage(`✅ ${subject} 학습 내용이 저장되었습니다!`);
+            
+            // 2초 후 버튼 원래대로
+            setTimeout(() => {
+                saveBtn.classList.remove('animate-pulse', 'from-blue-500', 'to-indigo-600');
+                saveBtn.classList.add('from-green-500', 'to-emerald-600');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i><span>저장하기</span>';
+            }, 2000);
+        }
+        
+        // 🆕 내용 변경 감지 (저장 필요 표시)
+        function markContentAsUnsaved(subject) {
+            const statusElement = document.getElementById(`${subject}SaveStatus`);
+            if (statusElement) {
+                statusElement.innerHTML = '<span class="text-gray-400 font-semibold flex items-center space-x-1"><i class="fas fa-circle text-xs"></i><span>저장 안됨</span></span>';
+            }
+        }
 
         // ⏱️ 타이머 관련 변수
         const timers = {};
@@ -2149,7 +2207,43 @@
                 return createIntegratedSubjectCard(item, config, subjectId);
             }).join('');
             
+            // 🆕 저장된 학습 내용 불러오기
+            loadSavedStudyContents(todaySchedule);
+            
             console.log('✅ 과목 카드 표시 완료');
+        }
+        
+        // 🆕 저장된 학습 내용 불러오기
+        function loadSavedStudyContents(todaySchedule) {
+            const today = new Date().toISOString().split('T')[0];
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            if (!todayRecord || !todayRecord.subjects) return;
+            
+            todaySchedule.forEach(item => {
+                const subject = item.subject;
+                const contentElement = document.getElementById(`${subject}Content`);
+                const statusElement = document.getElementById(`${subject}SaveStatus`);
+                
+                if (contentElement && todayRecord.subjects[subject] && todayRecord.subjects[subject].content) {
+                    const savedContent = todayRecord.subjects[subject].content;
+                    const updatedAt = new Date(todayRecord.subjects[subject].updated_at);
+                    const timeStr = `${updatedAt.getHours()}:${String(updatedAt.getMinutes()).padStart(2, '0')}`;
+                    
+                    contentElement.value = savedContent;
+                    
+                    if (statusElement) {
+                        statusElement.innerHTML = `<span class="text-green-600 font-semibold flex items-center space-x-1">
+                            <i class="fas fa-check-circle"></i>
+                            <span>${timeStr} 저장됨</span>
+                        </span>`;
+                    }
+                    
+                    console.log(`✅ ${subject} 저장된 내용 불러옴: ${savedContent.substring(0, 30)}...`);
+                }
+            });
         }
 
         // 🎨 과목 설정 가져오기
@@ -2242,13 +2336,27 @@
                         
                         ${!isPreview ? `
                         <!-- 학습 내용 입력 (실제 학습 과목만) -->
-                        <textarea id="${item.subject}Content" rows="3" 
-                                  placeholder="📝 오늘 학습한 내용을 기록하세요"
-                                  class="w-full px-4 py-3 border-2 rounded-lg focus:outline-none text-sm"
-                                  style="border-color: ${colors.border};"
-                                  onfocus="this.style.borderColor='${colors.main}'"
-                                  onblur="this.style.borderColor='${colors.border}'"
-                                  onchange="saveStudyContent('${item.subject}', this.value)"></textarea>
+                        <div class="space-y-2">
+                            <textarea id="${item.subject}Content" rows="3" 
+                                      placeholder="📝 오늘 학습한 내용을 기록하세요"
+                                      class="w-full px-4 py-3 border-2 rounded-lg focus:outline-none text-sm"
+                                      style="border-color: ${colors.border};"
+                                      onfocus="this.style.borderColor='${colors.main}'"
+                                      onblur="this.style.borderColor='${colors.border}'"
+                                      oninput="markContentAsUnsaved('${item.subject}')"></textarea>
+                            
+                            <!-- 저장 버튼 -->
+                            <div class="flex items-center justify-between">
+                                <button 
+                                    onclick="saveStudyContentManually('${item.subject}')"
+                                    id="${item.subject}SaveBtn"
+                                    class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-105 flex items-center space-x-2">
+                                    <i class="fas fa-save"></i>
+                                    <span>저장하기</span>
+                                </button>
+                                <div id="${item.subject}SaveStatus" class="text-xs text-gray-500"></div>
+                            </div>
+                        </div>
                         ` : ''}
                         
                         <!-- 학습 자료 -->
