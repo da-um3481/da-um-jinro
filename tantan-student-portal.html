@@ -386,6 +386,14 @@
             let cardCount = 0;
             Object.values(subjects).forEach(subject => {
                 console.log(`Processing subject: ${subject.name}`);
+                console.log(`subject.topics type:`, Array.isArray(subject.topics));
+                console.log(`subject.topics length:`, subject.topics ? subject.topics.length : 'undefined');
+                
+                if (!subject.topics || !Array.isArray(subject.topics) || subject.topics.length === 0) {
+                    console.error(`❌ Invalid topics for ${subject.name}:`, subject.topics);
+                    return;
+                }
+                
                 const topic = subject.topics[studentData.currentDay - 1] || subject.topics[0];
                 console.log(`Topic for ${subject.name}:`, topic);
                 const dayKey = `${studentData.currentDay}_${subject.name}`;
