@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 기초학력 탄탄 - 학생 학습 포털</title>
+    <title>📚 기초학력 탄탄 - 학생 학습 포털 v1.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -365,7 +365,14 @@
         // ==========================================
         function renderSubjects() {
             const container = document.getElementById('subjectsContainer');
+            if (!container) {
+                console.error('subjectsContainer not found');
+                return;
+            }
             container.innerHTML = '';
+            
+            console.log('Rendering subjects for day:', studentData.currentDay);
+            console.log('Subjects:', Object.keys(subjects));
             
             Object.values(subjects).forEach(subject => {
                 const topic = subject.topics[studentData.currentDay - 1] || subject.topics[0];
