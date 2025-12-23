@@ -396,9 +396,13 @@
                 
                 const topic = subject.topics[studentData.currentDay - 1] || subject.topics[0];
                 console.log(`Topic for ${subject.name}:`, topic);
+                
                 const dayKey = `${studentData.currentDay}_${subject.name}`;
+                console.log(`dayKey: ${dayKey}`);
+                console.log(`studentData.timers:`, studentData.timers);
+                
                 const isCompleted = studentData.studyLog[studentData.currentDay]?.[subject.name]?.completed || false;
-                const timerData = studentData.timers[dayKey] || { elapsed: 0, running: false };
+                const timerData = studentData.timers?.[dayKey] || { elapsed: 0, running: false };
                 
                 // 색상 매핑
                 const colorClasses = {
@@ -653,13 +657,28 @@
         function loadStudentData() {
             const saved = localStorage.getItem('tantan_student_data');
             if (saved) {
-                studentData = JSON.parse(saved);
+                const loaded = JSON.parse(saved);
+                
+                // 기본 구조 보장
+                studentData = {
+                    name: loaded.name || '',
+                    grade: loaded.grade || 1,
+                    currentDay: loaded.currentDay || 1,
+                    studyLog: loaded.studyLog || {},
+                    timers: loaded.timers || {},
+                    totalMinutes: loaded.totalMinutes || 0
+                };
+                
                 // running 플래그 초기화 (페이지 새로고침 시)
                 if (studentData.timers && typeof studentData.timers === 'object') {
                     Object.keys(studentData.timers).forEach(key => {
                         studentData.timers[key].running = false;
                     });
                 }
+                
+                console.log('✅ Student data loaded:', studentData);
+            } else {
+                console.log('ℹ️ No saved data found, using defaults');
             }
         }
 
