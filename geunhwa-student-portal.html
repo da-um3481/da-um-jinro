@@ -1688,19 +1688,52 @@
             diagnosticResults.push(result);
             localStorage.setItem('diagnostic_results', JSON.stringify(diagnosticResults));
             
-            // 학생의 진단 완료 표시
+            // 학생의 진단 완료 표시 (기존 방식 - 하위 호환)
             let diagnosticStatus = JSON.parse(localStorage.getItem('diagnostic_status')) || {};
             diagnosticStatus[result.studentId] = diagnosticStatus[result.studentId] || {};
             diagnosticStatus[result.studentId][result.subject] = true;
             localStorage.setItem('diagnostic_status', JSON.stringify(diagnosticStatus));
             
+            // 🆕 학생 객체에 직접 진단 완료 표시 (다른 기기에서도 확인 가능)
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const studentIndex = students.findIndex(s => s.id === result.studentId);
+            if (studentIndex !== -1) {
+                if (!students[studentIndex].diagnostic_completed) {
+                    students[studentIndex].diagnostic_completed = {};
+                }
+                students[studentIndex].diagnostic_completed[result.subject] = {
+                    completed: true,
+                    date: result.testDate,
+                    level: result.level,
+                    score: result.totalScore
+                };
+                localStorage.setItem('students', JSON.stringify(students));
+                console.log(`✅ 학생 객체에 진단평가 완료 기록: ${result.studentId} - ${result.subject}`);
+            }
+            
             console.log('✅ 진단평가 결과 저장 완료:', result);
         }
         
-        // 진단평가 완료 여부 확인
+        // 진단평가 완료 여부 확인 (다른 기기에서도 동작)
         function hasDiagnosticCompleted(studentId, subject) {
+            // 1️⃣ 우선순위: 학생 객체에서 확인 (다른 기기에서도 공유됨)
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => s.id === studentId);
+            
+            if (student && student.diagnostic_completed && student.diagnostic_completed[subject]) {
+                console.log(`✅ 진단평가 완료 확인 (학생 객체): ${studentId} - ${subject}`);
+                return true;
+            }
+            
+            // 2️⃣ 폴백: 기존 diagnostic_status에서 확인 (하위 호환)
             const diagnosticStatus = JSON.parse(localStorage.getItem('diagnostic_status')) || {};
-            return diagnosticStatus[studentId] && diagnosticStatus[studentId][subject];
+            if (diagnosticStatus[studentId] && diagnosticStatus[studentId][subject]) {
+                console.log(`✅ 진단평가 완료 확인 (diagnostic_status): ${studentId} - ${subject}`);
+                return true;
+            }
+            
+            console.log(`❌ 진단평가 미완료: ${studentId} - ${subject}`);
+            return false;
         }
 
         // 선생님 피드백 로드
@@ -1842,15 +1875,21 @@
                     phone: registeredStudent ? registeredStudent.phone || '' : '',
                     email: registeredStudent ? registeredStudent.email || '' : '',
                     created_at: new Date().toISOString(),
-                    isGuest: isGuest
+                    isGuest: isGuest,
+                    diagnostic_completed: {} // 🆕 진단평가 완료 기록 (다른 기기 공유용)
                 };
                 
                 // 학생 목록에 추가
                 students.push(student);
                 localStorage.setItem('students', JSON.stringify(students));
                 
-                console.log(`✅ 새 학생 계정 생성: ${nameInput} (${selectedGrade}학년)`);
+                console.log(`✅ 새 학생 계정 생성: ${studentName} (${selectedGrade}학년)`);
             } else {
+                // 🆕 기존 학생이면 diagnostic_completed 필드 초기화 (없는 경우)
+                if (!student.diagnostic_completed) {
+                    student.diagnostic_completed = {};
+                }
+                
                 // 기존 학생이면 등록 정보가 있을 경우 업데이트
                 if (registeredStudent) {
                     student.grade = selectedGrade;
@@ -1865,6 +1904,8 @@
                         localStorage.setItem('students', JSON.stringify(students));
                     }
                 }
+                
+                console.log(`✅ 기존 학생 로그인: ${student.name} (진단평가 완료: ${student.diagnostic_completed && Object.keys(student.diagnostic_completed).length > 0 ? 'O' : 'X'})`);
             }
 
             // localStorage에 현재 학생 정보 저장
