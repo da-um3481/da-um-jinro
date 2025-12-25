@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>👨‍🏫 중학생 교사 대시보드 - 자기주도학습UP (성취도 평가)</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #10b981;
@@ -806,6 +808,9 @@
                 <button class="nav-tab active" onclick="showSection('dashboard')" id="tab-dashboard">
                     📊 전체 현황
                 </button>
+                <button class="nav-tab" onclick="showSection('evaluation')" id="tab-evaluation">
+                    📈 평가 관리
+                </button>
                 <button class="nav-tab" onclick="showSection('diagnostic')" id="tab-diagnostic">
                     📝 진단평가 결과
                 </button>
@@ -964,6 +969,248 @@
         </div>
         </div>
         <!-- /전체 현황 섹션 끝 -->
+
+        <!-- 평가 관리 섹션 -->
+        <div class="section-container" id="section-evaluation">
+            <div class="section">
+                <div class="section-header" style="margin-bottom: 2rem;">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">📊</span>
+                        평가 관리 시스템
+                    </h2>
+                    <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem;">
+                        진단평가, 2주차 평가, 4주차 평가, 30일 완료 재평가(Post-test) 통합 관리
+                    </p>
+                </div>
+
+                <!-- 평가 유형 탭 -->
+                <div class="evaluation-tabs" style="display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <button class="eval-tab active" data-eval-type="diagnostic" style="flex: 1; min-width: 200px; padding: 15px 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                        <i class="fas fa-clipboard-check"></i> 진단평가 (Pre-test)
+                    </button>
+                    <button class="eval-tab" data-eval-type="biweekly" style="flex: 1; min-width: 200px; padding: 15px 20px; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                        <i class="fas fa-calendar-check"></i> 2주/4주 평가
+                    </button>
+                    <button class="eval-tab" data-eval-type="posttest" style="flex: 1; min-width: 200px; padding: 15px 20px; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                        <i class="fas fa-trophy"></i> 30일 완료 재평가
+                    </button>
+                    <button class="eval-tab" data-eval-type="comparison" style="flex: 1; min-width: 200px; padding: 15px 20px; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                        <i class="fas fa-chart-line"></i> 성장 비교 분석
+                    </button>
+                </div>
+
+                <!-- 진단평가 결과 -->
+                <div class="eval-content active" id="eval-diagnostic">
+                    <div class="stats-grid" style="margin-bottom: 30px;">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">진단평가 완료</span>
+                                <span class="stat-icon">📋</span>
+                            </div>
+                            <div class="stat-value" id="diagnosticCompletedCount" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>전체 학생 중 완료 비율</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">평균 점수</span>
+                                <span class="stat-icon">📊</span>
+                            </div>
+                            <div class="stat-value" id="diagnosticAvgScore" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>50점 만점 기준</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">심화 수준</span>
+                                <span class="stat-icon">🎯</span>
+                            </div>
+                            <div class="stat-value" id="diagnosticAdvancedCount" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>심화 수준 학생 수</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">기초 수준</span>
+                                <span class="stat-icon">📚</span>
+                            </div>
+                            <div class="stat-value" id="diagnosticBasicCount" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>집중 지도 필요 학생</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 진단평가 학생별 상세 결과 -->
+                    <div class="card" style="padding: 25px; margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <span>👨‍🎓</span> 학생별 진단평가 결과
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: rgba(255,255,255,0.05);">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 2px solid rgba(255,255,255,0.1);">학생명</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">학년</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">총점</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">수준</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">과목별 점수</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">검사일</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">상세</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="diagnosticTableBody">
+                                    <tr>
+                                        <td colspan="7" style="padding: 40px; text-align: center; color: var(--text-muted);">
+                                            진단평가 데이터를 불러오는 중...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2주/4주 평가 결과 -->
+                <div class="eval-content" id="eval-biweekly" style="display: none;">
+                    <div class="stats-grid" style="margin-bottom: 30px;">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">2주차 평가 완료</span>
+                                <span class="stat-icon">✅</span>
+                            </div>
+                            <div class="stat-value" id="biweekly2CompletedCount" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>Day 14-16 평가 완료율</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">4주차 평가 완료</span>
+                                <span class="stat-icon">✅</span>
+                            </div>
+                            <div class="stat-value" id="biweekly4CompletedCount" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>Day 28-30 평가 완료율</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2주/4주 평가 학생별 결과 -->
+                    <div class="card" style="padding: 25px;">
+                        <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <span>📅</span> 학생별 중간 평가 현황
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: rgba(255,255,255,0.05);">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 2px solid rgba(255,255,255,0.1);">학생명</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">학년</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">경과일</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">2주차 평가</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">4주차 평가</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="biweeklyTableBody">
+                                    <tr>
+                                        <td colspan="6" style="padding: 40px; text-align: center; color: var(--text-muted);">
+                                            중간 평가 데이터를 불러오는 중...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 30일 완료 재평가 -->
+                <div class="eval-content" id="eval-posttest" style="display: none;">
+                    <div class="stats-grid" style="margin-bottom: 30px;">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">30일 완주</span>
+                                <span class="stat-icon">🏆</span>
+                            </div>
+                            <div class="stat-value" id="postTestCompletedCount" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>프로그램 완주 학생 수</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <div class="stat-header">
+                                <span class="stat-label" style="color: white;">평균 향상도</span>
+                                <span class="stat-icon">📈</span>
+                            </div>
+                            <div class="stat-value" id="postTestAvgImprovement" style="color: white;">-</div>
+                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
+                                <span>Pre-test 대비 점수 향상</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 재평가 학생별 결과 -->
+                    <div class="card" style="padding: 25px;">
+                        <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <span>🏆</span> 30일 완료 재평가 결과
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: rgba(255,255,255,0.05);">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 2px solid rgba(255,255,255,0.1);">학생명</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">학년</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">Pre-test</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">Post-test</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">향상도</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">수준 변화</th>
+                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">완료일</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="postTestTableBody">
+                                    <tr>
+                                        <td colspan="7" style="padding: 40px; text-align: center; color: var(--text-muted);">
+                                            재평가 데이터를 불러오는 중...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 성장 비교 분석 -->
+                <div class="eval-content" id="eval-comparison" style="display: none;">
+                    <div class="card" style="padding: 25px; margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <span>📈</span> 학급 전체 성장 추이
+                        </h3>
+                        <canvas id="growthChart" style="max-height: 400px;"></canvas>
+                    </div>
+
+                    <div class="card" style="padding: 25px;">
+                        <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <span>🏆</span> 우수 성장 학생 (Top 5)
+                        </h3>
+                        <div id="topGrowthStudents">
+                            <p style="text-align: center; color: var(--text-muted); padding: 40px;">
+                                데이터를 분석하는 중...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /평가 관리 섹션 끝 -->
 
         <!-- 진단평가 결과 섹션 -->
         <div class="section-container" id="section-diagnostic">
@@ -2595,6 +2842,354 @@
                 toast.style.animation = 'slideInRight 0.3s ease-out reverse';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        // ==========================================
+        // 평가 관리 시스템
+        // ==========================================
+        
+        // 평가 탭 전환
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.eval-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const evalType = this.getAttribute('data-eval-type');
+                    
+                    // 모든 탭 비활성화
+                    document.querySelectorAll('.eval-tab').forEach(t => {
+                        t.style.background = 'rgba(255,255,255,0.1)';
+                        t.style.border = '2px solid rgba(255,255,255,0.2)';
+                    });
+                    
+                    // 선택된 탭 활성화
+                    this.style.background = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+                    this.style.border = 'none';
+                    
+                    // 모든 콘텐츠 숨김
+                    document.querySelectorAll('.eval-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    // 선택된 콘텐츠 표시
+                    document.getElementById(`eval-${evalType}`).style.display = 'block';
+                    
+                    // 해당 데이터 로드
+                    switch(evalType) {
+                        case 'diagnostic':
+                            loadDiagnosticResults();
+                            break;
+                        case 'biweekly':
+                            loadBiweeklyEvaluations();
+                            break;
+                        case 'posttest':
+                            loadPostTestResults();
+                            break;
+                        case 'comparison':
+                            loadGrowthComparison();
+                            break;
+                    }
+                });
+            });
+        });
+        
+        // 진단평가 결과 로드
+        function loadDiagnosticResults() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 통계 계산
+            const totalStudents = students.length;
+            const completedStudents = diagnosticResults.length;
+            const avgScore = diagnosticResults.length > 0 
+                ? (diagnosticResults.reduce((sum, r) => sum + r.totalScore, 0) / diagnosticResults.length).toFixed(1)
+                : 0;
+            const advancedCount = diagnosticResults.filter(r => r.level === '심화').length;
+            const basicCount = diagnosticResults.filter(r => r.level === '기초').length;
+            
+            // 통계 업데이트
+            document.getElementById('diagnosticCompletedCount').textContent = `${completedStudents}/${totalStudents}명`;
+            document.getElementById('diagnosticAvgScore').textContent = `${avgScore}점`;
+            document.getElementById('diagnosticAdvancedCount').textContent = `${advancedCount}명`;
+            document.getElementById('diagnosticBasicCount').textContent = `${basicCount}명`;
+            
+            // 테이블 업데이트
+            const tbody = document.getElementById('diagnosticTableBody');
+            if (diagnosticResults.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="padding: 40px; text-align: center; color: var(--text-muted);">아직 진단평가를 완료한 학생이 없습니다.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = diagnosticResults.map(result => {
+                const levelColors = {
+                    '기초': 'background: #f59e0b; color: white;',
+                    '표준': 'background: #3b82f6; color: white;',
+                    '심화': 'background: #8b5cf6; color: white;'
+                };
+                
+                // 과목별 점수 계산 (간단히 5과목으로 나눔)
+                const subjectScores = {
+                    '수학': Math.floor(result.totalScore / 5),
+                    '영어': Math.floor(result.totalScore / 5),
+                    '국어': Math.floor(result.totalScore / 5),
+                    '사회': Math.floor(result.totalScore / 5),
+                    '과학': result.totalScore - (Math.floor(result.totalScore / 5) * 4)
+                };
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 15px;">${result.studentName || '익명'}</td>
+                        <td style="padding: 15px; text-align: center;">중${result.grade || '-'}</td>
+                        <td style="padding: 15px; text-align: center; font-weight: 700; color: #10b981;">${result.totalScore}/50</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <span style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; ${levelColors[result.level] || ''}">${result.levelLabel || result.level}</span>
+                        </td>
+                        <td style="padding: 15px; text-align: center; font-size: 13px;">
+                            수${subjectScores['수학']} 영${subjectScores['영어']} 국${subjectScores['국어']} 사${subjectScores['사회']} 과${subjectScores['과학']}
+                        </td>
+                        <td style="padding: 15px; text-align: center; font-size: 13px; color: var(--text-muted);">${new Date(result.testDate).toLocaleDateString('ko-KR')}</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <button onclick="viewDiagnosticDetail('${result.studentId}')" style="padding: 6px 12px; background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                                상세보기
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 2주/4주 평가 로드
+        function loadBiweeklyEvaluations() {
+            const biweeklyEvals = JSON.parse(localStorage.getItem('biweekly_evaluations')) || {};
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 통계 계산
+            let week2Completed = 0;
+            let week4Completed = 0;
+            
+            Object.keys(biweeklyEvals).forEach(studentId => {
+                if (biweeklyEvals[studentId].week2?.completed) week2Completed++;
+                if (biweeklyEvals[studentId].week4?.completed) week4Completed++;
+            });
+            
+            document.getElementById('biweekly2CompletedCount').textContent = `${week2Completed}/${students.length}명`;
+            document.getElementById('biweekly4CompletedCount').textContent = `${week4Completed}/${students.length}명`;
+            
+            // 테이블 업데이트
+            const tbody = document.getElementById('biweeklyTableBody');
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="padding: 40px; text-align: center; color: var(--text-muted);">등록된 학생이 없습니다.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = students.map(student => {
+                const programStart = localStorage.getItem(`program_start_${student.id}`);
+                const daysPassed = programStart 
+                    ? Math.floor((new Date() - new Date(programStart)) / (1000 * 60 * 60 * 24))
+                    : 0;
+                
+                const week2Status = biweeklyEvals[student.id]?.week2?.completed ? '✅ 완료' : daysPassed >= 14 ? '⚠️ 미완료' : '⏳ 대기';
+                const week4Status = biweeklyEvals[student.id]?.week4?.completed ? '✅ 완료' : daysPassed >= 28 ? '⚠️ 미완료' : '⏳ 대기';
+                
+                const statusColor = daysPassed >= 14 && !biweeklyEvals[student.id]?.week2?.completed ? 'color: #f59e0b;' :
+                                   daysPassed >= 28 && !biweeklyEvals[student.id]?.week4?.completed ? 'color: #ef4444;' : '';
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 15px;">${student.name}</td>
+                        <td style="padding: 15px; text-align: center;">중${student.grade || '-'}</td>
+                        <td style="padding: 15px; text-align: center;">Day ${daysPassed}</td>
+                        <td style="padding: 15px; text-align: center;">${week2Status}</td>
+                        <td style="padding: 15px; text-align: center;">${week4Status}</td>
+                        <td style="padding: 15px; text-align: center; ${statusColor}">
+                            ${daysPassed < 14 ? '진행중' : daysPassed < 30 ? '중간 점검' : '완료 단계'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 재평가(Post-test) 결과 로드
+        function loadPostTestResults() {
+            const postTestResults = JSON.parse(localStorage.getItem('post_test_results')) || {};
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            const postTestArray = Object.values(postTestResults);
+            
+            // 통계 계산
+            const completedCount = postTestArray.length;
+            let totalImprovement = 0;
+            let improvementCount = 0;
+            
+            postTestArray.forEach(postTest => {
+                const preTest = diagnosticResults.find(r => r.studentId === postTest.studentId);
+                if (preTest) {
+                    totalImprovement += (postTest.totalScore - preTest.totalScore);
+                    improvementCount++;
+                }
+            });
+            
+            const avgImprovement = improvementCount > 0 
+                ? (totalImprovement / improvementCount).toFixed(1)
+                : 0;
+            
+            document.getElementById('postTestCompletedCount').textContent = `${completedCount}/${students.length}명`;
+            document.getElementById('postTestAvgImprovement').textContent = `+${avgImprovement}점`;
+            
+            // 테이블 업데이트
+            const tbody = document.getElementById('postTestTableBody');
+            if (postTestArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="padding: 40px; text-align: center; color: var(--text-muted);">아직 30일을 완주한 학생이 없습니다.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = postTestArray.map(postTest => {
+                const preTest = diagnosticResults.find(r => r.studentId === postTest.studentId);
+                if (!preTest) return '';
+                
+                const improvement = postTest.totalScore - preTest.totalScore;
+                const improvementColor = improvement > 0 ? '#10b981' : improvement < 0 ? '#ef4444' : '#6b7280';
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 15px;">${postTest.studentName}</td>
+                        <td style="padding: 15px; text-align: center;">중${postTest.grade || '-'}</td>
+                        <td style="padding: 15px; text-align: center;">${preTest.totalScore}점 (${preTest.level})</td>
+                        <td style="padding: 15px; text-align: center;">${postTest.totalScore}점 (${postTest.level})</td>
+                        <td style="padding: 15px; text-align: center; font-weight: 700; color: ${improvementColor};">
+                            ${improvement >= 0 ? '+' : ''}${improvement}점
+                        </td>
+                        <td style="padding: 15px; text-align: center;">
+                            ${preTest.level} → ${postTest.level}
+                            ${preTest.level !== postTest.level ? '📈' : ''}
+                        </td>
+                        <td style="padding: 15px; text-align: center; font-size: 13px; color: var(--text-muted);">
+                            ${new Date(postTest.completedAt).toLocaleDateString('ko-KR')}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 성장 비교 분석 로드
+        function loadGrowthComparison() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const postTestResults = JSON.parse(localStorage.getItem('post_test_results')) || {};
+            
+            // 차트 데이터 준비
+            const students = [];
+            const preScores = [];
+            const postScores = [];
+            
+            Object.values(postTestResults).forEach(postTest => {
+                const preTest = diagnosticResults.find(r => r.studentId === postTest.studentId);
+                if (preTest) {
+                    students.push(postTest.studentName);
+                    preScores.push(preTest.totalScore);
+                    postScores.push(postTest.totalScore);
+                }
+            });
+            
+            // Chart.js로 그래프 그리기
+            const ctx = document.getElementById('growthChart');
+            if (ctx && typeof Chart !== 'undefined') {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: students,
+                        datasets: [
+                            {
+                                label: 'Pre-test (시작)',
+                                data: preScores,
+                                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                                borderColor: '#3b82f6',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Post-test (30일 후)',
+                                data: postScores,
+                                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                borderColor: '#10b981',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f1f5f9' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 50,
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: 'rgba(255,255,255,0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: 'rgba(255,255,255,0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // 우수 성장 학생 Top 5
+            const growthData = [];
+            Object.values(postTestResults).forEach(postTest => {
+                const preTest = diagnosticResults.find(r => r.studentId === postTest.studentId);
+                if (preTest) {
+                    growthData.push({
+                        name: postTest.studentName,
+                        improvement: postTest.totalScore - preTest.totalScore,
+                        preScore: preTest.totalScore,
+                        postScore: postTest.totalScore
+                    });
+                }
+            });
+            
+            growthData.sort((a, b) => b.improvement - a.improvement);
+            const topStudents = growthData.slice(0, 5);
+            
+            const topContainer = document.getElementById('topGrowthStudents');
+            if (topStudents.length === 0) {
+                topContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px;">아직 데이터가 충분하지 않습니다.</p>';
+                return;
+            }
+            
+            topContainer.innerHTML = topStudents.map((student, index) => `
+                <div style="display: flex; align-items: center; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 15px;">
+                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: white; margin-right: 20px;">
+                        ${index + 1}
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-size: 18px;">${student.name}</h4>
+                        <p style="font-size: 14px; color: var(--text-muted);">
+                            ${student.preScore}점 → ${student.postScore}점
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 24px; font-weight: 700; color: #10b981;">+${student.improvement}점</div>
+                        <div style="font-size: 13px; color: var(--text-muted);">향상도</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 진단평가 상세보기
+        function viewDiagnosticDetail(studentId) {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const result = diagnosticResults.find(r => r.studentId === studentId);
+            
+            if (!result) {
+                showToast('진단평가 결과를 찾을 수 없습니다.');
+                return;
+            }
+            
+            showToast(`📊 ${result.studentName} 학생 진단평가 상세\n\n총점: ${result.totalScore}/50점\n수준: ${result.levelLabel || result.level}`);
         }
     </script>
 </body>
