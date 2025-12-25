@@ -427,6 +427,23 @@
 
                 <div class="link-card">
                     <div class="link-header">
+                        <span class="link-icon">📚</span>
+                        <h3 class="link-title">기초탄탄 학생 포털 ⭐ NEW</h3>
+                    </div>
+                    <p class="link-desc">기초학력 향상을 위한 맞춤형 학생 포털입니다. 국어/영어/수학 기초 다지기에 최적화되어 있습니다.</p>
+                    <div class="link-url">https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html</div>
+                    <div class="btn-group">
+                        <a href="https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> 열기
+                        </a>
+                        <button class="btn btn-secondary" onclick="copyLink('https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html')">
+                            <i class="fas fa-copy"></i> 복사
+                        </button>
+                    </div>
+                </div>
+
+                <div class="link-card">
+                    <div class="link-header">
                         <span class="link-icon">👩‍🏫</span>
                         <h3 class="link-title">교사 대시보드 (중학생)</h3>
                     </div>
@@ -571,8 +588,19 @@
                         <i class="fas fa-qrcode" style="color: #666;"></i>
                     </div>
                     <div class="qr-label">학생 포털 QR</div>
-                    <div class="qr-desc">학생 접속용</div>
+                    <div class="qr-desc">학생 접속용 (30일)</div>
                     <button class="btn btn-primary" style="margin-top: 1rem;" onclick="generateQR('https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html', '학생포털')">
+                        <i class="fas fa-download"></i> QR 생성
+                    </button>
+                </div>
+
+                <div class="qr-card">
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode" style="color: #666;"></i>
+                    </div>
+                    <div class="qr-label">기초탄탄 QR</div>
+                    <div class="qr-desc">기초학력 향상</div>
+                    <button class="btn btn-primary" style="margin-top: 1rem;" onclick="generateQR('https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html', '기초탄탄포털')">
                         <i class="fas fa-download"></i> QR 생성
                     </button>
                 </div>
