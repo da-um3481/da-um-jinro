@@ -665,7 +665,7 @@
                 <div>
                     <p class="text-sm opacity-90 mb-1">오늘 목표</p>
                     <div class="flex items-center space-x-2 justify-center">
-                        <p class="text-xl sm:text-2xl font-bold" id="dailyTarget">3.5시간</p>
+                        <p class="text-xl sm:text-2xl font-bold" id="dailyTarget">3.75시간</p>
                         <span class="text-xs px-2 sm:px-3 py-1 bg-white/20 rounded-full" id="programDay">학습 시작 전</span>
                     </div>
                 </div>
@@ -731,7 +731,7 @@
                         <i class="fas fa-calendar-day text-green-700 mr-2"></i>오늘의 학습 스케줄
                     </h3>
                     <p class="text-xs text-gray-500 mt-1 ml-7">
-                        ✅ 3과목 모두 학습 가능 (순서 상관없음)
+                        ✅ 5과목 학습 가능 (국·영·수 필수, 사회·과학 권장)
                     </p>
                 </div>
                 <button 
@@ -1225,11 +1225,11 @@
             const dayOfWeek = today.getDay(); // 0: 일요일, 1-5: 월-금, 6: 토요일
             
             if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-                // 월-금 (평일): 3시간 권장
-                return { hours: 3, label: '3시간 (평일)' };
+                // 월-금 (평일): 3.75시간 권장 (5과목 × 45분)
+                return { hours: 3.75, label: '3.75시간 (평일)' };
             } else {
-                // 토-일 (주말): 4시간 권장 (오전 2시간 + 오후 2시간)
-                return { hours: 4, label: '4시간 (주말)' };
+                // 토-일 (주말): 5시간 권장 (5과목 × 60분)
+                return { hours: 5, label: '5시간 (주말)' };
             }
         }
 
@@ -2493,13 +2493,13 @@
             // 3~4주차: 강의 + 문제풀이 집중
             const isConceptPhase = currentWeek <= 2;
             
-            // 월~금: 3과목 모두 능동학습 (순서 상관없음)
+            // 월~금: 5과목 순환 학습 (국·영·수 필수, 사회·과학 권장)
             const weekdaySubjects = [
-                ['수학', '영어', '국어'],    // 월
-                ['수학', '영어', '과학'],    // 화
-                ['수학', '영어', '사회'],    // 수
-                ['수학', '국어', '과학'],    // 목
-                ['영어', '국어', '사회']     // 금
+                ['수학', '영어', '국어', '사회', '과학'],    // 월 - 5과목 전체
+                ['수학', '영어', '국어', '과학', '사회'],    // 화 - 5과목 전체
+                ['수학', '영어', '국어', '사회', '과학'],    // 수 - 5과목 전체
+                ['수학', '영어', '국어', '과학', '사회'],    // 목 - 5과목 전체
+                ['수학', '영어', '국어', '사회', '과학']     // 금 - 5과목 전체
             ];
             
             const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
@@ -2519,32 +2519,40 @@
                         content = `${subj} EBS 강의 수강 + 문제풀이`;
                     }
                     
+                    // 국·영·수는 필수(높음), 사회·과학은 권장(보통)
+                    const isMandatory = ['수학', '영어', '국어'].includes(subj);
+                    
                     scheduleItems.push({
                         time: `${9 + i}:00-${9 + i}:45`,
                         duration: 45,
                         type: `${i + 1}교시`,
                         subject: subj,
                         content: content,
-                        importance: subj === '수학' || subj === '영어' ? '높음' : '보통',
+                        importance: isMandatory ? '높음' : '보통',
                         isActive: true,  // 모두 타이머 활성화
                         week: currentWeek,  // 현재 주차 정보 추가
-                        phase: isConceptPhase ? 'concept' : 'practice'  // 학습 단계
+                        phase: isConceptPhase ? 'concept' : 'practice',  // 학습 단계
+                        isMandatory: isMandatory  // 필수 여부 표시
                     });
                 });
                 
                 schedule[day] = JSON.stringify(scheduleItems);
             });
             
-            // 토~일: 3과목 복습 (각 45분)
+            // 토~일: 5과목 복습 (각 45분)
             schedule.saturday = JSON.stringify([
-                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
-                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
-                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' }
+                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '11:15-12:00', duration: 45, type: '4교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false },
+                { time: '12:00-12:45', duration: 45, type: '5교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false }
             ]);
             schedule.sunday = JSON.stringify([
-                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
-                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' },
-                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice' }
+                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '11:15-12:00', duration: 45, type: '4교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false },
+                { time: '12:00-12:45', duration: 45, type: '5교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false }
             ]);
             
             return schedule;
@@ -2571,8 +2579,8 @@
                 return;
             }
             
-            if (todaySchedule.length < 3) {
-                console.warn(`⚠️ 과목이 ${todaySchedule.length}개만 있습니다! (정상: 3개)`);
+            if (todaySchedule.length < 5) {
+                console.warn(`⚠️ 과목이 ${todaySchedule.length}개만 있습니다! (정상: 5개 - 국·영·수 필수, 사회·과학 권장)`);
                 console.warn('💡 해결: 오른쪽 상단 🔄 버튼을 클릭하여 스케줄을 재생성하세요.');
             }
             
@@ -3195,7 +3203,7 @@
             const date = new Date(dateStr);
             const dayOfWeek = date.getDay();
             const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-            const targetMinutes = isWeekend ? 240 : 135; // 2.25시간 = 135분
+            const targetMinutes = isWeekend ? 300 : 225; // 평일 3.75시간 = 225분, 주말 5시간 = 300분 (5과목)
             
             // 총 학습 시간 계산
             let totalMinutes = 0;
