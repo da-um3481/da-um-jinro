@@ -762,13 +762,17 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>중학생 교사 대시보드</span>
                 </a>
+                <a class="nav-item" onclick="showPage('evaluation-middle')" data-page="evaluation-middle">
+                    <i class="fas fa-chart-line"></i>
+                    <span>📊 평가 관리 (중학교)</span>
+                </a>
                 <a class="nav-item" onclick="showPage('teacher-high')" data-page="teacher-high">
                     <i class="fas fa-university"></i>
                     <span>고등학생 교사 대시보드</span>
                 </a>
                 <a class="nav-item" onclick="showPage('evaluation-management')" data-page="evaluation-management">
                     <i class="fas fa-chart-line"></i>
-                    <span>📊 평가 관리</span>
+                    <span>📊 평가 관리 (고등학교)</span>
                 </a>
 
                 <div class="nav-category">학부모</div>
@@ -895,6 +899,13 @@
                     </div>
                 </div>
 
+                <!-- 중학교 평가 관리 -->
+                <div class="page-section" id="page-evaluation-middle">
+                    <div class="card">
+                        <iframe src="middle-teacher-dashboard.html#evaluation" style="width: 100%; height: 80vh; border: none; border-radius: 12px;" onload="this.contentWindow.document.getElementById('tab-evaluation')?.click();"></iframe>
+                    </div>
+                </div>
+
                 <!-- 고등학생 교사 대시보드 -->
                 <div class="page-section" id="page-teacher-high">
                                         <div class="card">
@@ -999,8 +1010,9 @@
                 'student-30day': '학생 포털 (30일 프로그램)',
                 'student-100day': '학생 포털 (100일 프로그램)',
                 'teacher-middle': '중학생 교사 대시보드',
+                'evaluation-middle': '📊 평가 관리 시스템 (중학교)',
                 'teacher-high': '고등학생 교사 대시보드',
-                'evaluation-management': '📊 평가 관리 시스템',
+                'evaluation-management': '📊 평가 관리 시스템 (고등학교)',
                 'parent': '학부모 대시보드',
                 'admin': '근화여중 겨울방학 자기주도학습UP 챌린지',
                 'student-management': '학생 관리 시스템',
