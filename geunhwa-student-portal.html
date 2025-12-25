@@ -731,7 +731,7 @@
                         <i class="fas fa-calendar-day text-green-700 mr-2"></i>오늘의 학습 스케줄
                     </h3>
                     <p class="text-xs text-gray-500 mt-1 ml-7">
-                        ✅ 5과목 학습 가능 (국·영·수 필수, 사회·과학 권장)
+                        ✅ 5과목 학습 (국·영·수 필수, 사회·과학 권장) | 45분 수업 + 10분 휴식
                     </p>
                 </div>
                 <button 
@@ -2523,8 +2523,9 @@
                     const isMandatory = ['수학', '영어', '국어'].includes(subj);
                     
                     scheduleItems.push({
-                        time: `${9 + i}:00-${9 + i}:45`,
+                        time: '언제든지 시작',  // 시간 자유
                         duration: 45,
+                        breakTime: 10,  // 과목 완료 후 10분 휴식
                         type: `${i + 1}교시`,
                         subject: subj,
                         content: content,
@@ -2539,20 +2540,20 @@
                 schedule[day] = JSON.stringify(scheduleItems);
             });
             
-            // 토~일: 5과목 복습 (각 45분)
+            // 토~일: 5과목 복습 (각 45분 + 10분 휴식)
             schedule.saturday = JSON.stringify([
-                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
-                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
-                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
-                { time: '11:15-12:00', duration: 45, type: '4교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false },
-                { time: '12:00-12:45', duration: 45, type: '5교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false }
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '1교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '2교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '3교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '4교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '5교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false }
             ]);
             schedule.sunday = JSON.stringify([
-                { time: '9:00-9:45', duration: 45, type: '1교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
-                { time: '9:45-10:30', duration: 45, type: '2교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
-                { time: '10:30-11:15', duration: 45, type: '3교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
-                { time: '11:15-12:00', duration: 45, type: '4교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false },
-                { time: '12:00-12:45', duration: 45, type: '5교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false }
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '1교시', subject: '국어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '2교시', subject: '수학', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '3교시', subject: '영어', content: '이번 주 어려웠던 부분 복습', importance: '높음', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: true },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '4교시', subject: '과학', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '5교시', subject: '사회', content: '이번 주 어려웠던 부분 복습', importance: '보통', isActive: true, week: currentWeek, phase: isConceptPhase ? 'concept' : 'practice', isMandatory: false }
             ]);
             
             return schedule;
@@ -2676,7 +2677,7 @@
                                 </div>
                                 <div>
                                     <div class="text-xl font-black">${item.subject}${isPreview ? ' 📖' : ''}</div>
-                                    <div class="text-sm opacity-90">${isPreview ? '다음 학습 예정' : item.time + ' (' + item.duration + '분)'}</div>
+                                    <div class="text-sm opacity-90">${isPreview ? '다음 학습 예정' : item.duration + '분 수업' + (item.breakTime ? ' + ' + item.breakTime + '분 휴식' : '')}</div>
                                 </div>
                             </div>
                             ${!isPreview ? `<div class="text-2xl font-black" id="${item.subject}Time">00:00</div>` : '<span class="text-lg font-semibold">미리보기</span>'}
@@ -3812,6 +3813,17 @@
             <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-4 mb-5">
                 <h4 class="text-sm font-bold text-green-100 mb-2">📅 내일 학습 과목</h4>
                 <p class="text-white font-semibold text-base" id="tomorrowSubjects">수학, 영어, 과학</p>
+            </div>
+            
+            <!-- 🆕 휴식 시간 안내 -->
+            <div class="bg-gradient-to-r from-blue-500/30 to-purple-500/30 backdrop-blur-sm rounded-2xl p-4 mb-5 border-2 border-blue-300/50">
+                <div class="flex items-center gap-3">
+                    <div class="text-4xl">☕</div>
+                    <div class="flex-1">
+                        <h4 class="text-base font-bold text-white mb-1">10분 휴식하세요!</h4>
+                        <p class="text-sm text-blue-100">다음 과목 시작 전 10분간 쉬어가세요 🌟</p>
+                    </div>
+                </div>
             </div>
             
             <!-- 확인 버튼 -->
