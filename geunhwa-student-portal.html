@@ -2963,7 +2963,214 @@
                 }
             }
             
+            // 🆕 수준별 시중 교재 추천 섹션 추가
+            html += getRecommendedBooksSection(subjectName, grade, difficultyLevel, isConceptPhase);
+            
             html += '</div>';
+            return html;
+        }
+        
+        // 🆕 수준별 시중 교재 추천 함수
+        function getRecommendedBooksSection(subjectName, grade, difficultyLevel, isConceptPhase) {
+            const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
+            const subjectKey = subjectMap[subjectName];
+            
+            // 수준별 교재 데이터 (간소화된 버전)
+            const bookRecommendations = {
+                math: {
+                    concept: [
+                        { name: "개념원리 중학수학", difficulty: 1, badge: "기초", color: "orange", desc: "기본 개념 탄탄히" },
+                        { name: "숨마쿰라우데 개념기본서", difficulty: 2, badge: "표준", color: "blue", desc: "개념 상세 설명" },
+                        { name: "디딤돌 중학수학 개념기본", difficulty: 1, badge: "기초", color: "orange", desc: "체계적 개념 학습" }
+                    ],
+                    workbook: [
+                        { name: "개념+유형 라이트", difficulty: 1, badge: "기초", color: "orange", desc: "유형 정리 필수" },
+                        { name: "쎈 중등 수학", difficulty: 2, badge: "표준", color: "blue", desc: "유형별 문제 풍부" },
+                        { name: "일품 중등 수학", difficulty: 3, badge: "심화", color: "green", desc: "최상위 심화 문제" }
+                    ]
+                },
+                english: {
+                    concept: [
+                        { name: "Grammar Zone 기본편", difficulty: 1, badge: "기초", color: "orange", desc: "기초 문법 완성" },
+                        { name: "능률 VOCA", difficulty: 1, badge: "기초", color: "orange", desc: "필수 어휘 학습" },
+                        { name: "중학 영문법 3800제", difficulty: 2, badge: "표준", color: "blue", desc: "문법 완벽 정리" }
+                    ],
+                    workbook: [
+                        { name: "Grammar Zone 워크북", difficulty: 1, badge: "기초", color: "orange", desc: "문법 연습 문제" },
+                        { name: "완자 중등 영어", difficulty: 2, badge: "표준", color: "blue", desc: "내신 대비 필수" },
+                        { name: "리딩튠 중등 영어", difficulty: 3, badge: "심화", color: "green", desc: "독해 심화 학습" }
+                    ]
+                },
+                korean: {
+                    concept: [
+                        { name: "완자 중등 국어", difficulty: 1, badge: "기초", color: "orange", desc: "교과서 개념 정리" },
+                        { name: "오투 중등 국어", difficulty: 2, badge: "표준", color: "blue", desc: "내신 대비 완성" },
+                        { name: "블랙라벨 중등 국어", difficulty: 3, badge: "심화", color: "green", desc: "최상위 문제 도전" }
+                    ],
+                    workbook: [
+                        { name: "중학 국어 어휘력", difficulty: 1, badge: "기초", color: "orange", desc: "어휘 실력 향상" },
+                        { name: "디딤돌 국어 독해력", difficulty: 2, badge: "표준", color: "blue", desc: "독해 능력 강화" },
+                        { name: "비문학 독해 완성", difficulty: 3, badge: "심화", color: "green", desc: "고급 독해 훈련" }
+                    ]
+                },
+                science: {
+                    concept: [
+                        { name: "완자 중등 과학", difficulty: 1, badge: "기초", color: "orange", desc: "기본 개념 학습" },
+                        { name: "오투 중등 과학", difficulty: 2, badge: "표준", color: "blue", desc: "내신 완벽 대비" },
+                        { name: "우공비 중등 과학", difficulty: 1, badge: "기초", color: "orange", desc: "쉬운 개념 설명" }
+                    ],
+                    workbook: [
+                        { name: "완자 중등 과학 평가문제집", difficulty: 1, badge: "기초", color: "orange", desc: "기본 문제 풀이" },
+                        { name: "오투 과학 실전모의고사", difficulty: 2, badge: "표준", color: "blue", desc: "실전 대비 문제" },
+                        { name: "일등급 중등 과학", difficulty: 3, badge: "심화", color: "green", desc: "상위권 심화" }
+                    ]
+                },
+                social: {
+                    concept: [
+                        { name: "완자 중등 사회", difficulty: 1, badge: "기초", color: "orange", desc: "교과서 개념 정리" },
+                        { name: "오투 중등 사회", difficulty: 2, badge: "표준", color: "blue", desc: "내신 완벽 대비" },
+                        { name: "우공비 중등 사회", difficulty: 1, badge: "기초", color: "orange", desc: "쉬운 이해" }
+                    ],
+                    workbook: [
+                        { name: "완자 사회 평가문제집", difficulty: 1, badge: "기초", color: "orange", desc: "기본 문제 익히기" },
+                        { name: "내신콘서트 사회", difficulty: 2, badge: "표준", color: "blue", desc: "내신 실전 대비" },
+                        { name: "최고득점 중등 사회", difficulty: 3, badge: "심화", color: "green", desc: "상위권 완성" }
+                    ]
+                }
+            };
+            
+            const books = bookRecommendations[subjectKey];
+            if (!books) return '';
+            
+            // 수준에 맞는 교재 필터링
+            const conceptBooks = books.concept.filter(b => b.difficulty <= difficultyLevel + 1);
+            const workbooks = books.workbook.filter(b => b.difficulty <= difficultyLevel + 1);
+            
+            // 색상 매핑
+            const badgeColors = {
+                orange: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-300' },
+                blue: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-300' },
+                green: { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-300' }
+            };
+            
+            let html = `
+                <div class="mt-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-lg">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="text-2xl">📚</div>
+                        <div>
+                            <div class="text-sm font-bold text-purple-800">수준별 시중 교재 추천</div>
+                            <div class="text-xs text-gray-600">내 수준에 맞는 개념서와 문제집</div>
+                        </div>
+                    </div>
+            `;
+            
+            // 개념서 추천 (1~2주차 강조)
+            if (isConceptPhase) {
+                html += `
+                    <div class="mb-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-gray-700">💡 개념서 (1~2주 추천)</span>
+                            <span class="text-xs px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full font-semibold">지금 필요!</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2">
+                `;
+                
+                conceptBooks.forEach(book => {
+                    const colors = badgeColors[book.color];
+                    html += `
+                        <div class="p-2 bg-white rounded-lg border ${colors.border} hover:shadow-md transition-all">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-sm font-semibold text-gray-800">${book.name} ${grade}</div>
+                                    <div class="text-xs text-gray-600">${book.desc}</div>
+                                </div>
+                                <span class="text-xs px-2 py-1 ${colors.bg} ${colors.text} rounded-full font-semibold whitespace-nowrap ml-2">
+                                    ${book.badge}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 문제집 추천 (3~4주차 강조)
+            if (!isConceptPhase) {
+                html += `
+                    <div class="mb-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-gray-700">📝 문제집 (3~4주 추천)</span>
+                            <span class="text-xs px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-semibold">지금 필요!</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2">
+                `;
+                
+                workbooks.forEach(book => {
+                    const colors = badgeColors[book.color];
+                    html += `
+                        <div class="p-2 bg-white rounded-lg border ${colors.border} hover:shadow-md transition-all">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-sm font-semibold text-gray-800">${book.name} ${grade}</div>
+                                    <div class="text-xs text-gray-600">${book.desc}</div>
+                                </div>
+                                <span class="text-xs px-2 py-1 ${colors.bg} ${colors.text} rounded-full font-semibold whitespace-nowrap ml-2">
+                                    ${book.badge}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 1~2주차에도 문제집 목록은 보여주되, 덜 강조
+                html += `
+                    <div class="opacity-60">
+                        <div class="text-xs font-bold text-gray-600 mb-2">📝 문제집 (3~4주차부터 활용)</div>
+                        <div class="grid grid-cols-1 gap-2">
+                `;
+                
+                workbooks.slice(0, 2).forEach(book => {
+                    const colors = badgeColors[book.color];
+                    html += `
+                        <div class="p-2 bg-white rounded-lg border border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-xs font-semibold text-gray-700">${book.name} ${grade}</div>
+                                    <div class="text-xs text-gray-500">${book.desc}</div>
+                                </div>
+                                <span class="text-xs px-2 py-1 ${colors.bg} ${colors.text} rounded-full font-semibold whitespace-nowrap ml-2">
+                                    ${book.badge}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `
+                    <div class="mt-3 p-2 bg-white/70 rounded-lg">
+                        <p class="text-xs text-gray-600">
+                            💡 <strong>팁:</strong> 교과서와 EBS로 기본 학습 후, 
+                            ${isConceptPhase ? '개념서로 심화 학습' : '문제집으로 실전 대비'}을 하면 효과적입니다!
+                        </p>
+                    </div>
+                </div>
+            `;
+            
             return html;
         }
         
