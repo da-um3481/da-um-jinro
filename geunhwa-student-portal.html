@@ -3059,20 +3059,17 @@
                     <div class="flex items-center gap-2 mb-3">
                         <div class="text-2xl">📚</div>
                         <div>
-                            <div class="text-sm font-bold text-purple-800">수준별 시중 교재 추천</div>
-                            <div class="text-xs text-gray-600">내 수준에 맞는 개념서와 문제집</div>
+                            <div class="text-sm font-bold text-purple-800">시중 교재 참고 (선택사항)</div>
+                            <div class="text-xs text-gray-600">학습에 도움이 될 수 있는 수준별 개념서와 문제집</div>
                         </div>
                     </div>
             `;
             
-            // 개념서 추천 (1~2주차 강조)
+            // 개념서 추천 (1~2주차)
             if (isConceptPhase) {
                 html += `
                     <div class="mb-3">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs font-bold text-gray-700">💡 개념서 (1~2주 추천)</span>
-                            <span class="text-xs px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full font-semibold">지금 필요!</span>
-                        </div>
+                        <div class="text-xs font-bold text-gray-700 mb-2">💡 개념서 (1~2주 학습 시 참고)</div>
                         <div class="grid grid-cols-1 gap-2">
                 `;
                 
@@ -3099,14 +3096,11 @@
                 `;
             }
             
-            // 문제집 추천 (3~4주차 강조)
+            // 문제집 추천 (3~4주차)
             if (!isConceptPhase) {
                 html += `
                     <div class="mb-3">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs font-bold text-gray-700">📝 문제집 (3~4주 추천)</span>
-                            <span class="text-xs px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-semibold">지금 필요!</span>
-                        </div>
+                        <div class="text-xs font-bold text-gray-700 mb-2">📝 문제집 (3~4주 학습 시 참고)</div>
                         <div class="grid grid-cols-1 gap-2">
                 `;
                 
@@ -3165,8 +3159,8 @@
             html += `
                     <div class="mt-3 p-2 bg-white/70 rounded-lg">
                         <p class="text-xs text-gray-600">
-                            💡 <strong>팁:</strong> 교과서와 EBS로 기본 학습 후, 
-                            ${isConceptPhase ? '개념서로 심화 학습' : '문제집으로 실전 대비'}을 하면 효과적입니다!
+                            💡 <strong>참고:</strong> 교과서와 EBS가 기본이며, 
+                            추가 학습이 필요한 경우 ${isConceptPhase ? '개념서' : '문제집'}를 활용할 수 있습니다.
                         </p>
                     </div>
                 </div>
