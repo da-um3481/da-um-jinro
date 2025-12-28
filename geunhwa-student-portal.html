@@ -1727,6 +1727,67 @@
             }
         }
 
+        // 🆕 4주 로드맵 진행률 업데이트
+        function updateWeeklyRoadmapProgress() {
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            
+            if (!currentStudentId || studyRecords.length === 0) {
+                // 초기 상태
+                document.getElementById('overallProgress').textContent = '0%';
+                document.getElementById('totalDaysCompleted').textContent = '0 / 30일';
+                document.getElementById('overallProgressBar').style.width = '0%';
+                document.getElementById('week1Progress').textContent = '0/7일';
+                document.getElementById('week2Progress').textContent = '0/7일';
+                document.getElementById('week3Progress').textContent = '0/7일';
+                document.getElementById('week4Progress').textContent = '0/9일';
+                return;
+            }
+            
+            // 학생별 학습 기록 필터링
+            const myRecords = studyRecords.filter(r => r.student_id === currentStudentId);
+            
+            // 날짜별로 그룹화 (같은 날짜에 여러 과목 학습 가능)
+            const studyDates = new Set();
+            myRecords.forEach(record => {
+                if (record.date) {
+                    studyDates.add(record.date);
+                }
+            });
+            
+            const totalDaysStudied = studyDates.size;
+            const progressPercent = Math.min(Math.round((totalDaysStudied / 30) * 100), 100);
+            
+            // 전체 진행률 업데이트
+            document.getElementById('overallProgress').textContent = `${progressPercent}%`;
+            document.getElementById('totalDaysCompleted').textContent = `${totalDaysStudied} / 30일`;
+            document.getElementById('overallProgressBar').style.width = `${progressPercent}%`;
+            
+            // 날짜를 시간순으로 정렬
+            const sortedDates = Array.from(studyDates).sort();
+            
+            // 주차별 진행률 계산
+            const weekRanges = [
+                { id: 'week1Progress', start: 1, end: 7, maxDays: 7 },
+                { id: 'week2Progress', start: 8, end: 14, maxDays: 7 },
+                { id: 'week3Progress', start: 15, end: 21, maxDays: 7 },
+                { id: 'week4Progress', start: 22, end: 30, maxDays: 9 }
+            ];
+            
+            weekRanges.forEach(week => {
+                let weekDaysCompleted = 0;
+                
+                sortedDates.forEach((date, index) => {
+                    const dayNumber = index + 1;
+                    if (dayNumber >= week.start && dayNumber <= week.end) {
+                        weekDaysCompleted++;
+                    }
+                });
+                
+                document.getElementById(week.id).textContent = `${weekDaysCompleted}/${week.maxDays}일`;
+            });
+        }
+        
         // 🆕 2주차 평가 체크 및 표시
         function checkAndShowBiweeklyEvaluation(daysPassed) {
             const studentId = localStorage.getItem('currentStudentId');
@@ -1952,6 +2013,9 @@
             
             // activeSubject도 저장
             localStorage.setItem('activeSubject', activeSubject || '');
+            
+            // 🆕 4주 로드맵 진행률 업데이트
+            updateWeeklyRoadmapProgress();
         }
 
         // 타이머 시작
@@ -1971,6 +2035,7 @@
             if (!programStart) {
                 localStorage.setItem('programStartDate', new Date().toISOString().split('T')[0]);
                 initProgramProgress();
+                updateWeeklyRoadmapProgress();
             }
             
             activeSubject = subject;
@@ -2827,6 +2892,7 @@
             
             // 프로그램 진행률 새로고침
             initProgramProgress();
+            updateWeeklyRoadmapProgress();
             loadTeacherFeedback();
             
             // 🔄 당일 실행 중이던 타이머 복원
@@ -4395,6 +4461,7 @@
 
         // 페이지 로드 시 초기화
         initProgramProgress();
+        updateWeeklyRoadmapProgress();
         renderCalendar(); // 캘린더 렌더링
         
         // 로그인 상태 확인 (주석 처리 - 자동 로그인 방지)
