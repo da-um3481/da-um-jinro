@@ -766,6 +766,30 @@
             border-color: var(--primary);
         }
 
+        /* 삭제 버튼 스타일 */
+        .btn-delete {
+            padding: 0.5rem 0.75rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
+            color: var(--danger);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-delete i {
+            font-size: 0.875rem;
+        }
+
         /* 차트 컨테이너 */
         .chart-container {
             background: rgba(255, 255, 255, 0.03);
@@ -1331,11 +1355,12 @@
                                 <th>총점</th>
                                 <th>수준</th>
                                 <th>과목별 점수</th>
+                                <th>작업</th>
                             </tr>
                         </thead>
                         <tbody id="diagnosticResultsTableBody">
                             <tr>
-                                <td colspan="7" style="text-align: center; padding: 3rem;">
+                                <td colspan="8" style="text-align: center; padding: 3rem;">
                                     <div class="empty-icon">📝</div>
                                     <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
                                 </td>
@@ -1757,7 +1782,7 @@
             if (data.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 3rem;">
+                        <td colspan="8" style="text-align: center; padding: 3rem;">
                             <div class="empty-icon">📝</div>
                             <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
                             <div class="empty-text">학생이 학생 포털에서 진단평가를 완료하면 자동으로 표시됩니다</div>
@@ -1786,7 +1811,7 @@
                 const subjectScores = `수학:${perSubjectScore} 영어:${perSubjectScore} 국어:${perSubjectScore} 사회:${perSubjectScore} 과학:${perSubjectScore}`;
 
                 return `
-                    <tr>
+                    <tr data-student-id="${result.studentId}">
                         <td>${gradeDisplay}</td>
                         <td><strong>${result.studentName || '이름없음'}</strong></td>
                         <td>${dateStr}</td>
@@ -1794,9 +1819,78 @@
                         <td><strong>${result.totalScore || 0}점</strong></td>
                         <td><span class="level-badge ${levelClass}">${levelLabel}</span></td>
                         <td style="font-size: 0.875rem;">${subjectScores}</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteStudent('${result.studentId}', '${result.studentName || '이름없음'}')" title="학생 삭제">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             }).join('');
+        }
+
+        // 학생 삭제 함수
+        function deleteStudent(studentId, studentName) {
+            // 확인 대화상자
+            if (!confirm(`정말로 "${studentName}" 학생의 데이터를 삭제하시겠습니까?\n\n⚠️ 이 작업은 되돌릴 수 없으며, 다음 데이터가 모두 삭제됩니다:\n- 진단평가 결과\n- 학습 기록\n- 평가 결과\n- 모든 관련 데이터`)) {
+                return;
+            }
+
+            try {
+                // 1. 진단평가 결과 삭제
+                let diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                diagnosticResults = diagnosticResults.filter(result => result.studentId !== studentId);
+                localStorage.setItem('diagnostic_results', JSON.stringify(diagnosticResults));
+                console.log(`✅ 진단평가 결과 삭제 완료: ${studentId}`);
+
+                // 2. 학생 목록에서 삭제 (student_list)
+                let studentList = JSON.parse(localStorage.getItem('student_list')) || [];
+                studentList = studentList.filter(student => student.id !== studentId);
+                localStorage.setItem('student_list', JSON.stringify(studentList));
+                console.log(`✅ 학생 목록에서 삭제 완료: ${studentId}`);
+
+                // 3. 학습 기록 삭제 (study_records)
+                let studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+                studyRecords = studyRecords.filter(record => record.student_id !== studentId);
+                localStorage.setItem('study_records', JSON.stringify(studyRecords));
+                console.log(`✅ 학습 기록 삭제 완료: ${studentId}`);
+
+                // 4. 중간평가 결과 삭제 (biweekly_evaluations)
+                let biweeklyEvaluations = JSON.parse(localStorage.getItem('biweekly_evaluations')) || [];
+                biweeklyEvaluations = biweeklyEvaluations.filter(evaluation => evaluation.student_id !== studentId);
+                localStorage.setItem('biweekly_evaluations', JSON.stringify(biweeklyEvaluations));
+                console.log(`✅ 중간평가 결과 삭제 완료: ${studentId}`);
+
+                // 5. 최종평가 결과 삭제 (post_test_results)
+                let postTestResults = JSON.parse(localStorage.getItem('post_test_results')) || [];
+                postTestResults = postTestResults.filter(result => result.student_id !== studentId);
+                localStorage.setItem('post_test_results', JSON.stringify(postTestResults));
+                console.log(`✅ 최종평가 결과 삭제 완료: ${studentId}`);
+
+                // 6. 개별 학생 데이터 삭제 (studentData_{id})
+                const studentDataKey = `studentData_${studentId}`;
+                if (localStorage.getItem(studentDataKey)) {
+                    localStorage.removeItem(studentDataKey);
+                    console.log(`✅ 개별 학생 데이터 삭제 완료: ${studentDataKey}`);
+                }
+
+                // 7. 현재 선택된 학생이 삭제된 학생인 경우 초기화
+                if (localStorage.getItem('currentStudentId') === studentId) {
+                    localStorage.removeItem('currentStudentId');
+                    localStorage.removeItem('currentStudentName');
+                    localStorage.removeItem('currentStudentGrade');
+                    console.log(`✅ 현재 학생 정보 초기화 완료`);
+                }
+
+                // 성공 메시지
+                alert(`✅ "${studentName}" 학생의 모든 데이터가 삭제되었습니다.`);
+
+                // 페이지 새로고침하여 변경사항 반영
+                location.reload();
+            } catch (error) {
+                console.error('❌ 학생 삭제 중 오류 발생:', error);
+                alert(`❌ 학생 삭제 중 오류가 발생했습니다.\n오류: ${error.message}`);
+            }
         }
 
         // 수준별 학습관리 데이터 로드
