@@ -618,16 +618,11 @@
                                 </div>
                                 <div class="text-xs text-gray-500 mt-2">최소 30분 이상 학습 필요</div>
                             </div>
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 gap-3">
                                 <button onclick="startTimer('${subject.name}')" 
                                     id="startBtn_${subject.name}"
                                     class="py-3 px-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all shadow-md ${timerData.running ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'}">
                                     <i class="fas fa-play mr-2"></i>시작
-                                </button>
-                                <button onclick="stopTimer('${subject.name}')" 
-                                    id="stopBtn_${subject.name}"
-                                    class="py-3 px-4 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-all shadow-md ${!timerData.running ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'}">
-                                    <i class="fas fa-stop mr-2"></i>정지
                                 </button>
                             </div>
                         </div>
@@ -707,9 +702,8 @@
                 saveStudentData();
             }, 1000);
             
-            // 버튼 상태 업데이트
+            // 버튼 상태 업데이트 (시작 버튼만)
             document.getElementById(`startBtn_${subjectName}`).classList.add('opacity-50');
-            document.getElementById(`stopBtn_${subjectName}`).classList.remove('opacity-50');
         }
 
         // ==========================================
@@ -717,9 +711,9 @@
         // ==========================================
         function show45MinuteRestMessage(subjectName) {
             const restMessages = [
-                `🎉 축하해요! ${subjectName} 45분 완료!\n\n💪 정말 대단해요! 집중력이 최고네요!\n\n☕ 이제 10분 동안 쉬어가세요!\n물 한 잔 마시고, 스트레칭하며 휴식을 취하세요. 😊\n\n⏰ 10분 후 다시 돌아올게요!`,
-                `🌟 와우! ${subjectName} 45분 학습 완료!\n\n🏆 정말 멋진 집중력이에요!\n\n🧘‍♀️ 10분간 충전 타임!\n잠깐 눈을 감고 심호흡하거나,\n가벼운 스트레칭으로 몸을 풀어주세요!\n\n💫 휴식 후 더 좋은 컨디션으로 돌아올 거예요!`,
-                `✨ 대박! ${subjectName} 45분 돌파!\n\n🎯 목표 달성! 정말 잘했어요!\n\n🍵 10분 휴식 타임\n창밖을 보거나, 좋아하는 음악을 들으며\n머리를 식혀보세요!\n\n🚀 쉬었다가 다시 집중하면 더 효율적이에요!`
+                `🎉 축하해요! ${subjectName} 45분 완료!\n\n💪 정말 대단해요! 집중력이 최고네요!\n\n☕ 이제 10분 동안 쉬어가세요!\n물 한 잔 마시고, 스트레칭하며 휴식을 취하세요. 😊\n\n⏰ 휴식 후 "✅ 완료" 버튼을 눌러주세요!`,
+                `🌟 와우! ${subjectName} 45분 학습 완료!\n\n🏆 정말 멋진 집중력이에요!\n\n🧘‍♀️ 10분간 충전 타임!\n잠깐 눈을 감고 심호흡하거나,\n가벼운 스트레칭으로 몸을 풀어주세요!\n\n💫 쉬었다가 "✅ 완료" 버튼을 꼭 눌러주세요!`,
+                `✨ 대박! ${subjectName} 45분 돌파!\n\n🎯 목표 달성! 정말 잘했어요!\n\n🍵 10분 휴식 타임\n창밖을 보거나, 좋아하는 음악을 들으며\n머리를 식혀보세요!\n\n🚀 휴식 후 "✅ 완료" 버튼을 눌러 마무리하세요!`
             ];
             
             const message = restMessages[Math.floor(Math.random() * restMessages.length)];
@@ -739,7 +733,7 @@
         }
 
         // ==========================================
-        // 타이머 정지
+        // 타이머 정지 (완료 시 호출)
         // ==========================================
         function stopTimer(subjectName) {
             const dayKey = `${studentData.currentDay}_${subjectName}`;
@@ -754,9 +748,8 @@
                 saveStudentData();
             }
             
-            // 버튼 상태 업데이트
+            // 버튼 상태 업데이트 (시작 버튼만)
             document.getElementById(`startBtn_${subjectName}`).classList.remove('opacity-50');
-            document.getElementById(`stopBtn_${subjectName}`).classList.add('opacity-50');
         }
 
         // ==========================================
