@@ -797,6 +797,42 @@
             </div>
         </div>
 
+        <!-- 🆕 내일 학습 준비 알림 -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up mb-6" id="tomorrowPreviewSection" style="display: none;">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-sun text-yellow-500 mr-2"></i>내일 학습 준비
+                </h3>
+                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-bold">
+                    📅 미리 준비하세요!
+                </span>
+            </div>
+            
+            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl p-4 mb-4">
+                <div class="flex items-start gap-3">
+                    <div class="text-3xl">💡</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800 mb-2" id="tomorrowDate">내일 (12월 29일)</h4>
+                        <p class="text-sm text-gray-600 mb-3">
+                            내일 배울 내용을 미리 확인하고 교재를 준비하세요!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 내일의 과목 목록 -->
+            <div id="tomorrowSubjectsList" class="space-y-2">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+            
+            <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-xs text-gray-700">
+                    <i class="fas fa-info-circle text-blue-600 mr-1"></i>
+                    <strong>준비 팁:</strong> 교과서 해당 단원을 미리 읽어보면 학습 효과가 2배!
+                </p>
+            </div>
+        </div>
+
         <!-- 오늘의 학습 현황 (통합 원스톱) -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="todayStudySection">
             <div class="flex items-center justify-between mb-4">
@@ -2895,6 +2931,9 @@
             updateWeeklyRoadmapProgress();
             loadTeacherFeedback();
             
+            // 🆕 내일 학습 준비 알림 표시
+            showTomorrowPreview();
+            
             // 🔄 당일 실행 중이던 타이머 복원
             restoreRunningTimers();
             
@@ -3850,6 +3889,69 @@
         let currentCalendarYear = new Date().getFullYear();
         let currentCalendarMonth = new Date().getMonth(); // 0-11
         
+        // 🆕 내일 학습 내용 미리보기
+        function showTomorrowPreview() {
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            if (!currentStudentId) {
+                document.getElementById('tomorrowPreviewSection').style.display = 'none';
+                return;
+            }
+            
+            // 내일 날짜 계산
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+            const tomorrowDayOfWeek = tomorrow.getDay(); // 0(일) ~ 6(토)
+            
+            // 주말이면 표시 안 함
+            if (tomorrowDayOfWeek === 0 || tomorrowDayOfWeek === 6) {
+                document.getElementById('tomorrowPreviewSection').style.display = 'none';
+                return;
+            }
+            
+            // 내일의 예정 과목 가져오기
+            const tomorrowSubjects = getPlannedSubjectsForDate(tomorrowStr);
+            
+            if (tomorrowSubjects.length === 0) {
+                document.getElementById('tomorrowPreviewSection').style.display = 'none';
+                return;
+            }
+            
+            // 날짜 표시
+            const dayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+            const dateStr = `${tomorrow.getMonth() + 1}월 ${tomorrow.getDate()}일 (${dayNames[tomorrowDayOfWeek]})`;
+            document.getElementById('tomorrowDate').textContent = `내일 ${dateStr}`;
+            
+            // 과목 목록 생성
+            const subjectColors = {
+                '수학': { bg: 'from-blue-50 to-blue-100', icon: '🔢', border: 'border-blue-300', text: 'text-blue-800' },
+                '영어': { bg: 'from-red-50 to-red-100', icon: '🔤', border: 'border-red-300', text: 'text-red-800' },
+                '국어': { bg: 'from-green-50 to-green-100', icon: '📖', border: 'border-green-300', text: 'text-green-800' },
+                '사회': { bg: 'from-yellow-50 to-yellow-100', icon: '🌍', border: 'border-yellow-300', text: 'text-yellow-800' },
+                '과학': { bg: 'from-purple-50 to-purple-100', icon: '🔬', border: 'border-purple-300', text: 'text-purple-800' }
+            };
+            
+            const subjectsList = document.getElementById('tomorrowSubjectsList');
+            subjectsList.innerHTML = tomorrowSubjects.map((item, index) => {
+                const colors = subjectColors[item.subject] || { bg: 'from-gray-50 to-gray-100', icon: '📚', border: 'border-gray-300', text: 'text-gray-800' };
+                
+                return `
+                    <div class="p-3 bg-gradient-to-r ${colors.bg} border-2 ${colors.border} rounded-lg hover:shadow-md transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">${colors.icon}</div>
+                            <div class="flex-1">
+                                <div class="font-bold ${colors.text}">${index + 1}교시: ${item.subject}</div>
+                                <div class="text-sm text-gray-600 mt-1">📝 ${item.content}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // 섹션 표시
+            document.getElementById('tomorrowPreviewSection').style.display = 'block';
+        }
+        
         // 캘린더 렌더링
         function renderCalendar() {
             const yearMonthElement = document.getElementById('calendarYearMonth');
@@ -4581,6 +4683,7 @@
         initProgramProgress();
         updateWeeklyRoadmapProgress();
         renderCalendar(); // 캘린더 렌더링
+        showTomorrowPreview(); // 🆕 내일 학습 준비 표시
         
         // 로그인 상태 확인 (주석 처리 - 자동 로그인 방지)
         // 사용자가 명시적으로 이름을 입력해야만 로그인되도록 변경
