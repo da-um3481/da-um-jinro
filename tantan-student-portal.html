@@ -390,7 +390,8 @@
             currentDay: 1,
             studyLog: {},
             timers: {},
-            totalMinutes: 0
+            totalMinutes: 0,
+            lastAccessDate: new Date().toISOString().split('T')[0]
         };
 
         let activeTimers = {};
@@ -982,14 +983,28 @@ ${studentData.currentDay < 30 ? '내일도 이 멋진 기세로 함께 공부해
                     currentDay: loaded.currentDay || 1,
                     studyLog: loaded.studyLog || {},
                     timers: loaded.timers || {},
-                    totalMinutes: loaded.totalMinutes || 0
+                    totalMinutes: loaded.totalMinutes || 0,
+                    lastAccessDate: loaded.lastAccessDate || new Date().toISOString().split('T')[0]
                 };
                 
-                // running 플래그 초기화 (페이지 새로고침 시)
-                if (studentData.timers && typeof studentData.timers === 'object') {
-                    Object.keys(studentData.timers).forEach(key => {
-                        studentData.timers[key].running = false;
-                    });
+                // 날짜 체크: 당일이면 타이머 상태 유지, 다른 날이면 초기화
+                const today = new Date().toISOString().split('T')[0];
+                
+                if (studentData.lastAccessDate !== today) {
+                    // 다음 날이면 타이머 초기화 (단, elapsed와 완료 상태는 유지)
+                    console.log('📅 New day detected, resetting timer states');
+                    if (studentData.timers && typeof studentData.timers === 'object') {
+                        Object.keys(studentData.timers).forEach(key => {
+                            if (studentData.timers[key]) {
+                                studentData.timers[key].running = false;
+                            }
+                        });
+                    }
+                    studentData.lastAccessDate = today;
+                    saveStudentData();
+                } else {
+                    // 당일이면 running 상태 유지 (타이머 자동 재시작)
+                    console.log('✅ Same day - preserving timer states');
                 }
                 
                 console.log('✅ Student data loaded:', studentData);

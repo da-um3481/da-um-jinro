@@ -1885,6 +1885,43 @@
             return 0;
         }
 
+        // 🔄 실행 중이던 타이머 복원 (당일 재로그인 시)
+        function restoreRunningTimers() {
+            const today = new Date().toISOString().split('T')[0];
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            if (!todayRecord) {
+                console.log('ℹ️ 오늘 학습 기록 없음 - 타이머 복원 안 함');
+                return;
+            }
+            
+            // 실행 중이던 과목 찾기
+            const subjects = Object.keys(todayRecord.subjects || {});
+            let restoredSubject = null;
+            
+            for (const subject of subjects) {
+                if (todayRecord.subjects[subject].isRunning) {
+                    restoredSubject = subject;
+                    const savedSeconds = todayRecord.subjects[subject].time * 60;
+                    
+                    console.log(`🔄 타이머 복원: ${subject} (${Math.floor(savedSeconds/60)}분)`);
+                    
+                    // 타이머 자동 재시작
+                    setTimeout(() => {
+                        startTimer(subject, 45);
+                    }, 500);
+                    
+                    break; // 한 과목만 실행 가능하므로 break
+                }
+            }
+            
+            if (restoredSubject) {
+                showSuccessMessage(`⏰ ${restoredSubject} 학습이 계속됩니다!`);
+            }
+        }
+
         // 🆕 당일 학습 시간 저장 (실시간)
         function saveTodayStudyTime(subject, totalSeconds) {
             const today = new Date().toISOString().split('T')[0];
@@ -1904,13 +1941,17 @@
             }
             
             if (!todayRecord.subjects[subject]) {
-                todayRecord.subjects[subject] = { time: 0, content: '' };
+                todayRecord.subjects[subject] = { time: 0, content: '', isRunning: false };
             }
             
             todayRecord.subjects[subject].time = Math.floor(totalSeconds / 60);
             todayRecord.subjects[subject].last_update = new Date().toISOString();
+            todayRecord.subjects[subject].isRunning = (timers[subject] && timers[subject].isRunning) || false;
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
+            
+            // activeSubject도 저장
+            localStorage.setItem('activeSubject', activeSubject || '');
         }
 
         // 타이머 시작
@@ -2019,12 +2060,13 @@
             }
             
             if (!todayRecord.subjects[subject]) {
-                todayRecord.subjects[subject] = { time: 0, content: '' };
+                todayRecord.subjects[subject] = { time: 0, content: '', isRunning: false };
             }
             
             // 🆕 누적 시간이 아닌 총 시간으로 저장
             todayRecord.subjects[subject].time = minutes;
             todayRecord.subjects[subject].completed_at = new Date().toISOString();
+            todayRecord.subjects[subject].isRunning = false; // 완료 시 isRunning = false
             
             // 학습 내용도 저장
             const contentElement = document.getElementById(`${subject}Content`);
@@ -2781,6 +2823,9 @@
             // 프로그램 진행률 새로고침
             initProgramProgress();
             loadTeacherFeedback();
+            
+            // 🔄 당일 실행 중이던 타이머 복원
+            restoreRunningTimers();
             
             // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
             if (!isGuest) {
