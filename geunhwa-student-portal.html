@@ -2806,6 +2806,11 @@
             localStorage.setItem('currentStudentId', student.id);
             localStorage.setItem('currentStudentName', student.name);
             localStorage.setItem('currentStudentGrade', student.grade);
+            
+            // 로그인 날짜 저장 (자정 자동 로그아웃용)
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem('lastLoginDate', today);
+            console.log('📅 로그인 날짜 저장:', today);
 
             // 학생 정보 표시 업데이트 (게스트 모드 고려)
             const displayName = isGuest ? '게스트' : student.name;
@@ -4406,6 +4411,90 @@
             }
         }
         */
+
+        // ==========================================
+        // 타이머 영속성 및 자정 자동 로그아웃
+        // ==========================================
+
+        // 페이지 종료 시 데이터만 저장 (타이머는 계속 실행)
+        window.addEventListener('beforeunload', () => {
+            // 실행 중인 타이머의 상태를 저장 (멈추지 않음)
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const today = new Date().toISOString().split('T')[0];
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            
+            if (currentStudentId) {
+                // 오늘의 학습 기록 찾기
+                let todayRecord = studyRecords.find(r => r.student_id === currentStudentId && r.date === today);
+                
+                // 실행 중인 과목 저장
+                const activeSubject = localStorage.getItem('activeSubject');
+                if (activeSubject && todayRecord) {
+                    // isRunning 상태 유지
+                    if (todayRecord[activeSubject]) {
+                        todayRecord[activeSubject].isRunning = true;
+                    }
+                    localStorage.setItem('study_records', JSON.stringify(studyRecords));
+                }
+            }
+            
+            console.log('💾 페이지 종료: 타이머 상태 저장 완료 (타이머는 계속 실행)');
+        });
+
+        // 자정(24시)에 자동 로그아웃
+        function checkMidnightLogout() {
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            if (!currentStudentId) return; // 로그인하지 않았으면 체크 안함
+            
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            
+            // 마지막 접속 날짜 확인
+            const lastLoginDate = localStorage.getItem('lastLoginDate');
+            
+            // 날짜가 바뀌었으면 자동 로그아웃
+            if (lastLoginDate && lastLoginDate !== today) {
+                console.log('🌙 자정이 지나 자동 로그아웃:', lastLoginDate, '->', today);
+                
+                // 모든 타이머 정지
+                Object.keys(timers).forEach(subject => {
+                    if (timers[subject] && timers[subject].interval) {
+                        clearInterval(timers[subject].interval);
+                        timers[subject].isRunning = false;
+                    }
+                });
+                
+                // 현재 학습 중인 과목 저장 및 종료
+                const activeSubject = localStorage.getItem('activeSubject');
+                if (activeSubject && timers[activeSubject]) {
+                    const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+                    const today = new Date().toISOString().split('T')[0];
+                    saveTodayStudyTime(activeSubject, timers[activeSubject].seconds);
+                }
+                
+                // 세션 정보 초기화 (학습 데이터는 유지)
+                localStorage.removeItem('currentStudentId');
+                localStorage.removeItem('currentStudentName');
+                localStorage.removeItem('currentStudentGrade');
+                localStorage.removeItem('activeSubject');
+                localStorage.removeItem('lastLoginDate');
+                
+                // 로그아웃 메시지
+                alert('🌙 자정이 지나 자동으로 로그아웃되었습니다.\n\n학습 데이터는 저장되었습니다.\n다시 로그인해주세요!');
+                
+                // 페이지 새로고침 (로그인 화면으로)
+                location.reload();
+            } else if (!lastLoginDate) {
+                // 첫 로그인 시 날짜 저장
+                localStorage.setItem('lastLoginDate', today);
+            }
+        }
+
+        // 1분마다 자정 체크
+        setInterval(checkMidnightLogout, 60000); // 60초마다 체크
+        
+        // 초기 체크
+        checkMidnightLogout();
     </script>
     
     <!-- 🎉 학습 완료 축하 모달 -->
