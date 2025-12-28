@@ -616,7 +616,7 @@
                                 <div class="timer-display text-5xl font-black" style="color: ${subject.color === 'blue' ? '#2563eb' : subject.color === 'purple' ? '#9333ea' : '#4f46e5'};" id="timer_${subject.name}">
                                     ${formatTime(timerData.elapsed)}
                                 </div>
-                                <div class="text-xs text-gray-500 mt-2">최소 1분 이상 학습 필요</div>
+                                <div class="text-xs text-gray-500 mt-2">최소 30분 이상 학습 필요</div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <button onclick="startTimer('${subject.name}')" 
@@ -817,8 +817,8 @@
             const dayKey = `${studentData.currentDay}_${subjectName}`;
             const timerData = studentData.timers?.[dayKey];
             
-            // 최소 학습 시간: 20분 (1200초)
-            const MIN_STUDY_SECONDS = 1200; // 20분
+            // 최소 학습 시간: 30분 (1800초)
+            const MIN_STUDY_SECONDS = 1800; // 30분
             
             if (!timerData || timerData.elapsed < MIN_STUDY_SECONDS) {
                 const minutesStudied = Math.floor((timerData?.elapsed || 0) / 60);
