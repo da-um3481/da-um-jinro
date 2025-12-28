@@ -3996,10 +3996,13 @@
             
             const daySchedule = JSON.parse(studentSchedule[dayName] || '[]');
             
-            // 능동학습 과목만 필터링 (isActive: true)
+            // 능동학습 과목만 필터링 (isActive: true), subject와 content 반환
             const activeSubjects = daySchedule
                 .filter(item => item.isActive === true)
-                .map(item => item.subject);
+                .map(item => ({
+                    subject: item.subject,
+                    content: item.content || `${item.subject} 학습`
+                }));
             
             return activeSubjects;
         }
@@ -4068,7 +4071,7 @@
                             예정된 학습 과목
                         </h3>
                         <div class="grid gap-3">
-                            ${plannedSubjects.map((subject, index) => {
+                            ${plannedSubjects.map((item, index) => {
                                 const subjectColors = {
                                     '수학': { bg: 'from-blue-50 to-blue-100', icon: '🔢', border: 'border-blue-300' },
                                     '영어': { bg: 'from-red-50 to-red-100', icon: '🔤', border: 'border-red-300' },
@@ -4076,19 +4079,19 @@
                                     '사회': { bg: 'from-yellow-50 to-yellow-100', icon: '🌍', border: 'border-yellow-300' },
                                     '과학': { bg: 'from-purple-50 to-purple-100', icon: '🔬', border: 'border-purple-300' }
                                 };
-                                const colors = subjectColors[subject] || { bg: 'from-gray-50 to-gray-100', icon: '📚', border: 'border-gray-300' };
+                                const colors = subjectColors[item.subject] || { bg: 'from-gray-50 to-gray-100', icon: '📚', border: 'border-gray-300' };
                                 
                                 return `
                                     <div class="p-4 bg-gradient-to-r ${colors.bg} border-2 ${colors.border} rounded-xl">
                                         <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
+                                            <div class="flex items-center gap-3 flex-1">
                                                 <div class="text-3xl">${colors.icon}</div>
-                                                <div>
-                                                    <div class="font-bold text-gray-800">${index + 1}교시: ${subject}</div>
-                                                    <div class="text-sm text-gray-600">⏱️ 45분 학습 + 10분 휴식</div>
+                                                <div class="flex-1">
+                                                    <div class="font-bold text-gray-800 mb-1">${index + 1}교시: ${item.subject}</div>
+                                                    <div class="text-sm text-gray-600">📝 ${item.content}</div>
                                                 </div>
                                             </div>
-                                            <span class="px-3 py-1 bg-purple-500 text-white rounded-full text-xs font-bold">
+                                            <span class="px-3 py-1 bg-purple-500 text-white rounded-full text-xs font-bold whitespace-nowrap ml-2">
                                                 예정
                                             </span>
                                         </div>
@@ -4098,8 +4101,8 @@
                         </div>
                         <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
                             <p class="text-sm text-gray-700">
-                                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
-                                <strong>안내:</strong> 이 날짜에 로그인하면 위 과목들의 학습 일정이 자동으로 생성됩니다.
+                                <i class="fas fa-lightbulb text-blue-600 mr-2"></i>
+                                <strong>학습 준비 팁:</strong> 위 내용을 미리 예습하면 더 효과적으로 학습할 수 있습니다!
                             </p>
                         </div>
                     </div>
