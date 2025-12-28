@@ -3884,6 +3884,7 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDiv = document.createElement('div');
                 const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const cellDate = new Date(dateStr);
                 
                 // 해당 날짜의 학습 기록 가져오기
                 const achievement = getAchievementForDate(dateStr);
@@ -3891,6 +3892,16 @@
                 
                 // 오늘 날짜 확인
                 const isToday = isCurrentMonth && day === today.getDate();
+                
+                // 미래 날짜 확인 (오늘 이후)
+                const isFuture = cellDate > today;
+                
+                // 🆕 미래 날짜의 예정 과목 가져오기
+                let plannedSubjects = [];
+                if (isFuture && cellDate.getTime() - today.getTime() <= 7 * 24 * 60 * 60 * 1000) {
+                    // 1주일 이내의 미래 날짜만 표시
+                    plannedSubjects = getPlannedSubjectsForDate(dateStr);
+                }
                 
                 // 날짜 스타일
                 let bgColor = 'bg-white';
@@ -3908,17 +3919,29 @@
                               achievement >= 60 ? 'bg-gradient-to-br from-blue-50 to-blue-100' :
                               'bg-gradient-to-br from-gray-50 to-gray-100';
                     borderColor = achievement >= 80 ? 'border-green-300' : 'border-gray-300';
+                } else if (plannedSubjects.length > 0) {
+                    // 미래 날짜에 예정된 학습이 있으면 연한 보라색
+                    bgColor = 'bg-gradient-to-br from-purple-50 to-indigo-50';
+                    borderColor = 'border-purple-200';
                 }
                 
                 dayDiv.className = `text-center py-0.5 px-1 rounded border ${bgColor} ${borderColor} hover:shadow transition cursor-pointer`;
+                
+                // 🆕 미래 예정 과목 표시
+                let plannedSubjectsHtml = '';
+                if (plannedSubjects.length > 0) {
+                    const subjectCount = plannedSubjects.length;
+                    plannedSubjectsHtml = `<div class="text-[8px] text-purple-600 mt-0.5">📅 ${subjectCount}과목</div>`;
+                }
+                
                 dayDiv.innerHTML = `
                     <div class="text-[10px] font-bold ${textColor}">${day}</div>
                     ${emoji ? `<div class="text-xs mt-0.5">${emoji}</div>` : ''}
-                    ${achievement > 0 ? `<div class="text-[9px] text-gray-600">${achievement}%</div>` : ''}
+                    ${achievement > 0 ? `<div class="text-[9px] text-gray-600">${achievement}%</div>` : plannedSubjectsHtml}
                 `;
                 
                 // 클릭 이벤트 (날짜별 상세 정보)
-                dayDiv.onclick = () => showDayDetail(dateStr, achievement);
+                dayDiv.onclick = () => showDayDetail(dateStr, achievement, plannedSubjects);
                 
                 daysElement.appendChild(dayDiv);
             }
@@ -3950,6 +3973,37 @@
             return Math.min(achievement, 150); // 최대 150%까지 표시
         }
         
+        // 🆕 날짜별 예정 과목 가져오기
+        function getPlannedSubjectsForDate(dateStr) {
+            const date = new Date(dateStr);
+            const dayOfWeek = date.getDay(); // 0(일) ~ 6(토)
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const dayName = dayNames[dayOfWeek];
+            
+            // 주말은 제외 (또는 주말 스케줄이 있으면 포함)
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                return []; // 주말은 예정 없음으로 표시
+            }
+            
+            // 현재 학생의 스케줄 가져오기
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            if (!currentStudentId) return [];
+            
+            const schedules = JSON.parse(localStorage.getItem('student_schedules') || '[]');
+            const studentSchedule = schedules.find(s => s.student_id === currentStudentId);
+            
+            if (!studentSchedule || !studentSchedule[dayName]) return [];
+            
+            const daySchedule = JSON.parse(studentSchedule[dayName] || '[]');
+            
+            // 능동학습 과목만 필터링 (isActive: true)
+            const activeSubjects = daySchedule
+                .filter(item => item.isActive === true)
+                .map(item => item.subject);
+            
+            return activeSubjects;
+        }
+        
         // 달성도에 따른 이모지 반환
         function getEmojiForAchievement(achievement) {
             if (achievement === 0) return '';
@@ -3975,7 +4029,7 @@
         }
         
         // 날짜 상세 정보 표시 (모달)
-        function showDayDetail(dateStr, achievement) {
+        function showDayDetail(dateStr, achievement, plannedSubjects = []) {
             const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
             const record = studyRecords.find(r => r.date === dateStr);
             
@@ -3983,6 +4037,12 @@
             const date = new Date(dateStr);
             const formattedDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
             const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+            
+            // 미래 날짜 여부 확인
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const cellDate = new Date(dateStr);
+            const isFuture = cellDate > today;
             
             // 모달 열기
             const modal = document.getElementById('dayDetailModal');
@@ -3995,12 +4055,66 @@
             
             // 헤더 업데이트
             dateElement.textContent = `${formattedDate} (${dayOfWeek})`;
-            achievementElement.innerHTML = achievement > 0 
-                ? `<i class="fas fa-chart-line mr-2"></i>달성률: ${achievement}% ${getEmojiForAchievement(achievement)}`
-                : `<i class="fas fa-info-circle mr-2"></i>학습 기록이 없습니다`;
             
-            // 학습 기록 섹션
-            if (!record || !record.subjects || Object.keys(record.subjects).length === 0) {
+            // 🆕 미래 날짜 처리
+            if (isFuture && plannedSubjects.length > 0) {
+                achievementElement.innerHTML = `<i class="fas fa-calendar-plus text-purple-600 mr-2"></i>예정된 학습`;
+                
+                // 예정 과목 표시
+                studySection.innerHTML = `
+                    <div class="mb-6">
+                        <h3 class="text-md font-bold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-clipboard-list text-purple-600 mr-2"></i>
+                            예정된 학습 과목
+                        </h3>
+                        <div class="grid gap-3">
+                            ${plannedSubjects.map((subject, index) => {
+                                const subjectColors = {
+                                    '수학': { bg: 'from-blue-50 to-blue-100', icon: '🔢', border: 'border-blue-300' },
+                                    '영어': { bg: 'from-red-50 to-red-100', icon: '🔤', border: 'border-red-300' },
+                                    '국어': { bg: 'from-green-50 to-green-100', icon: '📖', border: 'border-green-300' },
+                                    '사회': { bg: 'from-yellow-50 to-yellow-100', icon: '🌍', border: 'border-yellow-300' },
+                                    '과학': { bg: 'from-purple-50 to-purple-100', icon: '🔬', border: 'border-purple-300' }
+                                };
+                                const colors = subjectColors[subject] || { bg: 'from-gray-50 to-gray-100', icon: '📚', border: 'border-gray-300' };
+                                
+                                return `
+                                    <div class="p-4 bg-gradient-to-r ${colors.bg} border-2 ${colors.border} rounded-xl">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="text-3xl">${colors.icon}</div>
+                                                <div>
+                                                    <div class="font-bold text-gray-800">${index + 1}교시: ${subject}</div>
+                                                    <div class="text-sm text-gray-600">⏱️ 45분 학습 + 10분 휴식</div>
+                                                </div>
+                                            </div>
+                                            <span class="px-3 py-1 bg-purple-500 text-white rounded-full text-xs font-bold">
+                                                예정
+                                            </span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                            <p class="text-sm text-gray-700">
+                                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                                <strong>안내:</strong> 이 날짜에 로그인하면 위 과목들의 학습 일정이 자동으로 생성됩니다.
+                            </p>
+                        </div>
+                    </div>
+                `;
+                
+                // 피드백 섹션 숨기기
+                feedbackSection.innerHTML = '';
+            } else {
+                // 기존 로직 (과거 또는 오늘 날짜)
+                achievementElement.innerHTML = achievement > 0 
+                    ? `<i class="fas fa-chart-line mr-2"></i>달성률: ${achievement}% ${getEmojiForAchievement(achievement)}`
+                    : `<i class="fas fa-info-circle mr-2"></i>학습 기록이 없습니다`;
+            
+                // 학습 기록 섹션 (기존 로직 유지)
+                if (!record || !record.subjects || Object.keys(record.subjects).length === 0) {
                 studySection.innerHTML = `
                     <div class="text-center py-8 bg-gray-50 rounded-xl">
                         <div class="text-5xl mb-3">📝</div>
@@ -4176,6 +4290,7 @@
                         </div>
                     </div>
                 `;
+            }
             }
             
             // 모달 표시
