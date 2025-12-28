@@ -683,7 +683,7 @@
             
             // 타이머 데이터 초기화
             if (!studentData.timers[dayKey]) {
-                studentData.timers[dayKey] = { elapsed: 0, running: true };
+                studentData.timers[dayKey] = { elapsed: 0, running: true, notified45: false };
             } else {
                 studentData.timers[dayKey].running = true;
             }
@@ -697,12 +697,45 @@
                 studentData.timers[dayKey].elapsed++;
                 document.getElementById(`timer_${subjectName}`).textContent = 
                     formatTime(studentData.timers[dayKey].elapsed);
+                
+                // 45분 도달 시 알림 (한 번만)
+                if (studentData.timers[dayKey].elapsed === 2700 && !studentData.timers[dayKey].notified45) {
+                    studentData.timers[dayKey].notified45 = true;
+                    show45MinuteRestMessage(subjectName);
+                }
+                
                 saveStudentData();
             }, 1000);
             
             // 버튼 상태 업데이트
             document.getElementById(`startBtn_${subjectName}`).classList.add('opacity-50');
             document.getElementById(`stopBtn_${subjectName}`).classList.remove('opacity-50');
+        }
+
+        // ==========================================
+        // 45분 완료 휴식 메시지
+        // ==========================================
+        function show45MinuteRestMessage(subjectName) {
+            const restMessages = [
+                `🎉 축하해요! ${subjectName} 45분 완료!\n\n💪 정말 대단해요! 집중력이 최고네요!\n\n☕ 이제 10분 동안 쉬어가세요!\n물 한 잔 마시고, 스트레칭하며 휴식을 취하세요. 😊\n\n⏰ 10분 후 다시 돌아올게요!`,
+                `🌟 와우! ${subjectName} 45분 학습 완료!\n\n🏆 정말 멋진 집중력이에요!\n\n🧘‍♀️ 10분간 충전 타임!\n잠깐 눈을 감고 심호흡하거나,\n가벼운 스트레칭으로 몸을 풀어주세요!\n\n💫 휴식 후 더 좋은 컨디션으로 돌아올 거예요!`,
+                `✨ 대박! ${subjectName} 45분 돌파!\n\n🎯 목표 달성! 정말 잘했어요!\n\n🍵 10분 휴식 타임\n창밖을 보거나, 좋아하는 음악을 들으며\n머리를 식혀보세요!\n\n🚀 쉬었다가 다시 집중하면 더 효율적이에요!`
+            ];
+            
+            const message = restMessages[Math.floor(Math.random() * restMessages.length)];
+            alert(message);
+            
+            // 10분 타이머 시작 (선택사항)
+            showRestTimer(10);
+        }
+
+        // ==========================================
+        // 휴식 타이머 표시 (선택사항)
+        // ==========================================
+        function showRestTimer(minutes) {
+            // 간단한 휴식 안내 (실제 타이머는 사용자가 원할 때)
+            const restTime = minutes * 60;
+            console.log(`💤 ${minutes}분 휴식 권장`);
         }
 
         // ==========================================
@@ -784,8 +817,13 @@
             const dayKey = `${studentData.currentDay}_${subjectName}`;
             const timerData = studentData.timers?.[dayKey];
             
-            if (!timerData || timerData.elapsed < 60) {
-                alert('최소 1분 이상 학습해야 완료할 수 있습니다.');
+            // 최소 학습 시간: 20분 (1200초)
+            const MIN_STUDY_SECONDS = 1200; // 20분
+            
+            if (!timerData || timerData.elapsed < MIN_STUDY_SECONDS) {
+                const minutesStudied = Math.floor((timerData?.elapsed || 0) / 60);
+                const minutesNeeded = Math.ceil((MIN_STUDY_SECONDS - (timerData?.elapsed || 0)) / 60);
+                alert(`⏰ 최소 학습 시간을 채워주세요!\n\n현재 학습 시간: ${minutesStudied}분\n필요한 시간: ${minutesNeeded}분 더 공부해주세요!\n\n💪 조금만 더 힘내요! 기초를 탄탄히 다지는 중이에요!`);
                 return;
             }
             
