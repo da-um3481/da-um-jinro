@@ -3185,9 +3185,9 @@
                     
                 return `
                     <div style="padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px; 
-                                border-left: 4px solid var(--primary);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <div>
+                                border-left: 4px solid var(--primary); position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div style="flex: 1;">
                                 <strong style="font-size: 1.1rem; color: var(--text);">
                                     ${student.name}
                                 </strong>
@@ -3196,10 +3196,21 @@
                                     ${student.number ? student.number + '번' : ''}
                                 </span>
                             </div>
-                            <span style="padding: 0.25rem 0.75rem; background: rgba(255, 255, 255, 0.1); 
-                                         border-radius: 12px; font-size: 0.9rem;">
-                                ${levelBadge}
-                            </span>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(255, 255, 255, 0.1); 
+                                             border-radius: 12px; font-size: 0.9rem; white-space: nowrap;">
+                                    ${levelBadge}
+                                </span>
+                                <button onclick="deleteStudent('${student.id}')" 
+                                    style="padding: 0.5rem 0.75rem; background: var(--danger); color: white; 
+                                           border: none; border-radius: 6px; cursor: pointer; 
+                                           font-size: 0.85rem; font-weight: 600; transition: all 0.3s;
+                                           white-space: nowrap;"
+                                    onmouseover="this.style.background='#dc2626'"
+                                    onmouseout="this.style.background='var(--danger)'">
+                                    🗑️ 삭제
+                                </button>
+                            </div>
                         </div>
                         ${student.notes ? `
                             <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
@@ -3212,6 +3223,79 @@
                     </div>
                 `;
             }).join('');
+        }
+        
+        // 학생 삭제 함수
+        function deleteStudent(studentId) {
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const student = students.find(s => s.id === studentId);
+            
+            if (!student) {
+                alert('⚠️ 학생 정보를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 삭제 확인
+            const confirmMessage = `⚠️ 정말로 "${student.name}" 학생을 삭제하시겠습니까?\n\n다음 데이터가 모두 삭제됩니다:\n- 학생 기본 정보\n- 진단평가 결과\n- 학습 기록\n- 평가 결과\n- 교사 피드백\n\n이 작업은 되돌릴 수 없습니다.`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // 1. 학생 목록에서 삭제
+            const updatedStudents = students.filter(s => s.id !== studentId);
+            localStorage.setItem('students', JSON.stringify(updatedStudents));
+            console.log(`✅ 학생 목록에서 삭제 완료: ${studentId}`);
+            
+            // 2. 진단평가 결과 삭제
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const updatedDiagnostic = diagnosticResults.filter(d => d.studentId !== studentId);
+            localStorage.setItem('diagnostic_results', JSON.stringify(updatedDiagnostic));
+            console.log(`✅ 진단평가 결과 삭제 완료: ${studentId}`);
+            
+            // 3. 학습 기록 삭제
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const updatedStudyRecords = studyRecords.filter(r => r.student_id !== studentId);
+            localStorage.setItem('study_records', JSON.stringify(updatedStudyRecords));
+            console.log(`✅ 학습 기록 삭제 완료: ${studentId}`);
+            
+            // 4. 2주차 평가 결과 삭제
+            const biweeklyEvals = JSON.parse(localStorage.getItem('biweekly_evaluations')) || [];
+            const updatedBiweekly = biweeklyEvals.filter(e => e.studentId !== studentId);
+            localStorage.setItem('biweekly_evaluations', JSON.stringify(updatedBiweekly));
+            console.log(`✅ 2주차 평가 결과 삭제 완료: ${studentId}`);
+            
+            // 5. 교사 피드백 삭제
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            const updatedFeedbacks = feedbacks.filter(f => f.studentId !== studentId);
+            localStorage.setItem('feedbacks', JSON.stringify(updatedFeedbacks));
+            console.log(`✅ 교사 피드백 삭제 완료: ${studentId}`);
+            
+            // 6. 학생별 스케줄 삭제
+            const schedules = JSON.parse(localStorage.getItem('student_schedules')) || [];
+            const updatedSchedules = schedules.filter(s => s.student_id !== studentId);
+            localStorage.setItem('student_schedules', JSON.stringify(updatedSchedules));
+            console.log(`✅ 학습 스케줄 삭제 완료: ${studentId}`);
+            
+            // 7. 프로그램 시작 날짜 삭제
+            localStorage.removeItem(`program_start_${studentId}`);
+            console.log(`✅ 프로그램 시작 날짜 삭제 완료: ${studentId}`);
+            
+            // 성공 메시지
+            alert(`✅ "${student.name}" 학생이 삭제되었습니다.\n\n모든 관련 데이터가 삭제되었습니다.`);
+            
+            // UI 업데이트
+            loadRecentStudents();
+            
+            // 전체 현황 업데이트
+            if (typeof loadDashboardStats === 'function') {
+                loadDashboardStats();
+            }
+            
+            // 현재 학생 목록 탭이 활성화되어 있다면 새로고침
+            if (document.getElementById('section-students').classList.contains('active')) {
+                initStudentDetailManagement();
+            }
         }
 
         // ==========================================
