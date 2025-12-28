@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 QR 코드 생성기 - 학생 포털</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --dark: #0f172a;
+            --text: #f1f5f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+        }
+
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .qr-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .qr-card-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .qr-icon {
+            font-size: 2rem;
+        }
+
+        .qr-desc {
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .qr-image {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .qr-image img {
+            display: block;
+            width: 300px;
+            height: 300px;
+        }
+
+        .qr-url {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            font-family: monospace;
+            color: var(--primary);
+            word-break: break-all;
+            margin-bottom: 1rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .info-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .info-content {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .print-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .print-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .print-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .print-card {
+            background: white;
+            color: #0f172a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .print-card-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .print-card-desc {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .header, .info-box, .btn-group {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .title {
+                font-size: 1.75rem;
+            }
+            .qr-grid {
+                grid-template-columns: 1fr;
+            }
+            .qr-image img {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">📱 학생 포털 QR 코드</h1>
+            <p class="subtitle">스캔하여 간편하게 접속하세요!</p>
+        </div>
+
+        <div class="info-box">
+            <div class="info-title">💡 QR 코드 사용 방법</div>
+            <div class="info-content">
+                <p><strong>학생:</strong> 스마트폰 카메라 또는 네이버 앱으로 QR 코드를 스캔하면 바로 학생 포털로 접속됩니다.</p>
+                <p><strong>교사:</strong> 이미지를 다운로드하여 가정통신문, 교실 게시물, PPT 자료 등에 활용하세요.</p>
+                <p><strong>인쇄:</strong> 각 QR 코드 아래 "이미지 다운로드" 버튼을 클릭하거나, 페이지 하단 인쇄용 버전을 활용하세요.</p>
+            </div>
+        </div>
+
+        <div class="qr-grid">
+            <!-- 학생 포털 (30일 프로그램) -->
+            <div class="qr-card">
+                <div class="qr-card-header">
+                    <span class="qr-icon">📚</span>
+                    <span>학생 포털 (30일)</span>
+                </div>
+                <p class="qr-desc">
+                    겨울방학 30일 자기주도학습 프로그램<br>
+                    5과목 균형 학습 (국어, 영어, 수학, 사회, 과학)
+                </p>
+                <div class="qr-image">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html" alt="학생 포털 QR 코드">
+                </div>
+                <div class="qr-url">
+                    https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html
+                </div>
+                <div class="btn-group">
+                    <a href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html" download="학생포털_QR코드.png" class="btn btn-primary">
+                        📥 이미지 다운로드
+                    </a>
+                    <a href="https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html" target="_blank" class="btn btn-secondary">
+                        🔗 포털 열기
+                    </a>
+                </div>
+            </div>
+
+            <!-- 기초탄탄 학생 포털 -->
+            <div class="qr-card">
+                <div class="qr-card-header">
+                    <span class="qr-icon">🌱</span>
+                    <span>기초탄탄 포털</span>
+                </div>
+                <p class="qr-desc">
+                    기초학력 향상 특별 프로그램<br>
+                    3과목 집중 학습 (국어, 영어, 수학)
+                </p>
+                <div class="qr-image">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html" alt="기초탄탄 포털 QR 코드">
+                </div>
+                <div class="qr-url">
+                    https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html
+                </div>
+                <div class="btn-group">
+                    <a href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html" download="기초탄탄포털_QR코드.png" class="btn btn-primary">
+                        📥 이미지 다운로드
+                    </a>
+                    <a href="https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html" target="_blank" class="btn btn-secondary">
+                        🔗 포털 열기
+                    </a>
+                </div>
+            </div>
+
+            <!-- 통합 포털 -->
+            <div class="qr-card">
+                <div class="qr-card-header">
+                    <span class="qr-icon">🎯</span>
+                    <span>통합 포털</span>
+                </div>
+                <p class="qr-desc">
+                    학생/교사/학부모 모든 시스템 통합<br>
+                    전체 프로그램 접근 가능
+                </p>
+                <div class="qr-image">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://da-um3481.github.io/da-um-jinro/unified-portal.html" alt="통합 포털 QR 코드">
+                </div>
+                <div class="qr-url">
+                    https://da-um3481.github.io/da-um-jinro/unified-portal.html
+                </div>
+                <div class="btn-group">
+                    <a href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=https://da-um3481.github.io/da-um-jinro/unified-portal.html" download="통합포털_QR코드.png" class="btn btn-primary">
+                        📥 이미지 다운로드
+                    </a>
+                    <a href="https://da-um3481.github.io/da-um-jinro/unified-portal.html" target="_blank" class="btn btn-secondary">
+                        🔗 포털 열기
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 인쇄용 섹션 -->
+        <div class="print-section">
+            <h2 class="print-title">📄 인쇄용 QR 코드 (A4 가정통신문/포스터용)</h2>
+            
+            <div class="print-grid">
+                <div class="print-card">
+                    <div class="print-card-title">📚 학생 포털 (30일)</div>
+                    <div class="print-card-desc">5과목 균형 학습</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html" alt="학생 포털">
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b;">
+                        스마트폰으로 스캔하세요
+                    </div>
+                </div>
+
+                <div class="print-card">
+                    <div class="print-card-title">🌱 기초탄탄 포털</div>
+                    <div class="print-card-desc">3과목 집중 학습</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://da-um3481.github.io/da-um-jinro/tantan-student-portal.html" alt="기초탄탄 포털">
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b;">
+                        스마트폰으로 스캔하세요
+                    </div>
+                </div>
+
+                <div class="print-card">
+                    <div class="print-card-title">🎯 통합 포털</div>
+                    <div class="print-card-desc">전체 시스템</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://da-um3481.github.io/da-um-jinro/unified-portal.html" alt="통합 포털">
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b;">
+                        스마트폰으로 스캔하세요
+                    </div>
+                </div>
+
+                <div class="print-card">
+                    <div class="print-card-title">👨‍👩‍👧 학부모 대시보드</div>
+                    <div class="print-card-desc">자녀 학습 현황</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://da-um3481.github.io/da-um-jinro/parent-dashboard.html" alt="학부모 대시보드">
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b;">
+                        스마트폰으로 스캔하세요
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="window.print()" class="btn btn-accent">
+                    🖨️ 인쇄하기 (Ctrl+P 또는 Cmd+P)
+                </button>
+            </div>
+        </div>
+
+        <!-- 활용 가이드 -->
+        <div class="info-box" style="margin-top: 3rem;">
+            <div class="info-title">📌 활용 가이드</div>
+            <div class="info-content">
+                <p><strong>1. 가정통신문:</strong> QR 코드를 가정통신문 하단에 삽입하여 학부모님께 전달</p>
+                <p><strong>2. 교실 게시:</strong> A4 용지에 인쇄하여 교실 뒤 게시판에 부착</p>
+                <p><strong>3. PPT 자료:</strong> 오리엔테이션 발표 자료에 QR 코드 이미지 삽입</p>
+                <p><strong>4. 학급 단체 카톡:</strong> QR 코드 이미지를 학급 단체방에 공유</p>
+                <p><strong>5. 학교 홈페이지:</strong> 학교 홈페이지 공지사항에 이미지 업로드</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
