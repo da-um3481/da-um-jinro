@@ -2001,7 +2001,24 @@
             for (const subject of subjects) {
                 if (todayRecord.subjects[subject].isRunning) {
                     restoredSubject = subject;
-                    const savedSeconds = todayRecord.subjects[subject].time * 60;
+                    let savedSeconds = todayRecord.subjects[subject].time * 60;
+                    
+                    // 🆕 백그라운드 실행 시간 계산
+                    const timerStartTime = localStorage.getItem('timerStartTime');
+                    if (timerStartTime) {
+                        const now = Date.now();
+                        const elapsedMs = now - parseInt(timerStartTime);
+                        const totalElapsedSeconds = Math.floor(elapsedMs / 1000);
+                        
+                        // 저장된 시간보다 경과 시간이 더 크면 업데이트
+                        if (totalElapsedSeconds > savedSeconds) {
+                            savedSeconds = totalElapsedSeconds;
+                            console.log(`⏱️ 백그라운드 실행 시간 추가: +${Math.floor((totalElapsedSeconds - savedSeconds) / 60)}분`);
+                        }
+                        
+                        // timerStartTime 제거 (사용 완료)
+                        localStorage.removeItem('timerStartTime');
+                    }
                     
                     console.log(`🔄 타이머 복원: ${subject} (${Math.floor(savedSeconds/60)}분)`);
                     
@@ -4744,31 +4761,30 @@
             if (lastLoginDate && lastLoginDate !== today) {
                 console.log('🌙 자정이 지나 자동 로그아웃:', lastLoginDate, '->', today);
                 
-                // 모든 타이머 정지
-                Object.keys(timers).forEach(subject => {
-                    if (timers[subject] && timers[subject].interval) {
-                        clearInterval(timers[subject].interval);
-                        timers[subject].isRunning = false;
-                    }
-                });
-                
-                // 현재 학습 중인 과목 저장 및 종료
+                // 🆕 타이머는 정지하지 않고 계속 실행 (isRunning 상태 유지)
+                // 현재 실행 중인 타이머 정보 저장 (재로그인 시 복원용)
                 const activeSubject = localStorage.getItem('activeSubject');
                 if (activeSubject && timers[activeSubject]) {
                     const studentId = localStorage.getItem('currentStudentId') || 'default_student';
-                    const today = new Date().toISOString().split('T')[0];
+                    
+                    // 현재 시간과 타이머 상태 저장
                     saveTodayStudyTime(activeSubject, timers[activeSubject].seconds);
+                    
+                    // 타이머 시작 시각 저장 (재로그인 시 경과 시간 계산용)
+                    localStorage.setItem('timerStartTime', Date.now() - (timers[activeSubject].seconds * 1000));
+                    
+                    console.log(`⏱️ 타이머는 백그라운드에서 계속 실행 중: ${activeSubject}`);
                 }
                 
                 // 세션 정보 초기화 (학습 데이터는 유지)
                 localStorage.removeItem('currentStudentId');
                 localStorage.removeItem('currentStudentName');
                 localStorage.removeItem('currentStudentGrade');
-                localStorage.removeItem('activeSubject');
+                // ⚠️ activeSubject는 유지 (타이머 복원용)
                 localStorage.removeItem('lastLoginDate');
                 
                 // 로그아웃 메시지
-                alert('🌙 자정이 지나 자동으로 로그아웃되었습니다.\n\n학습 데이터는 저장되었습니다.\n다시 로그인해주세요!');
+                alert('🌙 자정이 지나 자동으로 로그아웃되었습니다.\n\n✅ 타이머는 백그라운드에서 계속 실행됩니다.\n✅ 학습 데이터는 저장되었습니다.\n\n다시 로그인해주세요!');
                 
                 // 페이지 새로고침 (로그인 화면으로)
                 location.reload();
