@@ -2196,6 +2196,9 @@
                     updateTimerDisplay(subject);
                     updateProgressBar(subject);
                     
+                    // 🆕 타이머 복원 완료 후 timerStartTime 삭제 (더 이상 필요 없음)
+                    localStorage.removeItem('timerStartTime');
+                    
                     showSuccessMessage(`⏰ ${subject} 학습이 계속됩니다! (${Math.floor(currentSeconds/60)}분)`);
                     
                     break; // 한 과목만 실행 가능하므로 break
@@ -2260,8 +2263,24 @@
             
             activeSubject = subject;
             
-            // 🆕 당일 학습 시간 로드
-            const savedSeconds = loadTodayStudyTime(subject);
+            // 🆕 당일 학습 시간 로드 + 백그라운드 경과 시간 계산
+            let savedSeconds = loadTodayStudyTime(subject);
+            
+            // 🔥 백그라운드 실행 중이었다면 경과 시간 반영
+            const timerStartTime = localStorage.getItem('timerStartTime');
+            if (timerStartTime) {
+                const now = Date.now();
+                const totalElapsedSeconds = Math.floor((now - parseInt(timerStartTime)) / 1000);
+                
+                // 기록된 시간보다 경과 시간이 더 크면 경과 시간 사용
+                if (totalElapsedSeconds > savedSeconds) {
+                    console.log(`⏱️ 백그라운드 경과 시간 반영: ${Math.floor(totalElapsedSeconds / 60)}분 (기록: ${Math.floor(savedSeconds / 60)}분)`);
+                    savedSeconds = totalElapsedSeconds;
+                }
+                
+                // 타이머 시작 시각 삭제 (이미 반영했으므로)
+                localStorage.removeItem('timerStartTime');
+            }
             
             if (!timers[subject]) {
                 timers[subject] = { 
@@ -2271,7 +2290,7 @@
                     target: targetMinutes * 60 
                 };
             } else {
-                // 기존 타이머가 있으면 저장된 시간으로 복원
+                // 기존 타이머가 있으면 계산된 시간으로 복원
                 timers[subject].seconds = savedSeconds;
             }
             
@@ -2297,7 +2316,7 @@
             updateTimerDisplay(subject);
             updateProgressBar(subject);
             
-            console.log(`▶️ ${subject} 학습 시작 (목표: ${targetMinutes}분, 기존: ${Math.floor(savedSeconds/60)}분)`);
+            console.log(`▶️ ${subject} 학습 시작 (목표: ${targetMinutes}분, 시작: ${Math.floor(savedSeconds/60)}분)`);
         }
 
         // 타이머 정지 및 기록
