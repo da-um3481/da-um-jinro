@@ -660,7 +660,7 @@
                             자기주도학습UP 챌린지
                         </h1>
                         <p class="text-xs sm:text-base text-green-50 sm:border-l sm:border-green-300 sm:pl-4 hidden sm:block" id="studentInfo">
-                            📚 30일 겨울방학 프로그램
+                            📚 100일 학기중 프로그램
                         </p>
                     </div>
                 </div>
@@ -848,9 +848,9 @@
                 <div class="flex items-start gap-4">
                     <div class="text-5xl animate-bounce">🎓</div>
                     <div class="flex-1">
-                        <h4 class="text-lg font-bold text-purple-900 mb-2">🎉 30일 프로그램 완료! 성장 확인 평가</h4>
+                        <h4 class="text-lg font-bold text-purple-900 mb-2">🎉 100일 프로그램 완료! 성장 확인 평가</h4>
                         <p class="text-sm text-gray-800 mb-3 leading-relaxed">
-                            축하합니다! 30일 학습을 완주했습니다! 🎊<br>
+                            축하합니다! 100일 학습을 완주했습니다! 🎊<br>
                             처음 시작할 때 했던 <strong>진단평가와 동일한 문제</strong>를 다시 풀어보며<br>
                             여러분이 얼마나 성장했는지 확인해봅시다!
                         </p>
@@ -975,7 +975,7 @@
             </div>
         </div>
 
-        <!-- 📚 오늘의 복습 (누적복습 시스템 - 겨울방학 특화) -->
+        <!-- 📚 오늘의 복습 (누적복습 시스템 - 학기중 특화) -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="reviewSection">
             <div class="flex items-center justify-between mb-4">
                 <div>
@@ -3121,7 +3121,7 @@
             });
             
             alert(
-                `🎉🎉🎉 30일 프로그램 완주 축하합니다! 🎉🎉🎉\n\n` +
+                `🎉🎉🎉 100일 프로그램 완주 축하합니다! 🎉🎉🎉\n\n` +
                 `📊 성장 리포트\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n\n` +
                 `📌 시작 전 (Pre-test)\n` +
@@ -3496,7 +3496,7 @@
                 created_date: new Date().toISOString().split('T')[0]
             };
             
-            // 프로그램 시작일 확인 (30일 프로그램의 현재 주차 계산)
+            // 프로그램 시작일 확인 (100일 프로그램의 현재 주차 계산)
             const programStartDate = localStorage.getItem(`program_start_${student.id}`) || new Date().toISOString().split('T')[0];
             const startDate = new Date(programStartDate);
             const today = new Date();
@@ -5961,7 +5961,7 @@
         }
 
         // ==========================================
-        // 📚 누적복습 시스템 (겨울방학 자기주도학습 특화)
+        // 📚 누적복습 시스템 (학기중 학교수업 + 자기주도학습 통합)
         // ==========================================
         
         // 복습 스케줄 생성 (에빙하우스 망각곡선: 1일, 3일, 7일, 14일 후)
