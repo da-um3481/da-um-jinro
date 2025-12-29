@@ -2302,15 +2302,33 @@
                 return;
             }
             
-            // 출판사 이름 추출 (예: "비상교육 수학(상)" → "비상교육")
-            const publisher = selectedValue.split(' ')[0];
-            const url = onlineTextbookUrls[publisher];
+            // 출판사 이름 추출 (예: "비상-김원경" → "비상", "동아-윤정미" → "동아")
+            let publisher = selectedValue.split('-')[0];
+            
+            // 출판사명 매핑 (약칭 → 전체명)
+            const publisherMap = {
+                '비상': '비상교육',
+                '천재': '천재교육',
+                '신사고': '신사고',
+                '미래엔': '미래엔',
+                '동아': '동아출판',
+                '지학사': '지학사',
+                '금성': '금성출판사',
+                '능률': '능률',
+                'YBM': 'YBM'
+            };
+            
+            const fullPublisher = publisherMap[publisher] || publisher;
+            const url = onlineTextbookUrls[fullPublisher];
             
             if (url) {
                 window.open(url, '_blank');
-                console.log(`🌐 온라인 교과서 열기: ${publisher} - ${url}`);
+                console.log(`🌐 온라인 교과서 열기: ${fullPublisher} - ${url}`);
             } else {
-                alert('해당 출판사의 온라인 교과서 링크가 등록되지 않았습니다.');
+                alert(`해당 출판사(${fullPublisher})의 온라인 교과서 링크가 등록되지 않았습니다.`);
+                console.log(`❌ URL을 찾을 수 없음: publisher="${publisher}", fullPublisher="${fullPublisher}"`);
+            }
+        }
             }
         }
 

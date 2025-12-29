@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 자기주도학습UP 챌린지 - 나의 학습 포털</title>
+    <title>📚 학기중 100일 프로그램 - 학생 포털</title>
     
     <!-- 저작권 및 보안 메타데이터 -->
     <meta name="author" content="다움진로진학컨설팅 (DA:UM Career & Academic Consulting)">
     <meta name="copyright" content="© 2025 다움진로진학컨설팅. All rights reserved.">
     <meta name="robots" content="noarchive">
-    <meta name="description" content="다움진로진학컨설팅 자기주도학습UP 프로그램 - 근화여중 학생 포털">
+    <meta name="description" content="다움진로진학컨설팅 학기중 100일 프로그램 - 학교 수업 + 자기주도학습 통합 포털">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
@@ -418,11 +418,10 @@
         /* 단계별 스테이지 */
         .roadmap-stage {
             position: relative;
-            min-width: 120px;
-            max-width: 140px;
-            padding: 0.75rem;
-            border-radius: 12px;
-            border: 2px solid;
+            min-width: 200px;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 3px solid;
             transition: all 0.3s ease;
         }
         
@@ -444,8 +443,8 @@
         
         /* 스테이지 아이콘 */
         .stage-icon {
-            font-size: 2rem;
-            margin-bottom: 0.25rem;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
             display: inline-block;
         }
         
@@ -464,7 +463,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: #9ca3af;
         }
         
@@ -522,13 +521,12 @@
         /* 반응형 */
         @media (max-width: 640px) {
             .roadmap-stage {
-                min-width: 100px;
-                max-width: 120px;
-                padding: 0.5rem;
+                min-width: 160px;
+                padding: 1rem;
             }
             
             .stage-icon {
-                font-size: 1.5rem;
+                font-size: 2.5rem;
             }
         }
         
@@ -662,7 +660,7 @@
                             자기주도학습UP 챌린지
                         </h1>
                         <p class="text-xs sm:text-base text-green-50 sm:border-l sm:border-green-300 sm:pl-4 hidden sm:block" id="studentInfo">
-                            📚 30일 겨울방학 프로그램
+                            📚 100일 학기중 프로그램
                         </p>
                     </div>
                 </div>
@@ -850,9 +848,9 @@
                 <div class="flex items-start gap-4">
                     <div class="text-5xl animate-bounce">🎓</div>
                     <div class="flex-1">
-                        <h4 class="text-lg font-bold text-purple-900 mb-2">🎉 30일 프로그램 완료! 성장 확인 평가</h4>
+                        <h4 class="text-lg font-bold text-purple-900 mb-2">🎉 100일 프로그램 완료! 성장 확인 평가</h4>
                         <p class="text-sm text-gray-800 mb-3 leading-relaxed">
-                            축하합니다! 30일 학습을 완주했습니다! 🎊<br>
+                            축하합니다! 100일 학습을 완주했습니다! 🎊<br>
                             처음 시작할 때 했던 <strong>진단평가와 동일한 문제</strong>를 다시 풀어보며<br>
                             여러분이 얼마나 성장했는지 확인해봅시다!
                         </p>
@@ -977,7 +975,7 @@
             </div>
         </div>
 
-        <!-- 📚 오늘의 복습 (누적복습 시스템 - 겨울방학 특화) -->
+        <!-- 📚 오늘의 복습 (누적복습 시스템 - 학기중 특화) -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="reviewSection">
             <div class="flex items-center justify-between mb-4">
                 <div>
@@ -1012,6 +1010,136 @@
                     <div class="text-4xl mb-2">✅</div>
                     <p class="text-gray-500 text-sm">오늘 복습할 내용이 없어요</p>
                     <p class="text-gray-400 text-xs mt-1">학습 완료하면 자동으로 복습 일정이 만들어져요!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🏫 학교 수업 기록 (학기중 100일 프로그램 핵심) -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="schoolClassSection">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">
+                        <i class="fas fa-school text-blue-600 mr-2"></i>오늘의 학교 수업
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1 ml-7">
+                        💡 학교 수업 내용을 기록하면 내신 성적이 2배 올라요!
+                    </p>
+                </div>
+                <button 
+                    onclick="toggleSchoolClassForm()"
+                    class="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
+                    <i class="fas fa-plus mr-2"></i>수업 기록
+                </button>
+            </div>
+            
+            <!-- 오늘의 시간표 (평일만) -->
+            <div class="mb-4 p-4 bg-blue-50 rounded-xl">
+                <h4 class="text-sm font-bold text-gray-700 mb-3">📚 오늘의 시간표</h4>
+                <div id="todayTimetable" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                    <!-- 동적으로 생성 -->
+                    <div class="col-span-full text-center py-4">
+                        <p class="text-gray-500 text-sm">로그인 후 시간표가 표시됩니다</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 수업 기록 입력 폼 (초기 숨김) -->
+            <div id="schoolClassFormContainer" class="hidden mb-4 p-5 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                <h4 class="text-base font-bold text-gray-800 mb-4">
+                    <i class="fas fa-edit text-blue-600 mr-2"></i>수업 기록하기
+                </h4>
+                
+                <div class="space-y-4">
+                    <!-- 과목 선택 -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">과목</label>
+                        <select id="classSubject" 
+                                class="w-full p-3 rounded-lg border-2 border-blue-200 focus:border-blue-500 outline-none font-semibold">
+                            <option value="">과목을 선택하세요</option>
+                            <option value="수학">수학</option>
+                            <option value="영어">영어</option>
+                            <option value="국어">국어</option>
+                            <option value="과학">과학</option>
+                            <option value="사회">사회</option>
+                            <option value="역사">역사</option>
+                            <option value="도덕">도덕</option>
+                            <option value="체육">체육</option>
+                            <option value="음악">음악</option>
+                            <option value="미술">미술</option>
+                            <option value="기술가정">기술가정</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 수업 내용 -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">오늘 배운 내용 (교과서 페이지도 함께!)</label>
+                        <textarea id="classContent" 
+                                  class="w-full p-3 rounded-lg border-2 border-blue-200 focus:border-blue-500 outline-none resize-none" 
+                                  rows="3" 
+                                  placeholder="예: [p.42-45] 일차함수 그래프 그리기 (y = 2x + 3 형태)&#10;선생님이 강조한 내용: 기울기와 y절편 구분하기"></textarea>
+                    </div>
+                    
+                    <!-- 이해도 -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">이해도</label>
+                        <div class="flex gap-2">
+                            <button onclick="setUnderstanding(1)" 
+                                    class="understanding-btn flex-1 py-2 rounded-lg border-2 font-semibold transition-all hover:shadow-md"
+                                    data-level="1"
+                                    style="border-color: #cbd5e0; background: white;">
+                                😰 어려워요
+                            </button>
+                            <button onclick="setUnderstanding(2)" 
+                                    class="understanding-btn flex-1 py-2 rounded-lg border-2 font-semibold transition-all hover:shadow-md"
+                                    data-level="2"
+                                    style="border-color: #cbd5e0; background: white;">
+                                🤔 보통이에요
+                            </button>
+                            <button onclick="setUnderstanding(3)" 
+                                    class="understanding-btn flex-1 py-2 rounded-lg border-2 font-semibold transition-all hover:shadow-md"
+                                    data-level="3"
+                                    style="border-color: #cbd5e0; background: white;">
+                                😊 잘 알아요
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 질문사항 -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">선생님께 질문할 내용 (선택)</label>
+                        <textarea id="classQuestion" 
+                                  class="w-full p-3 rounded-lg border-2 border-blue-200 focus:border-blue-500 outline-none resize-none" 
+                                  rows="2" 
+                                  placeholder="예: x절편을 구할 때 y=0을 대입하는 이유가 궁금해요"></textarea>
+                    </div>
+                    
+                    <!-- 버튼 -->
+                    <div class="flex gap-3 pt-2">
+                        <button 
+                            onclick="toggleSchoolClassForm()" 
+                            class="flex-1 py-3 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition-all">
+                            취소
+                        </button>
+                        <button 
+                            onclick="saveSchoolClass()" 
+                            class="flex-1 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold rounded-lg hover:shadow-lg transition-all transform hover:scale-105">
+                            <i class="fas fa-save mr-2"></i>저장하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 저장된 수업 기록 목록 -->
+            <div id="schoolClassListContainer">
+                <h4 class="text-sm font-bold text-gray-700 mb-3">📝 오늘 기록한 수업</h4>
+                <div id="schoolClassList" class="space-y-3">
+                    <!-- 동적으로 생성 -->
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-2">📚</div>
+                        <p class="text-gray-500 text-sm">아직 기록한 수업이 없어요</p>
+                        <p class="text-gray-400 text-xs mt-1">수업이 끝날 때마다 바로 기록하세요!</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1588,7 +1716,7 @@
                 const currentDate = new Date();
                 const daysPassed = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
                 const daysRemaining = 30 - daysPassed;
-                const progressPercent = Math.min(Math.round((daysPassed / 30) * 100), 100);
+                const progressPercent = Math.min(Math.round((daysPassed / 100) * 100), 100);
                 
                 // 종료일 계산
                 const endDate = new Date(startDate);
@@ -1714,26 +1842,26 @@
                         <div class="stage-icon ${isActive ? 'pulse' : ''}">${stage.emoji}</div>
                         
                         <div class="text-center">
-                            <div class="font-bold text-gray-800 text-xs mb-1">${stage.name}</div>
-                            <div class="text-[10px] text-gray-600 mb-1">${stage.description}</div>
-                            <div class="text-[10px] font-semibold text-gray-700">${stage.days[0]}-${stage.days[1]}일차</div>
+                            <div class="font-bold text-gray-800 text-sm mb-1">${stage.name}</div>
+                            <div class="text-xs text-gray-600 mb-2">${stage.description}</div>
+                            <div class="text-xs font-semibold text-gray-700 mb-2">${stage.days[0]}-${stage.days[1]}일차</div>
                             
                             ${!isLocked ? `
-                                <div class="mt-2 pt-2 border-t border-gray-300">
-                                    <div class="text-[9px] font-bold text-gray-700 mb-0.5">보상</div>
-                                    <div class="reward-badge text-[10px]">${stage.reward}</div>
+                                <div class="mt-3 pt-3 border-t border-gray-300">
+                                    <div class="text-xs font-bold text-gray-700 mb-1">보상</div>
+                                    <div class="reward-badge text-xs">${stage.reward}</div>
                                 </div>
                             ` : ''}
                             
                             ${isCompleted ? `
-                                <div class="mt-1 text-green-600 font-bold text-[10px]">
-                                    <i class="fas fa-check-circle mr-1"></i>완료
+                                <div class="mt-2 text-green-600 font-bold text-sm">
+                                    <i class="fas fa-check-circle mr-1"></i>완료!
                                 </div>
                             ` : ''}
                             
                             ${isActive ? `
-                                <div class="mt-1 text-blue-600 font-bold text-[10px] animate-pulse">
-                                    <i class="fas fa-play-circle mr-1"></i>진행중
+                                <div class="mt-2 text-blue-600 font-bold text-sm animate-pulse">
+                                    <i class="fas fa-play-circle mr-1"></i>진행 중
                                 </div>
                             ` : ''}
                         </div>
@@ -2104,144 +2232,6 @@
         const timers = {};
         let activeSubject = null;
 
-        // 📚 교과서 데이터베이스
-        const textbooksDB = {
-            "수학": [
-                { value: "비상-김원경", label: "비상교육 (김원경)" },
-                { value: "비상-이진호", label: "비상교육 (이진호)" },
-                { value: "천재-김화경", label: "천재교육 (김화경)" },
-                { value: "천재-류희찬", label: "천재교육 (류희찬)" },
-                { value: "신사고-우정호", label: "신사고 (우정호)" },
-                { value: "미래엔", label: "미래엔" },
-                { value: "지학사-장경윤", label: "지학사 (장경윤)" }
-            ],
-            "영어": [
-                { value: "동아-윤정미", label: "동아출판 (윤정미)" },
-                { value: "동아-이병민", label: "동아출판 (이병민)" },
-                { value: "천재-이재영", label: "천재교육 (이재영)" },
-                { value: "YBM-박준언", label: "YBM (박준언)" },
-                { value: "YBM-송미정", label: "YBM (송미정)" },
-                { value: "능률-김성곤", label: "능률 (김성곤)" },
-                { value: "비상-김진완", label: "비상교육 (김진완)" }
-            ],
-            "국어": [
-                { value: "비상-김진수", label: "비상교육 (김진수)" },
-                { value: "비상-박영민", label: "비상교육 (박영민)" },
-                { value: "미래엔-민병곤", label: "미래엔 (민병곤)" },
-                { value: "천재-박영목", label: "천재교육 (박영목)" },
-                { value: "천재-노미숙", label: "천재교육 (노미숙)" }
-            ],
-            "과학": [
-                { value: "비상-임태훈", label: "비상교육 (임태훈)" },
-                { value: "미래엔-김성진", label: "미래엔 (김성진)" },
-                { value: "천재-정대홍", label: "천재교육 (정대홍)" }
-            ],
-            "사회": [
-                { value: "비상-강창숙", label: "비상교육 (강창숙)" },
-                { value: "미래엔-손영찬", label: "미래엔 (손영찬)" },
-                { value: "천재-구정화", label: "천재교육 (구정화)" }
-            ]
-        };
-
-        // 📖 교과서 옵션 HTML 생성
-        function getTextbookOptions(subject) {
-            const textbooks = textbooksDB[subject] || [];
-            return textbooks.map(book => 
-                `<option value="${book.value}">${book.label}</option>`
-            ).join('');
-        }
-
-        // 🌐 온라인 교과서 URL 매핑
-        const onlineTextbookUrls = {
-            '비상교육': 'https://textbook.visang.com/',
-            '천재교육': 'https://text.tsherpa.co.kr/',
-            '천재교과서': 'https://text.tsherpa.co.kr/',
-            '미래엔': 'https://22txbook.m-teacher.co.kr/',
-            '동아출판': 'https://mh.douclass.com/',
-            '지학사': 'https://textbook.jihak.co.kr/',
-            '금성출판사': 'https://www.kumsung.co.kr/',
-            '능률': 'https://www.nebooks.co.kr/',
-            'YBM': 'https://www.ybmbooks.com/'
-        };
-
-        // 🔗 온라인 교과서 열기
-        function openOnlineTextbook(subject) {
-            const select = document.getElementById(`${subject}Textbook`);
-            const selectedValue = select.value;
-            
-            if (!selectedValue || selectedValue === 'custom') {
-                alert('먼저 교과서를 선택해주세요.');
-                return;
-            }
-            
-            // 출판사 이름 추출 (예: "비상-김원경" → "비상", "동아-윤정미" → "동아")
-            let publisher = selectedValue.split('-')[0];
-            
-            // 출판사명 매핑 (약칭 → 전체명)
-            const publisherMap = {
-                '비상': '비상교육',
-                '천재': '천재교육',
-                '신사고': '신사고',
-                '미래엔': '미래엔',
-                '동아': '동아출판',
-                '지학사': '지학사',
-                '금성': '금성출판사',
-                '능률': '능률',
-                'YBM': 'YBM'
-            };
-            
-            const fullPublisher = publisherMap[publisher] || publisher;
-            const url = onlineTextbookUrls[fullPublisher];
-            
-            if (url) {
-                window.open(url, '_blank');
-                console.log(`🌐 온라인 교과서 열기: ${fullPublisher} - ${url}`);
-            } else {
-                alert(`해당 출판사(${fullPublisher})의 온라인 교과서 링크가 등록되지 않았습니다.`);
-                console.log(`❌ URL을 찾을 수 없음: publisher="${publisher}", fullPublisher="${fullPublisher}"`);
-            }
-        }
-
-        // 📝 교과서 선택 변경 처리
-        function handleTextbookChange(subject) {
-            const select = document.getElementById(`${subject}Textbook`);
-            const customDiv = document.getElementById(`${subject}CustomTextbook`);
-            const linkBtn = document.getElementById(`${subject}TextbookLink`);
-            
-            if (select.value === 'custom') {
-                customDiv.style.display = 'block';
-                if (linkBtn) linkBtn.style.display = 'none';
-            } else {
-                customDiv.style.display = 'none';
-                if (linkBtn) linkBtn.style.display = select.value ? 'block' : 'none';
-            }
-        }
-
-        // 📊 페이지 수 자동 계산
-        function updatePageCount(subject) {
-            const startInput = document.getElementById(`${subject}PageStart`);
-            const endInput = document.getElementById(`${subject}PageEnd`);
-            const countDiv = document.getElementById(`${subject}PageCount`);
-            
-            if (startInput && endInput && countDiv) {
-                startInput.addEventListener('input', calculatePages);
-                endInput.addEventListener('input', calculatePages);
-                
-                function calculatePages() {
-                    const start = parseInt(startInput.value) || 0;
-                    const end = parseInt(endInput.value) || 0;
-                    
-                    if (start > 0 && end >= start) {
-                        const pages = end - start + 1;
-                        countDiv.textContent = `(${pages}쪽)`;
-                        countDiv.className = 'text-xs text-blue-600 font-bold ml-2';
-                    } else {
-                        countDiv.textContent = '';
-                    }
-                }
-            }
-        }
-
         // 🆕 당일 학습 시간 로드 (재로그인 시)
         function loadTodayStudyTime(subject) {
             const today = new Date().toISOString().split('T')[0];
@@ -2334,35 +2324,6 @@
                     updateTimerDisplay(subject);
                     updateProgressBar(subject);
                     
-                    // 🔥 버튼 상태 변경 (시작 → 일시정지/완료)
-                    const updateButtonState = () => {
-                        const startBtn = document.querySelector(`[onclick*="startTimer('${subject}')"]`);
-                        const pauseBtn = document.querySelector(`[onclick*="pauseTimer('${subject}')"]`);
-                        const stopBtn = document.querySelector(`[onclick*="stopTimer('${subject}')"]`);
-                        
-                        if (startBtn) startBtn.style.display = 'none';
-                        if (pauseBtn) pauseBtn.style.display = 'inline-block';
-                        if (stopBtn) stopBtn.style.display = 'inline-block';
-                    };
-                    
-                    // 즉시 시도
-                    updateButtonState();
-                    
-                    // 카드가 나타날 때까지 반복 시도 (최대 3초)
-                    let attempts = 0;
-                    const buttonInterval = setInterval(() => {
-                        updateButtonState();
-                        updateTimerDisplay(subject);
-                        updateProgressBar(subject);
-                        attempts++;
-                        if (attempts >= 30) { // 3초 (100ms * 30)
-                            clearInterval(buttonInterval);
-                        }
-                    }, 100);
-                    
-                    // ⚠️ timerStartTime은 타이머 완료(stopTimer)까지 유지!
-                    // localStorage.removeItem('timerStartTime'); // ← 삭제하지 않음!
-                    
                     showSuccessMessage(`⏰ ${subject} 학습이 계속됩니다! (${Math.floor(currentSeconds/60)}분)`);
                     
                     break; // 한 과목만 실행 가능하므로 break
@@ -2405,63 +2366,6 @@
             updateWeeklyRoadmapProgress();
         }
 
-        // 📚 교과서 및 페이지 정보 저장
-        function saveTextbookInfo(subject) {
-            const textbookSelect = document.getElementById(`${subject}Textbook`);
-            const customInput = document.getElementById(`${subject}CustomTextbookName`);
-            const pageStart = document.getElementById(`${subject}PageStart`);
-            const pageEnd = document.getElementById(`${subject}PageEnd`);
-            
-            if (!textbookSelect) return;
-            
-            const today = new Date().toISOString().split('T')[0];
-            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
-            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
-            let todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
-            
-            if (!todayRecord) {
-                todayRecord = {
-                    id: `record_${Date.now()}`,
-                    student_id: studentId,
-                    student_name: localStorage.getItem('currentStudentName'),
-                    date: today,
-                    subjects: {}
-                };
-                studyRecords.push(todayRecord);
-            }
-            
-            if (!todayRecord.subjects[subject]) {
-                todayRecord.subjects[subject] = { time: 0, content: '', isRunning: false };
-            }
-            
-            // 교과서 정보 저장
-            let textbookName = '';
-            if (textbookSelect.value === 'custom') {
-                textbookName = customInput ? customInput.value : '';
-            } else if (textbookSelect.value) {
-                textbookName = textbookSelect.options[textbookSelect.selectedIndex].text;
-            }
-            
-            if (textbookName) {
-                todayRecord.subjects[subject].textbook = textbookName;
-            }
-            
-            // 페이지 범위 저장
-            const startPage = pageStart ? parseInt(pageStart.value) : 0;
-            const endPage = pageEnd ? parseInt(pageEnd.value) : 0;
-            
-            if (startPage > 0 && endPage >= startPage) {
-                todayRecord.subjects[subject].pages = {
-                    start: startPage,
-                    end: endPage,
-                    count: endPage - startPage + 1
-                };
-            }
-            
-            localStorage.setItem('study_records', JSON.stringify(studyRecords));
-            console.log(`📚 ${subject} 교과서 정보 저장 완료:`, textbookName, startPage, '~', endPage);
-        }
-
         // 타이머 시작
         function startTimer(subject, targetMinutes = 45) {
             if (activeSubject && activeSubject !== subject) {
@@ -2484,24 +2388,8 @@
             
             activeSubject = subject;
             
-            // 🆕 당일 학습 시간 로드 + 백그라운드 경과 시간 계산
-            let savedSeconds = loadTodayStudyTime(subject);
-            
-            // 🔥 백그라운드 실행 중이었다면 경과 시간 반영
-            const timerStartTime = localStorage.getItem('timerStartTime');
-            if (timerStartTime) {
-                const now = Date.now();
-                const totalElapsedSeconds = Math.floor((now - parseInt(timerStartTime)) / 1000);
-                
-                // 기록된 시간보다 경과 시간이 더 크면 경과 시간 사용
-                if (totalElapsedSeconds > savedSeconds) {
-                    console.log(`⏱️ 백그라운드 경과 시간 반영: ${Math.floor(totalElapsedSeconds / 60)}분 (기록: ${Math.floor(savedSeconds / 60)}분)`);
-                    savedSeconds = totalElapsedSeconds;
-                }
-                
-                // 타이머 시작 시각 삭제 (이미 반영했으므로)
-                localStorage.removeItem('timerStartTime');
-            }
+            // 🆕 당일 학습 시간 로드
+            const savedSeconds = loadTodayStudyTime(subject);
             
             if (!timers[subject]) {
                 timers[subject] = { 
@@ -2511,7 +2399,7 @@
                     target: targetMinutes * 60 
                 };
             } else {
-                // 기존 타이머가 있으면 계산된 시간으로 복원
+                // 기존 타이머가 있으면 저장된 시간으로 복원
                 timers[subject].seconds = savedSeconds;
             }
             
@@ -2544,7 +2432,7 @@
             updateTimerDisplay(subject);
             updateProgressBar(subject);
             
-            console.log(`▶️ ${subject} 학습 시작 (목표: ${targetMinutes}분, 시작: ${Math.floor(savedSeconds/60)}분)`);
+            console.log(`▶️ ${subject} 학습 시작 (목표: ${targetMinutes}분, 기존: ${Math.floor(savedSeconds/60)}분)`);
         }
 
         // 타이머 정지 및 기록
@@ -2608,38 +2496,6 @@
             const contentElement = document.getElementById(`${subject}Content`);
             if (contentElement && contentElement.value) {
                 todayRecord.subjects[subject].content = contentElement.value;
-            }
-            
-            // 📚 교과서 및 페이지 정보 저장
-            const textbookSelect = document.getElementById(`${subject}Textbook`);
-            const customInput = document.getElementById(`${subject}CustomTextbookName`);
-            const pageStart = document.getElementById(`${subject}PageStart`);
-            const pageEnd = document.getElementById(`${subject}PageEnd`);
-            
-            if (textbookSelect) {
-                let textbookName = '';
-                if (textbookSelect.value === 'custom') {
-                    textbookName = customInput ? customInput.value : '';
-                } else if (textbookSelect.value) {
-                    textbookName = textbookSelect.options[textbookSelect.selectedIndex].text;
-                }
-                
-                if (textbookName) {
-                    todayRecord.subjects[subject].textbook = textbookName;
-                }
-            }
-            
-            if (pageStart && pageEnd) {
-                const startPage = parseInt(pageStart.value) || 0;
-                const endPage = parseInt(pageEnd.value) || 0;
-                
-                if (startPage > 0 && endPage >= startPage) {
-                    todayRecord.subjects[subject].pages = {
-                        start: startPage,
-                        end: endPage,
-                        count: endPage - startPage + 1
-                    };
-                }
             }
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
@@ -3280,7 +3136,7 @@
             });
             
             alert(
-                `🎉🎉🎉 30일 프로그램 완주 축하합니다! 🎉🎉🎉\n\n` +
+                `🎉🎉🎉 100일 프로그램 완주 축하합니다! 🎉🎉🎉\n\n` +
                 `📊 성장 리포트\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n\n` +
                 `📌 시작 전 (Pre-test)\n` +
@@ -3640,7 +3496,11 @@
             // 🆕 오늘의 복습 목록 표시
             displayTodaysReviews();
             
-            alert(`✅ ${student.name} 학생 환영합니다!\n📅 오늘의 학습 스케줄이 준비되었습니다!`);
+            // 🆕 학교 수업 기록 불러오기 (학기중 100일 프로그램)
+            loadSchoolClassList();
+            loadTodayTimetable();
+            
+            alert(`✅ ${student.name} 학생 환영합니다!\n📅 학기중 100일 프로그램이 시작됩니다!`);
         }
 
         // 🤖 주간 스케줄 자동 생성 (4주 단계별 학습 적용)
@@ -3653,7 +3513,7 @@
                 created_date: new Date().toISOString().split('T')[0]
             };
             
-            // 프로그램 시작일 확인 (30일 프로그램의 현재 주차 계산)
+            // 프로그램 시작일 확인 (100일 프로그램의 현재 주차 계산)
             const programStartDate = localStorage.getItem(`program_start_${student.id}`) || new Date().toISOString().split('T')[0];
             const startDate = new Date(programStartDate);
             const today = new Date();
@@ -3796,11 +3656,6 @@
             // 🆕 저장된 학습 내용 불러오기
             loadSavedStudyContents(todaySchedule);
             
-            // 📊 페이지 카운터 활성화
-            todaySchedule.forEach(item => {
-                updatePageCount(item.subject);
-            });
-            
             console.log('✅ 과목 카드 표시 완료');
         }
         
@@ -3926,66 +3781,6 @@
                         ${getLearningContentHTML(item.subject, colors, studentGrade)}
                         
                         ${!isPreview ? `
-                        <!-- 📚 교과서 및 페이지 입력 -->
-                        <div class="space-y-3 mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <i class="fas fa-book text-blue-600"></i>
-                                <span class="font-bold text-blue-800">📖 교과서 정보</span>
-                            </div>
-                            
-                            <!-- 교과서 선택 -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="text-xs text-gray-600 mb-1 block">교과서 출판사</label>
-                                    <select id="${item.subject}Textbook" 
-                                            class="w-full px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
-                                            onchange="handleTextbookChange('${item.subject}')">
-                                        <option value="">선택 안 함</option>
-                                        ${getTextbookOptions(item.subject)}
-                                        <option value="custom">📝 직접 입력</option>
-                                    </select>
-                                    
-                                    <!-- 온라인 교과서 보기 버튼 -->
-                                    <button id="${item.subject}TextbookLink" 
-                                            onclick="openOnlineTextbook('${item.subject}')"
-                                            style="display: none;"
-                                            class="mt-2 w-full px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all text-sm font-medium flex items-center justify-center space-x-2">
-                                        <span>🌐</span>
-                                        <span>온라인 교과서 보기</span>
-                                    </button>
-                                </div>
-                                
-                                <!-- 직접 입력 필드 (숨김) -->
-                                <div id="${item.subject}CustomTextbook" style="display: none;">
-                                    <label class="text-xs text-gray-600 mb-1 block">교과서명 직접 입력</label>
-                                    <input type="text" 
-                                           id="${item.subject}CustomTextbookName"
-                                           placeholder="예: OO출판사 수학"
-                                           class="w-full px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm" />
-                                </div>
-                            </div>
-                            
-                            <!-- 페이지 범위 입력 -->
-                            <div>
-                                <label class="text-xs text-gray-600 mb-1 block">오늘 학습한 페이지</label>
-                                <div class="flex items-center space-x-2">
-                                    <input type="number" 
-                                           id="${item.subject}PageStart"
-                                           placeholder="시작"
-                                           min="1"
-                                           class="w-20 px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm text-center" />
-                                    <span class="text-gray-500 font-bold">~</span>
-                                    <input type="number" 
-                                           id="${item.subject}PageEnd"
-                                           placeholder="끝"
-                                           min="1"
-                                           class="w-20 px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm text-center" />
-                                    <span class="text-gray-600 text-sm">쪽</span>
-                                    <div id="${item.subject}PageCount" class="text-xs text-blue-600 font-bold ml-2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
                         <!-- 학습 내용 입력 (실제 학습 과목만) -->
                         <div class="space-y-2">
                             <textarea id="${item.subject}Content" rows="3" 
@@ -5569,7 +5364,7 @@
             const startDate = new Date(programStart);
             const today = new Date();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            const completionPercent = Math.round((daysPassed / 30) * 100);
+            const completionPercent = Math.round((daysPassed / 100) * 100);
             
             // 오늘 총 학습 시간 계산
             const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
@@ -6183,7 +5978,7 @@
         }
 
         // ==========================================
-        // 📚 누적복습 시스템 (겨울방학 자기주도학습 특화)
+        // 📚 누적복습 시스템 (학기중 학교수업 + 자기주도학습 통합)
         // ==========================================
         
         // 복습 스케줄 생성 (에빙하우스 망각곡선: 1일, 3일, 7일, 14일 후)
@@ -6324,6 +6119,245 @@
         }
 
         // ==========================================
+        // 🏫 학교 수업 기록 시스템 (학기중 100일 프로그램)
+        // ==========================================
+        
+        let selectedUnderstanding = 0; // 이해도 저장 변수
+        
+        // 수업 기록 폼 토글
+        function toggleSchoolClassForm() {
+            const formContainer = document.getElementById('schoolClassFormContainer');
+            if (formContainer.classList.contains('hidden')) {
+                formContainer.classList.remove('hidden');
+                // 폼 초기화
+                document.getElementById('classSubject').value = '';
+                document.getElementById('classContent').value = '';
+                document.getElementById('classQuestion').value = '';
+                selectedUnderstanding = 0;
+                // 이해도 버튼 초기화
+                document.querySelectorAll('.understanding-btn').forEach(btn => {
+                    btn.style.borderColor = '#cbd5e0';
+                    btn.style.backgroundColor = 'white';
+                });
+            } else {
+                formContainer.classList.add('hidden');
+            }
+        }
+        
+        // 이해도 선택
+        function setUnderstanding(level) {
+            selectedUnderstanding = level;
+            
+            // 모든 버튼 초기화
+            document.querySelectorAll('.understanding-btn').forEach(btn => {
+                btn.style.borderColor = '#cbd5e0';
+                btn.style.backgroundColor = 'white';
+            });
+            
+            // 선택된 버튼 스타일
+            const selectedBtn = document.querySelector(`[data-level="${level}"]`);
+            
+            if (level === 1) {
+                selectedBtn.style.borderColor = '#f87171';
+                selectedBtn.style.backgroundColor = '#fee2e2';
+            } else if (level === 2) {
+                selectedBtn.style.borderColor = '#fbbf24';
+                selectedBtn.style.backgroundColor = '#fef3c7';
+            } else if (level === 3) {
+                selectedBtn.style.borderColor = '#34d399';
+                selectedBtn.style.backgroundColor = '#d1fae5';
+            }
+        }
+        
+        // 학교 수업 기록 저장
+        function saveSchoolClass() {
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const today = new Date().toISOString().split('T')[0];
+            
+            const subject = document.getElementById('classSubject').value;
+            const content = document.getElementById('classContent').value.trim();
+            const question = document.getElementById('classQuestion').value.trim();
+            
+            // 유효성 검사
+            if (!subject) {
+                alert('과목을 선택해주세요!');
+                return;
+            }
+            
+            if (!content) {
+                alert('오늘 배운 내용을 입력해주세요!');
+                return;
+            }
+            
+            if (selectedUnderstanding === 0) {
+                alert('이해도를 선택해주세요!');
+                return;
+            }
+            
+            // 수업 기록 데이터 생성
+            const schoolClassData = {
+                id: `class_${Date.now()}`,
+                student_id: studentId,
+                date: today,
+                timestamp: new Date().toISOString(),
+                subject: subject,
+                content: content,
+                understanding: selectedUnderstanding,
+                question: question,
+                reviewed: false
+            };
+            
+            // localStorage에 저장
+            let schoolClassRecords = JSON.parse(localStorage.getItem('school_class_records')) || [];
+            schoolClassRecords.push(schoolClassData);
+            localStorage.setItem('school_class_records', JSON.stringify(schoolClassRecords));
+            
+            console.log('✅ 학교 수업 기록 저장 완료:', schoolClassData);
+            
+            // 🆕 학교 수업 기록 기반 복습 스케줄 생성
+            const reviewSchedule = createReviewSchedule({
+                student_id: studentId,
+                date: today,
+                subject: subject,
+                content: content
+            });
+            
+            let reviewSchedules = JSON.parse(localStorage.getItem('review_schedules')) || [];
+            reviewSchedules.push(reviewSchedule);
+            localStorage.setItem('review_schedules', JSON.stringify(reviewSchedules));
+            
+            console.log('📚 학교 수업 복습 스케줄 생성:', reviewSchedule);
+            
+            // 폼 닫기
+            toggleSchoolClassForm();
+            
+            // 목록 업데이트
+            loadSchoolClassList();
+            displayTodaysReviews(); // 복습 목록도 업데이트
+            
+            // 성공 알림
+            alert('🏫 학교 수업이 기록되었습니다!\n\n💡 꿀팁: 오늘 배운 내용은 24시간 이내에 복습하면 기억이 2배 좋아요!');
+        }
+        
+        // 학교 수업 기록 목록 불러오기
+        function loadSchoolClassList() {
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const today = new Date().toISOString().split('T')[0];
+            
+            const schoolClassRecords = JSON.parse(localStorage.getItem('school_class_records')) || [];
+            const todayRecords = schoolClassRecords.filter(r => r.student_id === studentId && r.date === today);
+            
+            const listContainer = document.getElementById('schoolClassList');
+            
+            if (todayRecords.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-2">📚</div>
+                        <p class="text-gray-500 text-sm">아직 기록한 수업이 없어요</p>
+                        <p class="text-gray-400 text-xs mt-1">수업이 끝날 때마다 바로 기록하세요!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 기록 카드 생성
+            listContainer.innerHTML = todayRecords.map(record => {
+                const understandingEmoji = record.understanding === 1 ? '😰' : record.understanding === 2 ? '🤔' : '😊';
+                const understandingText = record.understanding === 1 ? '어려워요' : record.understanding === 2 ? '보통이에요' : '잘 알아요';
+                const understandingColor = record.understanding === 1 ? 'red' : record.understanding === 2 ? 'yellow' : 'green';
+                
+                return `
+                    <div class="p-4 bg-white rounded-xl border-2 border-${understandingColor}-200 hover:shadow-md transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-bold rounded-full">
+                                    ${record.subject}
+                                </span>
+                                <span class="text-xs text-gray-500">
+                                    ${new Date(record.timestamp).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}
+                                </span>
+                            </div>
+                            <span class="text-xl">${understandingEmoji}</span>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <p class="text-gray-800 font-semibold text-sm whitespace-pre-line">${record.content}</p>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="px-2 py-1 bg-${understandingColor}-100 text-${understandingColor}-700 font-semibold rounded">
+                                ${understandingText}
+                            </span>
+                            ${record.question ? `
+                                <button 
+                                    onclick="showQuestion('${record.id}')" 
+                                    class="text-blue-600 hover:text-blue-800 font-semibold">
+                                    <i class="fas fa-question-circle mr-1"></i>질문 보기
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 질문 보기
+        function showQuestion(recordId) {
+            const schoolClassRecords = JSON.parse(localStorage.getItem('school_class_records')) || [];
+            const record = schoolClassRecords.find(r => r.id === recordId);
+            
+            if (record && record.question) {
+                alert(`❓ 선생님께 질문할 내용\n\n${record.question}\n\n💡 내일 선생님께 꼭 여쭤보세요!`);
+            }
+        }
+        
+        // 오늘의 시간표 생성
+        function loadTodayTimetable() {
+            const timetableContainer = document.getElementById('todayTimetable');
+            const dayOfWeek = new Date().getDay(); // 0(일요일) ~ 6(토요일)
+            
+            // 주말이면 시간표 표시 안 함
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                timetableContainer.innerHTML = `
+                    <div class="col-span-full text-center py-4">
+                        <p class="text-gray-500 text-sm">주말에는 시간표가 없어요 🎉</p>
+                        <p class="text-gray-400 text-xs mt-1">휴식을 취하거나 자기주도 학습을 해보세요!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 평일 기본 시간표 (실제로는 학생별로 커스터마이징 가능)
+            const dayNames = ['월', '화', '수', '목', '금'];
+            const currentDay = dayNames[dayOfWeek - 1];
+            
+            // 샘플 시간표 (실제로는 학생 데이터에서 가져와야 함)
+            const sampleTimetable = [
+                { period: '1교시', subject: '국어', time: '09:00' },
+                { period: '2교시', subject: '수학', time: '10:00' },
+                { period: '3교시', subject: '영어', time: '11:00' },
+                { period: '4교시', subject: '과학', time: '12:00' },
+                { period: '점심', subject: '🍚', time: '12:50' },
+                { period: '5교시', subject: '사회', time: '14:00' },
+                { period: '6교시', subject: '체육', time: '15:00' }
+            ];
+            
+            timetableContainer.innerHTML = `
+                <div class="col-span-full mb-2 text-center">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+                        ${currentDay}요일 시간표
+                    </span>
+                </div>
+            ` + sampleTimetable.map(t => `
+                <div class="p-2 bg-white rounded-lg border-2 ${t.subject === '🍚' ? 'border-orange-200' : 'border-blue-100'} hover:border-blue-300 transition-all">
+                    <div class="text-xs text-gray-500 mb-1">${t.period}</div>
+                    <div class="font-bold text-sm text-gray-800">${t.subject}</div>
+                    <div class="text-xs text-gray-400 mt-1">${t.time}</div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
         // 페이지 로드 시 초기화
         // ==========================================
 
@@ -6332,14 +6366,16 @@
         updateWeeklyRoadmapProgress();
         renderCalendar(); // 캘린더 렌더링
         showTomorrowPreview(); // 🆕 내일 학습 준비 표시
+        loadTodayTimetable(); // 🆕 오늘의 시간표 표시
         
         // 🔥 타이머 복원은 로그인 후에만 실행 (로그인 전에는 카드가 없음)
-        // restoreRunningTimers(); // ← 로그인 후로 이동됨 (3294라인)
+        // restoreRunningTimers(); // ← 로그인 후로 이동됨 (3377라인)
         
         // 로그인 시 복습 목록 표시
         const currentStudentId = localStorage.getItem('currentStudentId');
         if (currentStudentId) {
             displayTodaysReviews();
+            loadSchoolClassList(); // 🆕 학교 수업 기록 불러오기
         }
         
         // 로그인 상태 확인 (주석 처리 - 자동 로그인 방지)
