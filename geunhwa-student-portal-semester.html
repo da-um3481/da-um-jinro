@@ -2461,6 +2461,10 @@
             timers[subject].isRunning = false;
             activeSubject = null;
             
+            // 🔥 타이머 완료 시 timerStartTime 삭제
+            localStorage.removeItem('timerStartTime');
+            console.log('🗑️ timerStartTime 삭제 (타이머 완료)');
+            
             // 🆕 최종 학습 시간 저장 (완료 시)
             const today = new Date().toISOString().split('T')[0];
             const studentId = localStorage.getItem('currentStudentId') || 'default_student';
@@ -2669,12 +2673,16 @@
                     // 현재 타이머 시간 저장
                     saveTodayStudyTime(activeSubject, timers[activeSubject].seconds);
                     
-                    // 🎯 타이머 시작 시각을 절대 시간으로 저장 (로그아웃 중에도 계속 카운트)
-                    // 현재 시각에서 경과 시간을 뺀 값 = 타이머 시작 절대 시각
-                    localStorage.setItem('timerStartTime', Date.now() - (timers[activeSubject].seconds * 1000));
+                    // 🎯 timerStartTime이 없으면 저장 (이미 있으면 유지!)
+                    if (!localStorage.getItem('timerStartTime')) {
+                        const absoluteStartTime = Date.now() - (timers[activeSubject].seconds * 1000);
+                        localStorage.setItem('timerStartTime', absoluteStartTime.toString());
+                        console.log(`⏱️ 로그아웃 - timerStartTime 저장: ${new Date(absoluteStartTime).toLocaleString('ko-KR')}`);
+                    } else {
+                        console.log(`⏱️ 로그아웃 - timerStartTime 이미 존재 (유지)`);
+                    }
                     
                     console.log(`⏱️ 로그아웃 - 타이머 백그라운드 실행 계속: ${activeSubject} (${Math.floor(timers[activeSubject].seconds/60)}분)`);
-                    console.log(`   타이머 시작 절대 시각: ${new Date(Date.now() - (timers[activeSubject].seconds * 1000)).toLocaleString('ko-KR')}`);
                     
                     // 타이머 interval은 계속 실행 (멈추지 않음)
                     // clearInterval을 호출하지 않음!
