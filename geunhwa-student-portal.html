@@ -2196,6 +2196,32 @@
                     updateTimerDisplay(subject);
                     updateProgressBar(subject);
                     
+                    // 🔥 버튼 상태 변경 (시작 → 일시정지/완료)
+                    const updateButtonState = () => {
+                        const startBtn = document.querySelector(`[onclick*="startTimer('${subject}')"]`);
+                        const pauseBtn = document.querySelector(`[onclick*="pauseTimer('${subject}')"]`);
+                        const stopBtn = document.querySelector(`[onclick*="stopTimer('${subject}')"]`);
+                        
+                        if (startBtn) startBtn.style.display = 'none';
+                        if (pauseBtn) pauseBtn.style.display = 'inline-block';
+                        if (stopBtn) stopBtn.style.display = 'inline-block';
+                    };
+                    
+                    // 즉시 시도
+                    updateButtonState();
+                    
+                    // 카드가 나타날 때까지 반복 시도 (최대 3초)
+                    let attempts = 0;
+                    const buttonInterval = setInterval(() => {
+                        updateButtonState();
+                        updateTimerDisplay(subject);
+                        updateProgressBar(subject);
+                        attempts++;
+                        if (attempts >= 30) { // 3초 (100ms * 30)
+                            clearInterval(buttonInterval);
+                        }
+                    }, 100);
+                    
                     // 🆕 타이머 복원 완료 후 timerStartTime 삭제 (더 이상 필요 없음)
                     localStorage.removeItem('timerStartTime');
                     
@@ -3264,8 +3290,10 @@
             // 🆕 내일 학습 준비 알림 표시
             showTomorrowPreview();
             
-            // 🔄 당일 실행 중이던 타이머 복원
-            restoreRunningTimers();
+            // 🔄 당일 실행 중이던 타이머 복원 (DOM 렌더링 후 실행)
+            setTimeout(() => {
+                restoreRunningTimers();
+            }, 500);
             
             // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
             if (!isGuest) {
@@ -5998,8 +6026,8 @@
         renderCalendar(); // 캘린더 렌더링
         showTomorrowPreview(); // 🆕 내일 학습 준비 표시
         
-        // 🔥 로그인 여부와 관계없이 실행 중이던 타이머 복원
-        restoreRunningTimers();
+        // 🔥 타이머 복원은 로그인 후에만 실행 (로그인 전에는 카드가 없음)
+        // restoreRunningTimers(); // ← 로그인 후로 이동됨 (3294라인)
         
         // 로그인 시 복습 목록 표시
         const currentStudentId = localStorage.getItem('currentStudentId');

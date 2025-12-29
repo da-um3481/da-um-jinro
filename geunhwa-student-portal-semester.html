@@ -3373,8 +3373,10 @@
             // 🆕 내일 학습 준비 알림 표시
             showTomorrowPreview();
             
-            // 🔄 당일 실행 중이던 타이머 복원
-            restoreRunningTimers();
+            // 🔄 당일 실행 중이던 타이머 복원 (DOM 렌더링 후 실행)
+            setTimeout(() => {
+                restoreRunningTimers();
+            }, 500);
             
             // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
             if (!isGuest) {
@@ -6351,8 +6353,8 @@
         showTomorrowPreview(); // 🆕 내일 학습 준비 표시
         loadTodayTimetable(); // 🆕 오늘의 시간표 표시
         
-        // 🔥 로그인 여부와 관계없이 실행 중이던 타이머 복원
-        restoreRunningTimers();
+        // 🔥 타이머 복원은 로그인 후에만 실행 (로그인 전에는 카드가 없음)
+        // restoreRunningTimers(); // ← 로그인 후로 이동됨 (3377라인)
         
         // 로그인 시 복습 목록 표시
         const currentStudentId = localStorage.getItem('currentStudentId');
