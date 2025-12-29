@@ -96,7 +96,14 @@ localStorage.setItem('timerStartTime', timerStartTime);
 // 3. 현재 시간 저장
 saveTodayStudyTime(activeSubject, timers[activeSubject].seconds);
 
-// 4. ⚠️ interval은 clearInterval 하지 않음! (계속 실행)
+// 4. 학생 세션 정보 삭제 (타이머 상태는 유지)
+localStorage.removeItem('currentStudentId');
+localStorage.removeItem('currentStudentName');
+// ⚠️ timerStartTime과 activeSubject는 유지!
+
+// 5. 페이지 새로고침 (interval은 자동 정리됨)
+location.reload();
+```
 
 // 5. 세션 정보만 삭제 (타이머 데이터는 유지)
 localStorage.removeItem('currentStudentId');
@@ -125,11 +132,15 @@ location.reload();
 
 ---
 
-## 3️⃣ 재로그인 시 타이머 복원 (restoreRunningTimers)
+## 3️⃣ 페이지 로드 시 타이머 자동 복원 (restoreRunningTimers)
 
-### 핵심: **자동으로 경과 시간 계산 후 재시작**
+### 핵심: **로그인 없이도 자동 복원!**
 
 ```javascript
+// 🔥 페이지 로드 시 항상 실행 (로그인 전에도!)
+// geunhwa-student-portal.html 5996행
+restoreRunningTimers();
+
 // 1. 오늘 학습 기록에서 isRunning = true인 과목 찾기
 const todayRecord = studyRecords.find(r => r.date === today);
 const runningSubject = Object.keys(todayRecord.subjects).find(s => 
@@ -138,28 +149,38 @@ const runningSubject = Object.keys(todayRecord.subjects).find(s =>
 
 // 2. 로그아웃 중 경과 시간 계산
 const timerStartTime = localStorage.getItem('timerStartTime');
-const now = Date.now();
-const totalElapsedSeconds = Math.floor((now - timerStartTime) / 1000);
-
-console.log(`⏱️ 로그아웃 중 경과 시간: ${Math.floor(totalElapsedSeconds / 60)}분`);
-
-// 3. 타이머 객체 복원
-timers[runningSubject] = {
-    seconds: totalElapsedSeconds,  // ✅ 경과 시간 반영
-    isRunning: true,
-    target: 45 * 60
-};
-
-// 4. interval 다시 시작 (자동으로 계속 카운트)
-timers[runningSubject].interval = setInterval(() => {
-    timers[runningSubject].seconds++;
-    updateTimerDisplay(runningSubject);
-    // ... 10초마다 자동 저장
-}, 1000);
-
-// 5. 사용자에게 알림
-alert(`⏰ ${runningSubject} 학습이 계속됩니다! (${Math.floor(totalElapsedSeconds/60)}분)`);
+if (timerStartTime) {
+    const now = Date.now();
+    const totalElapsedSeconds = Math.floor((now - timerStartTime) / 1000);
+    
+    console.log(`⏱️ 로그아웃 중 경과 시간: ${Math.floor(totalElapsedSeconds / 60)}분`);
+    
+    // 3. 타이머 객체 복원
+    timers[runningSubject] = {
+        seconds: totalElapsedSeconds,  // ✅ 경과 시간 반영
+        isRunning: true,
+        target: 45 * 60
+    };
+    
+    // 4. interval 다시 시작 (자동으로 계속 카운트)
+    timers[runningSubject].interval = setInterval(() => {
+        timers[runningSubject].seconds++;
+        updateTimerDisplay(runningSubject);
+        // ... 10초마다 자동 저장
+    }, 1000);
+    
+    // 5. timerStartTime 삭제 (한 번만 사용)
+    localStorage.removeItem('timerStartTime');
+    
+    // 6. 사용자에게 알림
+    showSuccessMessage(`⏰ ${runningSubject} 학습이 계속됩니다! (${Math.floor(totalElapsedSeconds/60)}분)`);
+}
 ```
+
+### 🆕 개선 사항 (2025-12-29)
+- **로그인 불필요**: 페이지 로드만으로 타이머 자동 복원
+- **즉시 실행**: 로그인 전에도 타이머가 돌아감
+- **백그라운드 유지**: 브라우저를 닫아도 시간은 계속 흐름
 
 ### 예시 시나리오
 ```
@@ -167,9 +188,13 @@ alert(`⏰ ${runningSubject} 학습이 계속됩니다! (${Math.floor(totalElaps
 14:15 - 15분 경과
 14:20 - 로그아웃 (timerStartTime = 14:00 저장)
       └─ 타이머는 백그라운드에서 계속 실행 ✅
-14:35 - 재로그인
+      └─ 브라우저 종료해도 OK
+
+14:35 - 브라우저 열기 (로그인 안 해도 됨!)
+      └─ 페이지 로드 → restoreRunningTimers() 자동 실행
       └─ 경과 시간 계산: 14:35 - 14:00 = 35분
       └─ 타이머 복원: 35분부터 자동으로 계속 카운트
+      └─ 화면에 "⏰ 수학 학습이 계속됩니다! (35분)" 표시
       └─ 사용자 알림: "수학 학습이 계속됩니다! (35분)"
 15:00 - 실제로 60분 학습 완료
 ```
