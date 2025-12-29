@@ -3288,17 +3288,8 @@
             
             // 주차별 학습 내용 결정
             // 1~2주차: 개념 집중 (교과서 + 기초 개념)
-            // 3~4주차: 심화수준이면 선행학습, 아니면 강의 + 문제풀이
+            // 3~4주차: 강의 + 문제풀이 (심화수준은 상급 문제)
             const isConceptPhase = currentWeek <= 2;
-            const isAdvancedPhase = currentWeek >= 3 && isAdvancedLevel; // 🆕 3~4주차 + 심화수준
-            
-            // 🆕 선행학습 정보 (현재 학년 → 다음 학년 1학기)
-            const nextGradeInfo = {
-                1: { grade: 2, semester: 1, label: '중2 1학기' },
-                2: { grade: 3, semester: 1, label: '중3 1학기' },
-                3: { grade: 'high1', semester: 1, label: '고1 1학기' }
-            };
-            const nextGrade = nextGradeInfo[student.grade] || { grade: student.grade, semester: 1, label: `중${student.grade} 심화` };
             
             // 월~금: 5과목 순환 학습 (국·영·수 필수, 사회·과학 권장)
             const weekdaySubjects = [
@@ -3324,13 +3315,13 @@
                         // 1~2주: 개념 집중
                         content = `${subj} 교과서 개념 학습`;
                         phase = 'concept';
-                    } else if (isAdvancedPhase) {
-                        // 🆕 3~4주 + 심화수준: 선행학습
-                        content = `${subj} ${nextGrade.label} 선행학습 (개념 예습)`;
-                        phase = 'advanced_preview';
                     } else {
-                        // 3~4주 + 기초/표준: 강의 + 문제풀이
-                        content = `${subj} EBS 강의 수강 + 문제풀이`;
+                        // 3~4주: 강의 + 문제풀이 (심화수준은 상급 문제 포함)
+                        if (isAdvancedLevel) {
+                            content = `${subj} EBS 강의 + 심화 문제풀이`;
+                        } else {
+                            content = `${subj} EBS 강의 수강 + 문제풀이`;
+                        }
                         phase = 'practice';
                     }
                     
@@ -3347,10 +3338,9 @@
                         importance: isMandatory ? '높음' : '보통',
                         isActive: true,  // 모두 타이머 활성화
                         week: currentWeek,  // 현재 주차 정보 추가
-                        phase: phase,  // 학습 단계 (concept/practice/advanced_preview)
+                        phase: phase,  // 학습 단계 (concept/practice)
                         isMandatory: isMandatory,  // 필수 여부 표시
-                        isAdvanced: isAdvancedPhase,  // 🆕 선행학습 여부
-                        nextGradeLabel: isAdvancedPhase ? nextGrade.label : null  // 🆕 선행학습 학년 정보
+                        isAdvancedLevel: isAdvancedLevel  // 심화 수준 여부
                     });
                 });
                 
@@ -3358,25 +3348,22 @@
             });
             
             // 토~일: 5과목 복습 (각 45분 + 10분 휴식)
-            const weekendContent = isAdvancedPhase 
-                ? '이번 주 선행학습 내용 복습 및 정리'
-                : '이번 주 어려웠던 부분 복습';
-            
-            const weekendPhase = isAdvancedPhase ? 'advanced_preview' : (isConceptPhase ? 'concept' : 'practice');
+            const weekendContent = '이번 주 어려웠던 부분 복습';
+            const weekendPhase = isConceptPhase ? 'concept' : 'practice';
             
             schedule.saturday = JSON.stringify([
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '1교시', subject: '수학', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '2교시', subject: '영어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '3교시', subject: '국어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '4교시', subject: '과학', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '5교시', subject: '사회', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null }
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '1교시', subject: '수학', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '2교시', subject: '영어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '3교시', subject: '국어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '4교시', subject: '과학', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '5교시', subject: '사회', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvancedLevel: isAdvancedLevel }
             ]);
             schedule.sunday = JSON.stringify([
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '1교시', subject: '국어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '2교시', subject: '수학', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '3교시', subject: '영어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '4교시', subject: '과학', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null },
-                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '5교시', subject: '사회', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvanced: isAdvancedPhase, nextGradeLabel: isAdvancedPhase ? nextGrade.label : null }
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '1교시', subject: '국어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '2교시', subject: '수학', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '3교시', subject: '영어', content: weekendContent, importance: '높음', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: true, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '4교시', subject: '과학', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvancedLevel: isAdvancedLevel },
+                { time: '언제든지 시작', duration: 45, breakTime: 10, type: '5교시', subject: '사회', content: weekendContent, importance: '보통', isActive: true, week: currentWeek, phase: weekendPhase, isMandatory: false, isAdvancedLevel: isAdvancedLevel }
             ]);
             
             return schedule;
@@ -3643,15 +3630,6 @@
                 r.studentId === studentId && r.subject === '종합'
             );
             const isAdvancedLevel = studentDiagnostic && studentDiagnostic.level === 'advanced';
-            const isAdvancedPreview = currentWeek >= 3 && isAdvancedLevel; // 3~4주차 + 심화수준
-            
-            // 🆕 선행학습 정보 (현재 학년 → 다음 학년 1학기)
-            const nextGradeInfo = {
-                1: { grade: 2, semester: 1, label: '중2 1학기' },
-                2: { grade: 3, semester: 1, label: '중3 1학기' },
-                3: { grade: 'high1', semester: 1, label: '고1 1학기' }
-            };
-            const nextGrade = nextGradeInfo[grade] || { grade: grade, semester: 1, label: `중${grade} 심화` };
             
             // 선생님이 설정한 수준별 조정 정보 가져오기
             const levelAdjustments = JSON.parse(localStorage.getItem('level_adjustments')) || [];
@@ -3660,7 +3638,11 @@
             let difficultyLevel = 2; // 기본값: 표준 (1=기본, 2=표준, 3=심화)
             let levelBadge = '';
             
-            if (studentAdjustment) {
+            // 심화 수준이면 난이도 3으로 설정
+            if (isAdvancedLevel && !studentAdjustment) {
+                difficultyLevel = 3;
+                levelBadge = '<span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">⭐ 심화 수준</span>';
+            } else if (studentAdjustment) {
                 if (studentAdjustment.contentLevel === '기본') {
                     difficultyLevel = 1;
                     levelBadge = '<span class="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">🌱 기본 수준</span>';
@@ -3674,19 +3656,22 @@
             
             let html = '<div class="space-y-2">';
             
-            // 🆕 주차별 학습 단계 배지 추가 (선행학습 모드 포함)
+            // 주차별 학습 단계 배지 추가
             let phaseBadge;
-            if (isAdvancedPreview) {
-                phaseBadge = `<span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full font-bold">🚀 ${currentWeek}주차: ${nextGrade.label} 선행학습</span>`;
-            } else if (isConceptPhase) {
+            if (isConceptPhase) {
                 phaseBadge = `<span class="text-xs px-2 py-1 bg-teal-100 text-teal-700 rounded-full font-bold">📖 ${currentWeek}주차: 개념 집중 단계</span>`;
             } else {
-                phaseBadge = `<span class="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full font-bold">🎯 ${currentWeek}주차: 강의+문제풀이 단계</span>`;
+                // 3~4주차: 심화 수준이면 상급 문제 포함
+                if (isAdvancedLevel) {
+                    phaseBadge = `<span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full font-bold">🎯 ${currentWeek}주차: 강의+심화문제 단계</span>`;
+                } else {
+                    phaseBadge = `<span class="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full font-bold">🎯 ${currentWeek}주차: 강의+문제풀이 단계</span>`;
+                }
             }
             
             // 수준 배지 + 주차 배지 표시
             html += `<div class="flex items-center justify-between mb-2 flex-wrap gap-2">
-                <div class="text-xs font-bold text-gray-700">📚 ${isAdvancedPreview ? '선행학습 자료' : '공교육 학습 자료 (무료)'}</div>
+                <div class="text-xs font-bold text-gray-700">📚 공교육 학습 자료 (무료)</div>
                 <div class="flex gap-2">
                     ${phaseBadge}
                     ${levelBadge}
@@ -3697,26 +3682,8 @@
             const textbookCard = generateTextbookCard(subjectName, grade, difficultyLevel);
             html += textbookCard;
             
-            // 🆕 주차별 학습 자료 필터링 (선행학습 모드 포함)
-            if (isAdvancedPreview) {
-                // 🆕 3~4주차 + 심화 수준: 선행학습 안내
-                html += `
-                    <div class="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-400 rounded-lg">
-                        <div class="flex items-start gap-3">
-                            <div class="text-3xl">🚀</div>
-                            <div class="flex-1">
-                                <div class="text-sm font-bold text-purple-900 mb-2">심화 수준 - 선행학습 모드</div>
-                                <div class="text-xs text-gray-800 space-y-1">
-                                    <p>✅ 현재 학년 학습을 잘 마쳤다면, <strong>${nextGrade.label}</strong> 내용을 미리 살펴보세요!</p>
-                                    <p>✅ 완벽하게 이해하려 하지 말고, <strong>큰 틀과 핵심 개념</strong>만 파악하세요</p>
-                                    <p>✅ 어려운 부분은 과감히 건너뛰고 나중에 다시 학습하면 됩니다</p>
-                                    <p>✅ <strong>교과서 개념 → 교재 → EBS 강의</strong> 순서로 학습하세요</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (isConceptPhase) {
+            // 주차별 학습 자료 필터링
+            if (isConceptPhase) {
                 // 1~2주차: 개념 집중 - 교과서만 강조, EBS는 선택사항으로
                 html += `
                     <div class="p-3 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-300 rounded-lg">
@@ -3757,11 +3724,11 @@
                         <div class="flex items-start gap-2">
                             <div class="text-xl">🚀</div>
                             <div class="flex-1">
-                                <div class="text-xs font-bold text-indigo-700 mb-1">3~4주 학습 가이드</div>
+                                <div class="text-xs font-bold text-indigo-700 mb-1">3~4주 학습 가이드${isAdvancedLevel ? ' (심화 수준)' : ''}</div>
                                 <div class="text-xs text-gray-700">
                                     ✓ <strong>EBS 강의</strong>로 개념을 다시 정리하세요<br>
-                                    ✓ <strong>EBS AI 단추</strong>로 충분한 문제를 풀어보세요<br>
-                                    ✓ 틀린 문제는 다시 풀어보고 이해하세요
+                                    ✓ <strong>EBS AI 단추</strong>로 ${isAdvancedLevel ? '심화 ' : ''}문제를 충분히 풀어보세요<br>
+                                    ✓ 틀린 문제는 다시 풀어보고 이해하세요${isAdvancedLevel ? '<br>✓ <strong>심화 문제집</strong>을 활용하여 상급 문제도 도전하세요' : ''}
                                 </div>
                             </div>
                         </div>
@@ -3827,22 +3794,17 @@
                 }
             }
             
-            // 🆕 수준별 시중 교재 추천 섹션 추가 (선행학습 모드 포함)
-            html += getRecommendedBooksSection(subjectName, grade, difficultyLevel, isConceptPhase, isAdvancedPreview, nextGrade.label);
+            // 수준별 시중 교재 추천 섹션 추가
+            html += getRecommendedBooksSection(subjectName, grade, difficultyLevel, isConceptPhase);
             
             html += '</div>';
             return html;
         }
         
-        // 🆕 수준별 시중 교재 추천 함수
-        function getRecommendedBooksSection(subjectName, grade, difficultyLevel, isConceptPhase, isAdvancedPreview = false, nextGradeLabel = null) {
+        // 수준별 시중 교재 추천 함수
+        function getRecommendedBooksSection(subjectName, grade, difficultyLevel, isConceptPhase) {
             const subjectMap = { '수학': 'math', '영어': 'english', '국어': 'korean', '과학': 'science', '사회': 'social' };
             const subjectKey = subjectMap[subjectName];
-            
-            // 🆕 선행학습 모드: 다음 학년 교재 추천
-            if (isAdvancedPreview && nextGradeLabel) {
-                return getAdvancedPreviewBooksSection(subjectName, nextGradeLabel, subjectKey);
-            }
             
             // 수준별 교재 데이터 (간소화된 버전)
             const bookRecommendations = {
