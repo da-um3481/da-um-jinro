@@ -975,6 +975,45 @@
             </div>
         </div>
 
+        <!-- 📚 오늘의 복습 (누적복습 시스템 - 겨울방학 특화) -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="reviewSection">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">
+                        <i class="fas fa-redo-alt text-yellow-600 mr-2"></i>오늘의 복습
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1 ml-7">
+                        📖 학습 후 1일, 3일, 7일, 14일 후 자동 복습 알림
+                    </p>
+                </div>
+                <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">
+                    자동 생성
+                </span>
+            </div>
+            
+            <!-- 복습 원리 간단 설명 -->
+            <div class="mb-4 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border-2 border-yellow-200">
+                <div class="flex items-center gap-2">
+                    <div class="text-2xl">🧠</div>
+                    <div class="flex-1">
+                        <p class="text-xs text-gray-700 font-semibold">
+                            학습 후 <strong>1일 내 74%</strong> 잊어버려요! 복습하면 장기기억으로 전환 💪
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 복습 목록 -->
+            <div id="todaysReviewList">
+                <!-- 동적으로 생성 -->
+                <div class="text-center py-6">
+                    <div class="text-4xl mb-2">✅</div>
+                    <p class="text-gray-500 text-sm">오늘 복습할 내용이 없어요</p>
+                    <p class="text-gray-400 text-xs mt-1">학습 완료하면 자동으로 복습 일정이 만들어져요!</p>
+                </div>
+            </div>
+        </div>
+
         <!-- 📅 학습 달성 캘린더 (더욱 축소) -->
         <div class="glass-effect rounded-xl shadow-lg p-3 animate-slide-up" id="achievementCalendar">
             <div class="flex items-center justify-between mb-2">
@@ -2320,6 +2359,22 @@
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
             
+            // 🆕 누적복습 스케줄 자동 생성 (에빙하우스 망각곡선)
+            const studyData = {
+                student_id: studentId,
+                date: today,
+                subject: subject,
+                content: todayRecord.subjects[subject].content || `${subject} 학습`,
+                time: minutes
+            };
+            
+            const reviewSchedule = createReviewSchedule(studyData);
+            let reviewSchedules = JSON.parse(localStorage.getItem('review_schedules')) || [];
+            reviewSchedules.push(reviewSchedule);
+            localStorage.setItem('review_schedules', JSON.stringify(reviewSchedules));
+            
+            console.log('📚 누적복습 스케줄 생성:', reviewSchedule);
+            
             // 🆕 타이머 초기화 (완료 후 재시작 대비)
             timers[subject].seconds = 0;
             
@@ -3290,6 +3345,9 @@
             
             // 3. 오늘의 과목으로 통합 카드 표시 (타이머 + 학습자료 + 입력란)
             displayIntegratedSubjectCards(todaySchedule);
+            
+            // 🆕 오늘의 복습 목록 표시
+            displayTodaysReviews();
             
             alert(`✅ ${student.name} 학생 환영합니다!\n📅 오늘의 학습 스케줄이 준비되었습니다!`);
         }
@@ -5335,6 +5393,147 @@
         }
 
         // ==========================================
+        // 📚 누적복습 시스템 (겨울방학 자기주도학습 특화)
+        // ==========================================
+        
+        // 복습 스케줄 생성 (에빙하우스 망각곡선: 1일, 3일, 7일, 14일 후)
+        function createReviewSchedule(studyData) {
+            const baseDate = new Date(studyData.date);
+            const reviewSchedule = {
+                id: `review_${Date.now()}`,
+                student_id: studyData.student_id,
+                subject: studyData.subject,
+                original_date: studyData.date,
+                original_content: studyData.content || `${studyData.subject} 학습`,
+                created_at: new Date().toISOString(),
+                reviews: [
+                    { day: 1, date: addDays(baseDate, 1), completed: false },
+                    { day: 3, date: addDays(baseDate, 3), completed: false },
+                    { day: 7, date: addDays(baseDate, 7), completed: false },
+                    { day: 14, date: addDays(baseDate, 14), completed: false }
+                ]
+            };
+            
+            return reviewSchedule;
+        }
+        
+        // 날짜 더하기 헬퍼
+        function addDays(date, days) {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result.toISOString().split('T')[0];
+        }
+        
+        // 오늘의 복습 목록 가져오기
+        function getTodaysReviews() {
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const today = new Date().toISOString().split('T')[0];
+            
+            const reviewSchedules = JSON.parse(localStorage.getItem('review_schedules')) || [];
+            
+            const todaysReviews = [];
+            
+            reviewSchedules.forEach(schedule => {
+                if (schedule.student_id !== studentId) return;
+                
+                schedule.reviews.forEach((review, idx) => {
+                    if (review.date === today && !review.completed) {
+                        todaysReviews.push({
+                            ...schedule,
+                            current_review_index: idx,
+                            current_review: review
+                        });
+                    }
+                });
+            });
+            
+            return todaysReviews;
+        }
+        
+        // 복습 완료 처리
+        function completeReview(scheduleId) {
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            let reviewSchedules = JSON.parse(localStorage.getItem('review_schedules')) || [];
+            
+            const schedule = reviewSchedules.find(s => s.id === scheduleId && s.student_id === studentId);
+            
+            if (schedule) {
+                const today = new Date().toISOString().split('T')[0];
+                const reviewToComplete = schedule.reviews.find(r => r.date === today && !r.completed);
+                
+                if (reviewToComplete) {
+                    reviewToComplete.completed = true;
+                    reviewToComplete.completed_at = new Date().toISOString();
+                    
+                    localStorage.setItem('review_schedules', JSON.stringify(reviewSchedules));
+                    
+                    console.log(`✅ 복습 완료: ${schedule.subject} (${reviewToComplete.day}일 후)`);
+                    
+                    // 화면 업데이트
+                    displayTodaysReviews();
+                    
+                    // 축하 메시지
+                    alert(`🎉 복습 완료!\n\n${schedule.subject} 복습을 완료했습니다!\n\n💡 꾸준한 복습이 실력을 만듭니다!`);
+                }
+            }
+        }
+        
+        // 오늘의 복습 목록 표시
+        function displayTodaysReviews() {
+            const todaysReviews = getTodaysReviews();
+            const reviewContainer = document.getElementById('todaysReviewList');
+            
+            if (!reviewContainer) return;
+            
+            if (todaysReviews.length === 0) {
+                reviewContainer.innerHTML = `
+                    <div class="text-center py-6">
+                        <div class="text-4xl mb-2">✅</div>
+                        <p class="text-gray-500 text-sm">오늘 복습할 내용이 없어요</p>
+                        <p class="text-gray-400 text-xs mt-1">학습 완료하면 자동으로 복습 일정이 만들어져요!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 복습 카드 생성
+            reviewContainer.innerHTML = todaysReviews.map(item => {
+                const reviewEmoji = item.current_review.day === 1 ? '1️⃣' : 
+                                   item.current_review.day === 3 ? '3️⃣' : 
+                                   item.current_review.day === 7 ? '7️⃣' : '1️⃣4️⃣';
+                
+                const daysAgo = item.current_review.day;
+                
+                return `
+                    <div class="p-4 bg-white rounded-xl border-2 border-yellow-200 hover:shadow-md transition-all mb-3">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">${reviewEmoji}</span>
+                                <div>
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm font-bold rounded-full">
+                                        ${item.subject}
+                                    </span>
+                                    <p class="text-xs text-gray-500 mt-1">${daysAgo}일 전 학습</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">${daysAgo}일 후 복습</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <p class="text-gray-800 text-sm font-semibold">${item.original_content}</p>
+                        </div>
+                        
+                        <button 
+                            onclick="completeReview('${item.id}')"
+                            class="w-full py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all transform hover:scale-105">
+                            <i class="fas fa-check-circle mr-2"></i>복습 완료
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==========================================
         // 페이지 로드 시 초기화
         // ==========================================
 
@@ -5343,6 +5542,12 @@
         updateWeeklyRoadmapProgress();
         renderCalendar(); // 캘린더 렌더링
         showTomorrowPreview(); // 🆕 내일 학습 준비 표시
+        
+        // 로그인 시 복습 목록 표시
+        const currentStudentId = localStorage.getItem('currentStudentId');
+        if (currentStudentId) {
+            displayTodaysReviews();
+        }
         
         // 로그인 상태 확인 (주석 처리 - 자동 로그인 방지)
         // 사용자가 명시적으로 이름을 입력해야만 로그인되도록 변경
