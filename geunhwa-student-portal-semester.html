@@ -2232,6 +2232,90 @@
         const timers = {};
         let activeSubject = null;
 
+        // 📚 교과서 데이터베이스
+        const textbooksDB = {
+            "수학": [
+                { value: "비상-김원경", label: "비상교육 (김원경)" },
+                { value: "비상-이진호", label: "비상교육 (이진호)" },
+                { value: "천재-김화경", label: "천재교육 (김화경)" },
+                { value: "천재-류희찬", label: "천재교육 (류희찬)" },
+                { value: "신사고-우정호", label: "신사고 (우정호)" },
+                { value: "미래엔", label: "미래엔" },
+                { value: "지학사-장경윤", label: "지학사 (장경윤)" }
+            ],
+            "영어": [
+                { value: "동아-윤정미", label: "동아출판 (윤정미)" },
+                { value: "동아-이병민", label: "동아출판 (이병민)" },
+                { value: "천재-이재영", label: "천재교육 (이재영)" },
+                { value: "YBM-박준언", label: "YBM (박준언)" },
+                { value: "YBM-송미정", label: "YBM (송미정)" },
+                { value: "능률-김성곤", label: "능률 (김성곤)" },
+                { value: "비상-김진완", label: "비상교육 (김진완)" }
+            ],
+            "국어": [
+                { value: "비상-김진수", label: "비상교육 (김진수)" },
+                { value: "비상-박영민", label: "비상교육 (박영민)" },
+                { value: "미래엔-민병곤", label: "미래엔 (민병곤)" },
+                { value: "천재-박영목", label: "천재교육 (박영목)" },
+                { value: "천재-노미숙", label: "천재교육 (노미숙)" }
+            ],
+            "과학": [
+                { value: "비상-임태훈", label: "비상교육 (임태훈)" },
+                { value: "미래엔-김성진", label: "미래엔 (김성진)" },
+                { value: "천재-정대홍", label: "천재교육 (정대홍)" }
+            ],
+            "사회": [
+                { value: "비상-강창숙", label: "비상교육 (강창숙)" },
+                { value: "미래엔-손영찬", label: "미래엔 (손영찬)" },
+                { value: "천재-구정화", label: "천재교육 (구정화)" }
+            ]
+        };
+
+        // 📖 교과서 옵션 HTML 생성
+        function getTextbookOptions(subject) {
+            const textbooks = textbooksDB[subject] || [];
+            return textbooks.map(book => 
+                `<option value="${book.value}">${book.label}</option>`
+            ).join('');
+        }
+
+        // 📝 교과서 선택 변경 처리
+        function handleTextbookChange(subject) {
+            const select = document.getElementById(`${subject}Textbook`);
+            const customDiv = document.getElementById(`${subject}CustomTextbook`);
+            
+            if (select.value === 'custom') {
+                customDiv.style.display = 'block';
+            } else {
+                customDiv.style.display = 'none';
+            }
+        }
+
+        // 📊 페이지 수 자동 계산
+        function updatePageCount(subject) {
+            const startInput = document.getElementById(`${subject}PageStart`);
+            const endInput = document.getElementById(`${subject}PageEnd`);
+            const countDiv = document.getElementById(`${subject}PageCount`);
+            
+            if (startInput && endInput && countDiv) {
+                startInput.addEventListener('input', calculatePages);
+                endInput.addEventListener('input', calculatePages);
+                
+                function calculatePages() {
+                    const start = parseInt(startInput.value) || 0;
+                    const end = parseInt(endInput.value) || 0;
+                    
+                    if (start > 0 && end >= start) {
+                        const pages = end - start + 1;
+                        countDiv.textContent = `(${pages}쪽)`;
+                        countDiv.className = 'text-xs text-blue-600 font-bold ml-2';
+                    } else {
+                        countDiv.textContent = '';
+                    }
+                }
+            }
+        }
+
         // 🆕 당일 학습 시간 로드 (재로그인 시)
         function loadTodayStudyTime(subject) {
             const today = new Date().toISOString().split('T')[0];
@@ -2366,6 +2450,63 @@
             updateWeeklyRoadmapProgress();
         }
 
+        // 📚 교과서 및 페이지 정보 저장
+        function saveTextbookInfo(subject) {
+            const textbookSelect = document.getElementById(`${subject}Textbook`);
+            const customInput = document.getElementById(`${subject}CustomTextbookName`);
+            const pageStart = document.getElementById(`${subject}PageStart`);
+            const pageEnd = document.getElementById(`${subject}PageEnd`);
+            
+            if (!textbookSelect) return;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            let todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            if (!todayRecord) {
+                todayRecord = {
+                    id: `record_${Date.now()}`,
+                    student_id: studentId,
+                    student_name: localStorage.getItem('currentStudentName'),
+                    date: today,
+                    subjects: {}
+                };
+                studyRecords.push(todayRecord);
+            }
+            
+            if (!todayRecord.subjects[subject]) {
+                todayRecord.subjects[subject] = { time: 0, content: '', isRunning: false };
+            }
+            
+            // 교과서 정보 저장
+            let textbookName = '';
+            if (textbookSelect.value === 'custom') {
+                textbookName = customInput ? customInput.value : '';
+            } else if (textbookSelect.value) {
+                textbookName = textbookSelect.options[textbookSelect.selectedIndex].text;
+            }
+            
+            if (textbookName) {
+                todayRecord.subjects[subject].textbook = textbookName;
+            }
+            
+            // 페이지 범위 저장
+            const startPage = pageStart ? parseInt(pageStart.value) : 0;
+            const endPage = pageEnd ? parseInt(pageEnd.value) : 0;
+            
+            if (startPage > 0 && endPage >= startPage) {
+                todayRecord.subjects[subject].pages = {
+                    start: startPage,
+                    end: endPage,
+                    count: endPage - startPage + 1
+                };
+            }
+            
+            localStorage.setItem('study_records', JSON.stringify(studyRecords));
+            console.log(`📚 ${subject} 교과서 정보 저장 완료:`, textbookName, startPage, '~', endPage);
+        }
+
         // 타이머 시작
         function startTimer(subject, targetMinutes = 45) {
             if (activeSubject && activeSubject !== subject) {
@@ -2496,6 +2637,38 @@
             const contentElement = document.getElementById(`${subject}Content`);
             if (contentElement && contentElement.value) {
                 todayRecord.subjects[subject].content = contentElement.value;
+            }
+            
+            // 📚 교과서 및 페이지 정보 저장
+            const textbookSelect = document.getElementById(`${subject}Textbook`);
+            const customInput = document.getElementById(`${subject}CustomTextbookName`);
+            const pageStart = document.getElementById(`${subject}PageStart`);
+            const pageEnd = document.getElementById(`${subject}PageEnd`);
+            
+            if (textbookSelect) {
+                let textbookName = '';
+                if (textbookSelect.value === 'custom') {
+                    textbookName = customInput ? customInput.value : '';
+                } else if (textbookSelect.value) {
+                    textbookName = textbookSelect.options[textbookSelect.selectedIndex].text;
+                }
+                
+                if (textbookName) {
+                    todayRecord.subjects[subject].textbook = textbookName;
+                }
+            }
+            
+            if (pageStart && pageEnd) {
+                const startPage = parseInt(pageStart.value) || 0;
+                const endPage = parseInt(pageEnd.value) || 0;
+                
+                if (startPage > 0 && endPage >= startPage) {
+                    todayRecord.subjects[subject].pages = {
+                        start: startPage,
+                        end: endPage,
+                        count: endPage - startPage + 1
+                    };
+                }
             }
             
             localStorage.setItem('study_records', JSON.stringify(studyRecords));
@@ -3656,6 +3829,11 @@
             // 🆕 저장된 학습 내용 불러오기
             loadSavedStudyContents(todaySchedule);
             
+            // 📊 페이지 카운터 활성화
+            todaySchedule.forEach(item => {
+                updatePageCount(item.subject);
+            });
+            
             console.log('✅ 과목 카드 표시 완료');
         }
         
@@ -3781,6 +3959,57 @@
                         ${getLearningContentHTML(item.subject, colors, studentGrade)}
                         
                         ${!isPreview ? `
+                        <!-- 📚 교과서 및 페이지 입력 -->
+                        <div class="space-y-3 mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-book text-blue-600"></i>
+                                <span class="font-bold text-blue-800">📖 교과서 정보</span>
+                            </div>
+                            
+                            <!-- 교과서 선택 -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-xs text-gray-600 mb-1 block">교과서 출판사</label>
+                                    <select id="${item.subject}Textbook" 
+                                            class="w-full px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
+                                            onchange="handleTextbookChange('${item.subject}')">
+                                        <option value="">선택 안 함</option>
+                                        ${getTextbookOptions(item.subject)}
+                                        <option value="custom">📝 직접 입력</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- 직접 입력 필드 (숨김) -->
+                                <div id="${item.subject}CustomTextbook" style="display: none;">
+                                    <label class="text-xs text-gray-600 mb-1 block">교과서명 직접 입력</label>
+                                    <input type="text" 
+                                           id="${item.subject}CustomTextbookName"
+                                           placeholder="예: OO출판사 수학"
+                                           class="w-full px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm" />
+                                </div>
+                            </div>
+                            
+                            <!-- 페이지 범위 입력 -->
+                            <div>
+                                <label class="text-xs text-gray-600 mb-1 block">오늘 학습한 페이지</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" 
+                                           id="${item.subject}PageStart"
+                                           placeholder="시작"
+                                           min="1"
+                                           class="w-20 px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm text-center" />
+                                    <span class="text-gray-500 font-bold">~</span>
+                                    <input type="number" 
+                                           id="${item.subject}PageEnd"
+                                           placeholder="끝"
+                                           min="1"
+                                           class="w-20 px-3 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 text-sm text-center" />
+                                    <span class="text-gray-600 text-sm">쪽</span>
+                                    <div id="${item.subject}PageCount" class="text-xs text-blue-600 font-bold ml-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- 학습 내용 입력 (실제 학습 과목만) -->
                         <div class="space-y-2">
                             <textarea id="${item.subject}Content" rows="3" 
