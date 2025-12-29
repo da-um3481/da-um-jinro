@@ -5402,6 +5402,11 @@
             
             // 성공 알림
             alert('🧠 메타인지 체크가 저장되었습니다!\n지금 기록한 내용은 학습 데이터에서 확인할 수 있어요.');
+            
+            // 하루 학습 완료 자기점검 모달 표시
+            setTimeout(() => {
+                showDailySelfCheckModal();
+            }, 500);
         }
         
         // 메타인지 체크 건너뛰기
@@ -5410,6 +5415,102 @@
             
             if (confirm_skip) {
                 closeMetaCognitionModal();
+            }
+        }
+
+        // ==========================================
+        // 📝 하루 학습 완료 자기점검 시스템
+        // ==========================================
+        
+        // 자기점검 모달 표시
+        function showDailySelfCheckModal() {
+            const modal = document.getElementById('dailySelfCheckModal');
+            const backdrop = document.getElementById('dailySelfCheckBackdrop');
+            
+            if (modal && backdrop) {
+                backdrop.classList.remove('hidden');
+                backdrop.classList.add('show');
+                modal.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                    modal.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 10);
+            }
+        }
+        
+        // 자기점검 모달 닫기
+        function closeDailySelfCheckModal() {
+            const modal = document.getElementById('dailySelfCheckModal');
+            const backdrop = document.getElementById('dailySelfCheckBackdrop');
+            
+            if (modal && backdrop) {
+                modal.style.opacity = '0';
+                modal.style.transform = 'translate(-50%, -50%) scale(0.95)';
+                backdrop.classList.remove('show');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    backdrop.classList.add('hidden');
+                }, 300);
+            }
+        }
+        
+        // 자기점검 저장
+        function saveDailySelfCheck() {
+            const studentId = localStorage.getItem('currentStudentId') || 'default_student';
+            const today = new Date().toISOString().split('T')[0];
+            
+            // 라디오 버튼 값 읽기
+            const startEasy = document.querySelector('input[name="startDifficulty"]:checked')?.value;
+            const blockedReason = document.querySelector('input[name="blockedReason"]:checked')?.value;
+            
+            // 텍스트 입력 값 읽기
+            const tomorrowAction = document.getElementById('tomorrowAction').value.trim();
+            
+            // 입력 검증
+            if (!startEasy || !blockedReason || !tomorrowAction) {
+                alert('⚠️ 모든 항목을 입력해주세요!');
+                return;
+            }
+            
+            // 자기점검 데이터 저장
+            const selfCheckData = {
+                student_id: studentId,
+                date: today,
+                timestamp: new Date().toISOString(),
+                responses: {
+                    startEasy: startEasy,
+                    blockedReason: blockedReason,
+                    tomorrowAction: tomorrowAction
+                }
+            };
+            
+            // localStorage에 저장
+            let selfCheckRecords = JSON.parse(localStorage.getItem('daily_self_check_records')) || [];
+            selfCheckRecords.push(selfCheckData);
+            localStorage.setItem('daily_self_check_records', JSON.stringify(selfCheckRecords));
+            
+            console.log('✅ 하루 학습 자기점검 저장 완료:', selfCheckData);
+            
+            // 입력 필드 초기화
+            document.querySelectorAll('input[name="startDifficulty"]').forEach(radio => radio.checked = false);
+            document.querySelectorAll('input[name="blockedReason"]').forEach(radio => radio.checked = false);
+            document.getElementById('tomorrowAction').value = '';
+            
+            // 모달 닫기
+            closeDailySelfCheckModal();
+            
+            // 성공 알림
+            alert('📝 오늘의 자기점검이 저장되었습니다!\n내일 더 나은 학습을 위해 활용해보세요! 💪');
+        }
+        
+        // 자기점검 건너뛰기
+        function skipDailySelfCheck() {
+            const confirm_skip = confirm('자기점검을 건너뛰시겠어요?\n\n💡 꿀팁: 매일 자기점검을 하면 학습 습관이 개선되고\n같은 실수를 반복하지 않게 됩니다!');
+            
+            if (confirm_skip) {
+                closeDailySelfCheckModal();
             }
         }
 
@@ -5843,6 +5944,90 @@
                     onclick="saveMetaCognition()" 
                     class="flex-1 py-3 bg-white text-green-600 font-black text-base rounded-xl hover:bg-green-50 transition-all transform hover:scale-105">
                     저장하기 💪
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 📝 하루 학습 완료 자기점검 모달 -->
+    <div id="dailySelfCheckBackdrop" class="celebration-modal-backdrop hidden">
+        <div id="dailySelfCheckModal" class="celebration-modal" style="max-width: 550px;">
+            <!-- 헤더 -->
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-3">📝</div>
+                <h2 class="text-3xl font-black text-white mb-2">오늘 하루 자기점검</h2>
+                <p class="text-lg text-green-100 font-semibold">오늘의 학습을 되돌아보며 내일을 준비해요!</p>
+            </div>
+            
+            <!-- 고정 질문 -->
+            <div class="space-y-5 mb-6">
+                <!-- 질문 1: 학습 시작 -->
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5">
+                    <h3 class="text-white font-bold text-lg mb-3 flex items-center">
+                        <span class="mr-2">1️⃣</span> 오늘 학습 시작은 어땠나요?
+                    </h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                            <input type="radio" name="startDifficulty" value="easy" 
+                                   class="w-5 h-5 text-green-500 cursor-pointer">
+                            <span class="text-white font-semibold">😊 쉬웠어요 - 바로 시작했어요</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                            <input type="radio" name="startDifficulty" value="hard" 
+                                   class="w-5 h-5 text-yellow-500 cursor-pointer">
+                            <span class="text-white font-semibold">😰 어려웠어요 - 시작이 힘들었어요</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- 질문 2: 막힌 이유 -->
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5">
+                    <h3 class="text-white font-bold text-lg mb-3 flex items-center">
+                        <span class="mr-2">2️⃣</span> 막힌 이유가 있다면?
+                    </h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                            <input type="radio" name="blockedReason" value="content" 
+                                   class="w-5 h-5 text-blue-500 cursor-pointer">
+                            <span class="text-white font-semibold">📚 내용이 어려웠어요</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                            <input type="radio" name="blockedReason" value="environment" 
+                                   class="w-5 h-5 text-purple-500 cursor-pointer">
+                            <span class="text-white font-semibold">🏠 주변 환경 때문이었어요</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                            <input type="radio" name="blockedReason" value="none" 
+                                   class="w-5 h-5 text-green-500 cursor-pointer">
+                            <span class="text-white font-semibold">✨ 없었어요 - 잘 진행됐어요</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- 질문 3: 내일 행동 -->
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5">
+                    <h3 class="text-white font-bold text-lg mb-3 flex items-center">
+                        <span class="mr-2">3️⃣</span> 내일 나의 행동 하나만 바꾼다면?
+                    </h3>
+                    <textarea id="tomorrowAction" 
+                              class="w-full p-3 rounded-xl bg-white/20 text-white placeholder-green-200 border-2 border-white/30 focus:border-green-300 outline-none resize-none" 
+                              rows="3" 
+                              placeholder="예: 타이머 시작 전에 책상 정리하기&#10;예: 핸드폰을 멀리 두고 시작하기&#10;예: 30분마다 5분씩 휴식하기"></textarea>
+                    <p class="text-xs text-green-100 mt-2">💡 작은 변화가 큰 차이를 만듭니다!</p>
+                </div>
+            </div>
+            
+            <!-- 버튼 -->
+            <div class="flex gap-3">
+                <button 
+                    onclick="skipDailySelfCheck()" 
+                    class="flex-1 py-3 bg-white/20 text-white font-bold text-base rounded-xl hover:bg-white/30 transition-all">
+                    건너뛰기
+                </button>
+                <button 
+                    onclick="saveDailySelfCheck()" 
+                    class="flex-1 py-3 bg-white text-green-600 font-black text-base rounded-xl hover:bg-green-50 transition-all transform hover:scale-105">
+                    제출하기 💪
                 </button>
             </div>
         </div>
