@@ -2151,15 +2151,53 @@
             ).join('');
         }
 
+        // 🌐 온라인 교과서 URL 매핑
+        const onlineTextbookUrls = {
+            '비상교육': 'https://textbook.visang.com/',
+            '천재교육': 'https://text.tsherpa.co.kr/',
+            '천재교과서': 'https://text.tsherpa.co.kr/',
+            '미래엔': 'https://22txbook.m-teacher.co.kr/',
+            '동아출판': 'https://mh.douclass.com/',
+            '지학사': 'https://textbook.jihak.co.kr/',
+            '금성출판사': 'https://www.kumsung.co.kr/',
+            '능률': 'https://www.nebooks.co.kr/',
+            'YBM': 'https://www.ybmbooks.com/'
+        };
+
+        // 🔗 온라인 교과서 열기
+        function openOnlineTextbook(subject) {
+            const select = document.getElementById(`${subject}Textbook`);
+            const selectedValue = select.value;
+            
+            if (!selectedValue || selectedValue === 'custom') {
+                alert('먼저 교과서를 선택해주세요.');
+                return;
+            }
+            
+            // 출판사 이름 추출 (예: "비상교육 수학(상)" → "비상교육")
+            const publisher = selectedValue.split(' ')[0];
+            const url = onlineTextbookUrls[publisher];
+            
+            if (url) {
+                window.open(url, '_blank');
+                console.log(`🌐 온라인 교과서 열기: ${publisher} - ${url}`);
+            } else {
+                alert('해당 출판사의 온라인 교과서 링크가 등록되지 않았습니다.');
+            }
+        }
+
         // 📝 교과서 선택 변경 처리
         function handleTextbookChange(subject) {
             const select = document.getElementById(`${subject}Textbook`);
             const customDiv = document.getElementById(`${subject}CustomTextbook`);
+            const linkBtn = document.getElementById(`${subject}TextbookLink`);
             
             if (select.value === 'custom') {
                 customDiv.style.display = 'block';
+                if (linkBtn) linkBtn.style.display = 'none';
             } else {
                 customDiv.style.display = 'none';
+                if (linkBtn) linkBtn.style.display = select.value ? 'block' : 'none';
             }
         }
 
@@ -3890,6 +3928,15 @@
                                         ${getTextbookOptions(item.subject)}
                                         <option value="custom">📝 직접 입력</option>
                                     </select>
+                                    
+                                    <!-- 온라인 교과서 보기 버튼 -->
+                                    <button id="${item.subject}TextbookLink" 
+                                            onclick="openOnlineTextbook('${item.subject}')"
+                                            style="display: none;"
+                                            class="mt-2 w-full px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all text-sm font-medium flex items-center justify-center space-x-2">
+                                        <span>🌐</span>
+                                        <span>온라인 교과서 보기</span>
+                                    </button>
                                 </div>
                                 
                                 <!-- 직접 입력 필드 (숨김) -->
