@@ -2321,6 +2321,13 @@
             }
             
             timers[subject].isRunning = true;
+            
+            // 🔥 타이머 시작 시각 저장 (절대 시각으로 저장)
+            // 현재 시각 - 이미 경과된 시간 = 타이머 실제 시작 절대 시각
+            const absoluteStartTime = Date.now() - (timers[subject].seconds * 1000);
+            localStorage.setItem('timerStartTime', absoluteStartTime.toString());
+            console.log(`🕐 타이머 시작 시각 저장: ${new Date(absoluteStartTime).toLocaleTimeString()}`);
+            
             timers[subject].interval = setInterval(() => {
                 timers[subject].seconds++;
                 updateTimerDisplay(subject);
