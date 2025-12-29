@@ -132,15 +132,25 @@ location.reload();
 
 ---
 
-## 3️⃣ 페이지 로드 시 타이머 자동 복원 (restoreRunningTimers)
+## 3️⃣ 재로그인 시 타이머 자동 복원 (restoreRunningTimers)
 
-### 핵심: **로그인 없이도 자동 복원!**
+### 핵심: **로그인 후 DOM 렌더링 완료 시점에 자동 복원!**
+
+재로그인 시 과목 카드가 생성된 **직후(500ms 지연)** 타이머가 복원되어 **경과 시간이 즉시 화면에 표시**됩니다.
 
 ```javascript
-// 🔥 페이지 로드 시 항상 실행 (로그인 전에도!)
-// geunhwa-student-portal.html 5996행
-restoreRunningTimers();
+// 🔥 로그인 후 과목 카드 생성 직후 실행
+function loginStudent() {
+    // 1. 로그인 처리 및 과목 카드 생성
+    generateAndDisplayTodaySchedule(student);
+    
+    // 2. DOM 렌더링 완료 후 타이머 복원 (500ms 지연)
+    setTimeout(() => {
+        restoreRunningTimers(); // ← 경과 시간으로 즉시 표시!
+    }, 500);
+}
 
+// restoreRunningTimers() 동작:
 // 1. 오늘 학습 기록에서 isRunning = true인 과목 찾기
 const todayRecord = studyRecords.find(r => r.date === today);
 const runningSubject = Object.keys(todayRecord.subjects).find(s => 
@@ -165,38 +175,55 @@ if (timerStartTime) {
     // 4. interval 다시 시작 (자동으로 계속 카운트)
     timers[runningSubject].interval = setInterval(() => {
         timers[runningSubject].seconds++;
-        updateTimerDisplay(runningSubject);
+        updateTimerDisplay(runningSubject);  // ← 화면에 즉시 표시!
+        updateProgressBar(runningSubject);
         // ... 10초마다 자동 저장
     }, 1000);
     
-    // 5. timerStartTime 삭제 (한 번만 사용)
+    // 5. 버튼 상태 업데이트 (시작 → 일시정지/완료)
+    // 최대 3초간 반복 시도 (100ms × 30회)
+    let attempts = 0;
+    const buttonInterval = setInterval(() => {
+        const startBtn = document.querySelector(`[onclick*="startTimer('${subject}')"]`);
+        if (startBtn) startBtn.style.display = 'none';
+        
+        updateTimerDisplay(subject);  // UI 강제 업데이트
+        updateProgressBar(subject);
+        
+        attempts++;
+        if (attempts >= 30) clearInterval(buttonInterval);
+    }, 100);
+    
+    // 6. timerStartTime 삭제 (한 번만 사용)
     localStorage.removeItem('timerStartTime');
     
-    // 6. 사용자에게 알림
+    // 7. 사용자에게 알림
     showSuccessMessage(`⏰ ${runningSubject} 학습이 계속됩니다! (${Math.floor(totalElapsedSeconds/60)}분)`);
 }
 ```
 
 ### 🆕 개선 사항 (2025-12-29)
-- **로그인 불필요**: 페이지 로드만으로 타이머 자동 복원
-- **즉시 실행**: 로그인 전에도 타이머가 돌아감
-- **백그라운드 유지**: 브라우저를 닫아도 시간은 계속 흐름
+- **즉시 표시**: 재로그인 시 타이머가 경과 시간(예: 15:23)으로 **즉시** 표시됨
+- **로그인 필수**: 과목 카드가 있어야 타이머 표시 가능 (로그인 후에만 복원)
+- **500ms 지연**: DOM 렌더링 완료 후 타이머 복원으로 안정성 확보
+- **재시도 로직**: 3초간 30회 반복으로 UI 업데이트 보장
 
-### 예시 시나리오
+### 예시 시나리오 (재로그인 시 즉시 표시)
 ```
-14:00 - 수학 타이머 시작 (0분)
-14:15 - 15분 경과
-14:20 - 로그아웃 (timerStartTime = 14:00 저장)
+10:00 - 수학 타이머 시작 (00:00)
+10:07 - 7분 경과 (07:00)
+10:07 - 로그아웃 (timerStartTime = 10:00 저장)
       └─ 타이머는 백그라운드에서 계속 실행 ✅
-      └─ 브라우저 종료해도 OK
 
-14:35 - 브라우저 열기 (로그인 안 해도 됨!)
-      └─ 페이지 로드 → restoreRunningTimers() 자동 실행
-      └─ 경과 시간 계산: 14:35 - 14:00 = 35분
-      └─ 타이머 복원: 35분부터 자동으로 계속 카운트
-      └─ 화면에 "⏰ 수학 학습이 계속됩니다! (35분)" 표시
-      └─ 사용자 알림: "수학 학습이 계속됩니다! (35분)"
-15:00 - 실제로 60분 학습 완료
+10:15 - 재로그인 
+      └─ 과목 카드 생성 완료
+      └─ 500ms 후 restoreRunningTimers() 실행
+      └─ 경과 시간 계산: 10:15 - 10:00 = 15분
+      └─ 화면에 "15:00" 즉시 표시! (00:00 아님!)
+      └─ 타이머 계속: 15:00 → 15:01 → 15:02...
+      
+10:45 - 45분 목표 달성 알림
+      └─ 완료 버튼으로 종료
 ```
 
 ---
