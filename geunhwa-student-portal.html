@@ -2663,28 +2663,49 @@
                 }
             }
             
-            // 채점
+            // 채점 및 과목별 점수 계산
             let correctCount = 0;
             let totalScore = 0;
             let wrongQuestions = [];
             
+            // 🆕 과목별 점수 추적
+            const subjectScores = {
+                '수학': { correct: 0, total: 0, score: 0 },
+                '영어': { correct: 0, total: 0, score: 0 },
+                '국어': { correct: 0, total: 0, score: 0 },
+                '사회': { correct: 0, total: 0, score: 0 },
+                '과학': { correct: 0, total: 0, score: 0 }
+            };
+            
             studentAnswers.forEach((answer, index) => {
                 const question = currentDiagnosticTest[index];
-                if (answer === question.answer) {
-                    correctCount++;
-                    totalScore += question.points;
-                } else if (answer !== null) {
-                    wrongQuestions.push({
-                        number: index + 1,
-                        concept: question.concept,
-                        difficulty: question.difficulty
-                    });
+                const subject = question.subject;
+                
+                // 과목별 문제 수 카운트
+                if (subjectScores[subject]) {
+                    subjectScores[subject].total++;
+                    
+                    if (answer === question.answer) {
+                        correctCount++;
+                        totalScore += question.points;
+                        subjectScores[subject].correct++;
+                        subjectScores[subject].score += question.points;
+                    } else if (answer !== null) {
+                        wrongQuestions.push({
+                            number: index + 1,
+                            subject: subject,
+                            concept: question.concept,
+                            difficulty: question.difficulty
+                        });
+                    }
                 }
             });
             
             // 수준 판정
             const level = determineLevel(totalScore);
             const levelInfo = levelCriteria[level];
+            
+            console.log('📊 과목별 점수:', subjectScores);
             
             // 결과 저장 (학생에게는 보이지 않음)
             saveDiagnosticResult({
@@ -2697,6 +2718,7 @@
                 level: level,
                 levelLabel: levelInfo.label,
                 wrongQuestions: wrongQuestions,
+                subjectScores: subjectScores,  // 🆕 과목별 점수 추가
                 testDate: new Date().toISOString(),
                 answers: studentAnswers
             });

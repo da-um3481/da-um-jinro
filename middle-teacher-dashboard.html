@@ -3437,17 +3437,42 @@
                 const levelColors = {
                     '기초': 'background: #f59e0b; color: white;',
                     '표준': 'background: #3b82f6; color: white;',
-                    '심화': 'background: #8b5cf6; color: white;'
+                    '심화': 'background: #8b5cf6; color: white;',
+                    'beginner': 'background: #f59e0b; color: white;',
+                    'intermediate': 'background: #3b82f6; color: white;',
+                    'advanced': 'background: #8b5cf6; color: white;'
                 };
                 
-                // 과목별 점수 계산 (간단히 5과목으로 나눔)
-                const subjectScores = {
-                    '수학': Math.floor(result.totalScore / 5),
-                    '영어': Math.floor(result.totalScore / 5),
-                    '국어': Math.floor(result.totalScore / 5),
-                    '사회': Math.floor(result.totalScore / 5),
-                    '과학': result.totalScore - (Math.floor(result.totalScore / 5) * 4)
-                };
+                // 🆕 과목별 점수 (새로운 데이터 구조 사용)
+                let subjectScoresHTML = '';
+                if (result.subjectScores) {
+                    // 새로운 형식: 과목별 상세 점수 있음
+                    const subjects = ['수학', '영어', '국어', '사회', '과학'];
+                    const subjectIcons = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+                    
+                    subjectScoresHTML = subjects.map(subject => {
+                        const subjectData = result.subjectScores[subject];
+                        if (subjectData) {
+                            const scoreColor = subjectData.score >= 8 ? '#10b981' : 
+                                              subjectData.score >= 5 ? '#3b82f6' : '#f59e0b';
+                            return `<div style="display: inline-block; margin: 2px; padding: 4px 8px; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                                <span style="font-size: 11px;">${subjectIcons[subject]}</span>
+                                <span style="font-weight: 700; color: ${scoreColor};">${subjectData.score}</span>
+                                <span style="font-size: 10px; color: var(--text-muted);">/10</span>
+                            </div>`;
+                        }
+                        return '';
+                    }).join('');
+                } else {
+                    // 구버전 형식: 과목별 점수가 없으면 총점을 5로 나눔
+                    const avgScore = Math.floor(result.totalScore / 5);
+                    subjectScoresHTML = `
+                        <div style="font-size: 12px; color: var(--text-muted);">
+                            과목별 약 ${avgScore}점
+                            <br><span style="font-size: 10px;">(구 버전 데이터)</span>
+                        </div>
+                    `;
+                }
                 
                 return `
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
@@ -3455,10 +3480,10 @@
                         <td style="padding: 15px; text-align: center;">중${result.grade || '-'}</td>
                         <td style="padding: 15px; text-align: center; font-weight: 700; color: #10b981;">${result.totalScore}/50</td>
                         <td style="padding: 15px; text-align: center;">
-                            <span style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; ${levelColors[result.level] || ''}">${result.levelLabel || result.level}</span>
+                            <span style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; ${levelColors[result.level] || levelColors[result.levelLabel] || ''}">${result.levelLabel || result.level}</span>
                         </td>
-                        <td style="padding: 15px; text-align: center; font-size: 13px;">
-                            수${subjectScores['수학']} 영${subjectScores['영어']} 국${subjectScores['국어']} 사${subjectScores['사회']} 과${subjectScores['과학']}
+                        <td style="padding: 15px; text-align: left; font-size: 11px;">
+                            ${subjectScoresHTML}
                         </td>
                         <td style="padding: 15px; text-align: center; font-size: 13px; color: var(--text-muted);">${new Date(result.testDate).toLocaleDateString('ko-KR')}</td>
                         <td style="padding: 15px; text-align: center;">
