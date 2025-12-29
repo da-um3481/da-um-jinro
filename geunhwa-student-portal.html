@@ -5998,6 +5998,9 @@
         renderCalendar(); // 캘린더 렌더링
         showTomorrowPreview(); // 🆕 내일 학습 준비 표시
         
+        // 🔥 로그인 여부와 관계없이 실행 중이던 타이머 복원
+        restoreRunningTimers();
+        
         // 로그인 시 복습 목록 표시
         const currentStudentId = localStorage.getItem('currentStudentId');
         if (currentStudentId) {
