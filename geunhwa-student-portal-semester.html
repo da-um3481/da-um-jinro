@@ -5614,8 +5614,10 @@
             // 모달 닫기
             closeDailySelfCheckModal();
             
-            // 성공 알림
-            alert('📝 오늘의 자기점검이 저장되었습니다!\n내일 더 나은 학습을 위해 활용해보세요! 💪');
+            // AI 피드백 생성 및 표시
+            setTimeout(() => {
+                generateAndShowDailyFeedback(selfCheckData);
+            }, 500);
         }
         
         // 자기점검 건너뛰기
@@ -5624,6 +5626,337 @@
             
             if (confirm_skip) {
                 closeDailySelfCheckModal();
+            }
+        }
+
+        // ==========================================
+        // 🤖 매일 AI 피드백 시스템
+        // ==========================================
+        
+        // AI 피드백 생성 및 표시
+        function generateAndShowDailyFeedback(selfCheckData) {
+            const studentId = selfCheckData.student_id;
+            const today = selfCheckData.date;
+            
+            // 1. 오늘의 학습 데이터 수집
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            // 2. 학습 분석
+            const analysis = analyzeTodayStudy(todayRecord, selfCheckData);
+            
+            // 3. AI 피드백 생성
+            const feedback = generateAIFeedback(analysis, selfCheckData);
+            
+            // 4. 피드백 저장
+            saveFeedback(studentId, today, feedback);
+            
+            // 5. 피드백 모달 표시
+            showFeedbackModal(feedback);
+        }
+        
+        // 오늘의 학습 분석
+        function analyzeTodayStudy(todayRecord, selfCheckData) {
+            const analysis = {
+                totalTime: 0,
+                subjects: [],
+                subjectCount: 0,
+                avgTimePerSubject: 0,
+                studyPattern: '',
+                efficiency: 0
+            };
+            
+            if (!todayRecord || !todayRecord.subjects) {
+                return analysis;
+            }
+            
+            // 과목별 학습 시간 및 순서 분석
+            const subjectData = [];
+            Object.entries(todayRecord.subjects).forEach(([subject, data]) => {
+                if (data.time > 0) {
+                    analysis.totalTime += data.time;
+                    subjectData.push({
+                        subject: subject,
+                        time: data.time,
+                        completedAt: data.completed_at ? new Date(data.completed_at) : null
+                    });
+                }
+            });
+            
+            // 완료 시간 순으로 정렬
+            subjectData.sort((a, b) => {
+                if (!a.completedAt) return 1;
+                if (!b.completedAt) return -1;
+                return a.completedAt - b.completedAt;
+            });
+            
+            analysis.subjects = subjectData;
+            analysis.subjectCount = subjectData.length;
+            analysis.avgTimePerSubject = analysis.subjectCount > 0 ? 
+                Math.round(analysis.totalTime / analysis.subjectCount) : 0;
+            
+            // 학습 패턴 분석
+            if (analysis.subjectCount === 0) {
+                analysis.studyPattern = 'no_study';
+            } else if (analysis.subjectCount === 1) {
+                analysis.studyPattern = 'single_subject';
+            } else if (analysis.subjectCount <= 3) {
+                analysis.studyPattern = 'moderate';
+            } else {
+                analysis.studyPattern = 'intensive';
+            }
+            
+            // 효율성 계산 (자기점검 + 학습량 기반)
+            let efficiencyScore = 0;
+            
+            // 학습 시작 난이도
+            if (selfCheckData.responses.startEasy === 'easy') {
+                efficiencyScore += 30;
+            } else {
+                efficiencyScore += 10;
+            }
+            
+            // 막힌 이유
+            if (selfCheckData.responses.blockedReason === 'none') {
+                efficiencyScore += 40;
+            } else if (selfCheckData.responses.blockedReason === 'content') {
+                efficiencyScore += 20;
+            } else {
+                efficiencyScore += 15;
+            }
+            
+            // 학습량 (목표: 하루 3과목 이상, 총 135분 이상)
+            if (analysis.subjectCount >= 3) {
+                efficiencyScore += 15;
+            } else {
+                efficiencyScore += analysis.subjectCount * 5;
+            }
+            
+            if (analysis.totalTime >= 135) {
+                efficiencyScore += 15;
+            } else {
+                efficiencyScore += Math.floor(analysis.totalTime / 10);
+            }
+            
+            analysis.efficiency = Math.min(efficiencyScore, 100);
+            
+            return analysis;
+        }
+        
+        // AI 피드백 생성
+        function generateAIFeedback(analysis, selfCheckData) {
+            const feedback = {
+                emoji: '',
+                title: '',
+                summary: '',
+                strengths: [],
+                improvements: [],
+                tomorrowTips: [],
+                motivationalMessage: ''
+            };
+            
+            // 1. 전체 평가 및 이모지
+            if (analysis.efficiency >= 80) {
+                feedback.emoji = '🌟';
+                feedback.title = '완벽한 하루였어요!';
+            } else if (analysis.efficiency >= 60) {
+                feedback.emoji = '👍';
+                feedback.title = '잘 하고 있어요!';
+            } else if (analysis.efficiency >= 40) {
+                feedback.emoji = '💪';
+                feedback.title = '좋은 시작이에요!';
+            } else {
+                feedback.emoji = '🌱';
+                feedback.title = '내일은 더 나아질 거예요!';
+            }
+            
+            // 2. 요약
+            const totalHours = Math.floor(analysis.totalTime / 60);
+            const totalMinutes = analysis.totalTime % 60;
+            const timeStr = totalHours > 0 ? `${totalHours}시간 ${totalMinutes}분` : `${totalMinutes}분`;
+            
+            feedback.summary = `오늘 ${analysis.subjectCount}개 과목을 ${timeStr} 동안 학습했어요. 효율성 점수는 ${analysis.efficiency}점입니다.`;
+            
+            // 3. 강점 분석
+            if (selfCheckData.responses.startEasy === 'easy') {
+                feedback.strengths.push('✨ 학습 시작이 수월했어요! 좋은 습관이 자리잡고 있어요.');
+            }
+            
+            if (selfCheckData.responses.blockedReason === 'none') {
+                feedback.strengths.push('🎯 막힘 없이 학습이 진행됐어요! 집중력이 훌륭해요.');
+            }
+            
+            if (analysis.subjectCount >= 3) {
+                feedback.strengths.push(`📚 ${analysis.subjectCount}개 과목을 균형있게 학습했어요!`);
+            }
+            
+            if (analysis.totalTime >= 135) {
+                feedback.strengths.push(`⏰ 목표 학습 시간(135분)을 달성했어요! (${timeStr})`);
+            }
+            
+            if (analysis.avgTimePerSubject >= 45) {
+                feedback.strengths.push('🔥 각 과목을 충분히 깊이있게 학습했어요!');
+            }
+            
+            if (feedback.strengths.length === 0) {
+                feedback.strengths.push('💪 학습을 시작한 것만으로도 대단해요!');
+            }
+            
+            // 4. 개선 제안
+            if (selfCheckData.responses.startEasy === 'hard') {
+                if (selfCheckData.responses.blockedReason === 'environment') {
+                    feedback.improvements.push('🏠 환경: 학습 전 핸드폰 멀리 두기, 책상 정리, 조용한 공간 확보를 시도해보세요.');
+                } else if (selfCheckData.responses.blockedReason === 'content') {
+                    feedback.improvements.push('📖 내용: 어려운 과목은 기초부터 다시 복습하고, 쉬운 과목부터 시작해보세요.');
+                } else {
+                    feedback.improvements.push('⏰ 타이밍: 학습하기 가장 좋은 시간대를 찾아보세요. (보통 오전이 효과적이에요)');
+                }
+            }
+            
+            if (analysis.subjectCount < 2) {
+                feedback.improvements.push('📚 과목 수: 한 과목만 공부하면 지루할 수 있어요. 2-3개 과목을 번갈아 학습해보세요.');
+            }
+            
+            if (analysis.totalTime < 90) {
+                feedback.improvements.push(`⏱️ 학습 시간: 현재 ${timeStr}이에요. 하루 최소 90분(2과목)을 목표로 해보세요!`);
+            }
+            
+            if (analysis.avgTimePerSubject < 30) {
+                feedback.improvements.push('⚡ 집중 시간: 각 과목을 최소 45분은 학습해야 깊이있게 이해할 수 있어요.');
+            }
+            
+            // 과목 순서 개선 제안
+            if (analysis.subjects.length >= 2) {
+                const firstSubject = analysis.subjects[0].subject;
+                const lastSubject = analysis.subjects[analysis.subjects.length - 1].subject;
+                
+                // 어려운 과목(수학, 과학)을 먼저 하는게 좋음
+                if (['영어', '국어', '사회'].includes(firstSubject) && 
+                    ['수학', '과학'].includes(lastSubject)) {
+                    feedback.improvements.push(`🔄 과목 순서: 어려운 과목(${lastSubject})을 먼저 하고, 쉬운 과목(${firstSubject})을 나중에 하면 더 효과적이에요!`);
+                }
+            }
+            
+            if (feedback.improvements.length === 0) {
+                feedback.improvements.push('✅ 현재 학습 방식이 효과적이에요. 이대로 유지하세요!');
+            }
+            
+            // 5. 내일을 위한 팁
+            const tomorrowAction = selfCheckData.responses.tomorrowAction;
+            feedback.tomorrowTips.push(`💡 당신의 계획: "${tomorrowAction}"`);
+            
+            // 추가 팁 제공
+            if (selfCheckData.responses.blockedReason === 'environment') {
+                feedback.tomorrowTips.push('🎧 백색소음이나 집중 음악을 틀어보는 것도 도움이 돼요.');
+                feedback.tomorrowTips.push('📍 도서관이나 카페 같은 새로운 공간을 시도해보세요.');
+            } else if (selfCheckData.responses.blockedReason === 'content') {
+                feedback.tomorrowTips.push('📝 모르는 내용은 바로 질문하거나 인터넷에서 찾아보세요.');
+                feedback.tomorrowTips.push('👥 친구와 함께 공부하면 서로 가르치며 배울 수 있어요.');
+            } else {
+                feedback.tomorrowTips.push('🔄 45분 학습 + 10분 휴식 사이클을 추천해요!');
+                feedback.tomorrowTips.push('✅ 학습 전에 오늘의 목표를 명확히 정하면 집중도가 올라가요.');
+            }
+            
+            // 6. 동기부여 메시지
+            const messages = [
+                '매일 조금씩 나아지는 것이 진짜 성장이에요! 🌱',
+                '오늘도 최선을 다한 당신, 정말 멋져요! 🌟',
+                '작은 습관이 큰 변화를 만들어요. 계속 가요! 💪',
+                '포기하지 않는 것이 가장 중요해요. 잘하고 있어요! 🔥',
+                '내일의 나는 오늘의 노력으로 만들어져요! ✨',
+                '꾸준함이 천재를 이긴다는 말, 믿어요! 🏆'
+            ];
+            
+            feedback.motivationalMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            return feedback;
+        }
+        
+        // 피드백 저장
+        function saveFeedback(studentId, date, feedback) {
+            let feedbackRecords = JSON.parse(localStorage.getItem('daily_feedback_records')) || [];
+            
+            feedbackRecords.push({
+                student_id: studentId,
+                date: date,
+                timestamp: new Date().toISOString(),
+                feedback: feedback
+            });
+            
+            localStorage.setItem('daily_feedback_records', JSON.stringify(feedbackRecords));
+            console.log('✅ AI 피드백 저장 완료:', feedback);
+        }
+        
+        // 피드백 모달 표시
+        function showFeedbackModal(feedback) {
+            const modal = document.getElementById('dailyFeedbackModal');
+            const backdrop = document.getElementById('dailyFeedbackBackdrop');
+            
+            if (!modal || !backdrop) return;
+            
+            // 내용 채우기
+            document.getElementById('feedbackEmoji').textContent = feedback.emoji;
+            document.getElementById('feedbackTitle').textContent = feedback.title;
+            document.getElementById('feedbackSummary').textContent = feedback.summary;
+            
+            // 강점 리스트
+            const strengthsList = document.getElementById('feedbackStrengths');
+            strengthsList.innerHTML = '';
+            feedback.strengths.forEach(strength => {
+                const li = document.createElement('li');
+                li.textContent = strength;
+                li.className = 'text-white text-sm py-2 px-3 bg-white/10 rounded-lg';
+                strengthsList.appendChild(li);
+            });
+            
+            // 개선 제안 리스트
+            const improvementsList = document.getElementById('feedbackImprovements');
+            improvementsList.innerHTML = '';
+            feedback.improvements.forEach(improvement => {
+                const li = document.createElement('li');
+                li.textContent = improvement;
+                li.className = 'text-white text-sm py-2 px-3 bg-white/10 rounded-lg';
+                improvementsList.appendChild(li);
+            });
+            
+            // 내일 팁 리스트
+            const tipsList = document.getElementById('feedbackTips');
+            tipsList.innerHTML = '';
+            feedback.tomorrowTips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                li.className = 'text-white text-sm py-2 px-3 bg-white/10 rounded-lg';
+                tipsList.appendChild(li);
+            });
+            
+            // 동기부여 메시지
+            document.getElementById('feedbackMotivation').textContent = feedback.motivationalMessage;
+            
+            // 모달 표시
+            backdrop.classList.remove('hidden');
+            backdrop.classList.add('show');
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modal.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 10);
+        }
+        
+        // 피드백 모달 닫기
+        function closeFeedbackModal() {
+            const modal = document.getElementById('dailyFeedbackModal');
+            const backdrop = document.getElementById('dailyFeedbackBackdrop');
+            
+            if (modal && backdrop) {
+                modal.style.opacity = '0';
+                modal.style.transform = 'translate(-50%, -50%) scale(0.95)';
+                backdrop.classList.remove('show');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    backdrop.classList.add('hidden');
+                }, 300);
             }
         }
 
@@ -6384,6 +6717,62 @@
                     제출하기 💪
                 </button>
             </div>
+        </div>
+    </div>
+    
+    <!-- 🤖 매일 AI 피드백 모달 -->
+    <div id="dailyFeedbackBackdrop" class="celebration-modal-backdrop hidden">
+        <div id="dailyFeedbackModal" class="celebration-modal" style="max-width: 650px; max-height: 90vh; overflow-y: auto;">
+            <!-- 헤더 -->
+            <div class="text-center mb-6">
+                <div class="text-7xl mb-3" id="feedbackEmoji">🤖</div>
+                <h2 class="text-3xl font-black text-white mb-2" id="feedbackTitle">오늘의 학습 분석</h2>
+                <p class="text-lg text-green-100 font-semibold" id="feedbackSummary">AI가 당신의 학습을 분석했어요!</p>
+            </div>
+            
+            <!-- 강점 섹션 -->
+            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5 mb-5">
+                <h3 class="text-white font-bold text-xl mb-4 flex items-center">
+                    <span class="mr-2">✨</span> 오늘의 강점
+                </h3>
+                <ul id="feedbackStrengths" class="space-y-2">
+                    <!-- 동적 생성 -->
+                </ul>
+            </div>
+            
+            <!-- 개선 제안 섹션 -->
+            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5 mb-5">
+                <h3 class="text-white font-bold text-xl mb-4 flex items-center">
+                    <span class="mr-2">💡</span> 개선 제안
+                </h3>
+                <ul id="feedbackImprovements" class="space-y-2">
+                    <!-- 동적 생성 -->
+                </ul>
+            </div>
+            
+            <!-- 내일을 위한 팁 섹션 -->
+            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5 mb-5">
+                <h3 class="text-white font-bold text-xl mb-4 flex items-center">
+                    <span class="mr-2">🚀</span> 내일을 위한 팁
+                </h3>
+                <ul id="feedbackTips" class="space-y-2">
+                    <!-- 동적 생성 -->
+                </ul>
+            </div>
+            
+            <!-- 동기부여 메시지 -->
+            <div class="bg-gradient-to-r from-yellow-400/30 to-orange-400/30 backdrop-blur-sm rounded-2xl p-5 mb-5 border-2 border-yellow-300/50">
+                <p class="text-white text-center font-bold text-lg" id="feedbackMotivation">
+                    매일 조금씩 나아지는 것이 진짜 성장이에요! 🌱
+                </p>
+            </div>
+            
+            <!-- 닫기 버튼 -->
+            <button 
+                onclick="closeFeedbackModal()" 
+                class="w-full py-4 bg-white text-green-600 font-black text-lg rounded-xl hover:bg-green-50 transition-all transform hover:scale-105">
+                확인했어요! 내일도 파이팅! 💪
+            </button>
         </div>
     </div>
     
