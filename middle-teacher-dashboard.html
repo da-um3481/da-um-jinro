@@ -1141,9 +1141,22 @@
 
                     <!-- 진단평가 학생별 상세 결과 -->
                     <div class="card" style="padding: 25px; margin-bottom: 20px;">
-                        <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <span>👨‍🎓</span> 학생별 진단평가 결과
-                        </h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="display: flex; align-items: center; gap: 10px; margin: 0;">
+                                <span>👨‍🎓</span> 학생별 진단평가 결과
+                            </h3>
+                            <div style="display: flex; gap: 10px;">
+                                <label for="importDataFileMiddle" style="padding: 10px 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s;">
+                                    <i class="fas fa-upload"></i>
+                                    데이터 가져오기
+                                </label>
+                                <input type="file" id="importDataFileMiddle" accept=".json" multiple style="display: none;" onchange="importStudentData(event)">
+                                <button onclick="clearDiagnosticData()" style="padding: 10px 20px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-trash-alt"></i>
+                                    데이터 초기화
+                                </button>
+                            </div>
+                        </div>
                         <div style="overflow-x: auto;">
                             <table class="data-table" style="width: 100%; border-collapse: collapse;">
                                 <thead style="background: rgba(255,255,255,0.05);">
@@ -3559,6 +3572,103 @@
                     </tr>
                 `;
             }).join('');
+        }
+        
+        // 📥 진단평가 데이터 가져오기 (Import)
+        function importStudentData(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) {
+                alert('파일을 선택해주세요.');
+                return;
+            }
+            
+            let importedCount = 0;
+            let errorCount = 0;
+            const existingResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const mergedResults = [...existingResults];
+            
+            console.log(`📥 ${files.length}개 파일 가져오기 시작...`);
+            
+            // 모든 파일 처리
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        console.log(`📄 파일 ${index + 1} 읽기 완료:`, file.name);
+                        
+                        // diagnostic_results 배열 확인
+                        if (data.diagnostic_results && Array.isArray(data.diagnostic_results)) {
+                            data.diagnostic_results.forEach(result => {
+                                // 중복 체크 (studentId 기준)
+                                const existingIndex = mergedResults.findIndex(r => r.studentId === result.studentId);
+                                if (existingIndex >= 0) {
+                                    // 기존 데이터 업데이트
+                                    mergedResults[existingIndex] = result;
+                                    console.log(`🔄 학생 데이터 업데이트: ${result.studentName} (${result.studentId})`);
+                                } else {
+                                    // 새 데이터 추가
+                                    mergedResults.push(result);
+                                    console.log(`➕ 새 학생 데이터 추가: ${result.studentName} (${result.studentId})`);
+                                }
+                                importedCount++;
+                            });
+                        }
+                        
+                        // 마지막 파일 처리 완료 시
+                        if (index === files.length - 1) {
+                            // localStorage에 저장
+                            localStorage.setItem('diagnostic_results', JSON.stringify(mergedResults));
+                            
+                            // 화면 갱신
+                            loadDiagnosticResults();
+                            
+                            alert(`✅ 데이터 가져오기 완료!\n\n📊 가져온 학생 수: ${importedCount}명\n❌ 오류: ${errorCount}건`);
+                            console.log(`✅ 총 ${importedCount}명의 진단평가 데이터 가져오기 완료`);
+                        }
+                    } catch (error) {
+                        console.error(`❌ 파일 읽기 오류 (${file.name}):`, error);
+                        errorCount++;
+                        
+                        if (index === files.length - 1) {
+                            alert(`⚠️ 일부 파일 처리 중 오류 발생\n\n✅ 성공: ${importedCount}명\n❌ 실패: ${errorCount}건`);
+                        }
+                    }
+                };
+                
+                reader.onerror = function() {
+                    console.error(`❌ 파일 읽기 실패: ${file.name}`);
+                    errorCount++;
+                };
+                
+                reader.readAsText(file);
+            });
+            
+            // 파일 입력 초기화 (같은 파일 다시 선택 가능하도록)
+            event.target.value = '';
+        }
+        
+        // 🗑️ 진단평가 데이터 초기화
+        function clearDiagnosticData() {
+            if (!confirm('⚠️ 경고: 모든 진단평가 데이터가 삭제됩니다!\n\n정말로 진단평가 데이터를 초기화하시겠습니까?')) {
+                return;
+            }
+            
+            if (!confirm('⚠️ 최종 확인: 삭제된 데이터는 복구할 수 없습니다!\n\n계속하시겠습니까?')) {
+                return;
+            }
+            
+            // localStorage에서 진단평가 데이터 삭제
+            localStorage.removeItem('diagnostic_results');
+            localStorage.removeItem('diagnostic_status');
+            
+            console.log('🗑️ 진단평가 데이터 초기화 완료');
+            
+            // 화면 갱신
+            loadDiagnosticResults();
+            
+            alert('✅ 진단평가 데이터가 초기화되었습니다.');
         }
         
         // 2주/4주 평가 로드
