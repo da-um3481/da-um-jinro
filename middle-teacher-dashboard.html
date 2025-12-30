@@ -3443,6 +3443,9 @@
         
         // 평가 탭 전환
         document.addEventListener('DOMContentLoaded', function() {
+            // 🆕 페이지 로드 시 진단평가 데이터 자동 로드
+            loadDiagnosticResults();
+            
             document.querySelectorAll('.eval-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     const evalType = this.getAttribute('data-eval-type');

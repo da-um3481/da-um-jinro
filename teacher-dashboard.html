@@ -5436,6 +5436,11 @@
         // 평가 관리 시스템
         // ==========================================
         
+        // 🆕 페이지 로드 시 진단평가 데이터 자동 로드
+        window.addEventListener('DOMContentLoaded', function() {
+            loadDiagnosticResults();
+        });
+        
         // 평가 탭 전환
         document.querySelectorAll('.eval-tab').forEach(tab => {
             tab.addEventListener('click', function() {
