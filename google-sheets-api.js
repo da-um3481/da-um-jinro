@@ -2,8 +2,8 @@
 // 이 파일을 학생 포털과 교사 대시보드에 포함시킵니다
 
 const GOOGLE_SHEETS_CONFIG = {
-    // 🔧 여기에 Google Apps Script 웹 앱 URL을 넣으세요!
-    WEB_APP_URL: 'YOUR_WEB_APP_URL_HERE',
+    // 🔧 Google Apps Script 웹 앱 URL
+    WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbxCRKmOjkjEbSPkpjzb_RF6c-o3g9GsvHBMjFzu2YxLbac7nK_MwV2AT5VYfzFR7aP7MQ/exec',
     
     // 자동 동기화 설정
     AUTO_SYNC: true,
@@ -147,6 +147,34 @@ async function saveTeacherFeedbackToCloud(feedback) {
         return { status: 'success' };
     } catch (error) {
         console.error('❌ 피드백 저장 실패:', error);
+        return { status: 'error', message: error.message };
+    }
+}
+
+// 🤖 AI 피드백 저장 (학생 포털에서 호출)
+async function saveAIFeedbackToCloud(feedback) {
+    if (!GOOGLE_SHEETS_CONFIG.WEB_APP_URL || GOOGLE_SHEETS_CONFIG.WEB_APP_URL === 'YOUR_WEB_APP_URL_HERE') {
+        console.warn('⚠️ Google Sheets URL이 설정되지 않았습니다.');
+        return { status: 'error' };
+    }
+    
+    try {
+        const response = await fetch(GOOGLE_SHEETS_CONFIG.WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'saveAIFeedback',
+                ...feedback
+            })
+        });
+        
+        console.log('✅ AI 피드백이 클라우드에 저장되었습니다');
+        return { status: 'success' };
+    } catch (error) {
+        console.error('❌ AI 피드백 저장 실패:', error);
         return { status: 'error', message: error.message };
     }
 }

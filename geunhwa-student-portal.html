@@ -3382,6 +3382,21 @@
             
             console.log('✅ 진단평가 결과 저장 완료:', result);
             
+            // 🌐 Google Sheets에 자동 저장
+            saveDiagnosticToCloud({
+                student_id: result.studentId,
+                student_name: result.studentName,
+                grade: result.grade,
+                total_score: result.totalScore,
+                level: result.level,
+                math_score: result.subjectScores?.['수학'] || 0,
+                english_score: result.subjectScores?.['영어'] || 0,
+                korean_score: result.subjectScores?.['국어'] || 0,
+                social_score: result.subjectScores?.['사회'] || 0,
+                science_score: result.subjectScores?.['과학'] || 0,
+                test_date: result.testDate
+            }).catch(err => console.warn('클라우드 저장 실패 (로컬은 저장됨):', err));
+            
             // 🚨 중요: 자동으로 데이터 내보내기 (선생님께 제출용)
             autoExportDiagnosticData(result);
         }
@@ -6287,6 +6302,20 @@
             
             localStorage.setItem('daily_feedback_records', JSON.stringify(feedbackRecords));
             console.log('✅ AI 피드백 저장 완료:', feedback);
+            
+            // 🌐 Google Sheets에 자동 저장
+            if (typeof saveAIFeedbackToCloud === 'function') {
+                saveAIFeedbackToCloud({
+                    student_id: studentId,
+                    date: date,
+                    emoji: feedback.emoji,
+                    title: feedback.title,
+                    summary: feedback.summary,
+                    strengths: feedback.strengths,
+                    improvements: feedback.improvements,
+                    tips: feedback.tips
+                }).catch(err => console.warn('클라우드 저장 실패 (로컬은 저장됨):', err));
+            }
         }
         
         // 피드백 모달 표시
