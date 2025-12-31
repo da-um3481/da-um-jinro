@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 스크린샷 예시</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .phone-mockup {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .screen {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .info-line {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .emoji {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 20px 0;
+        }
+        .subject-section {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .subject-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        .subject-score {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+        .instruction {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .info-box {
+            background: #dbeafe;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        .info-box h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info-box li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        .info-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 학생이 보낸 스크린샷 예시</h1>
+        
+        <div class="phone-mockup">
+            <div class="screen">
+                <div class="title">✅ 진단평가 완료!</div>
+                
+                <div class="info-line">
+                    <span class="emoji">👤</span>
+                    <strong>이름:</strong>&nbsp;김철수
+                </div>
+                <div class="info-line">
+                    <span class="emoji">📚</span>
+                    <strong>학년:</strong>&nbsp;중1
+                </div>
+                <div class="info-line">
+                    <span class="emoji">📊</span>
+                    <strong>총점:</strong>&nbsp;42/50
+                </div>
+                <div class="info-line">
+                    <span class="emoji">🎯</span>
+                    <strong>수준:</strong>&nbsp;표준
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="subject-section">
+                    <div class="subject-title">📝 과목별 점수:</div>
+                    <div class="subject-score">🔢 수학: <strong>8/10</strong></div>
+                    <div class="subject-score">🔤 영어: <strong>9/10</strong></div>
+                    <div class="subject-score">✍️ 국어: <strong>8/10</strong></div>
+                    <div class="subject-score">🌏 사회: <strong>9/10</strong></div>
+                    <div class="subject-score">🔬 과학: <strong>8/10</strong></div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="instruction">
+                    📱 이 화면을 스크린샷 찍어서<br>
+                    선생님께 카톡으로 보내주세요!<br>
+                    <small>(화면 캡처: 전원+볼륨다운)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>👩‍🏫 선생님이 확인할 수 있는 정보:</h3>
+            <ul>
+                <li><strong>학생 이름</strong>: 누가 제출했는지 확인</li>
+                <li><strong>학년</strong>: 중1~중3 구분</li>
+                <li><strong>총점</strong>: 50점 만점 중 점수</li>
+                <li><strong>수준</strong>: 기초/표준/심화 판정</li>
+                <li><strong>과목별 점수</strong>: 수학, 영어, 국어, 사회, 과학 각 10점씩</li>
+            </ul>
+        </div>
+
+        <div class="info-box" style="background: #d1fae5; margin-top: 20px;">
+            <h3 style="color: #065f46;">✅ 장점</h3>
+            <ul>
+                <li><strong>간단함</strong>: 스크린샷만 찍으면 끝</li>
+                <li><strong>빠름</strong>: JSON 다운로드 기다릴 필요 없음</li>
+                <li><strong>명확함</strong>: 모든 정보가 한 화면에</li>
+                <li><strong>실시간</strong>: 즉시 선생님께 전송 가능</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 12px;">
+            <h3 style="color: #92400e; margin-bottom: 15px;">📢 학생 공지 예시</h3>
+            <p style="color: #78350f; line-height: 1.8;">
+                "진단평가 완료하면 자동으로 결과 팝업이 뜹니다.<br>
+                그 화면을 <strong>스크린샷</strong> 찍어서<br>
+                선생님께 카톡으로 보내주세요!<br>
+                (과목별 점수가 모두 표시됩니다)"
+            </p>
+        </div>
+    </div>
+</body>
+</html>
