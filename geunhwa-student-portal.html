@@ -3145,10 +3145,13 @@
             // 이전 버튼
             prevBtn.disabled = currentQuestionIndex === 0;
             
-            // 다음/제출 버튼
-            if (currentQuestionIndex === currentDiagnosticTest.length - 1) {
+            // 다음/제출 버튼 (10문제 이상 풀면 제출 가능하도록 수정)
+            const answeredCount = studentAnswers.filter(ans => ans !== null).length;
+            if (currentQuestionIndex === currentDiagnosticTest.length - 1 || answeredCount >= 10) {
+                // 마지막 문제 또는 10문제 이상 풀었으면 제출 버튼 표시
                 nextBtn.classList.add('hidden');
                 submitBtn.classList.remove('hidden');
+                submitBtn.textContent = answeredCount >= 50 ? '제출하기 💪' : `제출하기 (${answeredCount}/${currentDiagnosticTest.length}문제 완료)`;
             } else {
                 nextBtn.classList.remove('hidden');
                 submitBtn.classList.add('hidden');

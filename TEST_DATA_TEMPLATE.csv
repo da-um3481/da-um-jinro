@@ -1,0 +1,4 @@
+student_id,student_name,grade,total_score,level,math_score,english_score,korean_score,social_score,science_score,test_date,timestamp
+student_001,김철수,1,42,표준,8,9,8,9,8,2024-12-30,2024-12-30T10:00:00Z
+student_002,이영희,2,38,기초,7,8,7,8,8,2024-12-30,2024-12-30T10:05:00Z
+student_003,박민수,1,45,심화,9,9,9,9,9,2024-12-30,2024-12-30T10:10:00Z
