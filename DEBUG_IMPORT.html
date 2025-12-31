@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Import 디버그 도구</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #dc2626;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        .section {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #e5e7eb;
+        }
+        .section h2 {
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #059669;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid #dc2626;
+            font-family: monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .code {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        input[type="file"]:hover {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 JSON Import 디버그 도구</h1>
+
+        <div class="alert alert-danger">
+            <strong>⚠️ 현재 문제:</strong><br>
+            학생이 다운로드한 JSON 파일을 선생님 대시보드에서 Import 했는데 화면에 표시되지 않음
+        </div>
+
+        <div class="section">
+            <h2>📤 Step 1: JSON 파일 선택</h2>
+            <input type="file" id="jsonFile" accept=".json" multiple>
+            <button class="btn btn-danger" onclick="analyzeJSON()">🔍 JSON 파일 분석</button>
+        </div>
+
+        <div class="section">
+            <h2>📊 분석 결과</h2>
+            <div id="result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>💡 예상 원인</h2>
+            <div class="alert alert-info">
+                <strong>가능한 원인:</strong><br>
+                1. JSON 구조가 다름 (diagnostic_results vs diagnosticResults)<br>
+                2. 브라우저 캐시 문제<br>
+                3. localStorage 저장 실패<br>
+                4. loadDiagnosticResults() 함수 미호출<br>
+                5. 데이터 형식 불일치
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 즉시 테스트</h2>
+            <button class="btn btn-success" onclick="testLocalStorage()">
+                📦 localStorage 직접 테스트
+            </button>
+            <div id="storageResult" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeJSON() {
+            const fileInput = document.getElementById('jsonFile');
+            const files = fileInput.files;
+            
+            if (!files || files.length === 0) {
+                alert('⚠️ JSON 파일을 먼저 선택해주세요!');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<strong>📋 분석 중...</strong><br><br>';
+
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        let html = `<strong>📄 파일 ${index + 1}: ${file.name}</strong><br>`;
+                        html += `<strong>크기:</strong> ${(file.size / 1024).toFixed(2)} KB<br><br>`;
+                        
+                        html += `<strong>🔑 최상위 키:</strong><br>`;
+                        html += `<div style="padding: 10px; background: #f3f4f6; border-radius: 5px; margin: 10px 0;">`;
+                        Object.keys(data).forEach(key => {
+                            html += `• ${key}<br>`;
+                        });
+                        html += `</div>`;
+                        
+                        // diagnostic_results 확인
+                        if (data.diagnostic_results) {
+                            html += `<strong style="color: #10b981;">✅ diagnostic_results 있음 (${data.diagnostic_results.length}개)</strong><br>`;
+                            html += `<div class="code">${JSON.stringify(data.diagnostic_results, null, 2).substring(0, 500)}...</div>`;
+                        } else if (data.diagnosticResults) {
+                            html += `<strong style="color: #f59e0b;">⚠️ diagnosticResults 있음 (camelCase - ${data.diagnosticResults.length}개)</strong><br>`;
+                            html += `<div class="code">${JSON.stringify(data.diagnosticResults, null, 2).substring(0, 500)}...</div>`;
+                        } else {
+                            html += `<strong style="color: #dc2626;">❌ diagnostic_results도 diagnosticResults도 없음!</strong><br>`;
+                        }
+                        
+                        html += `<br><strong>📦 전체 JSON 구조:</strong><br>`;
+                        html += `<div class="code">${JSON.stringify(data, null, 2).substring(0, 1000)}...</div>`;
+                        
+                        html += `<hr style="margin: 20px 0;">`;
+                        
+                        resultDiv.innerHTML += html;
+                        
+                    } catch (error) {
+                        resultDiv.innerHTML += `<strong style="color: #dc2626;">❌ 파일 ${index + 1} 읽기 오류:</strong><br>${error.message}<br><br>`;
+                    }
+                };
+                
+                reader.readAsText(file);
+            });
+        }
+
+        function testLocalStorage() {
+            const resultDiv = document.getElementById('storageResult');
+            
+            try {
+                // 테스트 데이터 생성
+                const testData = [{
+                    studentId: 'test_debug_001',
+                    studentName: '테스트학생',
+                    grade: '1',
+                    totalScore: 42,
+                    level: '표준',
+                    levelLabel: '표준',
+                    testDate: new Date().toISOString().split('T')[0],
+                    subjectScores: {
+                        '수학': { score: 8, total: 10 },
+                        '영어': { score: 9, total: 10 },
+                        '국어': { score: 8, total: 10 },
+                        '사회': { score: 9, total: 10 },
+                        '과학': { score: 8, total: 10 }
+                    }
+                }];
+
+                // localStorage에 직접 저장
+                localStorage.setItem('diagnostic_results', JSON.stringify(testData));
+                
+                // 즉시 읽기
+                const saved = JSON.parse(localStorage.getItem('diagnostic_results'));
+                
+                if (saved && saved.length > 0) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>✅ localStorage 테스트 성공!</strong><br><br>
+                            저장된 데이터:<br>
+                            • 학생명: ${saved[0].studentName}<br>
+                            • 학년: 중${saved[0].grade}<br>
+                            • 총점: ${saved[0].totalScore}/50<br>
+                            • 수준: ${saved[0].level}<br><br>
+                            <strong>이제 선생님 대시보드를 새로고침하면 이 데이터가 보여야 합니다!</strong><br><br>
+                            <a href="middle-teacher-dashboard.html" target="_blank" style="color: #dc2626; font-weight: 700;">
+                                → 중학교 교사 대시보드 열기
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('저장된 데이터를 읽을 수 없습니다');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>❌ localStorage 테스트 실패!</strong><br>
+                        오류: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
