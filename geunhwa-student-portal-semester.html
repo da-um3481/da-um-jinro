@@ -667,10 +667,19 @@
                 
                 <!-- 우측 메뉴 -->
                 <div class="flex items-center space-x-1 sm:space-x-2">
-                    <!-- 데이터 내보내기 버튼 -->
+                    <!-- 🆕 평가결과 보기 버튼 -->
+                    <button 
+                        onclick="showMyDiagnosticResult()" 
+                        class="hidden px-2 sm:px-3 py-1.5 sm:py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition shadow-lg text-xs sm:text-sm" 
+                        id="showResultBtn"
+                        title="내 진단평가 결과 보기">
+                        📊 평가결과
+                    </button>
+                    
+                    <!-- 데이터 내보내기 버튼 (숨김 처리) -->
                     <button 
                         onclick="exportStudentData()" 
-                        class="p-1.5 sm:p-2 text-white hover:bg-blue-600 rounded-lg transition" 
+                        class="hidden p-1.5 sm:p-2 text-white hover:bg-blue-600 rounded-lg transition" 
                         title="학습 데이터 내보내기 (선생님께 제출용)">
                         <i class="fas fa-download"></i>
                     </button>
@@ -3329,6 +3338,41 @@
         }
         
         // 🆕 결과 공유 모달 표시 (완전 자동화)
+        // 🆕 내 진단평가 결과 보기 (버튼 클릭용)
+        function showMyDiagnosticResult() {
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            const currentStudentName = localStorage.getItem('currentStudentName');
+            const currentStudentGrade = localStorage.getItem('currentStudentGrade');
+            
+            if (!currentStudentId) {
+                alert('❌ 로그인이 필요합니다!');
+                return;
+            }
+            
+            // localStorage에서 내 진단평가 결과 찾기
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const myResult = diagnosticResults.find(r => r.studentId === currentStudentId);
+            
+            if (!myResult) {
+                alert('❌ 진단평가 결과를 찾을 수 없습니다.\\n\\n아직 진단평가를 완료하지 않았습니다.');
+                return;
+            }
+            
+            // 과목별 점수 문자열 생성
+            const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+            let subjectText = '\\n━━━━━━━━━━━━━━━━━━\\n📝 과목별 점수:\\n';
+            if (myResult.subjectScores) {
+                Object.keys(myResult.subjectScores).forEach(subject => {
+                    const score = myResult.subjectScores[subject];
+                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}/10\\n`;
+                });
+            }
+            subjectText += '━━━━━━━━━━━━━━━━━━\\n';
+            
+            // 결과 팝업 표시
+            alert(`✅ 진단평가 결과\\n\\n👤 이름: ${currentStudentName}\\n📚 학년: 중${currentStudentGrade}\\n📊 총점: ${myResult.totalScore}/50\\n🎯 수준: ${myResult.level || myResult.levelLabel}${subjectText}\\n📱 이 화면을 스크린샷 찍어서\\n선생님께 카톡으로 보내주세요!\\n\\n(화면 캡처: 전원+볼륨다운)`);
+        }
+        
         function showShareResultModal(level, totalScore, subjectScores) {
             const studentName = localStorage.getItem('currentStudentName');
             const studentGrade = localStorage.getItem('currentStudentGrade');
@@ -7271,6 +7315,15 @@
                 // 진단평가 완료 여부 확인
                 const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
                 const myResult = diagnosticResults.find(r => r.studentId === currentStudentId);
+                
+                // 🆕 진단평가 완료한 학생은 "평가결과" 버튼 보이기
+                if (myResult) {
+                    const resultBtn = document.getElementById('showResultBtn');
+                    if (resultBtn) {
+                        resultBtn.classList.remove('hidden');
+                        console.log('✅ 평가결과 버튼 활성화');
+                    }
+                }
                 
                 // 이미 내보내기 한 적이 있는지 확인
                 const exportedFlag = localStorage.getItem(`diagnostic_exported_${currentStudentId}`);
