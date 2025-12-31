@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📥 다운로드 테스트</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+        }
+        .test-btn {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .test-btn:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📥 다운로드 테스트</h1>
+        
+        <div class="info">
+            <strong>💡 이 버튼을 클릭하면:</strong><br>
+            1. 테스트 JSON 파일이 다운로드됩니다<br>
+            2. 파일명: <code>진단평가_테스트_2025-12-31.json</code><br>
+            3. 저장 위치: 컴퓨터의 <strong>다운로드 폴더</strong>
+        </div>
+
+        <button class="test-btn" onclick="testDownload()">
+            📥 테스트 다운로드 시작
+        </button>
+
+        <div class="success" id="successMsg">
+            ✅ <strong>다운로드 완료!</strong><br><br>
+            📁 파일 위치:<br>
+            <strong>다운로드 폴더</strong>를 열어서 확인하세요!<br><br>
+            <small>
+            - Windows: C:\Users\사용자\Downloads\<br>
+            - Mac: /Users/사용자/Downloads\<br>
+            - 파일명: 진단평가_테스트_2025-12-31.json
+            </small>
+        </div>
+
+        <div class="info" style="margin-top: 30px;">
+            <strong>📍 다운로드 폴더 열기:</strong><br>
+            <strong>Windows:</strong> Windows키 + E → 왼쪽 "다운로드" 클릭<br>
+            <strong>Mac:</strong> Finder → 왼쪽 "다운로드" 클릭<br>
+            <strong>Chrome:</strong> Ctrl + J (다운로드 기록)
+        </div>
+    </div>
+
+    <script>
+        function testDownload() {
+            // 테스트 데이터 생성
+            const testData = {
+                student_info: {
+                    id: "test_001",
+                    name: "테스트",
+                    grade: "1",
+                    export_date: new Date().toISOString()
+                },
+                diagnostic_results: [{
+                    studentId: "test_001",
+                    studentName: "테스트",
+                    grade: "1",
+                    totalScore: 42,
+                    level: "표준",
+                    testDate: new Date().toISOString().split('T')[0],
+                    subjects: {
+                        math: { score: 8, total: 10 },
+                        english: { score: 9, total: 10 },
+                        korean: { score: 8, total: 10 },
+                        social: { score: 9, total: 10 },
+                        science: { score: 8, total: 10 }
+                    }
+                }],
+                metadata: {
+                    version: '1.0',
+                    program: '테스트 프로그램',
+                    export_timestamp: Date.now()
+                }
+            };
+
+            // JSON 파일로 다운로드
+            const dataStr = JSON.stringify(testData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `진단평가_테스트_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            // 성공 메시지 표시
+            document.getElementById('successMsg').style.display = 'block';
+
+            console.log('✅ 테스트 다운로드 완료');
+        }
+    </script>
+</body>
+</html>
