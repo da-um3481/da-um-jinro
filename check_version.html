@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>버전 확인</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a202c;
+            color: white;
+        }
+        .check-item {
+            background: #2d3748;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        .success { border-left: 5px solid #10b981; }
+        .error { border-left: 5px solid #ef4444; }
+        button {
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 중학교 교사 대시보드 버전 확인</h1>
+    
+    <div id="results"></div>
+    
+    <button onclick="checkVersion()">버전 확인</button>
+    <button onclick="checkImportFunction()">Import 함수 확인</button>
+    <button onclick="testLocalStorage()">localStorage 확인</button>
+    
+    <script>
+        async function checkVersion() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>확인 중...</p>';
+            
+            try {
+                const response = await fetch('https://da-um3481.github.io/da-um-jinro/middle-teacher-dashboard.html?' + Date.now());
+                const html = await response.text();
+                
+                const hasImportButton = html.includes('데이터 가져오기');
+                const hasImportFunction = html.includes('function importStudentData');
+                const hasClearFunction = html.includes('function clearDiagnosticData');
+                const hasAutoLoad = html.includes('loadDiagnosticResults()');
+                
+                results.innerHTML = `
+                    <div class="check-item ${hasImportButton ? 'success' : 'error'}">
+                        ${hasImportButton ? '✅' : '❌'} "데이터 가져오기" 버튼: ${hasImportButton ? '있음' : '없음'}
+                    </div>
+                    <div class="check-item ${hasImportFunction ? 'success' : 'error'}">
+                        ${hasImportFunction ? '✅' : '❌'} importStudentData() 함수: ${hasImportFunction ? '있음' : '없음'}
+                    </div>
+                    <div class="check-item ${hasClearFunction ? 'success' : 'error'}">
+                        ${hasClearFunction ? '✅' : '❌'} clearDiagnosticData() 함수: ${hasClearFunction ? '있음' : '없음'}
+                    </div>
+                    <div class="check-item ${hasAutoLoad ? 'success' : 'error'}">
+                        ${hasAutoLoad ? '✅' : '❌'} 자동 로드: ${hasAutoLoad ? '있음' : '없음'}
+                    </div>
+                    
+                    <div class="check-item success">
+                        <strong>📊 파일 크기:</strong> ${(html.length / 1024).toFixed(2)} KB
+                    </div>
+                    
+                    <div class="check-item success">
+                        <strong>⏰ 확인 시간:</strong> ${new Date().toLocaleString('ko-KR')}
+                    </div>
+                `;
+                
+                if (hasImportButton && hasImportFunction) {
+                    results.innerHTML += `
+                        <div class="check-item success" style="margin-top: 20px; font-size: 18px;">
+                            <strong>🎉 모든 기능이 정상 배포되었습니다!</strong><br>
+                            <br>
+                            <strong>캐시 문제일 가능성이 높습니다.</strong><br>
+                            <br>
+                            <strong>해결 방법:</strong><br>
+                            1. Ctrl + Shift + R (강력 새로고침)<br>
+                            2. 시크릿 모드로 접속<br>
+                            3. 브라우저 캐시 삭제
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                results.innerHTML = `
+                    <div class="check-item error">
+                        ❌ 오류: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function checkImportFunction() {
+            const results = document.getElementById('results');
+            const hasFunction = typeof importStudentData === 'function';
+            
+            results.innerHTML = `
+                <div class="check-item ${hasFunction ? 'success' : 'error'}">
+                    ${hasFunction ? '✅' : '❌'} 현재 페이지에 importStudentData 함수: ${hasFunction ? '있음' : '없음'}
+                </div>
+                <div class="check-item">
+                    ${hasFunction ? 
+                        '페이지가 최신 버전입니다!' : 
+                        '⚠️ 페이지가 구버전입니다. 강력 새로고침(Ctrl+Shift+R)이 필요합니다!'}
+                </div>
+            `;
+        }
+        
+        function testLocalStorage() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const results = document.getElementById('results');
+            
+            results.innerHTML = `
+                <div class="check-item">
+                    <strong>📦 localStorage 진단평가 데이터:</strong><br>
+                    <br>
+                    데이터 개수: ${diagnosticResults.length}개<br>
+                    <br>
+                    ${diagnosticResults.length > 0 ? 
+                        '<pre>' + JSON.stringify(diagnosticResults, null, 2) + '</pre>' : 
+                        '데이터 없음 (정상: Import 필요)'}
+                </div>
+            `;
+        }
+        
+        // 페이지 로드 시 자동 확인
+        window.addEventListener('DOMContentLoaded', checkVersion);
+    </script>
+</body>
+</html>

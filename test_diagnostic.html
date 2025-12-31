@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>진단평가 데이터 확인 테스트</title>
+</head>
+<body>
+    <h1>진단평가 데이터 확인</h1>
+    <button onclick="checkData()">데이터 확인</button>
+    <button onclick="testImport()">Import 테스트</button>
+    <pre id="result"></pre>
+    
+    <script>
+        function checkData() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            const result = {
+                localStorage_diagnostic_count: diagnosticResults.length,
+                localStorage_students_count: students.length,
+                diagnostic_data: diagnosticResults,
+                students_data: students
+            };
+            
+            document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+            console.log('진단평가 데이터:', result);
+        }
+        
+        function testImport() {
+            // 테스트 데이터 생성
+            const testData = {
+                student_info: {
+                    id: "test_student_123",
+                    name: "테스트학생",
+                    grade: "1",
+                    export_date: new Date().toISOString()
+                },
+                diagnostic_results: [{
+                    studentId: "test_student_123",
+                    studentName: "테스트학생",
+                    grade: "1",
+                    totalScore: 45,
+                    level: "심화",
+                    levelLabel: "심화 수준",
+                    testDate: new Date().toISOString(),
+                    subjectScores: {
+                        "수학": { score: 9, correct: 9, total: 10 },
+                        "영어": { score: 9, correct: 9, total: 10 },
+                        "국어": { score: 9, correct: 9, total: 10 },
+                        "사회": { score: 9, correct: 9, total: 10 },
+                        "과학": { score: 9, correct: 9, total: 10 }
+                    }
+                }],
+                metadata: {
+                    version: "1.0",
+                    program: "테스트",
+                    export_timestamp: Date.now()
+                }
+            };
+            
+            // localStorage에 저장
+            const existingResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            existingResults.push(testData.diagnostic_results[0]);
+            localStorage.setItem('diagnostic_results', JSON.stringify(existingResults));
+            
+            alert('테스트 데이터 저장 완료!\n이제 "데이터 확인" 버튼을 눌러보세요.');
+        }
+        
+        // 페이지 로드 시 자동 확인
+        window.addEventListener('DOMContentLoaded', checkData);
+    </script>
+</body>
+</html>
