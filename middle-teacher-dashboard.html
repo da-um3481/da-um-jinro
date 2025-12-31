@@ -2639,8 +2639,47 @@
         let subjectStudentChart = null;
 
         // 학생 상세 관리 초기화
-        function initStudentDetailManagement() {
-            const students = JSON.parse(localStorage.getItem('student_list')) || [];
+        async function initStudentDetailManagement() {
+            console.log('🔄 학생 목록 로딩 시작...');
+            
+            let students = [];
+            
+            try {
+                // Google Sheets에서 진단평가 결과 가져오기 (학생 목록 추출)
+                const diagnosticData = await getDiagnosticResultsFromCloud();
+                
+                if (diagnosticData.status === 'success' && diagnosticData.data && diagnosticData.data.length > 0) {
+                    console.log('✅ Google Sheets에서 학생 데이터 로드:', diagnosticData.data);
+                    
+                    // 진단평가 결과에서 학생 목록 추출 (중복 제거)
+                    const studentMap = new Map();
+                    
+                    diagnosticData.data.forEach(result => {
+                        const studentId = result.student_id;
+                        if (!studentMap.has(studentId)) {
+                            studentMap.set(studentId, {
+                                studentId: studentId,
+                                name: result.student_name,
+                                grade: result.grade || 1,
+                                class: 1,
+                                number: 1
+                            });
+                        }
+                    });
+                    
+                    students = Array.from(studentMap.values());
+                    console.log('📊 추출된 학생 목록:', students);
+                }
+            } catch (error) {
+                console.warn('⚠️ Google Sheets 조회 실패, localStorage 사용:', error);
+            }
+            
+            // 폴백: localStorage에서 학생 목록 가져오기
+            if (students.length === 0) {
+                students = JSON.parse(localStorage.getItem('student_list')) || [];
+                console.log('📦 localStorage에서 학생 목록 로드:', students);
+            }
+            
             const select = document.getElementById('studentDetailSelect');
             
             // 기존 옵션 제거 (첫 번째 옵션 제외)
@@ -2649,12 +2688,19 @@
             }
             
             // 학생 목록 추가
+            if (students.length === 0) {
+                console.warn('⚠️ 등록된 학생이 없습니다');
+                return;
+            }
+            
             students.forEach(student => {
                 const option = document.createElement('option');
                 option.value = JSON.stringify(student);
-                option.textContent = `${student.name} (${student.grade}학년 ${student.class}반 ${student.number}번)`;
+                option.textContent = `${student.name} (${student.grade}학년 ${student.class || 1}반 ${student.number || 1}번)`;
                 select.appendChild(option);
             });
+            
+            console.log(`✅ 학생 목록 로드 완료: ${students.length}명`);
         }
 
         // 학생 상세 데이터 로드
