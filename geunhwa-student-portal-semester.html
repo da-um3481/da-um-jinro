@@ -3315,8 +3315,8 @@
             // 모달 닫기
             document.getElementById('diagnosticModal').classList.add('hidden');
             
-            // 🆕 진단평가 완료 후 즉시 공유 요청
-            showShareResultModal(level, totalScore);
+            // 🆕 진단평가 완료 후 즉시 공유 요청 (과목별 점수 포함!)
+            showShareResultModal(level, totalScore, subjectScores);
             
             // 학습 스케줄 재생성 (수준에 맞춰)
             const student = {
@@ -3329,39 +3329,42 @@
         }
         
         // 🆕 결과 공유 모달 표시 (완전 자동화)
-        function showShareResultModal(level, totalScore) {
+        function showShareResultModal(level, totalScore, subjectScores) {
             const studentName = localStorage.getItem('currentStudentName');
             const studentGrade = localStorage.getItem('currentStudentGrade');
             
-            // 공유 메시지 생성 (간단하게!)
-            const shareText = `진단평가 완료: ${studentName} (중${studentGrade}) - ${totalScore}점 (${level})`;
-
-            // 모바일인지 확인
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile && navigator.share) {
-                // 모바일: Web Share API
-                setTimeout(() => {
-                    if (confirm(`✅ 진단평가 완료!\n\n이름: ${studentName}\n학년: 중${studentGrade}\n점수: ${totalScore}/50\n수준: ${level}\n\n선생님께 결과를 전송하시겠습니까?`)) {
-                        navigator.share({
-                            title: '진단평가 결과',
-                            text: shareText
-                        }).catch(err => {
-                            // 공유 실패시 화면에 표시
-                            showResultOnScreen(studentName, studentGrade, totalScore, level);
-                        });
-                    }
-                }, 500);
-            } else {
-                // PC 또는 공유 API 없음: 화면에 표시
-                showResultOnScreen(studentName, studentGrade, totalScore, level);
+            // 🎯 과목별 점수 문자열 생성
+            const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+            let subjectText = '';
+            if (subjectScores) {
+                Object.keys(subjectScores).forEach(subject => {
+                    const score = subjectScores[subject];
+                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}/10\n`;
+                });
             }
+            
+            // 공유 메시지 생성 (과목별 점수 포함!)
+            const shareText = `✅ 진단평가 완료!\n\n👤 이름: ${studentName}\n📚 학년: 중${studentGrade}\n📊 총점: ${totalScore}/50\n🎯 수준: ${level}\n\n📝 과목별 점수:\n${subjectText}\n이 결과를 선생님께 보내주세요!`;
+
+            // 화면에 크게 표시 (스크린샷용)
+            showResultOnScreen(studentName, studentGrade, totalScore, level, subjectScores);
         }
         
-        // 🆕 결과를 화면에 크게 표시
-        function showResultOnScreen(name, grade, score, level) {
+        // 🆕 결과를 화면에 크게 표시 (과목별 점수 포함!)
+        function showResultOnScreen(name, grade, score, level, subjectScores) {
+            // 🎯 과목별 점수 문자열 생성
+            const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+            let subjectText = '\n━━━━━━━━━━━━━━━━━━\n📝 과목별 점수:\n';
+            if (subjectScores) {
+                Object.keys(subjectScores).forEach(subject => {
+                    const score = subjectScores[subject];
+                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}/10\n`;
+                });
+            }
+            subjectText += '━━━━━━━━━━━━━━━━━━\n';
+            
             setTimeout(() => {
-                alert(`✅ 진단평가 완료!\n\n👤 이름: ${name}\n📚 학년: 중${grade}\n📈 점수: ${score}/50\n🎯 수준: ${level}\n\n📱 스크린샷을 찍어서\n선생님께 카톡으로 보내주세요!\n\n(이 화면을 캡처하세요)`);
+                alert(`✅ 진단평가 완료!\n\n👤 이름: ${name}\n📚 학년: 중${grade}\n📊 총점: ${score}/50\n🎯 수준: ${level}${subjectText}\n📱 이 화면을 스크린샷 찍어서\n선생님께 카톡으로 보내주세요!\n\n(화면 캡처: 전원+볼륨다운)`);
             }, 500);
         }
         
