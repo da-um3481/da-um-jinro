@@ -1,0 +1,27 @@
+{
+  "exportDate": "2025-12-31T10:00:00.000Z",
+  "exportType": "student_diagnostic_data",
+  "studentInfo": {
+    "id": "student_001",
+    "name": "김철수",
+    "grade": "1"
+  },
+  "diagnosticResults": [
+    {
+      "studentId": "student_001",
+      "studentName": "김철수",
+      "grade": "1",
+      "totalScore": 42,
+      "level": "표준",
+      "levelLabel": "표준",
+      "testDate": "2025-12-31",
+      "subjectScores": {
+        "수학": { "score": 8, "total": 10 },
+        "영어": { "score": 9, "total": 10 },
+        "국어": { "score": 8, "total": 10 },
+        "사회": { "score": 9, "total": 10 },
+        "과학": { "score": 8, "total": 10 }
+      }
+    }
+  ]
+}

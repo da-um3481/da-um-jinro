@@ -5548,99 +5548,105 @@
         }
         
         // 📥 진단평가 데이터 가져오기 (Import)
-        function importStudentData(event) {
+        async function importStudentData(event) {
             const files = event.target.files;
             if (!files || files.length === 0) {
                 alert('파일을 선택해주세요.');
                 return;
             }
             
-            let importedCount = 0;
-            let errorCount = 0;
-            const existingResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
-            const mergedResults = [...existingResults];
-            
             console.log(`📥 ${files.length}개 파일 가져오기 시작...`);
             
-            // 모든 파일 처리
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        console.log(`📄 파일 ${index + 1} 읽기 완료:`, file.name);
-                        console.log(`📋 파일 구조:`, Object.keys(data));
-                        
-                        // 🆕 여러 가지 JSON 구조 지원
-                        let resultsArray = [];
-                        
-                        // 케이스 1: diagnostic_results (snake_case)
-                        if (data.diagnostic_results && Array.isArray(data.diagnostic_results)) {
-                            resultsArray = data.diagnostic_results;
-                            console.log('✅ diagnostic_results 형식 감지');
-                        }
-                        // 케이스 2: diagnosticResults (camelCase)
-                        else if (data.diagnosticResults && Array.isArray(data.diagnosticResults)) {
-                            resultsArray = data.diagnosticResults;
-                            console.log('✅ diagnosticResults 형식 감지');
-                        }
-                        // 케이스 3: 직접 배열인 경우
-                        else if (Array.isArray(data)) {
-                            resultsArray = data;
-                            console.log('✅ 직접 배열 형식 감지');
-                        }
-                        
-                        if (resultsArray.length > 0) {
-                            resultsArray.forEach(result => {
-                                // 중복 체크 (studentId 기준)
-                                const existingIndex = mergedResults.findIndex(r => r.studentId === result.studentId);
-                                if (existingIndex >= 0) {
-                                    // 기존 데이터 업데이트
-                                    mergedResults[existingIndex] = result;
-                                    console.log(`🔄 학생 데이터 업데이트: ${result.studentName} (${result.studentId})`);
-                                } else {
-                                    // 새 데이터 추가
-                                    mergedResults.push(result);
-                                    console.log(`➕ 새 학생 데이터 추가: ${result.studentName} (${result.studentId})`);
-                                }
-                                importedCount++;
-                            });
-                        } else {
-                            console.warn(`⚠️ 파일에 진단평가 데이터가 없습니다: ${file.name}`);
-                        }
-                        
-                        // 마지막 파일 처리 완료 시
-                        if (index === files.length - 1) {
-                            // localStorage에 저장
-                            localStorage.setItem('diagnostic_results', JSON.stringify(mergedResults));
-                            
-                            // 화면 갱신
-                            loadDiagnosticResults();
-                            
-                            alert(`✅ 데이터 가져오기 완료!\n\n📊 가져온 학생 수: ${importedCount}명\n❌ 오류: ${errorCount}건`);
-                            console.log(`✅ 총 ${importedCount}명의 진단평가 데이터 가져오기 완료`);
-                        }
-                    } catch (error) {
-                        console.error(`❌ 파일 읽기 오류 (${file.name}):`, error);
-                        errorCount++;
-                        
-                        if (index === files.length - 1) {
-                            alert(`⚠️ 일부 파일 처리 중 오류 발생\n\n✅ 성공: ${importedCount}명\n❌ 실패: ${errorCount}건`);
-                        }
+            const existingResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const mergedResults = [...existingResults];
+            let importedCount = 0;
+            let errorCount = 0;
+            
+            // 🔥 모든 파일을 순차적으로 처리 (비동기 문제 해결!)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                try {
+                    const content = await readFileAsync(file);
+                    const data = JSON.parse(content);
+                    
+                    console.log(`📄 파일 ${i + 1}/${files.length} 읽기 완료:`, file.name);
+                    console.log(`📋 파일 구조:`, Object.keys(data));
+                    
+                    // 🆕 여러 가지 JSON 구조 지원
+                    let resultsArray = [];
+                    
+                    // 케이스 1: diagnostic_results (snake_case)
+                    if (data.diagnostic_results && Array.isArray(data.diagnostic_results)) {
+                        resultsArray = data.diagnostic_results;
+                        console.log('✅ diagnostic_results 형식 감지');
                     }
-                };
-                
-                reader.onerror = function() {
-                    console.error(`❌ 파일 읽기 실패: ${file.name}`);
+                    // 케이스 2: diagnosticResults (camelCase)
+                    else if (data.diagnosticResults && Array.isArray(data.diagnosticResults)) {
+                        resultsArray = data.diagnosticResults;
+                        console.log('✅ diagnosticResults 형식 감지');
+                    }
+                    // 케이스 3: 직접 배열인 경우
+                    else if (Array.isArray(data)) {
+                        resultsArray = data;
+                        console.log('✅ 직접 배열 형식 감지');
+                    }
+                    
+                    if (resultsArray.length > 0) {
+                        resultsArray.forEach(result => {
+                            // 중복 체크 (studentId 기준)
+                            const existingIndex = mergedResults.findIndex(r => r.studentId === result.studentId);
+                            if (existingIndex >= 0) {
+                                // 기존 데이터 업데이트
+                                mergedResults[existingIndex] = result;
+                                console.log(`🔄 학생 데이터 업데이트: ${result.studentName} (${result.studentId})`);
+                            } else {
+                                // 새 데이터 추가
+                                mergedResults.push(result);
+                                console.log(`➕ 새 학생 데이터 추가: ${result.studentName} (${result.studentId})`);
+                            }
+                            importedCount++;
+                        });
+                    } else {
+                        console.warn(`⚠️ 파일에 진단평가 데이터가 없습니다: ${file.name}`);
+                    }
+                    
+                } catch (error) {
+                    console.error(`❌ 파일 읽기 오류 (${file.name}):`, error);
                     errorCount++;
-                };
-                
+                }
+            }
+            
+            // 모든 파일 처리 완료!
+            console.log(`✅ 총 ${files.length}개 파일 처리 완료`);
+            console.log(`📊 병합된 결과:`, mergedResults);
+            
+            // localStorage에 저장
+            localStorage.setItem('diagnostic_results', JSON.stringify(mergedResults));
+            console.log('💾 localStorage 저장 완료');
+            
+            // 화면 갱신
+            loadDiagnosticResults();
+            console.log('🔄 화면 갱신 완료');
+            
+            // 결과 알림
+            if (errorCount > 0) {
+                alert(`⚠️ 일부 파일 처리 중 오류 발생\n\n✅ 성공: ${importedCount}명\n❌ 실패: ${errorCount}건\n\n화면을 확인해주세요!`);
+            } else {
+                alert(`✅ 데이터 가져오기 완료!\n\n📊 가져온 학생 수: ${importedCount}명\n\n화면에 표시되었습니다!`);
+            }
+            
+            // 파일 입력 초기화
+            event.target.value = '';
+        }
+        
+        // 🆕 파일을 Promise로 읽는 헬퍼 함수
+        function readFileAsync(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = e => reject(e);
                 reader.readAsText(file);
             });
-            
-            // 파일 입력 초기화 (같은 파일 다시 선택 가능하도록)
-            event.target.value = '';
         }
         
         // 🗑️ 진단평가 데이터 초기화
