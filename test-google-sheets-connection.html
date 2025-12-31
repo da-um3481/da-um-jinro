@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets 연동 테스트</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Google Sheets 연동 테스트</h1>
+        
+        <div class="test-section">
+            <h3>📝 Test 1: 진단평가 결과 저장</h3>
+            <button onclick="testSaveDiagnostic()">진단평가 결과 저장 테스트</button>
+            <div id="diagnostic-result" class="result info" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📚 Test 2: 학습 기록 저장</h3>
+            <button onclick="testSaveStudyRecord()">학습 기록 저장 테스트</button>
+            <div id="study-result" class="result info" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💬 Test 3: AI 피드백 저장</h3>
+            <button onclick="testSaveAIFeedback()">AI 피드백 저장 테스트</button>
+            <div id="feedback-result" class="result info" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Test 4: 데이터 읽기</h3>
+            <button onclick="testGetDiagnosticResults()">진단평가 결과 읽기</button>
+            <button onclick="testGetStudyRecords()">학습 기록 읽기</button>
+            <div id="read-result" class="result info" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxCRKmOjkjEbSPkpjzb_RF6c-o3g9GsvHBMjFzu2YxLbac7nK_MwV2AT5VYfzFR7aP7MQ/exec';
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+
+        async function testSaveDiagnostic() {
+            showResult('diagnostic-result', '⏳ 진단평가 결과 저장 중...', 'info');
+            
+            const testData = {
+                student_id: 'test_' + Date.now(),
+                student_name: '테스트학생' + Math.floor(Math.random() * 100),
+                grade: 1,
+                total_score: 42,
+                level: '표준',
+                math_score: 8,
+                english_score: 9,
+                korean_score: 8,
+                social_score: 9,
+                science_score: 8,
+                test_date: new Date().toISOString().split('T')[0]
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL + '?action=saveDiagnosticResult', {
+                    method: 'POST',
+                    body: JSON.stringify(testData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResult('diagnostic-result', 
+                        `✅ 성공!\n\n저장된 데이터:\n${JSON.stringify(testData, null, 2)}\n\n응답:\n${JSON.stringify(result, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('diagnostic-result', 
+                        `❌ 실패: ${result.message}\n\n${JSON.stringify(result, null, 2)}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('diagnostic-result', 
+                    `❌ 에러 발생:\n${error.message}\n\n스택:\n${error.stack}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testSaveStudyRecord() {
+            showResult('study-result', '⏳ 학습 기록 저장 중...', 'info');
+            
+            const testData = {
+                student_id: 'test_' + Date.now(),
+                student_name: '테스트학생' + Math.floor(Math.random() * 100),
+                date: new Date().toISOString().split('T')[0],
+                subject: '수학',
+                study_time: 90,
+                progress: 'p.25-35',
+                content: '이차방정식 학습'
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL + '?action=saveStudyRecord', {
+                    method: 'POST',
+                    body: JSON.stringify(testData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResult('study-result', 
+                        `✅ 성공!\n\n저장된 데이터:\n${JSON.stringify(testData, null, 2)}\n\n응답:\n${JSON.stringify(result, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('study-result', 
+                        `❌ 실패: ${result.message}\n\n${JSON.stringify(result, null, 2)}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('study-result', 
+                    `❌ 에러 발생:\n${error.message}\n\n스택:\n${error.stack}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testSaveAIFeedback() {
+            showResult('feedback-result', '⏳ AI 피드백 저장 중...', 'info');
+            
+            const testData = {
+                student_id: 'test_' + Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                emoji: '🎉',
+                title: '훌륭해요!',
+                summary: '오늘 학습 잘했어요!',
+                strengths: '꾸준한 학습 태도',
+                improvements: '복습 시간 늘리기',
+                tips: '내일도 화이팅!'
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL + '?action=saveAIFeedback', {
+                    method: 'POST',
+                    body: JSON.stringify(testData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResult('feedback-result', 
+                        `✅ 성공!\n\n저장된 데이터:\n${JSON.stringify(testData, null, 2)}\n\n응답:\n${JSON.stringify(result, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('feedback-result', 
+                        `❌ 실패: ${result.message}\n\n${JSON.stringify(result, null, 2)}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('feedback-result', 
+                    `❌ 에러 발생:\n${error.message}\n\n스택:\n${error.stack}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testGetDiagnosticResults() {
+            showResult('read-result', '⏳ 진단평가 결과 읽는 중...', 'info');
+            
+            try {
+                const response = await fetch(WEB_APP_URL + '?action=getDiagnosticResults');
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResult('read-result', 
+                        `✅ 성공! 총 ${result.data.length}개 데이터\n\n${JSON.stringify(result.data.slice(0, 3), null, 2)}\n\n...`, 
+                        'success'
+                    );
+                } else {
+                    showResult('read-result', 
+                        `❌ 실패: ${result.message}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('read-result', 
+                    `❌ 에러 발생:\n${error.message}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testGetStudyRecords() {
+            showResult('read-result', '⏳ 학습 기록 읽는 중...', 'info');
+            
+            try {
+                const response = await fetch(WEB_APP_URL + '?action=getStudyRecords');
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResult('read-result', 
+                        `✅ 성공! 총 ${result.data.length}개 데이터\n\n${JSON.stringify(result.data.slice(0, 3), null, 2)}\n\n...`, 
+                        'success'
+                    );
+                } else {
+                    showResult('read-result', 
+                        `❌ 실패: ${result.message}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('read-result', 
+                    `❌ 에러 발생:\n${error.message}`, 
+                    'error'
+                );
+            }
+        }
+    </script>
+</body>
+</html>
