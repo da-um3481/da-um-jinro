@@ -3328,89 +3328,41 @@
             generateAndDisplayTodaySchedule(student);
         }
         
-        // 🆕 결과 공유 모달 표시
+        // 🆕 결과 공유 모달 표시 (완전 자동화)
         function showShareResultModal(level, totalScore) {
             const studentName = localStorage.getItem('currentStudentName');
             const studentGrade = localStorage.getItem('currentStudentGrade');
             
-            // 공유 메시지 생성
-            const shareText = `📊 진단평가 완료!
-
-👤 이름: ${studentName}
-📚 학년: 중${studentGrade}
-📈 총점: ${totalScore}/50점
-🎯 수준: ${level}
-
-✅ 진단평가를 완료했습니다!`;
+            // 공유 메시지 생성 (간단하게!)
+            const shareText = `진단평가 완료: ${studentName} (중${studentGrade}) - ${totalScore}점 (${level})`;
 
             // 모바일인지 확인
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
-            if (isMobile) {
-                // 모바일: 즉시 공유 옵션 표시
-                if (confirm(`✅ 진단평가를 완료했습니다!\n\n📱 선생님께 결과를 공유하시겠습니까?\n\n확인을 누르면 카카오톡/문자로 공유할 수 있습니다.`)) {
-                    shareViaMobile(shareText);
-                }
+            if (isMobile && navigator.share) {
+                // 모바일: Web Share API
+                setTimeout(() => {
+                    if (confirm(`✅ 진단평가 완료!\n\n이름: ${studentName}\n학년: 중${studentGrade}\n점수: ${totalScore}/50\n수준: ${level}\n\n선생님께 결과를 전송하시겠습니까?`)) {
+                        navigator.share({
+                            title: '진단평가 결과',
+                            text: shareText
+                        }).catch(err => {
+                            // 공유 실패시 화면에 표시
+                            showResultOnScreen(studentName, studentGrade, totalScore, level);
+                        });
+                    }
+                }, 500);
             } else {
-                // PC: 복사 + 안내
-                if (confirm(`✅ 진단평가를 완료했습니다!\n\n💾 결과를 자동으로 저장했습니다.\n\n확인을 누르면 결과 요약을 복사합니다.\n그대로 선생님께 카톡/문자로 보내주세요!`)) {
-                    copyToClipboard(shareText);
-                    alert(`✅ 결과가 복사되었습니다!\n\n지금 카카오톡/문자를 열고\n붙여넣기(Ctrl+V)해서 선생님께 보내주세요!`);
-                }
+                // PC 또는 공유 API 없음: 화면에 표시
+                showResultOnScreen(studentName, studentGrade, totalScore, level);
             }
         }
         
-        // 🆕 모바일 공유
-        function shareViaMobile(text) {
-            if (navigator.share) {
-                // Web Share API 사용
-                navigator.share({
-                    title: '진단평가 결과',
-                    text: text
-                }).then(() => {
-                    console.log('✅ 공유 완료');
-                }).catch((error) => {
-                    console.log('공유 취소:', error);
-                    // 실패 시 복사
-                    fallbackCopy(text);
-                });
-            } else {
-                // Web Share API 미지원 시 복사
-                fallbackCopy(text);
-            }
-        }
-        
-        // 🆕 클립보드 복사
-        function copyToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    console.log('✅ 클립보드 복사 완료');
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
-            }
-        }
-        
-        // 🆕 Fallback 복사
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-            
-            try {
-                document.execCommand('copy');
-                alert(`✅ 결과가 복사되었습니다!\n\n카카오톡이나 문자를 열고\n붙여넣기해서 선생님께 보내주세요!`);
-            } catch (err) {
-                alert(`결과를 수동으로 복사해주세요:\n\n${text}`);
-            }
-            
-            document.body.removeChild(textarea);
+        // 🆕 결과를 화면에 크게 표시
+        function showResultOnScreen(name, grade, score, level) {
+            setTimeout(() => {
+                alert(`✅ 진단평가 완료!\n\n👤 이름: ${name}\n📚 학년: 중${grade}\n📈 점수: ${score}/50\n🎯 수준: ${level}\n\n📱 스크린샷을 찍어서\n선생님께 카톡으로 보내주세요!\n\n(이 화면을 캡처하세요)`);
+            }, 500);
         }
         
         // 진단 결과 저장
