@@ -2162,45 +2162,117 @@
             }
         }
 
-        // 진단평가 데이터 로드
-        function loadDiagnosticData() {
-            // localStorage에서 학생 포털의 진단평가 결과 가져오기
-            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+        // 진단평가 데이터 로드 (Google Sheets 연동)
+        async function loadDiagnosticData() {
+            console.log('🔄 진단평가 데이터 로딩 시작...');
             
-            console.log('📊 진단평가 결과 로드:', diagnosticResults);
-            
-            // 중학생만 필터링 (subject === '종합' 인 것만)
-            const diagnosticData = diagnosticResults.filter(result => {
-                return result.subject === '종합' && result.grade <= 3;
-            });
+            try {
+                // Google Sheets에서 데이터 가져오기
+                const cloudData = await getDiagnosticResultsFromCloud();
+                
+                if (cloudData.status === 'success' && cloudData.data && cloudData.data.length > 0) {
+                    console.log('✅ Google Sheets에서 데이터 로드 성공:', cloudData.data);
+                    
+                    // 중학생만 필터링
+                    const diagnosticData = cloudData.data.filter(result => {
+                        return result.grade && result.grade <= 3;
+                    });
+                    
+                    console.log('📊 중학생 진단평가 결과:', diagnosticData);
+                    
+                    // 통계 업데이트
+                    const completed = diagnosticData.length;
+                    const advanced = diagnosticData.filter(d => d.total_score >= 281).length;
+                    const intermediate = diagnosticData.filter(d => d.total_score >= 201 && d.total_score < 281).length;
+                    const beginner = diagnosticData.filter(d => d.total_score < 201).length;
 
-            console.log('📊 중학생 진단평가 결과:', diagnosticData);
+                    document.getElementById('diagnosticCompletedCount').textContent = completed;
+                    document.getElementById('advancedCount').textContent = advanced;
+                    document.getElementById('intermediateCount').textContent = intermediate;
+                    document.getElementById('beginnerCount').textContent = beginner;
 
-            // 통계 업데이트
-            const completed = diagnosticData.length;
-            const advanced = diagnosticData.filter(d => d.totalScore >= 281).length;
-            const intermediate = diagnosticData.filter(d => d.totalScore >= 201 && d.totalScore < 281).length;
-            const beginner = diagnosticData.filter(d => d.totalScore < 201).length;
+                    // 차트 업데이트
+                    const total = Math.max(completed, 1);
+                    document.getElementById('advancedBar').style.height = `${(advanced / total) * 200}px`;
+                    document.getElementById('intermediateBar').style.height = `${(intermediate / total) * 200}px`;
+                    document.getElementById('beginnerBar').style.height = `${(beginner / total) * 200}px`;
+                    document.getElementById('advancedPercent').textContent = `${Math.round((advanced / total) * 100)}%`;
+                    document.getElementById('intermediatePercent').textContent = `${Math.round((intermediate / total) * 100)}%`;
+                    document.getElementById('beginnerPercent').textContent = `${Math.round((beginner / total) * 100)}%`;
 
-            document.getElementById('diagnosticCompletedCount').textContent = completed;
-            document.getElementById('advancedCount').textContent = advanced;
-            document.getElementById('intermediateCount').textContent = intermediate;
-            document.getElementById('beginnerCount').textContent = beginner;
+                    // 테이블 업데이트
+                    displayDiagnosticResults(diagnosticData);
+                } else {
+                    console.log('⚠️ Google Sheets에 데이터 없음, localStorage 확인...');
+                    
+                    // 폴백: localStorage에서 데이터 가져오기
+                    const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                    const diagnosticData = diagnosticResults.filter(result => {
+                        return result.subject === '종합' && result.grade <= 3;
+                    });
 
-            // 차트 업데이트
-            const total = Math.max(completed, 1);
-            document.getElementById('advancedBar').style.height = `${(advanced / total) * 200}px`;
-            document.getElementById('intermediateBar').style.height = `${(intermediate / total) * 200}px`;
-            document.getElementById('beginnerBar').style.height = `${(beginner / total) * 200}px`;
-            document.getElementById('advancedPercent').textContent = `${Math.round((advanced / total) * 100)}%`;
-            document.getElementById('intermediatePercent').textContent = `${Math.round((intermediate / total) * 100)}%`;
-            document.getElementById('beginnerPercent').textContent = `${Math.round((beginner / total) * 100)}%`;
+                    console.log('📊 localStorage 진단평가 결과:', diagnosticData);
 
-            // 테이블 업데이트
-            displayDiagnosticResults(diagnosticData);
+                    // 통계 업데이트
+                    const completed = diagnosticData.length;
+                    const advanced = diagnosticData.filter(d => d.totalScore >= 281).length;
+                    const intermediate = diagnosticData.filter(d => d.totalScore >= 201 && d.totalScore < 281).length;
+                    const beginner = diagnosticData.filter(d => d.totalScore < 201).length;
+
+                    document.getElementById('diagnosticCompletedCount').textContent = completed;
+                    document.getElementById('advancedCount').textContent = advanced;
+                    document.getElementById('intermediateCount').textContent = intermediate;
+                    document.getElementById('beginnerCount').textContent = beginner;
+
+                    // 차트 업데이트
+                    const total = Math.max(completed, 1);
+                    document.getElementById('advancedBar').style.height = `${(advanced / total) * 200}px`;
+                    document.getElementById('intermediateBar').style.height = `${(intermediate / total) * 200}px`;
+                    document.getElementById('beginnerBar').style.height = `${(beginner / total) * 200}px`;
+                    document.getElementById('advancedPercent').textContent = `${Math.round((advanced / total) * 100)}%`;
+                    document.getElementById('intermediatePercent').textContent = `${Math.round((intermediate / total) * 100)}%`;
+                    document.getElementById('beginnerPercent').textContent = `${Math.round((beginner / total) * 100)}%`;
+
+                    // 테이블 업데이트
+                    displayDiagnosticResults(diagnosticData);
+                }
+            } catch (error) {
+                console.error('❌ 진단평가 데이터 로드 실패:', error);
+                
+                // 폴백: localStorage에서 데이터 가져오기
+                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                const diagnosticData = diagnosticResults.filter(result => {
+                    return result.subject === '종합' && result.grade <= 3;
+                });
+
+                console.log('📊 localStorage 진단평가 결과 (에러 폴백):', diagnosticData);
+
+                // 통계 업데이트
+                const completed = diagnosticData.length;
+                const advanced = diagnosticData.filter(d => d.totalScore >= 281).length;
+                const intermediate = diagnosticData.filter(d => d.totalScore >= 201 && d.totalScore < 281).length;
+                const beginner = diagnosticData.filter(d => d.totalScore < 201).length;
+
+                document.getElementById('diagnosticCompletedCount').textContent = completed;
+                document.getElementById('advancedCount').textContent = advanced;
+                document.getElementById('intermediateCount').textContent = intermediate;
+                document.getElementById('beginnerCount').textContent = beginner;
+
+                // 차트 업데이트
+                const total = Math.max(completed, 1);
+                document.getElementById('advancedBar').style.height = `${(advanced / total) * 200}px`;
+                document.getElementById('intermediateBar').style.height = `${(intermediate / total) * 200}px`;
+                document.getElementById('beginnerBar').style.height = `${(beginner / total) * 200}px`;
+                document.getElementById('advancedPercent').textContent = `${Math.round((advanced / total) * 100)}%`;
+                document.getElementById('intermediatePercent').textContent = `${Math.round((intermediate / total) * 100)}%`;
+                document.getElementById('beginnerPercent').textContent = `${Math.round((beginner / total) * 100)}%`;
+
+                // 테이블 업데이트
+                displayDiagnosticResults(diagnosticData);
+            }
         }
 
-        // 진단평가 결과 표시
+        // 진단평가 결과 표시 (Google Sheets 데이터 형식 지원)
         function displayDiagnosticResults(data) {
             const tbody = document.getElementById('diagnosticResultsTableBody');
             
@@ -2218,30 +2290,50 @@
             }
 
             tbody.innerHTML = data.map(result => {
-                // 수준 판정
+                // Google Sheets 데이터 형식과 localStorage 형식 모두 지원
+                const totalScore = result.total_score || result.totalScore || 0;
+                const studentName = result.student_name || result.studentName || '이름없음';
+                const studentId = result.student_id || result.studentId || '';
+                const grade = result.grade || 1;
+                const testDate = result.test_date || result.testDate || new Date().toISOString();
                 const level = result.level || 'beginner';
-                const levelLabel = result.levelLabel || '기초';
-                const levelClass = level === 'advanced' ? 'level-advanced' : 
-                                  level === 'intermediate' ? 'level-intermediate' : 'level-beginner';
+                
+                // 수준 판정
+                let levelLabel = '기초';
+                let levelClass = 'level-beginner';
+                if (totalScore >= 281) {
+                    levelLabel = '심화';
+                    levelClass = 'level-advanced';
+                } else if (totalScore >= 201) {
+                    levelLabel = '표준';
+                    levelClass = 'level-intermediate';
+                }
                 
                 // 진단일 포맷
-                const testDate = new Date(result.testDate);
-                const dateStr = `${testDate.getFullYear()}-${String(testDate.getMonth() + 1).padStart(2, '0')}-${String(testDate.getDate()).padStart(2, '0')}`;
+                const date = new Date(testDate);
+                const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
                 
                 // 학년 표시 (중1, 중2, 중3)
-                const gradeDisplay = result.grade ? `중${result.grade}` : 'N/A';
+                const gradeDisplay = `중${grade}`;
                 
-                // 과목별 점수는 총점을 5과목으로 균등 분배 (실제로는 과목별 데이터가 있어야 함)
-                const perSubjectScore = Math.round(result.totalScore / 5);
-                const subjectScores = `수학:${perSubjectScore} 영어:${perSubjectScore} 국어:${perSubjectScore} 사회:${perSubjectScore} 과학:${perSubjectScore}`;
+                // 정답 개수 계산 (총점 / 10 = 정답 개수)
+                const correctCount = Math.round(totalScore / 10);
+                
+                // 과목별 점수 (Google Sheets에서 가져온 경우)
+                const mathScore = result.math_score || Math.round(totalScore / 5);
+                const englishScore = result.english_score || Math.round(totalScore / 5);
+                const koreanScore = result.korean_score || Math.round(totalScore / 5);
+                const socialScore = result.social_score || Math.round(totalScore / 5);
+                const scienceScore = result.science_score || Math.round(totalScore / 5);
+                const subjectScores = `수학:${mathScore} 영어:${englishScore} 국어:${koreanScore} 사회:${socialScore} 과학:${scienceScore}`;
 
                 return `
-                    <tr data-student-id="${result.studentId}">
+                    <tr data-student-id="${studentId}">
                         <td>${gradeDisplay}</td>
-                        <td><strong>${result.studentName || '이름없음'}</strong></td>
+                        <td><strong>${studentName}</strong></td>
                         <td>${dateStr}</td>
-                        <td>${result.correctCount || 0}/50</td>
-                        <td><strong>${result.totalScore || 0}점</strong></td>
+                        <td>${correctCount}/50</td>
+                        <td><strong>${totalScore}점</strong></td>
                         <td><span class="level-badge ${levelClass}">${levelLabel}</span></td>
                         <td style="font-size: 0.875rem;">${subjectScores}</td>
                         <td>
