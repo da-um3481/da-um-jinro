@@ -915,6 +915,9 @@
                 <button class="nav-tab" onclick="showSection('student-input')" id="tab-student-input">
                     ✏️ 학생 입력
                 </button>
+                <button class="nav-tab" onclick="showSection('reports')" id="tab-reports">
+                    📊 보고서 관리 <span style="background: #ef4444; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; margin-left: 0.5rem;">NEW</span>
+                </button>
             </div>
         </div>
 
@@ -4363,6 +4366,290 @@ ${record.content || '기록 없음'}`);
                 select.appendChild(option);
             });
         });
+    </script>
+
+    <!-- 보고서 관리 섹션 -->
+    <div class="section-container" id="section-reports" style="display: none;">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📊 보고서 관리</h2>
+                <p class="section-subtitle">학생별 주간/프로그램 종합 보고서를 확인하고 다운로드합니다 (1월 5일~30일, 26일간)</p>
+            </div>
+
+            <!-- 보고서 생성 버튼 -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div style="padding: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <button onclick="generateAllWeeklyReports()" class="btn btn-primary">
+                            📊 전체 주간 요약 생성
+                        </button>
+                        <button onclick="generateAllProgramReports()" class="btn btn-success">
+                            🎉 전체 프로그램 종합 보고서 생성
+                        </button>
+                        <button onclick="loadReportsData()" class="btn" style="background: rgba(59, 130, 246, 0.1); color: var(--accent);">
+                            🔄 새로고침
+                        </button>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-radius: 0.5rem; font-size: 0.9rem; color: var(--text);">
+                        💡 <strong>안내:</strong> 주간 요약은 매주 토요일 자동 생성되며, 프로그램 종합 보고서는 1월 30일(목) 자동 생성됩니다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학생별 보고서 목록 -->
+            <div class="card">
+                <div style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary); font-size: 1.2rem;">
+                        👨‍🎓 학생별 보고서
+                    </h3>
+                    <div id="studentReportsList" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- 동적으로 채워짐 -->
+                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            보고서를 불러오는 중...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 보고서 자동화 시스템 로드 -->
+    <script src="report-automation.js"></script>
+    
+    <script>
+        // 보고서 관리 함수들
+        
+        /**
+         * 모든 학생의 주간 요약 생성
+         */
+        function generateAllWeeklyReports() {
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            if (students.length === 0) {
+                alert('❌ 등록된 학생이 없습니다.');
+                return;
+            }
+            
+            if (!confirm(`${students.length}명의 학생에 대한 주간 요약을 생성하시겠습니까?`)) {
+                return;
+            }
+            
+            let successCount = 0;
+            const today = new Date();
+            
+            students.forEach(student => {
+                const summary = window.ReportAutomation.generateWeeklySummary(student.id, today);
+                if (summary) {
+                    window.ReportAutomation.saveWeeklySummary(summary);
+                    successCount++;
+                }
+            });
+            
+            alert(`✅ ${successCount}명의 주간 요약이 생성되었습니다!`);
+            loadReportsData();
+        }
+        
+        /**
+         * 모든 학생의 프로그램 종합 보고서 생성
+         */
+        function generateAllProgramReports() {
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            if (students.length === 0) {
+                alert('❌ 등록된 학생이 없습니다.');
+                return;
+            }
+            
+            if (!confirm(`${students.length}명의 학생에 대한 프로그램 종합 보고서를 생성하시겠습니까?\n(26일간의 모든 데이터를 집계합니다)`)) {
+                return;
+            }
+            
+            let successCount = 0;
+            
+            students.forEach(student => {
+                const report = window.ReportAutomation.generateProgramReport(student.id);
+                if (report) {
+                    window.ReportAutomation.saveProgramReport(report);
+                    successCount++;
+                }
+            });
+            
+            alert(`✅ ${successCount}명의 프로그램 종합 보고서가 생성되었습니다!`);
+            loadReportsData();
+        }
+        
+        /**
+         * 보고서 데이터 불러오기 및 화면 표시
+         */
+        function loadReportsData() {
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            const programReports = JSON.parse(localStorage.getItem('program_reports')) || [];
+            const weeklySummaries = JSON.parse(localStorage.getItem('weekly_summary_records')) || [];
+            
+            const listContainer = document.getElementById('studentReportsList');
+            
+            if (students.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        등록된 학생이 없습니다.
+                    </div>
+                `;
+                return;
+            }
+            
+            listContainer.innerHTML = '';
+            
+            students.forEach(student => {
+                const studentWeeklies = weeklySummaries.filter(w => w.student_id === student.id);
+                const studentReport = programReports.find(r => r.student_id === student.id);
+                
+                const studentCard = document.createElement('div');
+                studentCard.style.cssText = `
+                    padding: 1.5rem;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 0.75rem;
+                `;
+                
+                studentCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary);">
+                                ${student.name} <span style="color: var(--text-secondary); font-size: 0.9rem;">(중${student.grade})</span>
+                            </h4>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                주간 요약: ${studentWeeklies.length}개 | 
+                                종합 보고서: ${studentReport ? '✅ 생성 완료' : '⏳ 미생성'}
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button onclick="viewWeeklySummaries('${student.id}')" class="btn" style="background: rgba(59, 130, 246, 0.1); color: var(--accent); font-size: 0.9rem;">
+                                📊 주간 요약 보기 (${studentWeeklies.length})
+                            </button>
+                            ${studentReport ? `
+                                <button onclick="viewProgramReport('${student.id}')" class="btn btn-success" style="font-size: 0.9rem;">
+                                    🎉 종합 보고서 보기
+                                </button>
+                                <button onclick="downloadReport('${student.id}')" class="btn btn-primary" style="font-size: 0.9rem;">
+                                    📥 다운로드
+                                </button>
+                            ` : `
+                                <button onclick="generateSingleProgramReport('${student.id}')" class="btn" style="background: rgba(234, 179, 8, 0.1); color: #fbbf24; font-size: 0.9rem;">
+                                    생성하기
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+                
+                listContainer.appendChild(studentCard);
+            });
+        }
+        
+        /**
+         * 특정 학생의 프로그램 보고서 생성
+         */
+        function generateSingleProgramReport(studentId) {
+            const report = window.ReportAutomation.generateProgramReport(studentId);
+            
+            if (report) {
+                window.ReportAutomation.saveProgramReport(report);
+                alert('✅ 프로그램 종합 보고서가 생성되었습니다!');
+                loadReportsData();
+            } else {
+                alert('❌ 보고서 생성에 실패했습니다. 학습 데이터가 부족한 것 같습니다.');
+            }
+        }
+        
+        /**
+         * 주간 요약 보기
+         */
+        function viewWeeklySummaries(studentId) {
+            const weeklySummaries = JSON.parse(localStorage.getItem('weekly_summary_records')) || [];
+            const studentWeeklies = weeklySummaries.filter(w => w.student_id === studentId);
+            
+            if (studentWeeklies.length === 0) {
+                alert('❌ 주간 요약이 없습니다.');
+                return;
+            }
+            
+            let message = '📊 주간 요약 목록\n\n';
+            studentWeeklies.forEach((summary, index) => {
+                message += `[${index + 1}주차] ${summary.week_start} ~ ${summary.week_end}\n`;
+                message += `  학습일: ${summary.total_study_days}일\n`;
+                message += `  학습시간: ${Math.round(summary.total_study_time_minutes / 60)}시간\n`;
+                message += `  평가: ${summary.overall_assessment}\n\n`;
+            });
+            
+            alert(message);
+        }
+        
+        /**
+         * 프로그램 종합 보고서 보기
+         */
+        function viewProgramReport(studentId) {
+            const programReports = JSON.parse(localStorage.getItem('program_reports')) || [];
+            const report = programReports.find(r => r.student_id === studentId);
+            
+            if (!report) {
+                alert('❌ 프로그램 종합 보고서가 없습니다.');
+                return;
+            }
+            
+            const stats = report.program_stats;
+            
+            let message = `🎉 ${report.program_name} 종합 보고서\n\n`;
+            message += `📅 기간: ${report.program_start} ~ ${report.program_end} (${report.program_days}일)\n\n`;
+            message += `📊 학습 통계\n`;
+            message += `  총 학습일: ${stats.total_study_days}일 / ${report.program_days}일\n`;
+            message += `  총 학습시간: ${stats.total_study_hours}시간\n`;
+            message += `  평균 일일 학습: ${stats.average_daily_study_minutes}분\n`;
+            message += `  학습 꾸준도: ${stats.overall_consistency}%\n\n`;
+            
+            if (report.diagnostic_assessment) {
+                message += `📝 진단평가 결과\n`;
+                message += `  총점: ${report.diagnostic_assessment.total_score}/50\n`;
+                message += `  수준: ${report.diagnostic_assessment.level}\n\n`;
+            }
+            
+            message += `✨ 종합 평가\n`;
+            message += report.program_assessment + '\n\n';
+            
+            message += `🎯 향후 학습 계획\n`;
+            report.future_plan.recommended_actions.forEach((action, i) => {
+                message += `  ${i + 1}. ${action}\n`;
+            });
+            
+            alert(message);
+        }
+        
+        /**
+         * 보고서 JSON 다운로드
+         */
+        function downloadReport(studentId) {
+            const programReports = JSON.parse(localStorage.getItem('program_reports')) || [];
+            const report = programReports.find(r => r.student_id === studentId);
+            
+            if (!report) {
+                alert('❌ 프로그램 종합 보고서가 없습니다.');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `프로그램_종합보고서_${report.student_info.name}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            console.log('📥 보고서 다운로드:', a.download);
+        }
+        
+        // 페이지 로드 시 보고서 데이터 로드
+        if (document.getElementById('section-reports')) {
+            setTimeout(loadReportsData, 1000);
+        }
     </script>
 
     <!-- 🔒 저작권 워터마크 -->
