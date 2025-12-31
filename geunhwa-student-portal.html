@@ -2418,6 +2418,19 @@
             // activeSubject도 저장
             localStorage.setItem('activeSubject', activeSubject || '');
             
+            // 🌐 Google Sheets에 자동 저장
+            if (typeof saveStudyRecordToCloud === 'function') {
+                saveStudyRecordToCloud({
+                    student_id: studentId,
+                    student_name: localStorage.getItem('currentStudentName'),
+                    date: today,
+                    subject: subject,
+                    study_time: Math.floor(totalSeconds / 60),
+                    progress: todayRecord.subjects[subject].textbook || '-',
+                    content: todayRecord.subjects[subject].content || '학습 진행 중'
+                }).catch(err => console.warn('⚠️ 클라우드 저장 실패 (로컬은 저장됨):', err));
+            }
+            
             // 🆕 4주 로드맵 진행률 업데이트
             updateWeeklyRoadmapProgress();
         }
@@ -6597,6 +6610,78 @@
             
             console.log('💾 페이지 종료: 타이머 상태 저장 완료 (타이머는 계속 실행)');
         });
+
+        // 교사 피드백 로드
+        async function loadTeacherFeedbacks() {
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            if (!currentStudentId) {
+                document.getElementById('feedbackContainer').innerHTML = '<p class="text-center text-gray-500 py-8">로그인 후 확인할 수 있습니다</p>';
+                return;
+            }
+            
+            try {
+                // Google Sheets에서 피드백 조회
+                const result = await getTeacherFeedbackFromCloud(currentStudentId);
+                
+                let feedbacks = [];
+                if (result.status === 'success' && result.data.length > 0) {
+                    feedbacks = result.data;
+                    console.log('✅ Google Sheets에서 교사 피드백 로드:', feedbacks);
+                } else {
+                    // 폴백: localStorage에서 조회
+                    const localFeedbacks = JSON.parse(localStorage.getItem('teacher_feedbacks')) || [];
+                    feedbacks = localFeedbacks.filter(f => f.student_id === currentStudentId);
+                    console.log('📦 localStorage에서 교사 피드백 로드:', feedbacks);
+                }
+                
+                const container = document.getElementById('feedbackContainer');
+                
+                if (feedbacks.length === 0) {
+                    container.innerHTML = '<p class="text-center text-gray-500 py-8">아직 선생님 피드백이 없습니다</p>';
+                    return;
+                }
+                
+                // 최신순으로 정렬
+                feedbacks.sort((a, b) => new Date(b.date || b.timestamp) - new Date(a.date || a.timestamp));
+                
+                // 최근 5개만 표시
+                const recentFeedbacks = feedbacks.slice(0, 5);
+                
+                container.innerHTML = recentFeedbacks.map(f => {
+                    const typeEmojis = {
+                        encouragement: '🎉',
+                        suggestion: '💡',
+                        correction: '📝',
+                        praise: '⭐',
+                        general: '💬'
+                    };
+                    const emoji = typeEmojis[f.feedback_type] || '💬';
+                    const date = f.date || new Date(f.timestamp).toISOString().split('T')[0];
+                    
+                    return `
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl mb-3 border-l-4 border-blue-500">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg font-bold">${emoji} 선생님 피드백</span>
+                                <span class="text-sm text-gray-500">${date}</span>
+                            </div>
+                            <p class="text-gray-700">${f.content}</p>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('❌ 교사 피드백 로드 실패:', error);
+                document.getElementById('feedbackContainer').innerHTML = '<p class="text-center text-red-500 py-8">피드백을 불러오는데 실패했습니다</p>';
+            }
+        }
+
+        // 페이지 로드 시 교사 피드백 로드
+        if (document.getElementById('feedbackContainer')) {
+            loadTeacherFeedbacks();
+            
+            // 30초마다 자동 갱신
+            setInterval(loadTeacherFeedbacks, 30000);
+        }
 
         // 자정(24시)에 자동 로그아웃
         function checkMidnightLogout() {

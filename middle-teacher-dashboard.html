@@ -1799,6 +1799,31 @@
                     </div>
                 </div>
 
+                <!-- 교사 피드백 작성 버튼 -->
+                <div id="teacherFeedbackSection" style="display: none; background: rgba(99, 102, 241, 0.1); border: 2px solid var(--accent); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0;">
+                            <i class="fas fa-pen-fancy"></i> 교사 피드백 작성
+                        </h3>
+                        <button onclick="openTeacherFeedbackModal()" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, var(--accent), var(--secondary)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                            <i class="fas fa-plus"></i> 피드백 작성하기
+                        </button>
+                    </div>
+                    <div style="color: var(--text-muted); font-size: 0.95rem;">
+                        학생에게 개인 맞춤 피드백을 전달하세요. 작성한 피드백은 학생 포털에서 즉시 확인할 수 있습니다.
+                    </div>
+                    
+                    <!-- 최근 피드백 목록 -->
+                    <div id="recentTeacherFeedbacks" style="margin-top: 1rem; display: none;">
+                        <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-muted);">
+                            최근 피드백
+                        </h4>
+                        <div id="recentFeedbacksList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <!-- 동적으로 채워짐 -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 탭 네비게이션 -->
                 <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem;">
                     <button class="student-detail-tab active" onclick="switchStudentDetailTab('overview')" data-tab="overview" style="padding: 0.75rem 1.5rem; background: rgba(30, 41, 59, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; white-space: nowrap; color: var(--text); transition: all 0.3s;">
@@ -2651,12 +2676,16 @@
             document.getElementById('selectedStudentClass').textContent = 
                 `${currentDetailStudent.grade}학년 ${currentDetailStudent.class}반 ${currentDetailStudent.number}번`;
             
+            // 교사 피드백 섹션 표시
+            document.getElementById('teacherFeedbackSection').style.display = 'block';
+            
             // 모든 데이터 로드
             loadStudentStats();
             loadStudentDailyFeedbacks();
             loadStudentWeeklyFeedbacks();
             loadStudentMonthlyReports();
             loadStudentRecords();
+            loadRecentTeacherFeedbacks();
         }
 
         // 탭 전환
@@ -4755,6 +4784,138 @@ ${record.content || '기록 없음'}`);
         }
     </script>
 
+    <script>
+        // 교사 피드백 작성 모달 열기
+        function openTeacherFeedbackModal() {
+            if (!currentDetailStudent) {
+                alert('학생을 먼저 선택해주세요');
+                return;
+            }
+            
+            const modal = document.getElementById('teacherFeedbackModal');
+            const studentName = document.getElementById('feedbackModalStudentName');
+            
+            studentName.textContent = `피드백 대상: ${currentDetailStudent.name} (${currentDetailStudent.grade}학년 ${currentDetailStudent.class}반)`;
+            
+            // 입력 필드 초기화
+            document.getElementById('feedbackType').value = 'general';
+            document.getElementById('feedbackContent').value = '';
+            
+            modal.style.display = 'flex';
+        }
+
+        // 교사 피드백 작성 모달 닫기
+        function closeTeacherFeedbackModal() {
+            document.getElementById('teacherFeedbackModal').style.display = 'none';
+        }
+
+        // 교사 피드백 제출
+        async function submitTeacherFeedback() {
+            const type = document.getElementById('feedbackType').value;
+            const content = document.getElementById('feedbackContent').value.trim();
+            
+            if (content.length < 10) {
+                alert('피드백 내용을 최소 10자 이상 작성해주세요');
+                return;
+            }
+            
+            if (!currentDetailStudent) {
+                alert('학생 정보를 찾을 수 없습니다');
+                return;
+            }
+            
+            const feedback = {
+                student_id: currentDetailStudent.studentId,
+                student_name: currentDetailStudent.name,
+                date: new Date().toISOString().split('T')[0],
+                feedback_type: type,
+                content: content
+            };
+            
+            console.log('📤 교사 피드백 전송:', feedback);
+            
+            try {
+                // Google Sheets에 저장
+                const result = await saveTeacherFeedbackToCloud(feedback);
+                
+                if (result.status === 'success') {
+                    console.log('✅ 교사 피드백 저장 성공');
+                    
+                    // localStorage에도 저장 (백업)
+                    const localFeedbacks = JSON.parse(localStorage.getItem('teacher_feedbacks')) || [];
+                    localFeedbacks.push({
+                        ...feedback,
+                        timestamp: new Date().toISOString(),
+                        is_read: false
+                    });
+                    localStorage.setItem('teacher_feedbacks', JSON.stringify(localFeedbacks));
+                    
+                    alert('✅ 피드백이 성공적으로 전송되었습니다!');
+                    closeTeacherFeedbackModal();
+                    loadRecentTeacherFeedbacks();
+                } else {
+                    throw new Error(result.message || '저장 실패');
+                }
+            } catch (error) {
+                console.error('❌ 피드백 저장 실패:', error);
+                alert('❌ 피드백 저장에 실패했습니다: ' + error.message);
+            }
+        }
+
+        // 최근 교사 피드백 로드
+        async function loadRecentTeacherFeedbacks() {
+            if (!currentDetailStudent) return;
+            
+            try {
+                // Google Sheets에서 피드백 조회
+                const result = await getTeacherFeedbackFromCloud(currentDetailStudent.studentId);
+                
+                let feedbacks = [];
+                if (result.status === 'success' && result.data.length > 0) {
+                    feedbacks = result.data;
+                } else {
+                    // 폴백: localStorage에서 조회
+                    const localFeedbacks = JSON.parse(localStorage.getItem('teacher_feedbacks')) || [];
+                    feedbacks = localFeedbacks.filter(f => f.student_id === currentDetailStudent.studentId);
+                }
+                
+                if (feedbacks.length > 0) {
+                    document.getElementById('recentTeacherFeedbacks').style.display = 'block';
+                    const listContainer = document.getElementById('recentFeedbacksList');
+                    
+                    // 최근 3개만 표시
+                    const recentFeedbacks = feedbacks.slice(-3).reverse();
+                    
+                    listContainer.innerHTML = recentFeedbacks.map(f => `
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 10px; border-left: 3px solid var(--accent);">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">${f.date || new Date(f.timestamp).toISOString().split('T')[0]}</span>
+                                <span style="padding: 0.25rem 0.5rem; background: rgba(99, 102, 241, 0.2); border-radius: 6px; font-size: 0.8rem;">${getFeedbackTypeLabel(f.feedback_type)}</span>
+                            </div>
+                            <div style="font-size: 0.95rem;">${f.content}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('recentTeacherFeedbacks').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('❌ 피드백 로드 실패:', error);
+            }
+        }
+
+        // 피드백 타입 라벨 반환
+        function getFeedbackTypeLabel(type) {
+            const labels = {
+                encouragement: '🎉 격려',
+                suggestion: '💡 제안',
+                correction: '📝 수정 요청',
+                praise: '⭐ 칭찬',
+                general: '💬 일반'
+            };
+            return labels[type] || '💬 일반';
+        }
+    </script>
+
     <!-- 🔒 저작권 워터마크 -->
     <div id="copyrightWatermark" style="position: fixed; bottom: 20px; right: 20px; 
                 background: rgba(0, 0, 0, 0.75); color: white; 
@@ -4773,6 +4934,60 @@ ${record.content || '기록 없음'}`);
                 </div>
                 <div style="font-size: 10px; color: rgba(255, 255, 255, 0.7);">
                     교사 전용 · 무단 복제 금지
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 교사 피드백 작성 모달 -->
+    <div id="teacherFeedbackModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
+            <!-- 모달 헤더 -->
+            <div style="padding: 2rem; border-bottom: 2px solid rgba(255, 255, 255, 0.1);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <h2 style="font-size: 1.5rem; font-weight: 900; margin: 0; background: linear-gradient(135deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        <i class="fas fa-pen-fancy"></i> 교사 피드백 작성
+                    </h2>
+                    <button onclick="closeTeacherFeedbackModal()" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: none; color: white; cursor: pointer; font-size: 1.2rem; transition: all 0.3s;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="feedbackModalStudentName" style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.95rem;">
+                    <!-- 학생 이름 표시 -->
+                </div>
+            </div>
+
+            <!-- 모달 바디 -->
+            <div style="padding: 2rem;">
+                <!-- 피드백 타입 선택 -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">피드백 유형</label>
+                    <select id="feedbackType" style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                        <option value="encouragement">🎉 격려</option>
+                        <option value="suggestion">💡 제안</option>
+                        <option value="correction">📝 수정 요청</option>
+                        <option value="praise">⭐ 칭찬</option>
+                        <option value="general">💬 일반</option>
+                    </select>
+                </div>
+
+                <!-- 피드백 내용 -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">피드백 내용</label>
+                    <textarea id="feedbackContent" placeholder="학생에게 전달할 피드백을 작성하세요..." style="width: 100%; min-height: 150px; padding: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 1rem; resize: vertical;"></textarea>
+                    <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+                        최소 10자 이상 작성해주세요
+                    </div>
+                </div>
+
+                <!-- 버튼 -->
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="closeTeacherFeedbackModal()" style="flex: 1; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        취소
+                    </button>
+                    <button onclick="submitTeacherFeedback()" style="flex: 2; padding: 1rem; background: linear-gradient(135deg, var(--accent), var(--secondary)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        <i class="fas fa-paper-plane"></i> 피드백 전송
+                    </button>
                 </div>
             </div>
         </div>
