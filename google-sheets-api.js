@@ -17,21 +17,30 @@ async function saveStudyRecordToCloud(record) {
         return { status: 'error', message: 'Not configured' };
     }
     
+    console.log('📤 학습 기록 전송 시작:', record);
+    
     try {
-        const response = await fetch(GOOGLE_SHEETS_CONFIG.WEB_APP_URL, {
+        const url = `${GOOGLE_SHEETS_CONFIG.WEB_APP_URL}?action=saveStudyRecord`;
+        
+        console.log('📡 요청 URL:', url);
+        console.log('📦 전송 데이터:', JSON.stringify(record, null, 2));
+        
+        const response = await fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'saveStudyRecord',
-                ...record
-            })
+            body: JSON.stringify(record)
         });
         
-        console.log('✅ 학습 기록이 클라우드에 저장되었습니다:', record);
-        return { status: 'success' };
+        const result = await response.json();
+        
+        console.log('✅ 서버 응답:', result);
+        
+        if (result.status === 'success') {
+            console.log('✅ 학습 기록이 클라우드에 저장되었습니다:', record);
+            return { status: 'success' };
+        } else {
+            console.error('❌ 저장 실패:', result.message);
+            return { status: 'error', message: result.message };
+        }
     } catch (error) {
         console.error('❌ 클라우드 저장 실패:', error);
         return { status: 'error', message: error.message };
@@ -39,37 +48,36 @@ async function saveStudyRecordToCloud(record) {
 }
 
 // ✅ 진단평가 결과 저장
-async function saveDiagnosticToCloud(result) {
+async function saveDiagnosticToCloud(data) {
     if (!GOOGLE_SHEETS_CONFIG.WEB_APP_URL || GOOGLE_SHEETS_CONFIG.WEB_APP_URL === 'YOUR_WEB_APP_URL_HERE') {
         console.warn('⚠️ Google Sheets URL이 설정되지 않았습니다.');
         return { status: 'error', message: 'Not configured' };
     }
     
+    console.log('📤 진단평가 결과 전송 시작:', data);
+    
     try {
-        const response = await fetch(GOOGLE_SHEETS_CONFIG.WEB_APP_URL, {
+        const url = `${GOOGLE_SHEETS_CONFIG.WEB_APP_URL}?action=saveDiagnosticResult`;
+        
+        console.log('📡 요청 URL:', url);
+        console.log('📦 전송 데이터:', JSON.stringify(data, null, 2));
+        
+        const response = await fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'saveDiagnosticResult',
-                student_id: result.studentId,
-                student_name: result.studentName,
-                grade: result.grade,
-                total_score: result.totalScore,
-                level: result.level,
-                math_score: result.subjectScores?.['수학']?.score || 0,
-                english_score: result.subjectScores?.['영어']?.score || 0,
-                korean_score: result.subjectScores?.['국어']?.score || 0,
-                social_score: result.subjectScores?.['사회']?.score || 0,
-                science_score: result.subjectScores?.['과학']?.score || 0,
-                test_date: result.testDate
-            })
+            body: JSON.stringify(data)
         });
         
-        console.log('✅ 진단평가 결과가 클라우드에 저장되었습니다');
-        return { status: 'success' };
+        const result = await response.json();
+        
+        console.log('✅ 서버 응답:', result);
+        
+        if (result.status === 'success') {
+            console.log('✅ 진단평가 결과가 클라우드에 저장되었습니다');
+            return { status: 'success' };
+        } else {
+            console.error('❌ 저장 실패:', result.message);
+            return { status: 'error', message: result.message };
+        }
     } catch (error) {
         console.error('❌ 클라우드 저장 실패:', error);
         return { status: 'error', message: error.message };
@@ -130,21 +138,30 @@ async function saveTeacherFeedbackToCloud(feedback) {
         return { status: 'error' };
     }
     
+    console.log('📤 교사 피드백 전송 시작:', feedback);
+    
     try {
-        const response = await fetch(GOOGLE_SHEETS_CONFIG.WEB_APP_URL, {
+        const url = `${GOOGLE_SHEETS_CONFIG.WEB_APP_URL}?action=saveFeedback`;
+        
+        console.log('📡 요청 URL:', url);
+        console.log('📦 전송 데이터:', JSON.stringify(feedback, null, 2));
+        
+        const response = await fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'saveFeedback',
-                ...feedback
-            })
+            body: JSON.stringify(feedback)
         });
         
-        console.log('✅ 선생님 피드백이 클라우드에 저장되었습니다');
-        return { status: 'success' };
+        const result = await response.json();
+        
+        console.log('✅ 서버 응답:', result);
+        
+        if (result.status === 'success') {
+            console.log('✅ 선생님 피드백이 클라우드에 저장되었습니다');
+            return { status: 'success' };
+        } else {
+            console.error('❌ 저장 실패:', result.message);
+            return { status: 'error', message: result.message };
+        }
     } catch (error) {
         console.error('❌ 피드백 저장 실패:', error);
         return { status: 'error', message: error.message };
@@ -158,21 +175,30 @@ async function saveAIFeedbackToCloud(feedback) {
         return { status: 'error' };
     }
     
+    console.log('📤 AI 피드백 전송 시작:', feedback);
+    
     try {
-        const response = await fetch(GOOGLE_SHEETS_CONFIG.WEB_APP_URL, {
+        const url = `${GOOGLE_SHEETS_CONFIG.WEB_APP_URL}?action=saveAIFeedback`;
+        
+        console.log('📡 요청 URL:', url);
+        console.log('📦 전송 데이터:', JSON.stringify(feedback, null, 2));
+        
+        const response = await fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'saveAIFeedback',
-                ...feedback
-            })
+            body: JSON.stringify(feedback)
         });
         
-        console.log('✅ AI 피드백이 클라우드에 저장되었습니다');
-        return { status: 'success' };
+        const result = await response.json();
+        
+        console.log('✅ 서버 응답:', result);
+        
+        if (result.status === 'success') {
+            console.log('✅ AI 피드백이 클라우드에 저장되었습니다');
+            return { status: 'success' };
+        } else {
+            console.error('❌ 저장 실패:', result.message);
+            return { status: 'error', message: result.message };
+        }
     } catch (error) {
         console.error('❌ AI 피드백 저장 실패:', error);
         return { status: 'error', message: error.message };
