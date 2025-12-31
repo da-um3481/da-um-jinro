@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Import 테스트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid #667eea;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 JSON Import 테스트</h1>
+
+        <div class="section">
+            <h2 style="color: #333; margin-bottom: 15px;">📥 Step 1: 테스트 JSON 파일 생성</h2>
+            <button class="btn btn-primary" onclick="downloadTestJSON()">
+                🎯 테스트 JSON 파일 다운로드
+            </button>
+            <div class="step">
+                <span class="step-number">1</span>
+                위 버튼을 클릭하면 <strong>테스트_진단평가_김철수_2025-12-31.json</strong> 파일이 다운로드됩니다.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 style="color: #333; margin-bottom: 15px;">📤 Step 2: 교사 대시보드에서 Import</h2>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>중학교 교사 대시보드</strong> 열기:<br>
+                <a href="https://da-um3481.github.io/da-um-jinro/middle-teacher-dashboard.html" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                    https://da-um3481.github.io/da-um-jinro/middle-teacher-dashboard.html ↗
+                </a>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                "평가 관리" 탭 클릭 → "📤 데이터 가져오기" 버튼 클릭
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                다운로드한 JSON 파일 선택 → 열기
+            </div>
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>화면에 데이터가 표시되는지 확인!</strong><br>
+                <ul style="margin-left: 40px; margin-top: 10px;">
+                    <li>학생명: 김철수</li>
+                    <li>학년: 중1</li>
+                    <li>총점: 42/50</li>
+                    <li>수준: 표준</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 style="color: #333; margin-bottom: 15px;">🔍 Step 3: 콘솔 확인 (문제 발생 시)</h2>
+            <div class="step">
+                <span class="step-number">F12</span>
+                F12 키를 누르고 "Console" 탭 열기
+            </div>
+            <div class="step">
+                다음 메시지를 찾으세요:
+                <div class="code-block">
+📄 파일 1 읽기 완료: 테스트_진단평가_김철수_2025-12-31.json
+📋 파일 구조: ["exportDate", "exportType", "studentInfo", ...]
+✅ diagnosticResults 형식 감지
+➕ 새 학생 데이터 추가: 김철수 (test_001)
+✅ 총 1명의 진단평가 데이터 가져오기 완료
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 style="color: #333; margin-bottom: 15px;">📊 테스트 JSON 파일 구조</h2>
+            <div class="code-block" id="jsonStructure"></div>
+        </div>
+
+        <div class="result" id="result" style="display: none;">
+            <h3 style="color: #10b981;">✅ 테스트 파일 생성 완료!</h3>
+            <p style="margin-top: 10px;">
+                📁 파일이 다운로드 폴더에 저장되었습니다.<br>
+                👉 이제 교사 대시보드에서 Import 해보세요!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 테스트 JSON 파일 생성 및 다운로드
+        function downloadTestJSON() {
+            const testData = {
+                exportDate: new Date().toISOString(),
+                exportType: 'student_diagnostic_data',
+                studentInfo: {
+                    id: 'test_001',
+                    name: '김철수',
+                    grade: '1'
+                },
+                diagnosticResults: [
+                    {
+                        studentId: 'test_001',
+                        studentName: '김철수',
+                        grade: '1',
+                        totalScore: 42,
+                        level: '표준',
+                        levelLabel: '표준',
+                        testDate: new Date().toISOString().split('T')[0],
+                        subjectScores: {
+                            '수학': { score: 8, total: 10 },
+                            '영어': { score: 9, total: 10 },
+                            '국어': { score: 8, total: 10 },
+                            '사회': { score: 9, total: 10 },
+                            '과학': { score: 8, total: 10 }
+                        }
+                    }
+                ],
+                postTestResults: null,
+                studyRecords: []
+            };
+
+            // JSON 파일로 다운로드
+            const blob = new Blob([JSON.stringify(testData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `테스트_진단평가_김철수_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // 결과 표시
+            document.getElementById('result').style.display = 'block';
+
+            // JSON 구조 표시
+            document.getElementById('jsonStructure').textContent = JSON.stringify(testData, null, 2);
+            
+            console.log('✅ 테스트 JSON 파일 다운로드 완료');
+        }
+
+        // 페이지 로드 시 JSON 구조 미리 보기
+        window.addEventListener('DOMContentLoaded', function() {
+            const exampleData = {
+                exportDate: "2025-12-31T...",
+                exportType: "student_diagnostic_data",
+                studentInfo: {
+                    id: "test_001",
+                    name: "김철수",
+                    grade: "1"
+                },
+                diagnosticResults: [
+                    {
+                        studentId: "test_001",
+                        studentName: "김철수",
+                        grade: "1",
+                        totalScore: 42,
+                        level: "표준",
+                        subjectScores: {
+                            "수학": { score: 8, total: 10 },
+                            "영어": { score: 9, total: 10 }
+                        }
+                    }
+                ]
+            };
+            document.getElementById('jsonStructure').textContent = JSON.stringify(exampleData, null, 2);
+        });
+    </script>
+</body>
+</html>
