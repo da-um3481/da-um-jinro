@@ -672,7 +672,7 @@
                     <!-- 🆕 평가결과 보기 버튼 -->
                     <button 
                         onclick="showMyDiagnosticResult()" 
-                        class="hidden px-2 sm:px-3 py-1.5 sm:py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition shadow-lg text-xs sm:text-sm" 
+                        class="hidden px-3 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition shadow-lg text-sm" 
                         id="showResultBtn"
                         title="내 진단평가 결과 보기">
                         📊 평가결과
@@ -3403,6 +3403,13 @@
             }
             
             console.log('✅ 진단평가 결과 저장 완료:', result);
+            
+            // 🆕 진단평가 완료 후 즉시 "평가결과" 버튼 활성화
+            const resultBtn = document.getElementById('showResultBtn');
+            if (resultBtn) {
+                resultBtn.classList.remove('hidden');
+                console.log('✅ 평가결과 버튼 활성화 (진단평가 제출 직후)');
+            }
             
             // 🌐 Google Sheets에 자동 저장
             saveDiagnosticToCloud({
