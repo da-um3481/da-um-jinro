@@ -803,6 +803,15 @@
                         📊 평가결과
                     </button>
                     
+                    <!-- 🆕 단원별 분석 보기 버튼 -->
+                    <button 
+                        onclick="showMyUnitAnalysis()" 
+                        class="hidden px-3 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-lg transition shadow-lg text-sm" 
+                        id="showUnitAnalysisBtn"
+                        title="단원별 학습 분석 보기">
+                        📈 학습분석
+                    </button>
+                    
                     <!-- 데이터 내보내기 버튼 (숨김 처리) -->
                     <button 
                         onclick="exportStudentData()" 
@@ -3586,6 +3595,9 @@
             // 🆕 진단평가 완료 후 즉시 공유 요청 (과목별 점수 + 수준 포함!)
             showShareResultModal(overallLevel, totalScore, subjectScores, subjectLevels);
             
+            // 🎯 단원별 분석 + EBS 강의 자동 추천!
+            showUnitAnalysisAndRecommendations(studentAnswers, currentGrade);
+            
             // 학습 스케줄 재생성 (수준에 맞춰)
             const student = {
                 id: localStorage.getItem('currentStudentId'),
@@ -3619,6 +3631,272 @@
 
             // 화면에 결과 표시
             showResultOnScreen(studentName, studentGrade, totalScore, level, subjectScores, subjectLevels);
+        }
+        
+        // 🎯 단원별 분석 + EBS 강의 자동 추천 (진단평가 완료 시)
+        function showUnitAnalysisAndRecommendations(studentAnswers, grade) {
+            console.log('📊 단원별 분석 시작...', { studentAnswers, grade });
+            
+            // 전체 문제 가져오기
+            const allQuestions = getAllQuestionsByGrade(grade);
+            
+            // 단원별 분석
+            const unitAnalysis = analyzeByUnit(studentAnswers, allQuestions);
+            
+            // EBS 강의 추천
+            const recommendations = recommendLectures(unitAnalysis, grade);
+            
+            console.log('✅ 단원별 분석 완료:', unitAnalysis);
+            console.log('✅ EBS 강의 추천:', recommendations);
+            
+            // UI에 표시
+            displayUnitAnalysisModal(unitAnalysis, recommendations, grade);
+        }
+        
+        // 🎯 단원별 분석 + 강의 추천 모달 표시
+        function displayUnitAnalysisModal(unitAnalysis, recommendations, grade) {
+            // 모달 HTML 생성
+            const modalHTML = `
+                <div id="unitAnalysisModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+                        <!-- 헤더 -->
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-lg">
+                            <h2 class="text-2xl font-bold flex items-center gap-2">
+                                <span>📊</span>
+                                <span>단원별 학습 분석 & 맞춤 강의 추천</span>
+                            </h2>
+                            <p class="text-blue-100 mt-2">당신의 강점과 약점을 파악하고, 최적의 학습 계획을 세워보세요!</p>
+                        </div>
+                        
+                        <div class="p-6">
+                            <!-- 단원별 분석 -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                    <span>🎯</span>
+                                    <span>과목별 단원 분석</span>
+                                </h3>
+                                ${generateUnitAnalysisHTML(unitAnalysis)}
+                            </div>
+                            
+                            <!-- 추천 강의 -->
+                            ${recommendations.length > 0 ? `
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                    <span>🎓</span>
+                                    <span>맞춤 EBS 강의 추천</span>
+                                </h3>
+                                <p class="text-gray-600 mb-4">취약한 단원을 보완할 수 있는 강의를 추천합니다!</p>
+                                ${generateRecommendationsHTML(recommendations)}
+                            </div>
+                            ` : ''}
+                            
+                            <!-- 버튼 -->
+                            <div class="flex justify-end gap-3">
+                                <button onclick="closeUnitAnalysisModal()" 
+                                    class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                                    닫기
+                                </button>
+                                <button onclick="saveUnitAnalysisToLocal()" 
+                                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                    💾 분석 결과 저장
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 모달 추가
+            const existingModal = document.getElementById('unitAnalysisModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // 분석 결과 저장 (localStorage)
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            if (currentStudentId) {
+                const unitAnalysisData = {
+                    studentId: currentStudentId,
+                    grade: grade,
+                    analysis: unitAnalysis,
+                    recommendations: recommendations,
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem(`unit_analysis_${currentStudentId}`, JSON.stringify(unitAnalysisData));
+                console.log('✅ 단원별 분석 결과 저장 완료');
+            }
+        }
+        
+        // 🎯 단원별 분석 HTML 생성
+        function generateUnitAnalysisHTML(unitAnalysis) {
+            if (Object.keys(unitAnalysis).length === 0) {
+                return '<p class="text-gray-500">분석 결과가 없습니다.</p>';
+            }
+            
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
+            
+            Object.entries(unitAnalysis).forEach(([subject, units]) => {
+                const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+                const emoji = subjectEmojis[subject] || '📚';
+                
+                html += `
+                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                        <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                            <span>${emoji}</span>
+                            <span>${subject}</span>
+                        </h4>
+                        ${Object.entries(units).map(([unitName, data]) => {
+                            const accuracy = (data.correct / data.total * 100).toFixed(0);
+                            const color = accuracy >= 70 ? 'text-green-600' : accuracy >= 40 ? 'text-yellow-600' : 'text-red-600';
+                            const bgColor = accuracy >= 70 ? 'bg-green-100' : accuracy >= 40 ? 'bg-yellow-100' : 'bg-red-100';
+                            
+                            return `
+                                <div class="mb-2 p-2 ${bgColor} rounded">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium text-gray-700">${unitName}</span>
+                                        <span class="${color} font-bold">${accuracy}%</span>
+                                    </div>
+                                    <div class="text-xs text-gray-600 mt-1">
+                                        ${data.correct}/${data.total} 정답
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // 🎯 강의 추천 HTML 생성
+        function generateRecommendationsHTML(recommendations) {
+            if (recommendations.length === 0) {
+                return '<p class="text-gray-500">추천 강의가 없습니다.</p>';
+            }
+            
+            let html = '<div class="space-y-4">';
+            
+            recommendations.forEach((rec, index) => {
+                const priorityColors = {
+                    '높음': 'bg-red-100 text-red-800',
+                    '중간': 'bg-yellow-100 text-yellow-800',
+                    '낮음': 'bg-green-100 text-green-800'
+                };
+                const priorityColor = priorityColors[rec.priority] || 'bg-gray-100 text-gray-800';
+                
+                html += `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-2xl">${rec.subjectEmoji || '📚'}</span>
+                                    <span class="font-bold text-lg">${rec.subject}</span>
+                                    <span class="px-2 py-1 rounded text-xs font-bold ${priorityColor}">
+                                        ${rec.priority}
+                                    </span>
+                                </div>
+                                <p class="text-gray-600 text-sm">단원: ${rec.unit}</p>
+                            </div>
+                            <span class="text-3xl">${index + 1}</span>
+                        </div>
+                        
+                        ${rec.lectures && rec.lectures.length > 0 ? `
+                            <div class="space-y-2 mt-3">
+                                ${rec.lectures.map(lecture => `
+                                    <div class="bg-blue-50 p-3 rounded">
+                                        <div class="font-medium text-blue-900">${lecture.title}</div>
+                                        <div class="text-sm text-gray-600 mt-1">👨‍🏫 ${lecture.teacher}</div>
+                                        <a href="${lecture.url}" target="_blank" 
+                                           class="inline-block mt-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition">
+                                            🎬 강의 보러가기 →
+                                        </a>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<p class="text-gray-500 text-sm mt-2">추천 강의 준비 중입니다.</p>'}
+                        
+                        <div class="mt-3 p-2 bg-yellow-50 rounded">
+                            <p class="text-sm text-gray-700">
+                                <strong>💡 추천 이유:</strong> ${rec.reason}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // 🎯 단원별 분석 모달 닫기
+        function closeUnitAnalysisModal() {
+            const modal = document.getElementById('unitAnalysisModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        // 🎯 단원별 분석 결과를 localStorage에 저장
+        function saveUnitAnalysisToLocal() {
+            alert('💾 분석 결과가 자동으로 저장되었습니다!\n\n언제든지 "내 분석 보기"에서 확인할 수 있습니다.');
+            closeUnitAnalysisModal();
+        }
+        
+        // 🎯 학년별 전체 문제 가져오기 (진단평가 DB에서)
+        function getAllQuestionsByGrade(grade) {
+            if (!window.diagnosticTestDB) {
+                console.error('❌ diagnosticTestDB가 로드되지 않았습니다!');
+                return [];
+            }
+            
+            const gradeData = window.diagnosticTestDB.find(g => g.grade === parseInt(grade));
+            if (!gradeData || !gradeData.subjects) {
+                console.error('❌ 해당 학년의 데이터를 찾을 수 없습니다:', grade);
+                return [];
+            }
+            
+            // 모든 과목의 문제를 하나의 배열로 합치기
+            const allQuestions = [];
+            Object.entries(gradeData.subjects).forEach(([subjectName, questions]) => {
+                questions.forEach(q => {
+                    allQuestions.push({
+                        ...q,
+                        subject: subjectName
+                    });
+                });
+            });
+            
+            console.log(`✅ 학년 ${grade} 전체 문제 ${allQuestions.length}개 로드 완료`);
+            return allQuestions;
+        }
+        
+        // 🎯 저장된 단원별 분석 보기 (버튼 클릭용)
+        function showMyUnitAnalysis() {
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            
+            if (!currentStudentId) {
+                alert('❌ 로그인이 필요합니다!');
+                return;
+            }
+            
+            // localStorage에서 저장된 분석 결과 찾기
+            const analysisData = localStorage.getItem(`unit_analysis_${currentStudentId}`);
+            
+            if (!analysisData) {
+                alert('❌ 단원별 분석 결과를 찾을 수 없습니다.\n\n진단평가를 완료하면 자동으로 분석 결과가 생성됩니다.');
+                return;
+            }
+            
+            try {
+                const { analysis, recommendations, grade } = JSON.parse(analysisData);
+                displayUnitAnalysisModal(analysis, recommendations, grade);
+            } catch (error) {
+                console.error('❌ 분석 결과 로드 오류:', error);
+                alert('❌ 분석 결과를 불러올 수 없습니다.');
+            }
         }
         
         // 🆕 내 진단평가 결과 보기 (버튼 클릭용)
@@ -3762,6 +4040,13 @@
             if (resultBtn) {
                 resultBtn.classList.remove('hidden');
                 console.log('✅ 평가결과 버튼 활성화 (진단평가 제출 직후)');
+            }
+            
+            // 🆕 진단평가 완료 후 즉시 "학습분석" 버튼 활성화
+            const unitAnalysisBtn = document.getElementById('showUnitAnalysisBtn');
+            if (unitAnalysisBtn) {
+                unitAnalysisBtn.classList.remove('hidden');
+                console.log('✅ 학습분석 버튼 활성화 (진단평가 제출 직후)');
             }
             
             // 🌐 Google Sheets에 자동 저장 (과목별 수준 포함!)
@@ -7666,6 +7951,13 @@
                     if (resultBtn) {
                         resultBtn.classList.remove('hidden');
                         console.log('✅ 평가결과 버튼 활성화');
+                    }
+                    
+                    // 🆕 "학습분석" 버튼도 보이기
+                    const unitAnalysisBtn = document.getElementById('showUnitAnalysisBtn');
+                    if (unitAnalysisBtn) {
+                        unitAnalysisBtn.classList.remove('hidden');
+                        console.log('✅ 학습분석 버튼 활성화');
                     }
                 }
                 
