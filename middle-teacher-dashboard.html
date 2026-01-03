@@ -1362,8 +1362,8 @@
                         📌 학생 선택
                     </label>
                     <select id="studentSelectForStudy" onchange="loadStudentStudyRecords(this.value)" 
-                            style="width: 100%; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: var(--text); font-size: 1rem;">
-                        <option value="">학생을 선택하세요</option>
+                            style="width: 100%; padding: 0.75rem; background: #2d3748; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: #ffffff; font-size: 1rem; cursor: pointer;">
+                        <option value="" style="background: #2d3748; color: #ffffff;">학생을 선택하세요</option>
                     </select>
                 </div>
 
@@ -1781,8 +1781,8 @@
                 <!-- 학생 선택 -->
                 <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">학생 선택</label>
-                    <select id="studentDetailSelect" onchange="loadStudentDetailData()" style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 1rem;">
-                        <option value="">학생을 선택하세요</option>
+                    <select id="studentDetailSelect" onchange="loadStudentDetailData()" style="width: 100%; padding: 1rem; background: #2d3748; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; font-family: inherit; font-size: 1rem; cursor: pointer;">
+                        <option value="" style="background: #2d3748; color: #ffffff;">학생을 선택하세요</option>
                     </select>
                 </div>
 
@@ -2697,6 +2697,8 @@
                 const option = document.createElement('option');
                 option.value = JSON.stringify(student);
                 option.textContent = `${student.name} (${student.grade}학년 ${student.class || 1}반 ${student.number || 1}번)`;
+                option.style.background = '#2d3748';
+                option.style.color = '#ffffff';
                 select.appendChild(option);
             });
             
@@ -4541,6 +4543,8 @@ ${record.content || '기록 없음'}`);
                 const option = document.createElement('option');
                 option.value = student.id;
                 option.textContent = `${student.name} (중${student.grade})`;
+                option.style.background = '#2d3748';
+                option.style.color = '#ffffff';
                 select.appendChild(option);
             });
         });
