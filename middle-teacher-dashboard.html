@@ -3405,6 +3405,7 @@
 
         let allStudents = [];
         let studyRecords = [];
+        let cloudDiagnosticData = []; // 🆕 클라우드 진단평가 데이터 (전역 변수)
 
         // 페이지 로드
         window.addEventListener('DOMContentLoaded', () => {
@@ -3431,6 +3432,7 @@
                 const result = await getDiagnosticResultsFromCloud();
                 if (result.status === 'success' && result.data.length > 0) {
                     console.log('☁️ Google Sheets 진단평가 결과:', result.data.length + '개');
+                    cloudDiagnosticData = result.data; // 🆕 전역 변수에 저장
                     
                     // 진단평가 완료한 학생 목록 추출 (중복 제거)
                     const diagnosticStudents = [];
@@ -3585,10 +3587,25 @@
                     }
                 });
                 
-                // 🆕 진단평가 결과 확인
+                // 🆕 진단평가 결과 확인 (로컬 + 클라우드)
                 const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
-                const hasDiagnostic = diagnosticResults.some(r => r.studentId === student.id);
-                const diagnosticData = diagnosticResults.find(r => r.studentId === student.id);
+                let hasDiagnostic = diagnosticResults.some(r => r.studentId === student.id);
+                let diagnosticData = diagnosticResults.find(r => r.studentId === student.id);
+                
+                // 🆕 클라우드 진단평가 데이터도 확인
+                if (!hasDiagnostic && cloudDiagnosticData.length > 0) {
+                    const cloudData = cloudDiagnosticData.find(r => 
+                        (r.student_id === student.id || r.studentId === student.id)
+                    );
+                    if (cloudData) {
+                        hasDiagnostic = true;
+                        diagnosticData = {
+                            totalScore: cloudData.total_score || cloudData.totalScore || 0,
+                            level: cloudData.overall_level || cloudData.level || null
+                        };
+                        console.log(`✅ ${student.name} 학생의 진단평가 결과를 클라우드에서 찾음:`, diagnosticData);
+                    }
+                }
                 
                 return {
                     ...student,
