@@ -10,38 +10,38 @@ const diagnosticTestDB = {
     1: {
         수학: [
             // 기초 (난이도: 1, 각 5점) - 2문제
-            {id: 1, question: "다음 중 소수가 아닌 것은?", options: ["2", "3", "4", "5"], answer: 2, difficulty: 1, points: 5, concept: "소수의 정의"},
+            {id: 1, question: "12의 약수 중 가장 큰 것은?", options: ["4", "6", "12", "24"], answer: 2, difficulty: 1, points: 5, concept: "약수의 개념"},
             {id: 2, question: "(-3) + 5의 값은?", options: ["-8", "-2", "2", "8"], answer: 2, difficulty: 1, points: 5, concept: "정수의 덧셈"},
             
             // 표준 (난이도: 2, 각 8점) - 5문제
-            {id: 3, question: "60을 소인수분해하면?", options: ["2² × 3 × 5", "2 × 3² × 5", "2² × 15", "4 × 15"], answer: 0, difficulty: 2, points: 8, concept: "소인수분해"},
-            {id: 4, question: "12와 18의 최대공약수는?", options: ["2", "3", "6", "36"], answer: 2, difficulty: 2, points: 8, concept: "최대공약수"},
-            {id: 5, question: "(-5) - (-3)의 값은?", options: ["-8", "-2", "2", "8"], answer: 1, difficulty: 2, points: 8, concept: "정수의 뺄셈"},
-            {id: 6, question: "(-3) × (+4)의 값은?", options: ["-12", "-7", "7", "12"], answer: 0, difficulty: 2, points: 8, concept: "정수의 곱셈"},
-            {id: 7, question: "x = 3일 때, 2x + 1의 값은?", options: ["5", "6", "7", "8"], answer: 2, difficulty: 2, points: 8, concept: "문자와 식"},
+            {id: 3, question: "(-5) - (-3)의 값은?", options: ["-8", "-2", "2", "8"], answer: 1, difficulty: 2, points: 8, concept: "정수의 뺄셈"},
+            {id: 4, question: "(-3) × (+4) + 6의 값은?", options: ["-18", "-6", "0", "6"], answer: 1, difficulty: 2, points: 8, concept: "정수의 사칙연산"},
+            {id: 5, question: "60을 소인수분해하면?", options: ["2² × 3 × 5", "2 × 3² × 5", "2³ × 3 × 5", "2² × 15"], answer: 0, difficulty: 2, points: 8, concept: "소인수분해"},
+            {id: 6, question: "12와 18의 최대공약수를 소인수분해로 구하면?", options: ["2", "3", "6", "2 × 3"], answer: 3, difficulty: 2, points: 8, concept: "최대공약수"},
+            {id: 7, question: "3x - 5 = 10일 때, x의 값은?", options: ["3", "4", "5", "6"], answer: 2, difficulty: 2, points: 8, concept: "일차방정식 기초"},
             
             // 심화 (난이도: 3, 각 15점) - 3문제
             {id: 8, question: "48과 72의 최소공배수는?", options: ["24", "96", "144", "288"], answer: 2, difficulty: 3, points: 15, concept: "최소공배수"},
-            {id: 9, question: "3(x - 2) = 2(x + 1)일 때, x의 값은?", options: ["4", "6", "8", "10"], answer: 2, difficulty: 3, points: 15, concept: "일차방정식"},
-            {id: 10, question: "x : y = 2 : 3이고 x + y = 15일 때, x의 값은?", options: ["3", "6", "9", "12"], answer: 1, difficulty: 3, points: 15, concept: "비와 비율"}
+            {id: 9, question: "2(3x - 1) = 5(x + 2)일 때, x의 값은?", options: ["8", "10", "12", "14"], answer: 2, difficulty: 3, points: 15, concept: "일차방정식 응용"},
+            {id: 10, question: "어떤 수의 3배에서 5를 뺀 값이 16일 때, 어떤 수는?", options: ["5", "6", "7", "8"], answer: 2, difficulty: 3, points: 15, concept: "문제 해결"}
         ],
         
         영어: [
             // 기초 (난이도: 1, 각 5점) - 2문제
             {id: 1, question: "'I ___ a student.' 빈칸에 알맞은 것은?", options: ["am", "is", "are", "be"], answer: 0, difficulty: 1, points: 5, concept: "be동사"},
-            {id: 2, question: "다음 중 복수형이 틀린 것은?", options: ["books", "childs", "boxes", "tomatoes"], answer: 1, difficulty: 1, points: 5, concept: "명사 복수형"},
+            {id: 2, question: "'book'의 복수형은?", options: ["books", "bookes", "book", "bookies"], answer: 0, difficulty: 1, points: 5, concept: "명사 복수형"},
             
             // 표준 (난이도: 2, 각 8점) - 5문제
-            {id: 3, question: "'___ you like pizza?' 빈칸에 알맞은 것은?", options: ["Do", "Does", "Are", "Is"], answer: 0, difficulty: 2, points: 8, concept: "일반동사 의문문"},
-            {id: 4, question: "'I am reading a book now.' 이 문장의 시제는?", options: ["현재", "과거", "현재진행", "미래"], answer: 2, difficulty: 2, points: 8, concept: "현재진행형"},
-            {id: 5, question: "'She ___ to school yesterday.' 빈칸에 알맞은 것은?", options: ["go", "goes", "went", "going"], answer: 2, difficulty: 2, points: 8, concept: "과거시제"},
-            {id: 6, question: "'There ___ many students.' 빈칸에 알맞은 것은?", options: ["is", "are", "am", "be"], answer: 1, difficulty: 2, points: 8, concept: "There is/are"},
-            {id: 7, question: "'He can ___ English.' 빈칸에 알맞은 것은?", options: ["speak", "speaks", "speaking", "spoke"], answer: 0, difficulty: 2, points: 8, concept: "조동사"},
+            {id: 3, question: "'She ___ a teacher.' 빈칸에 알맞은 것은?", options: ["am", "is", "are", "be"], answer: 1, difficulty: 2, points: 8, concept: "3인칭 단수"},
+            {id: 4, question: "'___ you play soccer?' 빈칸에 알맞은 것은?", options: ["Do", "Does", "Are", "Is"], answer: 0, difficulty: 2, points: 8, concept: "일반동사 의문문"},
+            {id: 5, question: "'I ___ to the library yesterday.' 빈칸에 알맞은 것은?", options: ["go", "goes", "went", "going"], answer: 2, difficulty: 2, points: 8, concept: "과거시제"},
+            {id: 6, question: "'He is ___ a book now.' 빈칸에 알맞은 것은?", options: ["read", "reads", "reading", "readed"], answer: 2, difficulty: 2, points: 8, concept: "현재진행형"},
+            {id: 7, question: "'There ___ two cats in the garden.' 빈칸에 알맞은 것은?", options: ["is", "are", "am", "be"], answer: 1, difficulty: 2, points: 8, concept: "There is/are"},
             
             // 심화 (난이도: 3, 각 15점) - 3문제
-            {id: 8, question: "'I have ___ here for 5 years.' 빈칸에 알맞은 것은?", options: ["live", "lives", "lived", "living"], answer: 2, difficulty: 3, points: 15, concept: "현재완료"},
-            {id: 9, question: "'She asked me ___ the door.' 빈칸에 알맞은 것은?", options: ["close", "to close", "closing", "closed"], answer: 1, difficulty: 3, points: 15, concept: "to부정사"},
-            {id: 10, question: "'The boy ___ is playing is my brother.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "when"], answer: 0, difficulty: 3, points: 15, concept: "관계대명사"}
+            {id: 8, question: "'I have ___ in Seoul since 2020.' 빈칸에 알맞은 것은?", options: ["live", "lived", "living", "lives"], answer: 1, difficulty: 3, points: 15, concept: "현재완료"},
+            {id: 9, question: "'My mother told me ___ my homework.' 빈칸에 알맞은 것은?", options: ["do", "to do", "doing", "did"], answer: 1, difficulty: 3, points: 15, concept: "to부정사"},
+            {id: 10, question: "'The man ___ is wearing a hat is my uncle.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "where"], answer: 0, difficulty: 3, points: 15, concept: "관계대명사"}
         ],
         
         국어: [
