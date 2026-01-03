@@ -3290,18 +3290,67 @@
         });
 
         // 데이터 로드
-        function loadDashboardData() {
+        async function loadDashboardData() {
             console.log('🔄 데이터 로딩 중...');
             
-            const students = [];
+            let students = [];
             studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
             
+            // 1. localStorage에서 학생 목록 가져오기
+            const localStudents = JSON.parse(localStorage.getItem('students')) || [];
+            console.log('📦 localStorage 학생:', localStudents.length + '명');
+            
+            // 2. Google Sheets에서 진단평가 완료한 학생 목록 가져오기
+            try {
+                const result = await getDiagnosticResultsFromCloud();
+                if (result.status === 'success' && result.data.length > 0) {
+                    console.log('☁️ Google Sheets 진단평가 결과:', result.data.length + '개');
+                    
+                    // 진단평가 완료한 학생 목록 추출 (중복 제거)
+                    const diagnosticStudents = [];
+                    const seen = new Set();
+                    
+                    result.data.forEach(record => {
+                        const studentId = record.student_id || record.studentId;
+                        const studentName = record.student_name || record.studentName;
+                        const grade = record.grade;
+                        
+                        if (studentId && !seen.has(studentId)) {
+                            seen.add(studentId);
+                            diagnosticStudents.push({
+                                id: studentId,
+                                name: studentName,
+                                grade: grade,
+                                class: 1,
+                                number: 1
+                            });
+                        }
+                    });
+                    
+                    console.log('📊 추출된 학생 목록:', diagnosticStudents.length + '명');
+                    
+                    // localStorage 학생과 합치기 (중복 제거)
+                    diagnosticStudents.forEach(ds => {
+                        if (!localStudents.find(ls => ls.id === ds.id)) {
+                            localStudents.push(ds);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.warn('⚠️ Google Sheets 조회 실패:', error);
+            }
+            
+            students = localStudents;
+            
+            // 3. 기존 방식도 유지 (하위 호환)
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith('student_')) {
                     try {
                         const studentData = JSON.parse(localStorage.getItem(key));
-                        students.push(studentData);
+                        if (!students.find(s => s.id === studentData.id)) {
+                            students.push(studentData);
+                        }
                     } catch (e) {
                         console.warn('학생 데이터 파싱 오류:', key);
                     }
@@ -3309,7 +3358,7 @@
             }
             
             allStudents = students;
-            console.log(`✅ ${students.length}명 학생 발견`);
+            console.log(`✅ 총 ${students.length}명 학생 발견`);
             
             updateStatistics(students, studyRecords);
             updateSubjectStatistics(studyRecords);
