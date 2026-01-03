@@ -4443,6 +4443,7 @@
             
             if (myDiagnostic) {
                 console.log('✅ 진단평가 완료 → 스케줄 생성');
+                
                 // 원스톱: 자동으로 오늘의 스케줄 생성 및 표시
                 generateAndDisplayTodaySchedule(student);
                 
@@ -4459,7 +4460,13 @@
                     restoreRunningTimers();
                 }, 500);
             } else {
-                console.log('⚠️ 진단평가 미완료 → 스케줄 생성 건너뛰기');
+                console.log('⚠️ 진단평가 미완료 → 모든 학습 기능 비활성화');
+                
+                // 🔴 중요: 로드맵 영역 완전히 숨김
+                const visualRoadmap = document.getElementById('visualRoadmap');
+                if (visualRoadmap) {
+                    visualRoadmap.style.display = 'none';
+                }
             }
             
             // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
