@@ -3878,6 +3878,7 @@
         // 🎯 저장된 단원별 분석 보기 (버튼 클릭용)
         function showMyUnitAnalysis() {
             const currentStudentId = localStorage.getItem('currentStudentId');
+            const currentStudentGrade = localStorage.getItem('currentStudentGrade');
             
             if (!currentStudentId) {
                 alert('❌ 로그인이 필요합니다!');
@@ -3885,13 +3886,51 @@
             }
             
             // localStorage에서 저장된 분석 결과 찾기
-            const analysisData = localStorage.getItem(`unit_analysis_${currentStudentId}`);
+            let analysisData = localStorage.getItem(`unit_analysis_${currentStudentId}`);
             
+            // 🆕 분석 결과가 없으면 진단평가 결과를 기반으로 자동 생성!
             if (!analysisData) {
-                alert('❌ 단원별 분석 결과를 찾을 수 없습니다.\n\n진단평가를 완료하면 자동으로 분석 결과가 생성됩니다.');
+                console.log('⚠️ 단원별 분석 결과 없음 → 자동 생성 시도');
+                
+                // 진단평가 결과 확인
+                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                const myResult = diagnosticResults.find(r => r.studentId === currentStudentId);
+                
+                if (!myResult || !myResult.answers) {
+                    alert('❌ 단원별 분석 결과를 찾을 수 없습니다.\n\n진단평가를 먼저 완료해주세요.');
+                    return;
+                }
+                
+                // 🎯 진단평가 답안을 기반으로 지금 분석 생성!
+                console.log('✅ 진단평가 결과 발견 → 단원별 분석 자동 생성 중...');
+                
+                const allQuestions = getAllQuestionsByGrade(currentStudentGrade);
+                if (allQuestions.length === 0) {
+                    alert('❌ 문제 데이터를 불러올 수 없습니다.');
+                    return;
+                }
+                
+                // 단원별 분석 실행
+                const unitAnalysis = analyzeByUnit(myResult.answers, allQuestions);
+                const recommendations = recommendLectures(unitAnalysis, currentStudentGrade);
+                
+                // localStorage에 저장
+                const newAnalysisData = {
+                    studentId: currentStudentId,
+                    grade: currentStudentGrade,
+                    analysis: unitAnalysis,
+                    recommendations: recommendations,
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem(`unit_analysis_${currentStudentId}`, JSON.stringify(newAnalysisData));
+                console.log('✅ 단원별 분석 자동 생성 완료!');
+                
+                // 모달 표시
+                displayUnitAnalysisModal(unitAnalysis, recommendations, currentStudentGrade);
                 return;
             }
             
+            // 기존 분석 결과가 있으면 바로 표시
             try {
                 const { analysis, recommendations, grade } = JSON.parse(analysisData);
                 displayUnitAnalysisModal(analysis, recommendations, grade);
