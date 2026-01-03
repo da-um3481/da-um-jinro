@@ -1778,6 +1778,52 @@
                     </button>
                 </div>
                 
+                <!-- 📋 전체 학생 목록 관리 -->
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0;">
+                            <i class="fas fa-users"></i> 전체 학생 목록
+                        </h3>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button onclick="openAddStudentModal()" style="padding: 0.75rem 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                <i class="fas fa-user-plus"></i> 학생 추가
+                            </button>
+                            <button onclick="openBulkAddStudentModal()" style="padding: 0.75rem 1rem; background: linear-gradient(135deg, var(--accent), var(--warning)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                <i class="fas fa-users"></i> 일괄 추가
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 학생 목록 테이블 -->
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: rgba(255, 255, 255, 0.1);">
+                                    <th style="padding: 1rem; text-align: left; font-weight: 700;">이름</th>
+                                    <th style="padding: 1rem; text-align: center; font-weight: 700;">학년</th>
+                                    <th style="padding: 1rem; text-align: center; font-weight: 700;">반</th>
+                                    <th style="padding: 1rem; text-align: center; font-weight: 700;">번호</th>
+                                    <th style="padding: 1rem; text-align: center; font-weight: 700;">진단평가</th>
+                                    <th style="padding: 1rem; text-align: center; font-weight: 700;">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allStudentsListTable">
+                                <tr>
+                                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                                        <i class="fas fa-spinner fa-spin"></i> 학생 목록 로딩 중...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border: 2px solid var(--accent); border-radius: 12px; color: var(--text-muted); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>안내:</strong> 학생 추가 후 학생들에게 포털 링크를 공유하면 자동으로 연동됩니다. 
+                        일괄 추가는 여러 명을 한 번에 입력할 수 있습니다.
+                    </div>
+                </div>
+                
                 <!-- 학생 선택 -->
                 <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">학생 선택</label>
@@ -4582,6 +4628,396 @@ ${record.content || '기록 없음'}`);
             }
         }
         
+        // ============================================================
+        // 📋 학생 목록 관리 함수들
+        // ============================================================
+        
+        /**
+         * 전체 학생 목록 테이블 로드 및 표시
+         */
+        function loadAllStudentsList() {
+            const tbody = document.getElementById('allStudentsListTable');
+            if (!tbody) return;
+            
+            // 로딩 중 표시
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin"></i> 학생 목록 로딩 중...
+                    </td>
+                </tr>
+            `;
+            
+            // localStorage에서 학생 목록 가져오기
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // Google Sheets에서 진단평가 완료한 학생 가져오기
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            
+            console.log('📋 전체 학생 목록 로드:', students.length + '명');
+            
+            if (students.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="padding: 3rem; text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">📚</div>
+                            <div style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                등록된 학생이 없습니다
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-muted);">
+                                상단의 "학생 추가" 또는 "일괄 추가" 버튼을 클릭하세요
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 학생 목록 정렬 (이름순)
+            students.sort((a, b) => {
+                if (a.grade !== b.grade) return a.grade - b.grade;
+                if (a.class !== b.class) return (a.class || 0) - (b.class || 0);
+                return (a.number || 0) - (b.number || 0);
+            });
+            
+            // 테이블 생성
+            tbody.innerHTML = students.map(student => {
+                // 진단평가 완료 여부 확인
+                const hasDiagnostic = diagnosticResults.some(d => d.studentId === student.id);
+                const diagnosticStatus = hasDiagnostic 
+                    ? '<span style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> 완료</span>'
+                    : '<span style="color: var(--text-muted);"><i class="fas fa-circle"></i> 미완료</span>';
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: background 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.05)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 1rem; font-weight: 600;">
+                            <i class="fas fa-user"></i> ${student.name}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            중${student.grade}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            ${student.class || '-'}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            ${student.number || '-'}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            ${diagnosticStatus}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <button onclick="deleteStudentFromList('${student.id}', '${student.name}')" style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; color: #ef4444; font-weight: 600; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
+                                <i class="fas fa-trash"></i> 삭제
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            console.log('✅ 학생 목록 테이블 생성 완료');
+        }
+        
+        /**
+         * 학생 추가 모달 열기
+         */
+        function openAddStudentModal() {
+            const modal = document.getElementById('addStudentModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                // 입력 필드 초기화
+                document.getElementById('addStudentName').value = '';
+                document.getElementById('addStudentGrade').value = '1';
+                document.getElementById('addStudentClass').value = '';
+                document.getElementById('addStudentNumber').value = '';
+            }
+        }
+        
+        /**
+         * 학생 추가 모달 닫기
+         */
+        function closeAddStudentModal() {
+            const modal = document.getElementById('addStudentModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        /**
+         * 학생 추가 제출
+         */
+        function submitAddStudent() {
+            const name = document.getElementById('addStudentName').value.trim();
+            const grade = parseInt(document.getElementById('addStudentGrade').value);
+            const classNum = document.getElementById('addStudentClass').value.trim();
+            const number = document.getElementById('addStudentNumber').value.trim();
+            
+            if (!name) {
+                alert('이름을 입력해주세요');
+                return;
+            }
+            
+            // localStorage에서 학생 목록 가져오기
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 중복 확인 (이름 + 학년)
+            const exists = students.some(s => s.name === name && s.grade === grade);
+            if (exists) {
+                alert(`이미 등록된 학생입니다: ${name} (중${grade})`);
+                return;
+            }
+            
+            // 새 학생 추가
+            const newStudent = {
+                id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                name: name,
+                grade: grade,
+                class: classNum ? parseInt(classNum) : null,
+                number: number ? parseInt(number) : null,
+                registeredAt: new Date().toISOString(),
+                diagnostic_completed: {
+                    math: false,
+                    english: false,
+                    korean: false,
+                    social: false,
+                    science: false
+                }
+            };
+            
+            students.push(newStudent);
+            localStorage.setItem('students', JSON.stringify(students));
+            
+            console.log('✅ 학생 추가 완료:', newStudent);
+            
+            // 모달 닫기
+            closeAddStudentModal();
+            
+            // 목록 새로고침
+            loadAllStudentsList();
+            loadStudentDropdowns();
+            
+            // 성공 메시지
+            alert(`✅ 학생이 추가되었습니다!\n\n이름: ${name}\n학년: 중${grade}\n\n학생에게 포털 링크를 공유하세요.`);
+        }
+        
+        /**
+         * 학생 일괄 추가 모달 열기
+         */
+        function openBulkAddStudentModal() {
+            const modal = document.getElementById('bulkAddStudentModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.getElementById('bulkStudentData').value = '';
+            }
+        }
+        
+        /**
+         * 학생 일괄 추가 모달 닫기
+         */
+        function closeBulkAddStudentModal() {
+            const modal = document.getElementById('bulkAddStudentModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        /**
+         * 학생 일괄 추가 제출
+         */
+        function submitBulkAddStudents() {
+            const bulkData = document.getElementById('bulkStudentData').value.trim();
+            
+            if (!bulkData) {
+                alert('학생 정보를 입력해주세요');
+                return;
+            }
+            
+            // localStorage에서 학생 목록 가져오기
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 줄 단위로 분리
+            const lines = bulkData.split('\n').filter(line => line.trim());
+            
+            let addedCount = 0;
+            let skippedCount = 0;
+            const errors = [];
+            
+            lines.forEach((line, index) => {
+                // 쉼표로 분리
+                const parts = line.split(',').map(p => p.trim());
+                
+                if (parts.length < 2) {
+                    errors.push(`${index + 1}번째 줄: 최소 이름과 학년을 입력해야 합니다`);
+                    return;
+                }
+                
+                const name = parts[0];
+                const grade = parseInt(parts[1]);
+                const classNum = parts[2] ? parseInt(parts[2]) : null;
+                const number = parts[3] ? parseInt(parts[3]) : null;
+                
+                // 유효성 검사
+                if (!name) {
+                    errors.push(`${index + 1}번째 줄: 이름이 비어있습니다`);
+                    return;
+                }
+                
+                if (!grade || grade < 1 || grade > 3) {
+                    errors.push(`${index + 1}번째 줄: 학년이 잘못되었습니다 (1, 2, 3만 가능)`);
+                    return;
+                }
+                
+                // 중복 확인
+                const exists = students.some(s => s.name === name && s.grade === grade);
+                if (exists) {
+                    skippedCount++;
+                    console.log(`⏭️ 중복 건너뜀: ${name} (중${grade})`);
+                    return;
+                }
+                
+                // 새 학생 추가
+                const newStudent = {
+                    id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    name: name,
+                    grade: grade,
+                    class: classNum,
+                    number: number,
+                    registeredAt: new Date().toISOString(),
+                    diagnostic_completed: {
+                        math: false,
+                        english: false,
+                        korean: false,
+                        social: false,
+                        science: false
+                    }
+                };
+                
+                students.push(newStudent);
+                addedCount++;
+                console.log(`✅ 학생 추가: ${name} (중${grade})`);
+            });
+            
+            // localStorage에 저장
+            localStorage.setItem('students', JSON.stringify(students));
+            
+            // 결과 메시지
+            let message = `📊 일괄 추가 완료!\n\n`;
+            message += `✅ 추가됨: ${addedCount}명\n`;
+            if (skippedCount > 0) {
+                message += `⏭️ 중복 건너뜀: ${skippedCount}명\n`;
+            }
+            if (errors.length > 0) {
+                message += `\n❌ 오류:\n${errors.join('\n')}`;
+            }
+            
+            alert(message);
+            
+            // 모달 닫기
+            closeBulkAddStudentModal();
+            
+            // 목록 새로고침
+            loadAllStudentsList();
+            loadStudentDropdowns();
+            
+            console.log(`📊 일괄 추가 완료: ${addedCount}명 추가, ${skippedCount}명 중복`);
+        }
+        
+        /**
+         * 학생 삭제
+         */
+        function deleteStudentFromList(studentId, studentName) {
+            if (!confirm(`⚠️ 정말 "${studentName}" 학생을 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없으며, 다음 데이터가 삭제됩니다:\n• 학생 기본 정보\n• 진단평가 결과\n• 학습 기록\n• 모든 관련 데이터`)) {
+                return;
+            }
+            
+            // localStorage에서 학생 목록 가져오기
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 해당 학생 제거
+            const filtered = students.filter(s => s.id !== studentId);
+            localStorage.setItem('students', JSON.stringify(filtered));
+            
+            // 진단평가 결과도 제거
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const filteredDiagnostic = diagnosticResults.filter(d => d.studentId !== studentId);
+            localStorage.setItem('diagnostic_results', JSON.stringify(filteredDiagnostic));
+            
+            // 학습 기록도 제거
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const filteredStudy = studyRecords.filter(r => r.student_id !== studentId);
+            localStorage.setItem('study_records', JSON.stringify(filteredStudy));
+            
+            console.log(`🗑️ 학생 삭제 완료: ${studentName} (${studentId})`);
+            
+            // 목록 새로고침
+            loadAllStudentsList();
+            loadStudentDropdowns();
+            
+            alert(`✅ "${studentName}" 학생이 삭제되었습니다.`);
+        }
+        
+        /**
+         * 모든 드롭다운 새로고침
+         */
+        function loadStudentDropdowns() {
+            // 학생 상세 관리 드롭다운
+            loadStudentDetailDropdown();
+            
+            // 학습 관리 드롭다운
+            loadStudyManagementDropdown();
+        }
+        
+        /**
+         * 학생 상세 관리 드롭다운 로드
+         */
+        function loadStudentDetailDropdown() {
+            const select = document.getElementById('studentDetailSelect');
+            if (!select) return;
+            
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 기존 옵션 제거 (첫 번째 제외)
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+            
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.name} (${student.grade}학년${student.class ? ' ' + student.class + '반' : ''}${student.number ? ' ' + student.number + '번' : ''})`;
+                option.style.background = '#2d3748';
+                option.style.color = '#ffffff';
+                select.appendChild(option);
+            });
+        }
+        
+        /**
+         * 학습 관리 드롭다운 로드
+         */
+        function loadStudyManagementDropdown() {
+            const select = document.getElementById('studentSelectForStudy');
+            if (!select) return;
+            
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            
+            // 기존 옵션 제거 (첫 번째 제외)
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+            
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.name} (중${student.grade})`;
+                option.style.background = '#2d3748';
+                option.style.color = '#ffffff';
+                select.appendChild(option);
+            });
+        }
+        
+        // ============================================================
+        // 끝: 학생 목록 관리 함수들
+        // ============================================================
+        
         // 페이지 로드 시 학생 목록 채우기
         window.addEventListener('DOMContentLoaded', function() {
             // 학생 목록 불러오기
@@ -4596,6 +5032,12 @@ ${record.content || '기록 없음'}`);
                 option.style.color = '#ffffff';
                 select.appendChild(option);
             });
+            
+            // 전체 학생 목록 테이블 로드
+            loadAllStudentsList();
+            
+            // 학생 상세 관리 드롭다운 로드
+            loadStudentDetailDropdown();
         });
     </script>
 
@@ -5089,6 +5531,104 @@ ${record.content || '기록 없음'}`);
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- 학생 추가 모달 -->
+    <div id="addStudentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 2rem; border-radius: 20px; max-width: 500px; width: 90%; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0;">
+                    <i class="fas fa-user-plus"></i> 학생 추가
+                </h3>
+                <button onclick="closeAddStudentModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.3s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); submitAddStudent();">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">이름 *</label>
+                    <input type="text" id="addStudentName" required style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; font-family: inherit; font-size: 1rem;" placeholder="예: 홍길동">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">학년 *</label>
+                        <select id="addStudentGrade" required style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; font-family: inherit; font-size: 1rem; cursor: pointer;">
+                            <option value="1">중1</option>
+                            <option value="2">중2</option>
+                            <option value="3">중3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">반</label>
+                        <input type="number" id="addStudentClass" min="1" max="20" style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; font-family: inherit; font-size: 1rem;" placeholder="1">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">번호</label>
+                        <input type="number" id="addStudentNumber" min="1" max="40" style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; font-family: inherit; font-size: 1rem;" placeholder="1">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 2px solid var(--primary); border-radius: 12px; color: var(--text-muted); font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>안내:</strong> 학생 추가 후 학생 포털 링크를 공유하세요. 학생이 같은 이름과 학년으로 로그인하면 자동 연동됩니다.
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" onclick="closeAddStudentModal()" style="flex: 1; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        취소
+                    </button>
+                    <button type="submit" style="flex: 2; padding: 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        <i class="fas fa-plus"></i> 추가하기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 학생 일괄 추가 모달 -->
+    <div id="bulkAddStudentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 2rem; border-radius: 20px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0;">
+                    <i class="fas fa-users"></i> 학생 일괄 추가
+                </h3>
+                <button onclick="closeBulkAddStudentModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.3s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(245, 158, 11, 0.1); border: 2px solid var(--warning); border-radius: 12px; color: var(--text-muted); font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> 
+                <strong>입력 형식:</strong><br>
+                <code style="background: rgba(0, 0, 0, 0.3); padding: 0.2rem 0.5rem; border-radius: 4px; margin-top: 0.5rem; display: inline-block;">이름, 학년, 반, 번호</code><br>
+                <span style="font-size: 0.85rem;">예: 홍길동, 1, 2, 5 (한 줄에 한 명씩 입력)</span>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); submitBulkAddStudents();">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">학생 목록 입력</label>
+                    <textarea id="bulkStudentData" rows="15" required style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; font-family: 'Courier New', monospace; font-size: 0.95rem; resize: vertical;" placeholder="홍길동, 1, 2, 5&#10;김영희, 1, 2, 6&#10;이철수, 2, 1, 10&#10;..."></textarea>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border: 2px solid var(--accent); border-radius: 12px; color: var(--text-muted); font-size: 0.85rem;">
+                    <strong>💡 팁:</strong><br>
+                    • 엑셀에서 복사해서 붙여넣기 가능 (쉼표로 구분)<br>
+                    • 반과 번호는 생략 가능 (이름, 학년만 입력)<br>
+                    • 중복된 학생은 자동으로 건너뜁니다
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" onclick="closeBulkAddStudentModal()" style="flex: 1; padding: 1rem; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        취소
+                    </button>
+                    <button type="submit" style="flex: 2; padding: 1rem; background: linear-gradient(135deg, var(--accent), var(--warning)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        <i class="fas fa-users"></i> 일괄 추가하기
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </body>
