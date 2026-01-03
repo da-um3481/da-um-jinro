@@ -3458,11 +3458,37 @@
                 }
             });
             
-            // 수준 판정
-            const level = determineLevel(totalScore);
-            const levelInfo = levelCriteria[level];
+            // 수준 판정 (총점 기준)
+            const overallLevel = determineLevel(totalScore);
+            const levelInfo = levelCriteria[overallLevel];
+            
+            // ✨ 과목별 수준 판정 (각 과목 10문제 = 100점 만점)
+            const subjectLevels = {};
+            const strengthSubjects = [];  // 강점 과목 (심화)
+            const weaknessSubjects = [];  // 보완 필요 과목 (기초)
+            
+            Object.keys(subjectScores).forEach(subject => {
+                const score = subjectScores[subject].score;
+                let subjectLevel = '';
+                
+                // 과목별 레벨 기준: 90점 이상 심화, 60점 이상 표준, 60점 미만 기초
+                if (score >= 90) {
+                    subjectLevel = '심화';
+                    strengthSubjects.push(subject);
+                } else if (score >= 60) {
+                    subjectLevel = '표준';
+                } else {
+                    subjectLevel = '기초';
+                    weaknessSubjects.push(subject);
+                }
+                
+                subjectLevels[subject] = subjectLevel;
+            });
             
             console.log('📊 과목별 점수:', subjectScores);
+            console.log('📊 과목별 수준:', subjectLevels);
+            console.log('💪 강점 과목:', strengthSubjects);
+            console.log('⚠️ 보완 필요 과목:', weaknessSubjects);
             
             // 결과 저장 (학생에게는 보이지 않음)
             saveDiagnosticResult({
@@ -3472,10 +3498,13 @@
                 subject: currentSubject,
                 correctCount: correctCount,
                 totalScore: totalScore,
-                level: level,
+                level: overallLevel,  // ✨ 변경: level → overallLevel
                 levelLabel: levelInfo.label,
                 wrongQuestions: wrongQuestions,
-                subjectScores: subjectScores,  // 🆕 과목별 점수 추가
+                subjectScores: subjectScores,
+                subjectLevels: subjectLevels,  // ✨ 추가: 과목별 수준
+                strengthSubjects: strengthSubjects.join(', '),  // ✨ 추가: 강점 과목
+                weaknessSubjects: weaknessSubjects.join(', '),  // ✨ 추가: 보완 필요 과목
                 testDate: new Date().toISOString(),
                 answers: studentAnswers
             });
@@ -3483,8 +3512,8 @@
             // 모달 닫기
             document.getElementById('diagnosticModal').classList.add('hidden');
             
-            // 🆕 진단평가 완료 후 즉시 공유 요청 (과목별 점수 포함!)
-            showShareResultModal(level, totalScore, subjectScores);
+            // 🆕 진단평가 완료 후 즉시 공유 요청 (과목별 점수 + 수준 포함!)
+            showShareResultModal(overallLevel, totalScore, subjectScores, subjectLevels);
             
             // 학습 스케줄 재생성 (수준에 맞춰)
             const student = {
@@ -3496,26 +3525,29 @@
             generateAndDisplayTodaySchedule(student);
         }
         
-        // 🆕 결과 공유 모달 표시 (과목별 점수 포함!)
-        function showShareResultModal(level, totalScore, subjectScores) {
+        // 🆕 결과 공유 모달 표시 (과목별 점수 + 수준 포함!)
+        function showShareResultModal(level, totalScore, subjectScores, subjectLevels) {
             const studentName = localStorage.getItem('currentStudentName');
             const studentGrade = localStorage.getItem('currentStudentGrade');
             
-            // 🎯 과목별 점수 문자열 생성
+            // 🎯 과목별 점수 + 수준 문자열 생성
             const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+            const levelEmojis = { '심화': '🔷', '표준': '🔶', '기초': '🔻' };
             let subjectText = '';
-            if (subjectScores) {
+            if (subjectScores && subjectLevels) {
                 Object.keys(subjectScores).forEach(subject => {
                     const score = subjectScores[subject];
-                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}/10\n`;
+                    const subjectLevel = subjectLevels[subject] || '';
+                    const levelEmoji = levelEmojis[subjectLevel] || '';
+                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}점 ${levelEmoji}${subjectLevel}\n`;
                 });
             }
             
-            // 공유 메시지 생성 (과목별 점수 포함!)
-            const shareText = `✅ 진단평가 완료!\n\n👤 이름: ${studentName}\n📚 학년: 중${studentGrade}\n📊 총점: ${totalScore}/50\n🎯 수준: ${level}\n\n📝 과목별 점수:\n${subjectText}\n이 결과를 선생님께 보내주세요!`;
+            // 공유 메시지 생성 (과목별 점수 + 수준 포함!)
+            const shareText = `✅ 진단평가 완료!\n\n👤 이름: ${studentName}\n📚 학년: 중${studentGrade}\n📊 총점: ${totalScore}점/500점\n🎯 종합 수준: ${level}\n\n📝 과목별 점수 및 수준:\n${subjectText}\n이 결과를 선생님께 보내주세요!`;
 
             // 화면에 크게 표시 (스크린샷용)
-            showResultOnScreen(studentName, studentGrade, totalScore, level, subjectScores);
+            showResultOnScreen(studentName, studentGrade, totalScore, level, subjectScores, subjectLevels);
         }
         
         // 🆕 내 진단평가 결과 보기 (버튼 클릭용)
@@ -3538,19 +3570,36 @@
                 return;
             }
             
-            // 과목별 점수 문자열 생성
+            // 과목별 점수 + 수준 문자열 생성
             const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
-            let subjectText = '\n━━━━━━━━━━━━━━━━━━\n📝 과목별 점수:\n';
-            if (myResult.subjectScores) {
+            const levelEmojis = { '심화': '🔷', '표준': '🔶', '기초': '🔻' };
+            let subjectText = '\n━━━━━━━━━━━━━━━━━━\n📝 과목별 성적:\n';
+            if (myResult.subjectScores && myResult.subjectLevels) {
                 Object.keys(myResult.subjectScores).forEach(subject => {
                     const score = myResult.subjectScores[subject];
-                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}/10\n`;
+                    const subjectLevel = myResult.subjectLevels[subject] || '';
+                    const levelEmoji = levelEmojis[subjectLevel] || '';
+                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}점 ${levelEmoji}${subjectLevel}\n`;
                 });
+            } else if (myResult.subjectScores) {
+                // 레벨 정보가 없는 경우 (기존 데이터)
+                Object.keys(myResult.subjectScores).forEach(subject => {
+                    const score = myResult.subjectScores[subject];
+                    subjectText += `${subjectEmojis[subject] || '📚'} ${subject}: ${score.score}점\n`;
+                });
+            }
+            
+            // 강점/약점 과목 표시
+            if (myResult.strengthSubjects) {
+                subjectText += `\n💪 강점 과목: ${myResult.strengthSubjects}\n`;
+            }
+            if (myResult.weaknessSubjects) {
+                subjectText += `⚠️ 보완 필요: ${myResult.weaknessSubjects}\n`;
             }
             subjectText += '━━━━━━━━━━━━━━━━━━\n';
             
             // 결과 팝업 표시
-            alert(`✅ 진단평가 결과\n\n👤 이름: ${currentStudentName}\n📚 학년: 중${currentStudentGrade}\n📊 총점: ${myResult.totalScore}/50\n🎯 수준: ${myResult.level || myResult.levelLabel}${subjectText}\n📱 이 화면을 스크린샷 찍어서\n선생님께 카톡으로 보내주세요!\n\n(화면 캡처: 전원+볼륨다운)`);
+            alert(`✅ 진단평가 결과\n\n👤 이름: ${currentStudentName}\n📚 학년: 중${currentStudentGrade}\n📊 총점: ${myResult.totalScore}점/500점\n🎯 종합 수준: ${myResult.level || myResult.levelLabel}${subjectText}\n📱 이 화면을 스크린샷 찍어서\n선생님께 카톡으로 보내주세요!\n\n(화면 캡처: 전원+볼륨다운)`);
         }
         
         // 🆕 결과를 화면에 크게 표시 (과목별 점수 포함!)
@@ -3644,18 +3693,25 @@
                 console.log('✅ 평가결과 버튼 활성화 (진단평가 제출 직후)');
             }
             
-            // 🌐 Google Sheets에 자동 저장
+            // 🌐 Google Sheets에 자동 저장 (과목별 수준 포함!)
             saveDiagnosticToCloud({
                 student_id: result.studentId,
                 student_name: result.studentName,
                 grade: result.grade,
                 total_score: result.totalScore,
-                level: result.level,
-                math_score: result.subjectScores?.['수학'] || 0,
-                english_score: result.subjectScores?.['영어'] || 0,
-                korean_score: result.subjectScores?.['국어'] || 0,
-                social_score: result.subjectScores?.['사회'] || 0,
-                science_score: result.subjectScores?.['과학'] || 0,
+                overall_level: result.level,  // ✨ 종합 수준
+                math_score: result.subjectScores?.['수학']?.score || 0,
+                math_level: result.subjectLevels?.['수학'] || '',  // ✨ 수학 수준
+                english_score: result.subjectScores?.['영어']?.score || 0,
+                english_level: result.subjectLevels?.['영어'] || '',  // ✨ 영어 수준
+                korean_score: result.subjectScores?.['국어']?.score || 0,
+                korean_level: result.subjectLevels?.['국어'] || '',  // ✨ 국어 수준
+                social_score: result.subjectScores?.['사회']?.score || 0,
+                social_level: result.subjectLevels?.['사회'] || '',  // ✨ 사회 수준
+                science_score: result.subjectScores?.['과학']?.score || 0,
+                science_level: result.subjectLevels?.['과학'] || '',  // ✨ 과학 수준
+                strength_subjects: result.strengthSubjects || '',  // ✨ 강점 과목
+                weakness_subjects: result.weaknessSubjects || '',  // ✨ 보완 필요 과목
                 test_date: result.testDate
             }).catch(err => console.warn('클라우드 저장 실패 (로컬은 저장됨):', err));
             
