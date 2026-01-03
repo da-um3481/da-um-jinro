@@ -7929,6 +7929,21 @@
                 console.log('✅ 진단평가 완료 → 로드맵 표시');
                 if (diagnosticWelcome) diagnosticWelcome.style.display = 'none';
                 if (visualRoadmap) visualRoadmap.style.display = 'block';
+                
+                // 🎉 진단평가 완료 메시지 표시 (한 번만)
+                const completionMessageShown = sessionStorage.getItem('diagnosticCompletionShown_' + currentStudentId);
+                if (!completionMessageShown) {
+                    setTimeout(() => {
+                        const studentName = localStorage.getItem('currentStudentName') || '학생';
+                        const totalScore = myResult.totalScore || 0;
+                        const level = myResult.level || '표준';
+                        
+                        alert(`🎉 축하합니다, ${studentName}님!\n\n✅ 진단평가를 이미 완료하셨습니다!\n\n📊 총점: ${totalScore}점 (475점 만점)\n📈 수준: ${level}\n\n💡 이제 맞춤형 30일 학습 여정을 시작하세요!`);
+                        
+                        // 이 세션에서 메시지를 표시했음을 기록
+                        sessionStorage.setItem('diagnosticCompletionShown_' + currentStudentId, 'true');
+                    }, 500);
+                }
             } else {
                 // 진단평가 미완료: 안내 화면 표시
                 console.log('⚠️ 진단평가 미완료 → 환영 화면 표시');
