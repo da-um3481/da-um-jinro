@@ -1019,8 +1019,57 @@
             </div>
         </div>
 
-        <!-- 🗺️ 30일 비주얼 로드맵 -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="visualRoadmap">
+        <!-- 📝 진단평가 안내 화면 (미완료 시) -->
+        <div class="glass-effect rounded-2xl shadow-xl p-8 animate-slide-up text-center" id="diagnosticWelcome" style="display: none;">
+            <div class="mb-6">
+                <div class="text-6xl mb-4">👋</div>
+                <h3 class="text-2xl font-black text-gray-800 mb-2">환영합니다!</h3>
+                <p class="text-gray-600">맞춤 학습을 시작하기 전에 진단평가가 필요해요</p>
+            </div>
+            
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                    <div>
+                        <div class="text-3xl mb-2">⏱</div>
+                        <div class="font-bold text-gray-800">소요 시간</div>
+                        <div class="text-sm text-gray-600">약 30분</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl mb-2">📚</div>
+                        <div class="font-bold text-gray-800">평가 과목</div>
+                        <div class="text-sm text-gray-600">수학, 영어, 국어, 사회, 과학</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl mb-2">🎯</div>
+                        <div class="font-bold text-gray-800">문항 수</div>
+                        <div class="text-sm text-gray-600">총 50문항 (과목당 10문항)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 mb-6">
+                <div class="flex items-start gap-3 text-left">
+                    <div class="text-2xl">💡</div>
+                    <div>
+                        <div class="font-bold text-gray-800 mb-1">진단평가 목적</div>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>✅ 현재 학력 수준 정확히 파악</li>
+                            <li>✅ 강점·약점 과목 분석</li>
+                            <li>✅ 맞춤형 30일 학습 계획 생성</li>
+                            <li>✅ 학습 전후 성장도 측정 기준점</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="startDiagnosticFromButton()" 
+                    class="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white text-lg font-bold rounded-xl hover:shadow-2xl transition-all hover:scale-105">
+                <i class="fas fa-rocket mr-2"></i>진단평가 시작하기
+            </button>
+        </div>
+
+        <!-- 🗺️ 30일 비주얼 로드맵 (진단평가 완료 후) -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="visualRoadmap" style="display: none;">
             <!-- 헤더: 진행률 + 동기부여 메시지 -->
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-4">
@@ -7566,12 +7615,37 @@
     
     <!-- 🚨 긴급: 진단평가 완료 학생을 위한 자동 알림 스크립트 -->
     <script>
+        // 🆕 진단평가 완료 여부에 따라 화면 전환
+        function checkDiagnosticStatusAndShowScreen() {
+            const currentStudentId = localStorage.getItem('currentStudentId');
+            if (!currentStudentId) return;
+            
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const myResult = diagnosticResults.find(r => r.studentId === currentStudentId);
+            
+            const diagnosticWelcome = document.getElementById('diagnosticWelcome');
+            const visualRoadmap = document.getElementById('visualRoadmap');
+            
+            if (myResult) {
+                // 진단평가 완료: 로드맵 표시
+                if (diagnosticWelcome) diagnosticWelcome.style.display = 'none';
+                if (visualRoadmap) visualRoadmap.style.display = 'block';
+            } else {
+                // 진단평가 미완료: 안내 화면 표시
+                if (diagnosticWelcome) diagnosticWelcome.style.display = 'block';
+                if (visualRoadmap) visualRoadmap.style.display = 'none';
+            }
+        }
+        
         // 페이지 로드 후 2초 뒤에 체크 (로그인 후)
         setTimeout(function() {
             const currentStudentId = localStorage.getItem('currentStudentId');
             const currentStudentName = localStorage.getItem('currentStudentName');
             
             if (currentStudentId && currentStudentName) {
+                // 🆕 진단평가 상태에 따라 화면 전환
+                checkDiagnosticStatusAndShowScreen();
+                
                 // 진단평가 완료 여부 확인
                 const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
                 const myResult = diagnosticResults.find(r => r.studentId === currentStudentId);
