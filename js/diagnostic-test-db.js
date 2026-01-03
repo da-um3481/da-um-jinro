@@ -104,68 +104,84 @@ const diagnosticTestDB = {
     // ==========================================
     2: {
         수학: [
-            {id: 1, question: "0.333...을 분수로 나타내면?", options: ["1/2", "1/3", "1/4", "2/3"], answer: 1, difficulty: 1, points: 5, concept: "순환소수"},
-            {id: 2, question: "2x × 3x²의 값은?", options: ["5x³", "6x²", "6x³", "5x²"], answer: 2, difficulty: 1, points: 5, concept: "단항식의 곱셈"},
-            {id: 3, question: "(x + 2)(x + 3)을 전개하면?", options: ["x² + 5x + 6", "x² + 6x + 5", "x² + 5x + 5", "x² + 6"], answer: 0, difficulty: 1, points: 5, concept: "다항식의 곱셈"},
-            {id: 4, question: "일차함수 y = 2x + 1의 기울기는?", options: ["1", "2", "-1", "-2"], answer: 1, difficulty: 2, points: 7, concept: "일차함수"},
-            {id: 5, question: "x + y = 5, x - y = 1일 때, x의 값은?", options: ["2", "3", "4", "5"], answer: 1, difficulty: 2, points: 7, concept: "연립방정식"},
-            {id: 6, question: "부등식 2x + 1 > 5의 해는?", options: ["x > 2", "x < 2", "x > 3", "x < 3"], answer: 0, difficulty: 2, points: 7, concept: "일차부등식"},
-            {id: 7, question: "정삼각형의 한 내각의 크기는?", options: ["30°", "45°", "60°", "90°"], answer: 2, difficulty: 2, points: 7, concept: "삼각형"},
-            {id: 8, question: "이등변삼각형의 두 밑각의 크기가 같을 때, 한 밑각이 70°이면 꼭지각은?", options: ["20°", "40°", "50°", "70°"], answer: 1, difficulty: 3, points: 10, concept: "이등변삼각형"},
-            {id: 9, question: "직각삼각형에서 빗변의 제곱은?", options: ["두 변의 합", "두 변의 제곱의 합", "두 변의 차", "두 변의 곱"], answer: 1, difficulty: 3, points: 10, concept: "피타고라스"},
-            {id: 10, question: "평행사변형의 대각의 크기의 합은?", options: ["90°", "180°", "270°", "360°"], answer: 1, difficulty: 3, points: 10, concept: "평행사변형"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "다음 중 순환소수는?", options: ["0.5", "0.25", "0.333...", "0.125"], answer: 2, difficulty: 1, points: 5, concept: "순환소수"},
+            {id: 2, question: "2a³ × 3a²를 계산하면?", options: ["5a⁵", "6a⁵", "5a⁶", "6a⁶"], answer: 1, difficulty: 1, points: 5, concept: "단항식의 곱셈"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "(2x + 3)(x - 1)을 전개하면?", options: ["2x² + x - 3", "2x² - x + 3", "2x² + x + 3", "2x² - x - 3"], answer: 0, difficulty: 2, points: 8, concept: "다항식의 곱셈"},
+            {id: 4, question: "일차함수 y = -2x + 3의 그래프가 지나지 않는 사분면은?", options: ["1사분면", "2사분면", "3사분면", "4사분면"], answer: 2, difficulty: 2, points: 8, concept: "일차함수 그래프"},
+            {id: 5, question: "연립방정식 {2x+y=7, x-y=2}를 풀면 x의 값은?", options: ["1", "2", "3", "4"], answer: 2, difficulty: 2, points: 8, concept: "연립방정식"},
+            {id: 6, question: "부등식 3x - 2 < 7의 해는?", options: ["x < 3", "x > 3", "x ≤ 3", "x ≥ 3"], answer: 0, difficulty: 2, points: 8, concept: "일차부등식"},
+            {id: 7, question: "평행사변형 ABCD에서 ∠A=70°이면 ∠C의 크기는?", options: ["70°", "90°", "110°", "180°"], answer: 0, difficulty: 2, points: 8, concept: "평행사변형의 성질"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "직각삼각형 ABC에서 ∠C=90°, BC=3cm, AC=4cm일 때 AB의 길이는?", options: ["5cm", "6cm", "7cm", "8cm"], answer: 0, difficulty: 3, points: 15, concept: "피타고라스 정리"},
+            {id: 9, question: "일차함수 y=ax+3의 그래프가 점 (2, 7)을 지날 때, a의 값은?", options: ["1", "2", "3", "4"], answer: 1, difficulty: 3, points: 15, concept: "일차함수 활용"},
+            {id: 10, question: "삼각형 ABC에서 AB=AC이고 ∠A=40°일 때, ∠B의 크기는?", options: ["40°", "50°", "60°", "70°"], answer: 3, difficulty: 3, points: 15, concept: "이등변삼각형 응용"}
+
         ],
         
         영어: [
-            {id: 1, question: "'I ___ (see) this movie before.' 빈칸에 알맞은 것은?", options: ["see", "saw", "have seen", "seeing"], answer: 2, difficulty: 1, points: 5, concept: "현재완료"},
-            {id: 2, question: "'I want ___ English.' 빈칸에 알맞은 것은?", options: ["learn", "to learn", "learning", "learned"], answer: 1, difficulty: 1, points: 5, concept: "to부정사"},
-            {id: 3, question: "'She enjoys ___ music.' 빈칸에 알맞은 것은?", options: ["listen", "to listen", "listening", "listened"], answer: 2, difficulty: 1, points: 5, concept: "동명사"},
-            {id: 4, question: "'This book is ___ than that one.' 빈칸에 알맞은 것은?", options: ["good", "better", "best", "well"], answer: 1, difficulty: 2, points: 7, concept: "비교급"},
-            {id: 5, question: "'He is the ___ student in class.' 빈칸에 알맞은 것은?", options: ["tall", "taller", "tallest", "most tall"], answer: 2, difficulty: 2, points: 7, concept: "최상급"},
-            {id: 6, question: "수동태: 'Tom wrote this letter.' → 'This letter ___ by Tom.'", options: ["writes", "wrote", "is written", "was written"], answer: 3, difficulty: 2, points: 7, concept: "수동태"},
-            {id: 7, question: "'If it ___ tomorrow, I will stay home.' 빈칸에 알맞은 것은?", options: ["rain", "rains", "will rain", "rained"], answer: 1, difficulty: 2, points: 7, concept: "조건절"},
-            {id: 8, question: "'I am interested ___ music.' 빈칸에 알맞은 것은?", options: ["in", "at", "on", "to"], answer: 0, difficulty: 3, points: 10, concept: "전치사"},
-            {id: 9, question: "'The book ___ I bought is interesting.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "where"], answer: 1, difficulty: 3, points: 10, concept: "관계대명사"},
-            {id: 10, question: "'He told me ___ quiet.' 빈칸에 알맞은 것은?", options: ["be", "to be", "being", "been"], answer: 1, difficulty: 3, points: 10, concept: "명령문"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "'I ___ to Seoul yesterday.' 빈칸에 알맞은 것은?", options: ["go", "goes", "went", "gone"], answer: 2, difficulty: 1, points: 5, concept: "과거시제"},
+            {id: 2, question: "'She ___ playing the piano now.' 빈칸에 알맞은 것은?", options: ["am", "is", "are", "be"], answer: 1, difficulty: 1, points: 5, concept: "현재진행형"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "'I have lived here ___ 2020.' 빈칸에 알맞은 것은?", options: ["for", "since", "during", "while"], answer: 1, difficulty: 2, points: 8, concept: "현재완료 since/for"},
+            {id: 4, question: "'I want ___ a doctor.' 빈칸에 알맞은 것은?", options: ["be", "to be", "being", "been"], answer: 1, difficulty: 2, points: 8, concept: "to부정사 명사적 용법"},
+            {id: 5, question: "'She is good at ___ English.' 빈칸에 알맞은 것은?", options: ["speak", "to speak", "speaking", "spoke"], answer: 2, difficulty: 2, points: 8, concept: "동명사"},
+            {id: 6, question: "'This problem is ___ than that one.' 빈칸에 알맞은 것은?", options: ["easy", "easier", "easiest", "more easy"], answer: 1, difficulty: 2, points: 8, concept: "비교급"},
+            {id: 7, question: "'The letter was written ___ Tom.' 빈칸에 알맞은 것은?", options: ["by", "with", "of", "from"], answer: 0, difficulty: 2, points: 8, concept: "수동태"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "'If I ___ you, I would study harder.' 빈칸에 알맞은 것은?", options: ["am", "was", "were", "be"], answer: 2, difficulty: 3, points: 15, concept: "가정법 과거"},
+            {id: 9, question: "'The boy ___ is playing soccer is my brother.' 빈칸에 알맞은 것은?", options: ["which", "who", "whose", "whom"], answer: 1, difficulty: 3, points: 15, concept: "관계대명사 주격"},
+            {id: 10, question: "다음 중 어법상 틀린 문장은?", options: ["He made me happy.", "She told me go home.", "I saw him play soccer.", "They let me use it."], answer: 1, difficulty: 3, points: 15, concept: "사역동사/지각동사"}
         ],
         
         국어: [
-            {id: 1, question: "설명문의 특징은?", options: ["감정 표현", "객관적 정보 전달", "주장과 근거", "인물의 갈등"], answer: 1, difficulty: 1, points: 5, concept: "설명문"},
-            {id: 2, question: "토론에서 가장 중요한 것은?", options: ["큰 목소리", "근거 있는 주장", "많은 발언", "상대방 비판"], answer: 1, difficulty: 1, points: 5, concept: "토론"},
-            {id: 3, question: "논설문의 구조는?", options: ["발단-전개-위기-절정-결말", "서론-본론-결론", "기-승-전-결", "초-중-종장"], answer: 1, difficulty: 1, points: 5, concept: "논설문"},
-            {id: 4, question: "다음 중 '의성어'는?", options: ["반짝반짝", "멍멍", "파랗다", "빨리"], answer: 1, difficulty: 2, points: 7, concept: "의성어"},
-            {id: 5, question: "'아버지가방에들어가신다'를 올바르게 띄어쓰면?", options: ["아버지 가방에 들어가신다", "아버지가 방에 들어가신다", "아버지 가 방에 들어가신다", "아버지가 방에들어가신다"], answer: 1, difficulty: 2, points: 7, concept: "띄어쓰기"},
-            {id: 6, question: "소설의 3요소는?", options: ["운율-심상-비유", "인물-사건-배경", "기-승-전-결", "서론-본론-결론"], answer: 1, difficulty: 2, points: 7, concept: "소설"},
-            {id: 7, question: "다음 중 '외래어' 표기가 맞는 것은?", options: ["컴퓨타", "컴퓨터", "컴퓨테", "컴퓨타"], answer: 1, difficulty: 2, points: 7, concept: "외래어"},
-            {id: 8, question: "'메밀꽃 필 무렵'의 작가는?", options: ["김유정", "이효석", "황순원", "김동인"], answer: 1, difficulty: 3, points: 10, concept: "현대 소설"},
-            {id: 9, question: "다음 중 '풍자'의 예는?", options: ["매우 아름답다", "겉과 속이 다르구나", "높은 산", "푸른 바다"], answer: 1, difficulty: 3, points: 10, concept: "풍자"},
-            {id: 10, question: "희곡의 구성 요소가 아닌 것은?", options: ["대사", "지문", "무대", "운율"], answer: 3, difficulty: 3, points: 10, concept: "희곡"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "'선생님께서 교실에 들어오셨다.'에서 사용된 높임법은?", options: ["주체 높임법", "객체 높임법", "상대 높임법", "모두 사용"], answer: 0, difficulty: 1, points: 5, concept: "높임법"},
+            {id: 2, question: "'비가 오다'를 피동 표현으로 바꾸면?", options: ["비가 오게 하다", "비에 오이다", "비가 내리다", "비를 내리다"], answer: 2, difficulty: 1, points: 5, concept: "피동 표현"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "설명문과 논설문의 가장 큰 차이는?", options: ["문단 구성", "문장 길이", "필자의 주장 유무", "어휘 수준"], answer: 2, difficulty: 2, points: 8, concept: "설명문과 논설문"},
+            {id: 4, question: "'눈이 휘둥그레졌다'는 어떤 표현법인가?", options: ["직유법", "은유법", "의인법", "과장법"], answer: 3, difficulty: 2, points: 8, concept: "표현법"},
+            {id: 5, question: "'꽃이 예쁘다. 그래서 많은 사람이 본다.' 두 문장을 자연스럽게 연결하면?", options: ["꽃이 예쁘니까 많은 사람이 본다.", "꽃이 예쁘고 많은 사람이 본다.", "꽃이 예쁘면 많은 사람이 본다.", "꽃이 예쁘거나 많은 사람이 본다."], answer: 0, difficulty: 2, points: 8, concept: "문장 연결"},
+            {id: 6, question: "다음 중 '한글 맞춤법'에 맞는 것은?", options: ["웃어른", "윗어른", "웃 어른", "윗 어른"], answer: 1, difficulty: 2, points: 8, concept: "한글 맞춤법"},
+            {id: 7, question: "소설의 시점 중 '나'가 주인공인 것은?", options: ["1인칭 관찰자 시점", "1인칭 주인공 시점", "3인칭 관찰자 시점", "3인칭 전지적 시점"], answer: 1, difficulty: 2, points: 8, concept: "소설의 시점"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "'메밀꽃 필 무렵'에서 허생원이 동이와 만나는 시간적 배경은?", options: ["새벽", "아침", "저녁", "밤"], answer: 3, difficulty: 3, points: 15, concept: "현대 소설 이해"},
+            {id: 9, question: "다음 중 '역설법'이 사용된 표현은?", options: ["그는 사자처럼 용감하다", "슬픔이 기쁨이 되었다", "달이 웃는다", "매우 빠르다"], answer: 1, difficulty: 3, points: 15, concept: "역설법"},
+            {id: 10, question: "시조의 형식으로 옳은 것은?", options: ["초장-중장", "초장-중장-종장", "기-승-전-결", "발단-전개-위기-절정-결말"], answer: 1, difficulty: 3, points: 15, concept: "시조의 형식"}
         ],
         
         사회: [
-            {id: 1, question: "지형도에서 등고선 간격이 좁으면?", options: ["평지", "완만한 경사", "급경사", "분지"], answer: 2, difficulty: 1, points: 5, concept: "지형도"},
-            {id: 2, question: "우리나라의 대표적인 반도는?", options: ["이탈리아", "한반도", "인도차이나", "아라비아"], answer: 1, difficulty: 1, points: 5, concept: "한국 지리"},
-            {id: 3, question: "도시화의 문제점이 아닌 것은?", options: ["교통 혼잡", "주택 부족", "환경 오염", "인구 감소"], answer: 3, difficulty: 1, points: 5, concept: "도시화"},
-            {id: 4, question: "우리나라의 1차 산업은?", options: ["농업", "제조업", "서비스업", "금융업"], answer: 0, difficulty: 2, points: 7, concept: "산업"},
-            {id: 5, question: "교통이 발달하면서 나타난 현상은?", options: ["지역 간 교류 증가", "물가 상승", "인구 감소", "산업 쇠퇴"], answer: 0, difficulty: 2, points: 7, concept: "교통"},
-            {id: 6, question: "대한민국 헌법의 기본 정신은?", options: ["자유", "평등", "민주주의", "모두"], answer: 3, difficulty: 2, points: 7, concept: "헌법"},
-            {id: 7, question: "국회의 주요 기능은?", options: ["행정", "입법", "사법", "경제"], answer: 1, difficulty: 2, points: 7, concept: "삼권분립"},
-            {id: 8, question: "환경 문제 해결을 위한 방법이 아닌 것은?", options: ["재활용", "쓰레기 줄이기", "대량 생산", "에너지 절약"], answer: 2, difficulty: 3, points: 10, concept: "환경"},
-            {id: 9, question: "세계화의 특징이 아닌 것은?", options: ["국가 간 교류 증가", "문화 교류", "자급자족", "무역 확대"], answer: 2, difficulty: 3, points: 10, concept: "세계화"},
-            {id: 10, question: "지역 축제의 목적이 아닌 것은?", options: ["지역 경제 활성화", "문화 계승", "주민 화합", "인구 감소"], answer: 3, difficulty: 3, points: 10, concept: "지역 문화"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "우리나라 지형의 특징은?", options: ["대부분 평야", "동쪽이 높고 서쪽이 낮음", "서쪽이 높고 동쪽이 낮음", "사막이 많음"], answer: 1, difficulty: 1, points: 5, concept: "한국 지리"},
+            {id: 2, question: "계절풍의 영향으로 우리나라는?", options: ["여름에 건조", "겨울에 다습", "여름에 고온다습", "사계절 건조"], answer: 2, difficulty: 1, points: 5, concept: "기후"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "인구 피라미드가 항아리형이면?", options: ["저출산·고령화", "인구 증가", "인구 감소", "청년층 많음"], answer: 0, difficulty: 2, points: 8, concept: "인구 구조"},
+            {id: 4, question: "우리나라 1차 산업의 비중이 줄어드는 이유는?", options: ["기계화와 산업화", "인구 증가", "수출 감소", "환경 문제"], answer: 0, difficulty: 2, points: 8, concept: "산업 구조 변화"},
+            {id: 5, question: "교통이 발달하면서 나타나는 현상이 아닌 것은?", options: ["지역 간 교류 증가", "대도시 집중", "자급자족 경제", "물류 비용 감소"], answer: 2, difficulty: 2, points: 8, concept: "교통 발달"},
+            {id: 6, question: "삼권분립에서 법을 만드는 기관은?", options: ["행정부", "입법부", "사법부", "헌법재판소"], answer: 1, difficulty: 2, points: 8, concept: "삼권분립"},
+            {id: 7, question: "대한민국 헌법 제1조 1항의 내용은?", options: ["국민주권", "민주공화국", "평등권", "자유권"], answer: 1, difficulty: 2, points: 8, concept: "헌법"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "도시화로 인한 문제를 해결하기 위한 방법이 아닌 것은?", options: ["그린벨트 설정", "신도시 건설", "대도시 집중 유도", "교통망 확충"], answer: 2, difficulty: 3, points: 15, concept: "도시화 문제"},
+            {id: 9, question: "세계화 시대에 문화 다양성을 보존하는 이유는?", options: ["경제적 이익", "전통 단절", "인류 문화 유산 보존", "획일화 촉진"], answer: 2, difficulty: 3, points: 15, concept: "세계화와 문화"},
+            {id: 10, question: "지속 가능한 발전을 위해 가장 중요한 것은?", options: ["경제 성장 우선", "환경과 경제의 조화", "개발 중단", "인구 증가"], answer: 1, difficulty: 3, points: 15, concept: "지속 가능한 발전"}
         ],
         
         과학: [
-            {id: 1, question: "물질의 세 가지 상태는?", options: ["고체, 액체, 기체", "물, 얼음, 수증기", "원자, 분자, 이온", "산, 염기, 중성"], answer: 0, difficulty: 1, points: 5, concept: "물질의 상태"},
-            {id: 2, question: "화학 반응의 예가 아닌 것은?", options: ["물 끓이기", "철 녹슬기", "종이 타기", "음식 소화"], answer: 0, difficulty: 1, points: 5, concept: "화학 반응"},
-            {id: 3, question: "광합성에 필요한 것이 아닌 것은?", options: ["빛", "물", "이산화탄소", "산소"], answer: 3, difficulty: 1, points: 5, concept: "광합성"},
-            {id: 4, question: "전류의 단위는?", options: ["볼트(V)", "암페어(A)", "와트(W)", "옴(Ω)"], answer: 1, difficulty: 2, points: 7, concept: "전류"},
-            {id: 5, question: "소화 효소가 분비되는 곳이 아닌 것은?", options: ["침샘", "위", "간", "작은창자"], answer: 2, difficulty: 2, points: 7, concept: "소화"},
-            {id: 6, question: "물의 밀도가 가장 큰 온도는?", options: ["0℃", "4℃", "10℃", "100℃"], answer: 1, difficulty: 2, points: 7, concept: "물의 특성"},
-            {id: 7, question: "기압이 낮으면?", options: ["날씨가 맑다", "비가 온다", "바람이 없다", "기온이 높다"], answer: 1, difficulty: 2, points: 7, concept: "날씨"},
-            {id: 8, question: "광합성 결과 생성되는 양분은?", options: ["단백질", "지방", "포도당", "물"], answer: 2, difficulty: 3, points: 10, concept: "광합성 산물"},
-            {id: 9, question: "판의 경계에서 일어나는 현상이 아닌 것은?", options: ["지진", "화산", "해일", "일식"], answer: 3, difficulty: 3, points: 10, concept: "판구조론"},
-            {id: 10, question: "별의 일주 운동 방향은?", options: ["동→서", "서→동", "남→북", "북→남"], answer: 0, difficulty: 3, points: 10, concept: "천체 운동"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "물이 얼음으로 변하는 상태 변화는?", options: ["융해", "응고", "증발", "승화"], answer: 1, difficulty: 1, points: 5, concept: "물질의 상태 변화"},
+            {id: 2, question: "산성 용액을 만나면 붉은색으로 변하는 지시약은?", options: ["리트머스 종이", "페놀프탈레인", "BTB 용액", "요오드 용액"], answer: 0, difficulty: 1, points: 5, concept: "산과 염기"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "물이 끓을 때 일어나는 변화를 입자 모형으로 설명하면?", options: ["입자 간 거리가 가까워진다", "입자 간 거리가 멀어진다", "입자가 사라진다", "입자가 생긴다"], answer: 1, difficulty: 2, points: 8, concept: "물질의 상태 변화와 입자"},
+            {id: 4, question: "전류가 흐르는 도선 주위에는?", options: ["자기장 형성", "소리 발생", "빛 발생", "중력 증가"], answer: 0, difficulty: 2, points: 8, concept: "전류의 자기 작용"},
+            {id: 5, question: "소화 과정에서 녹말을 분해하는 효소는?", options: ["아밀레이스", "펩신", "리파아제", "트립신"], answer: 0, difficulty: 2, points: 8, concept: "소화 효소"},
+            {id: 6, question: "식물 세포와 동물 세포의 차이점은?", options: ["핵의 유무", "세포막의 유무", "세포벽과 엽록체", "미토콘드리아"], answer: 2, difficulty: 2, points: 8, concept: "세포의 구조"},
+            {id: 7, question: "광합성 과정에서 생성되는 것은?", options: ["산소와 이산화탄소", "포도당과 산소", "물과 이산화탄소", "질소와 산소"], answer: 1, difficulty: 2, points: 8, concept: "광합성"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "광합성과 호흡의 관계를 가장 잘 설명한 것은?", options: ["서로 관계없음", "서로 반대 과정", "같은 과정", "광합성만 중요"], answer: 1, difficulty: 3, points: 15, concept: "광합성과 호흡"},
+            {id: 9, question: "판의 경계에서 일어나는 현상이 아닌 것은?", options: ["지진", "화산", "조산 운동", "일식"], answer: 3, difficulty: 3, points: 15, concept: "판구조론"},
+            {id: 10, question: "화성암, 퇴적암, 변성암의 생성 과정을 비교할 때, 퇴적암의 특징은?", options: ["마그마 냉각", "층리 구조", "높은 온도와 압력", "결정 크기가 큼"], answer: 1, difficulty: 3, points: 15, concept: "암석의 생성"}
         ]
     },
     
@@ -174,68 +190,83 @@ const diagnosticTestDB = {
     // ==========================================
     3: {
         수학: [
-            {id: 1, question: "√16의 값은?", options: ["2", "4", "8", "16"], answer: 1, difficulty: 1, points: 5, concept: "제곱근"},
-            {id: 2, question: "√2 × √8의 값은?", options: ["2", "4", "8", "16"], answer: 1, difficulty: 1, points: 5, concept: "무리수의 곱셈"},
-            {id: 3, question: "x² - 5x + 6을 인수분해하면?", options: ["(x-2)(x-3)", "(x+2)(x+3)", "(x-1)(x-6)", "(x+1)(x+6)"], answer: 0, difficulty: 1, points: 5, concept: "인수분해"},
-            {id: 4, question: "x² = 9의 해는?", options: ["x = 3", "x = -3", "x = ±3", "x = 9"], answer: 2, difficulty: 2, points: 7, concept: "이차방정식"},
-            {id: 5, question: "이차함수 y = x²의 꼭짓점은?", options: ["(0, 0)", "(1, 1)", "(-1, 1)", "(0, 1)"], answer: 0, difficulty: 2, points: 7, concept: "이차함수"},
-            {id: 6, question: "직각삼각형에서 빗변이 5, 한 변이 3일 때 나머지 변은?", options: ["2", "3", "4", "5"], answer: 2, difficulty: 2, points: 7, concept: "피타고라스"},
-            {id: 7, question: "sin 30°의 값은?", options: ["1/2", "√2/2", "√3/2", "1"], answer: 0, difficulty: 2, points: 7, concept: "삼각비"},
-            {id: 8, question: "원의 중심각이 60°일 때 호의 길이는? (반지름 6cm)", options: ["2πcm", "3πcm", "4πcm", "6πcm"], answer: 0, difficulty: 3, points: 10, concept: "원과 부채꼴"},
-            {id: 9, question: "자료 1, 2, 3, 4, 5의 평균은?", options: ["2", "3", "4", "5"], answer: 1, difficulty: 3, points: 10, concept: "통계"},
-            {id: 10, question: "경우의 수: 주사위 2개를 던질 때 나오는 경우는?", options: ["12", "24", "36", "48"], answer: 2, difficulty: 3, points: 10, concept: "확률"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "√49의 값은?", options: ["5", "6", "7", "8"], answer: 2, difficulty: 1, points: 5, concept: "제곱근"},
+            {id: 2, question: "2√3 + 3√3의 값은?", options: ["5√3", "5√6", "6√3", "√6"], answer: 0, difficulty: 1, points: 5, concept: "무리수의 덧셈"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "x² - x - 6을 인수분해하면?", options: ["(x-2)(x+3)", "(x+2)(x-3)", "(x-1)(x-6)", "(x+1)(x-6)"], answer: 0, difficulty: 2, points: 8, concept: "인수분해"},
+            {id: 4, question: "이차방정식 x² - 4x + 3 = 0의 해는?", options: ["x = 1, 2", "x = 1, 3", "x = 2, 3", "x = 1, 4"], answer: 1, difficulty: 2, points: 8, concept: "이차방정식"},
+            {id: 5, question: "이차함수 y = (x-2)² - 1의 축의 방정식은?", options: ["x = 1", "x = 2", "x = -1", "x = -2"], answer: 1, difficulty: 2, points: 8, concept: "이차함수의 그래프"},
+            {id: 6, question: "직각삼각형에서 빗변이 10cm, 한 변이 6cm일 때 나머지 변은?", options: ["4cm", "6cm", "8cm", "10cm"], answer: 2, difficulty: 2, points: 8, concept: "피타고라스 정리"},
+            {id: 7, question: "삼각형 ABC에서 ∠C=90°, AB=10, BC=6일 때, sin A의 값은?", options: ["3/5", "4/5", "3/4", "5/3"], answer: 0, difficulty: 2, points: 8, concept: "삼각비"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "반지름이 6cm인 원에서 중심각 120°에 대한 호의 길이는?", options: ["2πcm", "4πcm", "6πcm", "8πcm"], answer: 1, difficulty: 3, points: 15, concept: "원과 부채꼴"},
+            {id: 9, question: "자료 60, 70, 80, 90, 100의 분산은?", options: ["100", "150", "200", "250"], answer: 2, difficulty: 3, points: 15, concept: "분산과 표준편차"},
+            {id: 10, question: "서로 다른 5명 중 3명을 뽑아 일렬로 세우는 경우의 수는?", options: ["20", "30", "60", "120"], answer: 2, difficulty: 3, points: 15, concept: "순열"}
         ],
         
         영어: [
-            {id: 1, question: "'If I ___ you, I would study harder.' 빈칸에 알맞은 것은?", options: ["am", "was", "were", "be"], answer: 2, difficulty: 1, points: 5, concept: "가정법"},
-            {id: 2, question: "'A cake is made ___ flour.' 빈칸에 알맞은 것은?", options: ["by", "of", "with", "from"], answer: 3, difficulty: 1, points: 5, concept: "전치사"},
-            {id: 3, question: "'The book ___ I bought is interesting.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "when"], answer: 1, difficulty: 1, points: 5, concept: "관계대명사"},
-            {id: 4, question: "'___ hard, he passed the exam.' 빈칸에 알맞은 것은?", options: ["Study", "Studying", "Studied", "To study"], answer: 1, difficulty: 2, points: 7, concept: "분사구문"},
-            {id: 5, question: "'He is too young ___ drive.' 빈칸에 알맞은 것은?", options: ["for", "to", "of", "at"], answer: 1, difficulty: 2, points: 7, concept: "too ~ to"},
-            {id: 6, question: "'I am looking forward to ___ you.' 빈칸에 알맞은 것은?", options: ["see", "seeing", "saw", "seen"], answer: 1, difficulty: 2, points: 7, concept: "전치사 + 동명사"},
-            {id: 7, question: "'Neither he nor I ___ right.' 빈칸에 알맞은 것은?", options: ["am", "is", "are", "be"], answer: 0, difficulty: 2, points: 7, concept: "상관접속사"},
-            {id: 8, question: "'The girl ___ father is a doctor is my friend.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "that"], answer: 2, difficulty: 3, points: 10, concept: "소유격 관계대명사"},
-            {id: 9, question: "'I wish I ___ rich.' 빈칸에 알맞은 것은?", options: ["am", "was", "were", "be"], answer: 2, difficulty: 3, points: 10, concept: "I wish 가정법"},
-            {id: 10, question: "'She said that she ___ busy.' 빈칸에 알맞은 것은?", options: ["is", "was", "were", "be"], answer: 1, difficulty: 3, points: 10, concept: "시제 일치"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "'The letter was ___ by Tom.' 빈칸에 알맞은 것은?", options: ["write", "wrote", "written", "writing"], answer: 2, difficulty: 1, points: 5, concept: "수동태"},
+            {id: 2, question: "'She has lived here ___ 2015.' 빈칸에 알맞은 것은?", options: ["for", "since", "during", "while"], answer: 1, difficulty: 1, points: 5, concept: "현재완료"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "'If I ___ you, I would study harder.' 빈칸에 알맞은 것은?", options: ["am", "was", "were", "be"], answer: 2, difficulty: 2, points: 8, concept: "가정법 과거"},
+            {id: 4, question: "'The boy ___ is playing soccer is my brother.' 빈칸에 알맞은 것은?", options: ["which", "who", "whose", "whom"], answer: 1, difficulty: 2, points: 8, concept: "관계대명사 주격"},
+            {id: 5, question: "'___ carefully, he found the answer.' 빈칸에 알맞은 것은?", options: ["Think", "Thinking", "Thought", "To think"], answer: 1, difficulty: 2, points: 8, concept: "분사구문"},
+            {id: 6, question: "'I am looking forward to ___ you.' 빈칸에 알맞은 것은?", options: ["see", "seeing", "saw", "seen"], answer: 1, difficulty: 2, points: 8, concept: "전치사 + 동명사"},
+            {id: 7, question: "'He is too tired ___ work.' 빈칸에 알맞은 것은?", options: ["for", "to", "of", "at"], answer: 1, difficulty: 2, points: 8, concept: "too ~ to"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "'The girl ___ father is a doctor is my friend.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "that"], answer: 2, difficulty: 3, points: 15, concept: "소유격 관계대명사"},
+            {id: 9, question: "'I wish I ___ a millionaire.' 빈칸에 알맞은 것은?", options: ["am", "was", "were", "be"], answer: 2, difficulty: 3, points: 15, concept: "I wish 가정법"},
+            {id: 10, question: "다음 중 어법상 틀린 문장은?", options: ["She told me to go.", "He made me laugh.", "I saw him played soccer.", "They let me use it."], answer: 2, difficulty: 3, points: 15, concept: "지각동사/사역동사"}
         ],
         
         국어: [
-            {id: 1, question: "논설문의 구조는?", options: ["발단-전개-위기-절정-결말", "서론-본론-결론", "기-승-전-결", "초-중-종장"], answer: 1, difficulty: 1, points: 5, concept: "논설문"},
-            {id: 2, question: "토론의 필수 요소가 아닌 것은?", options: ["주제", "근거", "감정", "반론"], answer: 2, difficulty: 1, points: 5, concept: "토론"},
-            {id: 3, question: "비평문의 목적은?", options: ["감정 표현", "정보 전달", "작품 분석", "설득"], answer: 2, difficulty: 1, points: 5, concept: "비평문"},
-            {id: 4, question: "'무궁화 삼천리 화려 강산'의 수사법은?", options: ["은유", "직유", "과장", "대유"], answer: 3, difficulty: 2, points: 7, concept: "수사법"},
-            {id: 5, question: "한글의 창제 원리가 아닌 것은?", options: ["초성", "중성", "종성", "복성"], answer: 3, difficulty: 2, points: 7, concept: "한글"},
-            {id: 6, question: "'소나기'의 주제는?", options: ["우정", "첫사랑", "가족애", "우애"], answer: 1, difficulty: 2, points: 7, concept: "소설"},
-            {id: 7, question: "다음 중 '반어'의 예는?", options: ["참 잘했다 (빈정댐)", "매우 크다", "아주 작다", "정말 예쁘다"], answer: 0, difficulty: 2, points: 7, concept: "반어"},
-            {id: 8, question: "'광화문 연가'의 갈래는?", options: ["시조", "가사", "자유시", "현대시"], answer: 3, difficulty: 3, points: 10, concept: "시"},
-            {id: 9, question: "'허생전'의 작가는?", options: ["박지원", "정철", "김만중", "허균"], answer: 0, difficulty: 3, points: 10, concept: "고전 소설"},
-            {id: 10, question: "매체 언어의 특성이 아닌 것은?", options: ["다양한 기호", "쌍방향 소통", "제한된 공간", "손글씨만 사용"], answer: 3, difficulty: 3, points: 10, concept: "매체"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "논설문의 3단 구성은?", options: ["발단-전개-결말", "서론-본론-결론", "기-승-전-결", "초장-중장-종장"], answer: 1, difficulty: 1, points: 5, concept: "논설문"},
+            {id: 2, question: "토론에서 가장 중요한 것은?", options: ["큰 목소리", "근거 있는 주장", "많은 발언", "상대 비판"], answer: 1, difficulty: 1, points: 5, concept: "토론"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "'달은 밝은 거울이다'는 어떤 표현법인가?", options: ["직유법", "은유법", "의인법", "과장법"], answer: 1, difficulty: 2, points: 8, concept: "수사법"},
+            {id: 4, question: "한글 창제의 기본 원리는?", options: ["상형의 원리", "표의 문자", "표음 문자", "한자 응용"], answer: 2, difficulty: 2, points: 8, concept: "한글"},
+            {id: 5, question: "'소나기'에서 소년과 소녀의 관계는?", options: ["친구", "가족", "첫사랑", "이웃"], answer: 2, difficulty: 2, points: 8, concept: "현대 소설 감상"},
+            {id: 6, question: "'참 잘했네!'라고 빈정댈 때 사용하는 표현법은?", options: ["반어", "역설", "풍자", "과장"], answer: 0, difficulty: 2, points: 8, concept: "반어법"},
+            {id: 7, question: "비평문에서 가장 중요한 것은?", options: ["감정 표현", "객관적 분석", "주관적 느낌", "작가 칭찬"], answer: 1, difficulty: 2, points: 8, concept: "비평문"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "'허생전'에서 허생이 보여주는 인물상은?", options: ["현실 도피형", "사회 비판형", "권력 지향형", "향락 추구형"], answer: 1, difficulty: 3, points: 15, concept: "고전 소설 이해"},
+            {id: 9, question: "'슬픔이 기쁨이다'는 어떤 표현법인가?", options: ["은유법", "직유법", "역설법", "과장법"], answer: 2, difficulty: 3, points: 15, concept: "역설법"},
+            {id: 10, question: "매체 언어에서 문자와 함께 사용되는 기호가 아닌 것은?", options: ["이미지", "영상", "소리", "손글씨만"], answer: 3, difficulty: 3, points: 15, concept: "매체 언어"}
         ],
         
         사회: [
-            {id: 1, question: "민주주의의 기본 원리가 아닌 것은?", options: ["국민 주권", "기본권 보장", "권력 분립", "독재"], answer: 3, difficulty: 1, points: 5, concept: "민주주의"},
-            {id: 2, question: "시장 경제의 특징은?", options: ["계획 경제", "수요와 공급", "정부 통제", "배급제"], answer: 1, difficulty: 1, points: 5, concept: "시장 경제"},
-            {id: 3, question: "우리나라의 국회는 몇 원제인가?", options: ["1원제", "2원제", "3원제", "4원제"], answer: 0, difficulty: 1, points: 5, concept: "국회"},
-            {id: 4, question: "기본권의 종류가 아닌 것은?", options: ["자유권", "평등권", "참정권", "납세권"], answer: 3, difficulty: 2, points: 7, concept: "기본권"},
-            {id: 5, question: "국제 연합(UN)의 주요 목적은?", options: ["경제 발전", "세계 평화", "무역 증진", "문화 교류"], answer: 1, difficulty: 2, points: 7, concept: "국제기구"},
-            {id: 6, question: "수요가 증가하면 가격은?", options: ["상승", "하락", "변화 없음", "0"], answer: 0, difficulty: 2, points: 7, concept: "수요와 공급"},
-            {id: 7, question: "대한민국 헌법의 최고 가치는?", options: ["경제", "국방", "인간 존엄", "교육"], answer: 2, difficulty: 2, points: 7, concept: "헌법"},
-            {id: 8, question: "지속 가능한 발전의 핵심은?", options: ["경제 성장만", "환경 보호만", "경제+환경+사회", "인구 증가"], answer: 2, difficulty: 3, points: 10, concept: "지속 가능 발전"},
-            {id: 9, question: "세계화의 문제점이 아닌 것은?", options: ["빈부 격차", "문화 획일화", "환경 파괴", "자급자족 증가"], answer: 3, difficulty: 3, points: 10, concept: "세계화"},
-            {id: 10, question: "민주 정치의 발전 과정이 아닌 것은?", options: ["시민 혁명", "보통 선거", "삼권분립", "왕정 강화"], answer: 3, difficulty: 3, points: 10, concept: "민주 정치"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "대한민국 헌법 제1조 1항의 내용은?", options: ["국민주권", "민주공화국", "평화통일", "기본권 보장"], answer: 1, difficulty: 1, points: 5, concept: "헌법"},
+            {id: 2, question: "시장 경제에서 가격을 결정하는 요인은?", options: ["정부", "수요와 공급", "대기업", "소비자"], answer: 1, difficulty: 1, points: 5, concept: "시장 경제"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "삼권분립에서 법을 만드는 기관은?", options: ["행정부", "입법부", "사법부", "헌법재판소"], answer: 1, difficulty: 2, points: 8, concept: "삼권분립"},
+            {id: 4, question: "기본권 중 국가 권력으로부터 자유를 보장하는 권리는?", options: ["자유권", "평등권", "참정권", "사회권"], answer: 0, difficulty: 2, points: 8, concept: "기본권"},
+            {id: 5, question: "국제 연합(UN)의 주요 목적은?", options: ["경제 발전", "세계 평화 유지", "무역 증진", "환경 보호"], answer: 1, difficulty: 2, points: 8, concept: "국제기구"},
+            {id: 6, question: "수요가 증가하고 공급이 감소하면 가격은?", options: ["상승", "하락", "변화 없음", "0"], answer: 0, difficulty: 2, points: 8, concept: "수요와 공급 법칙"},
+            {id: 7, question: "대한민국 헌법에서 보장하는 최고 가치는?", options: ["경제 발전", "국방 강화", "인간의 존엄성", "문화 계승"], answer: 2, difficulty: 2, points: 8, concept: "헌법 기본 정신"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "지속 가능한 발전을 위해 가장 중요한 것은?", options: ["경제 성장만 추구", "환경 보호만 추구", "경제·환경·사회의 조화", "인구 증가"], answer: 2, difficulty: 3, points: 15, concept: "지속 가능한 발전"},
+            {id: 9, question: "세계화로 인한 긍정적 영향이 아닌 것은?", options: ["문화 교류 확대", "무역 증가", "자급자족 경제 강화", "정보 교류 증가"], answer: 2, difficulty: 3, points: 15, concept: "세계화"},
+            {id: 10, question: "민주주의 발전 과정에서 시민 혁명이 중요한 이유는?", options: ["왕권 강화", "국민주권 확립", "귀족 중심 사회", "신분제 강화"], answer: 1, difficulty: 3, points: 15, concept: "민주 정치 발전"}
         ],
         
         과학: [
-            {id: 1, question: "화학 반응식에서 보존되는 것은?", options: ["질량", "부피", "온도", "압력"], answer: 0, difficulty: 1, points: 5, concept: "질량 보존"},
-            {id: 2, question: "산과 염기가 반응하는 것은?", options: ["산화", "환원", "중화", "분해"], answer: 2, difficulty: 1, points: 5, concept: "중화 반응"},
-            {id: 3, question: "유전 정보를 담고 있는 물질은?", options: ["단백질", "지방", "DNA", "물"], answer: 2, difficulty: 1, points: 5, concept: "유전"},
-            {id: 4, question: "전기 분해에서 양극에 모이는 것은?", options: ["양이온", "음이온", "중성 입자", "전자"], answer: 1, difficulty: 2, points: 7, concept: "전기 분해"},
-            {id: 5, question: "식물의 생장점이 있는 곳은?", options: ["잎", "줄기 끝", "뿌리 중간", "꽃"], answer: 1, difficulty: 2, points: 7, concept: "식물"},
-            {id: 6, question: "작용 반작용의 법칙은?", options: ["관성의 법칙", "가속도의 법칙", "힘의 평형", "뉴턴 제3법칙"], answer: 3, difficulty: 2, points: 7, concept: "운동"},
-            {id: 7, question: "태양계 행성 중 가장 큰 것은?", options: ["지구", "화성", "목성", "토성"], answer: 2, difficulty: 2, points: 7, concept: "태양계"},
-            {id: 8, question: "효소의 특징이 아닌 것은?", options: ["촉매 역할", "단백질", "높은 온도에서 활성", "기질 특이성"], answer: 2, difficulty: 3, points: 10, concept: "효소"},
-            {id: 9, question: "판의 경계 유형이 아닌 것은?", options: ["발산 경계", "수렴 경계", "보존 경계", "융합 경계"], answer: 3, difficulty: 3, points: 10, concept: "판구조론"},
-            {id: 10, question: "별의 밝기를 나타내는 등급에서 숫자가 작을수록?", options: ["어둡다", "밝다", "멀다", "크다"], answer: 1, difficulty: 3, points: 10, concept: "별"}
+            // 기초 (2문제, 각 5점)
+            {id: 1, question: "화학 반응에서 반드시 보존되는 것은?", options: ["질량", "부피", "온도", "압력"], answer: 0, difficulty: 1, points: 5, concept: "질량 보존 법칙"},
+            {id: 2, question: "산성 용액과 염기성 용액이 반응하는 것은?", options: ["산화", "환원", "중화", "분해"], answer: 2, difficulty: 1, points: 5, concept: "중화 반응"},
+            // 표준 (5문제, 각 8점)
+            {id: 3, question: "DNA가 가지고 있는 정보는?", options: ["영양분", "유전 정보", "에너지", "호르몬"], answer: 1, difficulty: 2, points: 8, concept: "유전"},
+            {id: 4, question: "전기 분해에서 음극으로 이동하는 것은?", options: ["양이온", "음이온", "중성자", "전자"], answer: 0, difficulty: 2, points: 8, concept: "전기 분해"},
+            {id: 5, question: "뉴턴의 운동 제3법칙(작용·반작용)에서 두 힘의 관계는?", options: ["크기 같고 방향 같음", "크기 같고 방향 반대", "크기 다르고 방향 같음", "크기 다르고 방향 반대"], answer: 1, difficulty: 2, points: 8, concept: "운동 법칙"},
+            {id: 6, question: "태양계 행성 중 가장 큰 것은?", options: ["지구", "화성", "목성", "토성"], answer: 2, difficulty: 2, points: 8, concept: "태양계"},
+            {id: 7, question: "식물의 생장점은 어디에 있는가?", options: ["잎", "줄기와 뿌리 끝", "꽃", "열매"], answer: 1, difficulty: 2, points: 8, concept: "식물의 구조"},
+            // 심화 (3문제, 각 15점)
+            {id: 8, question: "효소가 최적 활성을 보이는 조건이 아닌 것은?", options: ["적정 pH", "적정 온도", "매우 높은 온도", "기질 존재"], answer: 2, difficulty: 3, points: 15, concept: "효소의 특성"},
+            {id: 9, question: "판의 경계에서 나타나는 지질 현상이 아닌 것은?", options: ["지진", "화산", "조산 운동", "일식"], answer: 3, difficulty: 3, points: 15, concept: "판구조론"},
+            {id: 10, question: "별의 등급(magnitude)에서 숫자가 작을수록 별은?", options: ["어둡다", "밝다", "멀다", "크다"], answer: 1, difficulty: 3, points: 15, concept: "별의 밝기"}
         ]
     },
     
