@@ -560,12 +560,14 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 24px;
-            padding: 2.5rem;
+            border-radius: 16px;
+            padding: 1.5rem;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
             z-index: 9999;
             max-width: 90%;
-            width: 500px;
+            width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -7502,68 +7504,52 @@
     <div id="celebrationModalBackdrop" class="celebration-modal-backdrop hidden">
         <div id="celebrationModal" class="celebration-modal">
             <!-- 축하 이모지 -->
-            <div class="text-center mb-6">
-                <div class="celebration-emoji text-6xl mb-3" id="celebrationEmoji">🎉</div>
-                <h2 class="text-3xl font-black text-white mb-2" id="celebrationTitle">오늘도 해냈어!</h2>
-                <p class="text-xl text-green-100 font-semibold" id="celebrationMessage">3일 연속 달성 중!</p>
+            <div class="text-center mb-4">
+                <div class="celebration-emoji text-4xl mb-2" id="celebrationEmoji">🎉</div>
+                <h2 class="text-xl font-black text-white mb-1" id="celebrationTitle">오늘도 해냈어!</h2>
+                <p class="text-sm text-green-100 font-semibold" id="celebrationMessage">3일 연속 달성 중!</p>
             </div>
             
             <!-- 획득 보상 -->
-            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5 mb-5 space-y-4">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="sparkle mr-2">✨</span> 오늘 얻은 것
+            <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 mb-3 space-y-2">
+                <h3 class="text-sm font-bold text-white mb-2 flex items-center">
+                    <span class="sparkle mr-1">✨</span> 오늘 얻은 것
                 </h3>
                 
                 <!-- 경험치 -->
                 <div class="flex items-center justify-between text-white">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-2xl">🏆</span>
-                        <span class="font-semibold">경험치</span>
+                    <div class="flex items-center space-x-1">
+                        <span class="text-lg">🏆</span>
+                        <span class="text-sm font-semibold">경험치</span>
                     </div>
-                    <span class="text-2xl font-black text-yellow-300" id="xpGained">+50 XP</span>
-                </div>
-                
-                <!-- XP 프로그레스 바 -->
-                <div class="relative">
-                    <div class="bg-white/30 rounded-full h-4 overflow-hidden">
-                        <div class="progress-bar-fill bg-gradient-to-r from-yellow-400 to-orange-500 h-full rounded-full" 
-                             id="xpProgressBar" style="width: 0%;"></div>
-                    </div>
-                    <div class="text-xs text-white text-center mt-1" id="levelInfo">Level 5 (450/500 XP)</div>
+                    <span class="text-lg font-black text-yellow-300" id="xpGained">+50 XP</span>
                 </div>
                 
                 <!-- 누적 시간 -->
                 <div class="flex items-center justify-between text-white">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-2xl">⏱️</span>
-                        <span class="font-semibold">누적 시간</span>
+                    <div class="flex items-center space-x-1">
+                        <span class="text-lg">⏱️</span>
+                        <span class="text-sm font-semibold">누적 시간</span>
                     </div>
-                    <span class="text-xl font-bold" id="totalTimeToday">2시간 30분</span>
+                    <span class="text-base font-bold" id="totalTimeToday">2시간 30분</span>
                 </div>
                 
                 <!-- 연속 달성 (Streak) -->
                 <div class="flex items-center justify-between text-white">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-2xl">🔥</span>
-                        <span class="font-semibold">연속 달성</span>
+                    <div class="flex items-center space-x-1">
+                        <span class="text-lg">🔥</span>
+                        <span class="text-sm font-semibold">연속 달성</span>
                     </div>
-                    <span class="text-xl font-bold text-orange-300" id="streakDays">3일 연속</span>
+                    <span class="text-base font-bold text-orange-300" id="streakDays">3일 연속</span>
                 </div>
             </div>
             
-            <!-- 다음 단계 -->
-            <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-4 mb-5">
-                <h4 class="text-sm font-bold text-green-100 mb-2">📅 내일 학습 과목</h4>
-                <p class="text-white font-semibold text-base" id="tomorrowSubjects">수학, 영어, 과학</p>
-            </div>
-            
-            <!-- 🆕 휴식 시간 안내 -->
-            <div class="bg-gradient-to-r from-blue-500/30 to-purple-500/30 backdrop-blur-sm rounded-2xl p-4 mb-5 border-2 border-blue-300/50">
-                <div class="flex items-center gap-3">
-                    <div class="text-4xl">☕</div>
+            <!-- 휴식 안내 (간단) -->
+            <div class="bg-gradient-to-r from-blue-500/30 to-purple-500/30 backdrop-blur-sm rounded-xl p-3 mb-3 border border-blue-300/50">
+                <div class="flex items-center gap-2">
+                    <div class="text-2xl">☕</div>
                     <div class="flex-1">
-                        <h4 class="text-base font-bold text-white mb-1">10분 휴식하세요!</h4>
-                        <p class="text-sm text-blue-100">다음 과목 시작 전 10분간 쉬어가세요 🌟</p>
+                        <p class="text-sm font-bold text-white">10분 휴식 후 다음 과목! 🌟</p>
                     </div>
                 </div>
             </div>
@@ -7571,107 +7557,92 @@
             <!-- 확인 버튼 -->
             <button 
                 onclick="closeCelebrationModal()" 
-                class="celebration-button w-full py-4 bg-white text-green-600 font-black text-lg rounded-xl hover:bg-green-50 transition-all transform hover:scale-105">
-                멋져! 계속 가자! 💪
+                class="celebration-button w-full py-3 bg-white text-green-600 font-bold text-base rounded-xl hover:bg-green-50 transition-all">
+                확인 💪
             </button>
         </div>
     </div>
     
     <!-- 🧠 메타인지 체크 모달 (혼공기적 방법론) -->
     <div id="metaCognitionModalBackdrop" class="celebration-modal-backdrop hidden">
-        <div id="metaCognitionModal" class="celebration-modal" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+        <div id="metaCognitionModal" class="celebration-modal" style="max-width: 450px; max-height: 80vh; overflow-y: auto;">
             <!-- 헤더 -->
-            <div class="text-center mb-6">
-                <div class="text-6xl mb-3">🧠</div>
-                <h2 class="text-3xl font-black text-white mb-2"><span id="metaSubjectName">학습</span> 이해도 체크</h2>
-                <p class="text-lg text-green-100 font-semibold">오늘 배운 내용을 스스로 점검해보세요!</p>
-                <p class="text-sm text-green-200 mt-2">💡 메타인지는 학습 효과를 2배 높여줍니다</p>
+            <div class="text-center mb-4">
+                <div class="text-4xl mb-2">🧠</div>
+                <h2 class="text-xl font-black text-white mb-1"><span id="metaSubjectName">학습</span> 이해도 체크</h2>
+                <p class="text-sm text-green-100">오늘 배운 내용을 점검해보세요!</p>
             </div>
             
             <!-- 메타인지 체크리스트 -->
-            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-5 mb-5 space-y-4">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="sparkle mr-2">✨</span> 4가지 체크리스트
+            <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 mb-3 space-y-2">
+                <h3 class="text-sm font-bold text-white mb-2 flex items-center">
+                    <span class="sparkle mr-1">✨</span> 체크리스트
                 </h3>
                 
                 <!-- 체크박스 항목들 -->
-                <label class="flex items-start gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                <label class="flex items-center gap-2 p-2 bg-white/10 rounded-lg hover:bg-white/20 cursor-pointer transition">
                     <input type="checkbox" id="metaCanExplain" 
-                           class="mt-1 w-5 h-5 rounded border-2 border-white/50 bg-white/20 checked:bg-green-500 checked:border-green-500 cursor-pointer">
+                           class="w-4 h-4 rounded border border-white/50 bg-white/20 checked:bg-green-500 checked:border-green-500 cursor-pointer">
                     <div class="flex-1">
-                        <div class="text-white font-semibold">📖 배운 내용을 말로 설명할 수 있나요?</div>
-                        <div class="text-xs text-green-100 mt-1">키워드만 보고 전체 내용을 설명할 수 있으면 체크!</div>
+                        <div class="text-white text-sm font-semibold">📖 배운 내용을 설명할 수 있나요?</div>
                     </div>
                 </label>
                 
-                <label class="flex items-start gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                <label class="flex items-center gap-2 p-2 bg-white/10 rounded-lg hover:bg-white/20 cursor-pointer transition">
                     <input type="checkbox" id="metaCanTeach" 
-                           class="mt-1 w-5 h-5 rounded border-2 border-white/50 bg-white/20 checked:bg-green-500 checked:border-green-500 cursor-pointer">
+                           class="w-4 h-4 rounded border border-white/50 bg-white/20 checked:bg-green-500 checked:border-green-500 cursor-pointer">
                     <div class="flex-1">
-                        <div class="text-white font-semibold">👥 친구에게 가르쳐줄 수 있나요?</div>
-                        <div class="text-xs text-green-100 mt-1">다른 사람에게 쉽게 설명할 수 있으면 완전 이해!</div>
+                        <div class="text-white text-sm font-semibold">👥 친구에게 가르쳐줄 수 있나요?</div>
                     </div>
                 </label>
                 
-                <label class="flex items-start gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                <label class="flex items-center gap-2 p-2 bg-white/10 rounded-lg hover:bg-white/20 cursor-pointer transition">
                     <input type="checkbox" id="metaCanSolveProblems" 
-                           class="mt-1 w-5 h-5 rounded border-2 border-white/50 bg-white/20 checked:bg-green-500 checked:border-green-500 cursor-pointer">
+                           class="w-4 h-4 rounded border border-white/50 bg-white/20 checked:bg-green-500 checked:border-green-500 cursor-pointer">
                     <div class="flex-1">
-                        <div class="text-white font-semibold">✏️ 비슷한 문제를 혼자 풀 수 있나요?</div>
-                        <div class="text-xs text-green-100 mt-1">응용 문제도 풀 수 있으면 실력이 탄탄!</div>
+                        <div class="text-white text-sm font-semibold">✏️ 비슷한 문제를 혼자 풀 수 있나요?</div>
                     </div>
                 </label>
                 
-                <label class="flex items-start gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 cursor-pointer transition">
+                <label class="flex items-center gap-2 p-2 bg-white/10 rounded-lg hover:bg-white/20 cursor-pointer transition">
                     <input type="checkbox" id="metaNeedsReview" 
-                           class="mt-1 w-5 h-5 rounded border-2 border-white/50 bg-white/20 checked:bg-yellow-500 checked:border-yellow-500 cursor-pointer">
+                           class="w-4 h-4 rounded border border-white/50 bg-white/20 checked:bg-yellow-500 checked:border-yellow-500 cursor-pointer">
                     <div class="flex-1">
-                        <div class="text-white font-semibold">🔄 이 부분은 다시 복습이 필요한가요?</div>
-                        <div class="text-xs text-green-100 mt-1">어려운 부분은 표시해서 나중에 집중 복습!</div>
+                        <div class="text-white text-sm font-semibold">🔄 다시 복습이 필요한가요?</div>
                     </div>
                 </label>
             </div>
             
             <!-- 간단한 메모 입력 -->
-            <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-4 mb-5 space-y-3">
-                <h4 class="text-sm font-bold text-green-100 mb-2">📝 간단 메모 (선택)</h4>
+            <div class="bg-white/15 backdrop-blur-sm rounded-xl p-3 mb-3 space-y-2">
+                <h4 class="text-xs font-bold text-green-100 mb-1">📝 메모 (선택)</h4>
                 
                 <div>
-                    <label class="text-white text-sm font-semibold mb-1 block">잘 이해한 내용</label>
                     <textarea id="metaUnderstood" 
-                              class="w-full p-2 rounded-lg bg-white/20 text-white placeholder-green-200 border-2 border-white/30 focus:border-green-300 outline-none resize-none" 
-                              rows="2" 
-                              placeholder="예: 일차함수 기울기 개념"></textarea>
+                              class="w-full p-2 rounded-lg bg-white/20 text-white text-sm placeholder-green-200 border border-white/30 focus:border-green-300 outline-none resize-none" 
+                              rows="1" 
+                              placeholder="잘 이해한 내용"></textarea>
                 </div>
                 
                 <div>
-                    <label class="text-white text-sm font-semibold mb-1 block">어려웠던 내용</label>
                     <textarea id="metaDifficult" 
-                              class="w-full p-2 rounded-lg bg-white/20 text-white placeholder-green-200 border-2 border-white/30 focus:border-green-300 outline-none resize-none" 
-                              rows="2" 
-                              placeholder="예: x절편 구하는 문제"></textarea>
-                </div>
-                
-                <div>
-                    <label class="text-white text-sm font-semibold mb-1 block">다음 학습 계획</label>
-                    <textarea id="metaNextPlan" 
-                              class="w-full p-2 rounded-lg bg-white/20 text-white placeholder-green-200 border-2 border-white/30 focus:border-green-300 outline-none resize-none" 
-                              rows="2" 
-                              placeholder="예: 내일 x절편 문제 5개 더 풀기"></textarea>
+                              class="w-full p-2 rounded-lg bg-white/20 text-white text-sm placeholder-green-200 border border-white/30 focus:border-green-300 outline-none resize-none" 
+                              rows="1" 
+                              placeholder="어려웠던 내용"></textarea>
                 </div>
             </div>
             
             <!-- 버튼 -->
-            <div class="flex gap-3">
+            <div class="flex gap-2">
                 <button 
                     onclick="skipMetaCognition()" 
-                    class="flex-1 py-3 bg-white/20 text-white font-bold text-base rounded-xl hover:bg-white/30 transition-all">
+                    class="flex-1 py-2 bg-white/20 text-white font-bold text-sm rounded-lg hover:bg-white/30 transition-all">
                     건너뛰기
                 </button>
                 <button 
                     onclick="saveMetaCognition()" 
-                    class="flex-1 py-3 bg-white text-green-600 font-black text-base rounded-xl hover:bg-green-50 transition-all transform hover:scale-105">
-                    저장하기 💪
+                    class="flex-1 py-2 bg-white text-green-600 font-bold text-sm rounded-lg hover:bg-green-50 transition-all">
+                    확인
                 </button>
             </div>
         </div>
