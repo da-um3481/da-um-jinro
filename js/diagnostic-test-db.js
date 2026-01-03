@@ -10,20 +10,160 @@ const diagnosticTestDB = {
     1: {
         수학: [
             // 기초 (난이도: 1, 각 5점) - 2문제
-            {id: 1, question: "12의 약수 중 가장 큰 것은?", options: ["4", "6", "12", "24"], answer: 2, difficulty: 1, points: 5, concept: "약수의 개념"},
-            {id: 2, question: "(-3) + 5의 값은?", options: ["-8", "-2", "2", "8"], answer: 2, difficulty: 1, points: 5, concept: "정수의 덧셈"},
+            {
+                id: 1, 
+                question: "12의 약수 중 가장 큰 것은?", 
+                options: ["4", "6", "12", "24"], 
+                answer: 2, 
+                difficulty: 1, 
+                points: 5, 
+                concept: "약수의 개념",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "소인수분해",
+                    소분류: "약수와 배수",
+                    개념태그: ["약수", "배수", "공약수"]
+                }
+            },
+            {
+                id: 2, 
+                question: "(-3) + 5의 값은?", 
+                options: ["-8", "-2", "2", "8"], 
+                answer: 2, 
+                difficulty: 1, 
+                points: 5, 
+                concept: "정수의 덧셈",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "정수와 유리수",
+                    소분류: "정수의 덧셈과 뺄셈",
+                    개념태그: ["정수", "덧셈", "음수"]
+                }
+            },
             
             // 표준 (난이도: 2, 각 8점) - 5문제
-            {id: 3, question: "(-5) - (-3)의 값은?", options: ["-8", "-2", "2", "8"], answer: 1, difficulty: 2, points: 8, concept: "정수의 뺄셈"},
-            {id: 4, question: "(-3) × (+4) + 6의 값은?", options: ["-18", "-6", "0", "6"], answer: 1, difficulty: 2, points: 8, concept: "정수의 사칙연산"},
-            {id: 5, question: "60을 소인수분해하면?", options: ["2² × 3 × 5", "2 × 3² × 5", "2³ × 3 × 5", "2² × 15"], answer: 0, difficulty: 2, points: 8, concept: "소인수분해"},
-            {id: 6, question: "12와 18의 최대공약수를 소인수분해로 구하면?", options: ["2", "3", "6", "2 × 3"], answer: 3, difficulty: 2, points: 8, concept: "최대공약수"},
-            {id: 7, question: "3x - 5 = 10일 때, x의 값은?", options: ["3", "4", "5", "6"], answer: 2, difficulty: 2, points: 8, concept: "일차방정식 기초"},
+            {
+                id: 3, 
+                question: "(-5) - (-3)의 값은?", 
+                options: ["-8", "-2", "2", "8"], 
+                answer: 1, 
+                difficulty: 2, 
+                points: 8, 
+                concept: "정수의 뺄셈",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "정수와 유리수",
+                    소분류: "정수의 덧셈과 뺄셈",
+                    개념태그: ["정수", "뺄셈", "음수"]
+                }
+            },
+            {
+                id: 4, 
+                question: "(-3) × (+4) + 6의 값은?", 
+                options: ["-18", "-6", "0", "6"], 
+                answer: 1, 
+                difficulty: 2, 
+                points: 8, 
+                concept: "정수의 사칙연산",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "정수와 유리수",
+                    소분류: "정수의 사칙연산",
+                    개념태그: ["정수", "곱셈", "덧셈", "혼합계산"]
+                }
+            },
+            {
+                id: 5, 
+                question: "60을 소인수분해하면?", 
+                options: ["2² × 3 × 5", "2 × 3² × 5", "2³ × 3 × 5", "2² × 15"], 
+                answer: 0, 
+                difficulty: 2, 
+                points: 8, 
+                concept: "소인수분해",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "소인수분해",
+                    소분류: "소인수분해의 뜻과 방법",
+                    개념태그: ["소수", "합성수", "소인수분해", "거듭제곱"]
+                }
+            },
+            {
+                id: 6, 
+                question: "12와 18의 최대공약수를 소인수분해로 구하면?", 
+                options: ["2", "3", "6", "2 × 3"], 
+                answer: 3, 
+                difficulty: 2, 
+                points: 8, 
+                concept: "최대공약수",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "소인수분해",
+                    소분류: "최대공약수와 최소공배수",
+                    개념태그: ["최대공약수", "소인수분해 활용"]
+                }
+            },
+            {
+                id: 7, 
+                question: "3x - 5 = 10일 때, x의 값은?", 
+                options: ["3", "4", "5", "6"], 
+                answer: 2, 
+                difficulty: 2, 
+                points: 8, 
+                concept: "일차방정식 기초",
+                unit: {
+                    대분류: "문자와 식",
+                    중분류: "일차방정식",
+                    소분류: "일차방정식의 풀이",
+                    개념태그: ["방정식", "등식의 성질", "이항"]
+                }
+            },
             
             // 심화 (난이도: 3, 각 15점) - 3문제
-            {id: 8, question: "48과 72의 최소공배수는?", options: ["24", "96", "144", "288"], answer: 2, difficulty: 3, points: 15, concept: "최소공배수"},
-            {id: 9, question: "2(3x - 1) = 5(x + 2)일 때, x의 값은?", options: ["8", "10", "12", "14"], answer: 2, difficulty: 3, points: 15, concept: "일차방정식 응용"},
-            {id: 10, question: "어떤 수의 3배에서 5를 뺀 값이 16일 때, 어떤 수는?", options: ["5", "6", "7", "8"], answer: 2, difficulty: 3, points: 15, concept: "문제 해결"}
+            {
+                id: 8, 
+                question: "48과 72의 최소공배수는?", 
+                options: ["24", "96", "144", "288"], 
+                answer: 2, 
+                difficulty: 3, 
+                points: 15, 
+                concept: "최소공배수",
+                unit: {
+                    대분류: "수와 연산",
+                    중분류: "소인수분해",
+                    소분류: "최대공약수와 최소공배수",
+                    개념태그: ["최소공배수", "소인수분해 활용", "응용"]
+                }
+            },
+            {
+                id: 9, 
+                question: "2(3x - 1) = 5(x + 2)일 때, x의 값은?", 
+                options: ["8", "10", "12", "14"], 
+                answer: 2, 
+                difficulty: 3, 
+                points: 15, 
+                concept: "일차방정식 응용",
+                unit: {
+                    대분류: "문자와 식",
+                    중분류: "일차방정식",
+                    소분류: "복잡한 일차방정식",
+                    개념태그: ["괄호가 있는 방정식", "분배법칙", "이항"]
+                }
+            },
+            {
+                id: 10, 
+                question: "어떤 수의 3배에서 5를 뺀 값이 16일 때, 어떤 수는?", 
+                options: ["5", "6", "7", "8"], 
+                answer: 2, 
+                difficulty: 3, 
+                points: 15, 
+                concept: "문제 해결",
+                unit: {
+                    대분류: "문자와 식",
+                    중분류: "일차방정식",
+                    소분류: "일차방정식의 활용",
+                    개념태그: ["문장제", "방정식 세우기", "문제해결"]
+                }
+            }
         ],
         
         영어: [
