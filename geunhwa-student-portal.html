@@ -3607,7 +3607,7 @@
             // 공유 메시지 생성 (과목별 점수 + 수준 포함!)
             const shareText = `✅ 진단평가 완료!\n\n👤 이름: ${studentName}\n📚 학년: 중${studentGrade}\n📊 총점: ${totalScore}점/500점\n🎯 종합 수준: ${level}\n\n📝 과목별 점수 및 수준:\n${subjectText}\n이 결과를 선생님께 보내주세요!`;
 
-            // 화면에 크게 표시 (스크린샷용)
+            // 화면에 결과 표시
             showResultOnScreen(studentName, studentGrade, totalScore, level, subjectScores, subjectLevels);
         }
         
@@ -3660,10 +3660,10 @@
             subjectText += '━━━━━━━━━━━━━━━━━━\n';
             
             // 결과 팝업 표시
-            alert(`✅ 진단평가 결과\n\n👤 이름: ${currentStudentName}\n📚 학년: 중${currentStudentGrade}\n📊 총점: ${myResult.totalScore}점/500점\n🎯 종합 수준: ${myResult.level || myResult.levelLabel}${subjectText}\n📱 이 화면을 스크린샷 찍어서\n선생님께 카톡으로 보내주세요!\n\n(화면 캡처: 전원+볼륨다운)`);
+            alert(`✅ 진단평가 결과\n\n👤 이름: ${currentStudentName}\n📚 학년: 중${currentStudentGrade}\n📊 총점: ${myResult.totalScore}점/475점\n🎯 종합 수준: ${myResult.level || myResult.levelLabel}${subjectText}\n\n💾 결과가 자동으로 저장되었습니다!`);
         }
         
-        // 🆕 결과를 화면에 크게 표시 (과목별 점수 포함!)
+        // 🆕 결과를 화면에 표시 (과목별 점수 포함!)
         function showResultOnScreen(name, grade, score, level, subjectScores) {
             // 🎯 과목별 점수 문자열 생성
             const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
@@ -3677,7 +3677,7 @@
             subjectText += '━━━━━━━━━━━━━━━━━━\n';
             
             setTimeout(() => {
-                alert(`✅ 진단평가 완료!\n\n👤 이름: ${name}\n📚 학년: 중${grade}\n📊 총점: ${score}/50\n🎯 수준: ${level}${subjectText}\n📱 이 화면을 스크린샷 찍어서\n선생님께 카톡으로 보내주세요!\n\n(화면 캡처: 전원+볼륨다운)`);
+                alert(`✅ 진단평가 완료!\n\n👤 이름: ${name}\n📚 학년: 중${grade}\n📊 총점: ${score}점\n🎯 수준: ${level}${subjectText}\n\n💾 결과가 자동으로 저장되었습니다!`);
             }, 500);
         }
         
