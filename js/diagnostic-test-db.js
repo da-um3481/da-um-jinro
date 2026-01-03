@@ -46,56 +46,56 @@ const diagnosticTestDB = {
         
         국어: [
             // 기초 (난이도: 1, 각 5점) - 2문제
-            {id: 1, question: "'빨갛다'의 품사는?", options: ["명사", "동사", "형용사", "부사"], answer: 2, difficulty: 1, points: 5, concept: "품사"},
-            {id: 2, question: "다음 중 높임 표현이 아닌 것은?", options: ["드시다", "계시다", "먹다", "주무시다"], answer: 2, difficulty: 1, points: 5, concept: "높임법"},
+            {id: 1, question: "'새가 하늘을 난다'에서 목적어는?", options: ["새가", "하늘을", "난다", "없음"], answer: 1, difficulty: 1, points: 5, concept: "문장 성분"},
+            {id: 2, question: "'선생님께서 말씀하셨다'의 높임 표현으로 올바른 것은?", options: ["주체 높임", "상대 높임", "객체 높임", "모두 해당"], answer: 0, difficulty: 1, points: 5, concept: "높임법"},
             
             // 표준 (난이도: 2, 각 8점) - 5문제
-            {id: 3, question: "'하늘이 파랗다'에서 주어는?", options: ["하늘이", "파랗다", "하늘", "이"], answer: 0, difficulty: 2, points: 8, concept: "문장 성분"},
-            {id: 4, question: "다음 중 사동 표현은?", options: ["먹다", "먹이다", "먹히다", "먹거나"], answer: 1, difficulty: 2, points: 8, concept: "사동/피동"},
-            {id: 5, question: "'은유법'의 예로 적절한 것은?", options: ["내 마음은 호수요", "너처럼 예쁜", "매우 아름다운", "꽃이 피었다"], answer: 0, difficulty: 2, points: 8, concept: "비유법"},
-            {id: 6, question: "다음 중 관형어는?", options: ["매우", "빨리", "예쁜", "천천히"], answer: 2, difficulty: 2, points: 8, concept: "문장 성분"},
-            {id: 7, question: "다음 중 '의태어'는?", options: ["반짝반짝", "멍멍", "파랗다", "빨리"], answer: 0, difficulty: 2, points: 8, concept: "의태어"},
+            {id: 3, question: "'동생이 엄마께 꽃을 드렸다'에서 사용된 높임법은?", options: ["주체 높임", "객체 높임", "상대 높임", "높임 없음"], answer: 1, difficulty: 2, points: 8, concept: "높임법 응용"},
+            {id: 4, question: "'바람이 나뭇잎을 흔든다'를 피동 표현으로 바꾸면?", options: ["나뭇잎이 바람에 흔들린다", "나뭇잎을 바람이 흔든다", "바람이 나뭇잎을 흔들게 한다", "나뭇잎이 흔들린다"], answer: 0, difficulty: 2, points: 8, concept: "사동/피동"},
+            {id: 5, question: "'내 마음은 호수요'에서 사용된 비유법은?", options: ["직유법", "은유법", "의인법", "활유법"], answer: 1, difficulty: 2, points: 8, concept: "비유법"},
+            {id: 6, question: "'그는 참 재미있는 책을 읽었다'에서 부사어는?", options: ["그는", "참", "재미있는", "책을"], answer: 1, difficulty: 2, points: 8, concept: "문장 성분"},
+            {id: 7, question: "다음 중 의성어와 의태어가 올바르게 짝지어진 것은?", options: ["멍멍 - 반짝반짝", "졸졸 - 아장아장", "쿵쿵 - 빨강", "파랑 - 멍멍"], answer: 0, difficulty: 2, points: 8, concept: "의성어와 의태어"},
             
             // 심화 (난이도: 3, 각 15점) - 3문제
-            {id: 8, question: "'역설법'의 예로 적절한 것은?", options: ["소리 없는 아우성", "빨간 장미", "높은 산", "맑은 하늘"], answer: 0, difficulty: 3, points: 15, concept: "표현법"},
-            {id: 9, question: "시조의 형식은?", options: ["초장-중장-종장", "기-승-전-결", "서-본-결", "발단-전개-위기-절정-결말"], answer: 0, difficulty: 3, points: 15, concept: "시조"},
-            {id: 10, question: "'춘향전'의 갈래는?", options: ["서사시", "판소리계 소설", "수필", "희곡"], answer: 1, difficulty: 3, points: 15, concept: "문학 갈래"}
+            {id: 8, question: "'소리 없는 아우성'이 역설법인 이유는?", options: ["소리와 아우성이 모순", "소리가 없는데 아우성이 모순", "아우성은 항상 소리가 큼", "비유가 과장됨"], answer: 1, difficulty: 3, points: 15, concept: "표현법 이해"},
+            {id: 9, question: "시조 '초장-중장-종장' 중 주제가 주로 나타나는 부분은?", options: ["초장", "중장", "종장", "초장과 중장"], answer: 2, difficulty: 3, points: 15, concept: "시조"},
+            {id: 10, question: "'춘향전'이 판소리계 소설인 이유는?", options: ["판소리로 불리던 이야기가 소설로 정착", "소설이 판소리가 됨", "춘향이가 노래를 부름", "극 형식으로 쓰임"], answer: 0, difficulty: 3, points: 15, concept: "문학 갈래"}
         ],
         
         사회: [
             // 기초 (난이도: 1, 각 5점) - 2문제
-            {id: 1, question: "위도 0도를 무엇이라 하는가?", options: ["북극", "남극", "적도", "자오선"], answer: 2, difficulty: 1, points: 5, concept: "위도와 경도"},
-            {id: 2, question: "사막 기후의 특징은?", options: ["비가 많다", "눈이 많다", "매우 건조하다", "항상 춥다"], answer: 2, difficulty: 1, points: 5, concept: "기후"},
+            {id: 1, question: "지구상의 위치를 나타내는 두 요소는?", options: ["위도와 경도", "동서와 남북", "적도와 자오선", "시간과 거리"], answer: 0, difficulty: 1, points: 5, concept: "위도와 경도"},
+            {id: 2, question: "지도에서 실제 거리를 줄여서 나타낸 비율을 무엇이라 하는가?", options: ["등고선", "방위", "축척", "범례"], answer: 2, difficulty: 1, points: 5, concept: "지도 읽기"},
             
             // 표준 (난이도: 2, 각 8점) - 5문제
-            {id: 3, question: "열대 기후 지역의 주요 작물은?", options: ["쌀", "밀", "바나나", "감자"], answer: 2, difficulty: 2, points: 8, concept: "열대 기후"},
-            {id: 4, question: "우리나라의 4계절 구분은?", options: ["봄, 여름, 가을, 겨울", "건기, 우기", "여름, 겨울", "3계절"], answer: 0, difficulty: 2, points: 8, concept: "계절"},
-            {id: 5, question: "지도에서 축척이 크면?", options: ["넓은 지역을 보여준다", "자세히 보여준다", "작게 보여준다", "색이 진하다"], answer: 1, difficulty: 2, points: 8, concept: "지도"},
-            {id: 6, question: "온대 기후의 특징은?", options: ["1년 내내 덥다", "4계절이 뚜렷하다", "매우 춥다", "비가 안 온다"], answer: 1, difficulty: 2, points: 8, concept: "온대 기후"},
-            {id: 7, question: "우리나라의 대표적인 산맥은?", options: ["히말라야", "태백산맥", "알프스", "로키산맥"], answer: 1, difficulty: 2, points: 8, concept: "한국 지리"},
+            {id: 3, question: "우리나라가 온대 기후에 속하는 가장 큰 이유는?", options: ["사계절이 뚜렷하다", "여름이 덥다", "겨울이 춥다", "비가 많이 온다"], answer: 0, difficulty: 2, points: 8, concept: "온대 기후"},
+            {id: 4, question: "적도 지역의 기후 특징으로 옳은 것은?", options: ["연중 고온 다습", "여름만 덥다", "건조하다", "4계절이 있다"], answer: 0, difficulty: 2, points: 8, concept: "열대 기후"},
+            {id: 5, question: "지형도에서 등고선 간격이 좁으면 지형은?", options: ["평지", "완만한 경사", "급한 경사", "분지"], answer: 2, difficulty: 2, points: 8, concept: "지형도"},
+            {id: 6, question: "기후가 생활 모습에 미치는 영향으로 옳은 것은?", options: ["추운 지역은 주로 두꺼운 옷을 입는다", "기후는 생활에 영향을 안 준다", "모든 지역의 집 모양이 같다", "기후와 음식은 무관하다"], answer: 0, difficulty: 2, points: 8, concept: "기후와 생활"},
+            {id: 7, question: "우리나라 산지 지형이 동쪽에 치우친 결과는?", options: ["동쪽이 평야 지대", "서쪽이 높은 산지", "동해안이 수심이 깊다", "서해안이 수심이 깊다"], answer: 2, difficulty: 2, points: 8, concept: "한국 지리"},
             
             // 심화 (난이도: 3, 각 15점) - 3문제
-            {id: 8, question: "경도 180도 선을 무엇이라 하는가?", options: ["본초 자오선", "적도", "날짜 변경선", "북회귀선"], answer: 2, difficulty: 3, points: 15, concept: "경도"},
-            {id: 9, question: "한대 기후 지역의 생활 모습은?", options: ["벼농사", "목축업", "순록 유목", "과일 재배"], answer: 2, difficulty: 3, points: 15, concept: "한대 기후"},
-            {id: 10, question: "세계 최대 사막은?", options: ["고비 사막", "사하라 사막", "칼라하리 사막", "아타카마 사막"], answer: 1, difficulty: 3, points: 15, concept: "세계 지리"}
+            {id: 8, question: "날짜 변경선(경도 180도)을 서쪽에서 동쪽으로 넘으면?", options: ["하루가 빨라진다", "하루가 늦어진다", "시간만 변한다", "변화 없음"], answer: 1, difficulty: 3, points: 15, concept: "날짜 변경선"},
+            {id: 9, question: "한대 기후 지역에서 집을 얼음으로 짓는 이유는?", options: ["나무가 없어서", "얼음이 단열 효과가 있어서", "전통이라서", "쉽게 구할 수 있고 단열 효과도 있어서"], answer: 3, difficulty: 3, points: 15, concept: "기후와 주거"},
+            {id: 10, question: "세계 3대 종교가 발생한 지역의 공통점은?", options: ["모두 아시아", "모두 유럽", "모두 사막", "모두 섬"], answer: 0, difficulty: 3, points: 15, concept: "세계 지리"}
         ],
         
         과학: [
             // 기초 (난이도: 1, 각 5점) - 2문제
-            {id: 1, question: "물의 끓는점은?", options: ["0℃", "50℃", "100℃", "200℃"], answer: 2, difficulty: 1, points: 5, concept: "물의 상태 변화"},
-            {id: 2, question: "지구의 공전 주기는?", options: ["1일", "1개월", "1년", "10년"], answer: 2, difficulty: 1, points: 5, concept: "지구의 운동"},
+            {id: 1, question: "물이 얼음이 되는 상태 변화는?", options: ["기화", "응고", "승화", "액화"], answer: 1, difficulty: 1, points: 5, concept: "물의 상태 변화"},
+            {id: 2, question: "생물의 특성이 아닌 것은?", options: ["생장과 발생", "물질대사", "자극에 반응", "부피 변화 없음"], answer: 3, difficulty: 1, points: 5, concept: "생물의 특성"},
             
             // 표준 (난이도: 2, 각 8점) - 5문제
-            {id: 3, question: "산성 용액의 pH는?", options: ["7보다 크다", "7보다 작다", "7이다", "0이다"], answer: 1, difficulty: 2, points: 8, concept: "산과 염기"},
-            {id: 4, question: "식물 세포에만 있는 것은?", options: ["핵", "세포막", "세포벽", "세포질"], answer: 2, difficulty: 2, points: 8, concept: "세포"},
-            {id: 5, question: "지진의 진앙은?", options: ["지진이 발생한 지하 지점", "진원 바로 위 지표면", "지진의 세기", "지진파"], answer: 1, difficulty: 2, points: 8, concept: "지진"},
-            {id: 6, question: "혼합물을 분리하는 방법이 아닌 것은?", options: ["증류", "여과", "크로마토그래피", "중화"], answer: 3, difficulty: 2, points: 8, concept: "혼합물 분리"},
-            {id: 7, question: "광합성을 하는 세포 소기관은?", options: ["핵", "엽록체", "미토콘드리아", "리보솜"], answer: 1, difficulty: 2, points: 8, concept: "광합성"},
+            {id: 3, question: "푸른색 리트머스 종이를 붉게 변화시키는 용액은?", options: ["산성", "염기성", "중성", "모두 해당"], answer: 0, difficulty: 2, points: 8, concept: "산과 염기"},
+            {id: 4, question: "식물 세포와 동물 세포의 공통점은?", options: ["세포벽이 있다", "엽록체가 있다", "핵과 세포막이 있다", "액포가 크다"], answer: 2, difficulty: 2, points: 8, concept: "세포"},
+            {id: 5, question: "지진의 진원과 진앙의 관계로 옳은 것은?", options: ["진원이 지표면에 있다", "진앙이 지하에 있다", "진앙은 진원의 바로 위 지표면", "같은 의미다"], answer: 2, difficulty: 2, points: 8, concept: "지진"},
+            {id: 6, question: "소금물에서 소금을 분리하는 방법은?", options: ["여과", "증발", "자석", "거름"], answer: 1, difficulty: 2, points: 8, concept: "혼합물 분리"},
+            {id: 7, question: "광합성에 필요한 것을 모두 고르면?", options: ["빛, 물, 이산화탄소", "빛, 물, 산소", "산소, 물, 양분", "빛, 산소, 양분"], answer: 0, difficulty: 2, points: 8, concept: "광합성"},
             
             // 심화 (난이도: 3, 각 15점) - 3문제
-            {id: 8, question: "광합성의 결과 생성되는 기체는?", options: ["산소", "이산화탄소", "질소", "수소"], answer: 0, difficulty: 3, points: 15, concept: "광합성 산물"},
-            {id: 9, question: "암석의 종류가 아닌 것은?", options: ["화성암", "변성암", "퇴적암", "풍화암"], answer: 3, difficulty: 3, points: 15, concept: "암석"},
-            {id: 10, question: "달의 위상 변화 원인은?", options: ["지구 자전", "달 자전", "달 공전", "태양 공전"], answer: 2, difficulty: 3, points: 15, concept: "달의 위상"}
+            {id: 8, question: "광합성과 호흡의 관계로 옳은 것은?", options: ["광합성만 산소를 만든다", "호흡은 양분을 만든다", "광합성과 호흡은 서로 반대 과정", "둘 다 산소를 만든다"], answer: 2, difficulty: 3, points: 15, concept: "광합성과 호흡"},
+            {id: 9, question: "화산 활동으로 생성되는 암석은?", options: ["화성암", "변성암", "퇴적암", "모두 해당"], answer: 0, difficulty: 3, points: 15, concept: "암석의 생성"},
+            {id: 10, question: "달의 위상이 변하는 이유는?", options: ["달이 스스로 빛을 내서", "달이 지구 주위를 공전해서", "지구가 자전해서", "태양이 움직여서"], answer: 1, difficulty: 3, points: 15, concept: "달의 위상"}
         ]
     },
     
