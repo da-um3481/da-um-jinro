@@ -1039,7 +1039,7 @@
         </div>
 
         <!-- 📝 진단평가 안내 화면 (미완료 시) -->
-        <div class="glass-effect rounded-2xl shadow-xl p-8 animate-slide-up text-center" id="diagnosticWelcome" style="display: block;">
+        <div class="glass-effect rounded-2xl shadow-xl p-8 animate-slide-up text-center" id="diagnosticWelcome" style="display: none;">
             <div class="mb-6">
                 <div class="text-6xl mb-4">👋</div>
                 <h3 class="text-2xl font-black text-gray-800 mb-2">환영합니다!</h3>
@@ -7990,13 +7990,14 @@
             }
         }
         
-        // 페이지 로드 후 2초 뒤에 체크 (로그인 후)
+        // 페이지 로드 후 즉시 체크 (로그인 후)
         setTimeout(function() {
             const currentStudentId = localStorage.getItem('currentStudentId');
             const currentStudentName = localStorage.getItem('currentStudentName');
             
             if (currentStudentId && currentStudentName) {
-                // 🆕 진단평가 상태에 따라 화면 전환
+                // 🆕 진단평가 상태에 따라 화면 전환 (즉시 실행!)
+                checkDiagnosticStatusAndShowScreen();
                 checkDiagnosticStatusAndShowScreen();
                 
                 // 진단평가 완료 여부 확인
@@ -8054,7 +8055,7 @@
                     }, 2000);
                 }
             }
-        }, 2000);
+        }, 100); // 즉시 실행 (100ms 지연)
     </script>
     
     <!-- Google Sheets API 로드 -->
