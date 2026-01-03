@@ -803,14 +803,6 @@
                         📊 평가결과
                     </button>
                     
-                    <!-- 🆕 단원별 분석 보기 버튼 -->
-                    <button 
-                        onclick="showMyUnitAnalysis()" 
-                        class="hidden px-3 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-lg transition shadow-lg text-sm" 
-                        id="showUnitAnalysisBtn"
-                        title="단원별 학습 분석 보기">
-                        📈 학습분석
-                    </button>
                     
                     <!-- 데이터 내보내기 버튼 (숨김 처리) -->
                     <button 
@@ -3597,8 +3589,8 @@
             // 🆕 진단평가 완료 후 즉시 공유 요청 (과목별 점수 + 수준 포함!)
             showShareResultModal(overallLevel, totalScore, subjectScores, subjectLevels);
             
-            // 🎯 단원별 분석 + EBS 강의 자동 추천!
-            showUnitAnalysisAndRecommendations(studentAnswers, currentGrade);
+            // 🎯 진단평가 완료 → 즉시 로드맵 화면으로 전환!
+            checkDiagnosticStatusAndShowScreen();
             
             // 학습 스케줄 재생성 (수준에 맞춰)
             const student = {
@@ -3608,6 +3600,10 @@
                 level: level
             };
             generateAndDisplayTodaySchedule(student);
+            
+            // 프로그램 진행률 초기화
+            initProgramProgress();
+            updateWeeklyRoadmapProgress();
         }
         
         // 🆕 결과 공유 모달 표시 (과목별 점수 + 수준 포함!)
@@ -4098,13 +4094,6 @@
             if (resultBtn) {
                 resultBtn.classList.remove('hidden');
                 console.log('✅ 평가결과 버튼 활성화 (진단평가 제출 직후)');
-            }
-            
-            // 🆕 진단평가 완료 후 즉시 "학습분석" 버튼 활성화
-            const unitAnalysisBtn = document.getElementById('showUnitAnalysisBtn');
-            if (unitAnalysisBtn) {
-                unitAnalysisBtn.classList.remove('hidden');
-                console.log('✅ 학습분석 버튼 활성화 (진단평가 제출 직후)');
             }
             
             // 🌐 Google Sheets에 자동 저장 (과목별 수준 포함!)
@@ -8040,22 +8029,6 @@
                     } else {
                         console.error('❌ 평가결과 버튼을 찾을 수 없음');
                     }
-                    
-                    // 🆕 "학습분석" 버튼도 보이기 (약간의 지연 추가)
-                    setTimeout(() => {
-                        const unitAnalysisBtn = document.getElementById('showUnitAnalysisBtn');
-                        if (unitAnalysisBtn) {
-                            unitAnalysisBtn.classList.remove('hidden');
-                            console.log('✅ 학습분석 버튼 활성화 (지연 실행)');
-                            console.log('🎯 버튼 상태:', {
-                                display: window.getComputedStyle(unitAnalysisBtn).display,
-                                visibility: window.getComputedStyle(unitAnalysisBtn).visibility,
-                                classes: unitAnalysisBtn.className
-                            });
-                        } else {
-                            console.error('❌ 학습분석 버튼을 찾을 수 없음');
-                        }
-                    }, 500);
                 } else {
                     console.log('⚠️ 진단평가 미완료 → 버튼 숨김 유지');
                 }
