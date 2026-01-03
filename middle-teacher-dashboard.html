@@ -2390,17 +2390,25 @@
                 // 정답 개수 계산 (총점 / 10 = 정답 개수)
                 const correctCount = Math.round(totalScore / 10);
                 
-                // ✨ 과목별 점수 및 수준
+                // ✨ 과목별 점수 및 수준 (구/신 스키마 모두 지원)
                 const mathScore = result.math_score || Math.round(totalScore / 5);
-                const mathLevel = result.math_level || '';
                 const englishScore = result.english_score || Math.round(totalScore / 5);
-                const englishLevel = result.english_level || '';
                 const koreanScore = result.korean_score || Math.round(totalScore / 5);
-                const koreanLevel = result.korean_level || '';
                 const socialScore = result.social_score || Math.round(totalScore / 5);
-                const socialLevel = result.social_level || '';
                 const scienceScore = result.science_score || Math.round(totalScore / 5);
-                const scienceLevel = result.science_level || '';
+                
+                // 과목별 수준 자동 계산 (없는 경우)
+                const calculateSubjectLevel = (score) => {
+                    if (score >= 90) return '심화';
+                    if (score >= 60) return '표준';
+                    return '기초';
+                };
+                
+                const mathLevel = result.math_level || calculateSubjectLevel(mathScore);
+                const englishLevel = result.english_level || calculateSubjectLevel(englishScore);
+                const koreanLevel = result.korean_level || calculateSubjectLevel(koreanScore);
+                const socialLevel = result.social_level || calculateSubjectLevel(socialScore);
+                const scienceLevel = result.science_level || calculateSubjectLevel(scienceScore);
                 
                 // 과목별 레벨 이모지
                 const getLevelEmoji = (level) => {
@@ -2421,9 +2429,27 @@
                     </div>
                 `;
                 
-                // ✨ 강점/약점 과목 표시
-                const strengthSubjects = result.strength_subjects || '';
-                const weaknessSubjects = result.weakness_subjects || '';
+                // ✨ 강점/약점 과목 자동 계산 (없는 경우)
+                let strengthSubjects = result.strength_subjects || '';
+                let weaknessSubjects = result.weakness_subjects || '';
+                
+                // 기존 데이터는 강점/약점 자동 계산
+                if (!strengthSubjects && !weaknessSubjects) {
+                    const subjects = [
+                        { name: '수학', level: mathLevel },
+                        { name: '영어', level: englishLevel },
+                        { name: '국어', level: koreanLevel },
+                        { name: '사회', level: socialLevel },
+                        { name: '과학', level: scienceLevel }
+                    ];
+                    
+                    const strengths = subjects.filter(s => s.level === '심화').map(s => s.name);
+                    const weaknesses = subjects.filter(s => s.level === '기초').map(s => s.name);
+                    
+                    strengthSubjects = strengths.join(', ');
+                    weaknessSubjects = weaknesses.join(', ');
+                }
+                
                 let strengthWeaknessHTML = '';
                 if (strengthSubjects || weaknessSubjects) {
                     strengthWeaknessHTML = `
