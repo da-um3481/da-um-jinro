@@ -1596,14 +1596,14 @@
                                 <th>진단일</th>
                                 <th>정답수</th>
                                 <th>총점</th>
-                                <th>수준</th>
-                                <th>과목별 점수</th>
+                                <th>종합수준</th>
+                                <th>과목별 점수 및 수준</th>
                                 <th>작업</th>
                             </tr>
                         </thead>
                         <tbody id="diagnosticResultsTableBody">
                             <tr>
-                                <td colspan="8" style="text-align: center; padding: 3rem;">
+                                <td colspan="9" style="text-align: center; padding: 3rem;">
                                     <div class="empty-icon">📝</div>
                                     <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
                                 </td>
@@ -2350,7 +2350,7 @@
             if (data.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" style="text-align: center; padding: 3rem;">
+                        <td colspan="9" style="text-align: center; padding: 3rem;">
                             <div class="empty-icon">📝</div>
                             <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
                             <div class="empty-text">학생이 학생 포털에서 진단평가를 완료하면 자동으로 표시됩니다</div>
@@ -2367,9 +2367,9 @@
                 const studentId = result.student_id || result.studentId || '';
                 const grade = result.grade || 1;
                 const testDate = result.test_date || result.testDate || new Date().toISOString();
-                const level = result.level || 'beginner';
+                const overallLevel = result.overall_level || result.level || 'beginner';
                 
-                // 수준 판정
+                // 종합 수준 판정
                 let levelLabel = '기초';
                 let levelClass = 'level-beginner';
                 if (totalScore >= 281) {
@@ -2390,13 +2390,49 @@
                 // 정답 개수 계산 (총점 / 10 = 정답 개수)
                 const correctCount = Math.round(totalScore / 10);
                 
-                // 과목별 점수 (Google Sheets에서 가져온 경우)
+                // ✨ 과목별 점수 및 수준
                 const mathScore = result.math_score || Math.round(totalScore / 5);
+                const mathLevel = result.math_level || '';
                 const englishScore = result.english_score || Math.round(totalScore / 5);
+                const englishLevel = result.english_level || '';
                 const koreanScore = result.korean_score || Math.round(totalScore / 5);
+                const koreanLevel = result.korean_level || '';
                 const socialScore = result.social_score || Math.round(totalScore / 5);
+                const socialLevel = result.social_level || '';
                 const scienceScore = result.science_score || Math.round(totalScore / 5);
-                const subjectScores = `수학:${mathScore} 영어:${englishScore} 국어:${koreanScore} 사회:${socialScore} 과학:${scienceScore}`;
+                const scienceLevel = result.science_level || '';
+                
+                // 과목별 레벨 이모지
+                const getLevelEmoji = (level) => {
+                    if (level === '심화') return '🔷';
+                    if (level === '표준') return '🔶';
+                    if (level === '기초') return '🔻';
+                    return '';
+                };
+                
+                // ✨ 과목별 점수 + 수준 표시
+                const subjectScoresHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">
+                        <div>🔢 수학: ${mathScore}점 ${getLevelEmoji(mathLevel)}<span style="color: ${mathLevel === '심화' ? 'var(--primary)' : mathLevel === '기초' ? 'var(--error)' : 'var(--warning)'}">${mathLevel}</span></div>
+                        <div>🔤 영어: ${englishScore}점 ${getLevelEmoji(englishLevel)}<span style="color: ${englishLevel === '심화' ? 'var(--primary)' : englishLevel === '기초' ? 'var(--error)' : 'var(--warning)'}">${englishLevel}</span></div>
+                        <div>✍️ 국어: ${koreanScore}점 ${getLevelEmoji(koreanLevel)}<span style="color: ${koreanLevel === '심화' ? 'var(--primary)' : koreanLevel === '기초' ? 'var(--error)' : 'var(--warning)'}">${koreanLevel}</span></div>
+                        <div>🌏 사회: ${socialScore}점 ${getLevelEmoji(socialLevel)}<span style="color: ${socialLevel === '심화' ? 'var(--primary)' : socialLevel === '기초' ? 'var(--error)' : 'var(--warning)'}">${socialLevel}</span></div>
+                        <div>🔬 과학: ${scienceScore}점 ${getLevelEmoji(scienceLevel)}<span style="color: ${scienceLevel === '심화' ? 'var(--primary)' : scienceLevel === '기초' ? 'var(--error)' : 'var(--warning)'}">${scienceLevel}</span></div>
+                    </div>
+                `;
+                
+                // ✨ 강점/약점 과목 표시
+                const strengthSubjects = result.strength_subjects || '';
+                const weaknessSubjects = result.weakness_subjects || '';
+                let strengthWeaknessHTML = '';
+                if (strengthSubjects || weaknessSubjects) {
+                    strengthWeaknessHTML = `
+                        <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.8rem;">
+                            ${strengthSubjects ? `<div style="color: var(--primary);">💪 강점: ${strengthSubjects}</div>` : ''}
+                            ${weaknessSubjects ? `<div style="color: var(--error);">⚠️ 보완: ${weaknessSubjects}</div>` : ''}
+                        </div>
+                    `;
+                }
 
                 return `
                     <tr data-student-id="${studentId}">
@@ -2406,7 +2442,7 @@
                         <td>${correctCount}/50</td>
                         <td><strong>${totalScore}점</strong></td>
                         <td><span class="level-badge ${levelClass}">${levelLabel}</span></td>
-                        <td style="font-size: 0.875rem;">${subjectScores}</td>
+                        <td>${subjectScoresHTML}${strengthWeaknessHTML}</td>
                         <td>
                             <button class="btn-delete" onclick="deleteStudent('${result.studentId}', '${result.studentName || '이름없음'}')" title="학생 삭제">
                                 <i class="fas fa-trash"></i>
