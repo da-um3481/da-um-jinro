@@ -3642,8 +3642,15 @@
             // 전체 문제 가져오기
             const allQuestions = getAllQuestionsByGrade(grade);
             
-            // 단원별 분석
-            const unitAnalysis = analyzeByUnit(studentAnswers, allQuestions);
+            if (!allQuestions || allQuestions.length === 0) {
+                console.error('❌ 문제 데이터를 불러올 수 없습니다.');
+                return;
+            }
+            
+            console.log('✅ 문제 로드 완료:', allQuestions.length + '개');
+            
+            // 단원별 분석 (파라미터 순서 수정!)
+            const unitAnalysis = analyzeByUnit(allQuestions, studentAnswers);
             
             // EBS 강의 추천
             const recommendations = recommendLectures(unitAnalysis, grade);
@@ -3902,17 +3909,27 @@
                 }
                 
                 // 🎯 진단평가 답안을 기반으로 지금 분석 생성!
-                console.log('✅ 진단평가 결과 발견 → 단원별 분석 자동 생성 중...');
+                console.log('✅ 진단평가 결과 발견 → 단원별 분석 자동 생성 중...', {
+                    studentId: currentStudentId,
+                    grade: currentStudentGrade,
+                    answersLength: myResult.answers.length
+                });
                 
                 const allQuestions = getAllQuestionsByGrade(currentStudentGrade);
-                if (allQuestions.length === 0) {
+                if (!allQuestions || allQuestions.length === 0) {
+                    console.error('❌ 문제 데이터 로드 실패');
                     alert('❌ 문제 데이터를 불러올 수 없습니다.');
                     return;
                 }
                 
-                // 단원별 분석 실행
-                const unitAnalysis = analyzeByUnit(myResult.answers, allQuestions);
+                console.log('✅ 문제 데이터 로드 완료:', allQuestions.length + '개');
+                
+                // 단원별 분석 실행 (파라미터 순서 수정!)
+                const unitAnalysis = analyzeByUnit(allQuestions, myResult.answers);
                 const recommendations = recommendLectures(unitAnalysis, currentStudentGrade);
+                
+                console.log('✅ 단원별 분석 생성 완료:', unitAnalysis);
+                console.log('✅ 강의 추천 생성 완료:', recommendations);
                 
                 // localStorage에 저장
                 const newAnalysisData = {
