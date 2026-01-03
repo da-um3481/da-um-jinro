@@ -2279,7 +2279,8 @@
                     // 폴백: localStorage에서 데이터 가져오기
                     const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
                     const diagnosticData = diagnosticResults.filter(result => {
-                        return result.subject === '종합' && result.grade <= 3;
+                        // subject 조건 제거 (모든 진단평가 결과 표시)
+                        return result.grade && result.grade <= 3;
                     });
 
                     console.log('📊 localStorage 진단평가 결과:', diagnosticData);
@@ -2313,7 +2314,8 @@
                 // 폴백: localStorage에서 데이터 가져오기
                 const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
                 const diagnosticData = diagnosticResults.filter(result => {
-                    return result.subject === '종합' && result.grade <= 3;
+                    // subject 조건 제거 (모든 진단평가 결과 표시)
+                    return result.grade && result.grade <= 3;
                 });
 
                 console.log('📊 localStorage 진단평가 결과 (에러 폴백):', diagnosticData);
