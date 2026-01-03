@@ -228,7 +228,7 @@ const diagnosticTestDB = {
             // 표준 (5문제, 각 8점)
             {id: 3, question: "'달은 밝은 거울이다'는 어떤 표현법인가?", options: ["직유법", "은유법", "의인법", "과장법"], answer: 1, difficulty: 2, points: 8, concept: "수사법"},
             {id: 4, question: "한글 창제의 기본 원리는?", options: ["상형의 원리", "표의 문자", "표음 문자", "한자 응용"], answer: 2, difficulty: 2, points: 8, concept: "한글"},
-            {id: 5, question: "'소나기'에서 소년과 소녀의 관계는?", options: ["친구", "가족", "첫사랑", "이웃"], answer: 2, difficulty: 2, points: 8, concept: "현대 소설 감상"},
+            {id: 5, question: "다음 중 '외래어 표기법'에 맞는 것은?", options: ["캐릭터", "케릭터", "캐릭타", "케릭타"], answer: 0, difficulty: 2, points: 8, concept: "외래어 표기법"},
             {id: 6, question: "'참 잘했네!'라고 빈정댈 때 사용하는 표현법은?", options: ["반어", "역설", "풍자", "과장"], answer: 0, difficulty: 2, points: 8, concept: "반어법"},
             {id: 7, question: "비평문에서 가장 중요한 것은?", options: ["감정 표현", "객관적 분석", "주관적 느낌", "작가 칭찬"], answer: 1, difficulty: 2, points: 8, concept: "비평문"},
             // 심화 (3문제, 각 15점)
