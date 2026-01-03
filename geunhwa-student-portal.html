@@ -4448,21 +4448,30 @@
             // 환영 메시지
             showWelcomeMessage(student.name, isGuest);
 
-            // 🎉 원스톱: 자동으로 오늘의 스케줄 생성 및 표시
-            generateAndDisplayTodaySchedule(student);
+            // 🎉 진단평가 완료한 학생만 스케줄 생성!
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const myDiagnostic = diagnosticResults.find(r => r.studentId === student.id);
             
-            // 프로그램 진행률 새로고침
-            initProgramProgress();
-            updateWeeklyRoadmapProgress();
-            loadTeacherFeedback();
-            
-            // 🆕 내일 학습 준비 알림 표시
-            showTomorrowPreview();
-            
-            // 🔄 당일 실행 중이던 타이머 복원 (DOM 렌더링 후 실행)
-            setTimeout(() => {
-                restoreRunningTimers();
-            }, 500);
+            if (myDiagnostic) {
+                console.log('✅ 진단평가 완료 → 스케줄 생성');
+                // 원스톱: 자동으로 오늘의 스케줄 생성 및 표시
+                generateAndDisplayTodaySchedule(student);
+                
+                // 프로그램 진행률 새로고침
+                initProgramProgress();
+                updateWeeklyRoadmapProgress();
+                loadTeacherFeedback();
+                
+                // 🆕 내일 학습 준비 알림 표시
+                showTomorrowPreview();
+                
+                // 🔄 당일 실행 중이던 타이머 복원 (DOM 렌더링 후 실행)
+                setTimeout(() => {
+                    restoreRunningTimers();
+                }, 500);
+            } else {
+                console.log('⚠️ 진단평가 미완료 → 스케줄 생성 건너뛰기');
+            }
             
             // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
             if (!isGuest) {
@@ -7971,20 +7980,31 @@
         // 🆕 진단평가 완료 여부에 따라 화면 전환
         function checkDiagnosticStatusAndShowScreen() {
             const currentStudentId = localStorage.getItem('currentStudentId');
-            if (!currentStudentId) return;
+            if (!currentStudentId) {
+                console.log('⚠️ 학생 ID 없음 - 화면 전환 중단');
+                return;
+            }
             
             const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
             const myResult = diagnosticResults.find(r => r.studentId === currentStudentId);
+            
+            console.log('🔍 화면 전환 체크:', {
+                studentId: currentStudentId,
+                hasResult: !!myResult,
+                totalResults: diagnosticResults.length
+            });
             
             const diagnosticWelcome = document.getElementById('diagnosticWelcome');
             const visualRoadmap = document.getElementById('visualRoadmap');
             
             if (myResult) {
                 // 진단평가 완료: 로드맵 표시
+                console.log('✅ 진단평가 완료 → 로드맵 표시');
                 if (diagnosticWelcome) diagnosticWelcome.style.display = 'none';
                 if (visualRoadmap) visualRoadmap.style.display = 'block';
             } else {
                 // 진단평가 미완료: 안내 화면 표시
+                console.log('⚠️ 진단평가 미완료 → 환영 화면 표시');
                 if (diagnosticWelcome) diagnosticWelcome.style.display = 'block';
                 if (visualRoadmap) visualRoadmap.style.display = 'none';
             }
@@ -7997,7 +8017,6 @@
             
             if (currentStudentId && currentStudentName) {
                 // 🆕 진단평가 상태에 따라 화면 전환 (즉시 실행!)
-                checkDiagnosticStatusAndShowScreen();
                 checkDiagnosticStatusAndShowScreen();
                 
                 // 진단평가 완료 여부 확인
