@@ -3458,8 +3458,20 @@
                 }
             });
             
-            // 수준 판정 (총점 기준)
-            const overallLevel = determineLevel(totalScore);
+            // 수준 판정 (총점 기준) - ✨ 새로운 기준: 475점 만점
+            let overallLevel = 'beginner';
+            if (totalScore >= 360) {  // 76% 이상
+                overallLevel = 'advanced';
+            } else if (totalScore >= 240) {  // 50% 이상
+                overallLevel = 'intermediate';
+            }
+            
+            // 레벨 정보 설정
+            const levelCriteria = {
+                'advanced': { label: '심화', color: 'green', message: '우수한 수준입니다!' },
+                'intermediate': { label: '표준', color: 'yellow', message: '평균 이상 수준입니다!' },
+                'beginner': { label: '기초', color: 'red', message: '기초부터 다시 시작합니다!' }
+            };
             const levelInfo = levelCriteria[overallLevel];
             
             // ✨ 과목별 수준 판정 (각 과목 10문제 = 100점 만점)
@@ -3471,11 +3483,11 @@
                 const score = subjectScores[subject].score;
                 let subjectLevel = '';
                 
-                // 과목별 레벨 기준: 90점 이상 심화, 60점 이상 표준, 60점 미만 기초
-                if (score >= 90) {
+                // 과목별 레벨 기준: 76점 이상 심화, 48점 이상 표준, 48점 미만 기초
+                if (score >= 72) {  // 95점 만점 기준 76% (72/95)
                     subjectLevel = '심화';
                     strengthSubjects.push(subject);
-                } else if (score >= 60) {
+                } else if (score >= 48) {  // 95점 만점 기준 50% (48/95)
                     subjectLevel = '표준';
                 } else {
                     subjectLevel = '기초';

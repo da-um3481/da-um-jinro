@@ -9,93 +9,93 @@ const diagnosticTestDB = {
     // ==========================================
     1: {
         수학: [
-            // 기초 (난이도: 1, 각 5점)
+            // 기초 (난이도: 1, 각 5점) - 2문제
             {id: 1, question: "다음 중 소수가 아닌 것은?", options: ["2", "3", "4", "5"], answer: 2, difficulty: 1, points: 5, concept: "소수의 정의"},
-            {id: 2, question: "12의 약수가 아닌 것은?", options: ["1", "2", "5", "6"], answer: 2, difficulty: 1, points: 5, concept: "약수 구하기"},
-            {id: 3, question: "(-3) + 5의 값은?", options: ["-8", "-2", "2", "8"], answer: 2, difficulty: 1, points: 5, concept: "정수의 덧셈"},
+            {id: 2, question: "(-3) + 5의 값은?", options: ["-8", "-2", "2", "8"], answer: 2, difficulty: 1, points: 5, concept: "정수의 덧셈"},
             
-            // 중급 (난이도: 2, 각 7점)
-            {id: 4, question: "60을 소인수분해하면?", options: ["2² × 3 × 5", "2 × 3² × 5", "2² × 15", "4 × 15"], answer: 0, difficulty: 2, points: 7, concept: "소인수분해"},
-            {id: 5, question: "12와 18의 최대공약수는?", options: ["2", "3", "6", "36"], answer: 2, difficulty: 2, points: 7, concept: "최대공약수"},
-            {id: 6, question: "(-5) - (-3)의 값은?", options: ["-8", "-2", "2", "8"], answer: 1, difficulty: 2, points: 7, concept: "정수의 뺄셈"},
-            {id: 7, question: "x = 3일 때, 2x + 1의 값은?", options: ["5", "6", "7", "8"], answer: 2, difficulty: 2, points: 7, concept: "문자와 식"},
+            // 표준 (난이도: 2, 각 8점) - 5문제
+            {id: 3, question: "60을 소인수분해하면?", options: ["2² × 3 × 5", "2 × 3² × 5", "2² × 15", "4 × 15"], answer: 0, difficulty: 2, points: 8, concept: "소인수분해"},
+            {id: 4, question: "12와 18의 최대공약수는?", options: ["2", "3", "6", "36"], answer: 2, difficulty: 2, points: 8, concept: "최대공약수"},
+            {id: 5, question: "(-5) - (-3)의 값은?", options: ["-8", "-2", "2", "8"], answer: 1, difficulty: 2, points: 8, concept: "정수의 뺄셈"},
+            {id: 6, question: "(-3) × (+4)의 값은?", options: ["-12", "-7", "7", "12"], answer: 0, difficulty: 2, points: 8, concept: "정수의 곱셈"},
+            {id: 7, question: "x = 3일 때, 2x + 1의 값은?", options: ["5", "6", "7", "8"], answer: 2, difficulty: 2, points: 8, concept: "문자와 식"},
             
-            // 고급 (난이도: 3, 각 10점)
-            {id: 8, question: "48과 72의 최소공배수는?", options: ["24", "96", "144", "288"], answer: 2, difficulty: 3, points: 10, concept: "최소공배수"},
-            {id: 9, question: "3(x - 2) = 2(x + 1)일 때, x의 값은?", options: ["4", "6", "8", "10"], answer: 2, difficulty: 3, points: 10, concept: "일차방정식"},
-            {id: 10, question: "x : y = 2 : 3이고 x + y = 15일 때, x의 값은?", options: ["3", "6", "9", "12"], answer: 1, difficulty: 3, points: 10, concept: "비와 비율"}
+            // 심화 (난이도: 3, 각 15점) - 3문제
+            {id: 8, question: "48과 72의 최소공배수는?", options: ["24", "96", "144", "288"], answer: 2, difficulty: 3, points: 15, concept: "최소공배수"},
+            {id: 9, question: "3(x - 2) = 2(x + 1)일 때, x의 값은?", options: ["4", "6", "8", "10"], answer: 2, difficulty: 3, points: 15, concept: "일차방정식"},
+            {id: 10, question: "x : y = 2 : 3이고 x + y = 15일 때, x의 값은?", options: ["3", "6", "9", "12"], answer: 1, difficulty: 3, points: 15, concept: "비와 비율"}
         ],
         
         영어: [
-            // 기초 (난이도: 1, 각 5점)
+            // 기초 (난이도: 1, 각 5점) - 2문제
             {id: 1, question: "'I ___ a student.' 빈칸에 알맞은 것은?", options: ["am", "is", "are", "be"], answer: 0, difficulty: 1, points: 5, concept: "be동사"},
-            {id: 2, question: "'She ___ a teacher.' 빈칸에 알맞은 것은?", options: ["am", "is", "are", "be"], answer: 1, difficulty: 1, points: 5, concept: "3인칭 단수"},
-            {id: 3, question: "다음 중 복수형이 틀린 것은?", options: ["books", "childs", "boxes", "tomatoes"], answer: 1, difficulty: 1, points: 5, concept: "명사 복수형"},
+            {id: 2, question: "다음 중 복수형이 틀린 것은?", options: ["books", "childs", "boxes", "tomatoes"], answer: 1, difficulty: 1, points: 5, concept: "명사 복수형"},
             
-            // 중급 (난이도: 2, 각 7점)
-            {id: 4, question: "'___ you like pizza?' 빈칸에 알맞은 것은?", options: ["Do", "Does", "Are", "Is"], answer: 0, difficulty: 2, points: 7, concept: "일반동사 의문문"},
-            {id: 5, question: "'I am reading a book now.' 이 문장의 시제는?", options: ["현재", "과거", "현재진행", "미래"], answer: 2, difficulty: 2, points: 7, concept: "현재진행형"},
-            {id: 6, question: "'She ___ to school yesterday.' 빈칸에 알맞은 것은?", options: ["go", "goes", "went", "going"], answer: 2, difficulty: 2, points: 7, concept: "과거시제"},
-            {id: 7, question: "'There ___ many students.' 빈칸에 알맞은 것은?", options: ["is", "are", "am", "be"], answer: 1, difficulty: 2, points: 7, concept: "There is/are"},
+            // 표준 (난이도: 2, 각 8점) - 5문제
+            {id: 3, question: "'___ you like pizza?' 빈칸에 알맞은 것은?", options: ["Do", "Does", "Are", "Is"], answer: 0, difficulty: 2, points: 8, concept: "일반동사 의문문"},
+            {id: 4, question: "'I am reading a book now.' 이 문장의 시제는?", options: ["현재", "과거", "현재진행", "미래"], answer: 2, difficulty: 2, points: 8, concept: "현재진행형"},
+            {id: 5, question: "'She ___ to school yesterday.' 빈칸에 알맞은 것은?", options: ["go", "goes", "went", "going"], answer: 2, difficulty: 2, points: 8, concept: "과거시제"},
+            {id: 6, question: "'There ___ many students.' 빈칸에 알맞은 것은?", options: ["is", "are", "am", "be"], answer: 1, difficulty: 2, points: 8, concept: "There is/are"},
+            {id: 7, question: "'He can ___ English.' 빈칸에 알맞은 것은?", options: ["speak", "speaks", "speaking", "spoke"], answer: 0, difficulty: 2, points: 8, concept: "조동사"},
             
-            // 고급 (난이도: 3, 각 10점)
-            {id: 8, question: "'I have ___ here for 5 years.' 빈칸에 알맞은 것은?", options: ["live", "lives", "lived", "living"], answer: 2, difficulty: 3, points: 10, concept: "현재완료"},
-            {id: 9, question: "'She asked me ___ the door.' 빈칸에 알맞은 것은?", options: ["close", "to close", "closing", "closed"], answer: 1, difficulty: 3, points: 10, concept: "to부정사"},
-            {id: 10, question: "'The boy ___ is playing is my brother.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "when"], answer: 0, difficulty: 3, points: 10, concept: "관계대명사"}
+            // 심화 (난이도: 3, 각 15점) - 3문제
+            {id: 8, question: "'I have ___ here for 5 years.' 빈칸에 알맞은 것은?", options: ["live", "lives", "lived", "living"], answer: 2, difficulty: 3, points: 15, concept: "현재완료"},
+            {id: 9, question: "'She asked me ___ the door.' 빈칸에 알맞은 것은?", options: ["close", "to close", "closing", "closed"], answer: 1, difficulty: 3, points: 15, concept: "to부정사"},
+            {id: 10, question: "'The boy ___ is playing is my brother.' 빈칸에 알맞은 것은?", options: ["who", "which", "whose", "when"], answer: 0, difficulty: 3, points: 15, concept: "관계대명사"}
         ],
         
         국어: [
-            // 기초 (난이도: 1, 각 5점)
+            // 기초 (난이도: 1, 각 5점) - 2문제
             {id: 1, question: "'빨갛다'의 품사는?", options: ["명사", "동사", "형용사", "부사"], answer: 2, difficulty: 1, points: 5, concept: "품사"},
-            {id: 2, question: "'먹다'를 과거형으로 바꾸면?", options: ["먹었다", "먹는다", "먹을다", "먹니다"], answer: 0, difficulty: 1, points: 5, concept: "시제"},
-            {id: 3, question: "다음 중 높임 표현이 아닌 것은?", options: ["드시다", "계시다", "먹다", "주무시다"], answer: 2, difficulty: 1, points: 5, concept: "높임법"},
+            {id: 2, question: "다음 중 높임 표현이 아닌 것은?", options: ["드시다", "계시다", "먹다", "주무시다"], answer: 2, difficulty: 1, points: 5, concept: "높임법"},
             
-            // 중급 (난이도: 2, 각 7점)
-            {id: 4, question: "'하늘이 파랗다'에서 주어는?", options: ["하늘이", "파랗다", "하늘", "이"], answer: 0, difficulty: 2, points: 7, concept: "문장 성분"},
-            {id: 5, question: "다음 중 사동 표현은?", options: ["먹다", "먹이다", "먹히다", "먹거나"], answer: 1, difficulty: 2, points: 7, concept: "사동/피동"},
-            {id: 6, question: "'은유법'의 예로 적절한 것은?", options: ["내 마음은 호수요", "너처럼 예쁜", "매우 아름다운", "꽃이 피었다"], answer: 0, difficulty: 2, points: 7, concept: "비유법"},
-            {id: 7, question: "다음 중 관형어는?", options: ["매우", "빨리", "예쁜", "천천히"], answer: 2, difficulty: 2, points: 7, concept: "문장 성분"},
+            // 표준 (난이도: 2, 각 8점) - 5문제
+            {id: 3, question: "'하늘이 파랗다'에서 주어는?", options: ["하늘이", "파랗다", "하늘", "이"], answer: 0, difficulty: 2, points: 8, concept: "문장 성분"},
+            {id: 4, question: "다음 중 사동 표현은?", options: ["먹다", "먹이다", "먹히다", "먹거나"], answer: 1, difficulty: 2, points: 8, concept: "사동/피동"},
+            {id: 5, question: "'은유법'의 예로 적절한 것은?", options: ["내 마음은 호수요", "너처럼 예쁜", "매우 아름다운", "꽃이 피었다"], answer: 0, difficulty: 2, points: 8, concept: "비유법"},
+            {id: 6, question: "다음 중 관형어는?", options: ["매우", "빨리", "예쁜", "천천히"], answer: 2, difficulty: 2, points: 8, concept: "문장 성분"},
+            {id: 7, question: "다음 중 '의태어'는?", options: ["반짝반짝", "멍멍", "파랗다", "빨리"], answer: 0, difficulty: 2, points: 8, concept: "의태어"},
             
-            // 고급 (난이도: 3, 각 10점)
-            {id: 8, question: "'역설법'의 예로 적절한 것은?", options: ["소리 없는 아우성", "빨간 장미", "높은 산", "맑은 하늘"], answer: 0, difficulty: 3, points: 10, concept: "표현법"},
-            {id: 9, question: "시조의 형식은?", options: ["초장-중장-종장", "기-승-전-결", "서-본-결", "발단-전개-위기-절정-결말"], answer: 0, difficulty: 3, points: 10, concept: "시조"},
-            {id: 10, question: "'춘향전'의 갈래는?", options: ["서사시", "판소리계 소설", "수필", "희곡"], answer: 1, difficulty: 3, points: 10, concept: "문학 갈래"}
+            // 심화 (난이도: 3, 각 15점) - 3문제
+            {id: 8, question: "'역설법'의 예로 적절한 것은?", options: ["소리 없는 아우성", "빨간 장미", "높은 산", "맑은 하늘"], answer: 0, difficulty: 3, points: 15, concept: "표현법"},
+            {id: 9, question: "시조의 형식은?", options: ["초장-중장-종장", "기-승-전-결", "서-본-결", "발단-전개-위기-절정-결말"], answer: 0, difficulty: 3, points: 15, concept: "시조"},
+            {id: 10, question: "'춘향전'의 갈래는?", options: ["서사시", "판소리계 소설", "수필", "희곡"], answer: 1, difficulty: 3, points: 15, concept: "문학 갈래"}
         ],
         
         사회: [
-            // 기초 (난이도: 1, 각 5점)
+            // 기초 (난이도: 1, 각 5점) - 2문제
             {id: 1, question: "위도 0도를 무엇이라 하는가?", options: ["북극", "남극", "적도", "자오선"], answer: 2, difficulty: 1, points: 5, concept: "위도와 경도"},
-            {id: 2, question: "우리나라의 수도는?", options: ["부산", "서울", "인천", "대구"], answer: 1, difficulty: 1, points: 5, concept: "한국 지리"},
-            {id: 3, question: "사막 기후의 특징은?", options: ["비가 많다", "눈이 많다", "매우 건조하다", "항상 춥다"], answer: 2, difficulty: 1, points: 5, concept: "기후"},
+            {id: 2, question: "사막 기후의 특징은?", options: ["비가 많다", "눈이 많다", "매우 건조하다", "항상 춥다"], answer: 2, difficulty: 1, points: 5, concept: "기후"},
             
-            // 중급 (난이도: 2, 각 7점)
-            {id: 4, question: "열대 기후 지역의 주요 작물은?", options: ["쌀", "밀", "바나나", "감자"], answer: 2, difficulty: 2, points: 7, concept: "열대 기후"},
-            {id: 5, question: "우리나라의 4계절 구분은?", options: ["봄, 여름, 가을, 겨울", "건기, 우기", "여름, 겨울", "3계절"], answer: 0, difficulty: 2, points: 7, concept: "계절"},
-            {id: 6, question: "지도에서 축척이 크면?", options: ["넓은 지역을 보여준다", "자세히 보여준다", "작게 보여준다", "색이 진하다"], answer: 1, difficulty: 2, points: 7, concept: "지도"},
-            {id: 7, question: "온대 기후의 특징은?", options: ["1년 내내 덥다", "4계절이 뚜렷하다", "매우 춥다", "비가 안 온다"], answer: 1, difficulty: 2, points: 7, concept: "온대 기후"},
+            // 표준 (난이도: 2, 각 8점) - 5문제
+            {id: 3, question: "열대 기후 지역의 주요 작물은?", options: ["쌀", "밀", "바나나", "감자"], answer: 2, difficulty: 2, points: 8, concept: "열대 기후"},
+            {id: 4, question: "우리나라의 4계절 구분은?", options: ["봄, 여름, 가을, 겨울", "건기, 우기", "여름, 겨울", "3계절"], answer: 0, difficulty: 2, points: 8, concept: "계절"},
+            {id: 5, question: "지도에서 축척이 크면?", options: ["넓은 지역을 보여준다", "자세히 보여준다", "작게 보여준다", "색이 진하다"], answer: 1, difficulty: 2, points: 8, concept: "지도"},
+            {id: 6, question: "온대 기후의 특징은?", options: ["1년 내내 덥다", "4계절이 뚜렷하다", "매우 춥다", "비가 안 온다"], answer: 1, difficulty: 2, points: 8, concept: "온대 기후"},
+            {id: 7, question: "우리나라의 대표적인 산맥은?", options: ["히말라야", "태백산맥", "알프스", "로키산맥"], answer: 1, difficulty: 2, points: 8, concept: "한국 지리"},
             
-            // 고급 (난이도: 3, 각 10점)
-            {id: 8, question: "경도 180도 선을 무엇이라 하는가?", options: ["본초 자오선", "적도", "날짜 변경선", "북회귀선"], answer: 2, difficulty: 3, points: 10, concept: "경도"},
-            {id: 9, question: "한대 기후 지역의 생활 모습은?", options: ["벼농사", "목축업", "순록 유목", "과일 재배"], answer: 2, difficulty: 3, points: 10, concept: "한대 기후"},
-            {id: 10, question: "세계 최대 사막은?", options: ["고비 사막", "사하라 사막", "칼라하리 사막", "아타카마 사막"], answer: 1, difficulty: 3, points: 10, concept: "세계 지리"}
+            // 심화 (난이도: 3, 각 15점) - 3문제
+            {id: 8, question: "경도 180도 선을 무엇이라 하는가?", options: ["본초 자오선", "적도", "날짜 변경선", "북회귀선"], answer: 2, difficulty: 3, points: 15, concept: "경도"},
+            {id: 9, question: "한대 기후 지역의 생활 모습은?", options: ["벼농사", "목축업", "순록 유목", "과일 재배"], answer: 2, difficulty: 3, points: 15, concept: "한대 기후"},
+            {id: 10, question: "세계 최대 사막은?", options: ["고비 사막", "사하라 사막", "칼라하리 사막", "아타카마 사막"], answer: 1, difficulty: 3, points: 15, concept: "세계 지리"}
         ],
         
         과학: [
-            // 기초 (난이도: 1, 각 5점)
+            // 기초 (난이도: 1, 각 5점) - 2문제
             {id: 1, question: "물의 끓는점은?", options: ["0℃", "50℃", "100℃", "200℃"], answer: 2, difficulty: 1, points: 5, concept: "물의 상태 변화"},
-            {id: 2, question: "광합성을 하는 세포 소기관은?", options: ["핵", "엽록체", "미토콘드리아", "리보솜"], answer: 1, difficulty: 1, points: 5, concept: "광합성"},
-            {id: 3, question: "지구의 공전 주기는?", options: ["1일", "1개월", "1년", "10년"], answer: 2, difficulty: 1, points: 5, concept: "지구의 운동"},
+            {id: 2, question: "지구의 공전 주기는?", options: ["1일", "1개월", "1년", "10년"], answer: 2, difficulty: 1, points: 5, concept: "지구의 운동"},
             
-            // 중급 (난이도: 2, 각 7점)
-            {id: 4, question: "산성 용액의 pH는?", options: ["7보다 크다", "7보다 작다", "7이다", "0이다"], answer: 1, difficulty: 2, points: 7, concept: "산과 염기"},
-            {id: 5, question: "식물 세포에만 있는 것은?", options: ["핵", "세포막", "세포벽", "세포질"], answer: 2, difficulty: 2, points: 7, concept: "세포"},
-            {id: 6, question: "지진의 진원지로부터 가장 먼 곳은?", options: ["진앙", "진원", "단층", "판"], answer: 0, difficulty: 2, points: 7, concept: "지진"},
-            {id: 7, question: "혼합물을 분리하는 방법이 아닌 것은?", options: ["증류", "여과", "크로마토그래피", "중화"], answer: 3, difficulty: 2, points: 7, concept: "혼합물 분리"},
+            // 표준 (난이도: 2, 각 8점) - 5문제
+            {id: 3, question: "산성 용액의 pH는?", options: ["7보다 크다", "7보다 작다", "7이다", "0이다"], answer: 1, difficulty: 2, points: 8, concept: "산과 염기"},
+            {id: 4, question: "식물 세포에만 있는 것은?", options: ["핵", "세포막", "세포벽", "세포질"], answer: 2, difficulty: 2, points: 8, concept: "세포"},
+            {id: 5, question: "지진의 진앙은?", options: ["지진이 발생한 지하 지점", "진원 바로 위 지표면", "지진의 세기", "지진파"], answer: 1, difficulty: 2, points: 8, concept: "지진"},
+            {id: 6, question: "혼합물을 분리하는 방법이 아닌 것은?", options: ["증류", "여과", "크로마토그래피", "중화"], answer: 3, difficulty: 2, points: 8, concept: "혼합물 분리"},
+            {id: 7, question: "광합성을 하는 세포 소기관은?", options: ["핵", "엽록체", "미토콘드리아", "리보솜"], answer: 1, difficulty: 2, points: 8, concept: "광합성"},
             
-            // 고급 (난이도: 3, 각 10점)
-            {id: 8, question: "광합성의 결과 생성되는 기체는?", options: ["산소", "이산화탄소", "질소", "수소"], answer: 0, difficulty: 3, points: 10, concept: "광합성 산물"},
-            {id: 9, question: "암석의 종류가 아닌 것은?", options: ["화성암", "변성암", "퇴적암", "풍화암"], answer: 3, difficulty: 3, points: 10, concept: "암석"},
-            {id: 10, question: "달의 위상 변화 원인은?", options: ["지구 자전", "달 자전", "달 공전", "태양 공전"], answer: 2, difficulty: 3, points: 10, concept: "달의 위상"}
+            // 심화 (난이도: 3, 각 15점) - 3문제
+            {id: 8, question: "광합성의 결과 생성되는 기체는?", options: ["산소", "이산화탄소", "질소", "수소"], answer: 0, difficulty: 3, points: 15, concept: "광합성 산물"},
+            {id: 9, question: "암석의 종류가 아닌 것은?", options: ["화성암", "변성암", "퇴적암", "풍화암"], answer: 3, difficulty: 3, points: 15, concept: "암석"},
+            {id: 10, question: "달의 위상 변화 원인은?", options: ["지구 자전", "달 자전", "달 공전", "태양 공전"], answer: 2, difficulty: 3, points: 15, concept: "달의 위상"}
         ]
     },
     

@@ -2253,8 +2253,9 @@
                     
                     // 통계 업데이트
                     const completed = diagnosticData.length;
-                    const advanced = diagnosticData.filter(d => d.total_score >= 281).length;
-                    const intermediate = diagnosticData.filter(d => d.total_score >= 201 && d.total_score < 281).length;
+                    // ✨ 새로운 기준: 475점 만점 (95점 × 5과목)
+                    const advanced = diagnosticData.filter(d => d.total_score >= 360).length;  // 76% 이상
+                    const intermediate = diagnosticData.filter(d => d.total_score >= 240 && d.total_score < 360).length;  // 50-75%
                     const beginner = diagnosticData.filter(d => d.total_score < 201).length;
 
                     document.getElementById('diagnosticCompletedCount').textContent = completed;
@@ -2287,8 +2288,9 @@
 
                     // 통계 업데이트
                     const completed = diagnosticData.length;
-                    const advanced = diagnosticData.filter(d => d.totalScore >= 281).length;
-                    const intermediate = diagnosticData.filter(d => d.totalScore >= 201 && d.totalScore < 281).length;
+                    // ✨ 새로운 기준: 475점 만점
+                    const advanced = diagnosticData.filter(d => d.totalScore >= 360).length;  // 76% 이상
+                    const intermediate = diagnosticData.filter(d => d.totalScore >= 240 && d.totalScore < 360).length;  // 50-75%
                     const beginner = diagnosticData.filter(d => d.totalScore < 201).length;
 
                     document.getElementById('diagnosticCompletedCount').textContent = completed;
@@ -2322,7 +2324,8 @@
 
                 // 통계 업데이트
                 const completed = diagnosticData.length;
-                const advanced = diagnosticData.filter(d => d.totalScore >= 281).length;
+                // ✨ 새로운 기준: 475점 만점
+                const advanced = diagnosticData.filter(d => d.totalScore >= 360).length;  // 76% 이상
                 const intermediate = diagnosticData.filter(d => d.totalScore >= 201 && d.totalScore < 281).length;
                 const beginner = diagnosticData.filter(d => d.totalScore < 201).length;
 
@@ -2371,13 +2374,13 @@
                 const testDate = result.test_date || result.testDate || new Date().toISOString();
                 const overallLevel = result.overall_level || result.level || 'beginner';
                 
-                // 종합 수준 판정
+                // 종합 수준 판정 (✨ 새로운 기준: 475점 만점)
                 let levelLabel = '기초';
                 let levelClass = 'level-beginner';
-                if (totalScore >= 281) {
+                if (totalScore >= 360) {  // 76% 이상
                     levelLabel = '심화';
                     levelClass = 'level-advanced';
-                } else if (totalScore >= 201) {
+                } else if (totalScore >= 240) {  // 50% 이상
                     levelLabel = '표준';
                     levelClass = 'level-intermediate';
                 }
@@ -2400,9 +2403,10 @@
                 const scienceScore = result.science_score || Math.round(totalScore / 5);
                 
                 // 과목별 수준 자동 계산 (없는 경우)
+                // ✨ 새로운 기준: 95점 만점 기준
                 const calculateSubjectLevel = (score) => {
-                    if (score >= 90) return '심화';
-                    if (score >= 60) return '표준';
+                    if (score >= 72) return '심화';  // 76% 이상
+                    if (score >= 48) return '표준';  // 50% 이상
                     return '기초';
                 };
                 
