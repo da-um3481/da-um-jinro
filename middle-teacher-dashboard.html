@@ -532,6 +532,18 @@
             background: rgba(16, 185, 129, 0.2);
             color: var(--primary);
         }
+        
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #059669;
+            font-weight: 700;
+        }
+        
+        .badge-warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #d97706;
+            font-weight: 700;
+        }
 
         .student-stats {
             text-align: right;
@@ -3573,12 +3585,20 @@
                     }
                 });
                 
+                // 🆕 진단평가 결과 확인
+                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                const hasDiagnostic = diagnosticResults.some(r => r.studentId === student.id);
+                const diagnosticData = diagnosticResults.find(r => r.studentId === student.id);
+                
                 return {
                     ...student,
                     totalHours: (totalMinutes / 60).toFixed(1),
                     totalMinutes,
                     lastActivity,
-                    recordCount: studentRecords.length
+                    recordCount: studentRecords.length,
+                    hasDiagnostic: hasDiagnostic,
+                    diagnosticScore: diagnosticData ? diagnosticData.totalScore : 0,
+                    diagnosticLevel: diagnosticData ? diagnosticData.level : null
                 };
             });
             
@@ -3608,6 +3628,11 @@
                     ? new Date(s.lastActivity).toLocaleDateString()
                     : '활동 없음';
                 
+                // 🆕 진단평가 상태 표시
+                const diagnosticBadge = s.hasDiagnostic 
+                    ? `<span class="badge badge-success">✅ 진단완료 (${s.diagnosticScore}점)</span>`
+                    : `<span class="badge badge-warning">⏳ 진단 미완료</span>`;
+                
                 return `
                     <div class="student-card" onclick="viewStudent('${s.id}')">
                         <div class="student-info">
@@ -3616,6 +3641,7 @@
                                 <div class="student-name">${s.name}</div>
                                 <div class="student-meta">
                                     <span class="badge badge-grade">${s.grade}</span>
+                                    ${diagnosticBadge}
                                     <span class="badge badge-status">${badge} ${status}</span>
                                     <span>📅 ${lastActivity}</span>
                                 </div>
