@@ -7954,20 +7954,9 @@
                 console.log('✅ 진단평가 완료 → 환영 화면 숨김');
                 if (diagnosticWelcome) diagnosticWelcome.style.display = 'none';
                 
-                // 🎉 진단평가 완료 메시지 표시 (한 번만)
-                const completionMessageShown = sessionStorage.getItem('diagnosticCompletionShown_' + currentStudentId);
-                if (!completionMessageShown) {
-                    setTimeout(() => {
-                        const studentName = localStorage.getItem('currentStudentName') || '학생';
-                        const totalScore = myResult.totalScore || 0;
-                        const level = myResult.level || '표준';
-                        
-                        alert(`🎉 축하합니다, ${studentName}님!\n\n✅ 진단평가를 이미 완료하셨습니다!\n\n📊 총점: ${totalScore}점 (475점 만점)\n📈 수준: ${level}\n\n💡 이제 맞춤형 학습을 시작하세요!`);
-                        
-                        // 이 세션에서 메시지를 표시했음을 기록
-                        sessionStorage.setItem('diagnosticCompletionShown_' + currentStudentId, 'true');
-                    }, 500);
-                }
+                // 🎉 진단평가 완료 메시지는 표시하지 않음 (학생 경험 개선)
+                // 메시지 없이 바로 학습 스케줄로 진입
+                console.log('💡 진단평가 완료 → 학습 스케줄로 바로 진입');
             } else {
                 // 진단평가 미완료: 안내 화면 표시
                 console.log('⚠️ 진단평가 미완료 → 환영 화면 표시');
@@ -8124,7 +8113,7 @@
                     }, 2000);
                 }
             }
-        }, 100); // 즉시 실행 (100ms 지연)
+        }, 0); // 즉시 실행 (지연 없음)
     </script>
     
     <!-- Google Sheets API 로드 -->
