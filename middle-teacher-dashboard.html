@@ -2572,16 +2572,24 @@
                 return grade <= 3;
             });
 
-            console.log('📊 수준별 학습관리 데이터:', middleSchoolDiagnostics);
+            console.log('📊 수준별 학습관리 원본 데이터:', middleSchoolDiagnostics);
+            console.log('📊 원본 데이터 개수:', middleSchoolDiagnostics.length);
 
             // 학생별로 그룹화 (최신 진단평가 결과만)
             const studentMap = new Map();
             middleSchoolDiagnostics.forEach(result => {
-                const existingResult = studentMap.get(result.studentId);
-                if (!existingResult || new Date(result.testDate) > new Date(existingResult.testDate)) {
-                    studentMap.set(result.studentId, result);
+                // studentId 다양한 형식 지원
+                const studentId = result.studentId || result.student_id || `${result.studentName}_${result.grade}`;
+                console.log('🔍 처리 중:', { studentId, name: result.studentName || result.student_name, grade: result.grade });
+                
+                const existingResult = studentMap.get(studentId);
+                if (!existingResult || new Date(result.testDate || result.test_date) > new Date(existingResult.testDate || existingResult.test_date)) {
+                    studentMap.set(studentId, result);
                 }
             });
+            
+            console.log('📊 그룹화 후 학생 수:', studentMap.size);
+            console.log('📊 그룹화 결과:', Array.from(studentMap.entries()));
 
             const managementData = Array.from(studentMap.values()).map(result => {
                 // 총점 가져오기 (Google Sheets 형식 & localStorage 형식 지원)
@@ -2601,9 +2609,13 @@
                 // 자동 조정 상태
                 const autoAdjusted = '✅ 자동 조정됨';
                 
+                // studentId와 studentName 다양한 형식 지원
+                const studentId = result.studentId || result.student_id || `${result.studentName || result.student_name}_${result.grade}`;
+                const studentName = result.studentName || result.student_name || '이름없음';
+                
                 return {
-                    studentId: result.studentId,
-                    name: result.studentName,
+                    studentId: studentId,
+                    name: studentName,
                     grade: result.grade ? `중${result.grade}` : 'N/A',
                     level: levelLabel,
                     totalScore: totalScore,
