@@ -1084,7 +1084,8 @@
         </div>
 
         <!-- 🗺️ 30일 비주얼 로드맵 (진단평가 완료 후) -->
-        <!-- 30일 학습 여정 섹션 삭제됨 (2026-01-04) -->
+        <!-- 30일 학습 여정 섹션 - 사용 안 함 (display: none) -->
+        <div style="display: none !important;" id="visualRoadmap-disabled">
         
             <!-- 헤더: 진행률 + 동기부여 메시지 -->
             <div class="mb-6">
@@ -1208,6 +1209,7 @@
                 </div>
             </div>
         </div>
+        </div><!-- /30일 학습 여정 섹션 끝 (숨김 처리) -->
 
         <!-- 🆕 내일 학습 준비 알림 -->
         <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up mb-6" id="tomorrowPreviewSection" style="display: none;">
