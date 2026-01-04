@@ -7962,13 +7962,78 @@
         }
         
         // 페이지 로드 후 즉시 체크 (로그인 후)
-        setTimeout(function() {
+        setTimeout(async function() {
             const currentStudentId = localStorage.getItem('currentStudentId');
             const currentStudentName = localStorage.getItem('currentStudentName');
             const currentStudentGrade = localStorage.getItem('currentStudentGrade');
             
             if (currentStudentId && currentStudentName) {
-                // 🆕 진단평가 상태에 따라 화면 전환 (즉시 실행!)
+                // 🌐 STEP 1: Google Sheets에서 진단평가 결과 먼저 로드 (다른 기기 동기화)
+                console.log('🌐 클라우드에서 진단평가 결과 로딩 중...');
+                try {
+                    if (typeof getDiagnosticResultsFromCloud === 'function') {
+                        const cloudData = await getDiagnosticResultsFromCloud();
+                        if (cloudData && cloudData.status === 'success' && cloudData.data && cloudData.data.length > 0) {
+                            console.log(`✅ 클라우드에서 ${cloudData.data.length}개 진단평가 결과 로드 완료`);
+                            
+                            // 현재 학생의 진단평가 결과 찾기
+                            const myCloudResult = cloudData.data.find(r => 
+                                r.student_name === currentStudentName && r.grade == currentStudentGrade
+                            );
+                            
+                            if (myCloudResult) {
+                                console.log('✅ 클라우드에서 현재 학생의 진단평가 결과 발견:', myCloudResult);
+                                
+                                // localStorage에 저장 (로컬과 클라우드 동기화)
+                                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                                const existingIndex = diagnosticResults.findIndex(r => r.studentId === currentStudentId);
+                                
+                                const localResult = {
+                                    studentId: currentStudentId,
+                                    studentName: currentStudentName,
+                                    grade: parseInt(currentStudentGrade),
+                                    subject: '종합',
+                                    totalScore: myCloudResult.total_score || myCloudResult.totalScore || 0,
+                                    level: myCloudResult.overall_level || myCloudResult.level || '표준',
+                                    testDate: myCloudResult.test_date || new Date().toISOString(),
+                                    subjectScores: {
+                                        '수학': { score: myCloudResult.math_score || 0 },
+                                        '영어': { score: myCloudResult.english_score || 0 },
+                                        '국어': { score: myCloudResult.korean_score || 0 },
+                                        '사회': { score: myCloudResult.social_score || 0 },
+                                        '과학': { score: myCloudResult.science_score || 0 }
+                                    },
+                                    subjectLevels: {
+                                        '수학': myCloudResult.math_level || '',
+                                        '영어': myCloudResult.english_level || '',
+                                        '국어': myCloudResult.korean_level || '',
+                                        '사회': myCloudResult.social_level || '',
+                                        '과학': myCloudResult.science_level || ''
+                                    },
+                                    strengthSubjects: myCloudResult.strength_subjects || '',
+                                    weaknessSubjects: myCloudResult.weakness_subjects || ''
+                                };
+                                
+                                if (existingIndex >= 0) {
+                                    diagnosticResults[existingIndex] = localResult;
+                                } else {
+                                    diagnosticResults.push(localResult);
+                                }
+                                
+                                localStorage.setItem('diagnostic_results', JSON.stringify(diagnosticResults));
+                                console.log('✅ 클라우드 진단평가 결과를 localStorage에 동기화 완료');
+                            } else {
+                                console.log('ℹ️ 클라우드에 현재 학생의 진단평가 결과 없음');
+                            }
+                        } else {
+                            console.log('ℹ️ 클라우드 데이터 없음 또는 비어있음');
+                        }
+                    }
+                } catch (error) {
+                    console.warn('⚠️ 클라우드 데이터 로드 실패 (로컬 데이터 사용):', error);
+                }
+                
+                // 🆕 STEP 2: 진단평가 상태에 따라 화면 전환 (즉시 실행!)
                 checkDiagnosticStatusAndShowScreen();
                 
                 // 진단평가 완료 여부 확인
