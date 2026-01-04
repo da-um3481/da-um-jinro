@@ -7956,6 +7956,7 @@
         setTimeout(function() {
             const currentStudentId = localStorage.getItem('currentStudentId');
             const currentStudentName = localStorage.getItem('currentStudentName');
+            const currentStudentGrade = localStorage.getItem('currentStudentGrade');
             
             if (currentStudentId && currentStudentName) {
                 // 🆕 진단평가 상태에 따라 화면 전환 (즉시 실행!)
@@ -7971,16 +7972,35 @@
                     currentStudentId: currentStudentId
                 });
                 
-                // 🆕 진단평가 완료한 학생은 "평가결과" 버튼 보이기
+                // 🆕 진단평가 완료한 학생은 학습 스케줄 생성 + 버튼 활성화
                 if (myResult) {
-                    console.log('✅ 진단평가 완료 확인 → 버튼 활성화 시작');
+                    console.log('✅ 진단평가 완료 확인 → 학습 기능 활성화');
                     
+                    // 학생 객체 생성
+                    const student = {
+                        id: currentStudentId,
+                        name: currentStudentName,
+                        grade: currentStudentGrade,
+                        level: myResult.level || '표준'
+                    };
+                    
+                    // 🔥 핵심: 학습 스케줄 자동 생성!
+                    generateAndDisplayTodaySchedule(student);
+                    initProgramProgress();
+                    updateWeeklyRoadmapProgress();
+                    loadTeacherFeedback();
+                    showTomorrowPreview();
+                    
+                    // 타이머 복원
+                    setTimeout(() => {
+                        restoreRunningTimers();
+                    }, 500);
+                    
+                    // 평가결과 버튼 활성화
                     const resultBtn = document.getElementById('showResultBtn');
                     if (resultBtn) {
                         resultBtn.classList.remove('hidden');
                         console.log('✅ 평가결과 버튼 활성화');
-                    } else {
-                        console.error('❌ 평가결과 버튼을 찾을 수 없음');
                     }
                 } else {
                     console.log('⚠️ 진단평가 미완료 → 버튼 숨김 유지');
