@@ -4224,7 +4224,16 @@
         
         // 진단평가 완료 여부 확인 (다른 기기에서도 동작)
         function hasDiagnosticCompleted(studentId, subject) {
-            // 1️⃣ 우선순위: 학생 객체에서 확인 (다른 기기에서도 공유됨)
+            // 🔥 최우선: diagnostic_results에서 확인 (실제 진단평가 결과)
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const hasResult = diagnosticResults.some(r => r.studentId === studentId);
+            
+            if (hasResult) {
+                console.log(`✅ 진단평가 완료 확인 (diagnostic_results): ${studentId}`);
+                return true;
+            }
+            
+            // 1️⃣ 학생 객체에서 확인 (다른 기기에서도 공유됨)
             const students = JSON.parse(localStorage.getItem('students')) || [];
             const student = students.find(s => s.id === studentId);
             
