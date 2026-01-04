@@ -2725,18 +2725,8 @@
             // activeSubject도 저장
             localStorage.setItem('activeSubject', activeSubject || '');
             
-            // 🌐 Google Sheets에 자동 저장
-            if (typeof saveStudyRecordToCloud === 'function') {
-                saveStudyRecordToCloud({
-                    student_id: studentId,
-                    student_name: localStorage.getItem('currentStudentName'),
-                    date: today,
-                    subject: subject,
-                    study_time: Math.floor(totalSeconds / 60),
-                    progress: todayRecord.subjects[subject].textbook || '-',
-                    content: todayRecord.subjects[subject].content || '학습 진행 중'
-                }).catch(err => console.warn('⚠️ 클라우드 저장 실패 (로컬은 저장됨):', err));
-            }
+            // ⚠️ Google Sheets 자동 저장 제거 (타이머 완료 시에만 저장)
+            // 10초마다 localStorage에만 저장하고, 클라우드는 stopTimer()에서 저장
             
             // 🆕 4주 로드맵 진행률 업데이트
             updateWeeklyRoadmapProgress();

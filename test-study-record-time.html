@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학습 기록 시간 테스트</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        .test-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .result {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .before, .after {
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .before {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+        }
+        .after {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+        }
+        .label {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-new {
+            background: #4caf50;
+            color: white;
+        }
+        .badge-improved {
+            background: #2196f3;
+            color: white;
+        }
+        .badge-removed {
+            background: #f44336;
+            color: white;
+        }
+        .demo-button {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        .demo-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .highlight {
+            background: #fff59d;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ 학습 기록 시간 정보 개선 확인</h1>
+        
+        <!-- Before/After 비교 -->
+        <div class="test-section">
+            <div class="test-title">📊 Before vs After 비교</div>
+            <div class="comparison">
+                <div class="before">
+                    <div class="label">❌ Before (기존)</div>
+                    <div class="code-block">
+E: study_time = 45
+   (분? 시간? 불명확)
+
+H: timestamp = 2026-01-04T10:48:07.076Z
+   (복잡하고 불필요)
+                    </div>
+                    <div style="margin-top: 10px; color: #666;">
+                        ⚠️ 학습 시작/종료 시간을 알 수 없음<br>
+                        ⚠️ 시간대별 패턴 분석 불가능
+                    </div>
+                </div>
+                
+                <div class="after">
+                    <div class="label">✅ After (개선)</div>
+                    <div class="code-block">
+E: start_time = 14:30:00
+   (시작 시간 명확)
+
+F: end_time = 15:15:30
+   (종료 시간 명확)
+
+G: study_duration = 45분 30초
+   (가독성 향상)
+                    </div>
+                    <div style="margin-top: 10px; color: #4caf50;">
+                        ✅ 학습 시작/종료 시간 명확<br>
+                        ✅ 시간대별 패턴 분석 가능
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 새로운 컬럼 구조 -->
+        <div class="test-section">
+            <div class="test-title">🗂️ 새로운 Google Sheets 컬럼 구조</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>컬럼</th>
+                        <th>이름</th>
+                        <th>설명</th>
+                        <th>예시</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A</td>
+                        <td>student_id</td>
+                        <td>학생 ID</td>
+                        <td>student_176752</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>student_name</td>
+                        <td>학생 이름</td>
+                        <td>이나연</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>date</td>
+                        <td>날짜</td>
+                        <td>2026-01-04</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>subject</td>
+                        <td>과목</td>
+                        <td>국어</td>
+                        <td>-</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td>E</td>
+                        <td><strong>start_time</strong></td>
+                        <td><strong>시작 시간</strong></td>
+                        <td><strong>14:30:00</strong></td>
+                        <td><span class="badge badge-new">NEW</span></td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td>F</td>
+                        <td><strong>end_time</strong></td>
+                        <td><strong>종료 시간</strong></td>
+                        <td><strong>15:15:30</strong></td>
+                        <td><span class="badge badge-new">NEW</span></td>
+                    </tr>
+                    <tr style="background: #e3f2fd;">
+                        <td>G</td>
+                        <td><strong>study_duration</strong></td>
+                        <td><strong>학습 시간</strong></td>
+                        <td><strong>45분 30초</strong></td>
+                        <td><span class="badge badge-improved">IMPROVED</span></td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>progress</td>
+                        <td>진도</td>
+                        <td>약속 진행 중</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>content</td>
+                        <td>학습 내용</td>
+                        <td>약속 진행 중</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="result">
+                <strong>✨ 핵심 개선사항:</strong><br>
+                • <span class="highlight">시작 시간 (start_time)</span> 추가로 학습 시작 시각 정확히 기록<br>
+                • <span class="highlight">종료 시간 (end_time)</span> 추가로 학습 종료 시각 정확히 기록<br>
+                • <span class="highlight">학습 시간 (study_duration)</span> 포맷 개선 (45분 30초)<br>
+                • <span class="highlight">timestamp 컬럼 제거</span>로 간결화
+            </div>
+        </div>
+
+        <!-- 코드 변경 확인 -->
+        <div class="test-section">
+            <div class="test-title">💻 코드 변경 확인</div>
+            
+            <h3>1. 학생 포털 (geunhwa-student-portal.html)</h3>
+            <div class="code-block">
+// stopTimer() 함수에서 시작/종료 시간 계산
+const endTime = new Date();
+const startTime = new Date(endTime.getTime() - (totalSeconds * 1000));
+
+const formattedStartTime = startTime.toTimeString().split(' ')[0]; // 14:30:00
+const formattedEndTime = endTime.toTimeString().split(' ')[0];     // 15:15:30
+
+saveStudyRecordToCloud({
+    start_time: formattedStartTime,
+    end_time: formattedEndTime,
+    study_duration: `${minutes}분 ${seconds}초`,
+    ...
+});
+            </div>
+
+            <h3>2. Google Apps Script (apps-script-clean.txt)</h3>
+            <div class="code-block">
+// saveStudyRecord() 함수 컬럼 구조 변경
+studySheet.appendRow([
+  data.student_id,
+  data.student_name,
+  data.date,
+  data.subject,
+  data.start_time || '-',          // 시작 시간
+  data.end_time || '-',            // 종료 시간
+  data.study_duration || '0분 0초', // 학습 시간
+  data.progress || '-',
+  data.content || '학습 진행 중'
+]);
+            </div>
+            
+            <div class="result">
+                ✅ 코드 변경 완료!<br>
+                ✅ GitHub에 푸시 완료!<br>
+                ⚠️ <strong>Google Apps Script 업데이트 필요!</strong>
+            </div>
+        </div>
+
+        <!-- 예시 데이터 -->
+        <div class="test-section">
+            <div class="test-title">📝 예시 데이터</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>학생</th>
+                        <th>날짜</th>
+                        <th>과목</th>
+                        <th>시작</th>
+                        <th>종료</th>
+                        <th>학습 시간</th>
+                        <th>진도</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>이나연</td>
+                        <td>2026-01-04</td>
+                        <td>국어</td>
+                        <td>14:30:00</td>
+                        <td>15:15:30</td>
+                        <td>45분 30초</td>
+                        <td>약속 진행 중</td>
+                    </tr>
+                    <tr>
+                        <td>이나연</td>
+                        <td>2026-01-04</td>
+                        <td>수학</td>
+                        <td>15:30:00</td>
+                        <td>16:20:00</td>
+                        <td>50분 0초</td>
+                        <td>함수 단원</td>
+                    </tr>
+                    <tr>
+                        <td>박민수</td>
+                        <td>2026-01-04</td>
+                        <td>영어</td>
+                        <td>19:00:00</td>
+                        <td>19:45:00</td>
+                        <td>45분 0초</td>
+                        <td>독해 연습</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="result">
+                <strong>📊 분석 가능한 정보:</strong><br>
+                • 시간대별 학습 패턴: 오후 2-3시, 저녁 7-8시에 집중<br>
+                • 과목별 집중 시간: 국어 오후, 영어 저녁<br>
+                • 학습 효율성: 목표 45분 vs 실제 45-50분
+            </div>
+        </div>
+
+        <!-- 다음 단계 -->
+        <div class="test-section">
+            <div class="test-title">🚀 다음 단계</div>
+            <ol style="line-height: 2;">
+                <li><strong>Google Apps Script 업데이트</strong>
+                    <ul>
+                        <li>Google Sheets 열기</li>
+                        <li>확장 프로그램 → Apps Script</li>
+                        <li><code>apps-script-clean.txt</code> 내용으로 코드 업데이트</li>
+                        <li>배포 → 웹 앱으로 배포 → 새 배포</li>
+                    </ul>
+                </li>
+                <li><strong>학생 포털 테스트</strong>
+                    <ul>
+                        <li>타이머 시작/완료</li>
+                        <li>Google Sheets 확인</li>
+                        <li>시작/종료 시간 확인</li>
+                    </ul>
+                </li>
+                <li><strong>교사 대시보드 연동</strong>
+                    <ul>
+                        <li>새로운 컬럼 구조 반영</li>
+                        <li>시간대별 분석 기능 추가</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- 테스트 링크 -->
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="demo-button" onclick="window.open('https://da-um3481.github.io/da-um-jinro/geunhwa-student-portal.html', '_blank')">
+                🎓 학생 포털 열기
+            </button>
+            <button class="demo-button" onclick="window.open('https://github.com/da-um3481/da-um-jinro/blob/main/apps-script-clean.txt', '_blank')">
+                📄 Apps Script 코드 보기
+            </button>
+            <button class="demo-button" onclick="window.open('https://github.com/da-um3481/da-um-jinro/blob/main/STUDY_RECORD_TIME_IMPROVEMENT.md', '_blank')">
+                📝 상세 문서 보기
+            </button>
+        </div>
+    </div>
+
+    <script>
+        console.log('✅ 학습 기록 시간 정보 개선 확인 페이지 로드 완료!');
+        console.log('📊 새로운 컬럼 구조:');
+        console.log('E: start_time (시작 시간)');
+        console.log('F: end_time (종료 시간)');
+        console.log('G: study_duration (학습 시간)');
+    </script>
+</body>
+</html>
