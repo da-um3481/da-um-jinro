@@ -50,7 +50,7 @@ function saveStudyRecord(e, sheet) {
     const studySheet = sheet.getSheetByName('study_records') || sheet.insertSheet('study_records');
     
     if (studySheet.getLastRow() === 0) {
-      studySheet.appendRow(['student_id', 'student_name', 'date', 'subject', 'study_time', 'progress', 'content', 'timestamp']);
+      studySheet.appendRow(['student_id', 'student_name', 'date', 'subject', 'start_time', 'end_time', 'study_duration', 'progress', 'content']);
     }
     
     studySheet.appendRow([
@@ -58,10 +58,11 @@ function saveStudyRecord(e, sheet) {
       data.student_name,
       data.date,
       data.subject,
-      data.study_time,
-      data.progress,
-      data.content,
-      new Date().toISOString()
+      data.start_time || '-',
+      data.end_time || '-',
+      data.study_duration || (data.study_time + '분'),
+      data.progress || '-',
+      data.content || '학습 진행 중'
     ]);
     
     return ContentService.createTextOutput(JSON.stringify({
