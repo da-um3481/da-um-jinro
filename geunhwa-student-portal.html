@@ -489,6 +489,28 @@
             }
         }
         
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+        
         /* 통계 대시보드 카드 */
         .stats-card {
             background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
@@ -7372,7 +7394,10 @@
         async function loadTeacherFeedbacks() {
             const currentStudentId = localStorage.getItem('currentStudentId');
             if (!currentStudentId) {
-                document.getElementById('feedbackContainer').innerHTML = '<p class="text-center text-gray-500 py-8">로그인 후 확인할 수 있습니다</p>';
+                const container = document.getElementById('feedbackContainer');
+                if (container) {
+                    container.innerHTML = '<p class="text-center text-gray-500 py-8">로그인 후 확인할 수 있습니다</p>';
+                }
                 return;
             }
             
@@ -7392,10 +7417,19 @@
                 }
                 
                 const container = document.getElementById('feedbackContainer');
+                if (!container) return;
                 
                 if (feedbacks.length === 0) {
                     container.innerHTML = '<p class="text-center text-gray-500 py-8">아직 선생님 피드백이 없습니다</p>';
                     return;
+                }
+                
+                // 🆕 새 피드백 알림 체크
+                const lastFeedbackCount = parseInt(localStorage.getItem('lastFeedbackCount_' + currentStudentId)) || 0;
+                if (feedbacks.length > lastFeedbackCount) {
+                    const newCount = feedbacks.length - lastFeedbackCount;
+                    showFeedbackNotification(newCount, feedbacks[0]);
+                    localStorage.setItem('lastFeedbackCount_' + currentStudentId, feedbacks.length.toString());
                 }
                 
                 // 최신순으로 정렬
@@ -7428,8 +7462,52 @@
                 
             } catch (error) {
                 console.error('❌ 교사 피드백 로드 실패:', error);
-                document.getElementById('feedbackContainer').innerHTML = '<p class="text-center text-red-500 py-8">피드백을 불러오는데 실패했습니다</p>';
+                const container = document.getElementById('feedbackContainer');
+                if (container) {
+                    container.innerHTML = '<p class="text-center text-red-500 py-8">피드백을 불러오는데 실패했습니다</p>';
+                }
             }
+        }
+        
+        // 🆕 새 피드백 알림 표시
+        function showFeedbackNotification(count, latestFeedback) {
+            // 알림음 재생 (선택사항)
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjGH0fPTgjMGHm7A7+OZSA0PVbTp6KhPDwlHouDwvmogBTGG0PPTgjQGHm2/7+SZRwwOVLPq6KhPDwpHouDwvGsfBjCFz/PUgTQGH2y/7+WZRw0OVLPp6KhQDwpHouDwvGsfBjCFz/PUgTQGH2y/7+WZRw0OVLPp6KhQDwpHouDwvGsfBjCFzvPVgjQGH2y+7+aZRgwOVLPp56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwOVLPp56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwOVLPp56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgwPVLLo56hRDwpGoeHwvGsfBjCFzvPVgjQGH2y+7+aZRgw==');
+                audio.volume = 0.3;
+                audio.play().catch(() => {});
+            } catch(e) {}
+            
+            // 화면 상단에 알림 배너 표시
+            const banner = document.createElement('div');
+            banner.className = 'fixed top-20 right-5 z-50 animate-slide-in';
+            banner.style.cssText = 'animation: slideIn 0.5s ease-out; max-width: 400px;';
+            banner.innerHTML = `
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-xl shadow-2xl">
+                    <div class="flex items-center gap-3">
+                        <div class="text-3xl">💌</div>
+                        <div class="flex-1">
+                            <div class="font-bold text-lg">새로운 선생님 피드백!</div>
+                            <div class="text-sm opacity-90 mt-1">${latestFeedback.content.substring(0, 50)}${latestFeedback.content.length > 50 ? '...' : ''}</div>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-white hover:text-gray-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(banner);
+            
+            // 5초 후 자동 제거
+            setTimeout(() => {
+                banner.style.animation = 'slideOut 0.5s ease-in';
+                setTimeout(() => banner.remove(), 500);
+            }, 5000);
+            
+            console.log(`🔔 새 피드백 알림: ${count}개`);
         }
 
         // 페이지 로드 시 교사 피드백 로드
