@@ -1084,7 +1084,8 @@
         </div>
 
         <!-- 🗺️ 30일 비주얼 로드맵 (진단평가 완료 후) -->
-        <div class="glass-effect rounded-2xl shadow-xl p-6 animate-slide-up" id="visualRoadmap" style="display: none;">
+        <!-- 30일 학습 여정 섹션 삭제됨 (2026-01-04) -->
+        
             <!-- 헤더: 진행률 + 동기부여 메시지 -->
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-4">
@@ -4478,12 +4479,6 @@
                 }, 500);
             } else {
                 console.log('⚠️ 진단평가 미완료 → 모든 학습 기능 비활성화');
-                
-                // 🔴 중요: 로드맵 영역 완전히 숨김
-                const visualRoadmap = document.getElementById('visualRoadmap');
-                if (visualRoadmap) {
-                    visualRoadmap.style.display = 'none';
-                }
             }
             
             // 🎯 진단평가 실행 (게스트가 아닌 경우만, 최초 1회만)
@@ -7951,13 +7946,11 @@
             });
             
             const diagnosticWelcome = document.getElementById('diagnosticWelcome');
-            const visualRoadmap = document.getElementById('visualRoadmap');
             
             if (myResult) {
-                // 진단평가 완료: 로드맵 표시
-                console.log('✅ 진단평가 완료 → 로드맵 표시');
+                // 진단평가 완료: 환영 화면 숨김
+                console.log('✅ 진단평가 완료 → 환영 화면 숨김');
                 if (diagnosticWelcome) diagnosticWelcome.style.display = 'none';
-                if (visualRoadmap) visualRoadmap.style.display = 'block';
                 
                 // 🎉 진단평가 완료 메시지 표시 (한 번만)
                 const completionMessageShown = sessionStorage.getItem('diagnosticCompletionShown_' + currentStudentId);
@@ -7967,7 +7960,7 @@
                         const totalScore = myResult.totalScore || 0;
                         const level = myResult.level || '표준';
                         
-                        alert(`🎉 축하합니다, ${studentName}님!\n\n✅ 진단평가를 이미 완료하셨습니다!\n\n📊 총점: ${totalScore}점 (475점 만점)\n📈 수준: ${level}\n\n💡 이제 맞춤형 30일 학습 여정을 시작하세요!`);
+                        alert(`🎉 축하합니다, ${studentName}님!\n\n✅ 진단평가를 이미 완료하셨습니다!\n\n📊 총점: ${totalScore}점 (475점 만점)\n📈 수준: ${level}\n\n💡 이제 맞춤형 학습을 시작하세요!`);
                         
                         // 이 세션에서 메시지를 표시했음을 기록
                         sessionStorage.setItem('diagnosticCompletionShown_' + currentStudentId, 'true');
@@ -7977,7 +7970,6 @@
                 // 진단평가 미완료: 안내 화면 표시
                 console.log('⚠️ 진단평가 미완료 → 환영 화면 표시');
                 if (diagnosticWelcome) diagnosticWelcome.style.display = 'block';
-                if (visualRoadmap) visualRoadmap.style.display = 'none';
             }
         }
         
@@ -7988,6 +7980,22 @@
             const currentStudentGrade = localStorage.getItem('currentStudentGrade');
             
             if (currentStudentId && currentStudentName) {
+                // 🎯 STEP 0: 프로그램 시작일 강제 업데이트 (2025-01-05)
+                const PROGRAM_START_DATE = '2025-01-05';
+                const currentProgramStart = localStorage.getItem('programStartDate');
+                const currentStudentProgramStart = localStorage.getItem(`program_start_${currentStudentId}`);
+                
+                // 기존 시작일이 2025-01-05가 아니면 업데이트
+                if (currentProgramStart !== PROGRAM_START_DATE) {
+                    localStorage.setItem('programStartDate', PROGRAM_START_DATE);
+                    console.log('📅 프로그램 시작일 업데이트:', currentProgramStart, '→', PROGRAM_START_DATE);
+                }
+                
+                if (currentStudentProgramStart !== PROGRAM_START_DATE) {
+                    localStorage.setItem(`program_start_${currentStudentId}`, PROGRAM_START_DATE);
+                    console.log('📅 학생별 프로그램 시작일 업데이트:', currentStudentProgramStart, '→', PROGRAM_START_DATE);
+                }
+                
                 // 🌐 STEP 1: Google Sheets에서 진단평가 결과 먼저 로드 (다른 기기 동기화)
                 console.log('🌐 클라우드에서 진단평가 결과 로딩 중...');
                 try {
