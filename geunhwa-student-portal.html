@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🚀 자기주도학습UP 챌린지 - 나의 학습 포털</title>
     
+    <!-- 버전 정보 (캐시 버스팅) -->
+    <meta name="version" content="2.0.1">
+    <meta name="build-date" content="2026-01-04">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <!-- 저작권 및 보안 메타데이터 -->
     <meta name="author" content="다움진로진학컨설팅 (DA:UM Career & Academic Consulting)">
     <meta name="copyright" content="© 2025 다움진로진학컨설팅. All rights reserved.">
@@ -8012,6 +8019,14 @@
         
         // 페이지 로드 시 평가 일정 체크
         window.addEventListener('DOMContentLoaded', function() {
+            // 버전 정보 표시
+            const version = document.querySelector('meta[name="version"]')?.content || '알 수 없음';
+            const buildDate = document.querySelector('meta[name="build-date"]')?.content || '알 수 없음';
+            console.log(`%c🚀 자기주도학습UP 챌린지 학생 포털`, 'font-size: 20px; font-weight: bold; color: #667eea;');
+            console.log(`%c버전: ${version} | 빌드: ${buildDate}`, 'font-size: 14px; color: #4CAF50;');
+            console.log(`%c🐛 10초 중복 저장 버그 수정 완료! (v2.0.1)`, 'font-size: 12px; color: #f59e0b; font-weight: bold;');
+            console.log('');
+            
             // 로그인 후 평가 상태 체크
             setTimeout(checkAssessmentAvailability, 1000);
         });
