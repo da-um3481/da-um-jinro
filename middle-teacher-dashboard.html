@@ -2583,10 +2583,21 @@
             });
 
             const managementData = Array.from(studentMap.values()).map(result => {
-                // 수준 라벨
-                const levelLabel = result.levelLabel || '기초';
+                // 총점 가져오기 (Google Sheets 형식 & localStorage 형식 지원)
+                const totalScore = result.total_score || result.totalScore || 0;
                 
-                // 자동 조정 상태 (임시로 모두 조정 완료로 표시)
+                // ✨ 수준 판정 (진단평가 결과와 동일한 기준: 475점 만점)
+                let levelLabel = '기초';
+                let levelKey = 'beginner';
+                if (totalScore >= 360) {  // 76% 이상
+                    levelLabel = '심화';
+                    levelKey = 'advanced';
+                } else if (totalScore >= 240) {  // 50% 이상
+                    levelLabel = '표준';
+                    levelKey = 'intermediate';
+                }
+                
+                // 자동 조정 상태
                 const autoAdjusted = '✅ 자동 조정됨';
                 
                 return {
@@ -2594,10 +2605,10 @@
                     name: result.studentName,
                     grade: result.grade ? `중${result.grade}` : 'N/A',
                     level: levelLabel,
-                    totalScore: result.totalScore,
-                    contentLevel: levelLabel,
+                    totalScore: totalScore,
+                    contentLevel: `${levelLabel} 콘텐츠`,
                     autoAdjusted: autoAdjusted,
-                    levelKey: result.level || 'beginner' // advanced, intermediate, beginner
+                    levelKey: levelKey // advanced, intermediate, beginner
                 };
             });
 
@@ -2660,7 +2671,7 @@
                         <td><strong>${student.name}</strong></td>
                         <td><span class="level-badge ${levelClass}">${student.level}</span></td>
                         <td><strong>${student.totalScore}</strong>점</td>
-                        <td>${student.contentLevel} 콘텐츠</td>
+                        <td>${student.contentLevel}</td>
                         <td>${student.autoAdjusted}</td>
                     </tr>
                 `;
