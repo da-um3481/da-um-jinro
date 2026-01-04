@@ -1869,8 +1869,13 @@
         // 프로그램 진행 상태 관리
         function initProgramProgress() {
             const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
-            const programStart = localStorage.getItem('programStartDate');
             const targetInfo = getDailyTargetHours();
+            
+            // 🎯 겨울방학 30일 프로그램: 2025년 1월 5일 ~ 2월 3일
+            const PROGRAM_START_DATE = '2025-01-05';
+            const PROGRAM_END_DATE = '2025-02-03';
+            
+            const programStart = localStorage.getItem('programStartDate') || PROGRAM_START_DATE;
             
             if (!programStart) {
                 // 학습 시작 전 - 초기 상태
@@ -1881,9 +1886,9 @@
                 document.getElementById('roadmapProgressPercent').textContent = '0%';
                 document.getElementById('roadmapProgressDays').textContent = '0일 / 30일';
                 document.getElementById('roadmapProgressBar').style.width = '0%';
-                document.getElementById('roadmapStartDate').textContent = '시작: 미정';
-                document.getElementById('roadmapDDay').textContent = '학습 시작 전';
-                document.getElementById('roadmapEndDate').textContent = '종료: 미정';
+                document.getElementById('roadmapStartDate').textContent = `시작: ${PROGRAM_START_DATE}`;
+                document.getElementById('roadmapDDay').textContent = 'D-DAY';
+                document.getElementById('roadmapEndDate').textContent = `종료: ${PROGRAM_END_DATE}`;
                 
                 // 기본 동기부여 메시지
                 updateMotivationMessage(0);
@@ -2804,9 +2809,13 @@
             }
             
             // 프로그램 시작 처리
+            // 🎯 겨울방학 30일 프로그램: 2025년 1월 5일 ~ 2월 3일
+            const PROGRAM_START_DATE = '2025-01-05';
             const programStart = localStorage.getItem('programStartDate');
             if (!programStart) {
-                localStorage.setItem('programStartDate', new Date().toISOString().split('T')[0]);
+                // 프로그램 공식 시작일로 설정
+                localStorage.setItem('programStartDate', PROGRAM_START_DATE);
+                console.log('📅 프로그램 시작일 설정:', PROGRAM_START_DATE);
                 initProgramProgress();
                 updateWeeklyRoadmapProgress();
             }
@@ -4594,11 +4603,20 @@
             };
             
             // 프로그램 시작일 확인 (30일 프로그램의 현재 주차 계산)
-            const programStartDate = localStorage.getItem(`program_start_${student.id}`) || new Date().toISOString().split('T')[0];
+            // 🎯 겨울방학 30일 프로그램: 2025년 1월 5일 ~ 2월 3일
+            const PROGRAM_START_DATE = '2025-01-05'; // 프로그램 공식 시작일
+            const programStartDate = localStorage.getItem(`program_start_${student.id}`) || PROGRAM_START_DATE;
             const startDate = new Date(programStartDate);
             const today = new Date();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
             const currentWeek = Math.min(Math.floor(daysPassed / 7) + 1, 4); // 1~4주차
+            
+            console.log('📅 프로그램 일정:', {
+                시작일: PROGRAM_START_DATE,
+                오늘: today.toISOString().split('T')[0],
+                경과일: daysPassed,
+                현재주차: currentWeek
+            });
             
             // 🆕 진단평가 결과 확인 (심화 수준 판정)
             const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
@@ -5009,7 +5027,9 @@
             const studentId = localStorage.getItem('currentStudentId');
             
             // 🆕 프로그램 주차 계산 (1~4주)
-            const programStartDate = localStorage.getItem(`program_start_${studentId}`) || new Date().toISOString().split('T')[0];
+            // 🎯 겨울방학 30일 프로그램: 2025년 1월 5일 ~ 2월 3일
+            const PROGRAM_START_DATE = '2025-01-05'; // 프로그램 공식 시작일
+            const programStartDate = localStorage.getItem(`program_start_${studentId}`) || PROGRAM_START_DATE;
             const startDate = new Date(programStartDate);
             const today = new Date();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
