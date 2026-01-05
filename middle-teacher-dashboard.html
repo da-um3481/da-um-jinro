@@ -1274,9 +1274,15 @@
 
                 <!-- 학생 선택 -->
                 <div style="background: rgba(255, 255, 255, 0.03); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
-                    <label style="display: block; color: var(--text); font-weight: 600; margin-bottom: 0.75rem;">
-                        📌 학생 선택
-                    </label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <label style="display: block; color: var(--text); font-weight: 600;">
+                            📌 학생 선택
+                        </label>
+                        <button onclick="showStudentGroupedView()" 
+                                style="padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--accent), var(--secondary)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                            <i class="fas fa-users"></i> 학생별 요약 보기
+                        </button>
+                    </div>
                     <select id="studentSelectForStudy" onchange="loadStudentStudyRecords(this.value)" 
                             style="width: 100%; padding: 0.75rem; background: #2d3748; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: #ffffff; font-size: 1rem; cursor: pointer;">
                         <option value="" style="background: #2d3748; color: #ffffff;">학생을 선택하세요</option>
@@ -5614,6 +5620,172 @@ ${record.content || '기록 없음'}`);
             };
             return labels[type] || '💬 일반';
         }
+
+        // ============================================================
+        // 🆕 학생별 학습 기록 그룹화 보기
+        // ============================================================
+        
+        /**
+         * 학생별 요약 보기 모달 열기
+         */
+        async function showStudentGroupedView() {
+            const modal = document.getElementById('studentGroupedModal');
+            if (!modal) return;
+            
+            modal.style.display = 'flex';
+            
+            const content = document.getElementById('studentGroupedContent');
+            content.innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--text-muted);">학생별 데이터를 불러오는 중...</p>
+                </div>
+            `;
+            
+            try {
+                // Google Sheets에서 학생별 그룹화된 데이터 조회
+                const result = await getStudyRecordsFromCloud('', 'student');
+                
+                console.log('📊 학생별 그룹화 데이터:', result);
+                
+                if (result.status === 'success' && result.data && result.data.length > 0) {
+                    renderStudentGroupedData(result.data);
+                } else {
+                    content.innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <i class="fas fa-inbox" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                            <p style="color: var(--text-muted); font-size: 1.1rem;">학습 기록이 없습니다</p>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">학생들이 학습을 시작하면 여기에 표시됩니다</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ 학생별 데이터 조회 실패:', error);
+                content.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--danger); font-size: 1.1rem;">데이터 로드 실패</p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        /**
+         * 학생별 그룹화 데이터 렌더링
+         */
+        function renderStudentGroupedData(data) {
+            const content = document.getElementById('studentGroupedContent');
+            
+            if (!data || data.length === 0) {
+                content.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-inbox" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">학습 기록이 없습니다</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = data.map(student => {
+                const hours = Math.floor(student.totalMinutes / 60);
+                const minutes = student.totalMinutes % 60;
+                const recordCount = student.records ? student.records.length : 0;
+                
+                // 과목별 통계 HTML 생성
+                const subjectStatsHtml = Object.keys(student.subjectStats || {}).map(subject => {
+                    const stats = student.subjectStats[subject];
+                    const subHours = Math.floor(stats.totalMinutes / 60);
+                    const subMinutes = stats.totalMinutes % 60;
+                    
+                    return `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <span style="font-weight: 600;">${subject}</span>
+                                <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem;">${stats.count}회</span>
+                            </div>
+                            <span style="color: var(--accent); font-weight: 600;">${subHours > 0 ? subHours + '시간 ' : ''}${subMinutes}분</span>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'">
+                        <!-- 학생 헤더 -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid rgba(255, 255, 255, 0.1);">
+                            <div>
+                                <h4 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-user-graduate" style="color: var(--accent);"></i>
+                                    ${student.studentName}
+                                </h4>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                                    총 ${recordCount}개의 학습 기록
+                                </p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 2rem; font-weight: 900; color: var(--primary);">
+                                    ${hours > 0 ? hours + '시간 ' : ''}${minutes}분
+                                </div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">총 학습 시간</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 과목별 통계 -->
+                        <div>
+                            <h5 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-muted);">
+                                📊 과목별 학습 현황
+                            </h5>
+                            ${subjectStatsHtml || '<p style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem; text-align: center;">과목별 데이터가 없습니다</p>'}
+                        </div>
+                        
+                        <!-- 상세보기 버튼 -->
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                            <button onclick="closeStudentGroupedModal(); selectStudentForStudy('${student.studentId}')" 
+                                    style="width: 100%; padding: 0.75rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                <i class="fas fa-chart-line"></i> 상세 학습 기록 보기
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            content.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">
+                        총 ${data.length}명의 학생
+                    </h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        아래 학생을 클릭하여 상세 기록을 확인할 수 있습니다
+                    </p>
+                </div>
+                ${html}
+            `;
+        }
+        
+        /**
+         * 학생별 요약 모달 닫기
+         */
+        function closeStudentGroupedModal() {
+            const modal = document.getElementById('studentGroupedModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        /**
+         * 특정 학생 선택 (모달에서 호출)
+         */
+        function selectStudentForStudy(studentId) {
+            const select = document.getElementById('studentSelectForStudy');
+            if (select) {
+                select.value = studentId;
+                loadStudentStudyRecords(studentId);
+                
+                // 학습 관리 탭으로 이동
+                showSection('study-management');
+            }
+        }
+    
     </script>
 
     <!-- 🔒 저작권 워터마크 -->
@@ -5788,6 +5960,32 @@ ${record.content || '기록 없음'}`);
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- 학생별 학습 기록 요약 모달 -->
+    <div id="studentGroupedModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center; overflow-y: auto;">
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 2rem; border-radius: 20px; max-width: 1200px; width: 95%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); margin: 2rem auto;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; position: sticky; top: 0; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 1rem 0; z-index: 1;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0;">
+                    <i class="fas fa-users"></i> 학생별 학습 기록 요약
+                </h3>
+                <button onclick="closeStudentGroupedModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.3s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border: 2px solid var(--accent); border-radius: 12px; color: var(--text-muted); font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> 
+                <strong>안내:</strong> 모든 학생의 학습 기록을 이름별로 그룹화하여 표시합니다. 각 학생의 총 학습 시간과 과목별 통계를 한눈에 확인할 수 있습니다.
+            </div>
+            
+            <div id="studentGroupedContent" style="margin-top: 1.5rem;">
+                <div style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--text-muted);">데이터를 불러오는 중...</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -85,7 +85,7 @@ async function saveDiagnosticToCloud(data) {
 }
 
 // 📥 학습 기록 조회 (교사 대시보드에서 호출)
-async function getStudyRecordsFromCloud(studentId = null) {
+async function getStudyRecordsFromCloud(studentId = null, groupBy = null) {
     if (!GOOGLE_SHEETS_CONFIG.WEB_APP_URL || GOOGLE_SHEETS_CONFIG.WEB_APP_URL === 'YOUR_WEB_APP_URL_HERE') {
         console.warn('⚠️ Google Sheets URL이 설정되지 않았습니다.');
         return { status: 'error', data: [] };
@@ -96,6 +96,9 @@ async function getStudyRecordsFromCloud(studentId = null) {
         url.searchParams.append('action', 'getStudyRecords');
         if (studentId) {
             url.searchParams.append('student_id', studentId);
+        }
+        if (groupBy) {
+            url.searchParams.append('group_by', groupBy);
         }
         
         const response = await fetch(url.toString());
