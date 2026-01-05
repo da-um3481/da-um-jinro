@@ -750,12 +750,33 @@
                         const dateHours = Math.floor(dateData.totalMinutes / 60);
                         const dateMinutes = dateData.totalMinutes % 60;
                         
-                        const dateSubRecords = dateData.records.map(r => {
-                            const h = Math.floor(r.time / 60);
-                            const m = r.time % 60;
+                        // 과목별로 그룹화
+                        const subjectGroups = {};
+                        dateData.records.forEach(r => {
+                            if (!subjectGroups[r.subject]) {
+                                subjectGroups[r.subject] = {
+                                    count: 0,
+                                    totalTime: 0,
+                                    contents: []
+                                };
+                            }
+                            subjectGroups[r.subject].count++;
+                            subjectGroups[r.subject].totalTime += r.time;
+                            if (r.content && r.content !== '학습 완료') {
+                                subjectGroups[r.subject].contents.push(r.content);
+                            }
+                        });
+                        
+                        const dateSubRecords = Object.keys(subjectGroups).map(subject => {
+                            const group = subjectGroups[subject];
+                            const h = Math.floor(group.totalTime / 60);
+                            const m = group.totalTime % 60;
+                            const contentText = group.contents.length > 0 ? group.contents.join(', ') : '학습 완료';
+                            
                             return `
                                 <div style="padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 5px; margin-top: 0.5rem;">
-                                    <strong>${r.subject}</strong> | ${h > 0 ? h + '시간 ' : ''}${m}분 | ${r.content}
+                                    <strong>${subject}</strong> | ${h > 0 ? h + '시간 ' : ''}${m}분 / ${group.count}회
+                                    ${contentText !== '학습 완료' ? `<br><span style="color: var(--text-muted); font-size: 0.9rem;">${contentText}</span>` : ''}
                                 </div>
                             `;
                         }).join('');
