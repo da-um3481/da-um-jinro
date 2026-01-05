@@ -160,6 +160,44 @@
             font-size: 0.9rem;
         }
 
+        .date-summary {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .date-summary h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .date-stat-item {
+            text-align: center;
+        }
+
+        .date-stat-item .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .date-stat-item .label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
         .student-list {
             display: grid;
             gap: 1.5rem;
@@ -451,36 +489,90 @@
         }
 
         function displayStats() {
-            const totalStudents = allStudents.length;
-            const totalRecords = allStudents.reduce((sum, s) => sum + s.recordCount, 0);
-            const totalMinutes = allStudents.reduce((sum, s) => sum + s.totalMinutes, 0);
-            const totalHours = Math.floor(totalMinutes / 60);
-            const avgMinutes = totalStudents > 0 ? Math.round(totalMinutes / totalStudents) : 0;
+            const selectedDate = document.getElementById('dateFilter').value;
+            
+            if (selectedDate) {
+                // 특정 날짜 선택 시 해당 날짜 통계만 표시
+                const dateStudents = allStudents.filter(student => 
+                    student.records.some(r => r.date === selectedDate)
+                );
+                
+                const dateRecords = [];
+                dateStudents.forEach(student => {
+                    dateRecords.push(...student.records.filter(r => r.date === selectedDate));
+                });
+                
+                const totalMinutes = dateRecords.reduce((sum, r) => sum + r.time, 0);
+                const totalHours = Math.floor(totalMinutes / 60);
+                
+                document.getElementById('statsContainer').innerHTML = `
+                    <div class="date-summary">
+                        <h3>
+                            <i class="fas fa-calendar-day"></i>
+                            ${selectedDate} 학습 현황
+                        </h3>
+                        <div class="date-stats">
+                            <div class="date-stat-item">
+                                <div class="value">${dateStudents.length}</div>
+                                <div class="label">학습한 학생</div>
+                            </div>
+                            <div class="date-stat-item">
+                                <div class="value">${dateRecords.length}</div>
+                                <div class="label">총 학습 세션</div>
+                            </div>
+                            <div class="date-stat-item">
+                                <div class="value">${totalHours}시간 ${totalMinutes % 60}분</div>
+                                <div class="label">총 학습 시간</div>
+                            </div>
+                            <div class="date-stat-item">
+                                <div class="value">${dateStudents.length > 0 ? Math.round(totalMinutes / dateStudents.length) : 0}분</div>
+                                <div class="label">학생당 평균</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 전체 통계
+                const totalStudents = allStudents.length;
+                const totalRecords = allStudents.reduce((sum, s) => sum + s.recordCount, 0);
+                const totalMinutes = allStudents.reduce((sum, s) => sum + s.totalMinutes, 0);
+                const totalHours = Math.floor(totalMinutes / 60);
+                const avgMinutes = totalStudents > 0 ? Math.round(totalMinutes / totalStudents) : 0;
 
-            document.getElementById('statsContainer').innerHTML = `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="icon">👥</div>
-                        <div class="value">${totalStudents}</div>
-                        <div class="label">총 학생 수</div>
+                // 학습한 날짜 목록
+                const uniqueDates = new Set();
+                allStudents.forEach(student => {
+                    student.records.forEach(record => {
+                        if (record.date) uniqueDates.add(record.date);
+                    });
+                });
+                const totalDays = uniqueDates.size;
+
+                document.getElementById('statsContainer').innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="icon">👥</div>
+                            <div class="value">${totalStudents}</div>
+                            <div class="label">총 학생 수</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon">📚</div>
+                            <div class="value">${totalRecords}</div>
+                            <div class="label">총 학습 기록</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon">📅</div>
+                            <div class="value">${totalDays}</div>
+                            <div class="label">학습한 날짜</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon">⏱️</div>
+                            <div class="value">${totalHours}시간</div>
+                            <div class="label">총 학습 시간</div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="icon">📚</div>
-                        <div class="value">${totalRecords}</div>
-                        <div class="label">총 학습 기록</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon">⏱️</div>
-                        <div class="value">${totalHours}</div>
-                        <div class="label">총 학습 시간 (시간)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon">📊</div>
-                        <div class="value">${avgMinutes}</div>
-                        <div class="label">평균 학습 시간 (분)</div>
-                    </div>
-                </div>
-            `;
+                `;
+            }
         }
 
         function displayStudents(students) {
@@ -606,49 +698,60 @@
 
             let filtered = allStudents;
 
+            // 날짜 필터 (우선 적용)
+            if (selectedDate) {
+                filtered = filtered
+                    .filter(student => 
+                        // 해당 날짜에 학습한 학생만 포함
+                        student.records.some(r => r.date === selectedDate)
+                    )
+                    .map(student => {
+                        // 해당 날짜의 데이터만 표시
+                        const dateRecords = student.records.filter(r => r.date === selectedDate);
+                        
+                        const filteredStudent = {
+                            ...student,
+                            records: dateRecords,
+                            recordCount: dateRecords.length,
+                            totalMinutes: dateRecords.reduce((sum, r) => sum + r.time, 0),
+                            dateMap: {
+                                [selectedDate]: student.dateMap[selectedDate] || { 
+                                    date: selectedDate, 
+                                    totalMinutes: dateRecords.reduce((sum, r) => sum + r.time, 0),
+                                    records: dateRecords.map(r => ({
+                                        subject: r.subject,
+                                        time: r.time,
+                                        content: r.content
+                                    }))
+                                }
+                            }
+                        };
+
+                        // 과목별 재계산
+                        filteredStudent.subjects = {};
+                        dateRecords.forEach(record => {
+                            if (!filteredStudent.subjects[record.subject]) {
+                                filteredStudent.subjects[record.subject] = {
+                                    count: 0,
+                                    totalMinutes: 0
+                                };
+                            }
+                            filteredStudent.subjects[record.subject].count++;
+                            filteredStudent.subjects[record.subject].totalMinutes += record.time;
+                        });
+
+                        return filteredStudent;
+                    });
+            }
+
             // 학생 이름 필터
             if (searchTerm.trim()) {
                 filtered = filtered.filter(student => 
                     student.name.toLowerCase().includes(searchTerm.toLowerCase())
                 );
             }
-
-            // 날짜 필터
-            if (selectedDate) {
-                filtered = filtered.map(student => {
-                    // 해당 날짜에 학습한 학생만 포함
-                    const dateRecords = student.records.filter(r => r.date === selectedDate);
-                    
-                    if (dateRecords.length === 0) return null;
-
-                    // 해당 날짜의 데이터만 표시
-                    const filteredStudent = {
-                        ...student,
-                        records: dateRecords,
-                        recordCount: dateRecords.length,
-                        totalMinutes: dateRecords.reduce((sum, r) => sum + r.time, 0),
-                        dateMap: {
-                            [selectedDate]: student.dateMap[selectedDate] || { date: selectedDate, totalMinutes: 0, records: [] }
-                        }
-                    };
-
-                    // 과목별 재계산
-                    filteredStudent.subjects = {};
-                    dateRecords.forEach(record => {
-                        if (!filteredStudent.subjects[record.subject]) {
-                            filteredStudent.subjects[record.subject] = {
-                                count: 0,
-                                totalMinutes: 0
-                            };
-                        }
-                        filteredStudent.subjects[record.subject].count++;
-                        filteredStudent.subjects[record.subject].totalMinutes += record.time;
-                    });
-
-                    return filteredStudent;
-                }).filter(s => s !== null);
-            }
             
+            displayStats();
             displayStudents(filtered);
         }
 
