@@ -1571,13 +1571,12 @@
                                     <th style="padding: 1rem; text-align: center; font-weight: 700;">학년</th>
                                     <th style="padding: 1rem; text-align: center; font-weight: 700;">반</th>
                                     <th style="padding: 1rem; text-align: center; font-weight: 700;">번호</th>
-                                    <th style="padding: 1rem; text-align: center; font-weight: 700;">진단평가</th>
                                     <th style="padding: 1rem; text-align: center; font-weight: 700;">관리</th>
                                 </tr>
                             </thead>
                             <tbody id="allStudentsListTable">
                                 <tr>
-                                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                                    <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">
                                         <i class="fas fa-spinner fa-spin"></i> 학생 목록 로딩 중...
                                     </td>
                                 </tr>
@@ -4685,7 +4684,7 @@ ${record.content || '기록 없음'}`);
             // 로딩 중 표시
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                    <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">
                         <i class="fas fa-spinner fa-spin"></i> 학생 목록 로딩 중...
                     </td>
                 </tr>
@@ -4694,15 +4693,12 @@ ${record.content || '기록 없음'}`);
             // localStorage에서 학생 목록 가져오기
             const students = JSON.parse(localStorage.getItem('students')) || [];
             
-            // Google Sheets에서 진단평가 완료한 학생 가져오기
-            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
-            
             console.log('📋 전체 학생 목록 로드:', students.length + '명');
             
             if (students.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="padding: 3rem; text-align: center;">
+                        <td colspan="5" style="padding: 3rem; text-align: center;">
                             <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">📚</div>
                             <div style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.5rem;">
                                 등록된 학생이 없습니다
@@ -4725,12 +4721,6 @@ ${record.content || '기록 없음'}`);
             
             // 테이블 생성
             tbody.innerHTML = students.map(student => {
-                // 진단평가 완료 여부 확인
-                const hasDiagnostic = diagnosticResults.some(d => d.studentId === student.id);
-                const diagnosticStatus = hasDiagnostic 
-                    ? '<span style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> 완료</span>'
-                    : '<span style="color: var(--text-muted);"><i class="fas fa-circle"></i> 미완료</span>';
-                
                 return `
                     <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: background 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.05)'" onmouseout="this.style.background='transparent'">
                         <td style="padding: 1rem; font-weight: 600;">
@@ -4744,9 +4734,6 @@ ${record.content || '기록 없음'}`);
                         </td>
                         <td style="padding: 1rem; text-align: center;">
                             ${student.number || '-'}
-                        </td>
-                        <td style="padding: 1rem; text-align: center;">
-                            ${diagnosticStatus}
                         </td>
                         <td style="padding: 1rem; text-align: center;">
                             <button onclick="deleteStudentFromList('${student.id}', '${student.name}')" style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; color: #ef4444; font-weight: 600; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
