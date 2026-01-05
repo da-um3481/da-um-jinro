@@ -111,12 +111,10 @@ function groupRecordsByStudent(records) {
     // Get student name
     var studentName = record.name || record.student_name || record.studentName || '';
     if (!studentName) {
-      // Try to find any name-like column
       for (var key in record) {
         if (record.hasOwnProperty(key)) {
           var val = record[key];
           if (val && typeof val === 'string' && val.length > 0 && val.length < 20) {
-            // Skip common non-name values
             if (key.toLowerCase().indexOf('name') >= 0 || key.indexOf('이름') >= 0) {
               studentName = val;
               break;
@@ -130,15 +128,15 @@ function groupRecordsByStudent(records) {
       studentName = 'Unknown Student ' + (i + 1);
     }
     
-    // Get student ID
-    var studentId = record.id || record.student_id || record.studentId || ('student_' + i);
+    // ✅ Use student name as key instead of ID to properly group
+    var studentKey = studentName;
     
-    Logger.log('Row ' + i + ': name=' + studentName + ', id=' + studentId);
+    Logger.log('Row ' + i + ': name=' + studentName);
     
-    if (!grouped[studentId]) {
-      grouped[studentId] = {
+    if (!grouped[studentKey]) {
+      grouped[studentKey] = {
         studentName: studentName,
-        studentId: studentId,
+        studentId: record.id || record.student_id || studentName,
         totalMinutes: 0,
         subjectStats: {},
         records: []
@@ -150,7 +148,6 @@ function groupRecordsByStudent(records) {
     if (record.time) {
       time = parseInt(record.time, 10) || 0;
     } else if (record.item) {
-      // Try to parse from item column if it has time info
       var itemStr = String(record.item);
       if (itemStr.indexOf(':') >= 0) {
         var timeParts = itemStr.split(':');
@@ -162,22 +159,22 @@ function groupRecordsByStudent(records) {
       }
     }
     
-    grouped[studentId].totalMinutes += time;
+    grouped[studentKey].totalMinutes += time;
     
     // Get subject
     var subject = record.subject || record.content || 'Other';
     
-    if (!grouped[studentId].subjectStats[subject]) {
-      grouped[studentId].subjectStats[subject] = {
+    if (!grouped[studentKey].subjectStats[subject]) {
+      grouped[studentKey].subjectStats[subject] = {
         count: 0,
         totalMinutes: 0
       };
     }
     
-    grouped[studentId].subjectStats[subject].count++;
-    grouped[studentId].subjectStats[subject].totalMinutes += time;
+    grouped[studentKey].subjectStats[subject].count++;
+    grouped[studentKey].subjectStats[subject].totalMinutes += time;
     
-    grouped[studentId].records.push(record);
+    grouped[studentKey].records.push(record);
   }
   
   var result = [];
@@ -193,7 +190,10 @@ function groupRecordsByStudent(records) {
     return 0;
   });
   
-  Logger.log('Grouped students: ' + result.length);
+  Logger.log('Grouped students: ' + result.length + ' unique students');
+  for (var i = 0; i < result.length; i++) {
+    Logger.log('  - ' + result[i].studentName + ': ' + result[i].totalMinutes + ' mins');
+  }
   
   return result;
 }
