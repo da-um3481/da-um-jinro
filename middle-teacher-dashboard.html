@@ -5647,8 +5647,24 @@ ${record.content || '기록 없음'}`);
             `;
             
             try {
-                // Google Sheets에서 학생별 그룹화된 데이터 조회
-                console.log('🔍 학습 기록 요청: studentId=""', 'groupBy="student"');
+                // ✅ 먼저 localStorage에서 학습 기록 가져오기
+                const localRecords = JSON.parse(localStorage.getItem('study_records') || '[]');
+                
+                console.log('📦 localStorage 학습 기록:', localRecords.length, '건');
+                
+                if (localRecords.length > 0) {
+                    // localStorage 데이터를 학생별로 그룹화
+                    const grouped = groupLocalStudyRecords(localRecords);
+                    console.log('👥 그룹화된 학생:', grouped.length, '명');
+                    
+                    if (grouped.length > 0) {
+                        renderStudentGroupedData(grouped);
+                        return;
+                    }
+                }
+                
+                // localStorage에 없으면 Google Sheets에서 조회
+                console.log('🔍 Google Sheets에서 학습 기록 조회...');
                 const result = await getStudyRecordsFromCloud('', 'student');
                 
                 console.log('📊 응답 타입:', typeof result);
@@ -5791,6 +5807,56 @@ ${record.content || '기록 없음'}`);
                 </div>
                 ${html}
             `;
+        }
+        
+        /**
+         * localStorage 학습 기록을 학생별로 그룹화
+         */
+        function groupLocalStudyRecords(records) {
+            const grouped = {};
+            
+            records.forEach(record => {
+                const studentId = record.student_id || 'unknown';
+                const studentName = record.student_name || '이름없음';
+                
+                if (!grouped[studentId]) {
+                    grouped[studentId] = {
+                        studentId: studentId,
+                        studentName: studentName,
+                        totalMinutes: 0,
+                        subjectStats: {},
+                        records: []
+                    };
+                }
+                
+                // 과목별 시간 합산
+                const subjects = record.subjects || {};
+                Object.keys(subjects).forEach(subject => {
+                    const subjectData = subjects[subject];
+                    const time = subjectData.seconds ? Math.floor(subjectData.seconds / 60) : (subjectData.time || 0);
+                    
+                    grouped[studentId].totalMinutes += time;
+                    
+                    if (!grouped[studentId].subjectStats[subject]) {
+                        grouped[studentId].subjectStats[subject] = {
+                            count: 0,
+                            totalMinutes: 0
+                        };
+                    }
+                    
+                    grouped[studentId].subjectStats[subject].count++;
+                    grouped[studentId].subjectStats[subject].totalMinutes += time;
+                });
+                
+                grouped[studentId].records.push(record);
+            });
+            
+            // 배열로 변환 및 정렬
+            const result = Object.values(grouped);
+            result.sort((a, b) => a.studentName.localeCompare(b.studentName));
+            
+            console.log('✅ localStorage 그룹화 완료:', result);
+            return result;
         }
         
         /**
