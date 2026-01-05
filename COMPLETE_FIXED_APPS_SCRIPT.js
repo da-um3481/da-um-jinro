@@ -278,16 +278,18 @@ function groupRecordsByStudent(records) {
     var record = records[i];
     
     // 학생 이름 안전하게 가져오기 (다양한 필드명 지원)
-    var studentName = record.student_name || 
+    // ⭐ name 필드를 최우선으로 처리 (현재 Sheets 형식에 맞춤)
+    var studentName = record.name || 
+                      record.student_name || 
                       record.studentName || 
-                      record.name || 
                       record['학생이름'] || 
                       record['이름'] || 
                       '알 수 없음';
     
-    var studentId = record.student_id || 
+    // ⭐ id를 student_id보다 우선 처리
+    var studentId = record.id || 
+                    record.student_id || 
                     record.studentId || 
-                    record.id || 
                     'unknown';
     
     Logger.log('👤 학생 이름: ' + studentName + ', ID: ' + studentId);
@@ -348,18 +350,18 @@ function saveStudyRecord(params) {
   var sheet = getOrCreateSheet(SHEET_NAMES.STUDY_RECORDS);
   
   // 헤더 설정 (첫 실행 시)
+  // ⭐ 현재 Sheets 형식에 맞춤: id, name, date, subject, time, content
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
-      'id', 'student_id', 'student_name', 'date',
-      'subject', 'time', 'content'
+      'id', 'name', 'date', 'subject', 'time', 'content'
     ]);
   }
   
   // 데이터 추가
+  // ⭐ 현재 Sheets 형식에 맞춤: id, name으로 저장
   sheet.appendRow([
     params.id || '',
-    params.student_id || '',
-    params.student_name || '',
+    params.student_name || params.name || '',  // name 필드 사용
     params.date || new Date().toISOString().split('T')[0],
     params.subject || '',
     params.time || 0,
