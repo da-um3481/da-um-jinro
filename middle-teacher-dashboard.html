@@ -918,9 +918,6 @@
                 <button class="nav-tab" onclick="showSection('diagnostic')" id="tab-diagnostic">
                     📝 진단평가 결과
                 </button>
-                <button class="nav-tab" onclick="showSection('level-management')" id="tab-level-management">
-                    📚 수준별 학습관리
-                </button>
                 <button class="nav-tab" onclick="showSection('students')" id="tab-students">
                     👨‍🎓 학생 목록
                 </button>
@@ -1628,154 +1625,6 @@
         <!-- /진단평가 결과 섹션 끝 -->
 
         <!-- 수준별 학습관리 섹션 -->
-        <div class="section-container" id="section-level-management">
-            <!-- 안내 메시지 -->
-            <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); border-left: 4px solid var(--accent); padding: 1.5rem; margin-bottom: 2rem; border-radius: 12px;">
-                <div style="display: flex; align-items: start; gap: 1rem;">
-                    <span style="font-size: 2rem;">⚙️</span>
-                    <div>
-                        <h4 style="color: var(--text); margin-bottom: 0.5rem; font-weight: 600;">자동 학습 콘텐츠 조정</h4>
-                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
-                            학생이 진단평가를 완료하면, 학생 포털의 학습 콘텐츠가 자동으로 수준에 맞게 조정됩니다.<br>
-                            고급: 심화 개념 및 응용 문제 | 중급: 표준 교과 과정 | 기초: 기본 개념 집중 학습
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 수준별 통계 -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span class="stat-label">고급 수준 학생</span>
-                        <span class="stat-icon">⭐</span>
-                    </div>
-                    <div class="stat-value" id="advancedStudentsCount">0</div>
-                    <div class="stat-change positive">
-                        <span>심화 콘텐츠 제공</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span class="stat-label">중급 수준 학생</span>
-                        <span class="stat-icon">📈</span>
-                    </div>
-                    <div class="stat-value" id="intermediateStudentsCount">0</div>
-                    <div class="stat-change positive">
-                        <span>표준 콘텐츠 제공</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span class="stat-label">기초 수준 학생</span>
-                        <span class="stat-icon">🌱</span>
-                    </div>
-                    <div class="stat-value" id="beginnerStudentsCount">0</div>
-                    <div class="stat-change positive">
-                        <span>기본 콘텐츠 제공</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span class="stat-label">진단 미완료</span>
-                        <span class="stat-icon">❓</span>
-                    </div>
-                    <div class="stat-value" id="notDiagnosedCount">0</div>
-                    <div class="stat-change positive">
-                        <span>진단평가 필요</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 학생별 학습 내용 조정 테이블 -->
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="section-title-icon">⚙️</span>
-                        학생별 학습 내용 조정 현황
-                    </h2>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <button class="btn-filter active" onclick="filterLevelManagement('all')">전체</button>
-                        <button class="btn-filter" onclick="filterLevelManagement('advanced')">고급</button>
-                        <button class="btn-filter" onclick="filterLevelManagement('intermediate')">중급</button>
-                        <button class="btn-filter" onclick="filterLevelManagement('beginner')">기초</button>
-                        <button class="btn-filter" onclick="filterLevelManagement('not_diagnosed')">진단 미완료</button>
-                    </div>
-                </div>
-
-                <div style="overflow-x: auto;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>학년</th>
-                                <th>학생명</th>
-                                <th>현재 수준</th>
-                                <th>진단 점수</th>
-                                <th>학습 내용 수준</th>
-                                <th>자동 조정 상태</th>
-                            </tr>
-                        </thead>
-                        <tbody id="levelManagementTableBody">
-                            <tr>
-                                <td colspan="6" style="text-align: center; padding: 3rem;">
-                                    <div class="empty-icon">👨‍🎓</div>
-                                    <div class="empty-title">학생 데이터를 불러오는 중입니다</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 수준별 학습 내용 설명 -->
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="section-title-icon">💡</span>
-                        수준별 학습 내용 기준
-                    </h2>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                    <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--primary); padding: 1.5rem; border-radius: 12px;">
-                        <h4 style="color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                            ⭐ 고급 (281-362점)
-                        </h4>
-                        <ul style="color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem; font-size: 0.875rem;">
-                            <li>심화 개념 및 응용 문제</li>
-                            <li>고난도 교재 추천</li>
-                            <li>경시대회 수준 콘텐츠</li>
-                            <li>자기주도 학습 강화</li>
-                        </ul>
-                    </div>
-                    <div style="background: rgba(139, 92, 246, 0.1); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 12px;">
-                        <h4 style="color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                            📈 중급 (201-280점)
-                        </h4>
-                        <ul style="color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem; font-size: 0.875rem;">
-                            <li>표준 교과 과정</li>
-                            <li>교과서 핵심 개념</li>
-                            <li>중간 난이도 문제</li>
-                            <li>단계적 심화 학습</li>
-                        </ul>
-                    </div>
-                    <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning); padding: 1.5rem; border-radius: 12px;">
-                        <h4 style="color: var(--warning); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                            🌱 기초 (0-200점)
-                        </h4>
-                        <ul style="color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem; font-size: 0.875rem;">
-                            <li>기본 개념 집중 학습</li>
-                            <li>쉬운 교재 및 영상</li>
-                            <li>반복 학습 강화</li>
-                            <li>개념 이해 중심</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /수준별 학습관리 섹션 끝 -->
 
         <!-- 학생 목록 섹션 -->
         <div class="section-container" id="section-students">
@@ -2234,8 +2083,6 @@
             // 섹션별 데이터 로드
             if (sectionName === 'diagnostic') {
                 loadDiagnosticData();
-            } else if (sectionName === 'level-management') {
-                loadLevelManagementData();
             } else if (sectionName === 'study-management') {
                 // ✅ 학습 관리 섹션: 진단평가 완료 학생 목록 로드
                 loadStudyManagementDropdown();
