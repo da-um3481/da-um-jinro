@@ -543,8 +543,21 @@
                 studentMap[name].subjects[subject].count++;
                 studentMap[name].subjects[subject].totalMinutes += timeValue;
 
+                // 날짜 형식 정규화 (2026. 1. 5 -> 2026-01-05)
+                let normalizedDate = record.date;
+                if (normalizedDate && normalizedDate.includes('.')) {
+                    // "2026. 1. 5" 형식을 "2026-01-05"로 변환
+                    const parts = normalizedDate.split('.').map(p => p.trim()).filter(p => p);
+                    if (parts.length === 3) {
+                        const year = parts[0];
+                        const month = parts[1].padStart(2, '0');
+                        const day = parts[2].padStart(2, '0');
+                        normalizedDate = `${year}-${month}-${day}`;
+                    }
+                }
+                
                 studentMap[name].records.push({
-                    date: record.date,
+                    date: normalizedDate,
                     subject: subject,
                     time: timeValue,
                     content: record.content || '학습 완료'
