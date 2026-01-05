@@ -3155,17 +3155,42 @@
             const today = new Date().toISOString().split('T')[0];
             const studentId = localStorage.getItem('currentStudentId');
             
-            if (!studentId) return;
+            if (!studentId) {
+                console.log('⚠️ updateTotalStudyTime: studentId 없음');
+                return;
+            }
             
             const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
             const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
             
-            if (!todayRecord) return;
-            
             let totalMinutes = 0;
-            Object.values(todayRecord.subjects).forEach(subj => {
-                totalMinutes += (subj.time || 0);
-            });
+            
+            // 1️⃣ localStorage에 저장된 과목별 시간 합산
+            if (todayRecord && todayRecord.subjects) {
+                Object.keys(todayRecord.subjects).forEach(subject => {
+                    const subj = todayRecord.subjects[subject];
+                    
+                    // 실행 중인 과목이면 타이머의 실시간 시간 사용
+                    if (subject === activeSubject && timers[subject] && timers[subject].isRunning) {
+                        const currentTimerMinutes = Math.floor(timers[subject].seconds / 60);
+                        totalMinutes += currentTimerMinutes;
+                        console.log(`⏱️ [실행중] ${subject}: ${currentTimerMinutes}분 (타이머 기준)`);
+                    } else {
+                        // 완료되었거나 실행중이 아닌 과목은 저장된 시간 사용
+                        totalMinutes += (subj.time || 0);
+                        console.log(`✅ [저장됨] ${subject}: ${subj.time || 0}분`);
+                    }
+                });
+            }
+            
+            // 2️⃣ localStorage에 아직 기록이 없지만 타이머가 실행 중인 경우
+            if (activeSubject && timers[activeSubject] && timers[activeSubject].isRunning) {
+                if (!todayRecord || !todayRecord.subjects[activeSubject]) {
+                    const currentTimerMinutes = Math.floor(timers[activeSubject].seconds / 60);
+                    totalMinutes += currentTimerMinutes;
+                    console.log(`⏱️ [신규 실행중] ${activeSubject}: ${currentTimerMinutes}분`);
+                }
+            }
             
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
@@ -3173,9 +3198,21 @@
             const targetHours = getDailyTargetHours().hours;
             const achievement = Math.min(Math.round((totalMinutes / (targetHours * 60)) * 100), 100);
             
-            document.getElementById('totalStudyTime').textContent = `${hours}시간 ${minutes}분`;
-            document.getElementById('achievementRate').textContent = `${achievement}%`;
-            document.getElementById('achievementBar').style.width = `${achievement}%`;
+            const totalStudyTimeEl = document.getElementById('totalStudyTime');
+            const achievementRateEl = document.getElementById('achievementRate');
+            const achievementBarEl = document.getElementById('achievementBar');
+            
+            if (totalStudyTimeEl) {
+                totalStudyTimeEl.textContent = `${hours}시간 ${minutes}분`;
+            }
+            if (achievementRateEl) {
+                achievementRateEl.textContent = `${achievement}%`;
+            }
+            if (achievementBarEl) {
+                achievementBarEl.style.width = `${achievement}%`;
+            }
+            
+            console.log(`📊 오늘 학습 시간 업데이트: ${hours}시간 ${minutes}분 (총 ${totalMinutes}분)`);
         }
 
         // 과목 이름 변환
