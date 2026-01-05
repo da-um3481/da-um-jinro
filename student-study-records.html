@@ -436,7 +436,7 @@
                         </thead>
                         <tbody>
                             ${student.records.map(record => {
-                                const recordTime = record.time || 0;
+                                const recordTime = record.calculatedTime || record.time || 45;
                                 const recordHours = Math.floor(recordTime / 60);
                                 const recordMinutes = recordTime % 60;
                                 
