@@ -135,6 +135,24 @@ function getStudyRecords(params) {
   var sheet = getOrCreateSheet(SHEET_NAMES.STUDY_RECORDS);
   var data = sheet.getDataRange().getValues();
   
+  // 데이터 없으면 다른 시트 이름 시도
+  if (data.length <= 1) {
+    Logger.log('study_records 시트 비어있음, 다른 이름 시도...');
+    
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var allSheets = ss.getSheets();
+    
+    for (var s = 0; s < allSheets.length; s++) {
+      var sheetName = allSheets[s].getName().toLowerCase();
+      if (sheetName.indexOf('study') >= 0 || sheetName.indexOf('학습') >= 0 || sheetName.indexOf('record') >= 0) {
+        Logger.log('학습 기록 시트 발견: ' + allSheets[s].getName());
+        sheet = allSheets[s];
+        data = sheet.getDataRange().getValues();
+        break;
+      }
+    }
+  }
+  
   if (data.length <= 1) {
     return createJsonResponse({
       status: 'success',
