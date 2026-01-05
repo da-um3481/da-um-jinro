@@ -4634,22 +4634,43 @@
             console.log('🔍 [학습 기록] 로드 시작, studentId:', studentId);
             
             if (!studentId) {
-                document.getElementById('studentStudyStats').style.display = 'none';
+                const statsElement = document.getElementById('studentStudyStats');
+                if (statsElement) {
+                    statsElement.style.display = 'none';
+                }
                 return;
             }
             
             // 통계 섹션 표시
-            document.getElementById('studentStudyStats').style.display = 'block';
+            const statsElement = document.getElementById('studentStudyStats');
+            if (statsElement) {
+                statsElement.style.display = 'block';
+            }
             
             // 학생 이름 표시
             const select = document.getElementById('studentSelectForStudy');
+            if (!select) {
+                console.error('❌ [학습 기록] studentSelectForStudy 요소를 찾을 수 없습니다');
+                return;
+            }
+            
             const selectedOption = select.options[select.selectedIndex];
-            const studentName = selectedOption.text;
-            document.getElementById('selectedStudentName').textContent = studentName;
+            const studentName = selectedOption ? selectedOption.text : '학생';
+            
+            const nameElement = document.getElementById('selectedStudentName');
+            if (nameElement) {
+                nameElement.textContent = studentName;
+            } else {
+                console.warn('⚠️ [학습 기록] selectedStudentName 요소를 찾을 수 없습니다');
+            }
             console.log('🔍 [학습 기록] 선택된 학생:', studentName);
             
             // 로딩 표시
             const tbody = document.getElementById('studyRecordsTableBody');
+            if (!tbody) {
+                console.error('❌ [학습 기록] studyRecordsTableBody 요소를 찾을 수 없습니다');
+                return;
+            }
             tbody.innerHTML = '<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">🔄 학습 기록을 불러오는 중...</td></tr>';
             
             try {
@@ -4685,11 +4706,15 @@
                         console.log('📭 [학습 기록] 학습 기록 없음');
                         tbody.innerHTML = '<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">📭 아직 학습 기록이 없습니다</td></tr>';
                         
-                        // 통계 초기화
-                        document.getElementById('totalStudyDays').textContent = '0';
-                        document.getElementById('totalStudyTime').textContent = '0분';
-                        document.getElementById('studySubjects').textContent = '-';
-                        document.getElementById('avgStudyTime').textContent = '0분/일';
+                        // 통계 초기화 (안전하게)
+                        const updateStat = (id, value) => {
+                            const elem = document.getElementById(id);
+                            if (elem) elem.textContent = value;
+                        };
+                        updateStat('totalStudyDays', '0');
+                        updateStat('totalStudyTime', '0분');
+                        updateStat('studySubjects', '-');
+                        updateStat('avgStudyTime', '0분/일');
                     }
                 }
             } catch (error) {
