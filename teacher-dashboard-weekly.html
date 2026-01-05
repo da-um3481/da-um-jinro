@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교사 대시보드 (주간) - 학생 학습 기록</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, var(--warning), #f59e0b);
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .week-selector {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .week-selector select {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn.btn-excel {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .student-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .student-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .total-time {
+            font-size: 1.2rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .weekly-summary {
+            margin: 1.5rem 0;
+        }
+
+        .weekly-summary h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .day-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .day-badge {
+            padding: 0.4rem 0.8rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .subject-stats {
+            margin-bottom: 1rem;
+        }
+
+        .subject-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .weekly-feedback {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid var(--primary);
+            border-radius: 8px;
+        }
+
+        .weekly-feedback h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .feedback-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .feedback-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .feedback-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .feedback-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .feedback-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .students-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .week-selector,
+            .search-box {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calendar-week"></i> 교사 대시보드 (주간)</h1>
+            <div class="badge">📊 주간 종합 분석</div>
+            <p>1주일 학습 데이터 종합 & AI 주간 피드백</p>
+        </div>
+
+        <div class="controls">
+            <div class="week-selector">
+                <select id="weekSelector">
+                    <option value="">주차 선택...</option>
+                </select>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 학생 이름으로 검색...">
+            </div>
+            <button class="btn" onclick="loadData()">
+                <i class="fas fa-sync-alt"></i>
+                새로고침
+            </button>
+            <button class="btn btn-excel" onclick="exportWeeklyExcel()">
+                <i class="fas fa-file-excel"></i>
+                주간 엑셀 내보내기
+            </button>
+        </div>
+
+        <div id="statsContainer"></div>
+        <div id="contentContainer"></div>
+    </div>
+
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6qWy7j413iykH1VxStxh-Jer0w721-a2fC0Vnbf_JQfs8hV8gRW6lBXluawBtQd80YkPPRyKItEGN/pub?gid=1158249397&single=true&output=csv';
+        
+        let allStudents = [];
+        let allRecords = [];
+        let weeklyFeedbacks = {}; // { "studentName_weekKey": "feedback text" }
+
+        // 주간 피드백 로드
+        function loadWeeklyFeedbacks() {
+            const saved = localStorage.getItem('teacher_weekly_feedbacks');
+            if (saved) {
+                try {
+                    weeklyFeedbacks = JSON.parse(saved);
+                } catch (e) {
+                    weeklyFeedbacks = {};
+                }
+            }
+        }
+
+        // 주간 피드백 저장
+        function saveWeeklyFeedbacks() {
+            localStorage.setItem('teacher_weekly_feedbacks', JSON.stringify(weeklyFeedbacks));
+        }
+
+        // 주간 피드백 키 생성
+        function getWeeklyFeedbackKey(studentName, weekKey) {
+            return `${studentName}_${weekKey}`;
+        }
+
+        // 주차 생성 (프로그램 기간: 2026-01-05 ~ 2026-01-30)
+        function generateWeeks() {
+            const weeks = [];
+            const startDate = new Date('2026-01-05');
+            const endDate = new Date('2026-01-30');
+            
+            let currentWeekStart = new Date(startDate);
+            let weekNumber = 1;
+            
+            while (currentWeekStart <= endDate) {
+                const weekEnd = new Date(currentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                
+                if (weekEnd > endDate) {
+                    weekEnd.setTime(endDate.getTime());
+                }
+                
+                const weekKey = `${formatDate(currentWeekStart)}~${formatDate(weekEnd)}`;
+                const weekLabel = `${weekNumber}주차 (${formatDate(currentWeekStart)} ~ ${formatDate(weekEnd)})`;
+                
+                weeks.push({ key: weekKey, label: weekLabel, start: new Date(currentWeekStart), end: new Date(weekEnd) });
+                
+                currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+                weekNumber++;
+            }
+            
+            return weeks;
+        }
+
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 페이지 로드 시 주차 선택 옵션 생성
+        window.addEventListener('DOMContentLoaded', () => {
+            loadWeeklyFeedbacks();
+            
+            const weeks = generateWeeks();
+            const selector = document.getElementById('weekSelector');
+            
+            weeks.forEach((week, index) => {
+                const option = document.createElement('option');
+                option.value = week.key;
+                option.textContent = week.label;
+                if (index === 0) option.selected = true; // 첫 주차를 기본 선택
+                selector.appendChild(option);
+            });
+            
+            loadData();
+            
+            document.getElementById('searchInput').addEventListener('input', filterData);
+            document.getElementById('weekSelector').addEventListener('change', filterData);
+        });
+
+        function loadData() {
+            const contentContainer = document.getElementById('contentContainer');
+            contentContainer.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p style="margin-top: 1rem; color: var(--text-muted);">Google Sheets에서 데이터를 불러오는 중...</p>
+                </div>
+            `;
+
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    console.log('CSV 데이터:', results.data);
+                    processData(results.data);
+                },
+                error: function(error) {
+                    console.error('CSV 로드 실패:', error);
+                    contentContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>데이터 로드 실패</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function processData(records) {
+            // 테스트 학생 제외
+            allRecords = records.filter(record => {
+                const name = (record.name || '').toLowerCase();
+                return !name.includes('테스트') && !name.includes('test');
+            });
+
+            // 학생별 그룹화
+            const studentMap = {};
+            allRecords.forEach(record => {
+                const name = record.name;
+                if (!name || name === 'name') return;
+
+                if (!studentMap[name]) {
+                    studentMap[name] = {
+                        studentName: name,
+                        studentId: record.id || name,
+                        totalMinutes: 0,
+                        recordCount: 0,
+                        subjects: {},
+                        records: []
+                    };
+                }
+
+                const timeValue = parseInt(record.time) || 45;
+                studentMap[name].totalMinutes += timeValue;
+                studentMap[name].recordCount++;
+
+                const subject = record.subject || '기타';
+                if (!studentMap[name].subjects[subject]) {
+                    studentMap[name].subjects[subject] = { count: 0, totalMinutes: 0 };
+                }
+                studentMap[name].subjects[subject].count++;
+                studentMap[name].subjects[subject].totalMinutes += timeValue;
+
+                studentMap[name].records.push({
+                    date: record.date,
+                    subject: subject,
+                    time: timeValue,
+                    content: record.content || '학습 완료'
+                });
+            });
+
+            allStudents = Object.values(studentMap);
+            console.log('그룹화된 학생:', allStudents);
+
+            filterData();
+        }
+
+        function filterData() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const selectedWeek = document.getElementById('weekSelector').value;
+
+            if (!selectedWeek) {
+                document.getElementById('contentContainer').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-week"></i>
+                        <p>주차를 선택해주세요</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 주차 범위 파싱
+            const [startDateStr, endDateStr] = selectedWeek.split('~');
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+
+            // 해당 주차에 학습한 학생 필터링
+            let weekStudents = allStudents.map(student => {
+                const weekRecords = student.records.filter(record => {
+                    const recordDate = new Date(record.date);
+                    return recordDate >= startDate && recordDate <= endDate;
+                });
+
+                if (weekRecords.length === 0) return null;
+
+                // 주간 과목별 통계
+                const weekSubjects = {};
+                weekRecords.forEach(record => {
+                    const subject = record.subject;
+                    if (!weekSubjects[subject]) {
+                        weekSubjects[subject] = { count: 0, totalMinutes: 0, contents: [] };
+                    }
+                    weekSubjects[subject].count++;
+                    weekSubjects[subject].totalMinutes += record.time;
+                    if (record.content) {
+                        weekSubjects[subject].contents.push(record.content);
+                    }
+                });
+
+                // 학습한 날짜 목록
+                const studyDates = [...new Set(weekRecords.map(r => r.date))].sort();
+
+                const weekTotalMinutes = weekRecords.reduce((sum, r) => sum + r.time, 0);
+
+                return {
+                    ...student,
+                    weekRecords,
+                    weekSubjects,
+                    studyDates,
+                    weekTotalMinutes
+                };
+            }).filter(s => s !== null);
+
+            // 검색 필터
+            if (searchText) {
+                weekStudents = weekStudents.filter(s => 
+                    s.studentName.toLowerCase().includes(searchText)
+                );
+            }
+
+            displayWeeklyStats(weekStudents, selectedWeek);
+            displayWeeklyStudents(weekStudents, selectedWeek);
+        }
+
+        function displayWeeklyStats(students, weekKey) {
+            const totalStudents = students.length;
+            const totalMinutes = students.reduce((sum, s) => sum + s.weekTotalMinutes, 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalSessions = students.reduce((sum, s) => sum + s.weekRecords.length, 0);
+            const avgMinutes = totalStudents > 0 ? Math.round(totalMinutes / totalStudents) : 0;
+
+            const [startDateStr, endDateStr] = weekKey.split('~');
+
+            document.getElementById('statsContainer').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">📅</div>
+                        <div class="value">${startDateStr} ~ ${endDateStr}</div>
+                        <div class="label">선택한 주차</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">👥</div>
+                        <div class="value">${totalStudents}</div>
+                        <div class="label">학습한 학생</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📚</div>
+                        <div class="value">${totalSessions}</div>
+                        <div class="label">총 학습 세션</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⏱️</div>
+                        <div class="value">${totalHours}시간 ${totalMinutes % 60}분</div>
+                        <div class="label">총 학습 시간</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📊</div>
+                        <div class="value">${avgMinutes}분</div>
+                        <div class="label">학생당 평균 시간</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayWeeklyStudents(students, weekKey) {
+            if (students.length === 0) {
+                document.getElementById('contentContainer').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>해당 주차에 학습 기록이 없습니다</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const studentsHtml = students.map(student => {
+                const hours = Math.floor(student.weekTotalMinutes / 60);
+                const mins = student.weekTotalMinutes % 60;
+                const timeStr = hours > 0 ? `${hours}시간 ${mins}분` : `${mins}분`;
+
+                const daysHtml = student.studyDates.map(date => 
+                    `<div class="day-badge">${date}</div>`
+                ).join('');
+
+                const subjectsHtml = Object.entries(student.weekSubjects).map(([subject, data]) => {
+                    const subHours = Math.floor(data.totalMinutes / 60);
+                    const subMins = data.totalMinutes % 60;
+                    const subTimeStr = subHours > 0 ? `${subHours}시간 ${subMins}분` : `${subMins}분`;
+                    
+                    return `
+                        <div class="subject-item">
+                            <span>${subject}</span>
+                            <span>${subTimeStr} / ${data.count}회</span>
+                        </div>
+                    `;
+                }).join('');
+
+                const feedbackKey = getWeeklyFeedbackKey(student.studentName, weekKey);
+                const savedFeedback = weeklyFeedbacks[feedbackKey] || '';
+
+                return `
+                    <div class="student-card">
+                        <div class="student-header">
+                            <div class="student-name">${student.studentName}</div>
+                            <div class="total-time">${timeStr}</div>
+                        </div>
+                        
+                        <div class="weekly-summary">
+                            <h4>📅 학습한 날짜 (${student.studyDates.length}일)</h4>
+                            <div class="day-list">${daysHtml}</div>
+                        </div>
+                        
+                        <div class="subject-stats">
+                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">📚 과목별 학습 시간</h4>
+                            ${subjectsHtml}
+                        </div>
+                        
+                        <div class="weekly-feedback">
+                            <h4><i class="fas fa-comment-dots"></i> 주간 종합 피드백</h4>
+                            <div class="feedback-content" id="feedback-${feedbackKey.replace(/[^a-zA-Z0-9]/g, '_')}">${savedFeedback || '아직 피드백이 작성되지 않았습니다.'}</div>
+                            <div class="feedback-actions">
+                                <button class="feedback-btn primary" onclick="generateWeeklyFeedback('${student.studentName}', '${weekKey}')">
+                                    <i class="fas fa-robot"></i> AI 자동 생성
+                                </button>
+                                <button class="feedback-btn secondary" onclick="editWeeklyFeedback('${student.studentName}', '${weekKey}')">
+                                    <i class="fas fa-edit"></i> 직접 작성
+                                </button>
+                                ${savedFeedback ? `<button class="feedback-btn secondary" onclick="saveWeeklyFeedback('${student.studentName}', '${weekKey}')"><i class="fas fa-save"></i> 저장</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('contentContainer').innerHTML = `
+                <div class="students-grid">
+                    ${studentsHtml}
+                </div>
+            `;
+        }
+
+        // AI 주간 피드백 생성
+        function generateWeeklyFeedback(studentName, weekKey) {
+            const student = allStudents.find(s => s.studentName === studentName);
+            if (!student) return;
+
+            const [startDateStr, endDateStr] = weekKey.split('~');
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+
+            const weekRecords = student.records.filter(record => {
+                const recordDate = new Date(record.date);
+                return recordDate >= startDate && recordDate <= endDate;
+            });
+
+            // 주간 데이터 분석
+            const studyDates = [...new Set(weekRecords.map(r => r.date))].sort();
+            const totalDays = studyDates.length;
+            const totalMinutes = weekRecords.reduce((sum, r) => sum + r.time, 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+
+            // 과목별 통계
+            const weekSubjects = {};
+            weekRecords.forEach(record => {
+                const subject = record.subject;
+                if (!weekSubjects[subject]) {
+                    weekSubjects[subject] = { count: 0, totalMinutes: 0 };
+                }
+                weekSubjects[subject].count++;
+                weekSubjects[subject].totalMinutes += record.time;
+            });
+
+            // AI 피드백 생성
+            let feedback = `📊 ${studentName} 학생의 주간 학습 분석\n\n`;
+            
+            // 1. 전체 요약
+            feedback += `【전체 요약】\n`;
+            feedback += `• 학습 일수: ${totalDays}일\n`;
+            feedback += `• 총 학습 시간: ${totalHours}시간 ${totalMinutes % 60}분\n`;
+            feedback += `• 일평균 학습 시간: ${totalDays > 0 ? Math.round(totalMinutes / totalDays) : 0}분\n\n`;
+
+            // 2. 학습 일수 평가
+            feedback += `【학습 패턴】\n`;
+            if (totalDays >= 6) {
+                feedback += `✅ 거의 매일 학습하는 매우 우수한 학습 습관을 보여주고 있습니다!\n`;
+            } else if (totalDays >= 4) {
+                feedback += `✅ 주 4~5회 학습하는 좋은 습관을 유지하고 있습니다.\n`;
+            } else if (totalDays >= 2) {
+                feedback += `⚠️ 주 2~3회 학습하고 있습니다. 조금 더 꾸준한 학습이 필요합니다.\n`;
+            } else {
+                feedback += `⚠️ 학습 빈도가 낮습니다. 매일 조금씩이라도 꾸준히 학습하는 습관을 기르는 것이 중요합니다.\n`;
+            }
+
+            // 3. 과목별 분석
+            feedback += `\n【과목별 학습 현황】\n`;
+            Object.entries(weekSubjects).forEach(([subject, data]) => {
+                const subHours = Math.floor(data.totalMinutes / 60);
+                const subMins = data.totalMinutes % 60;
+                const timeStr = subHours > 0 ? `${subHours}시간 ${subMins}분` : `${subMins}분`;
+                feedback += `• ${subject}: ${timeStr} (${data.count}회 학습)\n`;
+            });
+
+            // 4. 과목 균형 평가
+            const subjectCount = Object.keys(weekSubjects).length;
+            feedback += `\n【과목 균형】\n`;
+            if (subjectCount >= 3) {
+                feedback += `✅ ${subjectCount}개 과목을 골고루 학습하여 균형잡힌 학습을 하고 있습니다.\n`;
+            } else if (subjectCount === 2) {
+                feedback += `⚠️ 2개 과목에 집중하고 있습니다. 다른 과목도 함께 학습하면 더 좋겠습니다.\n`;
+            } else {
+                feedback += `⚠️ 1개 과목에만 집중하고 있습니다. 여러 과목을 균형있게 학습해보세요.\n`;
+            }
+
+            // 5. 종합 평가 및 격려
+            feedback += `\n【종합 평가】\n`;
+            if (totalMinutes >= 600) {
+                feedback += `🌟 이번 주 학습량이 매우 우수합니다! 10시간 이상 학습하여 훌륭한 자기주도학습 태도를 보여주고 있습니다. 이 페이스를 꾸준히 유지한다면 반드시 좋은 결과가 있을 것입니다!\n`;
+            } else if (totalMinutes >= 300) {
+                feedback += `💪 이번 주 5~10시간 학습하여 꾸준한 노력을 보여주고 있습니다. 조금 더 집중해서 학습 시간을 늘려보세요!\n`;
+            } else if (totalMinutes >= 120) {
+                feedback += `📚 이번 주 2~5시간 학습했습니다. 시작은 좋습니다! 다음 주에는 조금 더 시간을 투자해보세요.\n`;
+            } else {
+                feedback += `🌱 이번 주 학습량이 부족합니다. 다음 주에는 매일 조금씩이라도 꾸준히 학습하는 습관을 만들어보세요. 시작이 반입니다!\n`;
+            }
+
+            feedback += `\n💡 다음 주 목표: `;
+            if (totalDays < 5) {
+                feedback += `주 5일 이상 학습하기`;
+            } else if (totalMinutes < 300) {
+                feedback += `주 5시간 이상 학습하기`;
+            } else {
+                feedback += `현재 학습 패턴 유지하며 내용 심화하기`;
+            }
+
+            // 피드백 표시 및 편집 모드로 전환
+            const feedbackKey = getWeeklyFeedbackKey(studentName, weekKey);
+            const elementId = `feedback-${feedbackKey.replace(/[^a-zA-Z0-9]/g, '_')}`;
+            const feedbackElement = document.getElementById(elementId);
+            
+            if (feedbackElement) {
+                feedbackElement.parentElement.innerHTML = `
+                    <h4><i class="fas fa-comment-dots"></i> 주간 종합 피드백</h4>
+                    <textarea class="feedback-textarea" id="textarea-${elementId}">${feedback}</textarea>
+                    <div class="feedback-actions">
+                        <button class="feedback-btn primary" onclick="saveWeeklyFeedback('${studentName}', '${weekKey}')">
+                            <i class="fas fa-save"></i> 저장
+                        </button>
+                        <button class="feedback-btn secondary" onclick="filterData()">
+                            <i class="fas fa-times"></i> 취소
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // 피드백 직접 작성
+        function editWeeklyFeedback(studentName, weekKey) {
+            const feedbackKey = getWeeklyFeedbackKey(studentName, weekKey);
+            const savedFeedback = weeklyFeedbacks[feedbackKey] || '';
+            const elementId = `feedback-${feedbackKey.replace(/[^a-zA-Z0-9]/g, '_')}`;
+            const feedbackElement = document.getElementById(elementId);
+            
+            if (feedbackElement) {
+                feedbackElement.parentElement.innerHTML = `
+                    <h4><i class="fas fa-comment-dots"></i> 주간 종합 피드백</h4>
+                    <textarea class="feedback-textarea" id="textarea-${elementId}">${savedFeedback}</textarea>
+                    <div class="feedback-actions">
+                        <button class="feedback-btn primary" onclick="saveWeeklyFeedback('${studentName}', '${weekKey}')">
+                            <i class="fas fa-save"></i> 저장
+                        </button>
+                        <button class="feedback-btn secondary" onclick="filterData()">
+                            <i class="fas fa-times"></i> 취소
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // 피드백 저장
+        function saveWeeklyFeedback(studentName, weekKey) {
+            const feedbackKey = getWeeklyFeedbackKey(studentName, weekKey);
+            const elementId = `feedback-${feedbackKey.replace(/[^a-zA-Z0-9]/g, '_')}`;
+            const textarea = document.getElementById(`textarea-${elementId}`);
+            
+            if (textarea) {
+                const feedbackText = textarea.value.trim();
+                if (feedbackText) {
+                    weeklyFeedbacks[feedbackKey] = feedbackText;
+                    saveWeeklyFeedbacks();
+                    alert('💾 주간 피드백이 저장되었습니다!');
+                    filterData(); // 새로고침
+                } else {
+                    alert('⚠️ 피드백 내용을 입력해주세요.');
+                }
+            }
+        }
+
+        // 주간 엑셀 내보내기
+        function exportWeeklyExcel() {
+            const selectedWeek = document.getElementById('weekSelector').value;
+            
+            if (!selectedWeek) {
+                alert('📅 주차를 먼저 선택해주세요!');
+                return;
+            }
+
+            const [startDateStr, endDateStr] = selectedWeek.split('~');
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+
+            // 해당 주차 학생 데이터
+            const weekStudents = allStudents.map(student => {
+                const weekRecords = student.records.filter(record => {
+                    const recordDate = new Date(record.date);
+                    return recordDate >= startDate && recordDate <= endDate;
+                });
+
+                if (weekRecords.length === 0) return null;
+
+                const weekSubjects = {};
+                weekRecords.forEach(record => {
+                    const subject = record.subject;
+                    if (!weekSubjects[subject]) {
+                        weekSubjects[subject] = { count: 0, totalMinutes: 0 };
+                    }
+                    weekSubjects[subject].count++;
+                    weekSubjects[subject].totalMinutes += record.time;
+                });
+
+                const studyDates = [...new Set(weekRecords.map(r => r.date))].sort();
+                const weekTotalMinutes = weekRecords.reduce((sum, r) => sum + r.time, 0);
+
+                return {
+                    studentName: student.studentName,
+                    weekRecords,
+                    weekSubjects,
+                    studyDates,
+                    weekTotalMinutes
+                };
+            }).filter(s => s !== null);
+
+            if (weekStudents.length === 0) {
+                alert('해당 주차에 학습 기록이 없습니다.');
+                return;
+            }
+
+            // 엑셀 데이터 생성
+            const excelData = [];
+            excelData.push([`주간 학습 기록: ${startDateStr} ~ ${endDateStr}`]);
+            excelData.push([]);
+            excelData.push(['학생 이름', '학습 일수', '총 학습 시간', '일평균 시간', '과목별 학습', '주간 피드백']);
+
+            weekStudents.forEach(student => {
+                const hours = Math.floor(student.weekTotalMinutes / 60);
+                const mins = student.weekTotalMinutes % 60;
+                const timeStr = hours > 0 ? `${hours}시간 ${mins}분` : `${mins}분`;
+                const avgMins = student.studyDates.length > 0 ? Math.round(student.weekTotalMinutes / student.studyDates.length) : 0;
+                
+                const subjectsStr = Object.entries(student.weekSubjects).map(([subject, data]) => {
+                    const subHours = Math.floor(data.totalMinutes / 60);
+                    const subMins = data.totalMinutes % 60;
+                    const subTimeStr = subHours > 0 ? `${subHours}h ${subMins}m` : `${subMins}m`;
+                    return `${subject}: ${subTimeStr} (${data.count}회)`;
+                }).join(', ');
+
+                const feedbackKey = getWeeklyFeedbackKey(student.studentName, selectedWeek);
+                const feedback = weeklyFeedbacks[feedbackKey] || '';
+
+                excelData.push([
+                    student.studentName,
+                    `${student.studyDates.length}일`,
+                    timeStr,
+                    `${avgMins}분`,
+                    subjectsStr,
+                    feedback
+                ]);
+            });
+
+            // 통계 요약
+            const totalMinutes = weekStudents.reduce((sum, s) => sum + s.weekTotalMinutes, 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const avgMinutes = weekStudents.length > 0 ? Math.round(totalMinutes / weekStudents.length) : 0;
+
+            excelData.push([]);
+            excelData.push(['=== 통계 요약 ===']);
+            excelData.push(['주차', `${startDateStr} ~ ${endDateStr}`]);
+            excelData.push(['학습한 학생 수', `${weekStudents.length}명`]);
+            excelData.push(['총 학습 시간', `${totalHours}시간 ${totalMinutes % 60}분`]);
+            excelData.push(['학생당 평균 시간', `${avgMinutes}분`]);
+
+            // 엑셀 파일 생성
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            ws['!cols'] = [
+                { wch: 12 },
+                { wch: 10 },
+                { wch: 15 },
+                { wch: 12 },
+                { wch: 40 },
+                { wch: 60 }
+            ];
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '주간학습기록');
+
+            const fileName = `주간학습기록_${startDateStr}_${endDateStr}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+
+            alert(`✅ ${fileName} 파일이 다운로드되었습니다!`);
+        }
+    </script>
+</body>
+</html>
