@@ -6,6 +6,8 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -461,6 +463,10 @@
                 <i class="fas fa-sync-alt"></i>
                 새로고침
             </button>
+            <button class="btn" onclick="exportToExcel()" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fas fa-file-excel"></i>
+                엑셀 내보내기
+            </button>
         </div>
 
         <div id="statsContainer"></div>
@@ -594,6 +600,132 @@
                 filterData();
             });
         });
+
+        // 엑셀 내보내기 함수
+        function exportToExcel() {
+            const selectedDate = document.getElementById('dateFilter').value;
+            
+            if (!selectedDate) {
+                alert('📅 날짜를 먼저 선택해주세요!\n\n엑셀 내보내기는 특정 날짜를 선택한 후 사용할 수 있습니다.');
+                return;
+            }
+            
+            // 선택된 날짜의 데이터 필터링
+            const dateStudents = allStudents.filter(student => 
+                student.records.some(r => r.date === selectedDate)
+            ).map(student => {
+                // 해당 날짜의 기록만 필터링
+                const dateRecords = student.records.filter(r => r.date === selectedDate);
+                
+                // 날짜별 과목 그룹화
+                const dateSubjects = {};
+                dateRecords.forEach(record => {
+                    const subject = record.subject;
+                    if (!dateSubjects[subject]) {
+                        dateSubjects[subject] = { count: 0, totalMinutes: 0, contents: [] };
+                    }
+                    dateSubjects[subject].count++;
+                    dateSubjects[subject].totalMinutes += record.time;
+                    if (record.content) {
+                        dateSubjects[subject].contents.push(record.content);
+                    }
+                });
+                
+                return {
+                    studentName: student.studentName,
+                    date: selectedDate,
+                    dateRecords,
+                    dateSubjects
+                };
+            });
+            
+            if (dateStudents.length === 0) {
+                alert(`${selectedDate}에 학습 기록이 없습니다.`);
+                return;
+            }
+            
+            // 엑셀 데이터 생성
+            const excelData = [];
+            
+            // 헤더 추가
+            excelData.push(['학생 이름', '날짜', '과목', '학습 시간', '학습 횟수', '학습 내용', '교사 피드백']);
+            
+            dateStudents.forEach(student => {
+                const feedbackKey = getFeedbackKey(student.studentName, selectedDate);
+                const feedback = feedbacks[feedbackKey] || '';
+                
+                let firstRow = true;
+                Object.entries(student.dateSubjects).forEach(([subject, data]) => {
+                    const hours = Math.floor(data.totalMinutes / 60);
+                    const mins = data.totalMinutes % 60;
+                    const timeStr = hours > 0 ? `${hours}시간 ${mins}분` : `${mins}분`;
+                    const content = data.contents.join(', ') || '학습 완료';
+                    
+                    if (firstRow) {
+                        excelData.push([
+                            student.studentName,
+                            selectedDate,
+                            subject,
+                            timeStr,
+                            `${data.count}회`,
+                            content,
+                            feedback
+                        ]);
+                        firstRow = false;
+                    } else {
+                        excelData.push([
+                            '',
+                            '',
+                            subject,
+                            timeStr,
+                            `${data.count}회`,
+                            content,
+                            ''
+                        ]);
+                    }
+                });
+                
+                // 빈 줄 추가 (학생 구분)
+                excelData.push(['', '', '', '', '', '', '']);
+            });
+            
+            // 통계 요약 추가
+            const totalMinutes = dateStudents.reduce((sum, s) => {
+                return sum + s.dateRecords.reduce((rSum, r) => rSum + r.time, 0);
+            }, 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const avgMinutes = dateStudents.length > 0 ? Math.round(totalMinutes / dateStudents.length) : 0;
+            
+            excelData.push(['']);
+            excelData.push(['=== 통계 요약 ===']);
+            excelData.push(['날짜', selectedDate]);
+            excelData.push(['학습한 학생 수', `${dateStudents.length}명`]);
+            excelData.push(['총 학습 시간', `${totalHours}시간 ${totalMinutes % 60}분`]);
+            excelData.push(['학생당 평균 시간', `${avgMinutes}분`]);
+            
+            // 엑셀 파일 생성
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            
+            // 컬럼 너비 설정
+            ws['!cols'] = [
+                { wch: 12 },  // 학생 이름
+                { wch: 12 },  // 날짜
+                { wch: 10 },  // 과목
+                { wch: 12 },  // 학습 시간
+                { wch: 10 },  // 학습 횟수
+                { wch: 30 },  // 학습 내용
+                { wch: 50 }   // 교사 피드백
+            ];
+            
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, selectedDate);
+            
+            // 파일 다운로드
+            const fileName = `학습기록_${selectedDate}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            
+            alert(`✅ ${fileName} 파일이 다운로드되었습니다!`);
+        }
 
         function loadData() {
             const contentContainer = document.getElementById('contentContainer');
