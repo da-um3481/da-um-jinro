@@ -157,6 +157,8 @@ function getStudyRecords(params) {
   
   var headers = data[0];
   Logger.log('Headers: ' + JSON.stringify(headers));
+  Logger.log('Header count: ' + headers.length);
+  Logger.log('Header B1 (name field): ' + headers[1]);
   
   var records = [];
   
@@ -213,13 +215,13 @@ function groupRecordsByStudent(records) {
   for (var i = 0; i < records.length; i++) {
     var record = records[i];
     
-    var studentName = record.name || 
-                      record.student_name || 
+    var studentName = record.student_name || 
+                      record.name || 
                       record.studentName || 
-                      'Unknown';
+                      '알 수 없음';
     
-    var studentId = record.id || 
-                    record.student_id || 
+    var studentId = record.student_id || 
+                    record.id || 
                     record.studentId || 
                     'unknown';
     

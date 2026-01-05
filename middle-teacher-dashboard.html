@@ -5077,7 +5077,11 @@ ${record.content || '기록 없음'}`);
                     
                     // 중학생만 필터링
                     const middleSchoolStudents = result.data.filter(student => {
-                        const grade = student.grade || parseInt(student.student_id?.split('_')[1]) || 0;
+                        let grade = student.grade || student.student_grade || 0;
+                        if (!grade && student.student_id) {
+                            const parts = student.student_id.split('_');
+                            grade = parts.length > 1 ? parseInt(parts[1]) : 0;
+                        }
                         return grade > 0 && grade <= 3;
                     });
                     
