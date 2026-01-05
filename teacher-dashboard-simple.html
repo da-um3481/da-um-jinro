@@ -365,7 +365,14 @@
         }
 
         function processData(records) {
-            allRecords = records.filter(record => record.name && record.name !== 'name');
+            // 테스트 학생 제외 필터링
+            allRecords = records.filter(record => {
+                if (!record.name || record.name === 'name') return false;
+                // 테스트 학생 제외
+                const name = record.name.toLowerCase();
+                if (name.includes('테스트') || name.includes('test')) return false;
+                return true;
+            });
             
             // 학생별로 그룹화
             const studentMap = {};
