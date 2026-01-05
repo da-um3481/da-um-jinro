@@ -1,13 +1,15 @@
-# ✅ Apps Script ES5 호환 코드 (구문 오류 해결)
+# ✅ Apps Script ES5 호환 코드 (구문 오류 완전 해결)
 
 ## 🚨 문제
-**Line 224: Syntax error** - `const`와 화살표 함수(`=>`)를 Apps Script가 지원하지 않음
+**Line 107/224: Syntax error** - `const`, 화살표 함수(`=>`), 잘못된 `return` 구문
 
 ## ✅ **완전 호환 코드 (ES5)**
 
 ### 📋 **전체 코드 (복사 후 붙여넣기)**
 
-Apps Script 편집기에서 **Line 101-130을 완전히 삭제**하고 아래 코드로 교체:
+Apps Script 편집기에서 **Line 202-275를 완전히 삭제**하고 아래 코드로 교체:
+
+> ⚠️ **중요**: 기존 코드를 완전히 삭제한 후 붙여넣기!
 
 ```javascript
   if (action === 'getStudyRecords') {
@@ -87,16 +89,18 @@ Apps Script 편집기에서 **Line 101-130을 완전히 삭제**하고 아래 �
 
 ## 🔧 **적용 방법**
 
-### 1️⃣ **Line 101-130 완전 삭제**
+### 1️⃣ **Line 202-275 완전 삭제**
 ```
-1. Line 101부터 Line 130까지 전체 선택
+1. Line 202부터 Line 275까지 전체 선택
 2. Delete 키로 삭제
+3. 또는 Ctrl+G로 Line 202 이동 후 Shift+Ctrl+End로 끝까지 선택 후 삭제
 ```
 
 ### 2️⃣ **위 코드 붙여넣기**
 ```
 1. 위 코드 전체 복사 (Ctrl+A, Ctrl+C)
-2. Line 101 위치에 붙여넣기 (Ctrl+V)
+2. Line 202 위치에 붙여넣기 (Ctrl+V)
+3. 들여쓰기 확인 (2칸 또는 4칸 일관성)
 ```
 
 ### 3️⃣ **저장**
