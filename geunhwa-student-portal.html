@@ -2899,7 +2899,14 @@
             console.log(`🕐 타이머 시작 시각 저장: ${new Date(absoluteStartTime).toLocaleTimeString()}`);
             
             timers[subject].interval = setInterval(() => {
-                timers[subject].seconds++;
+                // ✅ 실제 경과 시간 계산 (표준시간 기반)
+                const timerStartTime = localStorage.getItem('timerStartTime');
+                if (timerStartTime) {
+                    const now = Date.now();
+                    const actualElapsedSeconds = Math.floor((now - parseInt(timerStartTime)) / 1000);
+                    timers[subject].seconds = actualElapsedSeconds;
+                }
+                
                 updateTimerDisplay(subject);
                 updateProgressBar(subject);
                 
@@ -2926,6 +2933,17 @@
         function stopTimer(subject) {
             if (!timers[subject] || !timers[subject].isRunning) {
                 return;
+            }
+            
+            // ✅ 실제 경과 시간 계산 (표준시간 기반)
+            const timerStartTime = localStorage.getItem('timerStartTime');
+            if (timerStartTime) {
+                const now = Date.now();
+                const actualElapsedSeconds = Math.floor((now - parseInt(timerStartTime)) / 1000);
+                
+                // 실제 경과 시간으로 업데이트
+                timers[subject].seconds = actualElapsedSeconds;
+                console.log(`🕐 실제 경과 시간 적용: ${Math.floor(actualElapsedSeconds / 60)}분 ${actualElapsedSeconds % 60}초`);
             }
             
             // 학습 시간 체크 (최소 30분)
