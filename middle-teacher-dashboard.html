@@ -1092,10 +1092,7 @@
 
                 <!-- 평가 유형 탭 -->
                 <div class="evaluation-tabs" style="display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
-                    <button class="eval-tab active" data-eval-type="diagnostic" style="flex: 1; min-width: 200px; padding: 15px 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
-                        <i class="fas fa-clipboard-check"></i> 진단평가 (Pre-test)
-                    </button>
-                    <button class="eval-tab" data-eval-type="biweekly" style="flex: 1; min-width: 200px; padding: 15px 20px; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                    <button class="eval-tab active" data-eval-type="biweekly" style="flex: 1; min-width: 200px; padding: 15px 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
                         <i class="fas fa-calendar-check"></i> 2주/4주 평가
                     </button>
                     <button class="eval-tab" data-eval-type="posttest" style="flex: 1; min-width: 200px; padding: 15px 20px; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
@@ -1106,99 +1103,9 @@
                     </button>
                 </div>
 
-                <!-- 진단평가 결과 -->
-                <div class="eval-content active" id="eval-diagnostic">
-                    <div class="stats-grid" style="margin-bottom: 30px;">
-                        <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-                            <div class="stat-header">
-                                <span class="stat-label" style="color: white;">진단평가 완료</span>
-                                <span class="stat-icon">📋</span>
-                            </div>
-                            <div class="stat-value" id="diagnosticCompletedCount" style="color: white;">-</div>
-                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
-                                <span>전체 학생 중 완료 비율</span>
-                            </div>
-                        </div>
-
-                        <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                            <div class="stat-header">
-                                <span class="stat-label" style="color: white;">평균 점수</span>
-                                <span class="stat-icon">📊</span>
-                            </div>
-                            <div class="stat-value" id="diagnosticAvgScore" style="color: white;">-</div>
-                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
-                                <span>50점 만점 기준</span>
-                            </div>
-                        </div>
-
-                        <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
-                            <div class="stat-header">
-                                <span class="stat-label" style="color: white;">심화 수준</span>
-                                <span class="stat-icon">🎯</span>
-                            </div>
-                            <div class="stat-value" id="diagnosticAdvancedCount" style="color: white;">-</div>
-                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
-                                <span>심화 수준 학생 수</span>
-                            </div>
-                        </div>
-
-                        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-                            <div class="stat-header">
-                                <span class="stat-label" style="color: white;">기초 수준</span>
-                                <span class="stat-icon">📚</span>
-                            </div>
-                            <div class="stat-value" id="diagnosticBasicCount" style="color: white;">-</div>
-                            <div class="stat-change" style="color: rgba(255,255,255,0.8);">
-                                <span>집중 지도 필요 학생</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 진단평가 학생별 상세 결과 -->
-                    <div class="card" style="padding: 25px; margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 style="display: flex; align-items: center; gap: 10px; margin: 0;">
-                                <span>👨‍🎓</span> 학생별 진단평가 결과
-                            </h3>
-                            <div style="display: flex; gap: 10px;">
-                                <label for="importDataFileMiddle" style="padding: 10px 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s;">
-                                    <i class="fas fa-upload"></i>
-                                    데이터 가져오기
-                                </label>
-                                <input type="file" id="importDataFileMiddle" accept=".json" multiple style="display: none;" onchange="importStudentData(event)">
-                                <button onclick="clearDiagnosticData()" style="padding: 10px 20px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
-                                    <i class="fas fa-trash-alt"></i>
-                                    데이터 초기화
-                                </button>
-                            </div>
-                        </div>
-                        <div style="overflow-x: auto;">
-                            <table class="data-table" style="width: 100%; border-collapse: collapse;">
-                                <thead style="background: rgba(255,255,255,0.05);">
-                                    <tr>
-                                        <th style="padding: 15px; text-align: left; border-bottom: 2px solid rgba(255,255,255,0.1);">학생명</th>
-                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">학년</th>
-                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">총점</th>
-                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">수준</th>
-                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">과목별 점수</th>
-                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">검사일</th>
-                                        <th style="padding: 15px; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.1);">상세</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="diagnosticTableBody">
-                                    <tr>
-                                        <td colspan="7" style="padding: 40px; text-align: center; color: var(--text-muted);">
-                                            진단평가 데이터를 불러오는 중...
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- 2주/4주 평가 결과 -->
-                <div class="eval-content" id="eval-biweekly" style="display: none;">
+                <div class="eval-content active" id="eval-biweekly">
                     <div class="stats-grid" style="margin-bottom: 30px;">
                         <div class="stat-card" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
                             <div class="stat-header">
