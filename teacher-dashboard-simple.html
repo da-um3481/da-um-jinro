@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교사 대시보드 - 학생 학습 기록</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ade80;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .stat-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .student-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .student-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .student-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .student-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .student-info .meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .total-time {
+            text-align: right;
+        }
+
+        .total-time .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .total-time .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .subjects {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .subject-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .subject-item .subject-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .subject-item .subject-stats {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .expand-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .expand-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .records-detail {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .records-detail.show {
+            display: block;
+        }
+
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .records-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .records-table td {
+            padding: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> 교사 대시보드</h1>
+            <p>학생 학습 기록 - 실시간 Google Sheets 연동</p>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 학생 이름으로 검색...">
+            </div>
+            <button class="btn" onclick="loadData()">
+                <i class="fas fa-sync-alt"></i>
+                새로고침
+            </button>
+        </div>
+
+        <div id="statsContainer"></div>
+        <div id="contentContainer"></div>
+    </div>
+
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6qWy7j413iykH1VxStxh-Jer0w721-a2fC0Vnbf_JQfs8hV8gRW6lBXluawBtQd80YkPPRyKItEGN/pub?gid=1158249397&single=true&output=csv';
+        
+        let allStudents = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                filterStudents(e.target.value);
+            });
+        });
+
+        function loadData() {
+            const contentContainer = document.getElementById('contentContainer');
+            contentContainer.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p style="margin-top: 1rem; color: var(--text-muted);">Google Sheets에서 데이터를 불러오는 중...</p>
+                </div>
+            `;
+
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    console.log('CSV 데이터:', results.data);
+                    processData(results.data);
+                },
+                error: function(error) {
+                    console.error('CSV 로드 실패:', error);
+                    contentContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>데이터 로드 실패</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function processData(records) {
+            // 학생별로 그룹화
+            const studentMap = {};
+
+            records.forEach(record => {
+                const name = record.name;
+                if (!name || name === 'name') return; // 헤더 제외
+
+                if (!studentMap[name]) {
+                    studentMap[name] = {
+                        name: name,
+                        totalMinutes: 0,
+                        recordCount: 0,
+                        subjects: {},
+                        records: []
+                    };
+                }
+
+                // 시간 계산 (time 열이 있으면 사용, 없으면 45분 기본)
+                const timeValue = parseInt(record.time) || 45;
+                studentMap[name].totalMinutes += timeValue;
+                studentMap[name].recordCount++;
+
+                // 과목별 통계
+                const subject = record.subject || '기타';
+                if (!studentMap[name].subjects[subject]) {
+                    studentMap[name].subjects[subject] = {
+                        count: 0,
+                        totalMinutes: 0
+                    };
+                }
+                studentMap[name].subjects[subject].count++;
+                studentMap[name].subjects[subject].totalMinutes += timeValue;
+
+                // 기록 저장
+                studentMap[name].records.push({
+                    date: record.date,
+                    subject: subject,
+                    time: timeValue,
+                    content: record.content || '학습 완료'
+                });
+            });
+
+            allStudents = Object.values(studentMap);
+            console.log('그룹화된 학생:', allStudents);
+
+            displayStats();
+            displayStudents(allStudents);
+        }
+
+        function displayStats() {
+            const totalStudents = allStudents.length;
+            const totalRecords = allStudents.reduce((sum, s) => sum + s.recordCount, 0);
+            const totalMinutes = allStudents.reduce((sum, s) => sum + s.totalMinutes, 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const avgMinutes = totalStudents > 0 ? Math.round(totalMinutes / totalStudents) : 0;
+
+            document.getElementById('statsContainer').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">👥</div>
+                        <div class="value">${totalStudents}</div>
+                        <div class="label">총 학생 수</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📚</div>
+                        <div class="value">${totalRecords}</div>
+                        <div class="label">총 학습 기록</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⏱️</div>
+                        <div class="value">${totalHours}</div>
+                        <div class="label">총 학습 시간 (시간)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📊</div>
+                        <div class="value">${avgMinutes}</div>
+                        <div class="label">평균 학습 시간 (분)</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayStudents(students) {
+            const contentContainer = document.getElementById('contentContainer');
+            
+            if (students.length === 0) {
+                contentContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>검색 결과가 없습니다</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = students.map((student, index) => {
+                const hours = Math.floor(student.totalMinutes / 60);
+                const minutes = student.totalMinutes % 60;
+
+                const subjectsHtml = Object.keys(student.subjects).map(subject => {
+                    const stats = student.subjects[subject];
+                    const subHours = Math.floor(stats.totalMinutes / 60);
+                    const subMinutes = stats.totalMinutes % 60;
+                    
+                    return `
+                        <div class="subject-item">
+                            <div class="subject-name">${subject}</div>
+                            <div class="subject-stats">
+                                ${stats.count}회 | ${subHours > 0 ? subHours + '시간 ' : ''}${subMinutes}분
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const recordsHtml = student.records.map(record => {
+                    const recordHours = Math.floor(record.time / 60);
+                    const recordMinutes = record.time % 60;
+                    return `
+                        <tr>
+                            <td>${record.date}</td>
+                            <td>${record.subject}</td>
+                            <td>${recordHours > 0 ? recordHours + '시간 ' : ''}${recordMinutes}분</td>
+                            <td>${record.content}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="student-card">
+                        <div class="student-header">
+                            <div class="student-info">
+                                <h3>
+                                    <i class="fas fa-user-graduate" style="color: var(--primary);"></i>
+                                    ${student.name}
+                                </h3>
+                                <div class="meta">총 ${student.recordCount}개의 학습 기록</div>
+                            </div>
+                            <div class="total-time">
+                                <div class="value">${hours > 0 ? hours + '시간 ' : ''}${minutes}분</div>
+                                <div class="label">총 학습 시간</div>
+                            </div>
+                        </div>
+                        
+                        <div class="subjects">
+                            ${subjectsHtml}
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleRecords(${index})">
+                            <i class="fas fa-chevron-down"></i> 상세 기록 보기
+                        </button>
+
+                        <div class="records-detail" id="records-${index}">
+                            <table class="records-table">
+                                <thead>
+                                    <tr>
+                                        <th>날짜</th>
+                                        <th>과목</th>
+                                        <th>시간</th>
+                                        <th>내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${recordsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            contentContainer.innerHTML = `<div class="student-list">${html}</div>`;
+        }
+
+        function toggleRecords(index) {
+            const element = document.getElementById(`records-${index}`);
+            element.classList.toggle('show');
+        }
+
+        function filterStudents(searchTerm) {
+            if (!searchTerm.trim()) {
+                displayStudents(allStudents);
+                return;
+            }
+
+            const filtered = allStudents.filter(student => 
+                student.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            displayStudents(filtered);
+        }
+    </script>
+</body>
+</html>
