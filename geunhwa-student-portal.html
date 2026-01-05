@@ -2759,6 +2759,9 @@
             
             // 🆕 4주 로드맵 진행률 업데이트
             updateWeeklyRoadmapProgress();
+            
+            // 🆕 오늘 학습 시간 실시간 업데이트
+            updateTotalStudyTime();
         }
 
         // 📚 교과서 및 페이지 정보 저장
@@ -8027,6 +8030,11 @@
             console.log(`%c🐛 10초 중복 저장 버그 수정 완료! (v2.0.1)`, 'font-size: 12px; color: #f59e0b; font-weight: bold;');
             console.log('');
             
+            // 🆕 페이지 로드 시 오늘 학습 시간 표시
+            if (localStorage.getItem('currentStudentId')) {
+                updateTotalStudyTime();
+            }
+            
             // 로그인 후 평가 상태 체크
             setTimeout(checkAssessmentAvailability, 1000);
         });
@@ -8191,6 +8199,8 @@
                     // 타이머 복원
                     setTimeout(() => {
                         restoreRunningTimers();
+                        // 🆕 타이머 복원 후 학습 시간 업데이트
+                        updateTotalStudyTime();
                     }, 500);
                     
                     // 평가결과 버튼 활성화
