@@ -2631,16 +2631,21 @@
                     
                     // 🆕 백그라운드 실행 시간 계산 (로그아웃 중에도 계속 실행됨)
                     const timerStartTime = localStorage.getItem('timerStartTime');
-                    let currentSeconds = todayRecord.subjects[subject].time * 60;
+                    // ✅ seconds 필드 우선 사용 (정확한 시간), 없으면 time * 60
+                    let currentSeconds = todayRecord.subjects[subject].seconds || (todayRecord.subjects[subject].time * 60);
                     
                     if (timerStartTime) {
                         const now = Date.now();
                         const elapsedMs = now - parseInt(timerStartTime);
                         const totalElapsedSeconds = Math.floor(elapsedMs / 1000);
                         
-                        // 로그아웃 중 경과된 시간 반영
+                        // ✅ timerStartTime부터의 총 경과 시간 사용
                         currentSeconds = totalElapsedSeconds;
-                        console.log(`⏱️ 로그아웃 중 경과 시간: ${Math.floor(totalElapsedSeconds / 60)}분`);
+                        console.log(`⏱️ timerStartTime부터 총 경과: ${Math.floor(totalElapsedSeconds / 60)}분 ${totalElapsedSeconds % 60}초`);
+                        console.log(`📝 저장된 시간: ${todayRecord.subjects[subject].time}분 (${todayRecord.subjects[subject].seconds || 0}초)`);
+                    } else {
+                        // timerStartTime이 없으면 저장된 시간만 사용
+                        console.log(`📝 저장된 시간만 복원: ${Math.floor(currentSeconds / 60)}분 ${currentSeconds % 60}초`);
                     }
                     
                     console.log(`🔄 타이머 복원: ${subject} (${Math.floor(currentSeconds/60)}분) - 자동 계속 실행`);
@@ -2742,10 +2747,17 @@
             }
             
             if (!todayRecord.subjects[subject]) {
-                todayRecord.subjects[subject] = { time: 0, content: '', isRunning: false };
+                todayRecord.subjects[subject] = { 
+                    time: 0,          // 분 단위 (호환성)
+                    seconds: 0,       // 초 단위 (정확한 시간)
+                    content: '', 
+                    isRunning: false 
+                };
             }
             
-            todayRecord.subjects[subject].time = Math.floor(totalSeconds / 60);
+            // ✅ 초 단위로 저장 (정확한 시간 유지)
+            todayRecord.subjects[subject].seconds = totalSeconds;
+            todayRecord.subjects[subject].time = Math.floor(totalSeconds / 60);  // 분 단위 (호환성)
             todayRecord.subjects[subject].last_update = new Date().toISOString();
             todayRecord.subjects[subject].isRunning = (timers[subject] && timers[subject].isRunning) || false;
             
