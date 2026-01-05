@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타이머 정확도 테스트</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a202c;
+            color: #ffffff;
+        }
+        .test-box {
+            background: #2d3748;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #4fd1c5;
+            margin-bottom: 20px;
+        }
+        .result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success {
+            background: #276749;
+            color: #9ae6b4;
+        }
+        .error {
+            background: #742a2a;
+            color: #fc8181;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .log {
+            background: #000;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .log-line {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h2>🧪 학습 시간 타이머 정확도 테스트</h2>
+        
+        <button onclick="test1()">테스트 1: 36분 4초 저장 및 복원</button>
+        <button onclick="test2()">테스트 2: 1시간 학습 시뮬레이션</button>
+        <button onclick="test3()">테스트 3: 로그아웃/재로그인 10회</button>
+        <button onclick="clearTest()" style="background: #e53e3e;">초기화</button>
+        
+        <div id="results"></div>
+        <div id="logs" class="log"></div>
+    </div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        const logsDiv = document.getElementById('logs');
+        
+        function log(message) {
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsDiv.appendChild(line);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        function showResult(message, isSuccess) {
+            const result = document.createElement('div');
+            result.className = `result ${isSuccess ? 'success' : 'error'}`;
+            result.textContent = message;
+            resultsDiv.appendChild(result);
+        }
+        
+        function clearTest() {
+            resultsDiv.innerHTML = '';
+            logsDiv.innerHTML = '';
+            localStorage.clear();
+            log('✅ localStorage 초기화 완료');
+        }
+        
+        // saveTodayStudyTime 함수 시뮬레이션
+        function saveTodayStudyTime(subject, totalSeconds) {
+            const today = new Date().toISOString().split('T')[0];
+            const studentId = 'test_student_001';
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            let todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            if (!todayRecord) {
+                todayRecord = {
+                    id: `record_${Date.now()}`,
+                    student_id: studentId,
+                    student_name: '테스트학생',
+                    date: today,
+                    subjects: {}
+                };
+                studyRecords.push(todayRecord);
+            }
+            
+            if (!todayRecord.subjects[subject]) {
+                todayRecord.subjects[subject] = { 
+                    time: 0,
+                    seconds: 0,
+                    content: '', 
+                    isRunning: false 
+                };
+            }
+            
+            // ✅ 새로운 방식: 초 단위로 저장
+            todayRecord.subjects[subject].seconds = totalSeconds;
+            todayRecord.subjects[subject].time = Math.floor(totalSeconds / 60);
+            todayRecord.subjects[subject].last_update = new Date().toISOString();
+            
+            localStorage.setItem('study_records', JSON.stringify(studyRecords));
+            
+            log(`💾 저장: ${subject} - ${Math.floor(totalSeconds/60)}분 ${totalSeconds%60}초 (총 ${totalSeconds}초)`);
+            return todayRecord;
+        }
+        
+        // restoreRunningTimers 함수 시뮬레이션
+        function restoreStudyTime(subject) {
+            const today = new Date().toISOString().split('T')[0];
+            const studentId = 'test_student_001';
+            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
+            const todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
+            
+            if (!todayRecord || !todayRecord.subjects[subject]) {
+                log(`❌ 복원 실패: ${subject} 기록 없음`);
+                return 0;
+            }
+            
+            // ✅ seconds 필드 우선 사용
+            const currentSeconds = todayRecord.subjects[subject].seconds || (todayRecord.subjects[subject].time * 60);
+            
+            log(`📥 복원: ${subject} - ${Math.floor(currentSeconds/60)}분 ${currentSeconds%60}초 (총 ${currentSeconds}초)`);
+            return currentSeconds;
+        }
+        
+        // 테스트 1: 36분 4초 저장 및 복원
+        function test1() {
+            log('\n========== 테스트 1 시작 ==========');
+            clearTest();
+            
+            const subject = '수학';
+            const testSeconds = 36 * 60 + 4;  // 2164초
+            
+            log(`📝 테스트: ${Math.floor(testSeconds/60)}분 ${testSeconds%60}초 저장`);
+            
+            // 저장
+            const saved = saveTodayStudyTime(subject, testSeconds);
+            
+            // 확인
+            const savedSeconds = saved.subjects[subject].seconds;
+            const savedMinutes = saved.subjects[subject].time;
+            
+            log(`✅ 저장 확인: seconds=${savedSeconds}, time=${savedMinutes}분`);
+            
+            // 복원
+            const restored = restoreStudyTime(subject);
+            
+            // 결과
+            if (restored === testSeconds) {
+                showResult(`✅ 테스트 1 성공: ${testSeconds}초 → ${restored}초 (정확히 복원!)`, true);
+            } else {
+                showResult(`❌ 테스트 1 실패: ${testSeconds}초 → ${restored}초 (${testSeconds - restored}초 손실)`, false);
+            }
+            
+            log('========== 테스트 1 종료 ==========\n');
+        }
+        
+        // 테스트 2: 1시간 학습 시뮬레이션
+        function test2() {
+            log('\n========== 테스트 2 시작 ==========');
+            clearTest();
+            
+            const subject = '영어';
+            const testSeconds = 60 * 60;  // 3600초 (1시간)
+            
+            log(`📝 테스트: ${Math.floor(testSeconds/60)}분 학습 시뮬레이션`);
+            
+            // 저장
+            saveTodayStudyTime(subject, testSeconds);
+            
+            // 복원
+            const restored = restoreStudyTime(subject);
+            
+            // 결과
+            if (restored === testSeconds) {
+                showResult(`✅ 테스트 2 성공: 1시간 정확히 복원됨 (${restored}초)`, true);
+            } else {
+                showResult(`❌ 테스트 2 실패: ${testSeconds}초 → ${restored}초`, false);
+            }
+            
+            log('========== 테스트 2 종료 ==========\n');
+        }
+        
+        // 테스트 3: 로그아웃/재로그인 10회 반복
+        function test3() {
+            log('\n========== 테스트 3 시작 ==========');
+            clearTest();
+            
+            const subject = '국어';
+            let currentSeconds = 36 * 60 + 4;  // 2164초
+            
+            log(`📝 테스트: 로그아웃/재로그인 10회 반복`);
+            log(`초기 시간: ${Math.floor(currentSeconds/60)}분 ${currentSeconds%60}초`);
+            
+            let allSuccess = true;
+            
+            for (let i = 1; i <= 10; i++) {
+                // 저장 (로그아웃)
+                saveTodayStudyTime(subject, currentSeconds);
+                
+                // 10초 추가 학습
+                currentSeconds += 10;
+                
+                // 복원 (재로그인)
+                const restored = restoreStudyTime(subject);
+                
+                // 복원된 시간에 10초 추가
+                currentSeconds = restored + 10;
+                
+                if (restored === currentSeconds - 10) {
+                    log(`✅ 반복 ${i}: 정상 복원`);
+                } else {
+                    log(`❌ 반복 ${i}: 오류 (기대: ${currentSeconds - 10}, 실제: ${restored})`);
+                    allSuccess = false;
+                    break;
+                }
+            }
+            
+            const finalSeconds = currentSeconds - 10;
+            const expectedSeconds = (36 * 60 + 4) + (10 * 10);  // 초기 + (10초 × 10회)
+            
+            log(`📊 최종 시간: ${Math.floor(finalSeconds/60)}분 ${finalSeconds%60}초`);
+            log(`📊 예상 시간: ${Math.floor(expectedSeconds/60)}분 ${expectedSeconds%60}초`);
+            
+            // 결과
+            if (allSuccess && finalSeconds === expectedSeconds) {
+                showResult(`✅ 테스트 3 성공: 10회 반복 후에도 정확히 유지됨!`, true);
+            } else {
+                showResult(`❌ 테스트 3 실패: 누적 오차 발생 (${expectedSeconds - finalSeconds}초 손실)`, false);
+            }
+            
+            log('========== 테스트 3 종료 ==========\n');
+        }
+        
+        // 페이지 로드 시
+        log('🧪 타이머 정확도 테스트 준비 완료');
+        log('버튼을 클릭하여 테스트를 시작하세요.');
+    </script>
+</body>
+</html>
