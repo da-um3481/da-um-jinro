@@ -2566,30 +2566,57 @@
             // localStorage에서 진단평가 결과 가져오기
             const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
             
-            // 중학생만 필터링 (subject 조건 제거 - 모든 진단평가 결과 포함)
+            console.log('🔍 [수준별 학습관리] 원본 데이터 전체:', diagnosticResults);
+            console.log('🔍 [수준별 학습관리] 원본 개수:', diagnosticResults.length);
+            
+            // 중학생만 필터링 (grade가 1~3인 학생)
             const middleSchoolDiagnostics = diagnosticResults.filter(result => {
                 const grade = result.grade || parseInt(result.student_id?.split('_')[1]) || 0;
-                return grade <= 3;
+                const isMiddleSchool = grade > 0 && grade <= 3;
+                
+                if (!isMiddleSchool) {
+                    console.log('❌ 필터링 제외:', {
+                        name: result.studentName || result.student_name,
+                        grade,
+                        reason: grade <= 0 ? 'grade 없음' : 'grade > 3'
+                    });
+                }
+                
+                return isMiddleSchool;
             });
 
-            console.log('📊 수준별 학습관리 원본 데이터:', middleSchoolDiagnostics);
-            console.log('📊 원본 데이터 개수:', middleSchoolDiagnostics.length);
+            console.log('🔍 [수준별 학습관리] 중학생 필터 후:', middleSchoolDiagnostics);
+            console.log('🔍 [수준별 학습관리] 필터 후 개수:', middleSchoolDiagnostics.length);
 
             // 학생별로 그룹화 (최신 진단평가 결과만)
             const studentMap = new Map();
             middleSchoolDiagnostics.forEach(result => {
-                // studentId 다양한 형식 지원
-                const studentId = result.studentId || result.student_id || `${result.studentName}_${result.grade}`;
-                console.log('🔍 처리 중:', { studentId, name: result.studentName || result.student_name, grade: result.grade });
+                // studentId 폴백: studentId → student_id → 이름_학년
+                const studentName = result.studentName || result.student_name || '이름없음';
+                const studentId = result.studentId 
+                                  || result.student_id 
+                                  || `${studentName}_${result.grade}`;
+                
+                const totalScore = result.totalScore || result.total_score || 0;
+                
+                console.log('🔍 [처리 중]:', { 
+                    studentId, 
+                    name: studentName, 
+                    grade: result.grade,
+                    totalScore
+                });
                 
                 const existingResult = studentMap.get(studentId);
-                if (!existingResult || new Date(result.testDate || result.test_date) > new Date(existingResult.testDate || existingResult.test_date)) {
+                const currentDate = new Date(result.testDate || result.test_date);
+                const existingDate = existingResult ? new Date(existingResult.testDate || existingResult.test_date) : new Date(0);
+                
+                if (!existingResult || currentDate > existingDate) {
                     studentMap.set(studentId, result);
                 }
             });
             
-            console.log('📊 그룹화 후 학생 수:', studentMap.size);
-            console.log('📊 그룹화 결과:', Array.from(studentMap.entries()));
+            console.log('🔍 [수준별 학습관리] 그룹화 후 학생 수:', studentMap.size);
+            console.log('🔍 [수준별 학습관리] 최종 학생 목록:', Array.from(studentMap.keys()));
 
             const managementData = Array.from(studentMap.values()).map(result => {
                 // 총점 가져오기 (Google Sheets 형식 & localStorage 형식 지원)
