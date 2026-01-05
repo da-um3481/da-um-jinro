@@ -6,11 +6,47 @@
     <title>🚀 자기주도학습UP 챌린지 - 나의 학습 포털</title>
     
     <!-- 버전 정보 (캐시 버스팅) -->
-    <meta name="version" content="2.0.1">
-    <meta name="build-date" content="2026-01-04">
+    <meta name="version" content="3.0.0">
+    <meta name="build-date" content="2026-01-06">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    
+    <!-- 자동 캐시 무효화 및 업데이트 체크 -->
+    <script>
+        // 버전 체크 및 자동 새로고침
+        const CURRENT_VERSION = '3.0.0';
+        const VERSION_KEY = 'student_portal_version';
+        
+        (function() {
+            const savedVersion = localStorage.getItem(VERSION_KEY);
+            
+            // 버전이 다르면 캐시 클리어 및 강제 새로고침
+            if (savedVersion !== CURRENT_VERSION) {
+                console.log(`🔄 버전 업데이트 감지: ${savedVersion} → ${CURRENT_VERSION}`);
+                
+                // localStorage 버전 업데이트
+                localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+                
+                // 캐시 클리어 (가능한 경우)
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) caches.delete(name);
+                    });
+                }
+                
+                // 첫 방문이 아닌 경우에만 자동 새로고침
+                if (savedVersion !== null) {
+                    console.log('⚡ 자동 새로고침 시작...');
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 500);
+                }
+            } else {
+                console.log('✅ 최신 버전:', CURRENT_VERSION);
+            }
+        })();
+    </script>
     
     <!-- 저작권 및 보안 메타데이터 -->
     <meta name="author" content="다움진로진학컨설팅 (DA:UM Career & Academic Consulting)">
