@@ -5293,7 +5293,53 @@ ${record.content || '기록 없음'}`);
                 select.remove(1);
             }
             
-            // ✅ Google Sheets에서 진단평가 완료 학생 목록 가져오기
+            // ✅ localStorage 우선 사용 (빠르고 확실함)
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            console.log('📦 localStorage 진단 결과:', diagnosticResults.length, '건');
+            
+            if (diagnosticResults.length > 0) {
+                // 중학생만 필터링
+                const middleSchoolStudents = diagnosticResults.filter(student => {
+                    const grade = student.grade || 0;
+                    return grade > 0 && grade <= 3;
+                });
+                
+                console.log('🎓 중학생 필터링:', middleSchoolStudents.length, '명');
+                
+                // 중복 제거 (studentId 기준)
+                const studentMap = new Map();
+                middleSchoolStudents.forEach(student => {
+                    const studentId = student.studentId || student.student_id;
+                    const studentName = student.studentName || student.student_name || '이름없음';
+                    
+                    if (studentId && !studentMap.has(studentId)) {
+                        studentMap.set(studentId, {
+                            id: studentId,
+                            name: studentName,
+                            grade: student.grade
+                        });
+                    }
+                });
+                
+                const uniqueStudents = Array.from(studentMap.values());
+                console.log('👥 고유 학생 수:', uniqueStudents.length, '명');
+                
+                // 드롭다운에 추가
+                uniqueStudents.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = `${student.name} (중${student.grade})`;
+                    option.style.background = '#2d3748';
+                    option.style.color = '#ffffff';
+                    select.appendChild(option);
+                });
+                
+                console.log('✅ [학습 관리] 드롭다운에', uniqueStudents.length, '명 추가 완료');
+                return;
+            }
+            
+            // ✅ localStorage에 없으면 Google Sheets에서 가져오기
+            console.log('⚠️ localStorage 데이터 없음, Google Sheets 조회...');
             try {
                 const result = await getDiagnosticResultsFromCloud();
                 
