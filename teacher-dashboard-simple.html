@@ -306,6 +306,9 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 학생 이름으로 검색...">
             </div>
+            <div class="search-box">
+                <input type="date" id="dateFilter" min="2026-01-05" max="2026-01-30">
+            </div>
             <button class="btn" onclick="loadData()">
                 <i class="fas fa-sync-alt"></i>
                 새로고침
@@ -320,11 +323,15 @@
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6qWy7j413iykH1VxStxh-Jer0w721-a2fC0Vnbf_JQfs8hV8gRW6lBXluawBtQd80YkPPRyKItEGN/pub?gid=1158249397&single=true&output=csv';
         
         let allStudents = [];
+        let allRecords = [];
 
         window.addEventListener('DOMContentLoaded', () => {
             loadData();
             document.getElementById('searchInput').addEventListener('input', (e) => {
-                filterStudents(e.target.value);
+                filterData();
+            });
+            document.getElementById('dateFilter').addEventListener('change', (e) => {
+                filterData();
             });
         });
 
@@ -358,12 +365,13 @@
         }
 
         function processData(records) {
+            allRecords = records.filter(record => record.name && record.name !== 'name');
+            
             // 학생별로 그룹화
             const studentMap = {};
 
-            records.forEach(record => {
+            allRecords.forEach(record => {
                 const name = record.name;
-                if (!name || name === 'name') return; // 헤더 제외
 
                 if (!studentMap[name]) {
                     studentMap[name] = {
@@ -371,7 +379,8 @@
                         totalMinutes: 0,
                         recordCount: 0,
                         subjects: {},
-                        records: []
+                        records: [],
+                        dateMap: {} // 날짜별 기록
                     };
                 }
 
@@ -391,9 +400,36 @@
                 studentMap[name].subjects[subject].count++;
                 studentMap[name].subjects[subject].totalMinutes += timeValue;
 
+                // 날짜 정규화 (2026. 1. 5 → 2026-01-05)
+                let normalizedDate = record.date;
+                if (record.date && record.date.includes('.')) {
+                    const parts = record.date.split('.').map(p => p.trim());
+                    if (parts.length >= 3) {
+                        const year = parts[0];
+                        const month = parts[1].padStart(2, '0');
+                        const day = parts[2].padStart(2, '0');
+                        normalizedDate = `${year}-${month}-${day}`;
+                    }
+                }
+
+                // 날짜별 기록
+                if (!studentMap[name].dateMap[normalizedDate]) {
+                    studentMap[name].dateMap[normalizedDate] = {
+                        date: normalizedDate,
+                        totalMinutes: 0,
+                        records: []
+                    };
+                }
+                studentMap[name].dateMap[normalizedDate].totalMinutes += timeValue;
+                studentMap[name].dateMap[normalizedDate].records.push({
+                    subject: subject,
+                    time: timeValue,
+                    content: record.content || '학습 완료'
+                });
+
                 // 기록 저장
                 studentMap[name].records.push({
-                    date: record.date,
+                    date: normalizedDate,
                     subject: subject,
                     time: timeValue,
                     content: record.content || '학습 완료'
@@ -485,6 +521,36 @@
                     `;
                 }).join('');
 
+                // 날짜별 기록 HTML
+                const dateRecordsHtml = Object.values(student.dateMap || {})
+                    .sort((a, b) => new Date(b.date) - new Date(a.date)) // 최신순
+                    .map(dateData => {
+                        const dateHours = Math.floor(dateData.totalMinutes / 60);
+                        const dateMinutes = dateData.totalMinutes % 60;
+                        
+                        const dateSubRecords = dateData.records.map(r => {
+                            const h = Math.floor(r.time / 60);
+                            const m = r.time % 60;
+                            return `
+                                <div style="padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 5px; margin-top: 0.5rem;">
+                                    <strong>${r.subject}</strong> | ${h > 0 ? h + '시간 ' : ''}${m}분 | ${r.content}
+                                </div>
+                            `;
+                        }).join('');
+
+                        return `
+                            <div style="border-left: 3px solid var(--primary); padding-left: 1rem; margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                    <strong style="font-size: 1.1rem;">${dateData.date}</strong>
+                                    <span style="color: var(--accent); font-weight: 700;">
+                                        ${dateHours > 0 ? dateHours + '시간 ' : ''}${dateMinutes}분
+                                    </span>
+                                </div>
+                                ${dateSubRecords}
+                            </div>
+                        `;
+                    }).join('');
+
                 return `
                     <div class="student-card">
                         <div class="student-header">
@@ -506,23 +572,14 @@
                         </div>
 
                         <button class="expand-btn" onclick="toggleRecords(${index})">
-                            <i class="fas fa-chevron-down"></i> 상세 기록 보기
+                            <i class="fas fa-calendar-alt"></i> 날짜별 학습 기록 보기
                         </button>
 
                         <div class="records-detail" id="records-${index}">
-                            <table class="records-table">
-                                <thead>
-                                    <tr>
-                                        <th>날짜</th>
-                                        <th>과목</th>
-                                        <th>시간</th>
-                                        <th>내용</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${recordsHtml}
-                                </tbody>
-                            </table>
+                            <h4 style="margin-bottom: 1rem; color: var(--primary);">
+                                <i class="fas fa-calendar-week"></i> 날짜별 학습 기록
+                            </h4>
+                            ${dateRecordsHtml || '<p style="color: var(--text-muted);">학습 기록이 없습니다.</p>'}
                         </div>
                     </div>
                 `;
@@ -536,17 +593,60 @@
             element.classList.toggle('show');
         }
 
-        function filterStudents(searchTerm) {
-            if (!searchTerm.trim()) {
-                displayStudents(allStudents);
-                return;
+        function filterData() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const selectedDate = document.getElementById('dateFilter').value;
+
+            let filtered = allStudents;
+
+            // 학생 이름 필터
+            if (searchTerm.trim()) {
+                filtered = filtered.filter(student => 
+                    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+                );
             }
 
-            const filtered = allStudents.filter(student => 
-                student.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            // 날짜 필터
+            if (selectedDate) {
+                filtered = filtered.map(student => {
+                    // 해당 날짜에 학습한 학생만 포함
+                    const dateRecords = student.records.filter(r => r.date === selectedDate);
+                    
+                    if (dateRecords.length === 0) return null;
+
+                    // 해당 날짜의 데이터만 표시
+                    const filteredStudent = {
+                        ...student,
+                        records: dateRecords,
+                        recordCount: dateRecords.length,
+                        totalMinutes: dateRecords.reduce((sum, r) => sum + r.time, 0),
+                        dateMap: {
+                            [selectedDate]: student.dateMap[selectedDate] || { date: selectedDate, totalMinutes: 0, records: [] }
+                        }
+                    };
+
+                    // 과목별 재계산
+                    filteredStudent.subjects = {};
+                    dateRecords.forEach(record => {
+                        if (!filteredStudent.subjects[record.subject]) {
+                            filteredStudent.subjects[record.subject] = {
+                                count: 0,
+                                totalMinutes: 0
+                            };
+                        }
+                        filteredStudent.subjects[record.subject].count++;
+                        filteredStudent.subjects[record.subject].totalMinutes += record.time;
+                    });
+
+                    return filteredStudent;
+                }).filter(s => s !== null);
+            }
             
             displayStudents(filtered);
+        }
+
+        function filterStudents(searchTerm) {
+            filterData();
         }
     </script>
 </body>
