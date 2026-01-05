@@ -5293,39 +5293,21 @@ ${record.content || '기록 없음'}`);
                 select.remove(1);
             }
             
-            // ✅ localStorage 우선 사용 (빠르고 확실함)
-            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
-            console.log('📦 localStorage 진단 결과:', diagnosticResults.length, '건');
+            // ✅ 등록된 모든 학생 가져오기
+            const allStudents = JSON.parse(localStorage.getItem('students')) || [];
+            console.log('📦 localStorage 전체 학생:', allStudents.length, '명');
             
-            if (diagnosticResults.length > 0) {
+            if (allStudents.length > 0) {
                 // 중학생만 필터링
-                const middleSchoolStudents = diagnosticResults.filter(student => {
+                const middleSchoolStudents = allStudents.filter(student => {
                     const grade = student.grade || 0;
                     return grade > 0 && grade <= 3;
                 });
                 
                 console.log('🎓 중학생 필터링:', middleSchoolStudents.length, '명');
                 
-                // 중복 제거 (studentId 기준)
-                const studentMap = new Map();
-                middleSchoolStudents.forEach(student => {
-                    const studentId = student.studentId || student.student_id;
-                    const studentName = student.studentName || student.student_name || '이름없음';
-                    
-                    if (studentId && !studentMap.has(studentId)) {
-                        studentMap.set(studentId, {
-                            id: studentId,
-                            name: studentName,
-                            grade: student.grade
-                        });
-                    }
-                });
-                
-                const uniqueStudents = Array.from(studentMap.values());
-                console.log('👥 고유 학생 수:', uniqueStudents.length, '명');
-                
                 // 드롭다운에 추가
-                uniqueStudents.forEach(student => {
+                middleSchoolStudents.forEach(student => {
                     const option = document.createElement('option');
                     option.value = student.id;
                     option.textContent = `${student.name} (중${student.grade})`;
@@ -5334,7 +5316,7 @@ ${record.content || '기록 없음'}`);
                     select.appendChild(option);
                 });
                 
-                console.log('✅ [학습 관리] 드롭다운에', uniqueStudents.length, '명 추가 완료');
+                console.log('✅ [학습 관리] 드롭다운에', middleSchoolStudents.length, '명 추가 완료');
                 return;
             }
             
