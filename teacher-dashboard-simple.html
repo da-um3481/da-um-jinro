@@ -348,6 +348,7 @@
             display: flex;
             gap: 0.5rem;
             margin-top: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .btn-small {
@@ -360,6 +361,16 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-ai:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn-save {
@@ -483,6 +494,94 @@
         // 피드백 키 생성
         function getFeedbackKey(studentName, date) {
             return `${studentName}_${date}`;
+        }
+
+        // AI 자동 피드백 생성
+        function generateAIFeedback(studentName, date, dateData) {
+            const totalMinutes = dateData.totalMinutes;
+            const totalHours = Math.floor(totalMinutes / 60);
+            const remainMinutes = totalMinutes % 60;
+            const records = dateData.records;
+            
+            // 과목별 그룹화
+            const subjectGroups = {};
+            records.forEach(r => {
+                if (!subjectGroups[r.subject]) {
+                    subjectGroups[r.subject] = { count: 0, totalTime: 0, contents: [] };
+                }
+                subjectGroups[r.subject].count++;
+                subjectGroups[r.subject].totalTime += r.time;
+                if (r.content && r.content !== '학습 완료') {
+                    subjectGroups[r.subject].contents.push(r.content);
+                }
+            });
+            
+            const subjects = Object.keys(subjectGroups);
+            const subjectCount = subjects.length;
+            
+            let feedback = '';
+            
+            // 1. 총 학습 시간 평가
+            if (totalMinutes >= 180) {
+                feedback += '✅ 오늘 총 ' + (totalHours > 0 ? totalHours + '시간 ' : '') + remainMinutes + '분 동안 매우 충실하게 학습했습니다!\n\n';
+            } else if (totalMinutes >= 120) {
+                feedback += '✅ 오늘 총 ' + (totalHours > 0 ? totalHours + '시간 ' : '') + remainMinutes + '분 동안 꾸준히 학습했습니다.\n\n';
+            } else if (totalMinutes >= 60) {
+                feedback += '✅ 오늘 총 ' + (totalHours > 0 ? totalHours + '시간 ' : '') + remainMinutes + '분 학습했습니다.\n\n';
+            } else {
+                feedback += '✅ 오늘 ' + remainMinutes + '분 학습했습니다.\n\n';
+            }
+            
+            // 2. 과목별 분석
+            feedback += '📚 학습 내역:\n';
+            subjects.forEach(subject => {
+                const group = subjectGroups[subject];
+                const h = Math.floor(group.totalTime / 60);
+                const m = group.totalTime % 60;
+                
+                feedback += '  • ' + subject + ': ';
+                if (h > 0) feedback += h + '시간 ';
+                feedback += m + '분';
+                
+                if (group.count > 1) {
+                    feedback += ' (' + group.count + '회 반복)';
+                    if (group.count >= 3) {
+                        feedback += ' - 개념을 확실히 다졌습니다!';
+                    } else {
+                        feedback += ' - 꾸준히 복습하고 있습니다.';
+                    }
+                }
+                
+                if (group.contents.length > 0) {
+                    feedback += '\n    내용: ' + group.contents.slice(0, 3).join(', ');
+                    if (group.contents.length > 3) {
+                        feedback += ' 외 ' + (group.contents.length - 3) + '개';
+                    }
+                }
+                feedback += '\n';
+            });
+            
+            feedback += '\n';
+            
+            // 3. 과목 균형 평가
+            if (subjectCount >= 3) {
+                feedback += '💪 다양한 과목을 균형있게 학습하는 훌륭한 습관을 보여주고 있습니다.\n';
+            } else if (subjectCount === 2) {
+                feedback += '💪 두 과목을 집중적으로 학습했습니다.\n';
+            } else {
+                feedback += '💪 한 과목에 집중하여 깊이있게 학습했습니다.\n';
+            }
+            
+            // 4. 격려 메시지
+            if (totalMinutes >= 120) {
+                feedback += '\n🌟 오늘도 최선을 다한 모습이 멋집니다. 내일도 화이팅!';
+            } else if (totalMinutes >= 60) {
+                feedback += '\n🌟 꾸준한 학습 태도가 좋습니다. 계속 이 페이스를 유지하세요!';
+            } else {
+                feedback += '\n🌟 시작이 중요합니다. 내일은 조금 더 시간을 투자해보세요!';
+            }
+            
+            return feedback;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -808,6 +907,9 @@
                                     <div id="feedback-edit-${feedbackKey}" style="display: ${hasFeedback ? 'none' : 'block'};">
                                         <textarea class="feedback-textarea" id="feedback-text-${feedbackKey}" placeholder="이 날짜의 학습에 대한 피드백을 작성하세요...">${existingFeedback}</textarea>
                                         <div class="feedback-actions">
+                                            <button class="btn-small btn-ai" onclick="generateAndSetFeedback('${student.name}', '${dateData.date}', '${feedbackKey}')">
+                                                <i class="fas fa-magic"></i> AI 자동 생성
+                                            </button>
                                             <button class="btn-small btn-save" onclick="saveFeedback('${feedbackKey}')">
                                                 <i class="fas fa-save"></i> 저장
                                             </button>
@@ -969,6 +1071,25 @@
             document.getElementById(`feedback-text-${key}`).value = existingFeedback;
             document.getElementById(`feedback-display-${key}`).style.display = 'block';
             document.getElementById(`feedback-edit-${key}`).style.display = 'none';
+        }
+
+        // AI 피드백 생성 및 적용
+        function generateAndSetFeedback(studentName, date, feedbackKey) {
+            // 학생의 해당 날짜 데이터 찾기
+            const student = allStudents.find(s => s.name === studentName);
+            if (!student || !student.dateMap || !student.dateMap[date]) {
+                alert('⚠️ 학습 데이터를 찾을 수 없습니다.');
+                return;
+            }
+
+            const dateData = student.dateMap[date];
+            const aiFeedback = generateAIFeedback(studentName, date, dateData);
+            
+            // textarea에 자동 생성된 피드백 입력
+            document.getElementById(`feedback-text-${feedbackKey}`).value = aiFeedback;
+            
+            // 안내 메시지
+            alert('🤖 AI 피드백이 생성되었습니다!\n\n수정 후 [저장] 버튼을 눌러주세요.');
         }
     </script>
 </body>
