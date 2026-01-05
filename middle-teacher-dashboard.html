@@ -5648,12 +5648,39 @@ ${record.content || '기록 없음'}`);
             
             try {
                 // Google Sheets에서 학생별 그룹화된 데이터 조회
+                console.log('🔍 학습 기록 요청: studentId=""', 'groupBy="student"');
                 const result = await getStudyRecordsFromCloud('', 'student');
                 
-                console.log('📊 학생별 그룹화 데이터:', result);
+                console.log('📊 응답 타입:', typeof result);
+                console.log('📊 응답 상태:', result.status);
+                console.log('📊 응답 데이터 개수:', result.data ? result.data.length : 0);
+                console.log('📊 첫 번째 데이터:', result.data && result.data[0] ? result.data[0] : null);
                 
                 if (result.status === 'success' && result.data && result.data.length > 0) {
-                    renderStudentGroupedData(result.data);
+                    // 진단평가인지 학습기록인지 확인
+                    const firstItem = result.data[0];
+                    if (firstItem.studentName && firstItem.totalMinutes !== undefined) {
+                        // 학습 기록 (정상)
+                        console.log('✅ 학습 기록 데이터 확인');
+                        renderStudentGroupedData(result.data);
+                    } else if (firstItem.total_score !== undefined) {
+                        // 진단평가 (잘못된 데이터)
+                        console.error('❌ 진단평가 데이터가 반환됨! 학습 기록이 아닙니다.');
+                        content.innerHTML = `
+                            <div style="text-align: center; padding: 3rem;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                                <p style="color: var(--danger); font-size: 1.1rem;">데이터 오류</p>
+                                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                                    진단평가 데이터가 반환되었습니다.<br>
+                                    Apps Script의 getStudyRecords 함수를 확인하세요.
+                                </p>
+                            </div>
+                        `;
+                    } else {
+                        // 알 수 없는 형식
+                        console.error('❌ 알 수 없는 데이터 형식:', firstItem);
+                        renderStudentGroupedData(result.data);
+                    }
                 } else {
                     content.innerHTML = `
                         <div style="text-align: center; padding: 3rem;">
