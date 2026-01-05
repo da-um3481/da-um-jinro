@@ -156,6 +156,12 @@ function groupRecordsByStudent(records) {
       }
     }
     
+    // Time column is empty, so count records instead
+    // Each record = 1 session (you can assign default time if needed)
+    if (time === 0) {
+      time = 45; // Default: 45 minutes per session
+    }
+    
     grouped[studentKey].totalMinutes += time;
     
     var subject = record.subject || record.content || 'Other';
@@ -170,7 +176,16 @@ function groupRecordsByStudent(records) {
     grouped[studentKey].subjectStats[subject].count++;
     grouped[studentKey].subjectStats[subject].totalMinutes += time;
     
-    grouped[studentKey].records.push(record);
+    // Store original record with time info
+    var recordWithTime = {};
+    for (var key in record) {
+      if (record.hasOwnProperty(key)) {
+        recordWithTime[key] = record[key];
+      }
+    }
+    recordWithTime.calculatedTime = time; // Add calculated time
+    
+    grouped[studentKey].records.push(recordWithTime);
   }
   
   var result = [];
