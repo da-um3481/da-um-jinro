@@ -301,6 +301,105 @@
             display: block;
         }
 
+        .feedback-section {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .feedback-header h5 {
+            color: var(--accent);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(240, 147, 251, 0.3);
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--success), #22c55e);
+            color: white;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-edit {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .feedback-display {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem;
+            border-radius: 6px;
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
         .records-table {
             width: 100%;
             border-collapse: collapse;
@@ -362,8 +461,32 @@
         
         let allStudents = [];
         let allRecords = [];
+        let feedbacks = {}; // { "studentName_date": "feedback text" }
+
+        // 피드백 로드
+        function loadFeedbacks() {
+            const saved = localStorage.getItem('teacher_feedbacks');
+            if (saved) {
+                try {
+                    feedbacks = JSON.parse(saved);
+                } catch (e) {
+                    feedbacks = {};
+                }
+            }
+        }
+
+        // 피드백 저장
+        function saveFeedbacks() {
+            localStorage.setItem('teacher_feedbacks', JSON.stringify(feedbacks));
+        }
+
+        // 피드백 키 생성
+        function getFeedbackKey(studentName, date) {
+            return `${studentName}_${date}`;
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
+            loadFeedbacks();
             loadData();
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 filterData();
@@ -637,6 +760,11 @@
                             `;
                         }).join('');
 
+                        // 피드백 키
+                        const feedbackKey = getFeedbackKey(student.name, dateData.date);
+                        const existingFeedback = feedbacks[feedbackKey] || '';
+                        const hasFeedback = existingFeedback.length > 0;
+
                         return `
                             <div style="border-left: 3px solid var(--primary); padding-left: 1rem; margin-bottom: 1rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
@@ -646,6 +774,26 @@
                                     </span>
                                 </div>
                                 ${dateSubRecords}
+                                
+                                <!-- 피드백 섹션 -->
+                                <div class="feedback-section">
+                                    <div class="feedback-header">
+                                        <h5><i class="fas fa-comment-dots"></i> 교사 피드백</h5>
+                                        ${hasFeedback ? `<button class="btn-small btn-edit" onclick="editFeedback('${feedbackKey}')"><i class="fas fa-edit"></i> 수정</button>` : ''}
+                                    </div>
+                                    <div id="feedback-display-${feedbackKey}" style="display: ${hasFeedback ? 'block' : 'none'};">
+                                        <div class="feedback-display">${existingFeedback}</div>
+                                    </div>
+                                    <div id="feedback-edit-${feedbackKey}" style="display: ${hasFeedback ? 'none' : 'block'};">
+                                        <textarea class="feedback-textarea" id="feedback-text-${feedbackKey}" placeholder="이 날짜의 학습에 대한 피드백을 작성하세요...">${existingFeedback}</textarea>
+                                        <div class="feedback-actions">
+                                            <button class="btn-small btn-save" onclick="saveFeedback('${feedbackKey}')">
+                                                <i class="fas fa-save"></i> 저장
+                                            </button>
+                                            ${hasFeedback ? `<button class="btn-small btn-cancel" onclick="cancelFeedback('${feedbackKey}')"><i class="fas fa-times"></i> 취소</button>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         `;
                     }).join('');
@@ -757,6 +905,49 @@
 
         function filterStudents(searchTerm) {
             filterData();
+        }
+
+        // 피드백 저장
+        function saveFeedback(key) {
+            const textarea = document.getElementById(`feedback-text-${key}`);
+            const feedbackText = textarea.value.trim();
+            
+            if (feedbackText) {
+                feedbacks[key] = feedbackText;
+                saveFeedbacks();
+                
+                // UI 업데이트
+                document.getElementById(`feedback-display-${key}`).innerHTML = `<div class="feedback-display">${feedbackText}</div>`;
+                document.getElementById(`feedback-display-${key}`).style.display = 'block';
+                document.getElementById(`feedback-edit-${key}`).style.display = 'none';
+                
+                // 수정 버튼 추가
+                const header = document.getElementById(`feedback-display-${key}`).previousElementSibling;
+                if (!header.querySelector('.btn-edit')) {
+                    header.innerHTML = `
+                        <h5><i class="fas fa-comment-dots"></i> 교사 피드백</h5>
+                        <button class="btn-small btn-edit" onclick="editFeedback('${key}')"><i class="fas fa-edit"></i> 수정</button>
+                    `;
+                }
+                
+                alert('✅ 피드백이 저장되었습니다!');
+            } else {
+                alert('⚠️ 피드백 내용을 입력해주세요.');
+            }
+        }
+
+        // 피드백 수정
+        function editFeedback(key) {
+            document.getElementById(`feedback-display-${key}`).style.display = 'none';
+            document.getElementById(`feedback-edit-${key}`).style.display = 'block';
+        }
+
+        // 피드백 취소
+        function cancelFeedback(key) {
+            const existingFeedback = feedbacks[key] || '';
+            document.getElementById(`feedback-text-${key}`).value = existingFeedback;
+            document.getElementById(`feedback-display-${key}`).style.display = 'block';
+            document.getElementById(`feedback-edit-${key}`).style.display = 'none';
         }
     </script>
 </body>
