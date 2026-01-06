@@ -6,7 +6,7 @@
     <title>🚀 자기주도학습UP 챌린지 - 나의 학습 포털</title>
     
     <!-- 버전 정보 (캐시 버스팅) -->
-    <meta name="version" content="3.3.1">
+    <meta name="version" content="3.2.0">
     <meta name="build-date" content="2026-01-06">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -15,7 +15,7 @@
     <!-- 자동 캐시 무효화 및 업데이트 체크 -->
     <script>
         // 버전 체크 및 자동 새로고침
-        const CURRENT_VERSION = '3.3.1'; // ✅ 메타 태그와 동기화
+        const CURRENT_VERSION = '3.2.0'; // ✅ 메타 태그와 동기화
         const VERSION_KEY = 'student_portal_version';
         
         (function() {
@@ -6889,41 +6889,6 @@
             let metaCognitionRecords = JSON.parse(localStorage.getItem('meta_cognition_records')) || [];
             metaCognitionRecords.push(metaCognitionData);
             localStorage.setItem('meta_cognition_records', JSON.stringify(metaCognitionRecords));
-            
-            // 🆕 해당 과목의 학습 기록에 메타인지 데이터 추가
-            const studyRecords = JSON.parse(localStorage.getItem('study_records')) || [];
-            let todayRecord = studyRecords.find(r => r.student_id === studentId && r.date === today);
-            
-            if (todayRecord && todayRecord.subjects[subject]) {
-                // 메타인지 데이터를 학습 기록에 추가
-                todayRecord.subjects[subject].metacognition = metaCognitionData;
-                localStorage.setItem('study_records', JSON.stringify(studyRecords));
-                console.log('📝 메타인지 데이터를 학습 기록에 추가:', subject);
-                
-                // 🌐 Google Sheets로 전송 (메타인지 포함)
-                if (typeof saveStudyRecordToCloud === 'function') {
-                    const recordToSend = {
-                        student_id: studentId,
-                        student_name: localStorage.getItem('currentStudentName'),
-                        date: today,
-                        subject: subject,
-                        time: todayRecord.subjects[subject].time || 0,
-                        content: todayRecord.subjects[subject].content || '',
-                        // 🧠 메타인지 필드 추가
-                        meta_can_explain: canExplain ? 'O' : 'X',
-                        meta_can_teach: canTeach ? 'O' : 'X',
-                        meta_can_solve: canSolveProblems ? 'O' : 'X',
-                        meta_needs_review: needsReview ? 'O' : 'X',
-                        meta_score: metaCognitionData.score,
-                        meta_understood: understood,
-                        meta_difficult: difficult,
-                        meta_next_plan: nextPlan
-                    };
-                    
-                    saveStudyRecordToCloud(recordToSend);
-                    console.log('🌐 메타인지 데이터를 Google Sheets로 전송:', recordToSend);
-                }
-            }
             
             console.log('✅ 메타인지 체크 저장 완료:', metaCognitionData);
             
