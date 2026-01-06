@@ -6,7 +6,7 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     
     <!-- 버전 정보 -->
-    <meta name="version" content="1.2.0">
+    <meta name="version" content="1.3.0">
     <meta name="build-date" content="2026-01-06">
     
     <!-- 캐시 무효화 -->
@@ -611,14 +611,8 @@
             console.log(`🎯 교사 대시보드 v${version} (빌드: ${buildDate})`);
             
             loadFeedbacks();
+            loadData(); // 데이터 로드 (processData에서 날짜 자동 설정)
             
-            // 🆕 오늘 날짜를 기본값으로 설정
-            const today = new Date().toISOString().split('T')[0];
-            const dateFilter = document.getElementById('dateFilter');
-            dateFilter.value = today;
-            console.log('📅 오늘 날짜로 자동 설정:', today);
-            
-            loadData();
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 filterData();
             });
@@ -803,6 +797,36 @@
             console.log('📊 CSV에서 불러온 전체 기록 수:', records.length);
             console.log('📊 필터링 후 기록 수:', allRecords.length);
             console.log('📊 첫 3개 기록 샘플:', allRecords.slice(0, 3));
+            
+            // 🆕 가장 최근 날짜 찾기
+            const allDates = new Set();
+            allRecords.forEach(record => {
+                if (record.date && record.date.includes('.')) {
+                    const parts = record.date.split('.').map(p => p.trim());
+                    if (parts.length >= 3) {
+                        const year = parts[0];
+                        const month = parts[1].padStart(2, '0');
+                        const day = parts[2].padStart(2, '0');
+                        const normalizedDate = `${year}-${month}-${day}`;
+                        allDates.add(normalizedDate);
+                    }
+                }
+            });
+            const latestDate = Array.from(allDates).sort().reverse()[0];
+            console.log('📅 가장 최근 날짜:', latestDate);
+            
+            // 오늘 날짜에 데이터가 없으면 가장 최근 날짜로 설정
+            const today = new Date().toISOString().split('T')[0];
+            const dateFilter = document.getElementById('dateFilter');
+            const todayHasData = Array.from(allDates).includes(today);
+            
+            if (!todayHasData && latestDate) {
+                dateFilter.value = latestDate;
+                console.log('⚠️ 오늘 데이터 없음 → 가장 최근 날짜로 설정:', latestDate);
+            } else {
+                dateFilter.value = today;
+                console.log('✅ 오늘 날짜로 설정:', today);
+            }
             
             // 학생별로 그룹화
             const studentMap = {};
