@@ -459,6 +459,10 @@
             <div class="search-box">
                 <input type="date" id="dateFilter" min="2026-01-05" max="2026-01-30">
             </div>
+            <button class="btn" onclick="showAllRecords()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+                <i class="fas fa-list"></i>
+                전체 기록 보기
+            </button>
             <button class="btn" onclick="loadData()">
                 <i class="fas fa-sync-alt"></i>
                 새로고침
@@ -592,6 +596,13 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             loadFeedbacks();
+            
+            // 🆕 오늘 날짜를 기본값으로 설정
+            const today = new Date().toISOString().split('T')[0];
+            const dateFilter = document.getElementById('dateFilter');
+            dateFilter.value = today;
+            console.log('📅 오늘 날짜로 자동 설정:', today);
+            
             loadData();
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 filterData();
@@ -600,6 +611,14 @@
                 filterData();
             });
         });
+
+        // 🆕 전체 기록 보기 (날짜 필터 제거)
+        function showAllRecords() {
+            const dateFilter = document.getElementById('dateFilter');
+            dateFilter.value = ''; // 날짜 필터 비우기
+            filterData(); // 전체 데이터 표시
+            console.log('📋 전체 학습 기록을 표시합니다');
+        }
 
         // 엑셀 내보내기 함수
         function exportToExcel() {
@@ -1077,7 +1096,7 @@
                             <i class="fas fa-calendar-alt"></i> 날짜별 학습 기록 보기
                         </button>
 
-                        <div class="records-detail" id="records-${index}">
+                        <div class="records-detail" id="records-${index}">`
                             <h4 style="margin-bottom: 1rem; color: var(--primary);">
                                 <i class="fas fa-calendar-week"></i> 날짜별 학습 기록
                             </h4>
