@@ -6,7 +6,7 @@
     <title>🚀 자기주도학습UP 챌린지 - 나의 학습 포털</title>
     
     <!-- 버전 정보 (캐시 버스팅) -->
-    <meta name="version" content="3.0.0">
+    <meta name="version" content="3.0.1">
     <meta name="build-date" content="2026-01-06">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -15,7 +15,7 @@
     <!-- 자동 캐시 무효화 및 업데이트 체크 -->
     <script>
         // 버전 체크 및 자동 새로고침
-        const CURRENT_VERSION = '3.0.0';
+        const CURRENT_VERSION = '3.0.1';
         const VERSION_KEY = 'student_portal_version';
         
         (function() {
@@ -2895,23 +2895,24 @@
             
             activeSubject = subject;
             
-            // 🆕 당일 학습 시간 로드 + 백그라운드 경과 시간 계산
-            let savedSeconds = loadTodayStudyTime(subject);
-            
             // 🔥 백그라운드 실행 중이었다면 경과 시간 반영
             const timerStartTime = localStorage.getItem('timerStartTime');
+            let savedSeconds = 0; // 기본값은 0부터 시작
+            
             if (timerStartTime) {
+                // 백그라운드에서 실행 중이었다면 경과 시간 계산
                 const now = Date.now();
                 const totalElapsedSeconds = Math.floor((now - parseInt(timerStartTime)) / 1000);
                 
-                // 기록된 시간보다 경과 시간이 더 크면 경과 시간 사용
-                if (totalElapsedSeconds > savedSeconds) {
-                    console.log(`⏱️ 백그라운드 경과 시간 반영: ${Math.floor(totalElapsedSeconds / 60)}분 (기록: ${Math.floor(savedSeconds / 60)}분)`);
-                    savedSeconds = totalElapsedSeconds;
-                }
+                console.log(`⏱️ 백그라운드 경과 시간 반영: ${Math.floor(totalElapsedSeconds / 60)}분`);
+                savedSeconds = totalElapsedSeconds;
                 
                 // 타이머 시작 시각 삭제 (이미 반영했으므로)
                 localStorage.removeItem('timerStartTime');
+            } else {
+                // 새로 시작하는 경우 0부터 시작
+                console.log('🆕 새로운 타이머 시작 (0분부터)');
+                savedSeconds = 0;
             }
             
             if (!timers[subject]) {
