@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>교사 대시보드 - 학생 학습 기록</title>
+    
+    <!-- 버전 정보 -->
+    <meta name="version" content="1.2.0">
+    <meta name="build-date" content="2026-01-06">
+    
+    <!-- 캐시 무효화 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <!-- SheetJS for Excel export -->
@@ -595,6 +605,11 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // 버전 정보 출력
+            const version = document.querySelector('meta[name="version"]')?.content || 'unknown';
+            const buildDate = document.querySelector('meta[name="build-date"]')?.content || 'unknown';
+            console.log(`🎯 교사 대시보드 v${version} (빌드: ${buildDate})`);
+            
             loadFeedbacks();
             
             // 🆕 오늘 날짜를 기본값으로 설정
