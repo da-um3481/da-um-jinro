@@ -6,7 +6,7 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     
     <!-- 버전 정보 -->
-    <meta name="version" content="1.5.0">
+    <meta name="version" content="1.6.0">
     <meta name="build-date" content="2026-01-06">
     
     <!-- 캐시 무효화 -->
@@ -852,17 +852,31 @@
             // 🆕 가장 최근 날짜 찾기
             const allDates = new Set();
             allRecords.forEach(record => {
-                if (record.date && record.date.includes('.')) {
-                    const parts = record.date.split('.').map(p => p.trim());
-                    if (parts.length >= 3) {
-                        const year = parts[0];
-                        const month = parts[1].padStart(2, '0');
-                        const day = parts[2].padStart(2, '0');
-                        const normalizedDate = `${year}-${month}-${day}`;
+                let normalizedDate = null;
+                
+                // 날짜 정규화: 두 가지 형식 지원
+                if (record.date) {
+                    if (record.date.includes('.')) {
+                        // 한국 형식: 2026. 1. 6
+                        const parts = record.date.split('.').map(p => p.trim());
+                        if (parts.length >= 3) {
+                            const year = parts[0];
+                            const month = parts[1].padStart(2, '0');
+                            const day = parts[2].padStart(2, '0');
+                            normalizedDate = `${year}-${month}-${day}`;
+                        }
+                    } else if (record.date.includes('-')) {
+                        // ISO 형식: 2026-01-06
+                        normalizedDate = record.date.split('T')[0]; // 타임스탬프 제거
+                    }
+                    
+                    if (normalizedDate) {
                         allDates.add(normalizedDate);
                     }
                 }
             });
+            
+            console.log('📅 발견된 모든 날짜:', Array.from(allDates).sort());
             const latestDate = Array.from(allDates).sort().reverse()[0];
             console.log('📅 가장 최근 날짜:', latestDate);
             
@@ -912,15 +926,21 @@
                 studentMap[name].subjects[subject].count++;
                 studentMap[name].subjects[subject].totalMinutes += timeValue;
 
-                // 날짜 정규화 (2026. 1. 5 → 2026-01-05)
+                // 날짜 정규화 (2026. 1. 5 → 2026-01-05 또는 2026-01-06 → 2026-01-06)
                 let normalizedDate = record.date;
-                if (record.date && record.date.includes('.')) {
-                    const parts = record.date.split('.').map(p => p.trim());
-                    if (parts.length >= 3) {
-                        const year = parts[0];
-                        const month = parts[1].padStart(2, '0');
-                        const day = parts[2].padStart(2, '0');
-                        normalizedDate = `${year}-${month}-${day}`;
+                if (record.date) {
+                    if (record.date.includes('.')) {
+                        // 한국 형식: 2026. 1. 6
+                        const parts = record.date.split('.').map(p => p.trim());
+                        if (parts.length >= 3) {
+                            const year = parts[0];
+                            const month = parts[1].padStart(2, '0');
+                            const day = parts[2].padStart(2, '0');
+                            normalizedDate = `${year}-${month}-${day}`;
+                        }
+                    } else if (record.date.includes('-')) {
+                        // ISO 형식: 2026-01-06 또는 2026-01-06T12:34:56Z
+                        normalizedDate = record.date.split('T')[0];
                     }
                 }
 
