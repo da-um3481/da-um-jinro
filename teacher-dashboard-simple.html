@@ -6,7 +6,7 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     
     <!-- 버전 정보 -->
-    <meta name="version" content="1.8.0">
+    <meta name="version" content="1.9.0">
     <meta name="build-date" content="2026-01-06">
     
     <!-- 캐시 무효화 -->
@@ -991,18 +991,35 @@
                     };
                 }
                 studentMap[name].dateMap[normalizedDate].totalMinutes += timeValue;
-                studentMap[name].dateMap[normalizedDate].records.push({
+                
+                // 🧠 메타인지 데이터 포함
+                const recordWithMeta = {
                     subject: subject,
                     time: timeValue,
                     content: record.content || '학습 완료'
-                });
+                };
+                
+                // 메타인지 필드가 있으면 추가
+                if (record.meta_score !== undefined) {
+                    recordWithMeta.meta_score = record.meta_score;
+                    recordWithMeta.meta_can_explain = record.meta_can_explain;
+                    recordWithMeta.meta_can_teach = record.meta_can_teach;
+                    recordWithMeta.meta_can_solve = record.meta_can_solve;
+                    recordWithMeta.meta_needs_review = record.meta_needs_review;
+                    recordWithMeta.meta_understood = record.meta_understood;
+                    recordWithMeta.meta_difficult = record.meta_difficult;
+                    recordWithMeta.meta_next_plan = record.meta_next_plan;
+                }
+                
+                studentMap[name].dateMap[normalizedDate].records.push(recordWithMeta);
 
                 // 기록 저장
                 studentMap[name].records.push({
                     date: normalizedDate,
                     subject: subject,
                     time: timeValue,
-                    content: record.content || '학습 완료'
+                    content: record.content || '학습 완료',
+                    ...recordWithMeta // 메타인지 데이터 포함
                 });
             });
 
@@ -1175,10 +1192,47 @@
                             const m = group.totalTime % 60;
                             const contentText = group.contents.length > 0 ? group.contents.join(', ') : '학습 완료';
                             
+                            // 🧠 메타인지 데이터 찾기 (과목별 레코드에서)
+                            const metaData = dateData.records.find(r => 
+                                r.subject === subject && r.meta_score !== undefined
+                            );
+                            
+                            let metaHtml = '';
+                            if (metaData && metaData.meta_score !== undefined) {
+                                const canExplain = metaData.meta_can_explain === 'O' || metaData.meta_can_explain === true;
+                                const canTeach = metaData.meta_can_teach === 'O' || metaData.meta_can_teach === true;
+                                const canSolve = metaData.meta_can_solve === 'O' || metaData.meta_can_solve === true;
+                                const needsReview = metaData.meta_needs_review === 'O' || metaData.meta_needs_review === true;
+                                
+                                metaHtml = `
+                                    <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(99,102,241,0.1); border-radius: 5px; border-left: 3px solid var(--primary);">
+                                        <div style="font-weight: 600; margin-bottom: 0.3rem; color: var(--primary);">
+                                            <i class="fas fa-brain"></i> 메타인지 체크 (${metaData.meta_score}/3점)
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.85rem;">
+                                            <span style="color: ${canExplain ? '#10b981' : '#ef4444'};">
+                                                ${canExplain ? '✅' : '❌'} 설명 가능
+                                            </span>
+                                            <span style="color: ${canTeach ? '#10b981' : '#ef4444'};">
+                                                ${canTeach ? '✅' : '❌'} 가르칠 수 있음
+                                            </span>
+                                            <span style="color: ${canSolve ? '#10b981' : '#ef4444'};">
+                                                ${canSolve ? '✅' : '❌'} 문제 풀이
+                                            </span>
+                                            ${needsReview ? `<span style="color: #f59e0b; font-weight: 600;">🔄 복습 필요</span>` : ''}
+                                        </div>
+                                        ${metaData.meta_understood ? `<div style="margin-top: 0.3rem; color: #10b981; font-size: 0.85rem;">💡 잘 이해한 부분: ${metaData.meta_understood}</div>` : ''}
+                                        ${metaData.meta_difficult ? `<div style="margin-top: 0.3rem; color: #ef4444; font-size: 0.85rem;">⚠️ 어려운 부분: ${metaData.meta_difficult}</div>` : ''}
+                                        ${metaData.meta_next_plan ? `<div style="margin-top: 0.3rem; color: #6366f1; font-size: 0.85rem;">🎯 다음 계획: ${metaData.meta_next_plan}</div>` : ''}
+                                    </div>
+                                `;
+                            }
+                            
                             return `
                                 <div style="padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 5px; margin-top: 0.5rem;">
                                     <strong>${subject}</strong> | ${h > 0 ? h + '시간 ' : ''}${m}분 / ${group.count}회
                                     ${contentText !== '학습 완료' ? `<br><span style="color: var(--text-muted); font-size: 0.9rem;">${contentText}</span>` : ''}
+                                    ${metaHtml}
                                 </div>
                             `;
                         }).join('');
