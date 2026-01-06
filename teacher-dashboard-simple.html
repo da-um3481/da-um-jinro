@@ -785,6 +785,10 @@
                 return true;
             });
             
+            console.log('📊 CSV에서 불러온 전체 기록 수:', records.length);
+            console.log('📊 필터링 후 기록 수:', allRecords.length);
+            console.log('📊 첫 3개 기록 샘플:', allRecords.slice(0, 3));
+            
             // 학생별로 그룹화
             const studentMap = {};
 
@@ -1118,11 +1122,27 @@
             const searchTerm = document.getElementById('searchInput').value;
             const selectedDate = document.getElementById('dateFilter').value;
 
+            console.log('🔍 필터링 시작 - 검색어:', searchTerm, '날짜:', selectedDate);
+            console.log('📊 전체 학생 수:', allStudents.length);
+
             let filtered = allStudents;
 
             // 날짜 필터 (우선 적용)
             if (selectedDate) {
-                filtered = filtered
+                console.log('📅 날짜 필터 적용:', selectedDate);
+                
+                // 날짜가 일치하는 학생 확인
+                const studentsWithDate = allStudents.filter(student => 
+                    student.records.some(r => r.date === selectedDate)
+                );
+                console.log('📅 해당 날짜에 기록이 있는 학생 수:', studentsWithDate.length);
+                
+                if (studentsWithDate.length > 0) {
+                    console.log('📅 해당 날짜 학생 목록:', studentsWithDate.map(s => s.name));
+                    console.log('📅 첫 번째 학생의 날짜 목록:', studentsWithDate[0].records.map(r => r.date));
+                }
+                
+                filtered = studentsWithDate
                     .filter(student => 
                         // 해당 날짜에 학습한 학생만 포함
                         student.records.some(r => r.date === selectedDate)
