@@ -6,7 +6,7 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     
     <!-- 버전 정보 -->
-    <meta name="version" content="1.6.0">
+    <meta name="version" content="1.7.0">
     <meta name="build-date" content="2026-01-06">
     
     <!-- 캐시 무효화 -->
@@ -789,13 +789,57 @@
                     
                     // CSV 줄 분리
                     const lines = csvText.split(/\r?\n/);
-                    console.log('📋 전체 줄 수:', lines.length);
-                    console.log('📋 첫 3줄:', lines.slice(0, 3));
+                    console.log('📋 원본 전체 줄 수:', lines.length);
                     
-                    // 🔧 2번째 헤더 줄 제거 (id,name,date가 반복됨)
-                    if (lines.length > 1 && lines[1].startsWith('id,name,date')) {
-                        console.log('⚠️ 2번째 헤더 줄 감지 - 제거 중...');
-                        lines.splice(1, 1); // 2번째 줄 제거
+                    // 🔧 헤더 정리: 필수 컬럼만 추출
+                    if (lines.length > 0) {
+                        const headerLine = lines[0];
+                        const headers = headerLine.split(',');
+                        
+                        // 필수 컬럼 인덱스 찾기
+                        const requiredColumns = ['id', 'name', 'date', 'subject', 'time', 'content'];
+                        const columnIndexes = requiredColumns.map(col => 
+                            headers.findIndex(h => h.trim().toLowerCase() === col)
+                        );
+                        
+                        console.log('📋 컬럼 인덱스:', columnIndexes);
+                        
+                        // 필수 컬럼만 추출
+                        const cleanedLines = [];
+                        cleanedLines.push(requiredColumns.join(',')); // 깨끗한 헤더
+                        
+                        // 2번째 줄이 중복 헤더면 건너뛰기
+                        let startRow = 1;
+                        if (lines.length > 1 && lines[1].startsWith('id,')) {
+                            console.log('⚠️ 2번째 헤더 줄 감지 - 건너뛰기');
+                            startRow = 2;
+                        }
+                        
+                        // 데이터 행 처리
+                        for (let i = startRow; i < lines.length; i++) {
+                            const line = lines[i].trim();
+                            if (!line) continue;
+                            
+                            const cells = line.split(',');
+                            
+                            // 필수 컬럼 값만 추출
+                            const cleanedCells = columnIndexes.map(idx => {
+                                if (idx === -1) return '';
+                                // 쌍따옴표로 묶인 셀 처리
+                                let cell = cells[idx] || '';
+                                // 쉼표가 포함된 내용은 따옴표로 묶기
+                                if (cell.includes(',') || cell.includes('"')) {
+                                    cell = '"' + cell.replace(/"/g, '""') + '"';
+                                }
+                                return cell;
+                            });
+                            
+                            cleanedLines.push(cleanedCells.join(','));
+                        }
+                        
+                        console.log('✅ 정리된 줄 수:', cleanedLines.length);
+                        lines.length = 0;
+                        lines.push(...cleanedLines);
                     }
                     
                     // 수정된 CSV 재조합
