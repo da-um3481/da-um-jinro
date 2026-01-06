@@ -6,7 +6,7 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     
     <!-- 버전 정보 -->
-    <meta name="version" content="1.4.0">
+    <meta name="version" content="1.5.0">
     <meta name="build-date" content="2026-01-06">
     
     <!-- 캐시 무효화 -->
@@ -781,17 +781,49 @@
             
             console.log('📡 CSV URL (캐시 우회):', urlWithCacheBuster);
 
-            Papa.parse(urlWithCacheBuster, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    console.log('✅ CSV 데이터 로드 완료');
-                    console.log('📊 전체 레코드 수:', results.data.length);
-                    console.log('📋 첫 5개 샘플:', results.data.slice(0, 5));
-                    processData(results.data);
-                },
-                error: function(error) {
+            // 🔧 CSV 직접 로드 후 2번째 헤더 줄 제거
+            fetch(urlWithCacheBuster)
+                .then(response => response.text())
+                .then(csvText => {
+                    console.log('✅ CSV 원본 다운로드 완료');
+                    
+                    // CSV 줄 분리
+                    const lines = csvText.split(/\r?\n/);
+                    console.log('📋 전체 줄 수:', lines.length);
+                    console.log('📋 첫 3줄:', lines.slice(0, 3));
+                    
+                    // 🔧 2번째 헤더 줄 제거 (id,name,date가 반복됨)
+                    if (lines.length > 1 && lines[1].startsWith('id,name,date')) {
+                        console.log('⚠️ 2번째 헤더 줄 감지 - 제거 중...');
+                        lines.splice(1, 1); // 2번째 줄 제거
+                    }
+                    
+                    // 수정된 CSV 재조합
+                    const cleanedCSV = lines.join('\n');
+                    
+                    // Papa.parse로 파싱
+                    Papa.parse(cleanedCSV, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            console.log('✅ CSV 파싱 완료');
+                            console.log('📊 전체 레코드 수:', results.data.length);
+                            console.log('📋 첫 5개 샘플:', results.data.slice(0, 5));
+                            processData(results.data);
+                        },
+                        error: function(error) {
+                            console.error('❌ CSV 파싱 실패:', error);
+                            contentContainer.innerHTML = `
+                                <div class="empty-state">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <p>CSV 파싱 실패</p>
+                                    <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
+                                </div>
+                            `;
+                        }
+                    });
+                })
+                .catch(error => {
                     console.error('❌ CSV 로드 실패:', error);
                     contentContainer.innerHTML = `
                         <div class="empty-state">
@@ -800,8 +832,7 @@
                             <p style="font-size: 14px; margin-top: 10px;">Google Sheets "웹에 게시"가 활성화되어 있는지 확인하세요</p>
                         </div>
                     `;
-                }
-            });
+                });
         }
 
         function processData(records) {
