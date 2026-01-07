@@ -6,8 +6,8 @@
     <title>교사 대시보드 - 학생 학습 기록</title>
     
     <!-- 버전 정보 -->
-    <meta name="version" content="1.8.0">
-    <meta name="build-date" content="2026-01-06">
+    <meta name="version" content="1.9.0">
+    <meta name="build-date" content="2026-01-07">
     
     <!-- 캐시 무효화 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -991,10 +991,15 @@
                     };
                 }
                 studentMap[name].dateMap[normalizedDate].totalMinutes += timeValue;
+                // 🆕 content 병합: F열 + G열 (G열이 있으면 우선 사용)
+                const contentF = record.content || '';
+                const contentG = record[''] || record['meta_can_explain'] || '';  // G열 (빈 헤더)
+                const mergedContent = contentG || contentF || '학습 완료';
+                
                 studentMap[name].dateMap[normalizedDate].records.push({
                     subject: subject,
                     time: timeValue,
-                    content: record.content || '학습 완료'
+                    content: mergedContent
                 });
 
                 // 기록 저장
@@ -1002,7 +1007,7 @@
                     date: normalizedDate,
                     subject: subject,
                     time: timeValue,
-                    content: record.content || '학습 완료'
+                    content: mergedContent
                 });
             });
 
