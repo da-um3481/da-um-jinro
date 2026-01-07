@@ -502,19 +502,12 @@
         // 피드백 로드
         function loadFeedbacks() {
             const saved = localStorage.getItem('teacher_feedbacks');
-            console.log('📥 localStorage에서 피드백 로드 시도...');
-            console.log('📦 저장된 데이터:', saved);
             if (saved) {
                 try {
                     feedbacks = JSON.parse(saved);
-                    console.log('✅ 피드백 로드 성공! 개수:', Object.keys(feedbacks).length);
-                    console.log('📋 로드된 피드백:', feedbacks);
                 } catch (e) {
-                    console.error('❌ 피드백 파싱 에러:', e);
                     feedbacks = {};
                 }
-            } else {
-                console.log('⚠️ 저장된 피드백이 없습니다');
             }
         }
 
@@ -1199,8 +1192,6 @@
                         const feedbackKey = getFeedbackKey(student.name, dateData.date);
                         const existingFeedback = feedbacks[feedbackKey] || '';
                         const hasFeedback = existingFeedback.length > 0;
-                        
-                        console.log(`🔑 피드백 키: ${feedbackKey}, 존재 여부: ${hasFeedback}, 내용 길이: ${existingFeedback.length}`);
 
                         return `
                             <div style="border-left: 3px solid var(--primary); padding-left: 1rem; margin-bottom: 1rem;">
@@ -1368,13 +1359,9 @@
             const textarea = document.getElementById(`feedback-text-${key}`);
             const feedbackText = textarea.value.trim();
             
-            console.log(`💾 피드백 저장 시도 - 키: ${key}, 내용 길이: ${feedbackText.length}`);
-            
             if (feedbackText) {
                 feedbacks[key] = feedbackText;
                 saveFeedbacks();
-                console.log('✅ 피드백 저장 완료! 현재 feedbacks:', feedbacks);
-                console.log('📦 localStorage 확인:', localStorage.getItem('teacher_feedbacks'));
                 
                 // UI 업데이트
                 document.getElementById(`feedback-display-${key}`).innerHTML = `<div class="feedback-display">${feedbackText}</div>`;
