@@ -6,8 +6,8 @@
     <title>🚀 자기주도학습UP 챌린지 - 나의 학습 포털</title>
     
     <!-- 버전 정보 (캐시 버스팅) -->
-    <meta name="version" content="2.0.7">
-    <meta name="build-date" content="2026-01-08-03">
+    <meta name="version" content="2.0.8">
+    <meta name="build-date" content="2026-01-08-04">
     <meta name="build-date" content="2026-01-04">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -986,7 +986,7 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-gray-800 text-lg">나의 평가 일정</h3>
-                    <p class="text-xs text-gray-600">4주간 3회의 평가로 성장을 측정합니다</p>
+                    <p class="text-xs text-gray-600">진단평가와 대면 평가로 성장을 측정합니다</p>
                 </div>
             </div>
             
@@ -1008,53 +1008,20 @@
                     </div>
                 </div>
                 
-                <!-- 2. 중간평가 -->
-                <div class="assessment-card locked" id="midTestCard">
+                <!-- 2. 중간평가 (대면) -->
+                <div class="assessment-card" id="midTestCard">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="assessment-icon locked">
-                                <i class="fas fa-lock"></i>
+                            <div class="assessment-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                <i class="fas fa-users" style="color: white;"></i>
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800 text-sm sm:text-base">중간평가</h4>
-                                <p class="text-xs text-gray-600">2주차 학습 효과 측정</p>
-                                <p class="text-xs text-blue-600 font-semibold mt-1">📅 2025-01-16 (목) 오픈</p>
+                                <p class="text-xs text-gray-600">학습자 대면 평가회 및 학습코칭</p>
+                                <p class="text-xs text-green-600 font-semibold mt-1">📅 2026-01-09 (목) 진로상담실</p>
                             </div>
                         </div>
-                        <button 
-                            onclick="startMidTest()"
-                            id="midTestBtn"
-                            disabled
-                            class="assessment-btn locked"
-                        >
-                            <i class="fas fa-lock mr-1"></i>
-                            <span>시작</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- 3. 최종평가 -->
-                <div class="assessment-card locked" id="postTestCard">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="assessment-icon locked">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm sm:text-base">최종평가</h4>
-                                <p class="text-xs text-gray-600">4주 학습 종합 평가</p>
-                                <p class="text-xs text-purple-600 font-semibold mt-1">📅 2025-01-30 (목) 오픈</p>
-                            </div>
-                        </div>
-                        <button 
-                            onclick="startPostTest()"
-                            id="postTestBtn"
-                            disabled
-                            class="assessment-btn locked"
-                        >
-                            <i class="fas fa-lock mr-1"></i>
-                            <span>시작</span>
-                        </button>
+                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">대면</span>
                     </div>
                 </div>
                 
@@ -2462,34 +2429,10 @@
             console.log('📊 30일 완료! 재평가 알림 표시');
         }
         
-        // 🆕 재평가(Post-test) 시작
-        function startPostTest() {
-            const studentId = localStorage.getItem('currentStudentId');
-            const grade = localStorage.getItem('currentStudentGrade');
-            
-            if (!studentId || !grade) {
-                alert('학생 정보를 찾을 수 없습니다.');
-                return;
-            }
-            
-            // 확인 메시지
-            const confirmed = confirm(
-                '🎓 30일 완료 재평가를 시작합니다!\n\n' +
-                '📋 처음 진단평가와 동일한 50문제\n' +
-                '📊 Pre-test와 Post-test 점수 비교\n' +
-                '📈 과목별 향상도 분석\n\n' +
-                '준비되셨나요?'
-            );
-            
-            if (!confirmed) return;
-            
-            // 재평가 플래그 설정
-            sessionStorage.setItem('isPostTest', 'true');
-            
-            // 진단평가 시작 (동일한 문제)
-            startDiagnosticTest(grade, '종합');
-            
-            console.log('🎯 재평가(Post-test) 시작');
+        // 🆕 재평가(Post-test) 시작 (사용 안 함 - 최종평가 제거)
+        // function startPostTest() {
+        //     // 최종평가가 제거되어 더 이상 사용하지 않음
+        // }
         }
 
         // ⏱️ 타이머 관련 변수
@@ -8010,11 +7953,8 @@
             GROWTH_TEST_DATE: new Date('2025-01-30')    // 성장테스트
         };
         
-        // 평가 일정 체크 및 UI 업데이트
+        // 평가 일정 체크 및 UI 업데이트 (간소화 버전)
         function checkAssessmentAvailability() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
             const currentStudentId = localStorage.getItem('currentStudentId');
             if (!currentStudentId) return;
             
@@ -8022,99 +7962,31 @@
             const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
             const hasPreTest = diagnosticResults.find(r => r.studentId === currentStudentId);
             
-            // localStorage에서 평가 완료 여부 확인
-            const midTestResults = JSON.parse(localStorage.getItem('mid_test_results')) || [];
-            const postTestResults = JSON.parse(localStorage.getItem('post_test_results')) || [];
-            const growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
-            
-            const hasMidTest = midTestResults.find(r => r.studentId === currentStudentId);
-            const hasPostTest = postTestResults.find(r => r.studentId === currentStudentId);
-            const hasGrowthTest = growthTestResults.find(r => r.studentId === currentStudentId);
-            
-            // 진행 상황 계산
-            let completedCount = 0;
-            if (hasPreTest) completedCount++;
-            if (hasMidTest) completedCount++;
-            if (hasPostTest) completedCount++;
-            if (hasGrowthTest) completedCount++;
-            
-            // 진행률 업데이트
-            document.getElementById('assessmentProgress').textContent = `${completedCount}/4 완료`;
-            document.getElementById('assessmentProgressBar').style.width = `${(completedCount / 4) * 100}%`;
-            
             // 진단평가 상태
             const preTestCard = document.getElementById('preTestCard');
-            if (hasPreTest) {
+            if (hasPreTest && preTestCard) {
                 preTestCard.classList.remove('locked');
                 preTestCard.classList.add('completed');
             }
             
-            // 중간평가 상태
-            updateAssessmentCard('midTest', ASSESSMENT_SCHEDULE.MID_TEST_DATE, hasMidTest, hasPreTest);
-            
-            // 최종평가 상태 (중간평가 완료 필요)
-            updateAssessmentCard('postTest', ASSESSMENT_SCHEDULE.POST_TEST_DATE, hasPostTest, hasMidTest);
-            
-            // 성장테스트 상태 (최종평가 완료 필요)
-            updateAssessmentCard('growthTest', ASSESSMENT_SCHEDULE.GROWTH_TEST_DATE, hasGrowthTest, hasPostTest);
+            // 중간평가는 대면 평가로 변경되어 별도 처리 불필요
+            // 최종평가는 제거되어 별도 처리 불필요
         }
         
-        // 개별 평가 카드 업데이트
-        function updateAssessmentCard(testType, dueDate, isCompleted, prerequisiteCompleted) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const card = document.getElementById(`${testType}Card`);
-            const btn = document.getElementById(`${testType}Btn`);
-            const icon = card.querySelector('.assessment-icon');
-            
-            if (isCompleted) {
-                // 완료 상태
-                card.classList.remove('locked', 'available');
-                card.classList.add('completed');
-                icon.classList.remove('locked', 'available');
-                icon.classList.add('completed');
-                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                btn.classList.remove('locked', 'available');
-                btn.classList.add('locked');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-check mr-1"></i><span>완료</span>';
-            } else if (today >= dueDate && prerequisiteCompleted) {
-                // 사용 가능
-                card.classList.remove('locked', 'completed');
-                card.classList.add('available');
-                icon.classList.remove('locked', 'completed');
-                icon.classList.add('available');
-                icon.innerHTML = '<i class="fas fa-play-circle"></i>';
-                btn.classList.remove('locked');
-                btn.classList.add('available');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-play-circle mr-1"></i><span>시작</span>';
-            } else {
-                // 잠김 상태
-                card.classList.remove('available', 'completed');
-                card.classList.add('locked');
-                icon.classList.remove('available', 'completed');
-                icon.classList.add('locked');
-                icon.innerHTML = '<i class="fas fa-lock"></i>';
-                btn.classList.remove('available');
-                btn.classList.add('locked');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-lock mr-1"></i><span>시작</span>';
-            }
-        }
+        // 개별 평가 카드 업데이트 (사용 안 함 - 주석 처리)
+        // function updateAssessmentCard(testType, dueDate, isCompleted, prerequisiteCompleted) {
+        //     // 중간평가/최종평가가 제거되어 사용하지 않음
+        // }
         
-        // 중간평가 시작
-        function startMidTest() {
-            alert('🎯 중간평가를 시작합니다!\n\n2주간의 학습 성과를 확인해볼까요?');
-            // TODO: 중간평가 로직 구현
-        }
+        // 중간평가 시작 (사용 안 함 - 대면 평가로 변경)
+        // function startMidTest() {
+        //     // 더 이상 온라인 평가 없음
+        // }
         
-        // 최종평가 시작
-        function startPostTest() {
-            alert('📊 최종평가를 시작합니다!\n\n4주간의 학습 여정을 마무리할 시간입니다!');
-            // TODO: 최종평가 로직 구현
-        }
+        // 최종평가 시작 (사용 안 함 - 제거됨)
+        // function startPostTest() {
+        //     // 최종평가 제거됨
+        // }
         
         // 성장테스트 시작
         function startGrowthTest() {
