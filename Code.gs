@@ -1,17 +1,3 @@
-// Self-Directed Learning UP Challenge - Google Apps Script
-// Version: 7.0.0 (CLEAN - NO METACOGNITION)
-// Date: 2026-01-07
-
-// Sheet name configuration
-var SHEET_NAMES = {
-  DIAGNOSTIC: 'diagnostic_results',
-  STUDY_RECORDS: 'study_records',
-  TEACHER_FEEDBACK: 'teacher_feedback'
-};
-
-// ==========================================
-// POST Request Handler
-// ==========================================
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
@@ -41,9 +27,6 @@ function doPost(e) {
   }
 }
 
-// ==========================================
-// Save Study Record (WITH START/END TIME)
-// ==========================================
 function saveStudyRecordToSheet(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('study_records');
@@ -56,18 +39,31 @@ function saveStudyRecordToSheet(data) {
     });
   }
   
-  // New row with start/end time
+  var timeInMinutes = data.time || '';
+  
+  if (!timeInMinutes && data.start_time && data.end_time) {
+    try {
+      var start = parseTime(data.start_time);
+      var end = parseTime(data.end_time);
+      var diffMinutes = Math.round((end - start) / 60000);
+      timeInMinutes = diffMinutes;
+      Logger.log('Auto-calculated time: ' + diffMinutes + ' minutes');
+    } catch (e) {
+      Logger.log('Time calculation error: ' + e.toString());
+    }
+  }
+  
   var newRow = [
-    data.student_id || '',           // A: id
-    data.student_name || '',         // B: name
-    data.date || '',                 // C: date
-    data.subject || '',              // D: subject
-    data.time || '',                 // E: time (minutes)
-    data.content || '',              // F: content
-    '',                              // G: (empty - for detailed content)
-    data.start_time || '',           // H: start_time (HH:MM:SS)
-    data.end_time || '',             // I: end_time (HH:MM:SS)
-    new Date().toISOString()         // J: timestamp
+    data.student_id || '',
+    data.student_name || '',
+    data.date || '',
+    data.subject || '',
+    timeInMinutes,
+    data.content || '',
+    '',
+    data.start_time || '',
+    data.end_time || '',
+    new Date().toISOString()
   ];
   
   sheet.appendRow(newRow);
@@ -84,9 +80,6 @@ function saveStudyRecordToSheet(data) {
   });
 }
 
-// ==========================================
-// Save Diagnostic Result
-// ==========================================
 function saveDiagnosticResultToSheet(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('diagnostic_results');
@@ -95,7 +88,7 @@ function saveDiagnosticResultToSheet(data) {
     Logger.log('ERROR: diagnostic_results sheet not found!');
     return createJsonResponse({
       status: 'error',
-      message: 'diagnostic_results sheet not found'
+      message: 'study_records sheet not found'
     });
   }
   
@@ -122,9 +115,6 @@ function saveDiagnosticResultToSheet(data) {
   });
 }
 
-// ==========================================
-// Save Teacher Feedback
-// ==========================================
 function saveTeacherFeedbackToSheet(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('teacher_feedback');
@@ -151,18 +141,12 @@ function saveTeacherFeedbackToSheet(data) {
   });
 }
 
-// ==========================================
-// JSON Response Helper
-// ==========================================
 function createJsonResponse(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// ==========================================
-// GET Request Handler
-// ==========================================
 function doGet(e) {
   var action = e.parameter.action || '';
   
@@ -269,9 +253,6 @@ function getTeacherFeedback(e) {
   });
 }
 
-// ==========================================
-// Test Function
-// ==========================================
 function testDoPost() {
   var testData = {
     postData: {
@@ -293,4 +274,19 @@ function testDoPost() {
   
   var result = doPost(testData);
   Logger.log('Test Result: ' + result.getContent());
+}
+
+function parseTime(timeStr) {
+  var parts = timeStr.split(':');
+  var hours = parseInt(parts[0]) || 0;
+  var minutes = parseInt(parts[1]) || 0;
+  var seconds = parseInt(parts[2]) || 0;
+  
+  var date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  date.setSeconds(seconds);
+  date.setMilliseconds(0);
+  
+  return date.getTime();
 }

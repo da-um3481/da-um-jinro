@@ -1,8 +1,7 @@
 // Self-Directed Learning UP Challenge - Google Apps Script
-// Version: 7.0.0 (CLEAN - NO METACOGNITION)
+// Version: 6.1.0 (WITH START/END TIME)
 // Date: 2026-01-07
 
-// Sheet name configuration
 var SHEET_NAMES = {
   DIAGNOSTIC: 'diagnostic_results',
   STUDY_RECORDS: 'study_records',
@@ -10,15 +9,15 @@ var SHEET_NAMES = {
 };
 
 // ==========================================
-// POST Request Handler
+// 🆕 doPost - POST 요청 처리 (학습 기록 저장)
 // ==========================================
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     var action = e.parameter.action || '';
     
-    Logger.log('POST Request - Action: ' + action);
-    Logger.log('POST Data: ' + JSON.stringify(data));
+    Logger.log('📥 POST Request - Action: ' + action);
+    Logger.log('📦 POST Data: ' + JSON.stringify(data));
     
     if (action === 'saveStudyRecord') {
       return saveStudyRecordToSheet(data);
@@ -33,7 +32,7 @@ function doPost(e) {
       });
     }
   } catch (error) {
-    Logger.log('POST ERROR: ' + error.toString());
+    Logger.log('❌ POST ERROR: ' + error.toString());
     return createJsonResponse({
       status: 'error',
       message: error.toString()
@@ -42,57 +41,65 @@ function doPost(e) {
 }
 
 // ==========================================
-// Save Study Record (WITH START/END TIME)
+// 🆕 학습 기록 저장 (시작/종료 시간 포함)
 // ==========================================
 function saveStudyRecordToSheet(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('study_records');
   
   if (!sheet) {
-    Logger.log('ERROR: study_records sheet not found!');
+    Logger.log('❌ study_records sheet not found!');
     return createJsonResponse({
       status: 'error',
       message: 'study_records sheet not found'
     });
   }
   
-  // New row with start/end time
+  // 새 행 추가
   var newRow = [
     data.student_id || '',           // A: id
     data.student_name || '',         // B: name
     data.date || '',                 // C: date
     data.subject || '',              // D: subject
-    data.time || '',                 // E: time (minutes)
+    data.time || '',                 // E: time (학습 시간: 45분)
     data.content || '',              // F: content
-    '',                              // G: (empty - for detailed content)
-    data.start_time || '',           // H: start_time (HH:MM:SS)
-    data.end_time || '',             // I: end_time (HH:MM:SS)
-    new Date().toISOString()         // J: timestamp
+    '',                              // G: (빈 칸 - 상세 학습내용용)
+    data.start_time || '',           // H: start_time (시작 시간) 🆕
+    data.end_time || '',             // I: end_time (종료 시간) 🆕
+    data.meta_can_explain || '',     // J: meta_can_explain
+    data.meta_can_teach || '',       // K: meta_can_teach
+    data.meta_can_solve || '',       // L: meta_can_solve
+    data.meta_needs_review || '',    // M: meta_needs_review
+    data.meta_score || '',           // N: meta_score
+    data.meta_understood || '',      // O: meta_understood
+    data.meta_difficult || '',       // P: meta_difficult
+    data.meta_next_plan || '',       // Q: meta_next_plan
+    new Date().toISOString()         // R: timestamp
   ];
   
   sheet.appendRow(newRow);
   
-  Logger.log('Study record saved successfully!');
-  Logger.log('Data: ' + JSON.stringify(data));
-  Logger.log('Start: ' + (data.start_time || 'N/A'));
-  Logger.log('End: ' + (data.end_time || 'N/A'));
+  Logger.log('✅ Study record saved successfully!');
+  Logger.log('📊 Data: ' + JSON.stringify(data));
+  Logger.log('⏰ Start: ' + (data.start_time || 'N/A'));
+  Logger.log('⏰ End: ' + (data.end_time || 'N/A'));
   
   return createJsonResponse({
     status: 'success',
-    message: 'Study record saved',
+    message: 'Study record saved with start/end time',
     timestamp: new Date().toISOString()
   });
 }
 
 // ==========================================
-// Save Diagnostic Result
+// 🆕 진단평가 결과 저장
 // ==========================================
 function saveDiagnosticResultToSheet(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('diagnostic_results');
   
   if (!sheet) {
-    Logger.log('ERROR: diagnostic_results sheet not found!');
+    Logger.log('❌ diagnostic_results sheet not found!');
     return createJsonResponse({
       status: 'error',
       message: 'diagnostic_results sheet not found'
@@ -114,7 +121,7 @@ function saveDiagnosticResultToSheet(data) {
   
   sheet.appendRow(newRow);
   
-  Logger.log('Diagnostic result saved successfully!');
+  Logger.log('✅ Diagnostic result saved successfully!');
   
   return createJsonResponse({
     status: 'success',
@@ -123,7 +130,7 @@ function saveDiagnosticResultToSheet(data) {
 }
 
 // ==========================================
-// Save Teacher Feedback
+// 🆕 교사 피드백 저장
 // ==========================================
 function saveTeacherFeedbackToSheet(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -143,7 +150,7 @@ function saveTeacherFeedbackToSheet(data) {
   
   sheet.appendRow(newRow);
   
-  Logger.log('Teacher feedback saved successfully!');
+  Logger.log('✅ Teacher feedback saved successfully!');
   
   return createJsonResponse({
     status: 'success',
@@ -152,7 +159,7 @@ function saveTeacherFeedbackToSheet(data) {
 }
 
 // ==========================================
-// JSON Response Helper
+// JSON 응답 생성
 // ==========================================
 function createJsonResponse(obj) {
   return ContentService
@@ -161,12 +168,12 @@ function createJsonResponse(obj) {
 }
 
 // ==========================================
-// GET Request Handler
+// 🆕 doGet - GET 요청 처리 (기존 기능 유지)
 // ==========================================
 function doGet(e) {
   var action = e.parameter.action || '';
   
-  Logger.log('GET Request - Action: ' + action);
+  Logger.log('📥 GET Request - Action: ' + action);
   
   if (action === 'getStudyRecords') {
     return getStudyRecords(e);
@@ -270,7 +277,7 @@ function getTeacherFeedback(e) {
 }
 
 // ==========================================
-// Test Function
+// 테스트 함수
 // ==========================================
 function testDoPost() {
   var testData = {
