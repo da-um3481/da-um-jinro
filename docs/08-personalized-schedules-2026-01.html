@@ -425,13 +425,13 @@
                     다양한 형식으로 스케줄을 다운로드하여 활용하세요!
                 </p>
                 <div class="download-buttons">
-                    <a href="학생별_맞춤_스케줄_2026-01.json" download class="download-btn">
+                    <a href="../학생별_맞춤_스케줄_2026-01.json" download class="download-btn">
                         📄 JSON 다운로드
                     </a>
-                    <a href="학생별_맞춤_스케줄_2026-01.csv" download class="download-btn">
+                    <a href="../학생별_맞춤_스케줄_2026-01.csv" download class="download-btn">
                         📊 CSV 다운로드
                     </a>
-                    <a href="학생별_맞춤_스케줄_2026-01.md" download class="download-btn">
+                    <a href="../학생별_맞춤_스케줄_2026-01.md" download class="download-btn">
                         📝 Markdown 다운로드
                     </a>
                 </div>
@@ -446,7 +446,7 @@
         
         async function loadSchedules() {
             try {
-                const response = await fetch('학생별_맞춤_스케줄_2026-01.json');
+                const response = await fetch('../학생별_맞춤_스케줄_2026-01.json');
                 schedulesData = await response.json();
                 populateStudentSelector();
             } catch (error) {
