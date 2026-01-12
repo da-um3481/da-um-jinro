@@ -583,9 +583,10 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
         }[weekday]
         
         is_weekend = weekday in ["Saturday", "Sunday"]
-        subjects_per_day = 2 if is_weekend else 3
+        subjects_per_day = 3 if is_weekend else 5  # 평일 5과목, 주말 3과목
         
-        daily_tasks = []
+        daily_tasks_morning = []  # 오전 과목
+        daily_tasks_afternoon = []  # 오후 과목
         total_minutes = 0
         
         for i in range(min(subjects_per_day, len(prioritized_subjects))):
@@ -597,23 +598,53 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
             learning = get_learning_content(grade, subj_en, level, day)
             
             if learning:
+                # 기초/표준: 복습 메시지 추가
+                content = learning["content"]
+                if level in ["기초", "표준"]:
+                    if "복습" not in content:
+                        content += " [💡 이전 학년 개념 복습 필수]"
+                
+                # 심화 레벨 3~4주차: 예습 권장
+                if level == "심화" and day >= 14:
+                    if "다음 학년" not in content:
+                        content += " [🔥 다음 학년 맛보기 예습]"
+                
                 task = {
                     "subject": subj_kr,
                     "level": level,
                     "duration_minutes": learning["duration"],
                     "unit": learning["unit"],
-                    "learning_content": learning["content"],
-                    "practice_content": learning["practice"]
+                    "learning_content": content,
+                    "practice_content": learning["practice"],
+                    "time_of_day": "오전" if i < 3 else "오후"
                 }
-                daily_tasks.append(task)
+                
+                if i < 3:
+                    daily_tasks_morning.append(task)
+                else:
+                    daily_tasks_afternoon.append(task)
+                    
                 total_minutes += learning["duration"]
+        
+        daily_tasks = daily_tasks_morning + daily_tasks_afternoon
         
         if len(daily_tasks) > 1:
             total_minutes += (len(daily_tasks) - 1) * 10
         
-        daily_goal = f"{len(daily_tasks)}과목 학습 완료"
+        daily_goal = f"{len(daily_tasks)}과목 학습 완료 (오전 {len(daily_tasks_morning)}과목, 오후 {len(daily_tasks_afternoon)}과목)"
         if day % 7 == 6:
             daily_goal += " + 주간 복습"
+        
+        # 복습 및 3월 시험 관련 메시지 추가
+        motivational_message = ""
+        if day % 5 == 0:
+            motivational_message = "💪 복습이 가장 중요합니다! 오늘 배운 내용을 다시 한 번 훑어보세요."
+        elif day % 7 == 3:
+            motivational_message = "📚 3월 새학년 시험은 전 학년 개념 완료를 묻습니다. 기초부터 탄탄히!"
+        elif day == 13:
+            motivational_message = "🎯 3주차 시작! 지금까지 배운 내용을 꼭 복습하세요."
+        elif day == 20:
+            motivational_message = "🚀 마지막 주차! 전체 내용을 정리하며 마무리합시다."
         
         schedule["daily_schedules"].append({
             "day": day + 1,
@@ -622,8 +653,11 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
             "is_weekend": is_weekend,
             "total_minutes": total_minutes,
             "tasks": daily_tasks,
+            "tasks_morning": daily_tasks_morning,
+            "tasks_afternoon": daily_tasks_afternoon,
             "daily_goal": daily_goal,
-            "notes": f"{'주말 - 복습 중심' if is_weekend else '평일 - 집중 학습'}"
+            "notes": f"{'주말 - 복습 중심' if is_weekend else '평일 - 오전 3과목, 오후 2과목'}",
+            "motivational_message": motivational_message
         })
     
     return schedule

@@ -402,9 +402,12 @@
                 <h2>📋 스케줄 안내</h2>
                 <p>
                     ✓ 진단평가 결과를 바탕으로 학생별 약점 과목에 집중하는 맞춤형 스케줄입니다.<br>
-                    ✓ 기초 레벨은 30분, 표준 레벨은 40분, 심화 레벨은 50분 학습을 권장합니다.<br>
-                    ✓ 평일은 2-3과목, 주말은 1-2과목으로 무리 없이 학습할 수 있습니다.<br>
-                    ✓ 매일 꾸준히 학습하는 것이 가장 중요합니다!
+                    ⏱️ 기초 레벨 30분, 표준 레벨 40분, 심화 레벨 50분 학습 권장<br>
+                    📚 평일: 오전 3과목 + 오후 2과목 = 총 5과목<br>
+                    📚 주말: 3과목 복습 중심 학습<br>
+                    💡 <strong>기초/표준: 이전 학년 복습이 가장 중요!</strong><br>
+                    🔥 <strong>심화: 3~4주차에는 다음 학년 맛보기 예습</strong><br>
+                    💪 <strong>3월 새학년 시험은 전 학년 개념 완료를 묻습니다!</strong>
                 </p>
             </div>
             
@@ -534,6 +537,10 @@
                     const daily = schedule.daily_schedules[dayIdx];
                     const weekendClass = daily.is_weekend ? 'weekend' : '';
                     
+                    // 오전/오후 과목 분리
+                    const morningTasks = daily.tasks_morning || [];
+                    const afternoonTasks = daily.tasks_afternoon || [];
+                    
                     html += `
                         <div class="day-card ${weekendClass}">
                             <div class="day-header">
@@ -546,10 +553,19 @@
                                 </div>
                             </div>
                             
-                            <div class="task-list">
+                            ${daily.motivational_message ? `
+                            <div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: 600; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                ${daily.motivational_message}
+                            </div>
+                            ` : ''}
+                            
+                            ${morningTasks.length > 0 ? `
+                            <div style="margin: 15px 0;">
+                                <h4 style="color: #667eea; margin-bottom: 10px; font-size: 1.1em;">🌅 오전 학습 (${morningTasks.length}과목)</h4>
+                                <div class="task-list">
                     `;
                     
-                    daily.tasks.forEach((task, taskIdx) => {
+                    morningTasks.forEach((task, taskIdx) => {
                         html += `
                             <div class="task-item">
                                 <div class="task-header">
@@ -577,6 +593,54 @@
                             </div>
                         `;
                     });
+                    
+                    html += `
+                                </div>
+                            </div>
+                    `;
+                    
+                    // 오후 과목
+                    if (afternoonTasks.length > 0) {
+                        html += `
+                            <div style="margin: 15px 0;">
+                                <h4 style="color: #f5576c; margin-bottom: 10px; font-size: 1.1em;">🌆 오후 학습 (${afternoonTasks.length}과목)</h4>
+                                <div class="task-list">
+                        `;
+                        
+                        afternoonTasks.forEach((task, taskIdx) => {
+                            html += `
+                                <div class="task-item">
+                                    <div class="task-header">
+                                        <div>
+                                            <span class="task-subject">${morningTasks.length + taskIdx + 1}. ${task.subject}</span>
+                                            <span class="task-level ${task.level}">${task.level}</span>
+                                            ${task.unit ? `<span style="color: #764ba2; font-size: 0.95em; margin-left: 10px; font-weight: 600;">📖 ${task.unit}</span>` : ''}
+                                        </div>
+                                        <span class="task-duration">⏱️ ${task.duration_minutes}분</span>
+                                    </div>
+                                    <div class="task-activities">
+                                        ${task.learning_content ? `
+                                        <div style="background: #f0f4ff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+                                            <strong style="color: #667eea;">📚 학습 내용:</strong><br>
+                                            <span style="color: #333; line-height: 1.8;">${task.learning_content}</span>
+                                        </div>
+                                        ` : ''}
+                                        ${task.practice_content ? `
+                                        <div style="background: #fff4e6; padding: 12px; border-radius: 8px; margin: 10px 0;">
+                                            <strong style="color: #f5576c;">✍️ 연습 문제:</strong><br>
+                                            <span style="color: #333; line-height: 1.8;">${task.practice_content}</span>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        html += `
+                                </div>
+                            </div>
+                        `;
+                    }
                     
                     html += `
                             </div>
