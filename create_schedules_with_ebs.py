@@ -180,7 +180,7 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
         # 복습 및 3월 시험 관련 메시지 추가
         motivational_message = ""
         if day % 5 == 0:
-            motivational_message = "💪 복습이 가장 중요합니다! 오늘 배운 내용을 다시 한 번 훑어보세요."
+            motivational_message = "💪 복습이 가장 중요합니다! 복습 습관 너무 중요해요. 한 번 훑어보세요. 정말 알고 있나요?"
         elif day % 7 == 3:
             motivational_message = "📚 3월 새학년 시험은 전 학년 개념 완료를 묻습니다. 기초부터 탄탄히!"
         elif day == 13:
