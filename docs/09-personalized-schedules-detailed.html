@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생별 맞춤형 구체적 학습 스케줄 (30일) - DA.UM 학습관리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .info-box h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .info-box p {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .student-selector {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .student-selector select {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            min-width: 300px;
+        }
+        
+        .student-schedule {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .student-schedule.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .student-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .student-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .student-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-card h4 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .week-section {
+            margin-bottom: 40px;
+        }
+        
+        .week-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .week-header h3 {
+            font-size: 1.5em;
+        }
+        
+        .day-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .day-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .day-card.weekend {
+            border-left-color: #f5576c;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .day-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .day-card.weekend .day-title {
+            color: #f5576c;
+        }
+        
+        .day-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .day-meta span {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+        
+        .task-list {
+            margin-top: 15px;
+        }
+        
+        .task-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .task-subject {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .task-level {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .task-level.기초 {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .task-level.표준 {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .task-level.심화 {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .task-duration {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .task-activities {
+            margin-top: 10px;
+        }
+        
+        .task-activities ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .task-activities li {
+            padding: 5px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .task-activities li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .day-goal {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        .download-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .download-section h3 {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .download-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .download-btn {
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .print-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .student-selector,
+            .download-section,
+            .print-btn {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .day-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .day-meta {
+                margin-top: 10px;
+            }
+            
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .task-duration {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 학생별 맞춤형 구체적 학습 스케줄</h1>
+            <p>진단평가 결과 기반 · 교과서 단원별 구체적 학습 내용 포함</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">2026년 1월 13일 ~ 2026년 2월 11일</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-box">
+                <h2>📋 스케줄 안내</h2>
+                <p>
+                    ✓ 진단평가 결과를 바탕으로 학생별 약점 과목에 집중하는 맞춤형 스케줄입니다.<br>
+                    ✓ 기초 레벨은 30분, 표준 레벨은 40분, 심화 레벨은 50분 학습을 권장합니다.<br>
+                    ✓ 평일은 2-3과목, 주말은 1-2과목으로 무리 없이 학습할 수 있습니다.<br>
+                    ✓ 매일 꾸준히 학습하는 것이 가장 중요합니다!
+                </p>
+            </div>
+            
+            <div class="student-selector">
+                <label for="studentSelect" style="display: block; margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">
+                    👤 학생 선택
+                </label>
+                <select id="studentSelect">
+                    <option value="">학생을 선택하세요</option>
+                </select>
+            </div>
+            
+            <div id="scheduleContainer"></div>
+            
+            <div class="download-section">
+                <h3>📥 스케줄 다운로드</h3>
+                <p style="color: white; margin-bottom: 20px;">
+                    다양한 형식으로 스케줄을 다운로드하여 활용하세요!
+                </p>
+                <div class="download-buttons">
+                    <a href="../학생별_맞춤_스케줄_2026-01-v2.json" download class="download-btn">
+                        📄 JSON 다운로드
+                    </a>
+                    <a href="../학생별_맞춤_스케줄_2026-01-v2.csv" download class="download-btn">
+                        📊 CSV 다운로드 (구체적 학습 내용 포함)
+                    </a>
+                </div>
+                <button class="print-btn" onclick="window.print()">🖨️ 인쇄하기</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 스케줄 데이터 로드
+        let schedulesData = [];
+        
+        async function loadSchedules() {
+            try {
+                const response = await fetch('../학생별_맞춤_스케줄_2026-01-v2.json');
+                schedulesData = await response.json();
+                populateStudentSelector();
+            } catch (error) {
+                console.error('스케줄 데이터 로드 실패:', error);
+                document.getElementById('scheduleContainer').innerHTML = 
+                    '<p style="text-align: center; color: red;">스케줄 데이터를 불러오는데 실패했습니다.</p>';
+            }
+        }
+        
+        function populateStudentSelector() {
+            const select = document.getElementById('studentSelect');
+            schedulesData.forEach((schedule, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${schedule.student_name} (${schedule.grade})`;
+                select.appendChild(option);
+            });
+        }
+        
+        document.getElementById('studentSelect').addEventListener('change', function() {
+            const index = this.value;
+            if (index === '') {
+                document.getElementById('scheduleContainer').innerHTML = '';
+                return;
+            }
+            
+            const schedule = schedulesData[index];
+            displaySchedule(schedule);
+        });
+        
+        function displaySchedule(schedule) {
+            const container = document.getElementById('scheduleContainer');
+            
+            // 과목별 총 학습 시간 계산
+            const subjectTimes = {};
+            schedule.daily_schedules.forEach(daily => {
+                daily.tasks.forEach(task => {
+                    if (!subjectTimes[task.subject]) {
+                        subjectTimes[task.subject] = 0;
+                    }
+                    subjectTimes[task.subject] += task.duration_minutes;
+                });
+            });
+            
+            // 총 학습 시간 계산
+            const totalMinutes = Object.values(subjectTimes).reduce((a, b) => a + b, 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalMins = totalMinutes % 60;
+            
+            let html = `
+                <div class="student-schedule active">
+                    <div class="student-header">
+                        <h2>${schedule.student_name} (${schedule.grade})</h2>
+                        <div class="student-stats">
+                            <div class="stat-card">
+                                <h4>총 학습 기간</h4>
+                                <p>${schedule.total_days}일</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>총 학습 시간</h4>
+                                <p>${totalHours}시간 ${totalMins}분</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>학습 과목</h4>
+                                <p>${Object.keys(subjectTimes).length}과목</p>
+                            </div>
+                        </div>
+                    </div>
+            `;
+            
+            // 주차별로 그룹핑
+            for (let week = 0; week < 5; week++) {
+                const weekStart = week * 7;
+                const weekEnd = Math.min(weekStart + 7, 30);
+                
+                if (weekStart >= 30) break;
+                
+                html += `
+                    <div class="week-section">
+                        <div class="week-header">
+                            <h3>📅 ${week + 1}주차 (Day ${weekStart + 1} ~ Day ${weekEnd})</h3>
+                        </div>
+                `;
+                
+                for (let dayIdx = weekStart; dayIdx < weekEnd; dayIdx++) {
+                    if (dayIdx >= schedule.daily_schedules.length) break;
+                    
+                    const daily = schedule.daily_schedules[dayIdx];
+                    const weekendClass = daily.is_weekend ? 'weekend' : '';
+                    
+                    html += `
+                        <div class="day-card ${weekendClass}">
+                            <div class="day-header">
+                                <div class="day-title">
+                                    Day ${daily.day} - ${daily.date} (${daily.weekday})
+                                </div>
+                                <div class="day-meta">
+                                    <span>⏱️ ${daily.total_minutes}분</span>
+                                    <span>${daily.is_weekend ? '🏖️ 주말' : '📚 평일'}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="task-list">
+                    `;
+                    
+                    daily.tasks.forEach((task, taskIdx) => {
+                        html += `
+                            <div class="task-item">
+                                <div class="task-header">
+                                    <div>
+                                        <span class="task-subject">${taskIdx + 1}. ${task.subject}</span>
+                                        <span class="task-level ${task.level}">${task.level}</span>
+                                        ${task.unit ? `<span style="color: #764ba2; font-size: 0.95em; margin-left: 10px; font-weight: 600;">📖 ${task.unit}</span>` : ''}
+                                    </div>
+                                    <span class="task-duration">⏱️ ${task.duration_minutes}분</span>
+                                </div>
+                                <div class="task-activities">
+                                    ${task.learning_content ? `
+                                    <div style="background: #f0f4ff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+                                        <strong style="color: #667eea;">📚 학습 내용:</strong><br>
+                                        <span style="color: #333; line-height: 1.8;">${task.learning_content}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${task.practice_content ? `
+                                    <div style="background: #fff4e6; padding: 12px; border-radius: 8px; margin: 10px 0;">
+                                        <strong style="color: #f5576c;">✍️ 연습 문제:</strong><br>
+                                        <span style="color: #333; line-height: 1.8;">${task.practice_content}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                            <div class="day-goal">
+                                🎯 ${daily.daily_goal}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += `</div>`;
+            }
+            
+            html += `</div>`;
+            
+            container.innerHTML = html;
+        }
+        
+        // 페이지 로드 시 스케줄 데이터 로드
+        loadSchedules();
+    </script>
+</body>
+</html>
