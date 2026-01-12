@@ -1,0 +1,6617 @@
+[
+  {
+    "student_name": "김예서",
+    "grade": "중2",
+    "start_date": "2026-01-13",
+    "end_date": "2026-02-11",
+    "total_days": 30,
+    "daily_schedules": [
+      {
+        "day": 1,
+        "date": "2026-01-13",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 2,
+        "date": "2026-01-14",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 3,
+        "date": "2026-01-15",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 4,
+        "date": "2026-01-16",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 5,
+        "date": "2026-01-17",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 6,
+        "date": "2026-01-18",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 7,
+        "date": "2026-01-19",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 8,
+        "date": "2026-01-20",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 9,
+        "date": "2026-01-21",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 10,
+        "date": "2026-01-22",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 11,
+        "date": "2026-01-23",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 12,
+        "date": "2026-01-24",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 13,
+        "date": "2026-01-25",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 14,
+        "date": "2026-01-26",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 15,
+        "date": "2026-01-27",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 16,
+        "date": "2026-01-28",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 17,
+        "date": "2026-01-29",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 18,
+        "date": "2026-01-30",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 19,
+        "date": "2026-01-31",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 20,
+        "date": "2026-02-01",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 21,
+        "date": "2026-02-02",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 22,
+        "date": "2026-02-03",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 23,
+        "date": "2026-02-04",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 24,
+        "date": "2026-02-05",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 25,
+        "date": "2026-02-06",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 26,
+        "date": "2026-02-07",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 27,
+        "date": "2026-02-08",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 28,
+        "date": "2026-02-09",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 29,
+        "date": "2026-02-10",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 30,
+        "date": "2026-02-11",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "과학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 0,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      }
+    ]
+  },
+  {
+    "student_name": "박수은",
+    "grade": "중1",
+    "start_date": "2026-01-13",
+    "end_date": "2026-02-11",
+    "total_days": 30,
+    "daily_schedules": [
+      {
+        "day": 1,
+        "date": "2026-01-13",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 2,
+        "date": "2026-01-14",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 3,
+        "date": "2026-01-15",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 4,
+        "date": "2026-01-16",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 5,
+        "date": "2026-01-17",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 6,
+        "date": "2026-01-18",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 7,
+        "date": "2026-01-19",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 8,
+        "date": "2026-01-20",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 9,
+        "date": "2026-01-21",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 10,
+        "date": "2026-01-22",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 11,
+        "date": "2026-01-23",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 12,
+        "date": "2026-01-24",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 13,
+        "date": "2026-01-25",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 14,
+        "date": "2026-01-26",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 15,
+        "date": "2026-01-27",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 16,
+        "date": "2026-01-28",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 17,
+        "date": "2026-01-29",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 18,
+        "date": "2026-01-30",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 19,
+        "date": "2026-01-31",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 20,
+        "date": "2026-02-01",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 21,
+        "date": "2026-02-02",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 22,
+        "date": "2026-02-03",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 23,
+        "date": "2026-02-04",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 24,
+        "date": "2026-02-05",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 25,
+        "date": "2026-02-06",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 26,
+        "date": "2026-02-07",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 27,
+        "date": "2026-02-08",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 28,
+        "date": "2026-02-09",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 29,
+        "date": "2026-02-10",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 63,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 30,
+        "date": "2026-02-11",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 110,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 66,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "수학",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      }
+    ]
+  },
+  {
+    "student_name": "윤다운",
+    "grade": "중2",
+    "start_date": "2026-01-13",
+    "end_date": "2026-02-11",
+    "total_days": 30,
+    "daily_schedules": [
+      {
+        "day": 1,
+        "date": "2026-01-13",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 2,
+        "date": "2026-01-14",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 3,
+        "date": "2026-01-15",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 4,
+        "date": "2026-01-16",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 5,
+        "date": "2026-01-17",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 6,
+        "date": "2026-01-18",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 7,
+        "date": "2026-01-19",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 8,
+        "date": "2026-01-20",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 9,
+        "date": "2026-01-21",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 10,
+        "date": "2026-01-22",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 11,
+        "date": "2026-01-23",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 12,
+        "date": "2026-01-24",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 13,
+        "date": "2026-01-25",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 14,
+        "date": "2026-01-26",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 15,
+        "date": "2026-01-27",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 16,
+        "date": "2026-01-28",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 17,
+        "date": "2026-01-29",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 18,
+        "date": "2026-01-30",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 19,
+        "date": "2026-01-31",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 20,
+        "date": "2026-02-01",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 21,
+        "date": "2026-02-02",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 22,
+        "date": "2026-02-03",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 23,
+        "date": "2026-02-04",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 24,
+        "date": "2026-02-05",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 25,
+        "date": "2026-02-06",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 26,
+        "date": "2026-02-07",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 27,
+        "date": "2026-02-08",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 28,
+        "date": "2026-02-09",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 29,
+        "date": "2026-02-10",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 30,
+        "date": "2026-02-11",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 76,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 86,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      }
+    ]
+  },
+  {
+    "student_name": "이유나",
+    "grade": "중2",
+    "start_date": "2026-01-13",
+    "end_date": "2026-02-11",
+    "total_days": 30,
+    "daily_schedules": [
+      {
+        "day": 1,
+        "date": "2026-01-13",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 2,
+        "date": "2026-01-14",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 3,
+        "date": "2026-01-15",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 4,
+        "date": "2026-01-16",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 5,
+        "date": "2026-01-17",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 6,
+        "date": "2026-01-18",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 7,
+        "date": "2026-01-19",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 8,
+        "date": "2026-01-20",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 9,
+        "date": "2026-01-21",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 10,
+        "date": "2026-01-22",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 11,
+        "date": "2026-01-23",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 12,
+        "date": "2026-01-24",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 13,
+        "date": "2026-01-25",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 70,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 14,
+        "date": "2026-01-26",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 15,
+        "date": "2026-01-27",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 16,
+        "date": "2026-01-28",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 17,
+        "date": "2026-01-29",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 18,
+        "date": "2026-01-30",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 19,
+        "date": "2026-01-31",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 20,
+        "date": "2026-02-01",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 21,
+        "date": "2026-02-02",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 22,
+        "date": "2026-02-03",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 23,
+        "date": "2026-02-04",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 24,
+        "date": "2026-02-05",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 25,
+        "date": "2026-02-06",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 26,
+        "date": "2026-02-07",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 27,
+        "date": "2026-02-08",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 28,
+        "date": "2026-02-09",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 29,
+        "date": "2026-02-10",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 120,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 70,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 30,
+        "date": "2026-02-11",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 90,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      }
+    ]
+  },
+  {
+    "student_name": "최희원",
+    "grade": "중2",
+    "start_date": "2026-01-13",
+    "end_date": "2026-02-11",
+    "total_days": 30,
+    "daily_schedules": [
+      {
+        "day": 1,
+        "date": "2026-01-13",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 2,
+        "date": "2026-01-14",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 3,
+        "date": "2026-01-15",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 4,
+        "date": "2026-01-16",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 5,
+        "date": "2026-01-17",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 6,
+        "date": "2026-01-18",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 7,
+        "date": "2026-01-19",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 8,
+        "date": "2026-01-20",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 9,
+        "date": "2026-01-21",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 10,
+        "date": "2026-01-22",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 11,
+        "date": "2026-01-23",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 12,
+        "date": "2026-01-24",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 13,
+        "date": "2026-01-25",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 14,
+        "date": "2026-01-26",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 15,
+        "date": "2026-01-27",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 16,
+        "date": "2026-01-28",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 17,
+        "date": "2026-01-29",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 18,
+        "date": "2026-01-30",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 19,
+        "date": "2026-01-31",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 20,
+        "date": "2026-02-01",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 80,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 21,
+        "date": "2026-02-02",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 22,
+        "date": "2026-02-03",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 23,
+        "date": "2026-02-04",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 24,
+        "date": "2026-02-05",
+        "weekday": "목요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 25,
+        "date": "2026-02-06",
+        "weekday": "금요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 26,
+        "date": "2026-02-07",
+        "weekday": "토요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 27,
+        "date": "2026-02-08",
+        "weekday": "일요일",
+        "is_weekend": true,
+        "total_minutes": 90,
+        "tasks": [
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "2과목 학습 완료",
+        "notes": "주말 - 가벼운 복습 중심"
+      },
+      {
+        "day": 28,
+        "date": "2026-02-09",
+        "weekday": "월요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료 + 주간 복습",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 29,
+        "date": "2026-02-10",
+        "weekday": "화요일",
+        "is_weekend": false,
+        "total_minutes": 130,
+        "tasks": [
+          {
+            "subject": "사회",
+            "level": "기초",
+            "score": 73,
+            "duration_minutes": 30,
+            "activities": [
+              "개념 강의 영상 시청 (10분)",
+              "개념 노트 정리 (10분)",
+              "기본 문제 3~5개 풀이 (10분)"
+            ],
+            "difficulty": "easy"
+          },
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      },
+      {
+        "day": 30,
+        "date": "2026-02-11",
+        "weekday": "수요일",
+        "is_weekend": false,
+        "total_minutes": 140,
+        "tasks": [
+          {
+            "subject": "영어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "국어",
+            "level": "표준",
+            "score": 83,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          },
+          {
+            "subject": "수학",
+            "level": "표준",
+            "score": 93,
+            "duration_minutes": 40,
+            "activities": [
+              "개념 복습 및 예제 학습 (10분)",
+              "응용 문제 5~7개 풀이 (20분)",
+              "오답 정리 및 복습 (10분)"
+            ],
+            "difficulty": "medium"
+          }
+        ],
+        "daily_goal": "3과목 학습 완료",
+        "notes": "평일 - 집중 학습"
+      }
+    ]
+  }
+]
