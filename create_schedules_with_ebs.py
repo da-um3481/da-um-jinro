@@ -143,7 +143,7 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
                 
                 # 성유정 학생 영어 특별 메시지
                 if name == "성유정" and subj_en == "english" and level == "기초":
-                    tip = "⭐ 중1 기초 과정 복습: " + tip + " [🔄 기초부터 탄탄하게!]"
+                    tip = "⭐ 중1 기초 과정 복습: " + tip + " [🔄 기초부터 탄탄하게!] 💝 쉬운 단계부터 시작하면 마음도 편안해져요. 천천히, 하나씩 알아가는 과정이 소중합니다."
                 elif level in ["기초", "표준"]:
                     tip += " [💡 이전 학년 복습 필수]"
                 
