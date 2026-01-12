@@ -394,7 +394,7 @@
         <div class="header">
             <h1>🎓 학생별 맞춤형 구체적 학습 스케줄</h1>
             <p>진단평가 결과 기반 · 교과서 단원별 구체적 학습 내용 포함</p>
-            <p style="font-size: 0.9em; margin-top: 10px;">2026년 1월 13일 ~ 2026년 2월 11일</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">2026년 1월 5일(월) ~ 1월 30일(금) · 4주 (26일간)</p>
         </div>
         
         <div class="content">
@@ -425,10 +425,10 @@
                     다양한 형식으로 스케줄을 다운로드하여 활용하세요!
                 </p>
                 <div class="download-buttons">
-                    <a href="../학생별_맞춤_스케줄_2026-01-v2.json" download class="download-btn">
+                    <a href="../학생별_맞춤_스케줄_2026-01-v3.json" download class="download-btn">
                         📄 JSON 다운로드
                     </a>
-                    <a href="../학생별_맞춤_스케줄_2026-01-v2.csv" download class="download-btn">
+                    <a href="../학생별_맞춤_스케줄_2026-01-v3.csv" download class="download-btn">
                         📊 CSV 다운로드 (구체적 학습 내용 포함)
                     </a>
                 </div>
@@ -443,7 +443,7 @@
         
         async function loadSchedules() {
             try {
-                const response = await fetch('../학생별_맞춤_스케줄_2026-01-v2.json');
+                const response = await fetch('../학생별_맞춤_스케줄_2026-01-v3.json');
                 schedulesData = await response.json();
                 populateStudentSelector();
             } catch (error) {

@@ -565,15 +565,15 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
     schedule = {
         "student_name": name,
         "grade": grade,
-        "start_date": "2026-01-13",
-        "end_date": "2026-02-11",
-        "total_days": 30,
+        "start_date": "2026-01-05",
+        "end_date": "2026-01-30",
+        "total_days": 26,
         "daily_schedules": []
     }
     
-    start_date = datetime(2026, 1, 13)
+    start_date = datetime(2026, 1, 5)
     
-    for day in range(30):
+    for day in range(26):
         current_date = start_date + timedelta(days=day)
         date_str = current_date.strftime("%Y-%m-%d")
         weekday = current_date.strftime("%A")
@@ -686,12 +686,13 @@ def save_schedules_csv(schedules: List[Dict], filename: str):
 
 if __name__ == "__main__":
     print("🚀 구체적인 학습 스케줄 생성 시작...\n")
+    print("📅 기간: 2026년 1월 5일(월) ~ 1월 30일(금) - 4주 (26일간)\n")
     
     schedules = generate_all_schedules()
     
     print(f"\n✅ 총 {len(schedules)}명의 스케줄 생성 완료!\n")
     
-    timestamp = "2026-01-v2"
+    timestamp = "2026-01-v3"
     
     json_file = f"학생별_맞춤_스케줄_{timestamp}.json"
     csv_file = f"학생별_맞춤_스케줄_{timestamp}.csv"
