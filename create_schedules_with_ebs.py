@@ -129,13 +129,22 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
             subj_en, level, _ = prioritized_subjects[subj_idx]
             subj_kr = SUBJECT_MAPPING[subj_en]
             
+            # 성유정 학생 영어 특별 처리: 중1 기초 과정 복습
+            grade_for_method = grade
+            if name == "성유정" and subj_en == "english" and level == "기초":
+                grade_for_method = "중1"
+            
             # 실제 학습 방법 가져오기
-            method = get_learning_method(grade, subj_en, level, day)
+            method = get_learning_method(grade_for_method, subj_en, level, day)
             
             if method:
                 # 기초/표준: 복습 메시지 추가
                 tip = method["tip"]
-                if level in ["기초", "표준"]:
+                
+                # 성유정 학생 영어 특별 메시지
+                if name == "성유정" and subj_en == "english" and level == "기초":
+                    tip = "⭐ 중1 기초 과정 복습: " + tip + " [🔄 기초부터 탄탄하게!]"
+                elif level in ["기초", "표준"]:
                     tip += " [💡 이전 학년 복습 필수]"
                 
                 # 심화 레벨 3~4주차: 예습 권장
