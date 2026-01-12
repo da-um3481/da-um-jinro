@@ -9,19 +9,22 @@ EBS 중학 무료강의, EBS AI 단추, 자기주도학습법 기반
 
 LEARNING_METHODS = {
     "기초": {
-        "step1_understand": "EBS 중학 무료강의에서 '{keyword}' 검색하여 개념 강의 시청 (10분)",
-        "step2_practice": "EBS AI 단추 문제은행 - '쉬운' 난이도 문제 5개 풀기 (15분)",
-        "step3_check": "틀린 문제는 노트에 정리하고, 다시 풀어보기 (5분)"
+        "step1": "① 개념 이해: EBS 중학 무료강의 '{keyword}' 검색 → 개념 강의 보기 (7분)",
+        "step2": "② 관련 문제: EBS AI 단추 '쉬운' 문제 3개 풀기 (8분)",
+        "step3": "③ 백지 쓰기: 백지에 오늘 배운 내용 써보기 (5분)",
+        "step4": "④ 오류 찾기: 못 쓴 부분, 틀린 부분 강의/교재에서 다시 찾기 (3분)",
+        "step5": "⑤ 이해·기억: 왜 틀렸는지, 무엇을 빠뜨렸는지 생각하기 (2분)",
+        "step6": "⑥ 다시 쓰기: 백지에 다시 한 번 완벽하게 써보기 (5분)"
     },
     "표준": {
-        "step1_understand": "EBS 중학 강의 '{keyword}' 핵심 요약 노트 작성 (10분)",
-        "step2_practice": "EBS AI 단추 문제은행 - '적절한' 난이도 문제 7개 풀기 (20분)",
-        "step3_check": "오답노트 작성: 왜 틀렸는지 이유 쓰기 + 비슷한 유형 1개 더 풀기 (10분)"
+        "step1": "① 개념 학습: EBS 중학 강의 '{keyword}' 보며 핵심 요약 노트 작성 (10분)",
+        "step2": "② 문제 풀이: EBS AI 단추 '적절한' 난이도 문제 7개 풀기 (20분)",
+        "step3": "③ 오답 정리: 틀린 문제 → 왜 틀렸는지 이유 쓰기 → 비슷한 유형 1개 더 풀기 (10분)"
     },
     "심화": {
-        "step1_understand": "교과서 심화 개념 스스로 정리 + EBS 강의로 확인 (15분)",
-        "step2_practice": "EBS AI 단추 문제은행 - '어려운' 난이도 문제 7개 + 추가 문제 3개 (25분)",
-        "step3_check": "틀린 문제 완벽 분석: 개념-적용-풀이 3단계 정리 + 유사 문제 2개 풀기 (10분)"
+        "step1": "① 심화 개념: 교과서 심화 개념 스스로 정리 + EBS 강의로 확인 (15분)",
+        "step2": "② 고난도 풀이: EBS AI 단추 '어려운' 난이도 문제 7개 + 추가 문제 3개 (25분)",
+        "step3": "③ 완벽 분석: 틀린 문제 → 개념-적용-풀이 3단계 정리 → 유사 문제 2개 더 풀기 (10분)"
     }
 }
 
@@ -250,16 +253,29 @@ def get_learning_method(grade, subject_en, level, day_index):
     method = LEARNING_METHODS[level]
     
     # 키워드 치환
-    step1 = method["step1_understand"].format(keyword=topic["keyword"])
-    step2 = method["step2_practice"]
-    step3 = method["step3_check"]
-    
-    return {
-        "unit": topic["unit"],
-        "keyword": topic["keyword"],
-        "tip": topic["tip"],
-        "step1": step1,
-        "step2": step2,
-        "step3": step3,
-        "duration": 30 if level == "기초" else (40 if level == "표준" else 50)
-    }
+    if level == "기초":
+        step1 = method["step1"].format(keyword=topic["keyword"])
+        return {
+            "unit": topic["unit"],
+            "keyword": topic["keyword"],
+            "tip": topic["tip"],
+            "step1": step1,
+            "step2": method["step2"],
+            "step3": method["step3"],
+            "step4": method["step4"],
+            "step5": method["step5"],
+            "step6": method["step6"],
+            "duration": 30
+        }
+    else:
+        # 표준, 심화
+        step1 = method["step1"].format(keyword=topic["keyword"])
+        return {
+            "unit": topic["unit"],
+            "keyword": topic["keyword"],
+            "tip": topic["tip"],
+            "step1": step1,
+            "step2": method["step2"],
+            "step3": method["step3"],
+            "duration": 40 if level == "표준" else 50
+        }

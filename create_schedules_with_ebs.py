@@ -155,6 +155,12 @@ def create_weekly_schedule(student_data: Dict) -> Dict:
                     "time_of_day": "오전" if i < 3 else "오후"
                 }
                 
+                # 기초 레벨은 6단계
+                if level == "기초" and "step4" in method:
+                    task["step4"] = method["step4"]
+                    task["step5"] = method["step5"]
+                    task["step6"] = method["step6"]
+                
                 if i < 3:
                     daily_tasks_morning.append(task)
                 else:
