@@ -15,6 +15,11 @@ let currentStudent = null;
 let selectedStudyHours = 0;
 let isPlanCollapsed = true; // 기본적으로 접혀있음
 
+// 타이머 변수
+let timerStartTime = null;
+let timerInterval = null;
+let timerElapsedSeconds = 0;
+
 // 로그인
 function login() {
     const name = document.getElementById('nameInput').value.trim();
@@ -281,6 +286,11 @@ function displayWeeklyPlan() {
         icon.classList.add('rotate-180');
     }
     
+    // 오늘 요일 계산
+    const today = new Date();
+    const dayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+    const todayName = dayNames[today.getDay()];
+    
     const subjectIcons = {
         '국어': 'fa-book',
         '영어': 'fa-language',
@@ -299,14 +309,19 @@ function displayWeeklyPlan() {
         '휴식': 'bg-gray-50 border-gray-200 text-gray-600'
     };
     
-    container.innerHTML = weeklyPlan.map(dayPlan => `
-        <div class="border rounded-lg p-4">
+    container.innerHTML = weeklyPlan.map(dayPlan => {
+        const isToday = dayPlan.day === todayName;
+        return `
+        <div class="border rounded-lg p-4 ${isToday ? 'border-blue-500 border-2 bg-blue-50' : ''}">
             <div class="flex justify-between items-center mb-3">
-                <h4 class="font-bold text-lg">📅 ${dayPlan.day}</h4>
+                <h4 class="font-bold text-lg flex items-center gap-2">
+                    ${isToday ? '⭐' : '📅'} ${dayPlan.day}
+                    ${isToday ? '<span class="text-sm bg-blue-500 text-white px-2 py-1 rounded-full">오늘</span>' : ''}
+                </h4>
                 <span class="text-sm text-gray-600">총 ${Math.floor(dayPlan.totalMinutes / 60)}시간 ${dayPlan.totalMinutes % 60}분</span>
             </div>
             <div class="space-y-2">
-                ${dayPlan.schedule.map(item => `
+                ${dayPlan.schedule.map((item, idx) => `
                     <div class="flex items-center gap-3 ${subjectColors[item.subject]} border rounded p-2">
                         <div class="text-center min-w-[100px]">
                             <div class="text-xs font-semibold">${item.time}</div>
@@ -316,11 +331,36 @@ function displayWeeklyPlan() {
                             <span class="font-semibold">${item.subject}</span>
                         </div>
                         <div class="text-xs">${item.duration}분</div>
+                        ${item.type === 'study' && isToday ? `
+                            <button onclick="startStudyFromPlan('${item.subject}', ${item.duration})" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition">
+                                <i class="fas fa-play mr-1"></i>시작
+                            </button>
+                        ` : ''}
                     </div>
                 `).join('')}
             </div>
         </div>
-    `).join('');
+    `}).join('');
+}
+
+// 계획표에서 학습 시작
+function startStudyFromPlan(subject, duration) {
+    // 학습 일지 탭으로 이동
+    showTab('journal');
+    
+    // 과목 선택
+    document.getElementById('subject').value = subject;
+    
+    // 타이머 시작
+    startTimer();
+    
+    // 스크롤
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+    
+    alert(`✅ ${subject} 학습을 시작합니다!\n예상 시간: ${duration}분`);
 }
 
 // 탭 전환
@@ -346,11 +386,18 @@ function showTab(tabName) {
 function saveJournal() {
     const subject = document.getElementById('subject').value;
     const content = document.getElementById('content').value.trim();
-    const studyTime = document.getElementById('studyTime').value;
     const memo = document.getElementById('memo').value.trim();
 
     if (!content) {
         alert('학습 내용을 입력해주세요');
+        return;
+    }
+
+    // 타이머로 측정한 시간 사용
+    const studyTime = timerElapsedSeconds > 0 ? Math.round(timerElapsedSeconds / 60) : 0;
+    
+    if (studyTime === 0) {
+        alert('⏱️ 학습 시간을 측정해주세요!\n\n"학습 시작" 버튼을 눌러 타이머를 시작한 후,\n학습이 끝나면 "완료" 버튼을 눌러주세요.');
         return;
     }
 
@@ -360,7 +407,9 @@ function saveJournal() {
         date: new Date().toISOString(),
         subject: subject,
         content: content,
-        studyTime: studyTime || 0,
+        studyTime: studyTime,
+        startTime: timerStartTime ? new Date(timerStartTime).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
+        endTime: timerStartTime ? new Date(timerStartTime + (timerElapsedSeconds * 1000)).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
         memo: memo,
         photo: null // 추후 구현
     };
@@ -372,8 +421,8 @@ function saveJournal() {
 
     // 폼 초기화
     document.getElementById('content').value = '';
-    document.getElementById('studyTime').value = '';
     document.getElementById('memo').value = '';
+    resetTimer();
 
     alert('✅ 학습 기록이 저장되었습니다!');
     loadJournals();
@@ -396,12 +445,97 @@ function loadJournals() {
                     <span class="badge bg-blue-100 text-blue-800">${journal.subject}</span>
                     <span class="text-sm text-gray-500 ml-2">${formatDate(journal.date)}</span>
                 </div>
-                <span class="text-sm text-gray-600">⏱️ ${journal.studyTime}분</span>
+                <div class="text-right">
+                    <div class="text-lg font-bold text-blue-500">${journal.studyTime}분</div>
+                    ${journal.startTime && journal.endTime ? `
+                        <div class="text-xs text-gray-500">${journal.startTime} ~ ${journal.endTime}</div>
+                    ` : ''}
+                </div>
             </div>
             <p class="text-gray-800 mb-2">${journal.content}</p>
             ${journal.memo ? `<p class="text-sm text-gray-600 italic">💭 ${journal.memo}</p>` : ''}
         </div>
     `).join('');
+}
+
+// 타이머 시작
+function startTimer() {
+    timerStartTime = Date.now();
+    timerElapsedSeconds = 0;
+    
+    // UI 전환
+    document.getElementById('timerIdle').classList.add('hidden');
+    document.getElementById('timerRunning').classList.remove('hidden');
+    document.getElementById('timerCompleted').classList.add('hidden');
+    
+    // 시작 시각 표시
+    const startTimeStr = new Date(timerStartTime).toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    document.getElementById('startTime').textContent = startTimeStr;
+    
+    // 타이머 시작
+    timerInterval = setInterval(() => {
+        timerElapsedSeconds = Math.floor((Date.now() - timerStartTime) / 1000);
+        updateTimerDisplay();
+    }, 1000);
+}
+
+// 타이머 업데이트
+function updateTimerDisplay() {
+    const hours = Math.floor(timerElapsedSeconds / 3600);
+    const minutes = Math.floor((timerElapsedSeconds % 3600) / 60);
+    const seconds = timerElapsedSeconds % 60;
+    
+    const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    document.getElementById('elapsedTime').textContent = display;
+}
+
+// 타이머 정지 (완료)
+function stopTimer() {
+    if (!timerInterval) return;
+    
+    clearInterval(timerInterval);
+    timerInterval = null;
+    
+    const endTime = Date.now();
+    const totalMinutes = Math.round(timerElapsedSeconds / 60);
+    
+    // UI 전환
+    document.getElementById('timerRunning').classList.add('hidden');
+    document.getElementById('timerCompleted').classList.remove('hidden');
+    
+    // 완료 정보 표시
+    const startTimeStr = new Date(timerStartTime).toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    const endTimeStr = new Date(endTime).toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    document.getElementById('completedStartTime').textContent = startTimeStr;
+    document.getElementById('completedEndTime').textContent = endTimeStr;
+    document.getElementById('completedDuration').textContent = `${totalMinutes}분`;
+}
+
+// 타이머 리셋
+function resetTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    
+    timerStartTime = null;
+    timerElapsedSeconds = 0;
+    
+    // UI 리셋
+    document.getElementById('timerIdle').classList.remove('hidden');
+    document.getElementById('timerRunning').classList.add('hidden');
+    document.getElementById('timerCompleted').classList.add('hidden');
+    document.getElementById('elapsedTime').textContent = '00:00:00';
 }
 
 // 학습 미션 불러오기
