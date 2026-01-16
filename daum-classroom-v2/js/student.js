@@ -128,10 +128,10 @@ function createWeeklySchedule(totalHours, subjects, hasFocus) {
     // 총 학습 시간을 분으로 변환
     const totalMinutes = totalHours * 60;
     
-    // 45분 단위로 분할
-    const sessionDuration = 45;
-    const breakDuration = 10;
-    const sessionsPerDay = Math.floor(totalMinutes / sessionDuration);
+    // 50~60분 학습 + 5분 휴식 (평균 55분으로 계산)
+    const sessionDuration = 50 + Math.floor(Math.random() * 11); // 50~60분 랜덤
+    const breakDuration = 5;
+    const sessionsPerDay = Math.floor(totalMinutes / 55); // 평균 세션 시간으로 계산
     
     for (let day of days) {
         const dailySchedule = [];
@@ -139,6 +139,9 @@ function createWeeklySchedule(totalHours, subjects, hasFocus) {
         let startMinute = 0;
         
         for (let i = 0; i < sessionsPerDay; i++) {
+            // 각 세션마다 50~60분 랜덤 지정
+            const currentSessionDuration = 50 + Math.floor(Math.random() * 11);
+            
             // 과목 선택 (집중 과목이 있으면 더 자주)
             let subject;
             if (hasFocus && Math.random() < 0.6) {
@@ -151,14 +154,14 @@ function createWeeklySchedule(totalHours, subjects, hasFocus) {
             }
             
             // 시간 포맷
-            const endMinute = startMinute + sessionDuration;
+            const endMinute = startMinute + currentSessionDuration;
             const endHour = startHour + Math.floor(endMinute / 60);
             const finalEndMinute = endMinute % 60;
             
             dailySchedule.push({
                 time: `${String(startHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}-${String(endHour).padStart(2, '0')}:${String(finalEndMinute).padStart(2, '0')}`,
                 subject: subject,
-                duration: sessionDuration,
+                duration: currentSessionDuration,
                 type: 'study'
             });
             
@@ -186,7 +189,7 @@ function createWeeklySchedule(totalHours, subjects, hasFocus) {
         weeklyPlan.push({
             day: day,
             schedule: dailySchedule,
-            totalMinutes: sessionsPerDay * sessionDuration
+            totalMinutes: dailySchedule.filter(s => s.type === 'study').reduce((sum, s) => sum + s.duration, 0)
         });
     }
     
