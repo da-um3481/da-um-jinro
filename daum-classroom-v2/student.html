@@ -88,16 +88,33 @@
 
         <!-- 컨텐츠 영역 -->
         <div class="container mx-auto px-4 py-6">
-            <!-- 학습 시작 도우미 (첫 방문 시) -->
-            <div id="studyHelper" class="mb-6 hidden">
-                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-lg p-8">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-rocket text-6xl mb-4"></i>
-                        <h2 class="text-3xl font-bold mb-2">학습 시작이 막막하신가요?</h2>
-                        <p class="text-lg opacity-90">일주일 학습 계획을 자동으로 만들어드릴게요!</p>
+            <!-- 학습 시작 도우미 버튼 -->
+            <div class="mb-6">
+                <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-lg shadow-lg hover:shadow-xl transition flex items-center justify-center gap-3">
+                    <i class="fas fa-rocket text-2xl"></i>
+                    <span class="text-lg font-bold">학습 시작이 막막하신가요? 일주일 계획 자동 생성하기</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- 학습 시작 도우미 모달 -->
+            <div id="studyHelperModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4" onclick="if(event.target === this) closeStudyHelperModal()">
+                <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <!-- 모달 헤더 -->
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-t-lg sticky top-0">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h2 class="text-3xl font-bold mb-2">🚀 학습 시작 도우미</h2>
+                                <p class="text-lg opacity-90">일주일 학습 계획을 자동으로 만들어드릴게요!</p>
+                            </div>
+                            <button onclick="closeStudyHelperModal()" class="text-white hover:bg-white hover:bg-opacity-20 rounded-full w-10 h-10 flex items-center justify-center transition ml-4">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
                     </div>
-                    
-                    <div class="bg-white text-gray-800 rounded-lg p-6">
+
+                    <!-- 모달 바디 -->
+                    <div class="p-6">
                         <div class="mb-6">
                             <label class="block text-lg font-bold mb-3">📝 오늘 몇 시간 공부할 수 있나요?</label>
                             <div class="grid grid-cols-2 md:grid-cols-5 gap-3">

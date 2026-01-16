@@ -60,21 +60,32 @@ window.addEventListener('DOMContentLoaded', () => {
 // 학습 도우미 표시 여부 확인
 function checkAndShowStudyHelper() {
     const weeklyPlan = localStorage.getItem(STORAGE_KEYS.WEEKLY_PLAN);
-    const journals = getJournals().filter(j => j.studentName === currentStudent.name);
     
-    // 주간 계획이 없고, 학습 기록이 3개 미만이면 도우미 표시
-    if (!weeklyPlan && journals.length < 3) {
-        document.getElementById('studyHelper').classList.remove('hidden');
-    } else if (weeklyPlan) {
-        // 주간 계획이 있으면 표시
+    // 주간 계획이 있으면 표시
+    if (weeklyPlan) {
         displayWeeklyPlan();
     }
 }
 
+// 학습 도우미 모달 열기
+function openStudyHelperModal() {
+    document.getElementById('studyHelperModal').classList.remove('hidden');
+    document.getElementById('studyHelperModal').classList.add('flex');
+    // 선택 초기화
+    selectedStudyHours = 0;
+    document.querySelectorAll('.study-hour-btn').forEach(btn => btn.classList.remove('selected'));
+    document.querySelectorAll('.subject-checkbox').forEach(cb => cb.checked = false);
+}
+
+// 학습 도우미 모달 닫기
+function closeStudyHelperModal() {
+    document.getElementById('studyHelperModal').classList.add('hidden');
+    document.getElementById('studyHelperModal').classList.remove('flex');
+}
+
 // 학습 도우미 다시 표시
 function showStudyHelper() {
-    document.getElementById('studyHelper').classList.remove('hidden');
-    document.getElementById('weeklyPlanView').classList.add('hidden');
+    openStudyHelperModal();
 }
 
 // 학습 시간 선택
@@ -113,8 +124,10 @@ function generateWeeklyPlan() {
     // 저장
     localStorage.setItem(STORAGE_KEYS.WEEKLY_PLAN, JSON.stringify(weeklyPlan));
     
-    // 화면 전환
-    document.getElementById('studyHelper').classList.add('hidden');
+    // 모달 닫기
+    closeStudyHelperModal();
+    
+    // 화면에 표시
     displayWeeklyPlan();
     
     alert('✅ 일주일 학습 계획이 생성되었습니다!');
