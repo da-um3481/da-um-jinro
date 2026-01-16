@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 포털 - DA.UM Classroom MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">👨‍🎓 학생 포털</h1>
+                <p class="text-purple-100 text-sm" id="studentName">로그인이 필요합니다</p>
+            </div>
+            <button onclick="location.href='index.html'" 
+                    class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
+                <i class="fas fa-home mr-2"></i>홈으로
+            </button>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- 로그인 섹션 (처음에만 표시) -->
+            <div id="loginSection" class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">
+                    <i class="fas fa-sign-in-alt text-purple-600 mr-2"></i>
+                    로그인
+                </h2>
+                
+                <div class="max-w-md mx-auto space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">이름</label>
+                        <input type="text" id="loginName" placeholder="예: 홍길동"
+                               class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none">
+                    </div>
+
+                    <button onclick="login()" 
+                            class="w-full bg-purple-600 text-white py-3 rounded-xl font-bold hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-arrow-right mr-2"></i>입장하기
+                    </button>
+
+                    <p class="text-center text-gray-500 text-sm">
+                        💡 이름을 입력하면 내 과제를 확인할 수 있습니다
+                    </p>
+                </div>
+            </div>
+
+            <!-- 과제 목록 섹션 (로그인 후 표시) -->
+            <div id="contentSection" class="hidden">
+                <!-- 요약 정보 -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <!-- 전체 과제 -->
+                    <div class="bg-white rounded-xl shadow p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">전체 과제</p>
+                                <p class="text-3xl font-bold text-gray-800" id="totalCount">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-list text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 완료한 과제 -->
+                    <div class="bg-white rounded-xl shadow p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">완료</p>
+                                <p class="text-3xl font-bold text-green-600" id="completedCount">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 미완료 과제 -->
+                    <div class="bg-white rounded-xl shadow p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">미완료</p>
+                                <p class="text-3xl font-bold text-orange-600" id="pendingCount">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-exclamation-circle text-orange-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 과제 목록 -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-tasks text-purple-600 mr-2"></i>
+                        내 과제
+                    </h2>
+
+                    <div id="assignmentList" class="space-y-4">
+                        <!-- 동적으로 추가될 영역 -->
+                        <div class="text-center text-gray-400 py-8">
+                            <i class="fas fa-inbox text-4xl mb-3"></i>
+                            <p>아직 과제가 없습니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // LocalStorage 키
+        const STORAGE_KEY = 'classroom_mvp_assignments';
+        const USER_KEY = 'classroom_mvp_current_user';
+        let currentUser = null;
+
+        // 페이지 로드 시
+        document.addEventListener('DOMContentLoaded', function() {
+            // 저장된 사용자 확인
+            const savedUser = localStorage.getItem(USER_KEY);
+            if (savedUser) {
+                currentUser = savedUser;
+                showContent();
+            }
+        });
+
+        // 로그인
+        function login() {
+            const name = document.getElementById('loginName').value.trim();
+            
+            if (!name) {
+                alert('⚠️ 이름을 입력해주세요!');
+                return;
+            }
+
+            // 사용자 정보 저장
+            currentUser = name;
+            localStorage.setItem(USER_KEY, name);
+
+            showContent();
+        }
+
+        // 콘텐츠 표시
+        function showContent() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('contentSection').classList.remove('hidden');
+            document.getElementById('studentName').textContent = currentUser + ' 학생';
+            
+            loadAssignments();
+        }
+
+        // 과제 목록 불러오기
+        function getAssignments() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // 과제 완료 토글
+        function toggleComplete(assignId) {
+            const assignments = getAssignments();
+            const assignment = assignments.find(a => a.id === assignId);
+            
+            if (!assignment) return;
+
+            // 완료 목록에 추가/제거
+            const index = assignment.completedBy.indexOf(currentUser);
+            if (index > -1) {
+                // 이미 완료한 경우 -> 취소
+                assignment.completedBy.splice(index, 1);
+            } else {
+                // 미완료인 경우 -> 완료
+                assignment.completedBy.push(currentUser);
+            }
+
+            // 저장
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(assignments));
+            loadAssignments();
+        }
+
+        // 과제 목록 표시
+        function loadAssignments() {
+            const assignments = getAssignments();
+            const container = document.getElementById('assignmentList');
+
+            if (assignments.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-400 py-8">
+                        <i class="fas fa-inbox text-4xl mb-3"></i>
+                        <p>아직 과제가 없습니다</p>
+                        <p class="text-sm mt-2">선생님이 과제를 배포하면 여기에 표시됩니다</p>
+                    </div>
+                `;
+                updateCounts(0, 0, 0);
+                return;
+            }
+
+            // 최신순 정렬
+            assignments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            // 통계 계산
+            const total = assignments.length;
+            const completed = assignments.filter(a => a.completedBy.includes(currentUser)).length;
+            const pending = total - completed;
+
+            updateCounts(total, completed, pending);
+
+            container.innerHTML = assignments.map(assign => {
+                const deadline = new Date(assign.deadline);
+                const now = new Date();
+                const isOverdue = deadline < now;
+                const daysLeft = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+                const isCompleted = assign.completedBy.includes(currentUser);
+
+                let statusBadge, statusColor;
+                if (isCompleted) {
+                    statusBadge = '✅ 완료';
+                    statusColor = 'green';
+                } else if (isOverdue) {
+                    statusBadge = '⚠️ 마감됨';
+                    statusColor = 'red';
+                } else {
+                    statusBadge = `📌 D-${daysLeft}`;
+                    statusColor = 'orange';
+                }
+
+                return `
+                    <div class="border-2 ${isCompleted ? 'border-green-200 bg-green-50' : 'border-gray-200'} rounded-xl p-4 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-sm font-bold">${assign.subject}</span>
+                                <span class="px-3 py-1 bg-${statusColor}-100 text-${statusColor}-700 rounded-lg text-xs font-bold">${statusBadge}</span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">${assign.title}</h3>
+                        
+                        ${assign.description ? 
+                            `<p class="text-gray-600 text-sm mb-3">${assign.description}</p>` : 
+                            ''
+                        }
+                        
+                        <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                            <span><i class="far fa-calendar mr-1"></i>${formatDate(deadline)}</span>
+                            <span><i class="far fa-clock mr-1"></i>${formatTime(deadline)}</span>
+                        </div>
+
+                        ${!isOverdue ? `
+                            <button onclick="toggleComplete('${assign.id}')" 
+                                    class="w-full ${isCompleted ? 'bg-gray-200 text-gray-700' : 'bg-purple-600 text-white'} py-3 rounded-xl font-bold hover:opacity-80 transition-all">
+                                ${isCompleted ? 
+                                    '<i class="fas fa-undo mr-2"></i>완료 취소' : 
+                                    '<i class="fas fa-check mr-2"></i>완료 표시'
+                                }
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 통계 업데이트
+        function updateCounts(total, completed, pending) {
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        // 날짜 포맷
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('ko-KR', {
+                month: 'long',
+                day: 'numeric',
+                weekday: 'short'
+            });
+        }
+
+        // 시간 포맷
+        function formatTime(date) {
+            return new Date(date).toLocaleTimeString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    </script>
+</body>
+</html>

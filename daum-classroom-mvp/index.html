@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM Classroom MVP - 베타 버전</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">🎓 DA.UM Classroom (베타)</h1>
+            <p class="text-indigo-100 mt-2">과제 관리 + 학습 추적 통합 시스템</p>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 역할 선택 -->
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-700 text-2xl mr-3"></i>
+                    <div>
+                        <h3 class="text-yellow-800 font-bold">⚠️ 베타 버전 안내</h3>
+                        <p class="text-yellow-700 text-sm mt-1">
+                            이 버전은 개발 중인 테스트 버전입니다. 
+                            기존 DA.UM 학생포털과는 별도로 작동하며, 데이터는 독립적으로 저장됩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 역할 선택 카드 -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 교사 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-indigo-500"
+                     onclick="location.href='teacher.html'">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chalkboard-teacher text-indigo-600 text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">👨‍🏫 교사</h2>
+                        <p class="text-gray-600 mb-4">과제 생성, 공지사항 작성, 학생 관리</p>
+                        <ul class="text-left text-sm text-gray-500 space-y-2 mb-6">
+                            <li>✓ 과제 배포 및 관리</li>
+                            <li>✓ 학생 제출 현황 확인</li>
+                            <li>✓ 공지사항 게시</li>
+                        </ul>
+                        <button class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-colors">
+                            교사 대시보드로 이동 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 학생 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-purple-500"
+                     onclick="location.href='student.html'">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-graduate text-purple-600 text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">👨‍🎓 학생</h2>
+                        <p class="text-gray-600 mb-4">과제 확인, 학습 시간 기록, 제출</p>
+                        <ul class="text-left text-sm text-gray-500 space-y-2 mb-6">
+                            <li>✓ 내 과제 목록 확인</li>
+                            <li>✓ 과제 완료 체크</li>
+                            <li>✓ 공지사항 확인</li>
+                        </ul>
+                        <button class="w-full bg-purple-600 text-white py-3 rounded-xl font-bold hover:bg-purple-700 transition-colors">
+                            학생 포털로 이동 →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 안내 사항 -->
+            <div class="mt-8 bg-blue-50 rounded-xl p-6">
+                <h3 class="font-bold text-blue-900 mb-3">📌 MVP 버전 주요 기능</h3>
+                <div class="space-y-2 text-blue-800 text-sm">
+                    <p>✅ <strong>과제 시스템:</strong> 교사가 과제 생성 → 학생에게 자동 표시</p>
+                    <p>✅ <strong>완료 체크:</strong> 학생이 과제 완료 상태 업데이트</p>
+                    <p>✅ <strong>공지사항:</strong> 중요 알림 전달</p>
+                    <p>⏳ <strong>개발 예정:</strong> 파일 업로드, 피드백 기능 (Phase 2)</p>
+                </div>
+            </div>
+
+            <!-- 기존 DA.UM 포털 링크 -->
+            <div class="mt-6 text-center">
+                <a href="../geunhwa-student-portal.html" 
+                   class="inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    기존 DA.UM 학생포털로 돌아가기
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2026 다움진로진학컨설팅 | DA.UM Classroom MVP v0.1</p>
+            <p class="text-gray-500 text-sm mt-2">개발 브랜치: classroom-mvp | 완전 분리 운영</p>
+        </div>
+    </footer>
+</body>
+</html>
