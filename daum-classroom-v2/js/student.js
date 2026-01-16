@@ -5,12 +5,15 @@ const STORAGE_KEYS = {
     MISSIONS: 'daum_v2_missions',
     MATERIALS: 'daum_v2_materials',
     QUESTIONS: 'daum_v2_questions',
-    WEEKLY_PLAN: 'daum_v2_weekly_plan'
+    WEEKLY_PLAN: 'daum_v2_weekly_plan',
+    PLAN_CREATED_DATE: 'daum_v2_plan_created_date',
+    PLAN_COLLAPSED: 'daum_v2_plan_collapsed'
 };
 
 // 현재 학생 정보
 let currentStudent = null;
 let selectedStudyHours = 0;
+let isPlanCollapsed = true; // 기본적으로 접혀있음
 
 // 로그인
 function login() {
@@ -60,10 +63,43 @@ window.addEventListener('DOMContentLoaded', () => {
 // 학습 도우미 표시 여부 확인
 function checkAndShowStudyHelper() {
     const weeklyPlan = localStorage.getItem(STORAGE_KEYS.WEEKLY_PLAN);
+    const planCreatedDate = localStorage.getItem(STORAGE_KEYS.PLAN_CREATED_DATE);
     
-    // 주간 계획이 있으면 표시
-    if (weeklyPlan) {
-        displayWeeklyPlan();
+    // 계획이 있는지 확인
+    if (weeklyPlan && planCreatedDate) {
+        const createdDate = new Date(planCreatedDate);
+        const today = new Date();
+        const daysDiff = Math.floor((today - createdDate) / (1000 * 60 * 60 * 24));
+        
+        // 7일이 지났으면 자동 갱신
+        if (daysDiff >= 7) {
+            localStorage.removeItem(STORAGE_KEYS.WEEKLY_PLAN);
+            localStorage.removeItem(STORAGE_KEYS.PLAN_CREATED_DATE);
+            alert('✨ 일주일이 지나 새로운 학습 계획을 만들어주세요!');
+            openStudyHelperModal();
+        } else {
+            // 계획 표시
+            displayWeeklyPlan();
+        }
+    }
+}
+
+// 계획표 접기/펼치기
+function toggleWeeklyPlan() {
+    const content = document.getElementById('weeklyPlanContent');
+    const icon = document.getElementById('planToggleIcon');
+    const collapsed = localStorage.getItem(STORAGE_KEYS.PLAN_COLLAPSED);
+    
+    if (collapsed === 'true' || !collapsed) {
+        // 펼치기
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+        localStorage.setItem(STORAGE_KEYS.PLAN_COLLAPSED, 'false');
+    } else {
+        // 접기
+        content.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+        localStorage.setItem(STORAGE_KEYS.PLAN_COLLAPSED, 'true');
     }
 }
 
@@ -123,14 +159,16 @@ function generateWeeklyPlan() {
     
     // 저장
     localStorage.setItem(STORAGE_KEYS.WEEKLY_PLAN, JSON.stringify(weeklyPlan));
+    localStorage.setItem(STORAGE_KEYS.PLAN_CREATED_DATE, new Date().toISOString());
+    localStorage.setItem(STORAGE_KEYS.PLAN_COLLAPSED, 'true'); // 생성 후 접혀있음
     
     // 모달 닫기
     closeStudyHelperModal();
     
-    // 화면에 표시
+    // 화면에 표시 (접힌 상태)
     displayWeeklyPlan();
     
-    alert('✅ 일주일 학습 계획이 생성되었습니다!');
+    alert('✅ 일주일 학습 계획이 생성되었습니다!\n\n💡 계획표를 클릭하면 펼쳐서 볼 수 있습니다.');
 }
 
 // 학습 스케줄 생성 알고리즘
@@ -212,10 +250,36 @@ function createWeeklySchedule(totalHours, subjects, hasFocus) {
 // 주간 계획 표시
 function displayWeeklyPlan() {
     const weeklyPlan = JSON.parse(localStorage.getItem(STORAGE_KEYS.WEEKLY_PLAN));
+    const planCreatedDate = localStorage.getItem(STORAGE_KEYS.PLAN_CREATED_DATE);
+    const collapsed = localStorage.getItem(STORAGE_KEYS.PLAN_COLLAPSED);
+    
     if (!weeklyPlan) return;
     
     const container = document.getElementById('weeklyPlanContent');
-    document.getElementById('weeklyPlanView').classList.remove('hidden');
+    const viewContainer = document.getElementById('weeklyPlanView');
+    const icon = document.getElementById('planToggleIcon');
+    const expiryDateElement = document.getElementById('planExpiryDate');
+    
+    // 만료일 계산
+    if (planCreatedDate) {
+        const createdDate = new Date(planCreatedDate);
+        const expiryDate = new Date(createdDate);
+        expiryDate.setDate(expiryDate.getDate() + 7);
+        
+        const daysLeft = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
+        expiryDateElement.textContent = `${daysLeft}일 남음 | 클릭하여 펼치기/접기`;
+    }
+    
+    viewContainer.classList.remove('hidden');
+    
+    // 접힌 상태 반영
+    if (collapsed === 'true' || !collapsed) {
+        container.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+    } else {
+        container.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+    }
     
     const subjectIcons = {
         '국어': 'fa-book',
