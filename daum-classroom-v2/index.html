@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM 자기주도학습 플랫폼</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">DA.UM 자기주도학습 플랫폼</h1>
+            <p class="text-sm mt-2 opacity-90">학생 주도 학습 + AI 코칭 + 교사 지원</p>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- 학생 포털 -->
+            <div class="card-hover bg-white rounded-lg shadow-md p-8 text-center">
+                <div class="text-6xl mb-4">
+                    <i class="fas fa-user-graduate text-blue-500"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-4">학생 포털</h2>
+                <p class="text-gray-600 mb-6">
+                    나의 학습을 기록하고<br>
+                    AI 코칭을 받아보세요
+                </p>
+                <a href="student.html" class="inline-block bg-blue-500 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition">
+                    입장하기 →
+                </a>
+            </div>
+
+            <!-- 교사 대시보드 -->
+            <div class="card-hover bg-white rounded-lg shadow-md p-8 text-center">
+                <div class="text-6xl mb-4">
+                    <i class="fas fa-chalkboard-teacher text-purple-500"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-4">교사 대시보드</h2>
+                <p class="text-gray-600 mb-6">
+                    학생들의 학습을 관리하고<br>
+                    미션을 제시하세요
+                </p>
+                <a href="teacher.html" class="inline-block bg-purple-500 text-white px-8 py-3 rounded-lg hover:bg-purple-600 transition">
+                    입장하기 →
+                </a>
+            </div>
+        </div>
+
+        <!-- 기능 소개 -->
+        <div class="mt-12">
+            <h3 class="text-2xl font-bold text-center mb-8">핵심 기능</h3>
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- 학습 일지 -->
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <i class="fas fa-book text-4xl text-green-500 mb-3"></i>
+                    <h4 class="font-bold mb-2">학습 일지</h4>
+                    <p class="text-sm text-gray-600">학생 주도 학습 기록</p>
+                </div>
+
+                <!-- 학습 미션 -->
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <i class="fas fa-bullseye text-4xl text-orange-500 mb-3"></i>
+                    <h4 class="font-bold mb-2">학습 미션</h4>
+                    <p class="text-sm text-gray-600">교사 추천 목표</p>
+                </div>
+
+                <!-- 자료실 -->
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <i class="fas fa-folder-open text-4xl text-blue-500 mb-3"></i>
+                    <h4 class="font-bold mb-2">자료실</h4>
+                    <p class="text-sm text-gray-600">학습 자료 공유</p>
+                </div>
+
+                <!-- AI 코칭 -->
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <i class="fas fa-robot text-4xl text-purple-500 mb-3"></i>
+                    <h4 class="font-bold mb-2">AI 코칭</h4>
+                    <p class="text-sm text-gray-600">질문 & 답변</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-12">
+        <p>© 2024 DA.UM 진로진학컨설팅</p>
+        <p class="text-sm mt-2 opacity-75">자기주도학습의 새로운 기준</p>
+    </footer>
+</body>
+</html>

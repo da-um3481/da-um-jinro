@@ -1,0 +1,285 @@
+// LocalStorage 키
+const STORAGE_KEYS = {
+    STUDENT: 'daum_v2_current_student',
+    JOURNALS: 'daum_v2_journals',
+    MISSIONS: 'daum_v2_missions',
+    MATERIALS: 'daum_v2_materials',
+    QUESTIONS: 'daum_v2_questions'
+};
+
+// 현재 학생 정보
+let currentStudent = null;
+
+// 로그인
+function login() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (!name) {
+        alert('이름을 입력해주세요');
+        return;
+    }
+
+    currentStudent = {
+        name: name,
+        loginTime: new Date().toISOString()
+    };
+
+    localStorage.setItem(STORAGE_KEYS.STUDENT, JSON.stringify(currentStudent));
+    
+    document.getElementById('studentName').textContent = `${name}님 환영합니다! 👋`;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('mainScreen').classList.remove('hidden');
+
+    loadAllData();
+}
+
+// 로그아웃
+function logout() {
+    if (confirm('로그아웃 하시겠습니까?')) {
+        localStorage.removeItem(STORAGE_KEYS.STUDENT);
+        location.reload();
+    }
+}
+
+// 페이지 로드 시 자동 로그인 체크
+window.addEventListener('DOMContentLoaded', () => {
+    const savedStudent = localStorage.getItem(STORAGE_KEYS.STUDENT);
+    if (savedStudent) {
+        currentStudent = JSON.parse(savedStudent);
+        document.getElementById('studentName').textContent = `${currentStudent.name}님 환영합니다! 👋`;
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainScreen').classList.remove('hidden');
+        loadAllData();
+    }
+});
+
+// 탭 전환
+function showTab(tabName) {
+    // 모든 탭 버튼 비활성화
+    document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('hover:bg-gray-100');
+    });
+
+    // 모든 컨텐츠 숨기기
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+
+    // 선택한 탭 활성화
+    document.getElementById(`tab-${tabName}`).classList.add('tab-active');
+    document.getElementById(`tab-${tabName}`).classList.remove('hover:bg-gray-100');
+    document.getElementById(`content-${tabName}`).classList.remove('hidden');
+}
+
+// 학습 일지 저장
+function saveJournal() {
+    const subject = document.getElementById('subject').value;
+    const content = document.getElementById('content').value.trim();
+    const studyTime = document.getElementById('studyTime').value;
+    const memo = document.getElementById('memo').value.trim();
+
+    if (!content) {
+        alert('학습 내용을 입력해주세요');
+        return;
+    }
+
+    const journal = {
+        id: Date.now(),
+        studentName: currentStudent.name,
+        date: new Date().toISOString(),
+        subject: subject,
+        content: content,
+        studyTime: studyTime || 0,
+        memo: memo,
+        photo: null // 추후 구현
+    };
+
+    // 저장
+    const journals = getJournals();
+    journals.unshift(journal);
+    localStorage.setItem(STORAGE_KEYS.JOURNALS, JSON.stringify(journals));
+
+    // 폼 초기화
+    document.getElementById('content').value = '';
+    document.getElementById('studyTime').value = '';
+    document.getElementById('memo').value = '';
+
+    alert('✅ 학습 기록이 저장되었습니다!');
+    loadJournals();
+}
+
+// 학습 일지 목록 불러오기
+function loadJournals() {
+    const journals = getJournals().filter(j => j.studentName === currentStudent.name);
+    const container = document.getElementById('journalList');
+
+    if (journals.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">아직 학습 기록이 없습니다</p>';
+        return;
+    }
+
+    container.innerHTML = journals.map(journal => `
+        <div class="border rounded-lg p-4 hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <span class="badge bg-blue-100 text-blue-800">${journal.subject}</span>
+                    <span class="text-sm text-gray-500 ml-2">${formatDate(journal.date)}</span>
+                </div>
+                <span class="text-sm text-gray-600">⏱️ ${journal.studyTime}분</span>
+            </div>
+            <p class="text-gray-800 mb-2">${journal.content}</p>
+            ${journal.memo ? `<p class="text-sm text-gray-600 italic">💭 ${journal.memo}</p>` : ''}
+        </div>
+    `).join('');
+}
+
+// 학습 미션 불러오기
+function loadMissions() {
+    const missions = getMissions();
+    const container = document.getElementById('missionList');
+
+    if (missions.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">아직 미션이 없습니다</p>';
+        return;
+    }
+
+    container.innerHTML = missions.map(mission => `
+        <div class="border rounded-lg p-4 hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-2">
+                <h4 class="font-bold text-lg">${mission.title}</h4>
+                <span class="badge ${mission.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
+                    ${mission.status === 'active' ? '진행중' : '종료'}
+                </span>
+            </div>
+            <p class="text-gray-600 mb-2">${mission.description}</p>
+            <p class="text-sm text-gray-500">📅 ${mission.startDate} ~ ${mission.endDate}</p>
+        </div>
+    `).join('');
+}
+
+// 자료실 불러오기
+function loadMaterials() {
+    const materials = getMaterials();
+    const container = document.getElementById('materialsList');
+
+    if (materials.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8 col-span-2">아직 자료가 없습니다</p>';
+        return;
+    }
+
+    container.innerHTML = materials.map(material => `
+        <div class="border rounded-lg p-4 hover:shadow-md transition">
+            <div class="flex items-center mb-2">
+                <i class="fas fa-file-${getFileIcon(material.type)} text-2xl text-blue-500 mr-3"></i>
+                <div class="flex-1">
+                    <h4 class="font-bold">${material.title}</h4>
+                    <p class="text-sm text-gray-500">${material.subject}</p>
+                </div>
+            </div>
+            <button onclick="downloadMaterial('${material.url}')" class="w-full mt-2 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition text-sm">
+                <i class="fas fa-download mr-1"></i>다운로드
+            </button>
+        </div>
+    `).join('');
+}
+
+// AI 질문하기
+function askAI() {
+    const questionText = document.getElementById('questionText').value.trim();
+    
+    if (!questionText) {
+        alert('질문을 입력해주세요');
+        return;
+    }
+
+    const question = {
+        id: Date.now(),
+        studentName: currentStudent.name,
+        date: new Date().toISOString(),
+        question: questionText,
+        answer: '선생님께서 곧 답변해 주실 예정입니다. 조금만 기다려주세요! 🤖',
+        status: 'pending',
+        photo: null
+    };
+
+    const questions = getQuestions();
+    questions.unshift(question);
+    localStorage.setItem(STORAGE_KEYS.QUESTIONS, JSON.stringify(questions));
+
+    document.getElementById('questionText').value = '';
+    alert('✅ 질문이 등록되었습니다!');
+    loadQuestions();
+}
+
+// 질문 목록 불러오기
+function loadQuestions() {
+    const questions = getQuestions().filter(q => q.studentName === currentStudent.name);
+    const container = document.getElementById('questionList');
+
+    if (questions.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">아직 질문이 없습니다</p>';
+        return;
+    }
+
+    container.innerHTML = questions.map(question => `
+        <div class="border rounded-lg p-4 hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-2">
+                <span class="badge ${question.status === 'answered' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                    ${question.status === 'answered' ? '답변완료' : '대기중'}
+                </span>
+                <span class="text-sm text-gray-500">${formatDate(question.date)}</span>
+            </div>
+            <div class="bg-gray-50 rounded p-3 mb-2">
+                <p class="font-semibold mb-1">Q. ${question.question}</p>
+            </div>
+            <div class="bg-purple-50 rounded p-3">
+                <p class="text-sm">A. ${question.answer}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 유틸리티 함수들
+function getJournals() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.JOURNALS) || '[]');
+}
+
+function getMissions() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.MISSIONS) || '[]');
+}
+
+function getMaterials() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.MATERIALS) || '[]');
+}
+
+function getQuestions() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.QUESTIONS) || '[]');
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
+
+function getFileIcon(type) {
+    const icons = {
+        'pdf': 'pdf',
+        'image': 'image',
+        'video': 'video',
+        'doc': 'word',
+        'default': 'alt'
+    };
+    return icons[type] || icons.default;
+}
+
+function downloadMaterial(url) {
+    window.open(url, '_blank');
+}
+
+// 모든 데이터 로드
+function loadAllData() {
+    loadJournals();
+    loadMissions();
+    loadMaterials();
+    loadQuestions();
+}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM - 교사 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-2xl font-bold">DA.UM 교사 대시보드</h1>
+            <p class="text-sm opacity-90">학생 주도 학습 관리 시스템</p>
+        </div>
+    </header>
+
+    <!-- 통계 카드 -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="grid md:grid-cols-4 gap-4 mb-6">
+            <div class="stat-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">전체 학생</p>
+                        <p class="text-3xl font-bold" id="totalStudents">0</p>
+                    </div>
+                    <i class="fas fa-users text-4xl text-blue-500"></i>
+                </div>
+            </div>
+
+            <div class="stat-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">오늘 학습 기록</p>
+                        <p class="text-3xl font-bold" id="todayJournals">0</p>
+                    </div>
+                    <i class="fas fa-book text-4xl text-green-500"></i>
+                </div>
+            </div>
+
+            <div class="stat-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">대기 중 질문</p>
+                        <p class="text-3xl font-bold" id="pendingQuestions">0</p>
+                    </div>
+                    <i class="fas fa-question-circle text-4xl text-orange-500"></i>
+                </div>
+            </div>
+
+            <div class="stat-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">활성 미션</p>
+                        <p class="text-3xl font-bold" id="activeMissions">0</p>
+                    </div>
+                    <i class="fas fa-bullseye text-4xl text-purple-500"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <div class="bg-white shadow-md rounded-t-lg">
+            <div class="flex overflow-x-auto">
+                <button onclick="showTab('students')" id="tab-students" class="tab-active px-6 py-4 whitespace-nowrap">
+                    <i class="fas fa-users mr-2"></i>학생 관리
+                </button>
+                <button onclick="showTab('journals')" id="tab-journals" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                    <i class="fas fa-book mr-2"></i>학습 기록
+                </button>
+                <button onclick="showTab('missions')" id="tab-missions" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                    <i class="fas fa-bullseye mr-2"></i>미션 관리
+                </button>
+                <button onclick="showTab('materials')" id="tab-materials" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                    <i class="fas fa-folder-open mr-2"></i>자료 관리
+                </button>
+                <button onclick="showTab('questions')" id="tab-questions" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                    <i class="fas fa-comments mr-2"></i>질문 답변
+                </button>
+            </div>
+        </div>
+
+        <!-- 컨텐츠 영역 -->
+        <div class="bg-white shadow-md rounded-b-lg p-6">
+            <!-- 학생 관리 탭 -->
+            <div id="content-students" class="tab-content">
+                <h3 class="text-xl font-bold mb-4">학생 목록</h3>
+                <div id="studentsList" class="space-y-2"></div>
+            </div>
+
+            <!-- 학습 기록 탭 -->
+            <div id="content-journals" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">전체 학습 기록</h3>
+                    <select id="filterSubject" onchange="loadJournals()" class="px-4 py-2 border rounded-lg">
+                        <option value="">전체 과목</option>
+                        <option value="국어">국어</option>
+                        <option value="영어">영어</option>
+                        <option value="수학">수학</option>
+                        <option value="과학">과학</option>
+                        <option value="사회">사회</option>
+                    </select>
+                </div>
+                <div id="journalsList" class="space-y-4"></div>
+            </div>
+
+            <!-- 미션 관리 탭 -->
+            <div id="content-missions" class="tab-content hidden">
+                <div class="mb-6">
+                    <button onclick="showMissionForm()" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition">
+                        <i class="fas fa-plus mr-2"></i>새 미션 만들기
+                    </button>
+                </div>
+
+                <!-- 미션 생성 폼 -->
+                <div id="missionForm" class="hidden bg-gray-50 rounded-lg p-6 mb-6">
+                    <h4 class="font-bold mb-4">새 미션 만들기</h4>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">미션 제목</label>
+                        <input type="text" id="missionTitle" class="w-full px-4 py-2 border rounded-lg" placeholder="예: 이번 주 수학 문제 10개 풀기">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">설명</label>
+                        <textarea id="missionDesc" rows="3" class="w-full px-4 py-2 border rounded-lg" placeholder="미션의 상세 내용을 입력하세요"></textarea>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">시작일</label>
+                            <input type="date" id="missionStart" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">종료일</label>
+                            <input type="date" id="missionEnd" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="saveMission()" class="flex-1 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition">
+                            저장
+                        </button>
+                        <button onclick="hideMissionForm()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition">
+                            취소
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 미션 목록 -->
+                <div id="missionsList" class="space-y-4"></div>
+            </div>
+
+            <!-- 자료 관리 탭 -->
+            <div id="content-materials" class="tab-content hidden">
+                <div class="mb-6">
+                    <button onclick="showMaterialForm()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition">
+                        <i class="fas fa-plus mr-2"></i>자료 추가하기
+                    </button>
+                </div>
+
+                <!-- 자료 추가 폼 -->
+                <div id="materialForm" class="hidden bg-gray-50 rounded-lg p-6 mb-6">
+                    <h4 class="font-bold mb-4">새 자료 추가</h4>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">제목</label>
+                        <input type="text" id="materialTitle" class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">과목</label>
+                            <select id="materialSubject" class="w-full px-4 py-2 border rounded-lg">
+                                <option value="국어">국어</option>
+                                <option value="영어">영어</option>
+                                <option value="수학">수학</option>
+                                <option value="과학">과학</option>
+                                <option value="사회">사회</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">타입</label>
+                            <select id="materialType" class="w-full px-4 py-2 border rounded-lg">
+                                <option value="pdf">PDF</option>
+                                <option value="video">동영상</option>
+                                <option value="doc">문서</option>
+                                <option value="image">이미지</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">URL 링크</label>
+                        <input type="url" id="materialUrl" class="w-full px-4 py-2 border rounded-lg" placeholder="https://...">
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="saveMaterial()" class="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
+                            저장
+                        </button>
+                        <button onclick="hideMaterialForm()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition">
+                            취소
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 자료 목록 -->
+                <div id="materialsList" class="grid md:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- 질문 답변 탭 -->
+            <div id="content-questions" class="tab-content hidden">
+                <h3 class="text-xl font-bold mb-4">학생 질문</h3>
+                <div id="questionsList" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/teacher.js"></script>
+</body>
+</html>

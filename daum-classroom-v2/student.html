@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA.UM - 학생 포털</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">DA.UM 학생 포털</h1>
+                <p class="text-sm opacity-90" id="studentName">로그인 해주세요</p>
+            </div>
+            <button onclick="logout()" class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                <i class="fas fa-sign-out-alt mr-2"></i>로그아웃
+            </button>
+        </div>
+    </header>
+
+    <!-- 로그인 화면 -->
+    <div id="loginScreen" class="container mx-auto px-4 py-12">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+            <div class="text-center mb-6">
+                <i class="fas fa-user-circle text-6xl text-blue-500"></i>
+                <h2 class="text-2xl font-bold mt-4">학생 로그인</h2>
+            </div>
+            <input 
+                type="text" 
+                id="nameInput" 
+                placeholder="이름을 입력하세요" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            <button onclick="login()" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition">
+                입장하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 메인 화면 -->
+    <div id="mainScreen" class="hidden">
+        <!-- 탭 메뉴 -->
+        <div class="bg-white shadow-md sticky top-0 z-10">
+            <div class="container mx-auto px-4">
+                <div class="flex overflow-x-auto">
+                    <button onclick="showTab('journal')" id="tab-journal" class="tab-active px-6 py-4 whitespace-nowrap">
+                        <i class="fas fa-book mr-2"></i>학습 일지
+                    </button>
+                    <button onclick="showTab('mission')" id="tab-mission" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                        <i class="fas fa-bullseye mr-2"></i>학습 미션
+                    </button>
+                    <button onclick="showTab('materials')" id="tab-materials" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                        <i class="fas fa-folder-open mr-2"></i>자료실
+                    </button>
+                    <button onclick="showTab('coaching')" id="tab-coaching" class="px-6 py-4 whitespace-nowrap hover:bg-gray-100 transition">
+                        <i class="fas fa-robot mr-2"></i>AI 코칭
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 컨텐츠 영역 -->
+        <div class="container mx-auto px-4 py-6">
+            <!-- 학습 일지 탭 -->
+            <div id="content-journal" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-xl font-bold mb-4">오늘의 학습 기록</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">과목</label>
+                        <select id="subject" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="국어">국어</option>
+                            <option value="영어">영어</option>
+                            <option value="수학">수학</option>
+                            <option value="과학">과학</option>
+                            <option value="사회">사회</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">학습 내용</label>
+                        <textarea id="content" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="무엇을 공부했나요?"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">학습 시간 (분)</label>
+                        <input type="number" id="studyTime" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="45">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">사진 첨부 (선택)</label>
+                        <input type="file" id="photoUpload" accept="image/*" class="w-full px-4 py-2 border rounded-lg">
+                        <div id="photoPreview" class="mt-2"></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">메모</label>
+                        <textarea id="memo" rows="2" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="어려웠던 점, 느낀 점 등"></textarea>
+                    </div>
+
+                    <button onclick="saveJournal()" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition">
+                        <i class="fas fa-save mr-2"></i>저장하기
+                    </button>
+                </div>
+
+                <!-- 학습 기록 목록 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">나의 학습 기록</h3>
+                    <div id="journalList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- 학습 미션 탭 -->
+            <div id="content-mission" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">이번 주 학습 미션</h3>
+                    <div id="missionList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- 자료실 탭 -->
+            <div id="content-materials" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">학습 자료</h3>
+                    <div id="materialsList" class="grid md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- AI 코칭 탭 -->
+            <div id="content-coaching" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-xl font-bold mb-4">AI에게 질문하기</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">질문 내용</label>
+                        <textarea id="questionText" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="궁금한 것을 물어보세요"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">문제 사진 첨부 (선택)</label>
+                        <input type="file" id="questionPhoto" accept="image/*" class="w-full px-4 py-2 border rounded-lg">
+                        <div id="questionPhotoPreview" class="mt-2"></div>
+                    </div>
+
+                    <button onclick="askAI()" class="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition">
+                        <i class="fas fa-robot mr-2"></i>AI에게 질문하기
+                    </button>
+                </div>
+
+                <!-- 질문 목록 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">나의 질문</h3>
+                    <div id="questionList" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/student.js"></script>
+</body>
+</html>
