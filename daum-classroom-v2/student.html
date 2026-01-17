@@ -543,13 +543,14 @@
 
                     <div class="mb-4 md:mb-6">
                         <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">🎓 공부한 과목</label>
-                        <select id="subject" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-base md:text-lg font-bold text-dark">
+                        <select id="subject" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-base md:text-lg font-bold text-dark" onchange="handleSubjectChange(this)">
                             <option value="국어">🌸 국어</option>
                             <option value="영어">🌍 영어</option>
                             <option value="수학">🧮 수학</option>
                             <option value="과학">🔬 과학</option>
                             <option value="사회">🗺️ 사회</option>
                             <option value="기타">🎯 기타</option>
+                            <option value="__ADD_NEW__" style="background-color: #f0f9ff; font-weight: bold; color: #0284c7;">➕ 과목 추가...</option>
                         </select>
                     </div>
 

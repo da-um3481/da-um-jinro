@@ -7,7 +7,8 @@ const STORAGE_KEYS = {
     QUESTIONS: 'daum_v2_questions',
     TIMETABLE: 'daum_v2_timetable',
     REVIEW_STATUS: 'daum_v2_review_status',
-    DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan'
+    DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan',
+    CUSTOM_SUBJECTS: 'daum_v2_custom_subjects'
 };
 
 // 현재 학생 정보
@@ -53,6 +54,7 @@ function login() {
     // 주간 계획이 없으면 학습 도우미 표시
 
     loadAllData();
+    loadSubjectOptions(); // 커스텀 과목 로드
     showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
 }
 
@@ -74,6 +76,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('mainScreen').classList.remove('hidden');
     
         loadAllData();
+        loadSubjectOptions(); // 커스텀 과목 로드
         showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
     }
 });
@@ -97,6 +100,79 @@ function showTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.add('tab-active');
     document.getElementById(`tab-${tabName}`).classList.remove('hover:bg-gray-100');
     document.getElementById(`content-${tabName}`).classList.remove('hidden');
+}
+
+// 커스텀 과목 관리
+function getCustomSubjects() {
+    const subjects = localStorage.getItem(STORAGE_KEYS.CUSTOM_SUBJECTS);
+    return subjects ? JSON.parse(subjects) : [];
+}
+
+function saveCustomSubject(subjectName) {
+    const customSubjects = getCustomSubjects();
+    if (!customSubjects.includes(subjectName)) {
+        customSubjects.push(subjectName);
+        localStorage.setItem(STORAGE_KEYS.CUSTOM_SUBJECTS, JSON.stringify(customSubjects));
+    }
+}
+
+function loadSubjectOptions() {
+    const subjectSelect = document.getElementById('subject');
+    if (!subjectSelect) return;
+    
+    const customSubjects = getCustomSubjects();
+    
+    // 기본 옵션들
+    const defaultOptions = [
+        { value: '국어', label: '🌸 국어' },
+        { value: '영어', label: '🌍 영어' },
+        { value: '수학', label: '🧮 수학' },
+        { value: '과학', label: '🔬 과학' },
+        { value: '사회', label: '🗺️ 사회' },
+        { value: '기타', label: '🎯 기타' }
+    ];
+    
+    // HTML 생성
+    let html = '';
+    
+    // 기본 과목들
+    defaultOptions.forEach(opt => {
+        html += `<option value="${opt.value}">${opt.label}</option>`;
+    });
+    
+    // 커스텀 과목들
+    customSubjects.forEach(subject => {
+        html += `<option value="${subject}">📚 ${subject}</option>`;
+    });
+    
+    // 과목 추가 옵션
+    html += `<option value="__ADD_NEW__" style="background-color: #f0f9ff; font-weight: bold; color: #0284c7;">➕ 과목 추가...</option>`;
+    
+    subjectSelect.innerHTML = html;
+}
+
+function handleSubjectChange(selectElement) {
+    if (selectElement.value === '__ADD_NEW__') {
+        const newSubject = prompt('추가할 과목명을 입력해주세요:\n\n예) 음악, 미술, 체육, 한자, 코딩 등');
+        
+        if (newSubject && newSubject.trim()) {
+            const subjectName = newSubject.trim();
+            
+            // 저장
+            saveCustomSubject(subjectName);
+            
+            // 드롭다운 새로고침
+            loadSubjectOptions();
+            
+            // 새로 추가한 과목 선택
+            selectElement.value = subjectName;
+            
+            alert(`✅ "${subjectName}" 과목이 추가되었습니다!`);
+        } else {
+            // 취소하면 첫 번째 옵션으로 되돌림
+            selectElement.value = '국어';
+        }
+    }
 }
 
 // 사진 업로드 처리
