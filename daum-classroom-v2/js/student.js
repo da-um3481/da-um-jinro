@@ -19,6 +19,11 @@ let timerStartTime = null;
 let timerInterval = null;
 let timerElapsedSeconds = 0;
 
+// 자율학습 세션 관리 (과목별 시간 추적)
+let studySessions = []; // { subject, startTime, duration }
+let currentSessionStart = null;
+let currentSessionSubject = null;
+
 // 사진 업로드 변수
 let uploadedPhotos = [];
 
@@ -288,7 +293,6 @@ function viewPhotoModal(photoData, photoName) {
     document.body.appendChild(modal);
 }
 function saveJournal() {
-    const subject = document.getElementById('subject').value;
     const content = document.getElementById('content').value.trim();
     const memo = document.getElementById('memo').value.trim();
 
@@ -305,26 +309,69 @@ function saveJournal() {
         return;
     }
 
-    const journal = {
-        id: Date.now(),
-        studentName: currentStudent.name,
-        date: new Date().toISOString(),
-        subject: subject,
-        content: content,
-        studyTime: studyTime,
-        startTime: timerStartTime ? new Date(timerStartTime).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
-        endTime: timerStartTime ? new Date(timerStartTime + (timerElapsedSeconds * 1000)).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
-        memo: memo,
-        photos: uploadedPhotos // 사진 데이터 저장
-    };
-
-    // 저장
     const journals = getJournals();
-    journals.unshift(journal);
+    
+    // 세션이 있으면 각 과목별로 저장
+    if (studySessions.length > 0) {
+        studySessions.forEach(session => {
+            const journal = {
+                id: Date.now() + Math.random(), // 고유 ID
+                studentName: currentStudent.name,
+                date: new Date().toISOString(),
+                subject: session.subject,
+                content: content,
+                studyTime: session.duration,
+                startTime: session.startTime,
+                endTime: '', // 각 세션의 종료 시각은 생략 (시작 시각만 표시)
+                memo: memo,
+                photos: uploadedPhotos // 사진은 모든 세션에 동일하게 저장
+            };
+            journals.unshift(journal);
+            
+            // 복습 상태 업데이트
+            updateReviewStatus(session.subject, session.duration);
+        });
+        
+        alert(`✅ ${studySessions.length}개 과목의 학습 기록이 저장되었습니다!\n\n${studySessions.map(s => `• ${getSubjectIcon(s.subject)} ${s.subject}: ${s.duration}분`).join('\n')}`);
+    } else {
+        // 세션이 없으면 기존 방식대로 저장 (호환성)
+        const subject = document.getElementById('subject').value;
+        const journal = {
+            id: Date.now(),
+            studentName: currentStudent.name,
+            date: new Date().toISOString(),
+            subject: subject,
+            content: content,
+            studyTime: studyTime,
+            startTime: timerStartTime ? new Date(timerStartTime).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
+            endTime: timerStartTime ? new Date(timerStartTime + (timerElapsedSeconds * 1000)).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
+            memo: memo,
+            photos: uploadedPhotos
+        };
+        journals.unshift(journal);
+        
+        // 복습 상태 업데이트
+        updateReviewStatus(subject, studyTime);
+        
+        // 학습 시간에 따른 격려 메시지
+        let encourageMessage = '';
+        if (studyTime >= 60) {
+            encourageMessage = '\n\n🏆 와! 1시간 이상 공부했어요! 정말 대단해요!';
+        } else if (studyTime >= 30) {
+            encourageMessage = '\n\n💪 30분 이상 집중했네요! 멋져요!';
+        } else if (studyTime >= 15) {
+            encourageMessage = '\n\n✨ 15분 집중! 좋은 시작이에요!';
+        } else if (studyTime >= 5) {
+            encourageMessage = '\n\n👍 조금씩이라도 꾸준히 하는 게 중요해요!';
+        } else {
+            encourageMessage = '\n\n🌱 작은 시작도 소중해요! 다음엔 더 오래 해볼까요?';
+        }
+        
+        alert(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`);
+    }
+    
+    // 저장
     localStorage.setItem(STORAGE_KEYS.JOURNALS, JSON.stringify(journals));
-
-    // 복습 상태 업데이트
-    updateReviewStatus(subject, studyTime);
 
     // 폼 초기화
     document.getElementById('content').value = '';
@@ -334,21 +381,6 @@ function saveJournal() {
     uploadedPhotos = [];
     resetTimer();
 
-    // 학습 시간에 따른 격려 메시지
-    let encourageMessage = '';
-    if (studyTime >= 60) {
-        encourageMessage = '\n\n🏆 와! 1시간 이상 공부했어요! 정말 대단해요!';
-    } else if (studyTime >= 30) {
-        encourageMessage = '\n\n💪 30분 이상 집중했네요! 멋져요!';
-    } else if (studyTime >= 15) {
-        encourageMessage = '\n\n✨ 15분 집중! 좋은 시작이에요!';
-    } else if (studyTime >= 5) {
-        encourageMessage = '\n\n👍 조금씩이라도 꾸준히 하는 게 중요해요!';
-    } else {
-        encourageMessage = '\n\n🌱 작은 시작도 소중해요! 다음엔 더 오래 해볼까요?';
-    }
-
-    alert(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`);
     loadJournals();
     loadTodayClasses(); // 오늘의 수업 새로고침
     loadWeeklyStats(); // 주간 통계 새로고침
@@ -420,6 +452,12 @@ function loadJournals() {
 function startTimer() {
     timerStartTime = Date.now();
     timerElapsedSeconds = 0;
+    studySessions = []; // 세션 초기화
+    
+    // 첫 과목 시작 (기본값: 첫 번째 과목)
+    const subjectSelect = document.getElementById('subject');
+    currentSessionSubject = subjectSelect.value === '__ADD_NEW__' ? '국어' : subjectSelect.value;
+    currentSessionStart = Date.now();
     
     // UI 전환
     document.getElementById('timerIdle').classList.add('hidden');
@@ -433,11 +471,89 @@ function startTimer() {
     });
     document.getElementById('startTime').textContent = startTimeStr;
     
+    // 현재 과목 표시
+    document.getElementById('currentStudySubject').textContent = getSubjectIcon(currentSessionSubject) + ' ' + currentSessionSubject;
+    
     // 타이머 시작
     timerInterval = setInterval(() => {
         timerElapsedSeconds = Math.floor((Date.now() - timerStartTime) / 1000);
         updateTimerDisplay();
+        updateCurrentSubjectTime();
     }, 1000);
+}
+
+// 현재 과목 시간 업데이트
+function updateCurrentSubjectTime() {
+    if (currentSessionStart) {
+        const currentSeconds = Math.floor((Date.now() - currentSessionStart) / 1000);
+        const minutes = Math.floor(currentSeconds / 60);
+        document.getElementById('currentSubjectTime').textContent = minutes + '분';
+    }
+}
+
+// 과목 변경 함수
+function changeSubject() {
+    if (!timerInterval || !currentSessionSubject) return;
+    
+    // 현재 세션 종료 및 저장
+    const currentSessionEnd = Date.now();
+    const duration = Math.round((currentSessionEnd - currentSessionStart) / 1000 / 60); // 분 단위
+    
+    if (duration > 0) {
+        studySessions.push({
+            subject: currentSessionSubject,
+            startTime: new Date(currentSessionStart).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+            duration: duration
+        });
+    }
+    
+    // 과목 선택 프롬프트
+    loadSubjectOptions();
+    const subjectSelect = document.getElementById('subject');
+    const subjects = Array.from(subjectSelect.options)
+        .filter(opt => opt.value !== '__ADD_NEW__')
+        .map(opt => opt.value);
+    
+    let message = '변경할 과목을 선택하세요:\n\n';
+    subjects.forEach((subj, idx) => {
+        message += `${idx + 1}. ${getSubjectIcon(subj)} ${subj}\n`;
+    });
+    message += '\n번호를 입력하세요 (1-' + subjects.length + '):';
+    
+    const input = prompt(message);
+    const selectedIndex = parseInt(input) - 1;
+    
+    if (selectedIndex >= 0 && selectedIndex < subjects.length) {
+        currentSessionSubject = subjects[selectedIndex];
+        currentSessionStart = Date.now();
+        
+        // UI 업데이트
+        document.getElementById('currentStudySubject').textContent = getSubjectIcon(currentSessionSubject) + ' ' + currentSessionSubject;
+        document.getElementById('currentSubjectTime').textContent = '0분';
+        
+        // 세션 목록 표시
+        updateStudySessionsList();
+        
+        alert(`✅ ${currentSessionSubject} 과목으로 변경되었습니다!`);
+    } else {
+        alert('❌ 잘못된 입력입니다.');
+    }
+}
+
+// 세션 목록 업데이트
+function updateStudySessionsList() {
+    const listContainer = document.getElementById('studySessionsList');
+    
+    if (studySessions.length === 0) {
+        listContainer.classList.add('hidden');
+        return;
+    }
+    
+    listContainer.classList.remove('hidden');
+    listContainer.innerHTML = '<div class="font-bold text-gray-700 mb-1">📝 기록된 과목:</div>' + 
+        studySessions.map(session => 
+            `<div class="text-gray-600">• ${getSubjectIcon(session.subject)} ${session.subject}: ${session.duration}분</div>`
+        ).join('');
 }
 
 // 타이머 업데이트
@@ -460,6 +576,18 @@ function stopTimer() {
     const endTime = Date.now();
     const totalMinutes = Math.round(timerElapsedSeconds / 60);
     
+    // 마지막 세션 저장
+    if (currentSessionSubject && currentSessionStart) {
+        const duration = Math.round((endTime - currentSessionStart) / 1000 / 60);
+        if (duration > 0) {
+            studySessions.push({
+                subject: currentSessionSubject,
+                startTime: new Date(currentSessionStart).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+                duration: duration
+            });
+        }
+    }
+    
     // UI 전환
     document.getElementById('timerRunning').classList.add('hidden');
     document.getElementById('timerCompleted').classList.remove('hidden');
@@ -477,6 +605,9 @@ function stopTimer() {
     document.getElementById('completedStartTime').textContent = startTimeStr;
     document.getElementById('completedEndTime').textContent = endTimeStr;
     document.getElementById('completedDuration').textContent = `${totalMinutes}분`;
+    
+    // 목표 달성 체크
+    checkStudyGoalAchievement(totalMinutes);
 }
 
 // 타이머 리셋
@@ -488,12 +619,32 @@ function resetTimer() {
     
     timerStartTime = null;
     timerElapsedSeconds = 0;
+    studySessions = [];
+    currentSessionStart = null;
+    currentSessionSubject = null;
     
     // UI 리셋
     document.getElementById('timerIdle').classList.remove('hidden');
     document.getElementById('timerRunning').classList.add('hidden');
     document.getElementById('timerCompleted').classList.add('hidden');
     document.getElementById('elapsedTime').textContent = '00:00:00';
+    document.getElementById('studySessionsList').classList.add('hidden');
+}
+
+// 학습 목표 달성 체크
+function checkStudyGoalAchievement(totalMinutes) {
+    const plan = getDailyStudyPlan();
+    if (!plan || !plan.targetHours) return;
+    
+    const targetMinutes = plan.targetHours * 60;
+    const progressMinutes = getTodayStudyProgress();
+    
+    // 목표 달성했으면 축하 메시지
+    if (progressMinutes >= targetMinutes) {
+        setTimeout(() => {
+            alert('🎉🎉🎉\n\n오늘 학습계획이 달성되었어요~~\n\n뿌듯한 아침을 위해\n이제 잠을 자야해요~~~\n\n💤 내일도 화이팅! 💪');
+        }, 500);
+    }
 }
 
 // 학습 미션 불러오기
