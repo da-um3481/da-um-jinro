@@ -357,6 +357,26 @@ function saveJournal() {
 }
 
 // 학습 일지 목록 불러오기
+// 과목 아이콘 가져오기
+function getSubjectIcon(subject) {
+    const subjectIcons = {
+        '국어': '🌸',
+        '영어': '🌍',
+        '수학': '🧮',
+        '과학': '🔬',
+        '사회': '🗺️',
+        '기타': '🎯'
+    };
+    
+    // 기본 과목이면 해당 아이콘 반환
+    if (subjectIcons[subject]) {
+        return subjectIcons[subject];
+    }
+    
+    // 커스텀 과목이면 📚 아이콘 반환
+    return '📚';
+}
+
 function loadJournals() {
     const journals = getJournals().filter(j => j.studentName === currentStudent.name);
     const container = document.getElementById('journalList');
@@ -370,7 +390,7 @@ function loadJournals() {
         <div class="border rounded-lg p-4 hover:shadow-md transition">
             <div class="flex justify-between items-start mb-2">
                 <div>
-                    <span class="badge bg-blue-100 text-blue-800">${journal.subject}</span>
+                    <span class="badge bg-blue-100 text-blue-800">${getSubjectIcon(journal.subject)} ${journal.subject}</span>
                     <span class="text-sm text-gray-500 ml-2">${formatDate(journal.date)}</span>
                 </div>
                 <div class="text-right">
