@@ -358,6 +358,26 @@
 
             <!-- 오늘의 복습 탭 -->
             <div id="content-today" class="tab-content">
+                <!-- 테스트 모드 (개발용) -->
+                <div class="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-2xl p-4 mb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🧪</span>
+                            <span class="font-bold text-gray-700">테스트 모드</span>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="setTestDay('월')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">월요일</button>
+                            <button onclick="setTestDay('화')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">화요일</button>
+                            <button onclick="setTestDay('수')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">수요일</button>
+                            <button onclick="setTestDay('목')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">목요일</button>
+                            <button onclick="setTestDay('금')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">금요일</button>
+                            <button onclick="setTestDay('토')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">토요일</button>
+                            <button onclick="setTestDay('일')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">일요일</button>
+                            <button onclick="setTestDay(null)" class="bg-red-100 px-3 py-1 rounded-lg text-sm font-bold hover:bg-red-200 border border-red-300">초기화</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 오늘의 수업 카드 -->
                 <div class="cute-card p-8 mb-6">
                     <div class="flex items-center gap-3 mb-6">
@@ -609,7 +629,7 @@
             <div class="p-8">
                 <div class="mb-6">
                     <label class="block text-xl font-black mb-4 text-dark">📆 요일 선택</label>
-                    <div class="grid grid-cols-5 gap-3">
+                    <div class="grid grid-cols-7 gap-3">
                         <button onclick="selectDay('월')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
                             월
                         </button>
@@ -625,7 +645,14 @@
                         <button onclick="selectDay('금')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
                             금
                         </button>
+                        <button onclick="selectDay('토')" class="day-btn px-4 py-3 border-3 border-orange-300 rounded-2xl font-black text-lg hover:border-orange-500 transition bg-orange-50 text-dark">
+                            토
+                        </button>
+                        <button onclick="selectDay('일')" class="day-btn px-4 py-3 border-3 border-red-300 rounded-2xl font-black text-lg hover:border-red-500 transition bg-red-50 text-dark">
+                            일
+                        </button>
                     </div>
+                    <p class="text-sm text-gray-600 mt-2 font-semibold">💡 주말에는 보충수업, 학원 수업 등을 입력할 수 있어요!</p>
                 </div>
 
                 <div id="dayScheduleForm" class="hidden">

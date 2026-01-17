@@ -29,7 +29,9 @@ let questionPhoto = null;
 // 시간표 관련 변수
 let currentEditingDay = '';
 let timetableData = {};
-let timetableData = {};
+
+// 테스트 모드 변수
+let testDayOverride = null; // null이면 실제 날짜 사용
 
 // 로그인
 function login() {
@@ -1063,14 +1065,19 @@ function loadTimetableView() {
         return;
     }
     
-    const days = ['월', '화', '수', '목', '금'];
-    let html = '<div class="grid md:grid-cols-5 gap-4">';
+    const days = ['월', '화', '수', '목', '금', '토', '일'];
+    let html = '<div class="grid grid-cols-2 md:grid-cols-7 gap-4">';
     
     days.forEach(day => {
         const daySchedule = timetable[day] || [];
+        const isWeekend = day === '토' || day === '일';
+        const weekendClass = isWeekend ? 'border-2 border-orange-300' : '';
+        
         html += `
-            <div class="cute-card p-4 hover:shadow-xl transition">
-                <h4 class="text-lg font-black text-dark mb-3 text-center">${day}요일</h4>
+            <div class="cute-card p-4 hover:shadow-xl transition ${weekendClass}">
+                <h4 class="text-lg font-black text-dark mb-3 text-center">
+                    ${day}요일 ${isWeekend ? '🌞' : ''}
+                </h4>
                 <div class="space-y-2">
         `;
         
@@ -1117,10 +1124,13 @@ function getSubjectColor(subject) {
 function loadTodayClasses() {
     const today = new Date();
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-    const todayDayName = dayNames[today.getDay()];
+    
+    // 테스트 모드가 활성화되어 있으면 덮어쓰기
+    const todayDayName = testDayOverride || dayNames[today.getDay()];
     
     // 오늘 날짜 표시
-    const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 ${todayDayName}요일`;
+    const testModeIndicator = testDayOverride ? ' 🧪 (테스트 모드)' : '';
+    const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 ${todayDayName}요일${testModeIndicator}`;
     document.getElementById('todayDate').textContent = dateStr;
     
     const timetable = getTimetable();
@@ -1225,6 +1235,18 @@ function updateReviewStatus(subject, studyTime) {
     reviewStatus[todayKey][`${subject}_time`] = currentTime + studyTime;
     
     saveReviewStatus(reviewStatus);
+}
+
+// 테스트 모드: 요일 강제 변경
+function setTestDay(day) {
+    if (day === null) {
+        testDayOverride = null;
+        alert('✅ 테스트 모드가 해제되었습니다!\n실제 오늘 날짜로 돌아갑니다.');
+    } else {
+        testDayOverride = day;
+        alert(`🧪 테스트 모드 활성화!\n오늘을 "${day}요일"로 표시합니다.`);
+    }
+    loadTodayClasses();
 }
 
 // 데이터 모두 불러오기
