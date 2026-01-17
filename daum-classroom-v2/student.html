@@ -196,14 +196,14 @@
         <div class="bg-white/90 backdrop-blur-lg shadow-xl sticky top-0 z-10" style="border-bottom: 3px solid #E2E8F0;">
             <div class="container mx-auto px-2 md:px-4">
                 <div class="flex overflow-x-auto gap-1 md:gap-2 py-1 md:py-2">
-                    <button onclick="showTab('today')" id="tab-today" class="tab-active px-3 py-2 md:px-6 md:py-4 whitespace-nowrap font-black text-xs md:text-base">
+                    <button onclick="showTab('timetable')" id="tab-timetable" class="tab-active px-3 py-2 md:px-6 md:py-4 whitespace-nowrap font-black text-xs md:text-base">
+                        📅 수업시간표
+                    </button>
+                    <button onclick="showTab('today')" id="tab-today" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         🌟 오늘수업 복습
                     </button>
-                    <button onclick="showTab('timetable')" id="tab-timetable" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
-                        📅 시간표
-                    </button>
                     <button onclick="showTab('journal')" id="tab-journal" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
-                        📖 자율학습일지
+                        📖 자율학습
                     </button>
                     <button onclick="showTab('mission')" id="tab-mission" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         🎯 쌤 미션
@@ -211,22 +211,12 @@
                     <button onclick="showTab('materials')" id="tab-materials" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         📂 자료실
                     </button>
-
                 </div>
             </div>
         </div>
 
         <!-- 컨텐츠 영역 -->
         <div class="container mx-auto px-3 md:px-4 py-3 md:py-6">
-            <!-- 학습 시작 도우미 버튼 -->
-            <div class="mb-4 md:mb-6">
-                <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-3 md:py-6 rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-3xl transition cute-btn flex items-center justify-center gap-2 md:gap-4" style="border: 3px solid rgba(251, 191, 36, 0.3);">
-                    <div class="text-2xl md:text-4xl bounce">✨</div>
-                    <span class="text-sm md:text-xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 3분이면 일주일 계획 완성!</span>
-                    <div class="text-xl md:text-3xl wiggle">🚀</div>
-                </button>
-            </div>
-
             <!-- 학습 시작 도우미 모달 -->
             <div id="studyHelperModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-2 md:p-4" onclick="if(event.target === this) closeStudyHelperModal()">
                 <div class="bg-white rounded-2xl md:rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -523,8 +513,17 @@
                 </div>
             </div>
 
-            <!-- 자율학습일지 탭 -->
+            <!-- 자율학습 탭 -->
             <div id="content-journal" class="tab-content hidden">
+                <!-- 학습 마법사 버튼 -->
+                <div class="mb-4 md:mb-6">
+                    <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-3 md:py-5 rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl transition cute-btn flex items-center justify-center gap-2 md:gap-3" style="border: 3px solid rgba(251, 191, 36, 0.3);">
+                        <div class="text-xl md:text-3xl bounce">🔮</div>
+                        <span class="text-sm md:text-lg font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">학습 마법사 - 일주일 계획 만들기 ✨</span>
+                        <div class="text-lg md:text-2xl wiggle">🚀</div>
+                    </button>
+                </div>
+
                 <!-- 오늘의 자율학습 계획 카드 -->
                 <div class="cute-card p-4 md:p-8 mb-4 md:mb-6 bg-gradient-to-br from-purple-50 to-pink-50 border-3 border-purple-200">
                     <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">

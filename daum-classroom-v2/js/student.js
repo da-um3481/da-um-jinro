@@ -58,6 +58,7 @@ function login() {
     // 주간 계획이 없으면 학습 도우미 표시
     checkAndShowStudyHelper();
     loadAllData();
+    showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
 }
 
 // 로그아웃
@@ -78,6 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('mainScreen').classList.remove('hidden');
         checkAndShowStudyHelper();
         loadAllData();
+        showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
     }
 });
 
