@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 관리 - DA.UM 진학상담</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .students-list {
+            margin-top: 30px;
+        }
+        
+        .student-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .student-info h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .student-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .student-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 홈으로 돌아가기</a>
+        
+        <div class="header">
+            <div class="title">👥 학생 관리</div>
+            <p>학생을 등록하고 관리합니다</p>
+        </div>
+        
+        <div class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="section-title">등록된 학생 목록</div>
+                <button class="btn btn-primary" onclick="openAddModal()">➕ 학생 등록</button>
+            </div>
+            
+            <div id="studentsList" class="students-list">
+                <div class="empty-state">
+                    <div class="empty-state-icon">👥</div>
+                    <p>등록된 학생이 없습니다.</p>
+                    <p style="margin-top: 10px;">위의 "학생 등록" 버튼을 눌러 학생을 추가하세요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 학생 등록 모달 -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">새 학생 등록</div>
+            
+            <form id="addStudentForm">
+                <div class="form-group">
+                    <label>이름 *</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>학년 *</label>
+                    <select id="studentGrade" required>
+                        <option value="">선택하세요</option>
+                        <option value="1">중학교 1학년</option>
+                        <option value="2">중학교 2학년</option>
+                        <option value="3">중학교 3학년</option>
+                        <option value="4">고등학교 1학년</option>
+                        <option value="5">고등학교 2학년</option>
+                        <option value="6">고등학교 3학년</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>학교명</label>
+                    <input type="text" id="schoolName" placeholder="예: XX고등학교">
+                </div>
+                
+                <div class="form-group">
+                    <label>희망 전공</label>
+                    <input type="text" id="desiredMajor" placeholder="예: 컴퓨터공학">
+                </div>
+                
+                <div class="form-group">
+                    <label>전공 확정도</label>
+                    <select id="majorStatus">
+                        <option value="undecided">미정</option>
+                        <option value="exploring">탐색 중</option>
+                        <option value="confirmed">확정</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>학부모 이름</label>
+                    <input type="text" id="parentName">
+                </div>
+                
+                <div class="form-group">
+                    <label>학부모 연락처</label>
+                    <input type="tel" id="parentPhone" placeholder="예: 010-1234-5678">
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'https://5000-i45vnacl1o8qm5cx0lfip-2b54fc91.sandbox.novita.ai';
+        
+        // 페이지 로드 시 학생 목록 불러오기
+        window.addEventListener('load', loadStudents);
+        
+        async function loadStudents() {
+            try {
+                const response = await fetch(`${API_URL}/api/students`);
+                const students = await response.json();
+                
+                const listDiv = document.getElementById('studentsList');
+                
+                if (students.length === 0) {
+                    listDiv.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👥</div>
+                            <p>등록된 학생이 없습니다.</p>
+                            <p style="margin-top: 10px;">위의 "학생 등록" 버튼을 눌러 학생을 추가하세요.</p>
+                        </div>
+                    `;
+                } else {
+                    listDiv.innerHTML = students.map(student => `
+                        <div class="student-card">
+                            <div class="student-info">
+                                <h3>${student.name}</h3>
+                                <p>
+                                    ${getGradeName(student.grade)} | 
+                                    ${student.school_name || '학교 미등록'} | 
+                                    희망전공: ${student.desired_major || '미정'}
+                                </p>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-primary btn-small" onclick="goToDiagnosis(${student.id})">
+                                    진단하기
+                                </button>
+                                <button class="btn btn-secondary btn-small" onclick="viewDetail(${student.id})">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading students:', error);
+                alert('학생 목록을 불러오는데 실패했습니다.');
+            }
+        }
+        
+        function getGradeName(grade) {
+            const gradeNames = {
+                1: '중1', 2: '중2', 3: '중3',
+                4: '고1', 5: '고2', 6: '고3'
+            };
+            return gradeNames[grade] || `${grade}학년`;
+        }
+        
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+        
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+            document.getElementById('addStudentForm').reset();
+        }
+        
+        document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                name: document.getElementById('studentName').value,
+                grade: parseInt(document.getElementById('studentGrade').value),
+                school_name: document.getElementById('schoolName').value,
+                school_type: parseInt(document.getElementById('studentGrade').value) <= 3 ? 'middle' : 'high',
+                desired_major: document.getElementById('desiredMajor').value,
+                major_status: document.getElementById('majorStatus').value,
+                parent_name: document.getElementById('parentName').value,
+                parent_phone: document.getElementById('parentPhone').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/api/students`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('✅ 학생이 등록되었습니다!');
+                    closeAddModal();
+                    loadStudents();
+                } else {
+                    alert('❌ 등록에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error adding student:', error);
+                alert('❌ 등록 중 오류가 발생했습니다.');
+            }
+        });
+        
+        function goToDiagnosis(studentId) {
+            window.location.href = `diagnosis-test.html?student_id=${studentId}`;
+        }
+        
+        function viewDetail(studentId) {
+            window.location.href = `student-detail.html?id=${studentId}`;
+        }
+        
+        // 모달 외부 클릭 시 닫기
+        document.getElementById('addModal').addEventListener('click', (e) => {
+            if (e.target.id === 'addModal') {
+                closeAddModal();
+            }
+        });
+    </script>
+</body>
+</html>

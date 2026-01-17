@@ -325,6 +325,93 @@ def get_diagnosis_result(diagnosis_id):
     return jsonify(result)
 
 
+@app.route('/api/universities', methods=['GET'])
+def get_universities():
+    """대학 정보 조회 (서울권 + 경상권)"""
+    from data_loader import UNIVERSITY_DATA
+    from data_loader_gyeongsang import GYEONGSANG_UNIVERSITY_DATA
+    
+    # 지역 필터
+    region = request.args.get('region', 'all')
+    
+    all_universities = {}
+    
+    if region in ['all', 'seoul', '서울']:
+        all_universities.update(UNIVERSITY_DATA)
+    
+    if region in ['all', 'gyeongsang', '경상']:
+        all_universities.update(GYEONGSANG_UNIVERSITY_DATA)
+    
+    # 간단한 요약 정보만 반환
+    result = []
+    for univ_name, univ_data in all_universities.items():
+        result.append({
+            'name': univ_name,
+            'tier': univ_data.get('tier', ''),
+            'region': univ_data.get('지역', '서울'),
+            'feature': univ_data.get('특징', univ_data.get('특성', '')),
+            'popular_majors': list(univ_data.get('인기학과', {}).keys())[:5] if '인기학과' in univ_data else []
+        })
+    
+    return jsonify({
+        'total': len(result),
+        'universities': result
+    })
+
+
+@app.route('/api/universities/<university_name>', methods=['GET'])
+def get_university_detail(university_name):
+    """특정 대학 상세 정보"""
+    from data_loader import UNIVERSITY_DATA
+    from data_loader_gyeongsang import GYEONGSANG_UNIVERSITY_DATA
+    
+    # 대학 찾기
+    univ_data = UNIVERSITY_DATA.get(university_name) or GYEONGSANG_UNIVERSITY_DATA.get(university_name)
+    
+    if not univ_data:
+        return jsonify({'error': '대학을 찾을 수 없습니다.'}), 404
+    
+    return jsonify({
+        'name': university_name,
+        'data': univ_data
+    })
+
+
+@app.route('/api/majors', methods=['GET'])
+def get_majors():
+    """학과별 진로 정보"""
+    from data_loader import EXTRACURRICULAR_CATEGORIES
+    from data_loader_gyeongsang import GYEONGSANG_MAJOR_INFO
+    
+    return jsonify({
+        'gyeongsang': GYEONGSANG_MAJOR_INFO
+    })
+
+
+@app.route('/api/roadmap/<int:grade>', methods=['GET'])
+def get_grade_roadmap(grade):
+    """학년별 입시 로드맵"""
+    from data_loader import GRADE_ROADMAP
+    
+    grade_map = {
+        1: "중1", 2: "중2", 3: "중3",
+        4: "고1", 5: "고2", 6: "고3"
+    }
+    
+    grade_key = grade_map.get(grade)
+    if not grade_key:
+        return jsonify({'error': '잘못된 학년입니다.'}), 400
+    
+    roadmap = GRADE_ROADMAP.get(grade_key)
+    if not roadmap:
+        return jsonify({'error': '로드맵을 찾을 수 없습니다.'}), 404
+    
+    return jsonify({
+        'grade': grade_key,
+        'roadmap': roadmap
+    })
+
+
 # ==================== 초기화 ====================
 
 def init_db():
