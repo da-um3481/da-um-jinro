@@ -990,23 +990,23 @@ function addPeriod() {
 function addPeriodRow(periodNum, time, subject) {
     const periodsList = document.getElementById('periodsList');
     const periodDiv = document.createElement('div');
-    periodDiv.className = 'flex gap-3 items-center bg-gray-50 p-4 rounded-2xl border-2 border-gray-200';
+    periodDiv.className = 'flex gap-2 md:gap-3 items-center bg-gray-50 p-3 md:p-4 rounded-xl md:rounded-2xl border-2 border-gray-200';
     periodDiv.innerHTML = `
-        <div class="font-black text-lg text-dark w-16">${periodNum}교시</div>
-        <input type="time" value="${time}" class="period-time flex-1 px-4 py-2 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-semibold text-dark" placeholder="시작 시간">
-        <select class="period-subject flex-1 px-4 py-2 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-bold text-dark">
+        <div class="font-black text-sm md:text-lg text-dark w-12 md:w-16 flex-shrink-0">${periodNum}교시</div>
+        <input type="time" value="${time}" class="period-time w-24 md:w-32 px-2 py-2 md:px-4 md:py-2 border-2 border-gray-300 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-semibold text-dark text-sm md:text-base flex-shrink-0">
+        <select class="period-subject flex-1 min-w-0 px-2 py-2 md:px-4 md:py-2 border-2 border-gray-300 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-bold text-dark text-sm md:text-base">
             <option value="">과목 선택</option>
             <option value="국어" ${subject === '국어' ? 'selected' : ''}>🌸 국어</option>
             <option value="영어" ${subject === '영어' ? 'selected' : ''}>🌍 영어</option>
             <option value="수학" ${subject === '수학' ? 'selected' : ''}>🧮 수학</option>
             <option value="과학" ${subject === '과학' ? 'selected' : ''}>🔬 과학</option>
-            <option value="사회" ${subject === '사회' ? 'selected' : ''}>🗺️ 사회</option>
+            <option value="사회" ${subject === '사회' ? 'selected' : ''}>🗺️사회</option>
             <option value="음악" ${subject === '음악' ? 'selected' : ''}>🎵 음악</option>
             <option value="미술" ${subject === '미술' ? 'selected' : ''}>🎨 미술</option>
             <option value="체육" ${subject === '체육' ? 'selected' : ''}>⚽ 체육</option>
             <option value="기타" ${subject === '기타' ? 'selected' : ''}>🎯 기타</option>
         </select>
-        <button onclick="removePeriod(this)" class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition font-bold">
+        <button onclick="removePeriod(this)" class="bg-red-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl hover:bg-red-600 transition font-bold flex-shrink-0 text-sm md:text-base">
             🗑️
         </button>
     `;
