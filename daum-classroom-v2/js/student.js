@@ -572,6 +572,7 @@ function saveJournal() {
     loadJournals();
     loadTodayClasses(); // 오늘의 수업 새로고침
     loadWeeklyStats(); // 주간 통계 새로고침
+    loadLearningPatterns(); // 학습 패턴 새로고침
 }
 
 // 학습 일지 목록 불러오기
@@ -1385,6 +1386,189 @@ function loadReviewAlerts(pendingSubjects) {
     `;
 }
 
+// 학습 패턴 분석
+function loadLearningPatterns() {
+    const journals = getJournals().filter(j => j.studentName === currentStudent.name);
+    
+    if (journals.length === 0) {
+        document.getElementById('topSubjectsGrid').innerHTML = `
+            <div class="col-span-3 text-center py-6 text-gray-500">
+                <div class="text-3xl mb-2">📚</div>
+                <p class="text-sm font-semibold">아직 학습 기록이 없어요</p>
+            </div>
+        `;
+        document.getElementById('timeZoneAnalysis').innerHTML = '';
+        document.getElementById('weekdayPatternList').innerHTML = '';
+        return;
+    }
+    
+    // TOP 3 과목 분석
+    analyzeTopSubjects(journals);
+    
+    // 학습 시간대 분석
+    analyzeTimeZones(journals);
+    
+    // 요일별 학습 패턴
+    analyzeWeekdayPattern(journals);
+}
+
+// TOP 3 과목 분석
+function analyzeTopSubjects(journals) {
+    const subjectCount = {};
+    const subjectTime = {};
+    
+    journals.forEach(journal => {
+        const subject = journal.subject;
+        const time = journal.studyTime || 0;
+        
+        subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+        subjectTime[subject] = (subjectTime[subject] || 0) + time;
+    });
+    
+    // 학습 횟수 많은 순으로 정렬
+    const sortedSubjects = Object.entries(subjectCount)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+    
+    const container = document.getElementById('topSubjectsGrid');
+    
+    if (sortedSubjects.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-3 text-center py-6 text-gray-500">
+                <p class="text-sm font-semibold">학습 기록이 없어요</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    sortedSubjects.forEach(([subject, count], index) => {
+        const medals = ['🥇', '🥈', '🥉'];
+        const colors = [
+            'from-yellow-400 to-orange-400',
+            'from-gray-400 to-gray-500',
+            'from-orange-400 to-yellow-600'
+        ];
+        const time = subjectTime[subject] || 0;
+        const avgTime = Math.round(time / count);
+        
+        html += `
+            <div class="bg-gradient-to-br ${colors[index]} p-3 md:p-4 rounded-xl text-white text-center">
+                <div class="text-3xl md:text-4xl mb-1 md:mb-2">${medals[index]}</div>
+                <div class="text-lg md:text-xl font-black mb-1">${subject}</div>
+                <div class="text-xs md:text-sm font-semibold opacity-90">${count}회 학습</div>
+                <div class="text-xs md:text-sm font-semibold opacity-90">평균 ${avgTime}분</div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// 학습 시간대 분석
+function analyzeTimeZones(journals) {
+    const timeZones = {
+        morning: { name: '아침', emoji: '🌅', count: 0, time: 0, range: '6시~12시' },
+        afternoon: { name: '점심', emoji: '☀️', count: 0, time: 0, range: '12시~18시' },
+        evening: { name: '저녁', emoji: '🌙', count: 0, time: 0, range: '18시~24시' }
+    };
+    
+    journals.forEach(journal => {
+        if (!journal.startTime) return;
+        
+        // "오전 9:30" 형식에서 시간 추출
+        const timeMatch = journal.startTime.match(/(\d+):(\d+)/);
+        if (!timeMatch) return;
+        
+        let hour = parseInt(timeMatch[1]);
+        const isPM = journal.startTime.includes('오후');
+        
+        if (isPM && hour !== 12) hour += 12;
+        if (!isPM && hour === 12) hour = 0;
+        
+        let zone;
+        if (hour >= 6 && hour < 12) zone = 'morning';
+        else if (hour >= 12 && hour < 18) zone = 'afternoon';
+        else zone = 'evening';
+        
+        timeZones[zone].count++;
+        timeZones[zone].time += journal.studyTime || 0;
+    });
+    
+    const container = document.getElementById('timeZoneAnalysis');
+    const sorted = Object.entries(timeZones).sort((a, b) => b[1].count - a[1].count);
+    
+    let html = '';
+    sorted.forEach(([key, data]) => {
+        const percentage = journals.length > 0 ? Math.round((data.count / journals.length) * 100) : 0;
+        const opacity = data.count > 0 ? '100' : '50';
+        
+        html += `
+            <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-3 md:p-4 rounded-xl border-2 border-blue-200 text-center" style="opacity: ${opacity}%">
+                <div class="text-2xl md:text-3xl mb-1 md:mb-2">${data.emoji}</div>
+                <div class="text-sm md:text-base font-black text-dark">${data.name}</div>
+                <div class="text-xs md:text-sm font-semibold text-gray">${data.range}</div>
+                <div class="text-lg md:text-xl font-black text-dark mt-1">${data.count}회</div>
+                <div class="text-xs md:text-sm font-bold text-gray">${percentage}%</div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// 요일별 학습 패턴
+function analyzeWeekdayPattern(journals) {
+    const weekdays = {
+        '일': { name: '일요일', count: 0, time: 0 },
+        '월': { name: '월요일', count: 0, time: 0 },
+        '화': { name: '화요일', count: 0, time: 0 },
+        '수': { name: '수요일', count: 0, time: 0 },
+        '목': { name: '목요일', count: 0, time: 0 },
+        '금': { name: '금요일', count: 0, time: 0 },
+        '토': { name: '토요일', count: 0, time: 0 }
+    };
+    
+    journals.forEach(journal => {
+        const date = new Date(journal.date);
+        const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayName = dayNames[date.getDay()];
+        
+        weekdays[dayName].count++;
+        weekdays[dayName].time += journal.studyTime || 0;
+    });
+    
+    const container = document.getElementById('weekdayPatternList');
+    const dayOrder = ['월', '화', '수', '목', '금', '토', '일'];
+    const maxCount = Math.max(...Object.values(weekdays).map(d => d.count), 1);
+    
+    let html = '';
+    dayOrder.forEach(day => {
+        const data = weekdays[day];
+        const percentage = Math.round((data.count / maxCount) * 100);
+        const isWeekend = day === '토' || day === '일';
+        
+        html += `
+            <div class="bg-gray-50 p-3 md:p-4 rounded-xl border-2 border-gray-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="font-black text-sm md:text-base text-dark w-16">${data.name} ${isWeekend ? '🌞' : ''}</div>
+                    <div class="flex-1">
+                        <div class="w-full bg-gray-200 rounded-full h-3 md:h-4 overflow-hidden">
+                            <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-full rounded-full transition-all" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm md:text-base font-black text-dark">${data.count}회</div>
+                        <div class="text-xs md:text-sm font-semibold text-gray">${data.time}분</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
 // 테스트 모드: 요일 강제 변경
 function setTestDay(day) {
     if (day === null) {
@@ -1407,5 +1591,6 @@ function loadAllData() {
     loadTimetableView();
     loadTodayClasses();
     loadWeeklyStats(); // 주간 복습 통계 추가
+    loadLearningPatterns(); // 학습 패턴 분석 추가
 }
 
