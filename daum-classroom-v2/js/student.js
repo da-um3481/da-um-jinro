@@ -571,6 +571,7 @@ function saveJournal() {
     alert(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`);
     loadJournals();
     loadTodayClasses(); // 오늘의 수업 새로고침
+    loadWeeklyStats(); // 주간 통계 새로고침
 }
 
 // 학습 일지 목록 불러오기
@@ -1251,6 +1252,139 @@ function updateReviewStatus(subject, studyTime) {
     saveReviewStatus(reviewStatus);
 }
 
+// 주간 복습 통계 로드
+function loadWeeklyStats() {
+    const timetable = getTimetable();
+    const reviewStatus = getReviewStatus();
+    const today = new Date();
+    
+    // 이번 주 월요일 구하기
+    const dayOfWeek = today.getDay();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+    
+    let totalClasses = 0;
+    let completedClasses = 0;
+    const subjectTimeMap = {}; // 과목별 시간 집계
+    const pendingSubjects = new Set(); // 미완료 과목
+    
+    // 이번 주 월~일 (7일) 순회
+    for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(monday);
+        currentDate.setDate(monday.getDate() + i);
+        
+        const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayName = dayNames[currentDate.getDay()];
+        const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+        
+        const daySchedule = timetable[dayName] || [];
+        const dayReviews = reviewStatus[dateKey] || {};
+        
+        totalClasses += daySchedule.length;
+        
+        daySchedule.forEach(period => {
+            const subject = period.subject;
+            const isCompleted = dayReviews[subject] || false;
+            const reviewTime = dayReviews[`${subject}_time`] || 0;
+            
+            if (isCompleted) {
+                completedClasses++;
+            } else {
+                // 오늘 또는 과거 날짜의 미완료 과목만 추가
+                if (currentDate <= today) {
+                    pendingSubjects.add(subject);
+                }
+            }
+            
+            // 과목별 시간 집계
+            if (!subjectTimeMap[subject]) {
+                subjectTimeMap[subject] = 0;
+            }
+            subjectTimeMap[subject] += reviewTime;
+        });
+    }
+    
+    // 완료율 계산
+    const completionRate = totalClasses > 0 ? Math.round((completedClasses / totalClasses) * 100) : 0;
+    
+    // UI 업데이트
+    document.getElementById('weeklyCompletionRate').textContent = `${completionRate}%`;
+    document.getElementById('weeklyCompletionBar').style.width = `${completionRate}%`;
+    document.getElementById('weeklyCompleted').textContent = completedClasses;
+    document.getElementById('weeklyTotal').textContent = totalClasses;
+    
+    // 과목별 학습 시간 표시
+    loadSubjectTimeList(subjectTimeMap);
+    
+    // 복습 알림 표시
+    loadReviewAlerts(pendingSubjects);
+}
+
+// 과목별 학습 시간 목록 표시
+function loadSubjectTimeList(subjectTimeMap) {
+    const container = document.getElementById('subjectTimeList');
+    
+    // 시간 많은 순으로 정렬
+    const sortedSubjects = Object.entries(subjectTimeMap)
+        .filter(([_, time]) => time > 0)
+        .sort((a, b) => b[1] - a[1]);
+    
+    if (sortedSubjects.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-6 text-gray-500">
+                <div class="text-3xl mb-2">📚</div>
+                <p class="text-sm font-semibold">아직 이번 주 복습 기록이 없어요</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    sortedSubjects.forEach(([subject, time], index) => {
+        const subjectColor = getSubjectColor(subject);
+        const hours = Math.floor(time / 60);
+        const mins = time % 60;
+        const timeText = hours > 0 ? `${hours}시간 ${mins}분` : `${mins}분`;
+        
+        // 순위 메달
+        let rankEmoji = '';
+        if (index === 0) rankEmoji = '🥇';
+        else if (index === 1) rankEmoji = '🥈';
+        else if (index === 2) rankEmoji = '🥉';
+        
+        html += `
+            <div class="flex items-center gap-2 md:gap-3 bg-gradient-to-r ${subjectColor} p-3 md:p-4 rounded-xl">
+                <div class="text-xl md:text-2xl">${rankEmoji}</div>
+                <div class="flex-1">
+                    <div class="font-black text-white text-sm md:text-base">${subject}</div>
+                    <div class="font-semibold text-white text-xs md:text-sm opacity-90">${timeText}</div>
+                </div>
+                <div class="text-2xl md:text-3xl font-black text-white">${time}분</div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// 복습 알림 표시
+function loadReviewAlerts(pendingSubjects) {
+    const alertArea = document.getElementById('reviewAlertArea');
+    const pendingList = document.getElementById('pendingSubjectsList');
+    
+    if (pendingSubjects.size === 0) {
+        alertArea.classList.add('hidden');
+        return;
+    }
+    
+    alertArea.classList.remove('hidden');
+    
+    const subjects = Array.from(pendingSubjects);
+    pendingList.innerHTML = `
+        <span class="font-black">${subjects.join(', ')}</span> 과목을 복습해보세요! 💪
+    `;
+}
+
 // 테스트 모드: 요일 강제 변경
 function setTestDay(day) {
     if (day === null) {
@@ -1272,5 +1406,6 @@ function loadAllData() {
     checkAndShowStudyHelper();
     loadTimetableView();
     loadTodayClasses();
+    loadWeeklyStats(); // 주간 복습 통계 추가
 }
 

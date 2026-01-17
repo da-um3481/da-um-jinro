@@ -394,7 +394,7 @@
                 </div>
 
                 <!-- 복습 통계 카드 -->
-                <div class="cute-card p-4 md:p-8">
+                <div class="cute-card p-4 md:p-8 mb-4 md:mb-6">
                     <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                         <div class="text-2xl md:text-4xl">📊</div>
                         <h3 class="text-xl md:text-3xl font-black text-dark">오늘의 복습 현황 ✨</h3>
@@ -420,6 +420,53 @@
                                 <div class="text-2xl md:text-4xl mb-1 md:mb-2">⏱️</div>
                                 <div class="text-lg md:text-2xl font-black text-dark" id="todayTotalReviewTime">0분</div>
                                 <div class="text-xs md:text-sm font-bold text-gray">복습 시간</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 주간 복습 통계 카드 NEW! -->
+                <div class="cute-card p-4 md:p-8">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📈</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">이번 주 복습 통계 🔥</h3>
+                    </div>
+
+                    <!-- 주간 완료율 -->
+                    <div class="mb-4 md:mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm md:text-base font-bold text-gray">이번 주 복습 완료율</span>
+                            <span class="text-lg md:text-2xl font-black text-dark" id="weeklyCompletionRate">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-4 md:h-6 overflow-hidden">
+                            <div id="weeklyCompletionBar" class="bg-gradient-to-r from-green-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <span class="text-xs md:text-sm font-semibold text-gray">
+                                <span id="weeklyCompleted">0</span> / <span id="weeklyTotal">0</span> 수업 복습 완료
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 과목별 학습 시간 -->
+                    <div>
+                        <h4 class="text-base md:text-lg font-black text-dark mb-3 md:mb-4">📚 과목별 학습 시간</h4>
+                        <div id="subjectTimeList" class="space-y-2 md:space-y-3">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
+                    </div>
+
+                    <!-- 복습 알림 영역 -->
+                    <div id="reviewAlertArea" class="mt-4 md:mt-6 hidden">
+                        <div class="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-xl p-3 md:p-4">
+                            <div class="flex items-start gap-2 md:gap-3">
+                                <div class="text-2xl md:text-3xl">⚠️</div>
+                                <div class="flex-1">
+                                    <h5 class="text-sm md:text-base font-black text-dark mb-1 md:mb-2">아직 복습하지 않은 과목이 있어요!</h5>
+                                    <div id="pendingSubjectsList" class="text-xs md:text-sm font-semibold text-gray">
+                                        <!-- 동적으로 생성됨 -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
