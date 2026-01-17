@@ -111,12 +111,67 @@ function loadJournals() {
                 <div class="text-right">
                     <p class="text-sm text-gray-500">${formatDate(journal.date)}</p>
                     <p class="text-sm text-gray-600">⏱️ ${journal.studyTime}분</p>
+                    ${journal.startTime && journal.endTime ? `
+                        <p class="text-xs text-gray-400">${journal.startTime} ~ ${journal.endTime}</p>
+                    ` : ''}
                 </div>
             </div>
             <p class="text-gray-800 mb-2">${journal.content}</p>
-            ${journal.memo ? `<p class="text-sm text-gray-600 bg-gray-50 rounded p-2 italic">💭 ${journal.memo}</p>` : ''}
+            ${journal.memo ? `<p class="text-sm text-gray-600 bg-gray-50 rounded p-2 italic mb-2">💭 ${journal.memo}</p>` : ''}
+            ${journal.photos && journal.photos.length > 0 ? `
+                <div class="mt-3 border-t pt-3">
+                    <div class="text-sm font-semibold text-gray-700 mb-2">
+                        📷 첨부 사진 (${journal.photos.length})
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        ${journal.photos.map(photo => `
+                            <div class="relative group">
+                                <img src="${photo.data}" class="w-full h-24 object-cover rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${photo.data}', '${photo.name}')">
+                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b opacity-0 group-hover:opacity-100 transition truncate">
+                                    ${photo.name}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
         </div>
     `).join('');
+}
+
+// 사진 확대 모달 (교사용)
+function viewPhotoModal(photoData, photoName) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    };
+    
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-auto">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="font-bold">${photoName || '첨부 사진'}</h3>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <img src="${photoData}" class="max-w-full h-auto">
+            </div>
+            <div class="p-4 border-t flex justify-end gap-2">
+                <a href="${photoData}" download="${photoName || 'photo.jpg'}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <i class="fas fa-download mr-2"></i>다운로드
+                </a>
+                <button onclick="this.closest('.fixed').remove()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                    닫기
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 // 미션 폼 표시/숨기기
@@ -321,6 +376,12 @@ function loadQuestions() {
             
             <div class="bg-gray-50 rounded p-3 mb-3">
                 <p class="font-semibold mb-1">Q. ${question.question}</p>
+                ${question.photo ? `
+                    <div class="mt-3 border-t pt-3">
+                        <p class="text-xs text-gray-600 mb-2">📷 첨부된 문제 사진:</p>
+                        <img src="${question.photo.data}" class="max-w-md rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${question.photo.data}', '${question.photo.name}')">
+                    </div>
+                ` : ''}
             </div>
 
             ${question.status === 'pending' ? `

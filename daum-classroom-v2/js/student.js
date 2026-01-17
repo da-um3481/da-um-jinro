@@ -20,6 +20,10 @@ let timerStartTime = null;
 let timerInterval = null;
 let timerElapsedSeconds = 0;
 
+// 사진 업로드 변수
+let uploadedPhotos = [];
+let questionPhoto = null;
+
 // 로그인
 function login() {
     const name = document.getElementById('nameInput').value.trim();
@@ -382,7 +386,118 @@ function showTab(tabName) {
     document.getElementById(`content-${tabName}`).classList.remove('hidden');
 }
 
-// 학습 일지 저장
+// 사진 업로드 처리
+function handlePhotoUpload(event) {
+    const files = event.target.files;
+    const maxFiles = 3;
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    
+    if (files.length > maxFiles) {
+        alert(`최대 ${maxFiles}개의 사진만 첨부할 수 있습니다.`);
+        event.target.value = '';
+        return;
+    }
+    
+    uploadedPhotos = [];
+    const previewContainer = document.getElementById('photoPreview');
+    previewContainer.innerHTML = '';
+    
+    Array.from(files).forEach((file, index) => {
+        // 파일 크기 체크
+        if (file.size > maxSize) {
+            alert(`${file.name}은(는) 2MB를 초과합니다.`);
+            return;
+        }
+        
+        // 이미지 파일만
+        if (!file.type.startsWith('image/')) {
+            alert(`${file.name}은(는) 이미지 파일이 아닙니다.`);
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const photoData = {
+                name: file.name,
+                data: e.target.result,
+                size: file.size,
+                type: file.type
+            };
+            
+            uploadedPhotos.push(photoData);
+            
+            // 미리보기 생성
+            const previewDiv = document.createElement('div');
+            previewDiv.className = 'relative group';
+            previewDiv.innerHTML = `
+                <img src="${e.target.result}" class="w-full h-24 object-cover rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${e.target.result}', '${file.name}')">
+                <button onclick="removePhoto(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs opacity-0 group-hover:opacity-100 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="text-xs text-gray-500 mt-1 truncate">${file.name}</div>
+            `;
+            previewContainer.appendChild(previewDiv);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// 사진 삭제
+function removePhoto(index) {
+    uploadedPhotos.splice(index, 1);
+    
+    // 미리보기 업데이트
+    const previewContainer = document.getElementById('photoPreview');
+    previewContainer.innerHTML = '';
+    
+    uploadedPhotos.forEach((photo, idx) => {
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'relative group';
+        previewDiv.innerHTML = `
+            <img src="${photo.data}" class="w-full h-24 object-cover rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${photo.data}', '${photo.name}')">
+            <button onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs opacity-0 group-hover:opacity-100 transition">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="text-xs text-gray-500 mt-1 truncate">${photo.name}</div>
+        `;
+        previewContainer.appendChild(previewDiv);
+    });
+    
+    // 파일 input 리셋
+    document.getElementById('photoUpload').value = '';
+}
+
+// 사진 확대 모달
+function viewPhotoModal(photoData, photoName) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    };
+    
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-auto">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="font-bold">${photoName}</h3>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <img src="${photoData}" class="max-w-full h-auto">
+            </div>
+            <div class="p-4 border-t flex justify-end">
+                <a href="${photoData}" download="${photoName}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <i class="fas fa-download mr-2"></i>다운로드
+                </a>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
 function saveJournal() {
     const subject = document.getElementById('subject').value;
     const content = document.getElementById('content').value.trim();
@@ -411,7 +526,7 @@ function saveJournal() {
         startTime: timerStartTime ? new Date(timerStartTime).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
         endTime: timerStartTime ? new Date(timerStartTime + (timerElapsedSeconds * 1000)).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'}) : '',
         memo: memo,
-        photo: null // 추후 구현
+        photos: uploadedPhotos // 사진 데이터 저장
     };
 
     // 저장
@@ -422,6 +537,9 @@ function saveJournal() {
     // 폼 초기화
     document.getElementById('content').value = '';
     document.getElementById('memo').value = '';
+    document.getElementById('photoUpload').value = '';
+    document.getElementById('photoPreview').innerHTML = '';
+    uploadedPhotos = [];
     resetTimer();
 
     alert('✅ 학습 기록이 저장되었습니다!');
@@ -453,7 +571,17 @@ function loadJournals() {
                 </div>
             </div>
             <p class="text-gray-800 mb-2">${journal.content}</p>
-            ${journal.memo ? `<p class="text-sm text-gray-600 italic">💭 ${journal.memo}</p>` : ''}
+            ${journal.memo ? `<p class="text-sm text-gray-600 italic mb-2">💭 ${journal.memo}</p>` : ''}
+            ${journal.photos && journal.photos.length > 0 ? `
+                <div class="mt-3">
+                    <div class="text-sm font-semibold text-gray-700 mb-2">📷 첨부 사진 (${journal.photos.length})</div>
+                    <div class="grid grid-cols-3 gap-2">
+                        ${journal.photos.map(photo => `
+                            <img src="${photo.data}" class="w-full h-20 object-cover rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${photo.data}', '${photo.name}')">
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
         </div>
     `).join('');
 }
@@ -588,6 +716,55 @@ function loadMaterials() {
     `).join('');
 }
 
+// 질문 사진 업로드 처리
+function handleQuestionPhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    
+    if (file.size > maxSize) {
+        alert('파일 크기는 2MB 이하여야 합니다.');
+        event.target.value = '';
+        return;
+    }
+    
+    if (!file.type.startsWith('image/')) {
+        alert('이미지 파일만 첨부할 수 있습니다.');
+        event.target.value = '';
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        questionPhoto = {
+            name: file.name,
+            data: e.target.result,
+            size: file.size,
+            type: file.type
+        };
+        
+        // 미리보기
+        const previewContainer = document.getElementById('questionPhotoPreview');
+        previewContainer.innerHTML = `
+            <div class="relative inline-block">
+                <img src="${e.target.result}" class="max-w-xs rounded border">
+                <button onclick="removeQuestionPhoto()" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 hover:bg-red-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+    };
+    reader.readAsDataURL(file);
+}
+
+// 질문 사진 삭제
+function removeQuestionPhoto() {
+    questionPhoto = null;
+    document.getElementById('questionPhoto').value = '';
+    document.getElementById('questionPhotoPreview').innerHTML = '';
+}
+
 // AI 질문하기
 function askAI() {
     const questionText = document.getElementById('questionText').value.trim();
@@ -604,7 +781,7 @@ function askAI() {
         question: questionText,
         answer: '선생님께서 곧 답변해 주실 예정입니다. 조금만 기다려주세요! 🤖',
         status: 'pending',
-        photo: null
+        photo: questionPhoto // 사진 데이터 저장
     };
 
     const questions = getQuestions();
@@ -612,6 +789,7 @@ function askAI() {
     localStorage.setItem(STORAGE_KEYS.QUESTIONS, JSON.stringify(questions));
 
     document.getElementById('questionText').value = '';
+    removeQuestionPhoto();
     alert('✅ 질문이 등록되었습니다!');
     loadQuestions();
 }
@@ -636,6 +814,11 @@ function loadQuestions() {
             </div>
             <div class="bg-gray-50 rounded p-3 mb-2">
                 <p class="font-semibold mb-1">Q. ${question.question}</p>
+                ${question.photo ? `
+                    <div class="mt-2">
+                        <img src="${question.photo.data}" class="max-w-xs rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${question.photo.data}', '${question.photo.name}')">
+                    </div>
+                ` : ''}
             </div>
             <div class="bg-purple-50 rounded p-3">
                 <p class="text-sm">A. ${question.answer}</p>
