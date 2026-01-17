@@ -5,18 +5,13 @@ const STORAGE_KEYS = {
     MISSIONS: 'daum_v2_missions',
     MATERIALS: 'daum_v2_materials',
     QUESTIONS: 'daum_v2_questions',
-    WEEKLY_PLAN: 'daum_v2_weekly_plan',
-    PLAN_CREATED_DATE: 'daum_v2_plan_created_date',
-    PLAN_COLLAPSED: 'daum_v2_plan_collapsed',
     TIMETABLE: 'daum_v2_timetable',
     REVIEW_STATUS: 'daum_v2_review_status',
-    DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan' // ⭐ 추가
+    DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan'
 };
 
 // 현재 학생 정보
 let currentStudent = null;
-let selectedStudyHours = 0;
-let isPlanCollapsed = true; // 기본적으로 접혀있음
 
 // 타이머 변수
 let timerStartTime = null;
@@ -56,7 +51,7 @@ function login() {
     document.getElementById('mainScreen').classList.remove('hidden');
 
     // 주간 계획이 없으면 학습 도우미 표시
-    checkAndShowStudyHelper();
+
     loadAllData();
     showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
 }
@@ -77,314 +72,13 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('studentName').textContent = `${currentStudent.name}님 환영합니다! 👋`;
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainScreen').classList.remove('hidden');
-        checkAndShowStudyHelper();
+    
         loadAllData();
         showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
     }
 });
 
-// 학습 도우미 표시 여부 확인
-function checkAndShowStudyHelper() {
-    const weeklyPlan = localStorage.getItem(STORAGE_KEYS.WEEKLY_PLAN);
-    const planCreatedDate = localStorage.getItem(STORAGE_KEYS.PLAN_CREATED_DATE);
-    
-    // 계획이 있는지 확인
-    if (weeklyPlan && planCreatedDate) {
-        const createdDate = new Date(planCreatedDate);
-        const today = new Date();
-        const daysDiff = Math.floor((today - createdDate) / (1000 * 60 * 60 * 24));
-        
-        // 7일이 지났으면 자동 갱신
-        if (daysDiff >= 7) {
-            localStorage.removeItem(STORAGE_KEYS.WEEKLY_PLAN);
-            localStorage.removeItem(STORAGE_KEYS.PLAN_CREATED_DATE);
-            alert('✨ 일주일이 지나 새로운 학습 계획을 만들어주세요!');
-            openStudyHelperModal();
-        } else {
-            // 계획 표시
-            displayWeeklyPlan();
-        }
-    }
-}
 
-// 계획표 접기/펼치기
-function toggleWeeklyPlan() {
-    const content = document.getElementById('weeklyPlanContent');
-    const icon = document.getElementById('planToggleIcon');
-    const collapsed = localStorage.getItem(STORAGE_KEYS.PLAN_COLLAPSED);
-    
-    if (collapsed === 'true' || !collapsed) {
-        // 펼치기
-        content.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-        localStorage.setItem(STORAGE_KEYS.PLAN_COLLAPSED, 'false');
-    } else {
-        // 접기
-        content.classList.add('hidden');
-        icon.classList.remove('rotate-180');
-        localStorage.setItem(STORAGE_KEYS.PLAN_COLLAPSED, 'true');
-    }
-}
-
-// 학습 도우미 모달 열기
-function openStudyHelperModal() {
-    document.getElementById('studyHelperModal').classList.remove('hidden');
-    document.getElementById('studyHelperModal').classList.add('flex');
-    // 선택 초기화
-    selectedStudyHours = 0;
-    document.querySelectorAll('.study-hour-btn').forEach(btn => btn.classList.remove('selected'));
-    document.querySelectorAll('.subject-checkbox').forEach(cb => cb.checked = false);
-}
-
-// 학습 도우미 모달 닫기
-function closeStudyHelperModal() {
-    document.getElementById('studyHelperModal').classList.add('hidden');
-    document.getElementById('studyHelperModal').classList.remove('flex');
-}
-
-// 학습 도우미 다시 표시
-function showStudyHelper() {
-    openStudyHelperModal();
-}
-
-// 학습 시간 선택 (주간 계획용)
-function selectStudyHours(hours) {
-    selectedStudyHours = hours;
-    
-    // 모든 버튼 비활성화
-    document.querySelectorAll('.study-hour-btn').forEach(btn => {
-        btn.classList.remove('selected');
-    });
-    
-    // 선택한 버튼 활성화 - event.target 대신 모든 버튼 찾기
-    document.querySelectorAll('.study-hour-btn').forEach(btn => {
-        const btnText = btn.textContent.trim();
-        if (btnText.includes(`${hours}시간`)) {
-            btn.classList.add('selected');
-        }
-    });
-}
-
-// 주간 학습 계획 생성
-function generateWeeklyPlan() {
-    if (selectedStudyHours === 0) {
-        alert('학습 시간을 선택해주세요!');
-        return;
-    }
-
-    // 선택한 과목들
-    const selectedSubjects = [];
-    document.querySelectorAll('.subject-checkbox:checked').forEach(cb => {
-        selectedSubjects.push(cb.value);
-    });
-
-    // 기본 과목 (선택하지 않았으면 모든 과목)
-    const allSubjects = ['국어', '영어', '수학', '과학', '사회'];
-    const subjects = selectedSubjects.length > 0 ? selectedSubjects : allSubjects;
-
-    // 주간 계획 생성
-    const weeklyPlan = createWeeklySchedule(selectedStudyHours, subjects, selectedSubjects.length > 0);
-    
-    // 저장
-    localStorage.setItem(STORAGE_KEYS.WEEKLY_PLAN, JSON.stringify(weeklyPlan));
-    localStorage.setItem(STORAGE_KEYS.PLAN_CREATED_DATE, new Date().toISOString());
-    localStorage.setItem(STORAGE_KEYS.PLAN_COLLAPSED, 'true'); // 생성 후 접혀있음
-    
-    // 모달 닫기
-    closeStudyHelperModal();
-    
-    // 화면에 표시 (접힌 상태)
-    displayWeeklyPlan();
-    
-    alert('✅ 일주일 학습 계획이 생성되었습니다!\n\n💡 계획표를 클릭하면 펼쳐서 볼 수 있습니다.');
-}
-
-// 학습 스케줄 생성 알고리즘
-function createWeeklySchedule(totalHours, subjects, hasFocus) {
-    const days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
-    const weeklyPlan = [];
-    
-    // 총 학습 시간을 분으로 변환
-    const totalMinutes = totalHours * 60;
-    
-    // 50~60분 학습 + 5분 휴식 (평균 55분으로 계산)
-    const sessionDuration = 50 + Math.floor(Math.random() * 11); // 50~60분 랜덤
-    const breakDuration = 5;
-    const sessionsPerDay = Math.floor(totalMinutes / 55); // 평균 세션 시간으로 계산
-    
-    for (let day of days) {
-        const dailySchedule = [];
-        let startHour = 19; // 저녁 7시 시작
-        let startMinute = 0;
-        
-        for (let i = 0; i < sessionsPerDay; i++) {
-            // 각 세션마다 50~60분 랜덤 지정
-            const currentSessionDuration = 50 + Math.floor(Math.random() * 11);
-            
-            // 과목 선택 (집중 과목이 있으면 더 자주)
-            let subject;
-            if (hasFocus && Math.random() < 0.6) {
-                // 60% 확률로 집중 과목
-                subject = subjects[Math.floor(Math.random() * subjects.length)];
-            } else {
-                // 나머지는 모든 과목에서 랜덤
-                const allSubjects = ['국어', '영어', '수학', '과학', '사회'];
-                subject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
-            }
-            
-            // 시간 포맷
-            const endMinute = startMinute + currentSessionDuration;
-            const endHour = startHour + Math.floor(endMinute / 60);
-            const finalEndMinute = endMinute % 60;
-            
-            dailySchedule.push({
-                time: `${String(startHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}-${String(endHour).padStart(2, '0')}:${String(finalEndMinute).padStart(2, '0')}`,
-                subject: subject,
-                duration: currentSessionDuration,
-                type: 'study'
-            });
-            
-            // 마지막 세션이 아니면 휴식 추가
-            if (i < sessionsPerDay - 1) {
-                startHour = endHour;
-                startMinute = finalEndMinute;
-                
-                const breakEndMinute = startMinute + breakDuration;
-                const breakEndHour = startHour + Math.floor(breakEndMinute / 60);
-                const finalBreakEndMinute = breakEndMinute % 60;
-                
-                dailySchedule.push({
-                    time: `${String(startHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}-${String(breakEndHour).padStart(2, '0')}:${String(finalBreakEndMinute).padStart(2, '0')}`,
-                    subject: '휴식',
-                    duration: breakDuration,
-                    type: 'break'
-                });
-                
-                startHour = breakEndHour;
-                startMinute = finalBreakEndMinute;
-            }
-        }
-        
-        weeklyPlan.push({
-            day: day,
-            schedule: dailySchedule,
-            totalMinutes: dailySchedule.filter(s => s.type === 'study').reduce((sum, s) => sum + s.duration, 0)
-        });
-    }
-    
-    return weeklyPlan;
-}
-
-// 주간 계획 표시
-function displayWeeklyPlan() {
-    const weeklyPlan = JSON.parse(localStorage.getItem(STORAGE_KEYS.WEEKLY_PLAN));
-    const planCreatedDate = localStorage.getItem(STORAGE_KEYS.PLAN_CREATED_DATE);
-    const collapsed = localStorage.getItem(STORAGE_KEYS.PLAN_COLLAPSED);
-    
-    if (!weeklyPlan) return;
-    
-    const container = document.getElementById('weeklyPlanContent');
-    const viewContainer = document.getElementById('weeklyPlanView');
-    const icon = document.getElementById('planToggleIcon');
-    const expiryDateElement = document.getElementById('planExpiryDate');
-    
-    // 만료일 계산
-    if (planCreatedDate) {
-        const createdDate = new Date(planCreatedDate);
-        const expiryDate = new Date(createdDate);
-        expiryDate.setDate(expiryDate.getDate() + 7);
-        
-        const daysLeft = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
-        expiryDateElement.textContent = `${daysLeft}일 남음 | 클릭하여 펼치기/접기`;
-    }
-    
-    viewContainer.classList.remove('hidden');
-    
-    // 접힌 상태 반영
-    if (collapsed === 'true' || !collapsed) {
-        container.classList.add('hidden');
-        icon.classList.remove('rotate-180');
-    } else {
-        container.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-    }
-    
-    // 오늘 요일 계산
-    const today = new Date();
-    const dayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-    const todayName = dayNames[today.getDay()];
-    
-    const subjectIcons = {
-        '국어': 'fa-book',
-        '영어': 'fa-language',
-        '수학': 'fa-calculator',
-        '과학': 'fa-flask',
-        '사회': 'fa-globe',
-        '휴식': 'fa-coffee'
-    };
-    
-    const subjectColors = {
-        '국어': 'bg-red-50 border-red-200 text-red-800',
-        '영어': 'bg-blue-50 border-blue-200 text-blue-800',
-        '수학': 'bg-green-50 border-green-200 text-green-800',
-        '과학': 'bg-purple-50 border-purple-200 text-purple-800',
-        '사회': 'bg-yellow-50 border-yellow-200 text-yellow-800',
-        '휴식': 'bg-gray-50 border-gray-200 text-gray-600'
-    };
-    
-    container.innerHTML = weeklyPlan.map(dayPlan => {
-        const isToday = dayPlan.day === todayName;
-        return `
-        <div class="border rounded-lg p-4 ${isToday ? 'border-blue-500 border-2 bg-blue-50' : ''}">
-            <div class="flex justify-between items-center mb-3">
-                <h4 class="font-bold text-lg flex items-center gap-2">
-                    ${isToday ? '⭐' : '📅'} ${dayPlan.day}
-                    ${isToday ? '<span class="text-sm bg-blue-500 text-white px-2 py-1 rounded-full">오늘</span>' : ''}
-                </h4>
-                <span class="text-sm text-gray-600">총 ${Math.floor(dayPlan.totalMinutes / 60)}시간 ${dayPlan.totalMinutes % 60}분</span>
-            </div>
-            <div class="space-y-2">
-                ${dayPlan.schedule.map((item, idx) => `
-                    <div class="flex items-center gap-3 ${subjectColors[item.subject]} border rounded p-2">
-                        <div class="text-center min-w-[100px]">
-                            <div class="text-xs font-semibold">${item.time}</div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-1">
-                            <i class="fas ${subjectIcons[item.subject]}"></i>
-                            <span class="font-semibold">${item.subject}</span>
-                        </div>
-                        <div class="text-xs">${item.duration}분</div>
-                        ${item.type === 'study' && isToday ? `
-                            <button onclick="startStudyFromPlan('${item.subject}', ${item.duration})" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition">
-                                <i class="fas fa-play mr-1"></i>시작
-                            </button>
-                        ` : ''}
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `}).join('');
-}
-
-// 계획표에서 학습 시작
-function startStudyFromPlan(subject, duration) {
-    // 학습 일지 탭으로 이동
-    showTab('journal');
-    
-    // 과목 선택
-    document.getElementById('subject').value = subject;
-    
-    // 타이머 시작
-    startTimer();
-    
-    // 스크롤
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-    
-    alert(`✅ ${subject} 학습을 시작합니다!\n예상 시간: ${duration}분`);
-}
 
 // 탭 전환
 function showTab(tabName) {
@@ -1483,7 +1177,7 @@ function loadAllData() {
     loadJournals();
     loadMissions();
     loadMaterials();
-    checkAndShowStudyHelper();
+
     loadTimetableView();
     loadTodayClasses();
     loadWeeklyStats(); // 주간 복습 통계 추가
