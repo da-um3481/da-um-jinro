@@ -147,7 +147,7 @@ function showStudyHelper() {
     openStudyHelperModal();
 }
 
-// 학습 시간 선택
+// 학습 시간 선택 (주간 계획용)
 function selectStudyHours(hours) {
     selectedStudyHours = hours;
     
@@ -156,8 +156,13 @@ function selectStudyHours(hours) {
         btn.classList.remove('selected');
     });
     
-    // 선택한 버튼 활성화
-    event.target.closest('.study-hour-btn').classList.add('selected');
+    // 선택한 버튼 활성화 - event.target 대신 모든 버튼 찾기
+    document.querySelectorAll('.study-hour-btn').forEach(btn => {
+        const btnText = btn.textContent.trim();
+        if (btnText.includes(`${hours}시간`)) {
+            btn.classList.add('selected');
+        }
+    });
 }
 
 // 주간 학습 계획 생성
@@ -1546,8 +1551,8 @@ function cancelPlanForm() {
     });
 }
 
-// 학습 시간 선택
-function selectStudyHours(hours) {
+// 학습 시간 선택 (일일 계획용)
+function selectDailyStudyHours(hours) {
     selectedDailyStudyHours = hours;
     
     // 모든 버튼 스타일 초기화
@@ -1556,9 +1561,14 @@ function selectStudyHours(hours) {
         btn.classList.add('border-gray-300', 'bg-white');
     });
     
-    // 선택된 버튼 스타일 변경
-    event.target.classList.remove('border-gray-300', 'bg-white');
-    event.target.classList.add('border-purple-500', 'bg-purple-100');
+    // 선택된 버튼 스타일 변경 - 텍스트 기반으로 찾기
+    document.querySelectorAll('.study-plan-btn').forEach(btn => {
+        const btnText = btn.textContent.trim();
+        if (btnText === `${hours}시간`) {
+            btn.classList.remove('border-gray-300', 'bg-white');
+            btn.classList.add('border-purple-500', 'bg-purple-100');
+        }
+    });
 }
 
 // 오늘의 자율학습 계획 저장

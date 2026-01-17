@@ -317,33 +317,6 @@
                 </div>
             </div>
 
-            <!-- 생성된 주간 학습 계획 (접기/펼치기) -->
-            <div id="weeklyPlanView" class="mb-6 hidden">
-                <div class="cute-card overflow-hidden">
-                    <!-- 계획표 헤더 (항상 보임) -->
-                    <div class="p-5 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white cursor-pointer hover:opacity-90 transition" onclick="toggleWeeklyPlan()" style="border-bottom: 3px solid rgba(251, 191, 36, 0.4);">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <div class="text-4xl bounce">📅</div>
-                                <div>
-                                    <h3 class="text-xl font-black" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">나의 일주일 학습 계획 ✨</h3>
-                                    <p class="text-sm opacity-90 font-semibold" id="planExpiryDate">클릭하여 펼치기/접기</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <button onclick="event.stopPropagation(); showStudyHelper()" class="bg-white text-blue-600 px-5 py-2 rounded-full hover:bg-yellow-100 transition text-sm font-black cute-btn wiggle shadow-lg">
-                                    🔄 다시 만들기
-                                </button>
-                                <i id="planToggleIcon" class="fas fa-chevron-down text-3xl transition-transform"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 계획표 내용 (접을 수 있음) -->
-                    <div id="weeklyPlanContent" class="p-6 space-y-4 hidden"></div>
-                </div>
-            </div>
-
             <!-- 오늘수업 복습 탭 -->
             <div id="content-today" class="tab-content">
                 <!-- 테스트 모드 (개발용) -->
@@ -524,6 +497,33 @@
                     </button>
                 </div>
 
+                <!-- 생성된 주간 학습 계획 (접기/펼치기) -->
+                <div id="weeklyPlanView" class="mb-4 md:mb-6 hidden">
+                    <div class="cute-card overflow-hidden">
+                        <!-- 계획표 헤더 (항상 보임) -->
+                        <div class="p-4 md:p-5 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white cursor-pointer hover:opacity-90 transition" onclick="toggleWeeklyPlan()" style="border-bottom: 3px solid rgba(251, 191, 36, 0.4);">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2 md:gap-3">
+                                    <div class="text-2xl md:text-4xl bounce">📅</div>
+                                    <div>
+                                        <h3 class="text-base md:text-xl font-black" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">나의 일주일 학습 계획 ✨</h3>
+                                        <p class="text-xs md:text-sm opacity-90 font-semibold" id="planExpiryDate">클릭하여 펼치기/접기</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 md:gap-3">
+                                    <button onclick="event.stopPropagation(); showStudyHelper()" class="bg-white text-blue-600 px-3 py-1 md:px-5 md:py-2 rounded-full hover:bg-yellow-100 transition text-xs md:text-sm font-black cute-btn wiggle shadow-lg">
+                                        🔄 다시 만들기
+                                    </button>
+                                    <i id="planToggleIcon" class="fas fa-chevron-down text-xl md:text-3xl transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 계획표 내용 (접을 수 있음) -->
+                        <div id="weeklyPlanContent" class="p-4 md:p-6 space-y-3 md:space-y-4 hidden"></div>
+                    </div>
+                </div>
+
                 <!-- 오늘의 자율학습 계획 카드 -->
                 <div class="cute-card p-4 md:p-8 mb-4 md:mb-6 bg-gradient-to-br from-purple-50 to-pink-50 border-3 border-purple-200">
                     <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
@@ -545,22 +545,22 @@
                         <div class="mb-4 md:mb-6">
                             <label class="block text-base md:text-lg font-black mb-3 md:mb-4 text-dark">⏰ 오늘 자율학습 시간</label>
                             <div class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
-                                <button onclick="selectStudyHours(1)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                <button onclick="selectDailyStudyHours(1)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
                                     1시간
                                 </button>
-                                <button onclick="selectStudyHours(2)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                <button onclick="selectDailyStudyHours(2)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
                                     2시간
                                 </button>
-                                <button onclick="selectStudyHours(3)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                <button onclick="selectDailyStudyHours(3)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
                                     3시간
                                 </button>
-                                <button onclick="selectStudyHours(4)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                <button onclick="selectDailyStudyHours(4)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
                                     4시간
                                 </button>
-                                <button onclick="selectStudyHours(5)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                <button onclick="selectDailyStudyHours(5)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
                                     5시간
                                 </button>
-                                <button onclick="selectStudyHours(6)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                <button onclick="selectDailyStudyHours(6)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
                                     6시간
                                 </button>
                             </div>
