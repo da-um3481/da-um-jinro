@@ -993,7 +993,7 @@ function addPeriodRow(periodNum, time, subject) {
     periodDiv.className = 'flex gap-1.5 md:gap-3 items-center bg-gray-50 p-2.5 md:p-4 rounded-xl md:rounded-2xl border-2 border-gray-200';
     periodDiv.innerHTML = `
         <div class="font-black text-xs md:text-lg text-dark w-10 md:w-16 flex-shrink-0">${periodNum}교시</div>
-        <input type="time" value="${time}" class="period-time w-[90px] md:w-32 px-1.5 py-1.5 md:px-4 md:py-2 border-2 border-gray-300 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-semibold text-dark text-xs md:text-base flex-shrink-0">
+        <input type="time" value="${time}" class="period-time w-[110px] md:w-36 px-2 py-1.5 md:px-4 md:py-2 border-2 border-gray-300 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-semibold text-dark text-sm md:text-base flex-shrink-0">
         <select class="period-subject flex-1 min-w-0 px-1.5 py-1.5 md:px-4 md:py-2 border-2 border-gray-300 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-bold text-dark text-xs md:text-base">
             <option value="">과목</option>
             <option value="국어" ${subject === '국어' ? 'selected' : ''}>🌸국어</option>
