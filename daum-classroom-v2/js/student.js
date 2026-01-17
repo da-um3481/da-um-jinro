@@ -24,7 +24,6 @@ let timerElapsedSeconds = 0;
 
 // 사진 업로드 변수
 let uploadedPhotos = [];
-let questionPhoto = null;
 
 // 시간표 관련 변수
 let currentEditingDay = '';
@@ -745,116 +744,7 @@ function loadMaterials() {
     `).join('');
 }
 
-// 질문 사진 업로드 처리
-function handleQuestionPhotoUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    const maxSize = 2 * 1024 * 1024; // 2MB
-    
-    if (file.size > maxSize) {
-        alert('파일 크기는 2MB 이하여야 합니다.');
-        event.target.value = '';
-        return;
-    }
-    
-    if (!file.type.startsWith('image/')) {
-        alert('이미지 파일만 첨부할 수 있습니다.');
-        event.target.value = '';
-        return;
-    }
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        questionPhoto = {
-            name: file.name,
-            data: e.target.result,
-            size: file.size,
-            type: file.type
-        };
-        
-        // 미리보기
-        const previewContainer = document.getElementById('questionPhotoPreview');
-        previewContainer.innerHTML = `
-            <div class="relative inline-block">
-                <img src="${e.target.result}" class="max-w-xs rounded border">
-                <button onclick="removeQuestionPhoto()" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 hover:bg-red-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-    };
-    reader.readAsDataURL(file);
-}
 
-// 질문 사진 삭제
-function removeQuestionPhoto() {
-    questionPhoto = null;
-    document.getElementById('questionPhoto').value = '';
-    document.getElementById('questionPhotoPreview').innerHTML = '';
-}
-
-// AI 질문하기
-function askAI() {
-    const questionText = document.getElementById('questionText').value.trim();
-    
-    if (!questionText) {
-        alert('질문을 입력해주세요');
-        return;
-    }
-
-    const question = {
-        id: Date.now(),
-        studentName: currentStudent.name,
-        date: new Date().toISOString(),
-        question: questionText,
-        answer: '선생님께서 곧 답변해 주실 예정입니다. 조금만 기다려주세요! 🤖',
-        status: 'pending',
-        photo: questionPhoto // 사진 데이터 저장
-    };
-
-    const questions = getQuestions();
-    questions.unshift(question);
-    localStorage.setItem(STORAGE_KEYS.QUESTIONS, JSON.stringify(questions));
-
-    document.getElementById('questionText').value = '';
-    removeQuestionPhoto();
-    alert('✅ 질문이 등록되었습니다!');
-    loadQuestions();
-}
-
-// 질문 목록 불러오기
-function loadQuestions() {
-    const questions = getQuestions().filter(q => q.studentName === currentStudent.name);
-    const container = document.getElementById('questionList');
-
-    if (questions.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-center py-8">아직 질문이 없습니다</p>';
-        return;
-    }
-
-    container.innerHTML = questions.map(question => `
-        <div class="border rounded-lg p-4 hover:shadow-md transition">
-            <div class="flex justify-between items-start mb-2">
-                <span class="badge ${question.status === 'answered' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
-                    ${question.status === 'answered' ? '답변완료' : '대기중'}
-                </span>
-                <span class="text-sm text-gray-500">${formatDate(question.date)}</span>
-            </div>
-            <div class="bg-gray-50 rounded p-3 mb-2">
-                <p class="font-semibold mb-1">Q. ${question.question}</p>
-                ${question.photo ? `
-                    <div class="mt-2">
-                        <img src="${question.photo.data}" class="max-w-xs rounded border cursor-pointer hover:opacity-75 transition" onclick="viewPhotoModal('${question.photo.data}', '${question.photo.name}')">
-                    </div>
-                ` : ''}
-            </div>
-            <div class="bg-purple-50 rounded p-3">
-                <p class="text-sm">A. ${question.answer}</p>
-            </div>
-        </div>
-    `).join('');
-}
 
 // 유틸리티 함수들
 function getJournals() {
@@ -867,10 +757,6 @@ function getMissions() {
 
 function getMaterials() {
     return JSON.parse(localStorage.getItem(STORAGE_KEYS.MATERIALS) || '[]');
-}
-
-function getQuestions() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.QUESTIONS) || '[]');
 }
 
 function formatDate(dateString) {
@@ -898,7 +784,6 @@ function loadAllData() {
     loadJournals();
     loadMissions();
     loadMaterials();
-    loadQuestions();
 }
 
 // ========================================
