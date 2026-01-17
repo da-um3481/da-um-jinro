@@ -525,6 +525,98 @@
 
             <!-- 자율학습일지 탭 -->
             <div id="content-journal" class="tab-content hidden">
+                <!-- 오늘의 자율학습 계획 카드 -->
+                <div class="cute-card p-4 md:p-8 mb-4 md:mb-6 bg-gradient-to-br from-purple-50 to-pink-50 border-3 border-purple-200">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📋</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">오늘의 자율학습 계획 ✨</h3>
+                    </div>
+
+                    <!-- 계획이 없을 때 -->
+                    <div id="noPlanYet" class="text-center py-6 md:py-8">
+                        <div class="text-4xl md:text-6xl mb-3 md:mb-4">📝</div>
+                        <p class="text-base md:text-lg font-bold text-gray-600 mb-4 md:mb-6">오늘 자율학습 계획을 세워보세요!</p>
+                        <button onclick="showPlanForm()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-black text-base md:text-xl hover:from-purple-600 hover:to-pink-600 transition shadow-lg">
+                            <span class="text-xl md:text-2xl mr-2">✏️</span>계획 세우기
+                        </button>
+                    </div>
+
+                    <!-- 계획 입력 폼 (숨김) -->
+                    <div id="planForm" class="hidden">
+                        <div class="mb-4 md:mb-6">
+                            <label class="block text-base md:text-lg font-black mb-3 md:mb-4 text-dark">⏰ 오늘 자율학습 시간</label>
+                            <div class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
+                                <button onclick="selectStudyHours(1)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                    1시간
+                                </button>
+                                <button onclick="selectStudyHours(2)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                    2시간
+                                </button>
+                                <button onclick="selectStudyHours(3)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                    3시간
+                                </button>
+                                <button onclick="selectStudyHours(4)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                    4시간
+                                </button>
+                                <button onclick="selectStudyHours(5)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                    5시간
+                                </button>
+                                <button onclick="selectStudyHours(6)" class="study-plan-btn px-3 py-2 md:px-4 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-black text-sm md:text-base hover:border-purple-400 transition bg-white">
+                                    6시간
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 md:gap-3">
+                            <button onclick="saveDailyPlan()" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 md:py-4 rounded-full font-black text-base md:text-xl hover:from-purple-600 hover:to-pink-600 transition shadow-lg">
+                                <span class="text-xl md:text-2xl mr-2">💾</span>계획 저장
+                            </button>
+                            <button onclick="cancelPlanForm()" class="px-6 md:px-8 bg-gray-200 text-gray-700 py-3 md:py-4 rounded-full font-bold text-base md:text-lg hover:bg-gray-300 transition">
+                                취소
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 계획 표시 (저장 후) -->
+                    <div id="planDisplay" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+                            <div class="bg-white p-3 md:p-4 rounded-xl md:rounded-2xl border-2 border-purple-200 text-center">
+                                <div class="text-xs md:text-sm font-bold text-gray-600 mb-1 md:mb-2">목표 시간</div>
+                                <div class="text-2xl md:text-3xl font-black text-purple-600">
+                                    <span id="planTargetHours">0</span>시간
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 md:p-4 rounded-xl md:rounded-2xl border-2 border-green-200 text-center">
+                                <div class="text-xs md:text-sm font-bold text-gray-600 mb-1 md:mb-2">진행 시간</div>
+                                <div class="text-2xl md:text-3xl font-black text-green-600">
+                                    <span id="planProgressMinutes">0</span>분
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 md:p-4 rounded-xl md:rounded-2xl border-2 border-blue-200 text-center">
+                                <div class="text-xs md:text-sm font-bold text-gray-600 mb-1 md:mb-2">달성률</div>
+                                <div class="text-2xl md:text-3xl font-black text-blue-600">
+                                    <span id="planProgressPercent">0</span>%
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 진행률 바 -->
+                        <div class="mb-4 md:mb-6">
+                            <div class="w-full bg-gray-200 rounded-full h-4 md:h-6 overflow-hidden">
+                                <div id="planProgressBar" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs md:text-sm text-gray-600 mt-2 font-semibold text-center">
+                                <span id="planRemainingText">목표를 향해 달려가요! 💪</span>
+                            </p>
+                        </div>
+
+                        <button onclick="editDailyPlan()" class="w-full bg-gray-100 text-gray-700 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-gray-200 transition">
+                            <span class="text-base md:text-lg mr-1 md:mr-2">✏️</span>계획 수정하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 자율학습 기록 카드 -->
                 <div class="cute-card p-4 md:p-8 mb-4 md:mb-6">
                     <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                         <div class="text-2xl md:text-4xl">📘</div>

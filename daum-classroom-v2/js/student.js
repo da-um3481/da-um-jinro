@@ -9,7 +9,8 @@ const STORAGE_KEYS = {
     PLAN_CREATED_DATE: 'daum_v2_plan_created_date',
     PLAN_COLLAPSED: 'daum_v2_plan_collapsed',
     TIMETABLE: 'daum_v2_timetable',
-    REVIEW_STATUS: 'daum_v2_review_status'
+    REVIEW_STATUS: 'daum_v2_review_status',
+    DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan' // ⭐ 추가
 };
 
 // 현재 학생 정보
@@ -30,7 +31,10 @@ let currentEditingDay = '';
 let timetableData = {};
 
 // 테스트 모드 변수
-let testDayOverride = null; // null이면 실제 날짜 사용
+let testDayOverride = null;
+
+// 자율학습 계획 변수
+let selectedDailyStudyHours = 0; // null이면 실제 날짜 사용
 
 // 로그인
 function login() {
@@ -572,6 +576,7 @@ function saveJournal() {
     loadTodayClasses(); // 오늘의 수업 새로고침
     loadWeeklyStats(); // 주간 통계 새로고침
     loadLearningPatterns(); // 학습 패턴 새로고침
+    loadDailyStudyPlan(); // ⭐ 자율학습 계획 진행률 새로고침
 }
 
 // 학습 일지 목록 불러오기
@@ -1471,11 +1476,170 @@ function loadAllData() {
     loadJournals();
     loadMissions();
     loadMaterials();
-    loadQuestions();
     checkAndShowStudyHelper();
     loadTimetableView();
     loadTodayClasses();
     loadWeeklyStats(); // 주간 복습 통계 추가
     loadLearningPatterns(); // 학습 패턴 분석 추가
+    loadDailyStudyPlan(); // ⭐ 자율학습 계획 추가
+}
+
+// ========================================
+// 자율학습 계획 관련 함수들
+// ========================================
+
+// 오늘의 자율학습 계획 불러오기
+function getDailyStudyPlan() {
+    const plans = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_STUDY_PLAN) || '{}');
+    const today = new Date();
+    const dateKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    return plans[dateKey] || null;
+}
+
+// 오늘의 자율학습 계획 저장
+function saveDailyStudyPlanData(hours) {
+    const plans = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_STUDY_PLAN) || '{}');
+    const today = new Date();
+    const dateKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    
+    plans[dateKey] = {
+        targetHours: hours,
+        targetMinutes: hours * 60,
+        progressMinutes: 0,
+        createdAt: today.toISOString()
+    };
+    
+    localStorage.setItem(STORAGE_KEYS.DAILY_STUDY_PLAN, JSON.stringify(plans));
+}
+
+// 자율학습 진행 시간 업데이트
+function updateDailyPlanProgress(minutes) {
+    const plans = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_STUDY_PLAN) || '{}');
+    const today = new Date();
+    const dateKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    
+    if (plans[dateKey]) {
+        plans[dateKey].progressMinutes += minutes;
+        localStorage.setItem(STORAGE_KEYS.DAILY_STUDY_PLAN, JSON.stringify(plans));
+        loadDailyStudyPlan(); // 화면 업데이트
+    }
+}
+
+// 계획 폼 표시
+function showPlanForm() {
+    document.getElementById('noPlanYet').classList.add('hidden');
+    document.getElementById('planForm').classList.remove('hidden');
+}
+
+// 계획 폼 취소
+function cancelPlanForm() {
+    document.getElementById('planForm').classList.add('hidden');
+    document.getElementById('noPlanYet').classList.remove('hidden');
+    selectedDailyStudyHours = 0;
+    
+    // 모든 버튼 선택 해제
+    document.querySelectorAll('.study-plan-btn').forEach(btn => {
+        btn.classList.remove('border-purple-500', 'bg-purple-100');
+        btn.classList.add('border-gray-300', 'bg-white');
+    });
+}
+
+// 학습 시간 선택
+function selectStudyHours(hours) {
+    selectedDailyStudyHours = hours;
+    
+    // 모든 버튼 스타일 초기화
+    document.querySelectorAll('.study-plan-btn').forEach(btn => {
+        btn.classList.remove('border-purple-500', 'bg-purple-100');
+        btn.classList.add('border-gray-300', 'bg-white');
+    });
+    
+    // 선택된 버튼 스타일 변경
+    event.target.classList.remove('border-gray-300', 'bg-white');
+    event.target.classList.add('border-purple-500', 'bg-purple-100');
+}
+
+// 오늘의 자율학습 계획 저장
+function saveDailyPlan() {
+    if (selectedDailyStudyHours === 0) {
+        alert('학습 시간을 선택해주세요!');
+        return;
+    }
+    
+    saveDailyStudyPlanData(selectedDailyStudyHours);
+    alert(`✅ 오늘 ${selectedDailyStudyHours}시간 자율학습 계획이 저장되었습니다!\n\n목표를 향해 달려가요! 💪`);
+    
+    loadDailyStudyPlan();
+}
+
+// 계획 수정
+function editDailyPlan() {
+    const plan = getDailyStudyPlan();
+    if (plan) {
+        selectedDailyStudyHours = plan.targetHours;
+        document.getElementById('planDisplay').classList.add('hidden');
+        document.getElementById('planForm').classList.remove('hidden');
+        
+        // 기존 선택 시간 버튼 활성화
+        document.querySelectorAll('.study-plan-btn').forEach(btn => {
+            const hours = parseInt(btn.textContent);
+            if (hours === selectedDailyStudyHours) {
+                btn.classList.remove('border-gray-300', 'bg-white');
+                btn.classList.add('border-purple-500', 'bg-purple-100');
+            }
+        });
+    }
+}
+
+// 자율학습 계획 화면 로드
+function loadDailyStudyPlan() {
+    const plan = getDailyStudyPlan();
+    
+    if (!plan) {
+        // 계획 없음
+        document.getElementById('noPlanYet').classList.remove('hidden');
+        document.getElementById('planForm').classList.add('hidden');
+        document.getElementById('planDisplay').classList.add('hidden');
+        return;
+    }
+    
+    // 계획 있음 - 진행률 표시
+    document.getElementById('noPlanYet').classList.add('hidden');
+    document.getElementById('planForm').classList.add('hidden');
+    document.getElementById('planDisplay').classList.remove('hidden');
+    
+    // 오늘 자율학습일지에서 실제 진행 시간 계산
+    const journals = getJournals().filter(j => {
+        if (j.studentName !== currentStudent.name) return false;
+        const journalDate = new Date(j.date);
+        const today = new Date();
+        return journalDate.toDateString() === today.toDateString();
+    });
+    
+    const totalProgress = journals.reduce((sum, j) => sum + (j.studyTime || 0), 0);
+    const targetMinutes = plan.targetHours * 60;
+    const percentage = Math.min(Math.round((totalProgress / targetMinutes) * 100), 100);
+    
+    // UI 업데이트
+    document.getElementById('planTargetHours').textContent = plan.targetHours;
+    document.getElementById('planProgressMinutes').textContent = totalProgress;
+    document.getElementById('planProgressPercent').textContent = percentage;
+    document.getElementById('planProgressBar').style.width = `${percentage}%`;
+    
+    // 남은 시간 메시지
+    const remaining = targetMinutes - totalProgress;
+    let message = '';
+    if (percentage >= 100) {
+        message = '🎉 목표 달성! 정말 대단해요!';
+    } else if (remaining > 0) {
+        const remainingHours = Math.floor(remaining / 60);
+        const remainingMins = remaining % 60;
+        if (remainingHours > 0) {
+            message = `남은 시간: ${remainingHours}시간 ${remainingMins}분 💪`;
+        } else {
+            message = `남은 시간: ${remainingMins}분 💪`;
+        }
+    }
+    document.getElementById('planRemainingText').textContent = message;
 }
 
