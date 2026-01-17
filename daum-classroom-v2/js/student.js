@@ -8,7 +8,8 @@ const STORAGE_KEYS = {
     TIMETABLE: 'daum_v2_timetable',
     REVIEW_STATUS: 'daum_v2_review_status',
     DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan',
-    CUSTOM_SUBJECTS: 'daum_v2_custom_subjects'
+    CUSTOM_SUBJECTS: 'daum_v2_custom_subjects',
+    TIMER_STATE: 'daum_v2_timer_state' // 타이머 상태 저장
 };
 
 // 현재 학생 정보
@@ -60,6 +61,13 @@ function login() {
 
     loadAllData();
     loadSubjectOptions(); // 커스텀 과목 로드
+    
+    // 타이머 상태 복원
+    const restored = restoreTimerState();
+    if (restored) {
+        alert('⏱️ 이전에 진행 중이던 학습이 계속됩니다!');
+    }
+    
     showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
 }
 
@@ -82,6 +90,13 @@ window.addEventListener('DOMContentLoaded', () => {
     
         loadAllData();
         loadSubjectOptions(); // 커스텀 과목 로드
+        
+        // 타이머 상태 복원
+        const restored = restoreTimerState();
+        if (restored) {
+            console.log('타이머 상태가 복원되었습니다.');
+        }
+        
         showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
     }
 });
@@ -479,7 +494,14 @@ function startTimer() {
         timerElapsedSeconds = Math.floor((Date.now() - timerStartTime) / 1000);
         updateTimerDisplay();
         updateCurrentSubjectTime();
+        saveTimerState(); // 상태 저장
     }, 1000);
+    
+    // 학습 중 배지 표시
+    updateStudyingBadge();
+    
+    // 초기 상태 저장
+    saveTimerState();
 }
 
 // 현재 과목 시간 업데이트
@@ -608,6 +630,12 @@ function stopTimer() {
     
     // 목표 달성 체크
     checkStudyGoalAchievement(totalMinutes);
+    
+    // 상태 저장 (완료 상태로)
+    saveTimerState();
+    
+    // 학습 중 배지 숨기기
+    updateStudyingBadge();
 }
 
 // 타이머 리셋
@@ -622,6 +650,12 @@ function resetTimer() {
     studySessions = [];
     currentSessionStart = null;
     currentSessionSubject = null;
+    
+    // 상태 삭제
+    clearTimerState();
+    
+    // 학습 중 배지 숨기기
+    updateStudyingBadge();
     
     // UI 리셋
     document.getElementById('timerIdle').classList.remove('hidden');
@@ -1596,3 +1630,96 @@ function loadDailyStudyPlan() {
     document.getElementById('planRemainingText').textContent = message;
 }
 
+// 타이머 상태 저장
+function saveTimerState() {
+    if (!timerStartTime) return;
+    
+    const timerState = {
+        timerStartTime: timerStartTime,
+        studySessions: studySessions,
+        currentSessionSubject: currentSessionSubject,
+        currentSessionStart: currentSessionStart,
+        studentName: currentStudent ? currentStudent.name : null
+    };
+    
+    localStorage.setItem(STORAGE_KEYS.TIMER_STATE, JSON.stringify(timerState));
+}
+
+// 타이머 상태 복원
+function restoreTimerState() {
+    const savedState = localStorage.getItem(STORAGE_KEYS.TIMER_STATE);
+    if (!savedState) return false;
+    
+    try {
+        const state = JSON.parse(savedState);
+        
+        // 학생이 일치하는지 확인
+        if (!currentStudent || state.studentName !== currentStudent.name) {
+            return false;
+        }
+        
+        // 상태 복원
+        timerStartTime = state.timerStartTime;
+        studySessions = state.studySessions || [];
+        currentSessionSubject = state.currentSessionSubject;
+        currentSessionStart = state.currentSessionStart;
+        
+        // UI 전환
+        document.getElementById('timerIdle').classList.add('hidden');
+        document.getElementById('timerRunning').classList.remove('hidden');
+        document.getElementById('timerCompleted').classList.add('hidden');
+        
+        // 시작 시각 표시
+        const startTimeStr = new Date(timerStartTime).toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('startTime').textContent = startTimeStr;
+        
+        // 현재 과목 표시
+        if (currentSessionSubject) {
+            document.getElementById('currentStudySubject').textContent = getSubjectIcon(currentSessionSubject) + ' ' + currentSessionSubject;
+        }
+        
+        // 세션 목록 업데이트
+        updateStudySessionsList();
+        
+        // 타이머 재시작
+        timerInterval = setInterval(() => {
+            timerElapsedSeconds = Math.floor((Date.now() - timerStartTime) / 1000);
+            updateTimerDisplay();
+            updateCurrentSubjectTime();
+            saveTimerState(); // 주기적으로 저장
+        }, 1000);
+        
+        // 학습 중 배지 표시
+        updateStudyingBadge();
+        
+        return true;
+    } catch (e) {
+        console.error('타이머 상태 복원 실패:', e);
+        return false;
+    }
+}
+
+// 타이머 상태 삭제
+function clearTimerState() {
+    localStorage.removeItem(STORAGE_KEYS.TIMER_STATE);
+}
+
+// 학습 중 배지 업데이트
+function updateStudyingBadge() {
+    const badge = document.getElementById('studyingBadge');
+    if (timerInterval && timerStartTime) {
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+}
+
+// 학습 중 화면으로 이동
+function goToStudying() {
+    showTab('journal');
+    // 타이머 섹션으로 스크롤
+    document.getElementById('timerRunning').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}

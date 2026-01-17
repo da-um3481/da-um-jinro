@@ -122,6 +122,14 @@
             animation: wiggle 0.5s ease-in-out;
         }
         
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
         /* 과목별 색상 - 청색 기반 */
         .subject-korean { 
             background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
@@ -164,9 +172,15 @@
                     <p class="text-xs md:text-sm opacity-90 font-semibold" id="studentName">🌟 로그인하고 함께 공부해요!</p>
                 </div>
             </div>
-            <button onclick="logout()" class="bg-white text-blue-600 px-3 py-2 md:px-6 md:py-3 rounded-full hover:bg-yellow-100 transition cute-btn wiggle font-bold shadow-lg text-xs md:text-base">
-                <i class="fas fa-door-open mr-1 md:mr-2"></i><span class="hidden md:inline">안녕! </span>👋
-            </button>
+            <div class="flex items-center gap-2 md:gap-3">
+                <!-- 학습 중 버튼 (타이머 진행 중일 때만 표시) -->
+                <button id="studyingBadge" onclick="goToStudying()" class="hidden bg-gradient-to-r from-green-500 to-cyan-500 text-white px-3 py-2 md:px-4 md:py-3 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn font-black shadow-xl text-xs md:text-sm pulse-animation">
+                    <span class="text-base md:text-xl mr-1">🔥</span><span class="hidden md:inline">학습 중</span><span class="md:hidden">학습중</span>
+                </button>
+                <button onclick="logout()" class="bg-white text-blue-600 px-3 py-2 md:px-6 md:py-3 rounded-full hover:bg-yellow-100 transition cute-btn wiggle font-bold shadow-lg text-xs md:text-base">
+                    <i class="fas fa-door-open mr-1 md:mr-2"></i><span class="hidden md:inline">안녕! </span>👋
+                </button>
+            </div>
         </div>
     </header>
 
