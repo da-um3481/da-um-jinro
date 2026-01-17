@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진학상담 마스터 가이드 - DA.UM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 0;
+            border-bottom: 3px solid #3498db;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 100%;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #3498db;
+        }
+
+        .container {
+            max-width: 100%;
+            display: flex;
+            background: white;
+            min-height: calc(100vh - 45px);
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #ecf0f1;
+            border-right: 1px solid #bdc3c7;
+            padding: 10px;
+            overflow-y: auto;
+            position: sticky;
+            top: 45px;
+            height: calc(100vh - 45px);
+        }
+
+        .sidebar h3 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 15px 0 8px 0;
+            padding: 5px 8px;
+            background: #d5dbdb;
+            border-left: 3px solid #3498db;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin: 2px 0;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 4px 8px;
+            color: #555;
+            text-decoration: none;
+            font-size: 11px;
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .doc-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .doc-meta {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #7f8c8d;
+        }
+
+        /* 마크다운 콘텐츠 스타일 - 엑셀 보고서 느낌 */
+        #guideContent h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background: #2c3e50;
+            padding: 6px 10px;
+            margin: 20px 0 10px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        #guideContent h2 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            background: #ecf0f1;
+            padding: 5px 10px;
+            margin: 15px 0 8px 0;
+            border-left: 3px solid #e74c3c;
+        }
+
+        #guideContent h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #34495e;
+            margin: 12px 0 6px 0;
+            padding-left: 8px;
+            border-left: 3px solid #95a5a6;
+        }
+
+        #guideContent h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            margin: 10px 0 5px 0;
+        }
+
+        #guideContent p {
+            margin: 6px 0;
+            line-height: 1.6;
+        }
+
+        #guideContent pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 3px solid #3498db;
+            padding: 8px 10px;
+            margin: 8px 0;
+            overflow-x: auto;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        #guideContent code {
+            background: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            padding: 1px 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #e74c3c;
+            border-radius: 2px;
+        }
+
+        #guideContent pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #333;
+        }
+
+        #guideContent table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12px;
+            border: 1px solid #bdc3c7;
+        }
+
+        #guideContent table th {
+            background: #34495e;
+            color: white;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            border: 1px solid #2c3e50;
+        }
+
+        #guideContent table td {
+            padding: 5px 8px;
+            border: 1px solid #bdc3c7;
+            background: white;
+        }
+
+        #guideContent table tr:nth-child(even) td {
+            background: #f9f9f9;
+        }
+
+        #guideContent table tr:hover td {
+            background: #ecf0f1;
+        }
+
+        #guideContent blockquote {
+            border-left: 3px solid #f39c12;
+            background: #fef9e7;
+            padding: 8px 10px;
+            margin: 8px 0;
+            font-size: 12px;
+            color: #555;
+        }
+
+        #guideContent blockquote p {
+            margin: 4px 0;
+        }
+
+        #guideContent ul,
+        #guideContent ol {
+            margin: 6px 0;
+            padding-left: 25px;
+        }
+
+        #guideContent li {
+            margin: 3px 0;
+            line-height: 1.5;
+        }
+
+        #guideContent strong {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        #guideContent em {
+            font-style: italic;
+            color: #555;
+        }
+
+        #guideContent hr {
+            border: none;
+            border-top: 1px solid #bdc3c7;
+            margin: 15px 0;
+        }
+
+        .info-box {
+            background: #d5f4e6;
+            border: 1px solid #2ecc71;
+            border-left: 4px solid #2ecc71;
+            padding: 8px 10px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+
+        .warning-box {
+            background: #fef5e7;
+            border: 1px solid #f39c12;
+            border-left: 4px solid #f39c12;
+            padding: 8px 10px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .scroll-top:hover {
+            background: #2980b9;
+        }
+
+        .scroll-top.visible {
+            display: flex;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #3498db;
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+
+        /* 프린트 스타일 */
+        @media print {
+            .header,
+            .sidebar,
+            .scroll-top,
+            .progress-bar {
+                display: none;
+            }
+
+            .container {
+                display: block;
+            }
+
+            .main-content {
+                padding: 0;
+            }
+
+            #guideContent h1 {
+                page-break-before: always;
+            }
+
+            #guideContent h1:first-of-type {
+                page-break-before: avoid;
+            }
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">📊 DA.UM 진학상담 - 마스터 가이드</div>
+            <div class="nav">
+                <a href="index.html">홈</a>
+                <a href="student-management.html">학생관리</a>
+                <a href="university-info.html">대학정보</a>
+                <a href="admission-types.html">전형안내</a>
+                <a href="guide.html" class="active">가이드</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>📑 PART 1. 입시 기초</h3>
+            <ul>
+                <li><a href="#1-대학입시의-구조">1. 대학입시 구조</a></li>
+                <li><a href="#2-4대-전형-완전-정복">2. 4대 전형 정복</a></li>
+                <li><a href="#3-학생부의-모든-것">3. 학생부</a></li>
+                <li><a href="#4-수능-최저학력기준">4. 수능 최저</a></li>
+            </ul>
+
+            <h3>📑 PART 2. 실전 상담</h3>
+            <ul>
+                <li><a href="#5-첫-상담-40분-가이드">5. 40분 가이드</a></li>
+                <li><a href="#6-학년별-맞춤-상담법">6. 학년별 상담</a></li>
+                <li><a href="#7-전형별-전략-수립">7. 전형별 전략</a></li>
+                <li><a href="#8-위기관리-상담법">8. 위기관리</a></li>
+            </ul>
+
+            <h3>📑 PART 3. 시스템 활용</h3>
+            <ul>
+                <li><a href="#9-시스템-완전-활용법">9. 시스템 활용</a></li>
+                <li><a href="#10-자동-진단-해석">10. 진단 해석</a></li>
+                <li><a href="#11-상담-시나리오-100선">11. 시나리오 100선</a></li>
+            </ul>
+
+            <h3>📑 PART 4. 고급 테크닉</h3>
+            <ul>
+                <li><a href="#12-대학별-숨겨진-팁">12. 대학별 팁</a></li>
+                <li><a href="#13-합격-사례-분석">13. 합격 사례</a></li>
+                <li><a href="#14-상담사-자가-점검">14. 자가 점검</a></li>
+            </ul>
+
+            <div style="margin-top: 15px; padding: 8px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 3px; font-size: 11px;">
+                <strong>💡 Tip</strong><br>
+                Ctrl+F로 검색 가능<br>
+                Ctrl+P로 인쇄/PDF 저장
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="doc-title">진학상담 마스터 가이드 (완전판)</div>
+            <div class="doc-meta">
+                📅 버전 1.0 | 2026년 1월 | DA.UM 진학상담 연구소 | 
+                4개 파트, 14개 챕터, 100+ 시나리오, 36,000+ 글자
+            </div>
+
+            <div class="loading" id="loading">
+                ⏳ 가이드를 불러오는 중...
+            </div>
+
+            <div id="guideContent" style="display: none;">
+                <!-- 마크다운 내용이 여기에 렌더링됩니다 -->
+            </div>
+        </main>
+    </div>
+
+    <button class="scroll-top" id="scrollTop">↑</button>
+
+    <script>
+        // 마크다운 로드 및 렌더링
+        async function loadGuide() {
+            try {
+                const response = await fetch('MASTER_COUNSELOR_GUIDE.md');
+                const markdown = await response.text();
+                
+                // 마크다운을 HTML로 변환
+                const html = marked.parse(markdown);
+                
+                // 콘텐츠 삽입
+                document.getElementById('guideContent').innerHTML = html;
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('guideContent').style.display = 'block';
+                
+                // 목차 링크 스무스 스크롤
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href').substring(1);
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            const headerOffset = 60;
+                            const elementPosition = target.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                            
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+                
+            } catch (error) {
+                console.error('가이드 로딩 실패:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #e74c3c; padding: 20px; border: 1px solid #e74c3c; background: #fadbd8;">
+                        <strong>❌ 오류</strong><br>
+                        가이드를 불러올 수 없습니다: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 진행률 바 업데이트
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        }
+
+        // 맨 위로 버튼
+        function toggleScrollButton() {
+            const btn = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }
+
+        document.getElementById('scrollTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 이벤트 리스너
+        window.addEventListener('scroll', () => {
+            updateProgressBar();
+            toggleScrollButton();
+        });
+
+        // 페이지 로드
+        window.addEventListener('DOMContentLoaded', loadGuide);
+
+        // 키보드 단축키
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Home: 맨 위로
+            if (e.ctrlKey && e.key === 'Home') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
