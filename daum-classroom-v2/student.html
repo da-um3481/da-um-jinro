@@ -230,85 +230,85 @@
             </div>
 
             <!-- 학습 시작 도우미 모달 -->
-            <div id="studyHelperModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4" onclick="if(event.target === this) closeStudyHelperModal()">
-                <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div id="studyHelperModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-2 md:p-4" onclick="if(event.target === this) closeStudyHelperModal()">
+                <div class="bg-white rounded-2xl md:rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                     <!-- 모달 헤더 -->
-                    <div class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white p-8 rounded-t-3xl sticky top-0" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
+                    <div class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white p-4 md:p-8 rounded-t-2xl md:rounded-t-3xl sticky top-0" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
                         <div class="flex justify-between items-start">
                             <div>
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="text-5xl bounce">🔮</div>
-                                    <h2 class="text-4xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">학습 마법사 ✨</h2>
+                                <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                                    <div class="text-3xl md:text-5xl bounce">🔮</div>
+                                    <h2 class="text-2xl md:text-4xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">학습 마법사 ✨</h2>
                                 </div>
-                                <p class="text-lg opacity-90 ml-1 font-semibold">🌟 일주일 학습 계획을 마법처럼 만들어드릴게요!</p>
+                                <p class="text-sm md:text-lg opacity-90 ml-1 font-semibold">🌟 일주일 학습 계획을 마법처럼 만들어드릴게요!</p>
                             </div>
-                            <button onclick="closeStudyHelperModal()" class="text-white hover:bg-white hover:bg-opacity-30 rounded-full w-12 h-12 flex items-center justify-center transition ml-4 wiggle text-2xl font-bold">
+                            <button onclick="closeStudyHelperModal()" class="text-white hover:bg-white hover:bg-opacity-30 rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center transition ml-2 md:ml-4 wiggle text-xl md:text-2xl font-bold flex-shrink-0">
                                 ❌
                             </button>
                         </div>
                     </div>
 
                     <!-- 모달 바디 -->
-                    <div class="p-8">
-                        <div class="mb-8">
-                            <label class="block text-2xl font-black mb-4 text-dark">🕰️ 오늘 몇 시간 공부할 수 있나요?</label>
-                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                                <button onclick="selectStudyHours(2)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-blue-400">
-                                    <div class="text-4xl mb-1">🐰</div>
-                                    <div class="text-4xl font-black text-dark">2</div>
-                                    <div class="text-sm font-bold text-gray">시간</div>
+                    <div class="p-4 md:p-8">
+                        <div class="mb-6 md:mb-8">
+                            <label class="block text-lg md:text-2xl font-black mb-3 md:mb-4 text-dark">🕰️ 오늘 몇 시간 공부할 수 있나요?</label>
+                            <div class="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
+                                <button onclick="selectStudyHours(2)" class="study-hour-btn px-3 py-4 md:px-6 md:py-6 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl transition cute-btn bg-white hover:border-blue-400">
+                                    <div class="text-2xl md:text-4xl mb-1">🐰</div>
+                                    <div class="text-2xl md:text-4xl font-black text-dark">2</div>
+                                    <div class="text-xs md:text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(3)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-blue-400">
-                                    <div class="text-4xl mb-1">🦊</div>
-                                    <div class="text-4xl font-black text-dark">3</div>
-                                    <div class="text-sm font-bold text-gray">시간</div>
+                                <button onclick="selectStudyHours(3)" class="study-hour-btn px-3 py-4 md:px-6 md:py-6 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl transition cute-btn bg-white hover:border-blue-400">
+                                    <div class="text-2xl md:text-4xl mb-1">🦊</div>
+                                    <div class="text-2xl md:text-4xl font-black text-dark">3</div>
+                                    <div class="text-xs md:text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(4)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-blue-400">
-                                    <div class="text-4xl mb-1">🐻</div>
-                                    <div class="text-4xl font-black text-dark">4</div>
-                                    <div class="text-sm font-bold text-gray">시간</div>
+                                <button onclick="selectStudyHours(4)" class="study-hour-btn px-3 py-4 md:px-6 md:py-6 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl transition cute-btn bg-white hover:border-blue-400">
+                                    <div class="text-2xl md:text-4xl mb-1">🐻</div>
+                                    <div class="text-2xl md:text-4xl font-black text-dark">4</div>
+                                    <div class="text-xs md:text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(5)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-blue-400">
-                                    <div class="text-4xl mb-1">🦁</div>
-                                    <div class="text-4xl font-black text-dark">5</div>
-                                    <div class="text-sm font-bold text-gray">시간</div>
+                                <button onclick="selectStudyHours(5)" class="study-hour-btn px-3 py-4 md:px-6 md:py-6 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl transition cute-btn bg-white hover:border-blue-400">
+                                    <div class="text-2xl md:text-4xl mb-1">🦁</div>
+                                    <div class="text-2xl md:text-4xl font-black text-dark">5</div>
+                                    <div class="text-xs md:text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(6)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-blue-400">
-                                    <div class="text-4xl mb-1">🐼</div>
-                                    <div class="text-4xl font-black text-dark">6</div>
-                                    <div class="text-sm font-bold text-gray">시간</div>
+                                <button onclick="selectStudyHours(6)" class="study-hour-btn px-3 py-4 md:px-6 md:py-6 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl transition cute-btn bg-white hover:border-blue-400">
+                                    <div class="text-2xl md:text-4xl mb-1">🐼</div>
+                                    <div class="text-2xl md:text-4xl font-black text-dark">6</div>
+                                    <div class="text-xs md:text-sm font-bold text-gray">시간</div>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="mb-8">
-                            <label class="block text-2xl font-black mb-4 text-dark">🎓 집중하고 싶은 과목은? (선택사항)</label>
-                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div class="mb-6 md:mb-8">
+                            <label class="block text-lg md:text-2xl font-black mb-3 md:mb-4 text-dark">🎓 집중하고 싶은 과목은? (선택사항)</label>
+                            <div class="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="국어" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
-                                        <div class="text-3xl mb-2">🌸</div>
-                                        <div class="font-black text-lg text-dark">국어</div>
+                                    <div class="px-2 py-3 md:px-4 md:py-4 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
+                                        <div class="text-2xl md:text-3xl mb-1 md:mb-2">🌸</div>
+                                        <div class="font-black text-sm md:text-lg text-dark">국어</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="영어" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
-                                        <div class="text-3xl mb-2">🌍</div>
-                                        <div class="font-black text-lg text-dark">영어</div>
+                                    <div class="px-2 py-3 md:px-4 md:py-4 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
+                                        <div class="text-2xl md:text-3xl mb-1 md:mb-2">🌍</div>
+                                        <div class="font-black text-sm md:text-lg text-dark">영어</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="수학" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
-                                        <div class="text-3xl mb-2">🧮</div>
-                                        <div class="font-black text-lg text-dark">수학</div>
+                                    <div class="px-2 py-3 md:px-4 md:py-4 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
+                                        <div class="text-2xl md:text-3xl mb-1 md:mb-2">🧮</div>
+                                        <div class="font-black text-sm md:text-lg text-dark">수학</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="과학" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
-                                        <div class="text-3xl mb-2">🔬</div>
+                                    <div class="px-2 py-3 md:px-4 md:py-4 border-2 md:border-3 border-gray-300 rounded-2xl md:rounded-3xl text-center transition cute-btn bg-white hover:border-blue-400">
+                                        <div class="text-2xl md:text-3xl mb-1 md:mb-2">🔬</div>
                                         <div class="font-black text-lg text-dark">과학</div>
                                     </div>
                                 </label>
@@ -607,72 +607,72 @@
     </div>
 
     <!-- 시간표 입력 모달 -->
-    <div id="timetableModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4" onclick="if(event.target === this) closeTimetableModal()">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div id="timetableModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-2 md:p-4" onclick="if(event.target === this) closeTimetableModal()">
+        <div class="bg-white rounded-2xl md:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <!-- 모달 헤더 -->
-            <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-teal-600 text-white p-8 rounded-t-3xl sticky top-0" style="border-bottom: 4px solid rgba(6, 182, 212, 0.5);">
+            <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-teal-600 text-white p-4 md:p-8 rounded-t-2xl md:rounded-t-3xl sticky top-0" style="border-bottom: 4px solid rgba(6, 182, 212, 0.5);">
                 <div class="flex justify-between items-start">
                     <div>
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="text-5xl bounce">📅</div>
-                            <h2 class="text-4xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">시간표 입력 ✨</h2>
+                        <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                            <div class="text-3xl md:text-5xl bounce">📅</div>
+                            <h2 class="text-2xl md:text-4xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">시간표 입력 ✨</h2>
                         </div>
-                        <p class="text-lg opacity-90 ml-1 font-semibold">🌊 요일별로 수업 시간표를 입력해주세요!</p>
+                        <p class="text-sm md:text-lg opacity-90 ml-1 font-semibold">🌊 요일별로 수업 시간표를 입력해주세요!</p>
                     </div>
-                    <button onclick="closeTimetableModal()" class="text-white hover:bg-white hover:bg-opacity-30 rounded-full w-12 h-12 flex items-center justify-center transition ml-4 wiggle text-2xl font-bold">
+                    <button onclick="closeTimetableModal()" class="text-white hover:bg-white hover:bg-opacity-30 rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center transition ml-2 md:ml-4 wiggle text-xl md:text-2xl font-bold flex-shrink-0">
                         ❌
                     </button>
                 </div>
             </div>
 
             <!-- 모달 바디 -->
-            <div class="p-8">
-                <div class="mb-6">
-                    <label class="block text-xl font-black mb-4 text-dark">📆 요일 선택</label>
-                    <div class="grid grid-cols-7 gap-3">
-                        <button onclick="selectDay('월')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
+            <div class="p-4 md:p-8">
+                <div class="mb-4 md:mb-6">
+                    <label class="block text-base md:text-xl font-black mb-3 md:mb-4 text-dark">📆 요일 선택</label>
+                    <div class="grid grid-cols-7 gap-1 md:gap-3">
+                        <button onclick="selectDay('월')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-gray-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-blue-400 transition bg-white text-dark">
                             월
                         </button>
-                        <button onclick="selectDay('화')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
+                        <button onclick="selectDay('화')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-gray-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-blue-400 transition bg-white text-dark">
                             화
                         </button>
-                        <button onclick="selectDay('수')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
+                        <button onclick="selectDay('수')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-gray-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-blue-400 transition bg-white text-dark">
                             수
                         </button>
-                        <button onclick="selectDay('목')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
+                        <button onclick="selectDay('목')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-gray-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-blue-400 transition bg-white text-dark">
                             목
                         </button>
-                        <button onclick="selectDay('금')" class="day-btn px-4 py-3 border-3 border-gray-300 rounded-2xl font-black text-lg hover:border-blue-400 transition bg-white text-dark">
+                        <button onclick="selectDay('금')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-gray-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-blue-400 transition bg-white text-dark">
                             금
                         </button>
-                        <button onclick="selectDay('토')" class="day-btn px-4 py-3 border-3 border-orange-300 rounded-2xl font-black text-lg hover:border-orange-500 transition bg-orange-50 text-dark">
+                        <button onclick="selectDay('토')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-orange-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-orange-500 transition bg-orange-50 text-dark">
                             토
                         </button>
-                        <button onclick="selectDay('일')" class="day-btn px-4 py-3 border-3 border-red-300 rounded-2xl font-black text-lg hover:border-red-500 transition bg-red-50 text-dark">
+                        <button onclick="selectDay('일')" class="day-btn px-2 py-2 md:px-4 md:py-3 border-2 md:border-3 border-red-300 rounded-lg md:rounded-2xl font-black text-xs md:text-lg hover:border-red-500 transition bg-red-50 text-dark">
                             일
                         </button>
                     </div>
-                    <p class="text-sm text-gray-600 mt-2 font-semibold">💡 주말에는 보충수업, 학원 수업 등을 입력할 수 있어요!</p>
+                    <p class="text-xs md:text-sm text-gray-600 mt-2 font-semibold">💡 주말에는 보충수업, 학원 수업 등을 입력할 수 있어요!</p>
                 </div>
 
                 <div id="dayScheduleForm" class="hidden">
-                    <div class="mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <label class="block text-xl font-black text-dark" id="selectedDayLabel">📚 월요일 시간표</label>
-                            <button onclick="addPeriod()" class="bg-gradient-to-r from-green-500 to-cyan-500 text-white px-4 py-2 rounded-full font-bold text-sm cute-btn shadow-lg">
+                    <div class="mb-4 md:mb-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 md:mb-4 gap-2">
+                            <label class="block text-base md:text-xl font-black text-dark" id="selectedDayLabel">📚 월요일 시간표</label>
+                            <button onclick="addPeriod()" class="bg-gradient-to-r from-green-500 to-cyan-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-sm cute-btn shadow-lg w-full md:w-auto">
                                 ➕ 교시 추가
                             </button>
                         </div>
-                        <div id="periodsList" class="space-y-3">
+                        <div id="periodsList" class="space-y-2 md:space-y-3">
                             <!-- 동적으로 생성됨 -->
                         </div>
                     </div>
 
-                    <div class="flex gap-3">
-                        <button onclick="saveTimetable()" class="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white py-4 rounded-full hover:from-blue-700 hover:to-teal-600 transition cute-btn font-black text-xl shadow-xl">
-                            <span class="text-2xl mr-2">💾</span>저장하기
+                    <div class="flex flex-col md:flex-row gap-2 md:gap-3">
+                        <button onclick="saveTimetable()" class="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white py-3 md:py-4 rounded-full hover:from-blue-700 hover:to-teal-600 transition cute-btn font-black text-base md:text-xl shadow-xl">
+                            <span class="text-xl md:text-2xl mr-2">💾</span>저장하기
                         </button>
-                        <button onclick="clearDaySchedule()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-4 rounded-full hover:from-red-600 hover:to-pink-600 transition cute-btn font-black shadow-lg">
+                        <button onclick="clearDaySchedule()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 md:px-6 py-3 md:py-4 rounded-full hover:from-red-600 hover:to-pink-600 transition cute-btn font-black shadow-lg text-base md:text-lg">
                             🗑️ 초기화
                         </button>
                     </div>

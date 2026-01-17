@@ -554,7 +554,21 @@ function saveJournal() {
     uploadedPhotos = [];
     resetTimer();
 
-    alert('✅ 학습 기록이 저장되었습니다!');
+    // 학습 시간에 따른 격려 메시지
+    let encourageMessage = '';
+    if (studyTime >= 60) {
+        encourageMessage = '\n\n🏆 와! 1시간 이상 공부했어요! 정말 대단해요!';
+    } else if (studyTime >= 30) {
+        encourageMessage = '\n\n💪 30분 이상 집중했네요! 멋져요!';
+    } else if (studyTime >= 15) {
+        encourageMessage = '\n\n✨ 15분 집중! 좋은 시작이에요!';
+    } else if (studyTime >= 5) {
+        encourageMessage = '\n\n👍 조금씩이라도 꾸준히 하는 게 중요해요!';
+    } else {
+        encourageMessage = '\n\n🌱 작은 시작도 소중해요! 다음엔 더 오래 해볼까요?';
+    }
+
+    alert(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`);
     loadJournals();
     loadTodayClasses(); // 오늘의 수업 새로고침
 }
