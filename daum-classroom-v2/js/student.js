@@ -7,7 +7,9 @@ const STORAGE_KEYS = {
     QUESTIONS: 'daum_v2_questions',
     WEEKLY_PLAN: 'daum_v2_weekly_plan',
     PLAN_CREATED_DATE: 'daum_v2_plan_created_date',
-    PLAN_COLLAPSED: 'daum_v2_plan_collapsed'
+    PLAN_COLLAPSED: 'daum_v2_plan_collapsed',
+    TIMETABLE: 'daum_v2_timetable',
+    REVIEW_STATUS: 'daum_v2_review_status'
 };
 
 // 현재 학생 정보
@@ -23,6 +25,11 @@ let timerElapsedSeconds = 0;
 // 사진 업로드 변수
 let uploadedPhotos = [];
 let questionPhoto = null;
+
+// 시간표 관련 변수
+let currentEditingDay = '';
+let timetableData = {};
+let timetableData = {};
 
 // 로그인
 function login() {
@@ -534,6 +541,9 @@ function saveJournal() {
     journals.unshift(journal);
     localStorage.setItem(STORAGE_KEYS.JOURNALS, JSON.stringify(journals));
 
+    // 복습 상태 업데이트
+    updateReviewStatus(subject, studyTime);
+
     // 폼 초기화
     document.getElementById('content').value = '';
     document.getElementById('memo').value = '';
@@ -544,6 +554,7 @@ function saveJournal() {
 
     alert('✅ 학습 기록이 저장되었습니다!');
     loadJournals();
+    loadTodayClasses(); // 오늘의 수업 새로고침
 }
 
 // 학습 일지 목록 불러오기
@@ -871,3 +882,359 @@ function loadAllData() {
     loadMaterials();
     loadQuestions();
 }
+
+// ========================================
+// 시간표 관련 함수들
+// ========================================
+
+// 시간표 불러오기
+function getTimetable() {
+    const data = localStorage.getItem(STORAGE_KEYS.TIMETABLE);
+    return data ? JSON.parse(data) : {};
+}
+
+// 시간표 저장
+function saveTimetableData(data) {
+    localStorage.setItem(STORAGE_KEYS.TIMETABLE, JSON.stringify(data));
+}
+
+// 복습 상태 불러오기
+function getReviewStatus() {
+    const data = localStorage.getItem(STORAGE_KEYS.REVIEW_STATUS);
+    return data ? JSON.parse(data) : {};
+}
+
+// 복습 상태 저장
+function saveReviewStatus(data) {
+    localStorage.setItem(STORAGE_KEYS.REVIEW_STATUS, JSON.stringify(data));
+}
+
+// 시간표 입력 모달 열기
+function showTimetableInputModal() {
+    document.getElementById('timetableModal').classList.remove('hidden');
+    document.getElementById('timetableModal').classList.add('flex');
+    timetableData = getTimetable();
+}
+
+// 시간표 입력 모달 닫기
+function closeTimetableModal() {
+    document.getElementById('timetableModal').classList.add('hidden');
+    document.getElementById('timetableModal').classList.remove('flex');
+    document.getElementById('dayScheduleForm').classList.add('hidden');
+    currentEditingDay = '';
+}
+
+// 요일 선택
+function selectDay(day) {
+    currentEditingDay = day;
+    
+    // 모든 요일 버튼 스타일 초기화
+    document.querySelectorAll('.day-btn').forEach(btn => {
+        btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-teal-500', 'text-white');
+        btn.classList.add('bg-white', 'text-dark');
+    });
+    
+    // 선택된 버튼 스타일 변경
+    event.target.classList.remove('bg-white', 'text-dark');
+    event.target.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-teal-500', 'text-white');
+    
+    // 폼 표시
+    document.getElementById('dayScheduleForm').classList.remove('hidden');
+    document.getElementById('selectedDayLabel').textContent = `📚 ${day}요일 시간표`;
+    
+    // 기존 시간표 불러오기
+    loadDaySchedule(day);
+}
+
+// 해당 요일의 시간표 불러오기
+function loadDaySchedule(day) {
+    const periodsList = document.getElementById('periodsList');
+    periodsList.innerHTML = '';
+    
+    const daySchedule = timetableData[day] || [];
+    
+    if (daySchedule.length === 0) {
+        // 기본 1교시 추가
+        addPeriodRow(1, '', '');
+    } else {
+        daySchedule.forEach((period, index) => {
+            addPeriodRow(index + 1, period.time, period.subject);
+        });
+    }
+}
+
+// 교시 추가
+function addPeriod() {
+    const periodsList = document.getElementById('periodsList');
+    const currentCount = periodsList.children.length;
+    addPeriodRow(currentCount + 1, '', '');
+}
+
+// 교시 행 추가
+function addPeriodRow(periodNum, time, subject) {
+    const periodsList = document.getElementById('periodsList');
+    const periodDiv = document.createElement('div');
+    periodDiv.className = 'flex gap-3 items-center bg-gray-50 p-4 rounded-2xl border-2 border-gray-200';
+    periodDiv.innerHTML = `
+        <div class="font-black text-lg text-dark w-16">${periodNum}교시</div>
+        <input type="time" value="${time}" class="period-time flex-1 px-4 py-2 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-semibold text-dark" placeholder="시작 시간">
+        <select class="period-subject flex-1 px-4 py-2 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-bold text-dark">
+            <option value="">과목 선택</option>
+            <option value="국어" ${subject === '국어' ? 'selected' : ''}>🌸 국어</option>
+            <option value="영어" ${subject === '영어' ? 'selected' : ''}>🌍 영어</option>
+            <option value="수학" ${subject === '수학' ? 'selected' : ''}>🧮 수학</option>
+            <option value="과학" ${subject === '과학' ? 'selected' : ''}>🔬 과학</option>
+            <option value="사회" ${subject === '사회' ? 'selected' : ''}>🗺️ 사회</option>
+            <option value="음악" ${subject === '음악' ? 'selected' : ''}>🎵 음악</option>
+            <option value="미술" ${subject === '미술' ? 'selected' : ''}>🎨 미술</option>
+            <option value="체육" ${subject === '체육' ? 'selected' : ''}>⚽ 체육</option>
+            <option value="기타" ${subject === '기타' ? 'selected' : ''}>🎯 기타</option>
+        </select>
+        <button onclick="removePeriod(this)" class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition font-bold">
+            🗑️
+        </button>
+    `;
+    periodsList.appendChild(periodDiv);
+}
+
+// 교시 삭제
+function removePeriod(button) {
+    button.parentElement.remove();
+    
+    // 교시 번호 재정렬
+    const periods = document.querySelectorAll('#periodsList > div');
+    periods.forEach((period, index) => {
+        period.querySelector('.font-black').textContent = `${index + 1}교시`;
+    });
+}
+
+// 해당 요일 시간표 초기화
+function clearDaySchedule() {
+    if (confirm(`${currentEditingDay}요일 시간표를 모두 삭제하시겠습니까?`)) {
+        document.getElementById('periodsList').innerHTML = '';
+        addPeriodRow(1, '', '');
+    }
+}
+
+// 시간표 저장
+function saveTimetable() {
+    if (!currentEditingDay) {
+        alert('요일을 선택해주세요!');
+        return;
+    }
+    
+    const periods = [];
+    const periodElements = document.querySelectorAll('#periodsList > div');
+    
+    periodElements.forEach(element => {
+        const time = element.querySelector('.period-time').value;
+        const subject = element.querySelector('.period-subject').value;
+        
+        if (time && subject) {
+            periods.push({ time, subject });
+        }
+    });
+    
+    if (periods.length === 0) {
+        alert('최소 1개 이상의 수업을 입력해주세요!');
+        return;
+    }
+    
+    timetableData[currentEditingDay] = periods;
+    saveTimetableData(timetableData);
+    
+    alert(`${currentEditingDay}요일 시간표가 저장되었습니다! ✨`);
+    loadTimetableView();
+}
+
+// 시간표 전체 보기
+function loadTimetableView() {
+    const timetableView = document.getElementById('timetableView');
+    const timetable = getTimetable();
+    
+    if (Object.keys(timetable).length === 0) {
+        timetableView.innerHTML = `
+            <div class="text-center py-12">
+                <div class="text-6xl mb-4">📅</div>
+                <p class="text-xl font-bold text-gray mb-4">아직 시간표가 없어요!</p>
+                <p class="text-md font-semibold text-gray">위의 버튼을 눌러 시간표를 입력해주세요 😊</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const days = ['월', '화', '수', '목', '금'];
+    let html = '<div class="grid md:grid-cols-5 gap-4">';
+    
+    days.forEach(day => {
+        const daySchedule = timetable[day] || [];
+        html += `
+            <div class="cute-card p-4 hover:shadow-xl transition">
+                <h4 class="text-lg font-black text-dark mb-3 text-center">${day}요일</h4>
+                <div class="space-y-2">
+        `;
+        
+        if (daySchedule.length === 0) {
+            html += `<p class="text-sm text-gray text-center py-4">수업 없음</p>`;
+        } else {
+            daySchedule.forEach((period, index) => {
+                const subjectColor = getSubjectColor(period.subject);
+                html += `
+                    <div class="bg-gradient-to-r ${subjectColor} text-white p-3 rounded-xl text-center">
+                        <div class="text-xs font-semibold opacity-90">${index + 1}교시 · ${period.time}</div>
+                        <div class="text-md font-black">${period.subject}</div>
+                    </div>
+                `;
+            });
+        }
+        
+        html += `
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    timetableView.innerHTML = html;
+}
+
+// 과목별 색상 반환
+function getSubjectColor(subject) {
+    const colors = {
+        '국어': 'from-blue-500 to-cyan-500',
+        '영어': 'from-sky-500 to-cyan-500',
+        '수학': 'from-blue-700 to-blue-500',
+        '과학': 'from-teal-600 to-teal-400',
+        '사회': 'from-cyan-600 to-cyan-400',
+        '음악': 'from-purple-500 to-pink-500',
+        '미술': 'from-pink-500 to-rose-500',
+        '체육': 'from-orange-500 to-yellow-500'
+    };
+    return colors[subject] || 'from-gray-500 to-gray-400';
+}
+
+// 오늘의 수업 불러오기
+function loadTodayClasses() {
+    const today = new Date();
+    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+    const todayDayName = dayNames[today.getDay()];
+    
+    // 오늘 날짜 표시
+    const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 ${todayDayName}요일`;
+    document.getElementById('todayDate').textContent = dateStr;
+    
+    const timetable = getTimetable();
+    const todaySchedule = timetable[todayDayName] || [];
+    const reviewStatus = getReviewStatus();
+    const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    const todayReviews = reviewStatus[todayKey] || {};
+    
+    const todayClassList = document.getElementById('todayClassList');
+    
+    if (todaySchedule.length === 0) {
+        todayClassList.innerHTML = `
+            <div class="text-center py-12">
+                <div class="text-6xl mb-4">😊</div>
+                <p class="text-xl font-bold text-gray mb-4">오늘은 수업이 없어요!</p>
+                <p class="text-md font-semibold text-gray">또는 시간표 탭에서 시간표를 입력해주세요 📅</p>
+            </div>
+        `;
+        document.getElementById('todayTotalClasses').textContent = '0';
+        document.getElementById('todayCompletedReviews').textContent = '0';
+        document.getElementById('todayTotalReviewTime').textContent = '0분';
+        return;
+    }
+    
+    // 통계 계산
+    let completedCount = 0;
+    let totalReviewTime = 0;
+    
+    let html = '';
+    todaySchedule.forEach((period, index) => {
+        const isCompleted = todayReviews[period.subject] || false;
+        const reviewTime = todayReviews[`${period.subject}_time`] || 0;
+        
+        if (isCompleted) completedCount++;
+        totalReviewTime += reviewTime;
+        
+        const subjectColor = getSubjectColor(period.subject);
+        const statusIcon = isCompleted ? '✅' : '⏳';
+        const statusText = isCompleted ? '복습 완료!' : '복습 필요';
+        const statusColor = isCompleted ? 'bg-green-50 border-green-300' : 'bg-yellow-50 border-yellow-300';
+        
+        html += `
+            <div class="cute-card p-6 ${statusColor} border-2">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <div class="text-sm font-bold text-gray mb-1">${index + 1}교시 · ${period.time}</div>
+                        <div class="flex items-center gap-2">
+                            <div class="text-2xl font-black text-dark">${period.subject}</div>
+                            <div class="text-2xl">${statusIcon}</div>
+                        </div>
+                        <div class="text-sm font-semibold mt-1 ${isCompleted ? 'text-green-600' : 'text-yellow-600'}">
+                            ${statusText} ${reviewTime > 0 ? `(${reviewTime}분)` : ''}
+                        </div>
+                    </div>
+                    <button onclick="startReview('${period.subject}')" class="bg-gradient-to-r ${subjectColor} text-white px-6 py-3 rounded-full hover:shadow-lg transition cute-btn font-black">
+                        ${isCompleted ? '다시 복습 🔄' : '복습 시작 📖'}
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    todayClassList.innerHTML = html;
+    
+    // 통계 업데이트
+    document.getElementById('todayTotalClasses').textContent = todaySchedule.length;
+    document.getElementById('todayCompletedReviews').textContent = completedCount;
+    document.getElementById('todayTotalReviewTime').textContent = `${totalReviewTime}분`;
+}
+
+// 복습 시작
+function startReview(subject) {
+    // 학습 일지 탭으로 이동
+    showTab('journal');
+    
+    // 과목 자동 선택
+    document.getElementById('subject').value = subject;
+    
+    // 타이머 자동 시작 (선택사항)
+    if (confirm(`${subject} 복습을 시작하시겠습니까?\n타이머가 자동으로 시작됩니다! ⏱️`)) {
+        startTimer();
+        alert(`✨ ${subject} 복습 시작!\n집중해서 공부해볼까요? 💪`);
+    }
+}
+
+// 복습 상태 업데이트
+function updateReviewStatus(subject, studyTime) {
+    const today = new Date();
+    const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    
+    const reviewStatus = getReviewStatus();
+    
+    if (!reviewStatus[todayKey]) {
+        reviewStatus[todayKey] = {};
+    }
+    
+    // 해당 과목 복습 완료 표시
+    reviewStatus[todayKey][subject] = true;
+    
+    // 복습 시간 누적
+    const currentTime = reviewStatus[todayKey][`${subject}_time`] || 0;
+    reviewStatus[todayKey][`${subject}_time`] = currentTime + studyTime;
+    
+    saveReviewStatus(reviewStatus);
+}
+
+// 데이터 모두 불러오기
+function loadAllData() {
+    loadJournals();
+    loadMissions();
+    loadMaterials();
+    loadQuestions();
+    checkAndShowStudyHelper();
+    loadTimetableView();
+    loadTodayClasses();
+}
+
