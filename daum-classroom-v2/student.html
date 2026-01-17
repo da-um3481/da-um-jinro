@@ -7,58 +7,89 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+        
+        :root {
+            /* 퍼플/그레이 메인 색상 */
+            --primary-purple: #9333EA;
+            --primary-purple-light: #A855F7;
+            --primary-purple-dark: #7E22CE;
+            --secondary-gray: #64748B;
+            --secondary-gray-light: #94A3B8;
+            --secondary-gray-dark: #475569;
+            
+            /* 포인트 밝은 색상 */
+            --accent-yellow: #FBBF24;
+            --accent-cyan: #22D3EE;
+            --accent-pink: #EC4899;
+            --accent-green: #10B981;
+            
+            /* 배경 */
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #F1F5F9;
+            --bg-card: #FFFFFF;
+        }
         
         body {
-            font-family: 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            background: linear-gradient(135deg, #FFF5F7 0%, #F0F4FF 50%, #FFF9E6 100%);
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #F1F5F9 100%);
             min-height: 100vh;
+            color: #1E293B;
         }
+        
         .tab-active {
-            background: linear-gradient(135deg, #FFB3BA 0%, #BAA5FF 100%);
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-light) 100%);
             color: white;
             border-radius: 20px 20px 0 0;
-            box-shadow: 0 -4px 10px rgba(255, 179, 186, 0.3);
+            box-shadow: 0 -4px 10px rgba(147, 51, 234, 0.3);
         }
+        
         .badge {
             display: inline-block;
             padding: 0.35rem 0.85rem;
             border-radius: 50px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+        
         .study-hour-btn.selected {
-            border-color: #FFB3BA;
-            background: linear-gradient(135deg, #FFB3BA 0%, #FFDFBA 100%);
+            border-color: var(--primary-purple);
+            background: linear-gradient(135deg, var(--primary-purple-light) 0%, var(--accent-cyan) 100%);
+            color: white;
             transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 179, 186, 0.4);
+            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.4);
         }
+        
         .subject-check-btn input:checked + div {
-            border-color: #BAA5FF;
-            background: linear-gradient(135deg, #E0D4FF 0%, #D4E8FF 100%);
+            border-color: var(--primary-purple);
+            background: linear-gradient(135deg, var(--primary-purple-light) 0%, var(--accent-pink) 100%);
+            color: white;
             transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(186, 165, 255, 0.3);
+            box-shadow: 0 6px 15px rgba(147, 51, 234, 0.3);
         }
+        
         .rotate-180 {
             transform: rotate(180deg);
         }
+        
         #planToggleIcon {
             transition: transform 0.3s ease;
         }
         
         /* 귀여운 카드 스타일 */
         .cute-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--bg-card);
             backdrop-filter: blur(10px);
             border-radius: 25px;
-            box-shadow: 0 8px 25px rgba(186, 165, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 25px rgba(100, 116, 139, 0.15);
+            border: 2px solid #E2E8F0;
             transition: all 0.3s ease;
         }
         .cute-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(186, 165, 255, 0.25);
+            box-shadow: 0 15px 40px rgba(147, 51, 234, 0.2);
+            border-color: var(--primary-purple-light);
         }
         
         /* 버튼 스타일 */
@@ -66,6 +97,7 @@
             border-radius: 25px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
         }
         .cute-btn:hover {
             transform: translateY(-2px);
@@ -90,26 +122,49 @@
             animation: wiggle 0.5s ease-in-out;
         }
         
-        /* 과목별 색상 */
-        .subject-korean { background: linear-gradient(135deg, #FFB3BA 0%, #FFCCD5 100%); }
-        .subject-english { background: linear-gradient(135deg, #A5D8FF 0%, #C2E9FF 100%); }
-        .subject-math { background: linear-gradient(135deg, #BAA5FF 0%, #D4C5FF 100%); }
-        .subject-science { background: linear-gradient(135deg, #BAFFC9 0%, #D4FFE0 100%); }
-        .subject-social { background: linear-gradient(135deg, #FFDFBA 0%, #FFECD1 100%); }
+        /* 과목별 색상 - 퍼플/그레이 기반 */
+        .subject-korean { 
+            background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+            color: white;
+        }
+        .subject-english { 
+            background: linear-gradient(135deg, #3B82F6 0%, #22D3EE 100%);
+            color: white;
+        }
+        .subject-math { 
+            background: linear-gradient(135deg, #9333EA 0%, #A855F7 100%);
+            color: white;
+        }
+        .subject-science { 
+            background: linear-gradient(135deg, #10B981 0%, #22D3EE 100%);
+            color: white;
+        }
+        .subject-social { 
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+            color: white;
+        }
+        
+        /* 텍스트 가독성 강화 */
+        .text-dark {
+            color: #1E293B !important;
+        }
+        .text-gray {
+            color: #64748B !important;
+        }
     </style>
 </head>
 <body>
     <!-- 헤더 -->
-    <header class="bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 text-white py-6 shadow-xl" style="border-bottom: 4px solid rgba(255, 255, 255, 0.5);">
+    <header class="bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white py-6 shadow-xl" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="text-5xl bounce">🎓</div>
                 <div>
-                    <h1 class="text-3xl font-bold" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">DA.UM 학생 포털 ✨</h1>
-                    <p class="text-sm opacity-90" id="studentName">🌈 로그인하고 함께 공부해요!</p>
+                    <h1 class="text-3xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 DA.UM 학생 포털 ✨</h1>
+                    <p class="text-sm opacity-90 font-semibold" id="studentName">🌟 로그인하고 함께 공부해요!</p>
                 </div>
             </div>
-            <button onclick="logout()" class="bg-white text-pink-500 px-6 py-3 rounded-full hover:bg-pink-50 transition cute-btn wiggle font-semibold">
+            <button onclick="logout()" class="bg-white text-purple-600 px-6 py-3 rounded-full hover:bg-yellow-100 transition cute-btn wiggle font-bold shadow-lg">
                 <i class="fas fa-door-open mr-2"></i>안녕! 👋
             </button>
         </div>
@@ -119,17 +174,17 @@
     <div id="loginScreen" class="container mx-auto px-4 py-12">
         <div class="max-w-md mx-auto cute-card p-10">
             <div class="text-center mb-8">
-                <div class="text-8xl mb-4 wiggle">🐰</div>
-                <h2 class="text-3xl font-bold mb-2" style="color: #BAA5FF;">환영해요! 🌟</h2>
-                <p class="text-gray-600">같이 공부할 준비 됐나요?</p>
+                <div class="text-8xl mb-4 wiggle">💜</div>
+                <h2 class="text-4xl font-black mb-3 text-dark" style="color: #7E22CE;">환영해요! ✨</h2>
+                <p class="text-lg font-semibold text-gray">같이 공부할 준비 됐나요?</p>
             </div>
             <input 
                 type="text" 
                 id="nameInput" 
                 placeholder="이름을 알려주세요 😊" 
-                class="w-full px-6 py-4 border-2 border-pink-200 rounded-full mb-6 focus:outline-none focus:ring-4 focus:ring-pink-200 focus:border-pink-300 transition text-center text-lg"
+                class="w-full px-6 py-4 border-2 border-gray-300 rounded-full mb-6 focus:outline-none focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition text-center text-lg font-semibold text-dark"
             >
-            <button onclick="login()" class="w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white py-4 rounded-full hover:from-pink-500 hover:to-purple-500 transition cute-btn font-bold text-lg">
+            <button onclick="login()" class="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white py-4 rounded-full hover:from-purple-700 hover:to-purple-600 transition cute-btn font-black text-xl shadow-lg">
                 🚀 같이 공부하러 가요!
             </button>
         </div>
@@ -138,19 +193,19 @@
     <!-- 메인 화면 -->
     <div id="mainScreen" class="hidden">
         <!-- 탭 메뉴 -->
-        <div class="bg-white/80 backdrop-blur-lg shadow-xl sticky top-0 z-10" style="border-bottom: 3px solid rgba(186, 165, 255, 0.3);">
+        <div class="bg-white/90 backdrop-blur-lg shadow-xl sticky top-0 z-10" style="border-bottom: 3px solid #E2E8F0;">
             <div class="container mx-auto px-4">
                 <div class="flex overflow-x-auto gap-2 py-2">
-                    <button onclick="showTab('journal')" id="tab-journal" class="tab-active px-6 py-4 whitespace-nowrap font-bold">
+                    <button onclick="showTab('journal')" id="tab-journal" class="tab-active px-6 py-4 whitespace-nowrap font-black">
                         📖 학습 일지
                     </button>
-                    <button onclick="showTab('mission')" id="tab-mission" class="px-6 py-4 whitespace-nowrap hover:bg-pink-50 transition rounded-t-2xl font-semibold">
+                    <button onclick="showTab('mission')" id="tab-mission" class="px-6 py-4 whitespace-nowrap hover:bg-purple-50 transition rounded-t-2xl font-bold text-gray-700">
                         🎯 학습 미션
                     </button>
-                    <button onclick="showTab('materials')" id="tab-materials" class="px-6 py-4 whitespace-nowrap hover:bg-purple-50 transition rounded-t-2xl font-semibold">
+                    <button onclick="showTab('materials')" id="tab-materials" class="px-6 py-4 whitespace-nowrap hover:bg-purple-50 transition rounded-t-2xl font-bold text-gray-700">
                         📂 자료실
                     </button>
-                    <button onclick="showTab('coaching')" id="tab-coaching" class="px-6 py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-semibold">
+                    <button onclick="showTab('coaching')" id="tab-coaching" class="px-6 py-4 whitespace-nowrap hover:bg-purple-50 transition rounded-t-2xl font-bold text-gray-700">
                         🤖 AI 코칭
                     </button>
                 </div>
@@ -161,10 +216,10 @@
         <div class="container mx-auto px-4 py-6">
             <!-- 학습 시작 도우미 버튼 -->
             <div class="mb-6">
-                <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 text-white py-6 rounded-3xl shadow-2xl hover:shadow-3xl transition cute-btn flex items-center justify-center gap-4" style="border: 3px solid rgba(255,255,255,0.5);">
-                    <div class="text-4xl bounce">🚀</div>
-                    <span class="text-xl font-bold" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">🌟 공부가 어려우세요? 3분이면 일주일 계획 완성!</span>
-                    <div class="text-3xl wiggle">✨</div>
+                <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white py-6 rounded-3xl shadow-2xl hover:shadow-3xl transition cute-btn flex items-center justify-center gap-4" style="border: 3px solid rgba(251, 191, 36, 0.3);">
+                    <div class="text-4xl bounce">✨</div>
+                    <span class="text-xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 공부가 어려우세요? 3분이면 일주일 계획 완성!</span>
+                    <div class="text-3xl wiggle">🚀</div>
                 </button>
             </div>
 
@@ -172,16 +227,16 @@
             <div id="studyHelperModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4" onclick="if(event.target === this) closeStudyHelperModal()">
                 <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                     <!-- 모달 헤더 -->
-                    <div class="bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 text-white p-8 rounded-t-3xl sticky top-0" style="border-bottom: 4px solid rgba(255,255,255,0.5);">
+                    <div class="bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white p-8 rounded-t-3xl sticky top-0" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
                         <div class="flex justify-between items-start">
                             <div>
                                 <div class="flex items-center gap-3 mb-3">
-                                    <div class="text-5xl bounce">🦄</div>
-                                    <h2 class="text-4xl font-bold" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">학습 마법사 ✨</h2>
+                                    <div class="text-5xl bounce">🔮</div>
+                                    <h2 class="text-4xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">학습 마법사 ✨</h2>
                                 </div>
-                                <p class="text-lg opacity-90 ml-1">🌈 일주일 학습 계획을 마법처럼 만들어드릴게요!</p>
+                                <p class="text-lg opacity-90 ml-1 font-semibold">🌟 일주일 학습 계획을 마법처럼 만들어드릴게요!</p>
                             </div>
-                            <button onclick="closeStudyHelperModal()" class="text-white hover:bg-white hover:bg-opacity-30 rounded-full w-12 h-12 flex items-center justify-center transition ml-4 wiggle text-2xl">
+                            <button onclick="closeStudyHelperModal()" class="text-white hover:bg-white hover:bg-opacity-30 rounded-full w-12 h-12 flex items-center justify-center transition ml-4 wiggle text-2xl font-bold">
                                 ❌
                             </button>
                         </div>
@@ -190,79 +245,79 @@
                     <!-- 모달 바디 -->
                     <div class="p-8">
                         <div class="mb-8">
-                            <label class="block text-2xl font-bold mb-4" style="color: #BAA5FF;">🕰️ 오늘 몇 시간 공부할 수 있나요?</label>
+                            <label class="block text-2xl font-black mb-4 text-dark">🕰️ 오늘 몇 시간 공부할 수 있나요?</label>
                             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                                <button onclick="selectStudyHours(2)" class="study-hour-btn px-6 py-6 border-3 border-pink-200 rounded-3xl transition cute-btn bg-white">
+                                <button onclick="selectStudyHours(2)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-purple-400">
                                     <div class="text-4xl mb-1">🐰</div>
-                                    <div class="text-4xl font-bold" style="color: #FFB3BA;">2</div>
-                                    <div class="text-sm text-gray-600">시간</div>
+                                    <div class="text-4xl font-black text-dark">2</div>
+                                    <div class="text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(3)" class="study-hour-btn px-6 py-6 border-3 border-purple-200 rounded-3xl transition cute-btn bg-white">
+                                <button onclick="selectStudyHours(3)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-purple-400">
                                     <div class="text-4xl mb-1">🦊</div>
-                                    <div class="text-4xl font-bold" style="color: #BAA5FF;">3</div>
-                                    <div class="text-sm text-gray-600">시간</div>
+                                    <div class="text-4xl font-black text-dark">3</div>
+                                    <div class="text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(4)" class="study-hour-btn px-6 py-6 border-3 border-blue-200 rounded-3xl transition cute-btn bg-white">
+                                <button onclick="selectStudyHours(4)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-purple-400">
                                     <div class="text-4xl mb-1">🐻</div>
-                                    <div class="text-4xl font-bold" style="color: #A5D8FF;">4</div>
-                                    <div class="text-sm text-gray-600">시간</div>
+                                    <div class="text-4xl font-black text-dark">4</div>
+                                    <div class="text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(5)" class="study-hour-btn px-6 py-6 border-3 border-yellow-200 rounded-3xl transition cute-btn bg-white">
+                                <button onclick="selectStudyHours(5)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-purple-400">
                                     <div class="text-4xl mb-1">🦁</div>
-                                    <div class="text-4xl font-bold" style="color: #FFFFBA;">5</div>
-                                    <div class="text-sm text-gray-600">시간</div>
+                                    <div class="text-4xl font-black text-dark">5</div>
+                                    <div class="text-sm font-bold text-gray">시간</div>
                                 </button>
-                                <button onclick="selectStudyHours(6)" class="study-hour-btn px-6 py-6 border-3 border-green-200 rounded-3xl transition cute-btn bg-white">
+                                <button onclick="selectStudyHours(6)" class="study-hour-btn px-6 py-6 border-3 border-gray-300 rounded-3xl transition cute-btn bg-white hover:border-purple-400">
                                     <div class="text-4xl mb-1">🐼</div>
-                                    <div class="text-4xl font-bold" style="color: #BAFFC9;">6</div>
-                                    <div class="text-sm text-gray-600">시간</div>
+                                    <div class="text-4xl font-black text-dark">6</div>
+                                    <div class="text-sm font-bold text-gray">시간</div>
                                 </button>
                             </div>
                         </div>
 
                         <div class="mb-8">
-                            <label class="block text-2xl font-bold mb-4" style="color: #A5D8FF;">🎓 집중하고 싶은 과목은? (선택사항)</label>
+                            <label class="block text-2xl font-black mb-4 text-dark">🎓 집중하고 싶은 과목은? (선택사항)</label>
                             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="국어" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-pink-200 rounded-3xl text-center transition cute-btn bg-white">
+                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-purple-400">
                                         <div class="text-3xl mb-2">🌸</div>
-                                        <div class="font-bold text-lg" style="color: #FFB3BA;">국어</div>
+                                        <div class="font-black text-lg text-dark">국어</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="영어" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-blue-200 rounded-3xl text-center transition cute-btn bg-white">
+                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-purple-400">
                                         <div class="text-3xl mb-2">🌍</div>
-                                        <div class="font-bold text-lg" style="color: #A5D8FF;">영어</div>
+                                        <div class="font-black text-lg text-dark">영어</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="수학" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-purple-200 rounded-3xl text-center transition cute-btn bg-white">
+                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-purple-400">
                                         <div class="text-3xl mb-2">🧮</div>
-                                        <div class="font-bold text-lg" style="color: #BAA5FF;">수학</div>
+                                        <div class="font-black text-lg text-dark">수학</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="과학" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-green-200 rounded-3xl text-center transition cute-btn bg-white">
+                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-purple-400">
                                         <div class="text-3xl mb-2">🔬</div>
-                                        <div class="font-bold text-lg" style="color: #BAFFC9;">과학</div>
+                                        <div class="font-black text-lg text-dark">과학</div>
                                     </div>
                                 </label>
                                 <label class="subject-check-btn cursor-pointer">
                                     <input type="checkbox" value="사회" class="hidden subject-checkbox">
-                                    <div class="px-4 py-4 border-3 border-yellow-200 rounded-3xl text-center transition cute-btn bg-white">
+                                    <div class="px-4 py-4 border-3 border-gray-300 rounded-3xl text-center transition cute-btn bg-white hover:border-purple-400">
                                         <div class="text-3xl mb-2">🗺️</div>
-                                        <div class="font-bold text-lg" style="color: #FFDFBA;">사회</div>
+                                        <div class="font-black text-lg text-dark">사회</div>
                                     </div>
                                 </label>
                             </div>
                         </div>
 
-                        <button onclick="generateWeeklyPlan()" class="w-full bg-gradient-to-r from-yellow-300 via-pink-400 to-purple-400 text-white py-5 rounded-full text-2xl font-bold hover:shadow-2xl transition cute-btn" style="border: 3px solid rgba(255,255,255,0.6);">
-                            <span class="text-3xl mr-2">✨</span>마법같이 계획 만들기 <span class="text-3xl ml-2">🦄</span>
+                        <button onclick="generateWeeklyPlan()" class="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white py-5 rounded-full text-2xl font-black hover:shadow-2xl transition cute-btn shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.4);">
+                            <span class="text-3xl mr-2">✨</span>마법같이 계획 만들기 <span class="text-3xl ml-2">🚀</span>
                         </button>
                     </div>
                 </div>
@@ -272,17 +327,17 @@
             <div id="weeklyPlanView" class="mb-6 hidden">
                 <div class="cute-card overflow-hidden">
                     <!-- 계획표 헤더 (항상 보임) -->
-                    <div class="p-5 bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 text-white cursor-pointer hover:opacity-90 transition" onclick="toggleWeeklyPlan()" style="border-bottom: 3px solid rgba(255,255,255,0.4);">
+                    <div class="p-5 bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white cursor-pointer hover:opacity-90 transition" onclick="toggleWeeklyPlan()" style="border-bottom: 3px solid rgba(251, 191, 36, 0.4);">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-3">
                                 <div class="text-4xl bounce">📅</div>
                                 <div>
-                                    <h3 class="text-xl font-bold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">나의 일주일 학습 계획 🌈</h3>
-                                    <p class="text-sm opacity-90" id="planExpiryDate">클릭하여 펼치기/접기</p>
+                                    <h3 class="text-xl font-black" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">나의 일주일 학습 계획 ✨</h3>
+                                    <p class="text-sm opacity-90 font-semibold" id="planExpiryDate">클릭하여 펼치기/접기</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
-                                <button onclick="event.stopPropagation(); showStudyHelper()" class="bg-white text-pink-500 px-5 py-2 rounded-full hover:bg-pink-50 transition text-sm font-bold cute-btn wiggle">
+                                <button onclick="event.stopPropagation(); showStudyHelper()" class="bg-white text-purple-600 px-5 py-2 rounded-full hover:bg-yellow-100 transition text-sm font-black cute-btn wiggle shadow-lg">
                                     🔄 다시 만들기
                                 </button>
                                 <i id="planToggleIcon" class="fas fa-chevron-down text-3xl transition-transform"></i>
@@ -300,12 +355,12 @@
                 <div class="cute-card p-8 mb-6">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">📘</div>
-                        <h3 class="text-3xl font-bold" style="color: #BAA5FF;">오늘의 학습 기록 ✨</h3>
+                        <h3 class="text-3xl font-black text-dark">오늘의 학습 기록 ✨</h3>
                     </div>
                     
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #FFB3BA;">🎓 과목</label>
-                        <select id="subject" class="w-full px-5 py-3 border-2 border-pink-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-pink-200 focus:border-pink-300 transition text-lg">
+                        <label class="block text-lg font-black mb-3 text-dark">🎓 과목</label>
+                        <select id="subject" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition text-lg font-bold text-dark">
                             <option value="국어">🌸 국어</option>
                             <option value="영어">🌍 영어</option>
                             <option value="수학">🧮 수학</option>
@@ -316,72 +371,72 @@
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #A5D8FF;">📝 학습 내용</label>
-                        <textarea id="content" rows="4" class="w-full px-5 py-3 border-2 border-blue-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-300 transition text-lg" placeholder="무엇을 공부했나요? 😊"></textarea>
+                        <label class="block text-lg font-black mb-3 text-dark">📝 학습 내용</label>
+                        <textarea id="content" rows="4" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition text-lg font-semibold text-dark" placeholder="무엇을 공부했나요? 😊"></textarea>
                     </div>
 
                     <!-- 타이머 섹션 -->
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #BAFFC9;">⏱️ 학습 시간 측정 🔥</label>
+                        <label class="block text-lg font-black mb-3 text-dark">⏱️ 학습 시간 측정 🔥</label>
                         
                         <!-- 대기 상태 -->
-                        <div id="timerIdle" class="border-3 border-blue-200 rounded-3xl p-6 bg-gradient-to-br from-blue-50 to-purple-50">
-                            <button onclick="startTimer()" class="w-full bg-gradient-to-r from-green-400 to-blue-400 text-white py-4 rounded-full hover:from-green-500 hover:to-blue-500 transition cute-btn font-bold text-xl">
+                        <div id="timerIdle" class="border-3 border-gray-300 rounded-3xl p-6 bg-gradient-to-br from-gray-50 to-purple-50">
+                            <button onclick="startTimer()" class="w-full bg-gradient-to-r from-green-500 to-cyan-500 text-white py-4 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn font-black text-xl shadow-lg">
                                 <span class="text-2xl mr-2">▶️</span>함께 공부해요! <span class="text-2xl ml-2">💪</span>
                             </button>
                         </div>
 
                         <!-- 학습 중 상태 -->
-                        <div id="timerRunning" class="hidden border-3 border-green-300 rounded-3xl p-6 bg-gradient-to-br from-green-50 to-yellow-50">
+                        <div id="timerRunning" class="hidden border-3 border-green-400 rounded-3xl p-6 bg-gradient-to-br from-green-50 to-cyan-50">
                             <div class="text-center mb-4">
-                                <div class="text-2xl font-bold mb-3" style="color: #BAFFC9;">
+                                <div class="text-2xl font-black mb-3 text-dark">
                                     <span class="text-3xl">🔥</span> 집중하고 있어요!
                                 </div>
-                                <div class="text-md text-gray-600 mb-2">
-                                    시작: <span id="startTime" class="font-bold" style="color: #A5D8FF;"></span>
+                                <div class="text-md font-bold text-gray mb-2">
+                                    시작: <span id="startTime" class="font-black text-dark"></span>
                                 </div>
-                                <div class="text-5xl font-bold mb-3" id="elapsedTime" style="color: #BAA5FF;">
+                                <div class="text-5xl font-black mb-3 text-dark" id="elapsedTime">
                                     00:00:00
                                 </div>
                             </div>
-                            <button onclick="stopTimer()" class="w-full bg-gradient-to-r from-pink-400 to-red-400 text-white py-4 rounded-full hover:from-pink-500 hover:to-red-500 transition cute-btn font-bold text-xl">
+                            <button onclick="stopTimer()" class="w-full bg-gradient-to-r from-pink-500 to-red-500 text-white py-4 rounded-full hover:from-pink-600 hover:to-red-600 transition cute-btn font-black text-xl shadow-lg">
                                 <span class="text-2xl mr-2">■</span>완료! <span class="text-2xl ml-2">🎉</span>
                             </button>
                         </div>
 
                         <!-- 완료 상태 -->
-                        <div id="timerCompleted" class="hidden border-3 border-yellow-300 rounded-3xl p-6 bg-gradient-to-br from-yellow-50 to-pink-50">
+                        <div id="timerCompleted" class="hidden border-3 border-yellow-400 rounded-3xl p-6 bg-gradient-to-br from-yellow-50 to-orange-50">
                             <div class="text-center mb-4">
-                                <div class="text-3xl font-bold mb-3" style="color: #FFFFBA;">
+                                <div class="text-3xl font-black mb-3 text-dark">
                                     <span class="text-5xl">🎉</span> 정말 잠했어요!
                                 </div>
-                                <div class="text-md text-gray-600 space-y-2">
-                                    <div>시작: <span id="completedStartTime" class="font-bold" style="color: #A5D8FF;"></span></div>
-                                    <div>종료: <span id="completedEndTime" class="font-bold" style="color: #FFB3BA;"></span></div>
-                                    <div class="text-3xl font-bold mt-3" style="color: #BAA5FF;">
+                                <div class="text-md font-bold text-gray space-y-2">
+                                    <div>시작: <span id="completedStartTime" class="font-black text-dark"></span></div>
+                                    <div>종료: <span id="completedEndTime" class="font-black text-dark"></span></div>
+                                    <div class="text-3xl font-black mt-3 text-dark">
                                         🕰️ <span id="completedDuration"></span>
                                     </div>
                                 </div>
                             </div>
-                            <button onclick="resetTimer()" class="w-full bg-gradient-to-r from-purple-300 to-pink-300 text-white py-3 rounded-full hover:from-purple-400 hover:to-pink-400 transition cute-btn font-bold">
+                            <button onclick="resetTimer()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-3 rounded-full hover:from-purple-600 hover:to-indigo-600 transition cute-btn font-black shadow-lg">
                                 <span class="text-xl mr-2">🔄</span>다시 측정하기
                             </button>
                         </div>
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #FFB3BA;">📷 사진 첨부 (선택, 최대 3개)</label>
-                        <input type="file" id="photoUpload" accept="image/*" multiple class="w-full px-5 py-3 border-2 border-pink-200 rounded-2xl transition" onchange="handlePhotoUpload(event)">
-                        <p class="text-sm mt-2" style="color: #BAA5FF;">🌈 JPG, PNG 형식 / 각 파일 최대 2MB</p>
+                        <label class="block text-lg font-black mb-3 text-dark">📷 사진 첨부 (선택, 최대 3개)</label>
+                        <input type="file" id="photoUpload" accept="image/*" multiple class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl transition" onchange="handlePhotoUpload(event)">
+                        <p class="text-sm mt-2 font-bold text-gray">🌟 JPG, PNG 형식 / 각 파일 최대 2MB</p>
                         <div id="photoPreview" class="mt-3 grid grid-cols-3 gap-3"></div>
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #BAFFC9;">💬 메모</label>
-                        <textarea id="memo" rows="2" class="w-full px-5 py-3 border-2 border-green-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-200 focus:border-green-300 transition text-lg" placeholder="어려웠던 점, 느낀 점 등 🤔"></textarea>
+                        <label class="block text-lg font-black mb-3 text-dark">💬 메모</label>
+                        <textarea id="memo" rows="2" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition text-lg font-semibold text-dark" placeholder="어려웠던 점, 느낀 점 등 🤔"></textarea>
                     </div>
 
-                    <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-5 rounded-full hover:from-pink-500 hover:to-blue-500 transition cute-btn font-bold text-2xl" style="border: 3px solid rgba(255,255,255,0.5);">
+                    <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white py-5 rounded-full hover:from-purple-700 hover:to-purple-600 transition cute-btn font-black text-2xl shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.3);">
                         <span class="text-3xl mr-2">📥</span>저장하기 ✨
                     </button>
                 </div>
@@ -390,7 +445,7 @@
                 <div class="cute-card p-8">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">📚</div>
-                        <h3 class="text-3xl font-bold" style="color: #A5D8FF;">나의 학습 기록 🌟</h3>
+                        <h3 class="text-3xl font-black text-dark">나의 학습 기록 🌟</h3>
                     </div>
                     <div id="journalList" class="space-y-4"></div>
                 </div>
@@ -401,7 +456,7 @@
                 <div class="cute-card p-8">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">🎯</div>
-                        <h3 class="text-3xl font-bold" style="color: #FFB3BA;">이번 주 학습 미션 🔥</h3>
+                        <h3 class="text-3xl font-black text-dark">이번 주 학습 미션 🔥</h3>
                     </div>
                     <div id="missionList" class="space-y-4"></div>
                 </div>
@@ -412,7 +467,7 @@
                 <div class="cute-card p-8">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">📂</div>
-                        <h3 class="text-3xl font-bold" style="color: #BAA5FF;">학습 자료 📚</h3>
+                        <h3 class="text-3xl font-black text-dark">학습 자료 📚</h3>
                     </div>
                     <div id="materialsList" class="grid md:grid-cols-2 gap-4"></div>
                 </div>
@@ -423,22 +478,22 @@
                 <div class="cute-card p-8 mb-6">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">🤖</div>
-                        <h3 class="text-3xl font-bold" style="color: #BAFFC9;">AI에게 질문하기 💡</h3>
+                        <h3 class="text-3xl font-black text-dark">AI에게 질문하기 💡</h3>
                     </div>
                     
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #A5D8FF;">💬 질문 내용</label>
-                        <textarea id="questionText" rows="4" class="w-full px-5 py-3 border-2 border-blue-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-300 transition text-lg" placeholder="궁금한 것을 물어보세요 🤔"></textarea>
+                        <label class="block text-lg font-black mb-3 text-dark">💬 질문 내용</label>
+                        <textarea id="questionText" rows="4" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition text-lg font-semibold text-dark" placeholder="궁금한 것을 물어보세요 🤔"></textarea>
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3" style="color: #FFB3BA;">📷 문제 사진 첨부 (선택)</label>
-                        <input type="file" id="questionPhoto" accept="image/*" class="w-full px-5 py-3 border-2 border-pink-200 rounded-2xl transition" onchange="handleQuestionPhotoUpload(event)">
-                        <p class="text-sm mt-2" style="color: #BAA5FF;">🌈 문제 사진을 첨부하면 더 정확한 답변을 받을 수 있습니다</p>
+                        <label class="block text-lg font-black mb-3 text-dark">📷 문제 사진 첨부 (선택)</label>
+                        <input type="file" id="questionPhoto" accept="image/*" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl transition" onchange="handleQuestionPhotoUpload(event)">
+                        <p class="text-sm mt-2 font-bold text-gray">🌟 문제 사진을 첨부하면 더 정확한 답변을 받을 수 있습니다</p>
                         <div id="questionPhotoPreview" class="mt-3"></div>
                     </div>
 
-                    <button onclick="askAI()" class="w-full bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 text-white py-5 rounded-full hover:from-green-500 hover:to-purple-500 transition cute-btn font-bold text-2xl" style="border: 3px solid rgba(255,255,255,0.5);">
+                    <button onclick="askAI()" class="w-full bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 text-white py-5 rounded-full hover:from-green-600 hover:to-blue-600 transition cute-btn font-black text-2xl shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.3);">
                         <span class="text-3xl mr-2">🤖</span>AI에게 질문하기 ✨
                     </button>
                 </div>
@@ -447,7 +502,7 @@
                 <div class="cute-card p-8">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">💭</div>
-                        <h3 class="text-3xl font-bold" style="color: #FFFFBA;">나의 질문 🌟</h3>
+                        <h3 class="text-3xl font-black text-dark">나의 질문 🌟</h3>
                     </div>
                     <div id="questionList" class="space-y-4"></div>
                 </div>
