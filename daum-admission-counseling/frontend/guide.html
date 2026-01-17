@@ -531,40 +531,87 @@
 
         // 콘텐츠를 섹션별로 분리
         function parseContentSections() {
+            // HTML 파싱
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = fullContent;
             
-            // PART별로 수동 매핑 (실제 마크다운 구조에 맞게)
-            sections = {
-                'section-1-1': extractSection(tempDiv, 'PART 1', '1. 대학입시의 구조'),
-                'section-1-2': extractSection(tempDiv, 'PART 1', '2. 4대 전형 완전 정복'),
-                'section-1-3': extractSection(tempDiv, 'PART 1', '3. 학생부의 모든 것'),
-                'section-1-4': extractSection(tempDiv, 'PART 1', '4. 수능 최저학력기준'),
-                'section-2-1': extractSection(tempDiv, 'PART 2', '5. 세특의 중요성과 원리'),
-                'section-2-2': extractSection(tempDiv, 'PART 2', '6. 매력적인 세특 작성 전략'),
-                'section-2-3': extractSection(tempDiv, 'PART 2', '7. 세특 관리 4가지 방법'),
-                'section-2-4': extractSection(tempDiv, 'PART 2', '8. 전공별 세특 작성 사례'),
-                'section-2-5': extractSection(tempDiv, 'PART 2', '9. 세특 기재 금지 사항'),
-                'section-3-1': extractSection(tempDiv, 'PART 3', '10. 첫 상담 40분'),
-                'section-3-2': extractSection(tempDiv, 'PART 3', '11. 학년별 맞춤 상담법'),
-                'section-3-3': extractSection(tempDiv, 'PART 3', '12. 전형별 전략 수립'),
-                'section-3-4': extractSection(tempDiv, 'PART 3', '13. 위기관리 상담법'),
-                'section-4-1': extractSection(tempDiv, 'PART 4', '14. 시스템 완전 활용법'),
-            };
-        }
-
-        // 특정 섹션 추출 (간단한 버전 - 전체 콘텐츠 표시)
-        function extractSection(container, partName, sectionName) {
-            // 실제로는 더 복잡한 파싱 필요하지만, 일단 전체 콘텐츠 반환
-            return fullContent;
+            const allHeadings = tempDiv.querySelectorAll('h1, h2, h3');
+            const contentMap = {};
+            
+            // 각 섹션별 콘텐츠 추출
+            for (let i = 0; i < allHeadings.length; i++) {
+                const heading = allHeadings[i];
+                const text = heading.textContent.trim();
+                
+                // 다음 헤딩까지의 콘텐츠 수집
+                let content = '<div class="markdown-content">';
+                content += heading.outerHTML;
+                
+                let nextElement = heading.nextElementSibling;
+                const nextHeading = allHeadings[i + 1];
+                
+                while (nextElement && nextElement !== nextHeading) {
+                    content += nextElement.outerHTML;
+                    nextElement = nextElement.nextElementSibling;
+                }
+                
+                content += '</div>';
+                
+                // 섹션 매핑
+                if (text.includes('대학입시') || text.includes('입시 구조')) {
+                    contentMap['section-1-1'] = content;
+                } else if (text.includes('4대 전형') || text.includes('전형 완전')) {
+                    contentMap['section-1-2'] = content;
+                } else if (text.includes('학생부의 모든') || text.includes('학생부 항목')) {
+                    contentMap['section-1-3'] = content;
+                } else if (text.includes('수능 최저') || text.includes('최저학력')) {
+                    contentMap['section-1-4'] = content;
+                } else if (text.includes('세특의 중요성') || text.includes('세특 이해')) {
+                    contentMap['section-2-1'] = content;
+                } else if (text.includes('매력적인 세특') && !text.includes('관리')) {
+                    contentMap['section-2-2'] = content;
+                } else if (text.includes('세특 관리') || text.includes('4가지 방법')) {
+                    contentMap['section-2-3'] = content;
+                } else if (text.includes('전공별 세특') || text.includes('세특 작성 사례')) {
+                    contentMap['section-2-4'] = content;
+                } else if (text.includes('세특 기재 금지') || text.includes('금지 사항')) {
+                    contentMap['section-2-5'] = content;
+                } else if (text.includes('첫 상담') || text.includes('40분')) {
+                    contentMap['section-3-1'] = content;
+                } else if (text.includes('학년별') && text.includes('상담')) {
+                    contentMap['section-3-2'] = content;
+                } else if (text.includes('전형별 전략') || text.includes('전략 수립')) {
+                    contentMap['section-3-3'] = content;
+                } else if (text.includes('위기관리') || text.includes('위기 상담')) {
+                    contentMap['section-3-4'] = content;
+                } else if (text.includes('시스템') && text.includes('활용')) {
+                    contentMap['section-4-1'] = content;
+                }
+            }
+            
+            sections = contentMap;
+            
+            // 매핑이 안 된 섹션은 기본 콘텐츠 표시
+            const defaultSections = [
+                'section-1-1', 'section-1-2', 'section-1-3', 'section-1-4',
+                'section-2-1', 'section-2-2', 'section-2-3', 'section-2-4', 'section-2-5',
+                'section-3-1', 'section-3-2', 'section-3-3', 'section-3-4',
+                'section-4-1'
+            ];
+            
+            defaultSections.forEach(sectionId => {
+                if (!sections[sectionId]) {
+                    sections[sectionId] = `<div class="markdown-content">${fullContent}</div>`;
+                }
+            });
         }
 
         // 섹션 표시
         function showSection(sectionId) {
             const contentArea = document.getElementById('contentArea');
-            const content = sections[sectionId] || fullContent;
+            const content = sections[sectionId] || `<div class="markdown-content"><p style="color: #e53e3e;">⚠️ 섹션을 찾을 수 없습니다.</p></div>`;
             
-            contentArea.innerHTML = `<div class="markdown-content">${content}</div>`;
+            contentArea.innerHTML = content;
             
             // 사이드바 활성화
             document.querySelectorAll('.sidebar-menu a').forEach(link => {
