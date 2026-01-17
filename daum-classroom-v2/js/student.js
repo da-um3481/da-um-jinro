@@ -1098,8 +1098,8 @@ function loadTodayClasses() {
                             ${statusText} ${reviewTime > 0 ? `(${reviewTime}분)` : ''}
                         </div>
                     </div>
-                    <button onclick="startReview('${period.subject}')" class="bg-gradient-to-r ${subjectColor} text-white px-6 py-3 rounded-full hover:shadow-lg transition cute-btn font-black">
-                        ${isCompleted ? '다시 복습 🔄' : '복습 시작 📖'}
+                    <button onclick="startReview('${period.subject}')" class="bg-gradient-to-r ${subjectColor} text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:shadow-lg transition cute-btn font-black text-sm md:text-base">
+                        ${isCompleted ? '✅ 복습 완료' : '복습 완료 ✓'}
                     </button>
                 </div>
             </div>
@@ -1116,16 +1116,16 @@ function loadTodayClasses() {
 
 // 복습 시작
 function startReview(subject) {
-    // 학습 일지 탭으로 이동
-    showTab('journal');
-    
-    // 과목 자동 선택
-    document.getElementById('subject').value = subject;
-    
-    // 타이머 자동 시작 (선택사항)
-    if (confirm(`${subject} 복습을 시작하시겠습니까?\n타이머가 자동으로 시작됩니다! ⏱️`)) {
-        startTimer();
-        alert(`✨ ${subject} 복습 시작!\n집중해서 공부해볼까요? 💪`);
+    // 복습 완료 처리 (타이머 없이 즉시 완료)
+    if (confirm(`${subject} 복습을 완료하셨나요?`)) {
+        // 복습 상태만 업데이트 (시간은 0으로)
+        updateReviewStatus(subject, 0);
+        
+        alert(`✅ ${subject} 복습 완료!\n잘했어요! 🎉`);
+        
+        // 화면 새로고침
+        loadTodayClasses();
+        loadWeeklyStats();
     }
 }
 
