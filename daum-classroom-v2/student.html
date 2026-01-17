@@ -155,28 +155,28 @@
 </head>
 <body>
     <!-- 헤더 -->
-    <header class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-6 shadow-xl" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="text-5xl bounce">🎓</div>
+    <header class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-3 md:py-6 shadow-xl" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
+        <div class="container mx-auto px-3 md:px-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 md:gap-3">
+                <div class="text-3xl md:text-5xl bounce">🎓</div>
                 <div>
-                    <h1 class="text-3xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 DA.UM 학생 포털 ✨</h1>
-                    <p class="text-sm opacity-90 font-semibold" id="studentName">🌟 로그인하고 함께 공부해요!</p>
+                    <h1 class="text-lg md:text-3xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 DA.UM 학생 포털 ✨</h1>
+                    <p class="text-xs md:text-sm opacity-90 font-semibold" id="studentName">🌟 로그인하고 함께 공부해요!</p>
                 </div>
             </div>
-            <button onclick="logout()" class="bg-white text-blue-600 px-6 py-3 rounded-full hover:bg-yellow-100 transition cute-btn wiggle font-bold shadow-lg">
-                <i class="fas fa-door-open mr-2"></i>안녕! 👋
+            <button onclick="logout()" class="bg-white text-blue-600 px-3 py-2 md:px-6 md:py-3 rounded-full hover:bg-yellow-100 transition cute-btn wiggle font-bold shadow-lg text-xs md:text-base">
+                <i class="fas fa-door-open mr-1 md:mr-2"></i><span class="hidden md:inline">안녕! </span>👋
             </button>
         </div>
     </header>
 
     <!-- 로그인 화면 -->
-    <div id="loginScreen" class="container mx-auto px-4 py-12">
-        <div class="max-w-md mx-auto cute-card p-10">
-            <div class="text-center mb-8">
-                <div class="text-8xl mb-4 wiggle">💜</div>
-                <h2 class="text-4xl font-black mb-3 text-dark" style="color: #7E22CE;">환영해요! ✨</h2>
-                <p class="text-lg font-semibold text-gray">같이 공부할 준비 됐나요?</p>
+    <div id="loginScreen" class="container mx-auto px-4 py-8 md:py-12">
+        <div class="max-w-md mx-auto cute-card p-6 md:p-10">
+            <div class="text-center mb-6 md:mb-8">
+                <div class="text-6xl md:text-8xl mb-3 md:mb-4 wiggle">💜</div>
+                <h2 class="text-2xl md:text-4xl font-black mb-2 md:mb-3 text-dark" style="color: #7E22CE;">환영해요! ✨</h2>
+                <p class="text-base md:text-lg font-semibold text-gray">같이 공부할 준비 됐나요?</p>
             </div>
             <input 
                 type="text" 
@@ -194,24 +194,24 @@
     <div id="mainScreen" class="hidden">
         <!-- 탭 메뉴 -->
         <div class="bg-white/90 backdrop-blur-lg shadow-xl sticky top-0 z-10" style="border-bottom: 3px solid #E2E8F0;">
-            <div class="container mx-auto px-4">
-                <div class="flex overflow-x-auto gap-2 py-2">
-                    <button onclick="showTab('today')" id="tab-today" class="tab-active px-6 py-4 whitespace-nowrap font-black">
+            <div class="container mx-auto px-2 md:px-4">
+                <div class="flex overflow-x-auto gap-1 md:gap-2 py-1 md:py-2">
+                    <button onclick="showTab('today')" id="tab-today" class="tab-active px-3 py-2 md:px-6 md:py-4 whitespace-nowrap font-black text-xs md:text-base">
                         🌟 오늘의 복습
                     </button>
-                    <button onclick="showTab('timetable')" id="tab-timetable" class="px-6 py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700">
+                    <button onclick="showTab('timetable')" id="tab-timetable" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         📅 시간표
                     </button>
-                    <button onclick="showTab('journal')" id="tab-journal" class="px-6 py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700">
+                    <button onclick="showTab('journal')" id="tab-journal" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         📖 학습 일지
                     </button>
-                    <button onclick="showTab('mission')" id="tab-mission" class="px-6 py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700">
+                    <button onclick="showTab('mission')" id="tab-mission" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         🎯 학습 미션
                     </button>
-                    <button onclick="showTab('materials')" id="tab-materials" class="px-6 py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700">
+                    <button onclick="showTab('materials')" id="tab-materials" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         📂 자료실
                     </button>
-                    <button onclick="showTab('coaching')" id="tab-coaching" class="px-6 py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700">
+                    <button onclick="showTab('coaching')" id="tab-coaching" class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap hover:bg-blue-50 transition rounded-t-2xl font-bold text-gray-700 text-xs md:text-base">
                         🤖 AI 코칭
                     </button>
                 </div>
@@ -219,13 +219,13 @@
         </div>
 
         <!-- 컨텐츠 영역 -->
-        <div class="container mx-auto px-4 py-6">
+        <div class="container mx-auto px-3 md:px-4 py-3 md:py-6">
             <!-- 학습 시작 도우미 버튼 -->
-            <div class="mb-6">
-                <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-6 rounded-3xl shadow-2xl hover:shadow-3xl transition cute-btn flex items-center justify-center gap-4" style="border: 3px solid rgba(251, 191, 36, 0.3);">
-                    <div class="text-4xl bounce">✨</div>
-                    <span class="text-xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 공부가 어려우세요? 3분이면 일주일 계획 완성!</span>
-                    <div class="text-3xl wiggle">🚀</div>
+            <div class="mb-4 md:mb-6">
+                <button onclick="openStudyHelperModal()" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-3 md:py-6 rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-3xl transition cute-btn flex items-center justify-center gap-2 md:gap-4" style="border: 3px solid rgba(251, 191, 36, 0.3);">
+                    <div class="text-2xl md:text-4xl bounce">✨</div>
+                    <span class="text-sm md:text-xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 3분이면 일주일 계획 완성!</span>
+                    <div class="text-xl md:text-3xl wiggle">🚀</div>
                 </button>
             </div>
 
@@ -359,32 +359,32 @@
             <!-- 오늘의 복습 탭 -->
             <div id="content-today" class="tab-content">
                 <!-- 테스트 모드 (개발용) -->
-                <div class="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-2xl p-4 mb-4">
-                    <div class="flex items-center justify-between">
+                <div class="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-xl md:rounded-2xl p-3 md:p-4 mb-3 md:mb-4">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-2xl">🧪</span>
-                            <span class="font-bold text-gray-700">테스트 모드</span>
+                            <span class="text-xl md:text-2xl">🧪</span>
+                            <span class="font-bold text-gray-700 text-sm md:text-base">테스트 모드</span>
                         </div>
-                        <div class="flex gap-2 flex-wrap">
-                            <button onclick="setTestDay('월')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">월요일</button>
-                            <button onclick="setTestDay('화')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">화요일</button>
-                            <button onclick="setTestDay('수')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">수요일</button>
-                            <button onclick="setTestDay('목')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">목요일</button>
-                            <button onclick="setTestDay('금')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">금요일</button>
-                            <button onclick="setTestDay('토')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">토요일</button>
-                            <button onclick="setTestDay('일')" class="bg-white px-3 py-1 rounded-lg text-sm font-bold hover:bg-blue-50 border border-gray-300">일요일</button>
-                            <button onclick="setTestDay(null)" class="bg-red-100 px-3 py-1 rounded-lg text-sm font-bold hover:bg-red-200 border border-red-300">초기화</button>
+                        <div class="flex gap-1 md:gap-2 flex-wrap">
+                            <button onclick="setTestDay('월')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">월</button>
+                            <button onclick="setTestDay('화')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">화</button>
+                            <button onclick="setTestDay('수')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">수</button>
+                            <button onclick="setTestDay('목')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">목</button>
+                            <button onclick="setTestDay('금')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">금</button>
+                            <button onclick="setTestDay('토')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">토</button>
+                            <button onclick="setTestDay('일')" class="bg-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 border border-gray-300">일</button>
+                            <button onclick="setTestDay(null)" class="bg-red-100 px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs md:text-sm font-bold hover:bg-red-200 border border-red-300">초기화</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 오늘의 수업 카드 -->
-                <div class="cute-card p-8 mb-6">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">🌟</div>
+                <div class="cute-card p-4 md:p-8 mb-4 md:mb-6">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">🌟</div>
                         <div>
-                            <h3 class="text-3xl font-black text-dark">오늘의 수업 📚</h3>
-                            <p class="text-md font-bold text-gray mt-1" id="todayDate"></p>
+                            <h3 class="text-xl md:text-3xl font-black text-dark">오늘의 수업 📚</h3>
+                            <p class="text-xs md:text-md font-bold text-gray mt-1" id="todayDate"></p>
                         </div>
                     </div>
                     
@@ -394,32 +394,32 @@
                 </div>
 
                 <!-- 복습 통계 카드 -->
-                <div class="cute-card p-8">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">📊</div>
-                        <h3 class="text-3xl font-black text-dark">오늘의 복습 현황 ✨</h3>
+                <div class="cute-card p-4 md:p-8">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📊</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">오늘의 복습 현황 ✨</h3>
                     </div>
                     
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border-2 border-blue-200">
+                    <div class="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4">
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-3 md:p-6 rounded-xl md:rounded-2xl border-2 border-blue-200">
                             <div class="text-center">
-                                <div class="text-4xl mb-2">📖</div>
-                                <div class="text-2xl font-black text-dark" id="todayTotalClasses">0</div>
-                                <div class="text-sm font-bold text-gray">오늘 수업</div>
+                                <div class="text-2xl md:text-4xl mb-1 md:mb-2">📖</div>
+                                <div class="text-lg md:text-2xl font-black text-dark" id="todayTotalClasses">0</div>
+                                <div class="text-xs md:text-sm font-bold text-gray">오늘 수업</div>
                             </div>
                         </div>
-                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-green-200">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-3 md:p-6 rounded-xl md:rounded-2xl border-2 border-green-200">
                             <div class="text-center">
-                                <div class="text-4xl mb-2">✅</div>
-                                <div class="text-2xl font-black text-dark" id="todayCompletedReviews">0</div>
-                                <div class="text-sm font-bold text-gray">복습 완료</div>
+                                <div class="text-2xl md:text-4xl mb-1 md:mb-2">✅</div>
+                                <div class="text-lg md:text-2xl font-black text-dark" id="todayCompletedReviews">0</div>
+                                <div class="text-xs md:text-sm font-bold text-gray">복습 완료</div>
                             </div>
                         </div>
-                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl border-2 border-yellow-200">
+                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-3 md:p-6 rounded-xl md:rounded-2xl border-2 border-yellow-200">
                             <div class="text-center">
-                                <div class="text-4xl mb-2">⏱️</div>
-                                <div class="text-2xl font-black text-dark" id="todayTotalReviewTime">0분</div>
-                                <div class="text-sm font-bold text-gray">복습 시간</div>
+                                <div class="text-2xl md:text-4xl mb-1 md:mb-2">⏱️</div>
+                                <div class="text-lg md:text-2xl font-black text-dark" id="todayTotalReviewTime">0분</div>
+                                <div class="text-xs md:text-sm font-bold text-gray">복습 시간</div>
                             </div>
                         </div>
                     </div>
@@ -428,19 +428,19 @@
 
             <!-- 시간표 탭 -->
             <div id="content-timetable" class="tab-content hidden">
-                <div class="cute-card p-8 mb-6">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">📅</div>
-                        <h3 class="text-3xl font-black text-dark">나의 시간표 ✨</h3>
+                <div class="cute-card p-4 md:p-8 mb-4 md:mb-6">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📅</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">나의 시간표 ✨</h3>
                     </div>
                     
-                    <div class="mb-6">
-                        <button onclick="showTimetableInputModal()" class="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white py-4 rounded-full hover:from-blue-700 hover:to-teal-600 transition cute-btn font-black text-lg shadow-lg">
-                            <span class="text-2xl mr-2">➕</span>시간표 입력/수정하기
+                    <div class="mb-4 md:mb-6">
+                        <button onclick="showTimetableInputModal()" class="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white py-3 md:py-4 rounded-full hover:from-blue-700 hover:to-teal-600 transition cute-btn font-black text-sm md:text-lg shadow-lg">
+                            <span class="text-xl md:text-2xl mr-2">➕</span>시간표 입력/수정하기
                         </button>
                     </div>
                     
-                    <div id="timetableView" class="space-y-4">
+                    <div id="timetableView" class="space-y-3 md:space-y-4">
                         <!-- 동적으로 생성됨 -->
                     </div>
                 </div>
@@ -448,15 +448,15 @@
 
             <!-- 학습 일지 탭 -->
             <div id="content-journal" class="tab-content hidden">
-                <div class="cute-card p-8 mb-6">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">📘</div>
-                        <h3 class="text-3xl font-black text-dark">오늘의 학습 기록 ✨</h3>
+                <div class="cute-card p-4 md:p-8 mb-4 md:mb-6">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📘</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">오늘의 학습 기록 ✨</h3>
                     </div>
                     
-                    <div class="mb-6">
-                        <label class="block text-lg font-black mb-3 text-dark">🎓 과목</label>
-                        <select id="subject" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-lg font-bold text-dark">
+                    <div class="mb-4 md:mb-6">
+                        <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">🎓 과목</label>
+                        <select id="subject" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-base md:text-lg font-bold text-dark">
                             <option value="국어">🌸 국어</option>
                             <option value="영어">🌍 영어</option>
                             <option value="수학">🧮 수학</option>
@@ -466,27 +466,27 @@
                         </select>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block text-lg font-black mb-3 text-dark">📝 학습 내용</label>
-                        <textarea id="content" rows="4" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-lg font-semibold text-dark" placeholder="무엇을 공부했나요? 😊"></textarea>
+                    <div class="mb-4 md:mb-6">
+                        <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">📝 학습 내용</label>
+                        <textarea id="content" rows="4" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-base md:text-lg font-semibold text-dark" placeholder="무엇을 공부했나요? 😊"></textarea>
                     </div>
 
                     <!-- 타이머 섹션 -->
-                    <div class="mb-6">
-                        <label class="block text-lg font-black mb-3 text-dark">⏱️ 학습 시간 측정 🔥</label>
+                    <div class="mb-4 md:mb-6">
+                        <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">⏱️ 학습 시간 측정 🔥</label>
                         
                         <!-- 대기 상태 -->
-                        <div id="timerIdle" class="border-3 border-gray-300 rounded-3xl p-6 bg-gradient-to-br from-gray-50 to-blue-50">
-                            <button onclick="startTimer()" class="w-full bg-gradient-to-r from-green-500 to-cyan-500 text-white py-4 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn font-black text-xl shadow-lg">
-                                <span class="text-2xl mr-2">▶️</span>함께 공부해요! <span class="text-2xl ml-2">💪</span>
+                        <div id="timerIdle" class="border-3 border-gray-300 rounded-2xl md:rounded-3xl p-4 md:p-6 bg-gradient-to-br from-gray-50 to-blue-50">
+                            <button onclick="startTimer()" class="w-full bg-gradient-to-r from-green-500 to-cyan-500 text-white py-3 md:py-4 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn font-black text-base md:text-xl shadow-lg">
+                                <span class="text-xl md:text-2xl mr-2">▶️</span>함께 공부해요! <span class="text-xl md:text-2xl ml-2">💪</span>
                             </button>
                         </div>
 
                         <!-- 학습 중 상태 -->
-                        <div id="timerRunning" class="hidden border-3 border-green-400 rounded-3xl p-6 bg-gradient-to-br from-green-50 to-cyan-50">
-                            <div class="text-center mb-4">
-                                <div class="text-2xl font-black mb-3 text-dark">
-                                    <span class="text-3xl">🔥</span> 집중하고 있어요!
+                        <div id="timerRunning" class="hidden border-3 border-green-400 rounded-2xl md:rounded-3xl p-4 md:p-6 bg-gradient-to-br from-green-50 to-cyan-50">
+                            <div class="text-center mb-3 md:mb-4">
+                                <div class="text-lg md:text-2xl font-black mb-2 md:mb-3 text-dark">
+                                    <span class="text-2xl md:text-3xl">🔥</span> 집중하고 있어요!
                                 </div>
                                 <div class="text-md font-bold text-gray mb-2">
                                     시작: <span id="startTime" class="font-black text-dark"></span>
@@ -527,75 +527,75 @@
                         <div id="photoPreview" class="mt-3 grid grid-cols-3 gap-3"></div>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block text-lg font-black mb-3 text-dark">💬 메모</label>
-                        <textarea id="memo" rows="2" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-lg font-semibold text-dark" placeholder="어려웠던 점, 느낀 점 등 🤔"></textarea>
+                    <div class="mb-4 md:mb-6">
+                        <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">💬 메모</label>
+                        <textarea id="memo" rows="2" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-base md:text-lg font-semibold text-dark" placeholder="어려웠던 점, 느낀 점 등 🤔"></textarea>
                     </div>
 
-                    <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-5 rounded-full hover:from-blue-700 hover:to-blue-600 transition cute-btn font-black text-2xl shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.3);">
-                        <span class="text-3xl mr-2">📥</span>저장하기 ✨
+                    <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-3 md:py-5 rounded-full hover:from-blue-700 hover:to-blue-600 transition cute-btn font-black text-lg md:text-2xl shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.3);">
+                        <span class="text-2xl md:text-3xl mr-2">📥</span>저장하기 ✨
                     </button>
                 </div>
 
                 <!-- 학습 기록 목록 -->
-                <div class="cute-card p-8">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">📚</div>
-                        <h3 class="text-3xl font-black text-dark">나의 학습 기록 🌟</h3>
+                <div class="cute-card p-4 md:p-8">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📚</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">나의 학습 기록 🌟</h3>
                     </div>
-                    <div id="journalList" class="space-y-4"></div>
+                    <div id="journalList" class="space-y-3 md:space-y-4"></div>
                 </div>
             </div>
 
             <!-- 학습 미션 탭 -->
             <div id="content-mission" class="tab-content hidden">
-                <div class="cute-card p-8">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">🎯</div>
-                        <h3 class="text-3xl font-black text-dark">이번 주 학습 미션 🔥</h3>
+                <div class="cute-card p-4 md:p-8">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">🎯</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">이번 주 학습 미션 🔥</h3>
                     </div>
-                    <div id="missionList" class="space-y-4"></div>
+                    <div id="missionList" class="space-y-3 md:space-y-4"></div>
                 </div>
             </div>
 
             <!-- 자료실 탭 -->
             <div id="content-materials" class="tab-content hidden">
-                <div class="cute-card p-8">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">📂</div>
-                        <h3 class="text-3xl font-black text-dark">학습 자료 📚</h3>
+                <div class="cute-card p-4 md:p-8">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">📂</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">학습 자료 📚</h3>
                     </div>
-                    <div id="materialsList" class="grid md:grid-cols-2 gap-4"></div>
+                    <div id="materialsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4"></div>
                 </div>
             </div>
 
             <!-- AI 코칭 탭 -->
             <div id="content-coaching" class="tab-content hidden">
-                <div class="cute-card p-8 mb-6">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="text-4xl">🤖</div>
-                        <h3 class="text-3xl font-black text-dark">AI에게 질문하기 💡</h3>
+                <div class="cute-card p-4 md:p-8 mb-4 md:mb-6">
+                    <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                        <div class="text-2xl md:text-4xl">🤖</div>
+                        <h3 class="text-xl md:text-3xl font-black text-dark">AI에게 질문하기 💡</h3>
                     </div>
                     
-                    <div class="mb-6">
-                        <label class="block text-lg font-black mb-3 text-dark">💬 질문 내용</label>
-                        <textarea id="questionText" rows="4" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-lg font-semibold text-dark" placeholder="궁금한 것을 물어보세요 🤔"></textarea>
+                    <div class="mb-4 md:mb-6">
+                        <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">💬 질문 내용</label>
+                        <textarea id="questionText" rows="4" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition text-base md:text-lg font-semibold text-dark" placeholder="궁금한 것을 물어보세요 🤔"></textarea>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block text-lg font-black mb-3 text-dark">📷 문제 사진 첨부 (선택)</label>
-                        <input type="file" id="questionPhoto" accept="image/*" class="w-full px-5 py-3 border-2 border-gray-300 rounded-2xl transition" onchange="handleQuestionPhotoUpload(event)">
-                        <p class="text-sm mt-2 font-bold text-gray">🌟 문제 사진을 첨부하면 더 정확한 답변을 받을 수 있습니다</p>
+                    <div class="mb-4 md:mb-6">
+                        <label class="block text-base md:text-lg font-black mb-2 md:mb-3 text-dark">📷 문제 사진 첨부 (선택)</label>
+                        <input type="file" id="questionPhoto" accept="image/*" class="w-full px-3 py-2 md:px-5 md:py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl transition" onchange="handleQuestionPhotoUpload(event)">
+                        <p class="text-xs md:text-sm mt-2 font-bold text-gray">🌟 문제 사진을 첨부하면 더 정확한 답변을 받을 수 있습니다</p>
                         <div id="questionPhotoPreview" class="mt-3"></div>
                     </div>
 
-                    <button onclick="askAI()" class="w-full bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 text-white py-5 rounded-full hover:from-green-600 hover:to-blue-600 transition cute-btn font-black text-2xl shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.3);">
-                        <span class="text-3xl mr-2">🤖</span>AI에게 질문하기 ✨
+                    <button onclick="askAI()" class="w-full bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 text-white py-3 md:py-5 rounded-full hover:from-green-600 hover:to-blue-600 transition cute-btn font-black text-lg md:text-2xl shadow-xl" style="border: 3px solid rgba(251, 191, 36, 0.3);">
+                        <span class="text-2xl md:text-3xl mr-2">🤖</span>AI에게 질문하기 ✨
                     </button>
                 </div>
 
                 <!-- 질문 목록 -->
-                <div class="cute-card p-8">
+                <div class="cute-card p-4 md:p-8">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="text-4xl">💭</div>
                         <h3 class="text-3xl font-black text-dark">나의 질문 🌟</h3>
