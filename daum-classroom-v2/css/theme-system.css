@@ -1,0 +1,283 @@
+/* ============================================
+   테마 시스템 - 다크모드 & 컬러 테마
+   ============================================ */
+
+:root {
+    /* 라이트 모드 - 청소년 취향 그라데이션 */
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --warm-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    
+    /* 기본 색상 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-card: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    
+    /* 액센트 색상 */
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-orange: #f97316;
+    --accent-green: #10b981;
+    
+    /* 그림자 */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+    
+    /* 애니메이션 속도 */
+    --transition-fast: 0.2s;
+    --transition-normal: 0.3s;
+    --transition-slow: 0.5s;
+}
+
+/* 다크 모드 */
+[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.5);
+}
+
+/* 컬러 테마 - 민트 */
+[data-color-theme="mint"] {
+    --primary-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --accent-purple: #10b981;
+    --accent-pink: #06b6d4;
+}
+
+/* 컬러 테마 - 선셋 */
+[data-color-theme="sunset"] {
+    --primary-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --accent-purple: #f97316;
+    --accent-pink: #ec4899;
+}
+
+/* 컬러 테마 - 오션 */
+[data-color-theme="ocean"] {
+    --primary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --accent-purple: #0ea5e9;
+    --accent-pink: #8b5cf6;
+}
+
+/* 컬러 테마 - 체리 */
+[data-color-theme="cherry"] {
+    --primary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --accent-purple: #ec4899;
+    --accent-pink: #f43f5e;
+}
+
+/* 기본 스타일 적용 */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background var(--transition-normal), color var(--transition-normal);
+}
+
+.card,
+.stat-card,
+.cute-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.card:hover,
+.cute-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+/* 그라데이션 카드 */
+.gradient-card {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+}
+
+.gradient-card.secondary {
+    background: var(--secondary-gradient);
+}
+
+.gradient-card.success {
+    background: var(--success-gradient);
+}
+
+.gradient-card.warm {
+    background: var(--warm-gradient);
+}
+
+/* 테마 토글 버튼 */
+.theme-controls {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.theme-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: var(--shadow-glow);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* 컬러 테마 선택기 */
+.color-theme-picker {
+    position: fixed;
+    top: 160px;
+    right: 20px;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1001;
+    display: none;
+}
+
+.color-theme-picker.active {
+    display: block;
+    animation: scaleIn 0.3s ease;
+}
+
+.color-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.color-option {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(1.2);
+}
+
+.color-option.active {
+    border-color: var(--text-primary);
+}
+
+.color-option.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.color-option.purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.color-option.mint { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.color-option.sunset { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.color-option.ocean { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.color-option.cherry { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+
+/* 글래스모피즘 효과 */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .glass-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .theme-controls {
+        top: 70px;
+        right: 12px;
+    }
+    
+    .theme-toggle-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+    
+    .color-theme-picker {
+        right: 12px;
+        padding: 12px;
+    }
+    
+    .color-option {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* 네온 효과 (선택사항) */
+.neon-text {
+    text-shadow: 
+        0 0 5px var(--accent-purple),
+        0 0 10px var(--accent-purple),
+        0 0 20px var(--accent-purple);
+}
+
+[data-theme="dark"] .neon-text {
+    text-shadow: 
+        0 0 10px var(--accent-purple),
+        0 0 20px var(--accent-purple),
+        0 0 40px var(--accent-purple),
+        0 0 80px var(--accent-purple);
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
