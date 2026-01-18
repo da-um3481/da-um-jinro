@@ -124,6 +124,11 @@ function showTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.add('tab-active');
     document.getElementById(`tab-${tabName}`).classList.remove('hover:bg-gray-100');
     document.getElementById(`content-${tabName}`).classList.remove('hidden');
+    
+    // Sticky Nav 업데이트
+    if (window.updateActiveNavLink) {
+        updateActiveNavLink(tabName);
+    }
 }
 
 // 커스텀 과목 관리

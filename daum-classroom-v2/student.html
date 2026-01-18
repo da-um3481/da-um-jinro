@@ -161,6 +161,105 @@
         .text-gray {
             color: #64748B !important;
         }
+        
+        /* Sticky Navigation */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-nav.scrolled {
+            padding: 8px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        
+        @media (max-width: 767px) {
+            .sticky-nav {
+                padding: 8px 0;
+            }
+            
+            .nav-container {
+                padding: 0 12px;
+            }
+            
+            .nav-brand {
+                font-size: 16px;
+            }
+            
+            .nav-menu {
+                gap: 8px;
+                font-size: 13px;
+            }
+            
+            .nav-link {
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -185,6 +284,39 @@
             </div>
         </div>
     </header>
+
+    <!-- Sticky Navigation -->
+    <nav id="stickyNav" class="sticky-nav">
+        <div class="nav-container">
+            <span class="nav-brand">
+                <span>🎓</span>
+                <span class="hidden md:inline">DA.UM 학습 포털</span>
+                <span class="md:hidden">DA.UM</span>
+            </span>
+            <div class="nav-menu">
+                <a href="#" onclick="showTab('timetable'); return false;" class="nav-link" data-tab="timetable">
+                    <span class="hidden md:inline">📅 시간표</span>
+                    <span class="md:hidden">📅</span>
+                </a>
+                <a href="#" onclick="showTab('review'); return false;" class="nav-link" data-tab="review">
+                    <span class="hidden md:inline">📖 복습</span>
+                    <span class="md:hidden">📖</span>
+                </a>
+                <a href="#" onclick="showTab('journal'); return false;" class="nav-link" data-tab="journal">
+                    <span class="hidden md:inline">✍️ 자율학습</span>
+                    <span class="md:hidden">✍️</span>
+                </a>
+                <a href="#" onclick="showTab('missions'); return false;" class="nav-link" data-tab="missions">
+                    <span class="hidden md:inline">🎯 미션</span>
+                    <span class="md:hidden">🎯</span>
+                </a>
+                <a href="#" onclick="showTab('materials'); return false;" class="nav-link" data-tab="materials">
+                    <span class="hidden md:inline">📚 자료실</span>
+                    <span class="md:hidden">📚</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <!-- 로그인 화면 -->
     <div id="loginScreen" class="container mx-auto px-4 py-8 md:py-12">

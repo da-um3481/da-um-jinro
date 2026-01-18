@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScroll();
     initEmptyStates();
     initSkeletonLoading();
+    initStickyNav();
     console.log('✅ DA.UM UX 개선 스크립트 로드 완료');
 });
 
@@ -532,5 +533,42 @@ async function saveStudyRecord(data) {
 
 window.saveStudyRecord = saveStudyRecord;
 
-// 23. 완료! ✨
+// 23. Sticky Navigation
+function initStickyNav() {
+    const nav = document.getElementById('stickyNav');
+    if (!nav) return;
+    
+    // 스크롤 시 nav 스타일 변경
+    let lastScroll = 0;
+    window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+        
+        lastScroll = currentScroll;
+    });
+    
+    // 초기 active 상태 설정
+    updateActiveNavLink('timetable');
+}
+
+function updateActiveNavLink(tabName) {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        const linkTab = link.getAttribute('data-tab');
+        if (linkTab === tabName) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+window.updateActiveNavLink = updateActiveNavLink;
+
+// 24. 완료! ✨
 console.log('✅ DA.UM UX 개선 스크립트 로드 완료');
