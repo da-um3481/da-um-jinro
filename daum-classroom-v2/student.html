@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/responsive-improvements.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
         
@@ -618,7 +619,10 @@
                         <div class="text-2xl md:text-4xl">📚</div>
                         <h3 class="text-xl md:text-3xl font-black text-dark">나의 학습 기록 🌟</h3>
                     </div>
-                    <div id="journalList" class="space-y-3 md:space-y-4"></div>
+                    <div id="journalList" 
+                         class="space-y-3 md:space-y-4"
+                         data-empty-message="학습 기록을 작성해보세요!"
+                         data-empty-icon="📝"></div>
                 </div>
             </div>
 
@@ -629,7 +633,10 @@
                         <div class="text-2xl md:text-4xl">🎯</div>
                         <h3 class="text-xl md:text-3xl font-black text-dark">이번 주 쌤 미션 🔥</h3>
                     </div>
-                    <div id="missionList" class="space-y-3 md:space-y-4"></div>
+                    <div id="missionList" 
+                         class="space-y-3 md:space-y-4"
+                         data-empty-message="쌤이 미션을 올려주시면 여기에 표시돼요!"
+                         data-empty-icon="🎯"></div>
                 </div>
             </div>
 
@@ -640,7 +647,10 @@
                         <div class="text-2xl md:text-4xl">📂</div>
                         <h3 class="text-xl md:text-3xl font-black text-dark">학습 자료 📚</h3>
                     </div>
-                    <div id="materialsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4"></div>
+                    <div id="materialsList" 
+                         class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4"
+                         data-empty-message="학습 자료가 추가되면 여기에 표시돼요!"
+                         data-empty-icon="📚"></div>
                 </div>
             </div>
 
@@ -723,6 +733,7 @@
         </div>
     </div>
 
+    <script src="js/ux-improvements.js"></script>
     <script src="js/student.js"></script>
 </body>
 </html>

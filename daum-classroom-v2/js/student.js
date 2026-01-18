@@ -65,7 +65,11 @@ function login() {
     // 타이머 상태 복원
     const restored = restoreTimerState();
     if (restored) {
-        alert('⏱️ 이전에 진행 중이던 학습이 계속됩니다!');
+        if (window.showToast) {
+            showToast('⏱️ 이전에 진행 중이던 학습이 계속됩니다!', 'info', 4000);
+        } else {
+            alert('⏱️ 이전에 진행 중이던 학습이 계속됩니다!');
+        }
     }
     
     showTab('timetable'); // ⭐ 첫 번째 탭을 시간표로 설정
@@ -312,7 +316,12 @@ function saveJournal() {
     const memo = document.getElementById('memo').value.trim();
 
     if (!content) {
-        alert('학습 내용을 입력해주세요');
+        if (window.showToast) {
+            showToast('학습 내용을 입력해주세요', 'warning');
+        } else {
+            alert('학습 내용을 입력해주세요');
+        }
+        return;
         return;
     }
 
@@ -320,7 +329,12 @@ function saveJournal() {
     const studyTime = timerElapsedSeconds > 0 ? Math.round(timerElapsedSeconds / 60) : 0;
     
     if (studyTime === 0) {
-        alert('⏱️ 학습 시간을 측정해주세요!\n\n"학습 시작" 버튼을 눌러 타이머를 시작한 후,\n학습이 끝나면 "완료" 버튼을 눌러주세요.');
+        if (window.showToast) {
+            showToast('⏱️ 학습 시간을 측정해주세요! "학습 시작" 버튼을 눌러 타이머를 시작하세요.', 'warning', 4000);
+        } else {
+            alert('⏱️ 학습 시간을 측정해주세요!\n\n"학습 시작" 버튼을 눌러 타이머를 시작한 후,\n학습이 끝나면 "완료" 버튼을 눌러주세요.');
+        }
+        return;
         return;
     }
 
@@ -347,7 +361,11 @@ function saveJournal() {
             updateReviewStatus(session.subject, session.duration);
         });
         
-        alert(`✅ ${studySessions.length}개 과목의 학습 기록이 저장되었습니다!\n\n${studySessions.map(s => `• ${getSubjectIcon(s.subject)} ${s.subject}: ${s.duration}분`).join('\n')}`);
+        if (window.showToast) {
+            showToast(`✅ ${studySessions.length}개 과목의 학습 기록이 저장되었습니다! ${studySessions.map(s => `${getSubjectIcon(s.subject)} ${s.subject}: ${s.duration}분`).join(', ')}`, 'success', 4000);
+        } else {
+            alert(`✅ ${studySessions.length}개 과목의 학습 기록이 저장되었습니다!\n\n${studySessions.map(s => `• ${getSubjectIcon(s.subject)} ${s.subject}: ${s.duration}분`).join('\n')}`);
+        }
     } else {
         // 세션이 없으면 기존 방식대로 저장 (호환성)
         const subject = document.getElementById('subject').value;
@@ -382,7 +400,11 @@ function saveJournal() {
             encourageMessage = '\n\n🌱 작은 시작도 소중해요! 다음엔 더 오래 해볼까요?';
         }
         
-        alert(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`);
+        if (window.showToast) {
+            showToast(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`, 'success', 4000);
+        } else {
+            alert(`✅ 학습 기록이 저장되었습니다!${encourageMessage}`);
+        }
     }
     
     // 저장
@@ -676,7 +698,11 @@ function checkStudyGoalAchievement(totalMinutes) {
     // 목표 달성했으면 축하 메시지
     if (progressMinutes >= targetMinutes) {
         setTimeout(() => {
-            alert('🎉🎉🎉\n\n오늘 학습계획이 달성되었어요~~\n\n뿌듯한 아침을 위해\n이제 잠을 자야해요~~~\n\n💤 내일도 화이팅! 💪');
+            if (window.showToast) {
+                showToast('🎉🎉🎉 오늘 학습계획이 달성되었어요~~ 뿌듯한 아침을 위해 이제 잠을 자야해요~~~ 💤 내일도 화이팅! 💪', 'success', 6000);
+            } else {
+                alert('🎉🎉🎉\n\n오늘 학습계획이 달성되었어요~~\n\n뿌듯한 아침을 위해\n이제 잠을 자야해요~~~\n\n💤 내일도 화이팅! 💪');
+            }
         }, 500);
     }
 }
@@ -933,7 +959,11 @@ function saveTimetable() {
     timetableData[currentEditingDay] = periods;
     saveTimetableData(timetableData);
     
-    alert(`${currentEditingDay}요일 시간표가 저장되었습니다! ✨`);
+    if (window.showToast) {
+        showToast(`${currentEditingDay}요일 시간표가 저장되었습니다! ✨`, 'success');
+    } else {
+        alert(`${currentEditingDay}요일 시간표가 저장되었습니다! ✨`);
+    }
     loadTimetableView();
 }
 
@@ -1554,7 +1584,11 @@ function saveDailyPlan() {
     }
     
     saveDailyStudyPlanData(selectedDailyStudyHours);
-    alert(`✅ 오늘 ${selectedDailyStudyHours}시간 자율학습 계획이 저장되었습니다!\n\n목표를 향해 달려가요! 💪`);
+    if (window.showToast) {
+        showToast(`✅ 오늘 ${selectedDailyStudyHours}시간 자율학습 계획이 저장되었습니다! 목표를 향해 달려가요! 💪`, 'success');
+    } else {
+        alert(`✅ 오늘 ${selectedDailyStudyHours}시간 자율학습 계획이 저장되었습니다!\n\n목표를 향해 달려가요! 💪`);
+    }
     
     loadDailyStudyPlan();
 }
