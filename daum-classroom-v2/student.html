@@ -268,13 +268,13 @@
     <!-- 헤더 -->
     <header class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white py-3 md:py-6 shadow-xl" style="border-bottom: 4px solid rgba(251, 191, 36, 0.5);">
         <div class="container mx-auto px-3 md:px-4 flex justify-between items-center">
-            <div class="flex items-center gap-2 md:gap-3">
+            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition" style="text-decoration: none; color: inherit;">
                 <div class="text-3xl md:text-5xl bounce">🎓</div>
                 <div>
                     <h1 class="text-lg md:text-3xl font-black" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">💜 DA.UM 학생 포털 ✨</h1>
                     <p class="text-xs md:text-sm opacity-90 font-semibold" id="studentName">🌟 로그인하고 함께 공부해요!</p>
                 </div>
-            </div>
+            </a>
             <div class="flex items-center gap-2 md:gap-3">
                 <!-- 학습 중 버튼 (타이머 진행 중일 때만 표시) -->
                 <button id="studyingBadge" onclick="goToStudying()" class="hidden bg-gradient-to-r from-green-500 to-cyan-500 text-white px-3 py-2 md:px-4 md:py-3 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn font-black shadow-xl text-xs md:text-sm pulse-animation">
@@ -290,11 +290,11 @@
     <!-- Sticky Navigation -->
     <nav id="stickyNav" class="sticky-nav">
         <div class="nav-container">
-            <span class="nav-brand">
+            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="nav-brand cursor-pointer hover:opacity-80 transition" style="text-decoration: none; color: inherit;">
                 <span>🎓</span>
                 <span class="hidden md:inline">DA.UM 학습 포털</span>
                 <span class="md:hidden">DA.UM</span>
-            </span>
+            </a>
             <div class="nav-menu">
                 <a href="#" onclick="showTab('timetable'); return false;" class="nav-link" data-tab="timetable">
                     <span class="hidden md:inline">📅 시간표</span>
