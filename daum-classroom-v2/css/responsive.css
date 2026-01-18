@@ -1,0 +1,608 @@
+/* ====================================
+   DA.UM 학생 포털 - 반응형 & UX 개선 CSS
+   ==================================== */
+
+/* ====================================
+   1. 기본 Reset & 타이포그래피
+   ==================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    line-height: 1.6;
+    color: #1f2937;
+    background-color: #f3f4f6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ====================================
+   2. 컨테이너 & 레이아웃
+   ==================================== */
+.container,
+.main-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+@media (min-width: 768px) {
+    .container,
+    .main-content {
+        padding: 24px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container,
+    .main-content {
+        padding: 32px;
+    }
+}
+
+/* ====================================
+   3. 카드 그리드 시스템
+   ==================================== */
+.stats-grid,
+.subject-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+}
+
+/* 통계 그리드 - 반응형 */
+@media (min-width: 640px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 과목 그리드 - 반응형 */
+@media (min-width: 640px) {
+    .subject-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .subject-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* ====================================
+   4. 카드 스타일
+   ==================================== */
+.card,
+.stat-card,
+.subject-card,
+.cute-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover,
+.stat-card:hover,
+.subject-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 모바일에서 패딩 축소 */
+@media (max-width: 767px) {
+    .card,
+    .stat-card,
+    .subject-card,
+    .cute-card {
+        padding: 16px;
+    }
+}
+
+/* ====================================
+   5. 인터랙티브 요소 (버튼, 입력)
+   ==================================== */
+button,
+.btn,
+.button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+}
+
+button:hover,
+.btn:hover,
+.button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active,
+.btn:active,
+.button:active {
+    transform: translateY(0);
+}
+
+/* 모바일에서 버튼 full-width */
+@media (max-width: 767px) {
+    .mobile-full-btn {
+        width: 100%;
+    }
+}
+
+/* ====================================
+   6. 타이포그래피
+   ==================================== */
+h1 {
+    font-size: clamp(24px, 5vw, 32px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+h2 {
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+h3 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+p {
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.6;
+}
+
+/* ====================================
+   7. 네비게이션 탭
+   ==================================== */
+.nav-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 8px;
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-tabs button {
+    flex-shrink: 0;
+    min-width: 120px;
+    padding: 12px 16px;
+    white-space: nowrap;
+}
+
+.nav-tabs button.tab-active {
+    background: white;
+    color: #8b5cf6;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+@media (min-width: 768px) {
+    .nav-tabs {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-tabs button {
+        flex: 1 1 auto;
+        min-width: 140px;
+    }
+}
+
+/* ====================================
+   8. 반응형 테이블
+   ==================================== */
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+@media (max-width: 767px) {
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 8px 4px;
+    }
+}
+
+/* ====================================
+   9. 입력 필드
+   ==================================== */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* iOS에서 input zoom 방지 */
+@media (max-width: 767px) {
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        font-size: 16px;
+    }
+}
+
+/* ====================================
+   10. 모달
+   ==================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+@media (max-width: 767px) {
+    .modal-content {
+        max-height: 95vh;
+        padding: 20px;
+    }
+}
+
+/* ====================================
+   11. 스크롤 Top 버튼
+   ==================================== */
+.scroll-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #8b5cf6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    cursor: pointer;
+    z-index: 999;
+    transition: all 0.3s ease;
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+@media (max-width: 767px) {
+    .scroll-to-top {
+        width: 48px;
+        height: 48px;
+        bottom: 16px;
+        right: 16px;
+    }
+}
+
+/* ====================================
+   12. 로딩 & 토스트
+   ==================================== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #8b5cf6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ====================================
+   13. 스켈레톤 로더
+   ==================================== */
+.skeleton {
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ====================================
+   14. 접근성
+   ==================================== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+*:focus-visible {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 2px;
+}
+
+/* ====================================
+   15. 인쇄 스타일
+   ==================================== */
+@media print {
+    .nav-tabs,
+    .scroll-to-top,
+    button:not(.print-keep) {
+        display: none !important;
+    }
+    
+    .card,
+    .stat-card {
+        break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+}
+
+/* ====================================
+   16. 다크모드 준비 (선택사항)
+   ==================================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1f2937;
+        --bg-secondary: #111827;
+        --text-primary: #f9fafb;
+        --text-secondary: #d1d5db;
+    }
+    
+    /* 다크모드 활성화 시 주석 해제
+    body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+    }
+    
+    .card,
+    .cute-card {
+        background: var(--bg-secondary);
+    }
+    */
+}
+
+/* ====================================
+   17. 모션 감소 (접근성)
+   ==================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ====================================
+   18. 유틸리티 클래스
+   ==================================== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-4 { margin-bottom: 1rem; }
+
+.p-1 { padding: 0.25rem; }
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 0.75rem; }
+.p-4 { padding: 1rem; }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.hidden { display: none !important; }
+.block { display: block !important; }
+
+/* 반응형 유틸리티 */
+@media (min-width: 768px) {
+    .md\:flex { display: flex; }
+    .md\:hidden { display: none; }
+    .md\:block { display: block; }
+}
+
+/* ====================================
+   19. 학습 중 배지 (펄스 애니메이션)
+   ==================================== */
+.studying-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.studying-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+    }
+}
+
+/* ====================================
+   20. 과목별 색상 (일관성)
+   ==================================== */
+.subject-korean { background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%); }
+.subject-english { background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%); }
+.subject-math { background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%); }
+.subject-science { background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); }
+.subject-social { background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%); }
+.subject-other { background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); }
+
+/* ====================================
+   21. 진행률 바 (공통)
+   ==================================== */
+.progress-bar-container {
+    width: 100%;
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+    transition: width 0.3s ease;
+}
+
+/* ====================================
+   22. 완료! ✨
+   ==================================== */
