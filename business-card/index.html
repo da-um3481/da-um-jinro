@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다움진로진학컨설팅 - 정라미 명함</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        :root {
+            --primary-blue: #1E40AF;
+            --primary-teal: #0D9488;
+            --accent-yellow: #FBBF24;
+            --gradient-start: #1E40AF;
+            --gradient-end: #0D9488;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .business-card {
+            width: 900px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        
+        .business-card:hover {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+        }
+        
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background: var(--accent-yellow);
+            border-radius: 2px;
+        }
+        
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(251, 191, 36, 0.1);
+            color: var(--accent-yellow);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .contact-item:hover {
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .qr-container {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .control-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            background: white;
+            color: var(--primary-blue);
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* 인쇄용 스타일 */
+        @media print {
+            body {
+                background: white;
+            }
+            .business-card {
+                width: 90mm;
+                height: 50mm;
+                box-shadow: none;
+                page-break-after: always;
+            }
+            .controls {
+                display: none;
+            }
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .business-card {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                aspect-ratio: 9/5;
+            }
+            
+            .controls {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 컨트롤 버튼 -->
+    <div class="controls">
+        <button class="control-btn" onclick="window.print()">
+            <i class="fas fa-print"></i> 인쇄
+        </button>
+        <button class="control-btn" onclick="downloadAsImage()">
+            <i class="fas fa-download"></i> 이미지 저장
+        </button>
+        <button class="control-btn" onclick="flipCard()">
+            <i class="fas fa-sync"></i> 뒤집기
+        </button>
+    </div>
+
+    <!-- 명함 앞면 -->
+    <div class="business-card" id="businessCard">
+        <div class="card-front">
+            <!-- 왼쪽: 브랜드 영역 -->
+            <div class="gradient-bg" style="position: absolute; left: 0; top: 0; width: 380px; height: 100%; padding: 50px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <!-- 로고/브랜드 -->
+                    <div class="floating">
+                        <div style="font-size: 48px; color: white; margin-bottom: 10px;">💜</div>
+                        <h1 style="font-size: 32px; font-weight: 900; color: white; line-height: 1.2; margin-bottom: 5px;">
+                            DA.UM
+                        </h1>
+                        <div class="accent-line" style="margin-bottom: 15px;"></div>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.9); font-weight: 500;">
+                            진로진학컨설팅
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 하단 태그라인 -->
+                <div>
+                    <p style="font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.6;">
+                        "학생 한 명 한 명의<br>
+                        꿈을 다움질하다"
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 오른쪽: 연락처 영역 -->
+            <div style="position: absolute; right: 0; top: 0; width: 520px; height: 100%; padding: 50px; display: flex; flex-direction: column; justify-content: space-between;">
+                <!-- 이름/직책 -->
+                <div>
+                    <h2 style="font-size: 36px; font-weight: 900; color: var(--primary-blue); margin-bottom: 8px;">
+                        정라미
+                    </h2>
+                    <p style="font-size: 18px; color: var(--primary-teal); font-weight: 600; margin-bottom: 30px;">
+                        진로진학 컨설턴트
+                    </p>
+                    
+                    <!-- 연락처 -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div class="contact-item">
+                            <div class="icon-box">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <span style="font-size: 16px; color: #374151;">010-XXXX-XXXX</span>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="icon-box">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <span style="font-size: 16px; color: #374151;">ramijung@daum.com</span>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="icon-box">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <span style="font-size: 16px; color: #374151;">경북 김천시</span>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="icon-box">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <span style="font-size: 16px; color: #374151;">www.daum-consulting.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- QR 코드 -->
+                <div style="display: flex; justify-content: flex-end;">
+                    <div class="qr-container">
+                        <div id="qrcode"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // QR 코드 생성
+        const qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: "https://da-um3481.github.io/daum-classroom-v2/",
+            width: 100,
+            height: 100,
+            colorDark: "#1E40AF",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        
+        // 명함 뒤집기
+        let isFlipped = false;
+        function flipCard() {
+            const card = document.getElementById('businessCard');
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                card.style.transform = 'rotateY(180deg)';
+            } else {
+                card.style.transform = 'rotateY(0deg)';
+            }
+        }
+        
+        // 이미지로 다운로드
+        function downloadAsImage() {
+            const card = document.getElementById('businessCard');
+            
+            html2canvas(card, {
+                scale: 3,
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '다움진로진학컨설팅_정라미_명함.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+        
+        // 인쇄 최적화
+        window.addEventListener('beforeprint', () => {
+            document.body.style.background = 'white';
+        });
+        
+        window.addEventListener('afterprint', () => {
+            document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        });
+    </script>
+</body>
+</html>
