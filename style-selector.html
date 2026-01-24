@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 DA.UM 스타일 선택 - 어떤 모험을 선택하시겠어요?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* 헤더 */
+        .header {
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .title {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            opacity: 0.9;
+        }
+
+        /* 스타일 선택 그리드 */
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        /* 스타일 카드 */
+        .style-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .style-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .style-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 미리보기 영역 */
+        .preview-area {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-rpg {
+            background: linear-gradient(135deg, #0a0e27, #1a1a3e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .preview-rpg::before {
+            content: '⭐';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .preview-casual {
+            background: linear-gradient(135deg, #ffeef8, #e0f7ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .preview-casual::before {
+            content: '🌸';
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.2;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .preview-icon {
+            font-size: 120px;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* 카드 정보 영역 */
+        .card-info {
+            padding: 40px 30px;
+            color: #333;
+        }
+
+        .card-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .rpg-title {
+            background: linear-gradient(135deg, #ffd700, #ff8c42);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .casual-title {
+            background: linear-gradient(135deg, #ff6b9d, #48dbfb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-description {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* 특징 리스트 */
+        .features-list {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+        }
+
+        /* 선택 버튼 */
+        .select-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 22px;
+            font-weight: 900;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .select-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .select-btn:hover::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .select-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-rpg {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-rpg:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+        }
+
+        .btn-casual {
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-casual:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+        }
+
+        /* 추천 배지 */
+        .recommended-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 900;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(245, 87, 108, 0.5);
+            }
+        }
+
+        /* 하단 정보 */
+        .footer-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            animation: fadeIn 1s ease-out 0.5s backwards;
+        }
+
+        .footer-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .direct-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .direct-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .style-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin: 0 auto 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .preview-area {
+                height: 300px;
+            }
+
+            .preview-icon {
+                font-size: 80px;
+            }
+
+            .card-title {
+                font-size: 28px;
+            }
+
+            .card-description {
+                font-size: 16px;
+            }
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 별 배경 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 별 배경 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1 class="title">🎨 스타일을 선택하세요!</h1>
+            <p class="subtitle">당신의 학습 여정은 어떤 모습일까요?</p>
+        </div>
+
+        <!-- 스타일 선택 그리드 -->
+        <div class="style-grid">
+            <!-- RPG 스타일 -->
+            <div class="style-card" onclick="selectStyle('rpg')">
+                <div class="recommended-badge">🔥 인기</div>
+                <div class="preview-area preview-rpg">
+                    <div class="preview-icon">⚔️</div>
+                </div>
+                <div class="card-info">
+                    <h2 class="card-title rpg-title">RPG 던전 크롤러</h2>
+                    <p class="card-description">
+                        어두운 판타지 세계에서 펼쳐지는 학습 퀘스트!
+                        레벨업하고 장비를 모으며 성장하는 모험가가 되어보세요.
+                    </p>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <span class="feature-icon">🌌</span>
+                            <span>다크 판타지 배경과 황금 액센트</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">⚔️</span>
+                            <span>캐릭터 스탯과 레벨 시스템</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">💰</span>
+                            <span>골드 획득과 퀘스트 보상</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🏆</span>
+                            <span>업적과 칭호 시스템</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✨</span>
+                            <span>화려한 스킬 이펙트</span>
+                        </div>
+                    </div>
+                    <button class="select-btn btn-rpg" onclick="event.stopPropagation(); window.location.href='landing-rpg.html'">
+                        <span>⚔️ RPG 모험 시작하기</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 캐주얼 스타일 -->
+            <div class="style-card" onclick="selectStyle('casual')">
+                <div class="recommended-badge">💖 추천</div>
+                <div class="preview-area preview-casual">
+                    <div class="preview-icon">🐰</div>
+                </div>
+                <div class="card-info">
+                    <h2 class="card-title casual-title">캐주얼 파티 게임</h2>
+                    <p class="card-description">
+                        귀여운 마스코트와 함께하는 즐거운 학습!
+                        밝고 화사한 분위기에서 친구들과 경쟁하며 성장하세요.
+                    </p>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <span class="feature-icon">🌸</span>
+                            <span>밝은 파스텔 컬러와 귀여운 디자인</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🐰</span>
+                            <span>친근한 마스코트 캐릭터</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🎁</span>
+                            <span>랜덤 보상과 선물 상자</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">👥</span>
+                            <span>친구 초대와 협동 플레이</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🎉</span>
+                            <span>색종이와 축하 애니메이션</span>
+                        </div>
+                    </div>
+                    <button class="select-btn btn-casual" onclick="event.stopPropagation(); window.location.href='landing-casual.html'">
+                        <span>🎈 파티 시작하기</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 정보 -->
+        <div class="footer-info">
+            <p class="footer-text">💡 나중에 언제든지 스타일을 변경할 수 있어요!</p>
+            <p class="footer-text">또는 바로 클래스룸으로 이동하시겠어요?</p>
+            <a href="daum-classroom-v2/student.html" class="direct-link">
+                🚀 클래스룸 바로가기
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 별 생성
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        // 스타일 선택 함수
+        function selectStyle(style) {
+            if (style === 'rpg') {
+                window.location.href = 'landing-rpg.html';
+            } else if (style === 'casual') {
+                window.location.href = 'landing-casual.html';
+            }
+        }
+
+        // 카드 호버 효과
+        document.querySelectorAll('.style-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const icon = this.querySelector('.preview-icon');
+                icon.style.transform = 'scale(1.2) rotate(10deg)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                const icon = this.querySelector('.preview-icon');
+                icon.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>

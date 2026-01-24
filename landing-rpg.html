@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚔️ DA.UM 학습 퀘스트 - RPG 모험의 시작</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 별이 빛나는 배경 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* 메인 컨테이너 */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* 타이틀 영역 */
+        .title-area {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .main-title {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 72px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8)); }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #00d9ff;
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        /* 캐릭터 스탯 카드 */
+        .character-card {
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 50px rgba(255, 215, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .character-card h2 {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 32px;
+            color: #ffd700;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid #00d9ff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: #00d9ff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            color: #ffd700;
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .stat-icon {
+            font-size: 24px;
+        }
+
+        /* 경험치 바 */
+        .exp-bar-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .exp-label {
+            font-size: 16px;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .exp-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #ffd700;
+            position: relative;
+        }
+
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            width: 0%;
+            border-radius: 15px;
+            animation: fillExp 2s ease-out 0.5s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exp-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes fillExp {
+            to { width: 35%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        .exp-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        /* 액션 버튼들 */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        .btn {
+            font-family: 'Black Han Sans', sans-serif;
+            padding: 20px 40px;
+            font-size: 24px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: white;
+            border: 3px solid #ffd700;
+            animation: pulse 2s infinite;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5); }
+            50% { box-shadow: 0 10px 40px rgba(255, 107, 53, 0.8), 0 0 30px rgba(255, 215, 0, 0.5); }
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: 3px solid #00d9ff;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 퀘스트 힌트 */
+        .quest-hints {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+            margin-top: 60px;
+            animation: fadeInUp 1s ease-out 0.9s backwards;
+        }
+
+        .quest-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .quest-card:hover::before {
+            left: 100%;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border-color: #ffd700;
+        }
+
+        .quest-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        .quest-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .quest-desc {
+            font-size: 14px;
+            color: #00d9ff;
+            line-height: 1.6;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 48px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .character-card {
+                padding: 30px 20px;
+            }
+
+            .btn {
+                padding: 15px 30px;
+                font-size: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* 애니메이션 키프레임 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 파티클 효과 */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            animation: float 4s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 별 배경 -->
+    <div class="stars" id="stars"></div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="main-container">
+        <!-- 타이틀 -->
+        <div class="title-area">
+            <h1 class="main-title">⚔️ DA.UM 학습 퀘스트 ⚔️</h1>
+            <p class="subtitle">📜 당신의 전설이 시작됩니다 📜</p>
+        </div>
+
+        <!-- 캐릭터 스탯 카드 -->
+        <div class="character-card">
+            <h2>🛡️ 모험가 프로필</h2>
+            
+            <div class="stat-item">
+                <span class="stat-label">
+                    <span class="stat-icon">⭐</span>
+                    현재 레벨
+                </span>
+                <span class="stat-value">Lv.1</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">
+                    <span class="stat-icon">👤</span>
+                    직업
+                </span>
+                <span class="stat-value">초보 학습자</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">
+                    <span class="stat-icon">💰</span>
+                    보유 골드
+                </span>
+                <span class="stat-value">0 G</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">
+                    <span class="stat-icon">🏆</span>
+                    완료 퀘스트
+                </span>
+                <span class="stat-value">0 / ∞</span>
+            </div>
+
+            <!-- 경험치 바 -->
+            <div class="exp-bar-container">
+                <div class="exp-label">💎 경험치 (EXP)</div>
+                <div class="exp-bar">
+                    <div class="exp-fill"></div>
+                </div>
+                <div class="exp-text">0 / 100 EXP (35%)</div>
+            </div>
+        </div>
+
+        <!-- 액션 버튼 -->
+        <div class="action-buttons">
+            <a href="daum-classroom-v2/student.html" class="btn btn-primary">
+                <span>🎮 모험 시작하기</span>
+            </a>
+            <a href="#" class="btn btn-secondary" onclick="alert('곧 업데이트 예정입니다!'); return false;">
+                <span>📊 랭킹 보기</span>
+            </a>
+        </div>
+
+        <!-- 퀘스트 힌트 -->
+        <div class="quest-hints">
+            <div class="quest-card">
+                <div class="quest-icon">📚</div>
+                <div class="quest-title">일일 학습 퀘스트</div>
+                <div class="quest-desc">매일 복습하고<br>경험치 +50 획득!</div>
+            </div>
+
+            <div class="quest-card">
+                <div class="quest-icon">🎯</div>
+                <div class="quest-title">성적 상승 미션</div>
+                <div class="quest-desc">목표 달성 시<br>골드 +300 보상!</div>
+            </div>
+
+            <div class="quest-card">
+                <div class="quest-icon">👥</div>
+                <div class="quest-title">파티 플레이</div>
+                <div class="quest-desc">친구와 함께<br>보너스 2배!</div>
+            </div>
+
+            <div class="quest-card">
+                <div class="quest-icon">🏅</div>
+                <div class="quest-title">업적 시스템</div>
+                <div class="quest-desc">특별 칭호 획득<br>능력치 UP!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 별 생성
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 100;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 골드 코인 파티클 생성
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.textContent = '💰';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particle.style.zIndex = '5';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 4000);
+        }
+
+        // 초기화
+        createStars();
+
+        // 주기적으로 파티클 생성
+        setInterval(createParticle, 2000);
+
+        // 버튼 클릭 효과음 (선택사항)
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // 리플 효과
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.left = e.offsetX + 'px';
+                ripple.style.top = e.offsetY + 'px';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                ripple.style.pointerEvents = 'none';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 리플 애니메이션 추가
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    width: 200px;
+                    height: 200px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
