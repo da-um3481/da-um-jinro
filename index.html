@@ -3,70 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=daum-classroom-v2/student.html">
-    <title>다움 클래스룸 - 리다이렉트</title>
+    <title>다움 클래스룸</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            margin: 0;
-            background: #f8f9fa;
-            color: #1f2937;
-            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             padding: 20px;
         }
+        
         .container {
-            max-width: 500px;
+            max-width: 800px;
+            width: 100%;
             background: white;
             padding: 60px 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
+        
         .logo {
-            width: 120px;
+            width: 140px;
             height: auto;
             margin-bottom: 30px;
         }
+        
         h1 {
-            font-size: 32px;
-            margin-bottom: 15px;
+            font-size: 36px;
             font-weight: 700;
             color: #1f2937;
+            margin-bottom: 15px;
         }
-        p {
-            font-size: 16px;
-            margin-bottom: 25px;
+        
+        .subtitle {
+            font-size: 18px;
             color: #6b7280;
+            margin-bottom: 50px;
         }
-        a {
-            display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
+        
+        .role-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .role-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 40px 30px;
             text-decoration: none;
-            border-radius: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-8px);
+            border-color: #3b82f6;
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);
+        }
+        
+        .role-card.student {
+            border-color: #93c5fd;
+        }
+        
+        .role-card.student:hover {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+        
+        .role-card.teacher {
+            border-color: #fca5a5;
+        }
+        
+        .role-card.teacher:hover {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+        
+        .role-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .role-title {
+            font-size: 24px;
             font-weight: 700;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-top: 10px;
+            color: #1f2937;
+            margin-bottom: 10px;
         }
-        a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        
+        .role-description {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
         }
-        .spinner {
-            margin: 20px auto;
-            width: 50px;
-            height: 50px;
-            border: 4px solid #e5e7eb;
-            border-top-color: #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 24px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+            }
+            
+            .role-selection {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .role-card {
+                padding: 30px 20px;
+            }
+            
+            .role-icon {
+                font-size: 52px;
+            }
+            
+            .role-title {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -74,10 +145,27 @@
     <div class="container">
         <img src="daum-classroom-v2/images/daum-logo.png" alt="다움 로고" class="logo">
         <h1>다움 클래스룸</h1>
-        <p>학생 포털로 이동 중...</p>
-        <div class="spinner"></div>
-        <p style="font-size: 14px; margin-top: 30px;">자동으로 이동하지 않으면 아래 버튼을 클릭하세요</p>
-        <a href="daum-classroom-v2/student.html">🚀 클래스룸 입장하기</a>
+        <p class="subtitle">학생과 교사를 위한 온라인 학습 플랫폼</p>
+        
+        <div class="role-selection">
+            <a href="daum-classroom-v2/student.html" class="role-card student">
+                <div class="role-icon">🎓</div>
+                <div class="role-title">학생 포털</div>
+                <div class="role-description">
+                    시간표 관리, 복습 노트,<br>
+                    자율학습 일지, 학습 미션
+                </div>
+            </a>
+            
+            <a href="teacher-dashboard.html" class="role-card teacher">
+                <div class="role-icon">👨‍🏫</div>
+                <div class="role-title">교사 대시보드</div>
+                <div class="role-description">
+                    학생 관리, 과제 배정,<br>
+                    학습 현황 분석, 피드백
+                </div>
+            </a>
+        </div>
     </div>
 </body>
 </html>
