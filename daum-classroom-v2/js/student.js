@@ -9,7 +9,9 @@ const STORAGE_KEYS = {
     REVIEW_STATUS: 'daum_v2_review_status',
     DAILY_STUDY_PLAN: 'daum_v2_daily_study_plan',
     CUSTOM_SUBJECTS: 'daum_v2_custom_subjects',
-    TIMER_STATE: 'daum_v2_timer_state' // 타이머 상태 저장
+    TIMER_STATE: 'daum_v2_timer_state', // 타이머 상태 저장
+    ASSIGNMENTS: 'classroom_mvp_assignments', // 교사가 만든 과제 (교사 보드와 공유)
+    STUDENTS: 'classroom_students' // 학생 목록 (교사 보드와 공유)
 };
 
 // 현재 학생 정보
@@ -48,10 +50,22 @@ function login() {
 
     currentStudent = {
         name: name,
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
+        completedAssignments: 0
     };
 
     localStorage.setItem(STORAGE_KEYS.STUDENT, JSON.stringify(currentStudent));
+    
+    // 교사 보드와 공유: 학생 목록에 추가
+    const students = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENTS) || '[]');
+    const existingIndex = students.findIndex(s => s.name === name);
+    if (existingIndex >= 0) {
+        students[existingIndex] = currentStudent;
+    } else {
+        students.push(currentStudent);
+    }
+    localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
     
     document.getElementById('studentName').textContent = `${name}님 환영합니다! 👋`;
     document.getElementById('loginScreen').classList.add('hidden');
