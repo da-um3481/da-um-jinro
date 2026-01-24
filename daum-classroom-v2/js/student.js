@@ -366,6 +366,21 @@ function saveJournal() {
             updateReviewStatus(session.subject, session.duration);
         });
         
+        // 🎮 게이미피케이션: 학습 완료 이벤트 발생
+        if (typeof document !== 'undefined' && studySessions.length > 0) {
+            // 전체 학습 시간 계산
+            const totalDuration = studySessions.reduce((sum, s) => sum + s.duration, 0);
+            
+            // 학습 완료 이벤트 발생
+            document.dispatchEvent(new CustomEvent('studyCompleted', {
+                detail: {
+                    duration: totalDuration,
+                    subject: studySessions.map(s => s.subject).join(', '),
+                    sessions: studySessions.length
+                }
+            }));
+        }
+        
         if (window.showToast) {
             showToast(`✅ ${studySessions.length}개 과목의 학습 기록이 저장되었습니다! ${studySessions.map(s => `${getSubjectIcon(s.subject)} ${s.subject}: ${s.duration}분`).join(', ')}`, 'success', 4000);
         } else {
@@ -390,6 +405,16 @@ function saveJournal() {
         
         // 복습 상태 업데이트
         updateReviewStatus(subject, studyTime);
+        
+        // 🎮 게이미피케이션: 학습 완료 이벤트 발생
+        if (typeof document !== 'undefined') {
+            document.dispatchEvent(new CustomEvent('studyCompleted', {
+                detail: {
+                    duration: studyTime,
+                    subject: subject
+                }
+            }));
+        }
         
         // 학습 시간에 따른 격려 메시지
         let encourageMessage = '';

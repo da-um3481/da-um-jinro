@@ -1,0 +1,426 @@
+/**
+ * DA.UM 게이미피케이션 스타일
+ * 포인트 시스템 및 토스트 알림 UI
+ */
+
+/* ========================================
+   게이미피케이션 헤더
+   ======================================== */
+
+.gamification-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg-card, #ffffff);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* ========================================
+   레벨 표시
+   ======================================== */
+
+.level-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 100px;
+}
+
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #1E40AF 0%, #0D9488 100%);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  min-width: 70px;
+  transition: all 0.3s ease;
+}
+
+.level-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 64, 175, 0.4);
+}
+
+.level-title {
+  font-size: 0.75rem;
+  color: var(--text-tertiary, #6b7280);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ========================================
+   경험치 바
+   ======================================== */
+
+.exp-container {
+  flex: 1;
+  max-width: 400px;
+}
+
+.exp-bar-wrapper {
+  position: relative;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 24px;
+  background: var(--bg-hover, #f3f4f6);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid var(--border-color, #e5e7eb);
+}
+
+.exp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FBBF24 0%, #F59E0B 100%);
+  border-radius: 9999px;
+  transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 경험치 바 반짝임 효과 */
+.exp-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.exp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ========================================
+   포인트 표시
+   ======================================== */
+
+.points-display {
+  display: flex;
+  gap: 1rem;
+}
+
+.point-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-hover, #f3f4f6);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.point-item:hover {
+  background: var(--bg-active, #e5e7eb);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.point-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.point-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+}
+
+/* 경험치 획득 애니메이션 */
+@keyframes expGain {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.exp-display.gaining {
+  animation: expGain 0.3s ease-out;
+}
+
+/* 코인 획득 애니메이션 */
+@keyframes coinGain {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.coin-display.gaining {
+  animation: coinGain 0.5s ease-out;
+}
+
+/* ========================================
+   토스트 알림
+   ======================================== */
+
+.toast-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: all;
+  background: var(--bg-card, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  min-width: 300px;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-left: 4px solid #3B82F6;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast.hide {
+  opacity: 0;
+  transform: translateX(400px);
+}
+
+/* 타입별 색상 */
+.toast-success {
+  border-left-color: #10B981;
+}
+
+.toast-error {
+  border-left-color: #EF4444;
+}
+
+.toast-warning {
+  border-left-color: #F59E0B;
+}
+
+.toast-info {
+  border-left-color: #3B82F6;
+}
+
+.toast-levelup {
+  border-left-color: #8B5CF6;
+  background: linear-gradient(135deg, #ffffff 0%, #f3e8ff 100%);
+}
+
+/* 토스트 내용 */
+.toast-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.toast-body {
+  flex: 1;
+}
+
+.toast-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  margin-bottom: 0.25rem;
+}
+
+.toast-message {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.4;
+}
+
+/* 보상 표시 */
+.toast-rewards {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.reward-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: linear-gradient(135deg, #1E40AF 0%, #0D9488 100%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+/* 닫기 버튼 */
+.toast-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: #6b7280;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.toast:hover .toast-close {
+  opacity: 1;
+}
+
+.toast-close:hover {
+  background: #EF4444;
+  transform: scale(1.1);
+}
+
+/* ========================================
+   모바일 반응형
+   ======================================== */
+
+@media (max-width: 768px) {
+  .gamification-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .level-display {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .exp-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  .points-display {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .point-item {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* 토스트 모바일 최적화 */
+  .toast-container {
+    top: 60px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .toast {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+/* ========================================
+   다크모드 지원
+   ======================================== */
+
+[data-theme="dark"] .gamification-header {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .exp-bar {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+[data-theme="dark"] .point-item {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+[data-theme="dark"] .point-item:hover {
+  background: #4b5563;
+}
+
+[data-theme="dark"] .toast {
+  background: #1f2937;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .toast-title {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .toast-message {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .exp-text {
+  color: #1f2937;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}

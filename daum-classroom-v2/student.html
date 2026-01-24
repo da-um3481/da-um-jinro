@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="css/responsive-improvements.css">
     <link rel="stylesheet" href="css/theme-system.css">
     <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/gamification.css">
+    <!-- 🎮 게이미피케이션 CSS -->
+    <link rel="stylesheet" href="css/gamification/point-display.css">
+    <link rel="stylesheet" href="css/gamification/toast-notification.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
         
@@ -286,6 +290,44 @@
             </div>
         </div>
     </header>
+
+    <!-- 🎮 게이미피케이션 헤더 (포인트, 레벨, 경험치 바) -->
+    <div class="container mx-auto px-3 md:px-4 mt-4">
+        <div class="gamification-header">
+            <!-- 레벨 배지 -->
+            <div class="level-display">
+                <div class="level-badge">Lv. 1</div>
+                <div class="level-title">초보 학습자</div>
+            </div>
+
+            <!-- 경험치 바 -->
+            <div class="exp-container">
+                <div class="exp-bar-wrapper">
+                    <div class="exp-bar">
+                        <div class="exp-fill" style="width: 0%">
+                            <div class="exp-shine"></div>
+                        </div>
+                        <div class="exp-text">0 / 100 EXP</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 포인트 표시 -->
+            <div class="points-display">
+                <!-- 경험치 -->
+                <div class="point-item exp-display">
+                    <span class="point-icon">⭐</span>
+                    <span class="point-value exp-value">0 EXP</span>
+                </div>
+
+                <!-- 코인 -->
+                <div class="point-item coin-display">
+                    <span class="point-icon">💰</span>
+                    <span class="point-value coin-value">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Sticky Navigation -->
     <nav id="stickyNav" class="sticky-nav">
@@ -871,6 +913,11 @@
     <script src="js/ux-improvements.js"></script>
     <script src="js/theme-manager.js"></script>
     
+    <!-- 🎮 게이미피케이션 시스템 (순서 중요!) -->
+    <script src="js/gamification/toast-notification.js"></script>
+    <script src="js/gamification/point-system.js"></script>
+    <script src="js/gamification/activity-rewards.js"></script>
+    
     <!-- 추가 기능 시스템 -->
     <script src="js/additional-features.js"></script>
     <script src="js/notification.js"></script>
@@ -879,5 +926,35 @@
     
     <!-- 메인 로직 -->
     <script src="js/student.js"></script>
+    
+    <!-- 🎮 게이미피케이션 UI 업데이트 & 이벤트 연결 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 초기 UI 업데이트
+            if (typeof pointSystem !== 'undefined') {
+                setTimeout(() => {
+                    pointSystem.updateUI();
+                    console.log('✅ 게이미피케이션 UI 초기화 완료');
+                }, 100);
+            }
+            
+            // 애니메이션 트리거
+            document.addEventListener('daum:expEarned', (e) => {
+                const expDisplay = document.querySelector('.exp-display');
+                if (expDisplay) {
+                    expDisplay.classList.add('gaining');
+                    setTimeout(() => expDisplay.classList.remove('gaining'), 300);
+                }
+            });
+
+            document.addEventListener('daum:coinsEarned', (e) => {
+                const coinDisplay = document.querySelector('.coin-display');
+                if (coinDisplay) {
+                    coinDisplay.classList.add('gaining');
+                    setTimeout(() => coinDisplay.classList.remove('gaining'), 500);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
