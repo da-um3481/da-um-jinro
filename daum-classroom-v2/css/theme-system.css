@@ -236,17 +236,19 @@ body {
     .theme-controls {
         top: 70px;
         right: 12px;
+        gap: 8px;
     }
     
     .theme-toggle-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
     }
     
     .color-theme-picker {
         right: 12px;
         padding: 12px;
+        max-width: 280px;
     }
     
     .color-option {

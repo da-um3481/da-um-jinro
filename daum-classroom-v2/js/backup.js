@@ -549,7 +549,7 @@ class BackupSystem {
         style.textContent = `
             .floating-backup-btn {
                 position: fixed;
-                top: 140px;
+                top: 180px;
                 right: 20px;
                 width: 50px;
                 height: 50px;
@@ -818,8 +818,11 @@ class BackupSystem {
             
             @media (max-width: 768px) {
                 .floating-backup-btn {
-                    top: auto;
-                    bottom: 140px;
+                    top: 170px;
+                    right: 12px;
+                    width: 44px;
+                    height: 44px;
+                    font-size: 1.25rem;
                 }
                 
                 .backup-export-grid {

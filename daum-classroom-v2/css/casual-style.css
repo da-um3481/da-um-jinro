@@ -1,0 +1,478 @@
+/* 🌸 캐주얼 파티 게임 스타일 - 다움 클래스룸 */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Gaegu:wght@700&display=swap');
+
+:root {
+    /* 🌈 따뜻한 파스텔 메인 색상 (토끼 친화적) */
+    --primary-pink: #ffb3d9;
+    --primary-pink-light: #ffc9e3;
+    --primary-pink-dark: #ff99cc;
+    --secondary-peach: #ffd4b3;
+    --secondary-peach-light: #ffe0cc;
+    --secondary-peach-dark: #ffccad;
+    --accent-mint: #b3f0e0;
+    --accent-lavender: #e0d4ff;
+    --accent-cream: #fff4e6;
+    --accent-yellow: #fff3b3;
+    
+    /* 배경 */
+    --bg-gradient: linear-gradient(135deg, #fff0f6 0%, #fff8e6 50%, #f0fff4 100%);
+    --bg-card: #ffffff;
+    --bg-overlay: rgba(255, 255, 255, 0.95);
+    
+    /* 텍스트 */
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-light: #888888;
+}
+
+/* 전체 배경 */
+body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: linear-gradient(135deg, #fff0f6 0%, #fff8e6 50%, #f0fff4 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--text-primary);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 떠다니는 요소 배경 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 179, 217, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 212, 179, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(179, 240, 224, 0.08) 0%, transparent 50%);
+}
+
+/* 헤더 - 캐주얼 스타일 */
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, #ffb3d9 0%, #ffc9e3 50%, #ffd4b3 100%);
+    padding: 15px 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(255, 179, 217, 0.25);
+    transition: all 0.3s ease;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.sticky-nav.scrolled {
+    padding: 10px 0;
+    box-shadow: 0 6px 25px rgba(255, 179, 217, 0.3);
+}
+
+.nav-brand {
+    font-family: 'Gaegu', cursive;
+    font-size: 28px !important;
+    font-weight: 900;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.nav-brand:hover {
+    transform: scale(1.05);
+    text-shadow: 0 4px 15px rgba(255, 255, 255, 0.5);
+}
+
+/* 🐰 마스코트 추가 */
+.mascot-icon {
+    font-size: 32px;
+    animation: bounce 2s infinite;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* 네비게이션 링크 */
+.nav-link {
+    color: white !important;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 메인 헤더 타이틀 */
+.main-header-title {
+    font-family: 'Gaegu', cursive !important;
+    font-size: 42px !important;
+    background: linear-gradient(135deg, #ffb3d9, #ffd4b3, #b3f0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none !important;
+    animation: rainbow-glow 3s infinite;
+    font-weight: 900 !important;
+}
+
+@keyframes rainbow-glow {
+    0%, 100% {
+        filter: drop-shadow(0 3px 8px rgba(255, 179, 217, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 3px 12px rgba(255, 212, 179, 0.3));
+    }
+}
+
+/* 카드 스타일 - 귀여운 둥근 디자인 */
+.cute-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(255, 179, 217, 0.12);
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cute-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 179, 217, 0.04), transparent);
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.cute-card:hover {
+    transform: translateY(-8px) rotate(1deg);
+    box-shadow: 0 15px 45px rgba(255, 212, 179, 0.2);
+    border-color: var(--secondary-peach);
+}
+
+/* 버튼 스타일 */
+.cute-btn {
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.cute-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.cute-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.cute-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.cute-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+/* 메인 버튼 - 핑크 */
+.btn-primary-cute {
+    background: linear-gradient(135deg, #ffb3d9, #ff99cc);
+    color: white;
+}
+
+.btn-primary-cute:hover {
+    background: linear-gradient(135deg, #ffc9e3, #ffb3d9);
+}
+
+/* 보조 버튼 - 피치 */
+.btn-secondary-cute {
+    background: linear-gradient(135deg, #ffd4b3, #ffccad);
+    color: white;
+}
+
+.btn-secondary-cute:hover {
+    background: linear-gradient(135deg, #ffe0cc, #ffd4b3);
+}
+
+/* 성공 버튼 - 민트 */
+.btn-success-cute {
+    background: linear-gradient(135deg, #b3f0e0, #99e6d4);
+    color: white;
+}
+
+/* 탭 스타일 */
+.tab-active {
+    background: linear-gradient(135deg, #ffb3d9, #ffc9e3) !important;
+    color: white !important;
+    border-radius: 25px 25px 0 0 !important;
+    box-shadow: 0 -4px 15px rgba(255, 179, 217, 0.25) !important;
+    font-weight: 900 !important;
+}
+
+/* 배지 스타일 */
+.badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* 과목별 색상 - 파스텔 톤 */
+.subject-korean { 
+    background: linear-gradient(135deg, #ffb3d9, #ffc9e3);
+    color: white;
+}
+
+.subject-english { 
+    background: linear-gradient(135deg, #ffd4b3, #ffe0cc);
+    color: white;
+}
+
+.subject-math { 
+    background: linear-gradient(135deg, #e0d4ff, #d4c5ff);
+    color: white;
+}
+
+.subject-science { 
+    background: linear-gradient(135deg, #b3f0e0, #99e6d4);
+    color: white;
+}
+
+.subject-social { 
+    background: linear-gradient(135deg, #fff3b3, #fffacc);
+    color: #666;
+}
+
+/* 선택된 버튼 스타일 */
+.study-hour-btn.selected,
+.subject-check-btn input:checked + div {
+    border-color: var(--primary-pink) !important;
+    background: linear-gradient(135deg, #ffb3d9, #ffc9e3) !important;
+    color: white !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 8px 25px rgba(255, 179, 217, 0.3) !important;
+}
+
+/* 애니메이션 - 흔들기 */
+@keyframes wiggle {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-3deg);
+    }
+    75% {
+        transform: rotate(3deg);
+    }
+}
+
+.wiggle:hover {
+    animation: wiggle 0.5s ease-in-out;
+}
+
+/* 펄스 애니메이션 */
+@keyframes pulse-cute {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 15px rgba(255, 107, 157, 0);
+    }
+}
+
+.pulse-animation {
+    animation: pulse-cute 2s infinite;
+}
+
+/* 게이미피케이션 - 레벨/EXP/코인 */
+#gamificationContainer .stat-box {
+    background: linear-gradient(135deg, #fff5f9, #fffbf0) !important;
+    border-radius: 20px !important;
+    border: 3px solid transparent !important;
+    transition: all 0.3s ease !important;
+}
+
+#gamificationContainer .stat-box:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+    border-color: var(--primary-pink) !important;
+    box-shadow: 0 10px 30px rgba(255, 179, 217, 0.25) !important;
+}
+
+/* 진행바 - 귀여운 그라데이션 */
+.progress-bar {
+    background: white !important;
+    border-radius: 50px !important;
+    overflow: hidden !important;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08) !important;
+    border: 2px solid #fff5f9 !important;
+}
+
+.progress-fill,
+.progress-bar-fill {
+    background: linear-gradient(90deg, #ffb3d9, #ffd4b3, #b3f0e0) !important;
+    border-radius: 50px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.progress-fill::before,
+.progress-bar-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(200%);
+    }
+}
+
+/* 스크롤바 커스터마이징 */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff5f9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #ffb3d9, #ff99cc);
+    border-radius: 10px;
+    border: 2px solid #fff5f9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ffc9e3, #ffb3d9);
+}
+
+/* 토스트 알림 - 캐주얼 스타일 */
+.toast-notification {
+    border-radius: 20px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+    border: 3px solid white !important;
+}
+
+.toast-notification.success {
+    background: linear-gradient(135deg, #b3f0e0, #99e6d4) !important;
+}
+
+.toast-notification.levelup {
+    background: linear-gradient(135deg, #ffb3d9, #ffd4b3) !important;
+    animation: toast-bounce 0.5s ease-out !important;
+}
+
+@keyframes toast-bounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.05);
+    }
+}
+
+/* 반응형 - 모바일 */
+@media (max-width: 768px) {
+    .nav-brand {
+        font-size: 20px !important;
+    }
+    
+    .mascot-icon {
+        font-size: 24px;
+    }
+    
+    .main-header-title {
+        font-size: 28px !important;
+    }
+    
+    .cute-card {
+        border-radius: 20px;
+    }
+    
+    .cute-btn {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+}
+
+/* 색종이 효과 클래스 */
+.confetti-celebration {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* 아이콘 흔들림 */
+.icon-wiggle {
+    animation: icon-wiggle 1s infinite;
+}
+
+@keyframes icon-wiggle {
+    0%, 100% {
+        transform: rotate(-5deg);
+    }
+    50% {
+        transform: rotate(5deg);
+    }
+}
