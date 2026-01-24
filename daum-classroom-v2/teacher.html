@@ -28,6 +28,24 @@
     <!-- 메인 컨텐츠 -->
     <main class="container mx-auto px-4 py-8">
         <div class="max-w-6xl mx-auto">
+            <!-- 탭 네비게이션 -->
+            <div class="bg-white rounded-2xl shadow-lg p-2 mb-6 flex gap-2">
+                <button onclick="showTab('assignments')" id="tab-assignments" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all bg-blue-600 text-white">
+                    <i class="fas fa-tasks mr-2"></i>과제 관리
+                </button>
+                <button onclick="showTab('students')" id="tab-students" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-users mr-2"></i>학생 관리
+                </button>
+                <button onclick="showTab('analytics')" id="tab-analytics" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-chart-line mr-2"></i>학습 현황
+                </button>
+                <button onclick="showTab('feedback')" id="tab-feedback" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-comments mr-2"></i>피드백
+                </button>
+            </div>
+
+            <!-- 과제 관리 탭 -->
+            <div id="content-assignments" class="tab-content">
             <!-- 과제 생성 섹션 -->
             <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
@@ -97,6 +115,77 @@
                         <i class="fas fa-inbox text-4xl mb-3"></i>
                         <p>아직 배포된 과제가 없습니다</p>
                         <p class="text-sm mt-2">위에서 과제를 만들어보세요!</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- 학생 관리 탭 -->
+            <div id="content-students" class="tab-content hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-users text-blue-600 mr-2"></i>
+                        학생 목록
+                    </h2>
+                    <div id="studentList" class="space-y-3">
+                        <!-- 동적으로 추가될 영역 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학습 현황 탭 -->
+            <div id="content-analytics" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <div class="text-3xl font-bold text-blue-600 mb-2" id="totalAssignments">0</div>
+                        <div class="text-gray-600 font-semibold">총 과제 수</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <div class="text-3xl font-bold text-green-600 mb-2" id="completionRate">0%</div>
+                        <div class="text-gray-600 font-semibold">평균 완료율</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <div class="text-3xl font-bold text-purple-600 mb-2" id="activeStudents">0</div>
+                        <div class="text-gray-600 font-semibold">활동 학생 수</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">과목별 평균 완료율</h2>
+                    <div id="subjectStats" class="space-y-3">
+                        <!-- 동적으로 추가될 영역 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 피드백 탭 -->
+            <div id="content-feedback" class="tab-content hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-comments text-purple-600 mr-2"></i>
+                        학생 피드백 작성
+                    </h2>
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">학생 선택</label>
+                            <select id="feedbackStudent" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:outline-none">
+                                <option value="">학생을 선택하세요</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">피드백 내용</label>
+                            <textarea id="feedbackContent" rows="4" placeholder="학생에게 전달할 피드백을 작성하세요..."
+                                      class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:outline-none"></textarea>
+                        </div>
+                        <button onclick="sendFeedback()" 
+                                class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-paper-plane mr-2"></i>피드백 보내기
+                        </button>
+                    </div>
+                    <div class="border-t-2 pt-6">
+                        <h3 class="font-bold text-gray-800 mb-3">최근 피드백 내역</h3>
+                        <div id="feedbackHistory" class="space-y-3">
+                            <!-- 동적으로 추가될 영역 -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -268,6 +357,186 @@
                 hour: '2-digit',
                 minute: '2-digit'
             });
+        }
+
+        // 탭 전환
+        function showTab(tabName) {
+            // 모든 탭 버튼 비활성화
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+            
+            // 선택된 탭 활성화
+            document.getElementById('tab-' + tabName).classList.add('bg-blue-600', 'text-white');
+            document.getElementById('tab-' + tabName).classList.remove('text-gray-600', 'hover:bg-gray-100');
+            
+            // 모든 콘텐츠 숨김
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // 선택된 콘텐츠 표시
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            // 탭별 데이터 로드
+            if (tabName === 'students') loadStudents();
+            if (tabName === 'analytics') loadAnalytics();
+            if (tabName === 'feedback') loadFeedbackOptions();
+        }
+
+        // 학생 목록 로드 (localStorage에서)
+        function loadStudents() {
+            const students = JSON.parse(localStorage.getItem('classroom_students') || '[]');
+            const studentList = document.getElementById('studentList');
+            
+            if (students.length === 0) {
+                studentList.innerHTML = `
+                    <div class="text-center text-gray-400 py-8">
+                        <i class="fas fa-user-slash text-4xl mb-3"></i>
+                        <p>등록된 학생이 없습니다</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            studentList.innerHTML = students.map(student => `
+                <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">${student.name || '학생'}</div>
+                                <div class="text-sm text-gray-500">마지막 접속: ${student.lastLogin ? new Date(student.lastLogin).toLocaleDateString() : '정보 없음'}</div>
+                            </div>
+                        </div>
+                        <div class="text-sm font-semibold text-blue-600">
+                            완료: ${student.completedAssignments || 0}개
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 학습 현황 로드
+        function loadAnalytics() {
+            const assignments = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const students = JSON.parse(localStorage.getItem('classroom_students') || '[]');
+            
+            // 총 과제 수
+            document.getElementById('totalAssignments').textContent = assignments.length;
+            
+            // 평균 완료율
+            let totalCompletion = 0;
+            assignments.forEach(assignment => {
+                if (students.length > 0) {
+                    totalCompletion += (assignment.completedBy?.length || 0) / students.length * 100;
+                }
+            });
+            const avgCompletion = assignments.length > 0 ? (totalCompletion / assignments.length).toFixed(1) : 0;
+            document.getElementById('completionRate').textContent = avgCompletion + '%';
+            
+            // 활동 학생 수
+            document.getElementById('activeStudents').textContent = students.length;
+            
+            // 과목별 통계
+            const subjectMap = {};
+            assignments.forEach(assignment => {
+                if (!subjectMap[assignment.subject]) {
+                    subjectMap[assignment.subject] = { total: 0, completed: 0 };
+                }
+                subjectMap[assignment.subject].total++;
+                subjectMap[assignment.subject].completed += assignment.completedBy?.length || 0;
+            });
+            
+            const subjectStats = document.getElementById('subjectStats');
+            const subjects = Object.keys(subjectMap);
+            
+            if (subjects.length === 0) {
+                subjectStats.innerHTML = '<div class="text-center text-gray-400 py-4">과제 데이터가 없습니다</div>';
+                return;
+            }
+            
+            subjectStats.innerHTML = subjects.map(subject => {
+                const data = subjectMap[subject];
+                const rate = students.length > 0 ? (data.completed / (data.total * students.length) * 100).toFixed(1) : 0;
+                return `
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold text-gray-700">${subject}</span>
+                            <span class="text-blue-600 font-bold">${rate}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-blue-600 h-3 rounded-full transition-all" style="width: ${rate}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 피드백 옵션 로드
+        function loadFeedbackOptions() {
+            const students = JSON.parse(localStorage.getItem('classroom_students') || '[]');
+            const select = document.getElementById('feedbackStudent');
+            
+            select.innerHTML = '<option value="">학생을 선택하세요</option>' +
+                students.map(student => `<option value="${student.name}">${student.name}</option>`).join('');
+            
+            loadFeedbackHistory();
+        }
+
+        // 피드백 보내기
+        function sendFeedback() {
+            const student = document.getElementById('feedbackStudent').value;
+            const content = document.getElementById('feedbackContent').value.trim();
+            
+            if (!student) {
+                alert('⚠️ 학생을 선택해주세요!');
+                return;
+            }
+            
+            if (!content) {
+                alert('⚠️ 피드백 내용을 입력해주세요!');
+                return;
+            }
+            
+            const feedback = {
+                id: 'feedback_' + Date.now(),
+                student: student,
+                content: content,
+                date: new Date().toISOString()
+            };
+            
+            const feedbacks = JSON.parse(localStorage.getItem('classroom_feedbacks') || '[]');
+            feedbacks.unshift(feedback);
+            localStorage.setItem('classroom_feedbacks', JSON.stringify(feedbacks));
+            
+            alert('✅ 피드백이 전송되었습니다!');
+            document.getElementById('feedbackContent').value = '';
+            loadFeedbackHistory();
+        }
+
+        // 피드백 내역 로드
+        function loadFeedbackHistory() {
+            const feedbacks = JSON.parse(localStorage.getItem('classroom_feedbacks') || '[]');
+            const history = document.getElementById('feedbackHistory');
+            
+            if (feedbacks.length === 0) {
+                history.innerHTML = '<div class="text-center text-gray-400 py-4">아직 작성한 피드백이 없습니다</div>';
+                return;
+            }
+            
+            history.innerHTML = feedbacks.slice(0, 5).map(feedback => `
+                <div class="border-2 border-gray-200 rounded-lg p-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-gray-800">${feedback.student}</span>
+                        <span class="text-sm text-gray-500">${new Date(feedback.date).toLocaleDateString()}</span>
+                    </div>
+                    <p class="text-gray-600">${feedback.content}</p>
+                </div>
+            `).join('');
         }
     </script>
 </body>
