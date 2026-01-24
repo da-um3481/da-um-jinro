@@ -1183,6 +1183,18 @@ function updateReviewStatus(subject, studyTime) {
     reviewStatus[todayKey][`${subject}_time`] = currentTime + studyTime;
     
     saveReviewStatus(reviewStatus);
+    
+    // 🎮 게이미피케이션: 복습 완료 이벤트 발생
+    if (typeof document !== 'undefined' && studyTime > 0) {
+        // 정답률은 여기서는 100%로 가정 (실제 복습 체크 기능에서는 다를 수 있음)
+        document.dispatchEvent(new CustomEvent('reviewCompleted', {
+            detail: {
+                subject: subject,
+                correctRate: 100, // 복습 완료 = 100%
+                duration: studyTime
+            }
+        }));
+    }
 }
 
 // 주간 복습 통계 로드

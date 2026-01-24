@@ -1,0 +1,123 @@
+/* 게이미피케이션 헤더 */
+.gamification-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.level-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 100px;
+}
+
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #1E40AF 0%, #0D9488 100%);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 900;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  min-width: 70px;
+}
+
+.level-title {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  font-weight: 600;
+}
+
+.exp-container {
+  flex: 1;
+  max-width: 400px;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 24px;
+  background: #E5E7EB;
+  border-radius: 50px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #D1D5DB;
+}
+
+.exp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FBBF24 0%, #F59E0B 100%);
+  border-radius: 50px;
+  transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+}
+
+.exp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1F2937;
+  pointer-events: none;
+}
+
+.points-display {
+  display: flex;
+  gap: 1rem;
+}
+
+.point-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #F3F4F6;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  transition: all 0.2s ease;
+}
+
+.point-item:hover {
+  background: #E5E7EB;
+  transform: translateY(-2px);
+}
+
+.point-icon {
+  font-size: 1.5rem;
+}
+
+.point-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+@keyframes expGain {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.exp-display.gaining {
+  animation: expGain 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .gamification-header {
+    flex-direction: column;
+  }
+  .exp-container {
+    width: 100%;
+    max-width: none;
+  }
+}
