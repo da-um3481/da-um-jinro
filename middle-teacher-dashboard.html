@@ -1537,6 +1537,106 @@
         </div>
         <!-- /진단평가 결과 섹션 끝 -->
 
+        <!-- 🌱 성장테스트 결과 섹션 -->
+        <div class="section-container" id="section-growth-test" style="margin-top: 3rem;">
+            <!-- 안내 메시지 -->
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border-left: 4px solid #10b981; padding: 1.5rem; margin-bottom: 2rem; border-radius: 12px;">
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <span style="font-size: 2rem;">🌱</span>
+                    <div>
+                        <h4 style="color: var(--text); margin-bottom: 0.5rem; font-weight: 600;">성장테스트 결과 안내</h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            성장테스트는 진단평가와 동일한 문제로 진행되며, 30일간의 학습 성과를 측정합니다.<br>
+                            진단평가 점수와 비교하여 학생들의 실력 향상도를 확인할 수 있습니다.<br>
+                            <strong style="color: #10b981;">📊 성장 지표:</strong> 총점 변화, 과목별 점수 변화, 수준 변화
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 전체 통계 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">성장테스트 완료</span>
+                        <span class="stat-icon">🌱</span>
+                    </div>
+                    <div class="stat-value" id="growthTestCompletedCount">0</div>
+                    <div class="stat-change positive">
+                        <span id="growthTestCompletedInfo">진단평가 완료자 대비</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">평균 점수 향상</span>
+                        <span class="stat-icon">📈</span>
+                    </div>
+                    <div class="stat-value" id="averageScoreImprovement">0점</div>
+                    <div class="stat-change positive">
+                        <span id="improvementPercent">0%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">향상 학생</span>
+                        <span class="stat-icon">🎉</span>
+                    </div>
+                    <div class="stat-value" id="improvedStudentsCount">0</div>
+                    <div class="stat-change positive">
+                        <span id="improvedPercent">0%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">최고 향상</span>
+                        <span class="stat-icon">🏆</span>
+                    </div>
+                    <div class="stat-value" id="topImprovementScore">0점</div>
+                    <div class="stat-change positive">
+                        <span id="topImprovementStudent">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 학생별 성장테스트 결과 테이블 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">📊</span>
+                        학생별 성장 비교
+                    </h2>
+                </div>
+                
+                <div style="overflow-x: auto; border-radius: 12px; background: rgba(30, 41, 59, 0.4);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">학년</th>
+                                <th style="width: 100px;">학생명</th>
+                                <th style="width: 120px;">진단평가</th>
+                                <th style="width: 120px;">성장테스트</th>
+                                <th style="width: 120px;">점수 변화</th>
+                                <th style="width: 100px;">수준 변화</th>
+                                <th style="min-width: 300px;">과목별 변화</th>
+                                <th style="width: 120px;">테스트 일자</th>
+                            </tr>
+                        </thead>
+                        <tbody id="growthTestTableBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                    📝 성장테스트를 완료한 학생이 없습니다
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /성장테스트 결과 섹션 끝 -->
+
         <!-- 수준별 학습관리 섹션 -->
 
         <!-- 학생 목록 섹션 -->
@@ -5206,8 +5306,167 @@ ${record.content || '기록 없음'}`);
             // 학생 상세 관리 드롭다운 로드
             loadStudentDetailDropdown();
             
+            // 🌱 성장테스트 결과 로드
+            loadGrowthTestData();
+            
             console.log('✅ [페이지 로드] DOMContentLoaded 완료');
         });
+        
+        // 🌱 성장테스트 데이터 로드 및 표시
+        function loadGrowthTestData() {
+            console.log('🌱 성장테스트 데이터 로드 시작');
+            
+            try {
+                // localStorage에서 데이터 가져오기
+                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                const growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+                
+                console.log('📊 진단평가 결과:', diagnosticResults.length, '명');
+                console.log('🌱 성장테스트 결과:', growthTestResults.length, '명');
+                
+                if (growthTestResults.length === 0) {
+                    console.log('⚠️ 성장테스트 완료 학생 없음');
+                    return;
+                }
+                
+                // 진단평가 완료자 수
+                const diagnosticCompletedCount = diagnosticResults.length;
+                
+                // 통계 계산
+                let totalImprovement = 0;
+                let improvedCount = 0;
+                let topImprovement = 0;
+                let topImprovementStudent = '';
+                
+                // 비교 데이터 생성
+                const comparisonData = growthTestResults.map(growth => {
+                    const diagnostic = diagnosticResults.find(d => d.studentId === growth.studentId);
+                    
+                    if (!diagnostic) {
+                        return null;
+                    }
+                    
+                    const improvement = growth.totalScore - diagnostic.totalScore;
+                    totalImprovement += improvement;
+                    
+                    if (improvement > 0) {
+                        improvedCount++;
+                    }
+                    
+                    if (improvement > topImprovement) {
+                        topImprovement = improvement;
+                        topImprovementStudent = growth.studentName || diagnostic.studentName;
+                    }
+                    
+                    return {
+                        studentId: growth.studentId,
+                        studentName: growth.studentName || diagnostic.studentName,
+                        grade: growth.grade || diagnostic.grade,
+                        diagnosticScore: diagnostic.totalScore,
+                        growthScore: growth.totalScore,
+                        improvement: improvement,
+                        diagnosticLevel: diagnostic.level || getLevelLabel(diagnostic.totalScore),
+                        growthLevel: growth.level || getLevelLabel(growth.totalScore),
+                        diagnosticSubjects: diagnostic.subjectScores,
+                        growthSubjects: growth.subjectScores,
+                        testDate: growth.testDate || growth.completedAt
+                    };
+                }).filter(item => item !== null);
+                
+                // 통계 업데이트
+                const avgImprovement = comparisonData.length > 0 ? Math.round(totalImprovement / comparisonData.length) : 0;
+                const improvementPercent = diagnosticCompletedCount > 0 ? Math.round((comparisonData.length / diagnosticCompletedCount) * 100) : 0;
+                const improvedPercent = comparisonData.length > 0 ? Math.round((improvedCount / comparisonData.length) * 100) : 0;
+                
+                document.getElementById('growthTestCompletedCount').textContent = comparisonData.length;
+                document.getElementById('growthTestCompletedInfo').textContent = `진단평가 ${diagnosticCompletedCount}명 중`;
+                document.getElementById('averageScoreImprovement').textContent = avgImprovement > 0 ? `+${avgImprovement}점` : `${avgImprovement}점`;
+                document.getElementById('improvementPercent').textContent = `평균 ${avgImprovement > 0 ? '향상' : avgImprovement < 0 ? '하락' : '동일'}`;
+                document.getElementById('improvedStudentsCount').textContent = improvedCount;
+                document.getElementById('improvedPercent').textContent = `${improvedPercent}%`;
+                document.getElementById('topImprovementScore').textContent = topImprovement > 0 ? `+${topImprovement}점` : '0점';
+                document.getElementById('topImprovementStudent').textContent = topImprovementStudent || '-';
+                
+                // 테이블 표시
+                displayGrowthTestResults(comparisonData);
+                
+                console.log('✅ 성장테스트 데이터 로드 완료');
+            } catch (error) {
+                console.error('❌ 성장테스트 데이터 로드 오류:', error);
+            }
+        }
+        
+        // 점수에 따른 수준 라벨 반환
+        function getLevelLabel(score) {
+            if (score >= 360) return '심화';
+            if (score >= 240) return '표준';
+            return '기초';
+        }
+        
+        // 성장테스트 결과 테이블 표시
+        function displayGrowthTestResults(data) {
+            const tbody = document.getElementById('growthTestTableBody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            📝 성장테스트를 완료한 학생이 없습니다
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = data.map(item => {
+                // 점수 변화 표시
+                const improvement = item.improvement;
+                const improvementSymbol = improvement > 0 ? '📈' : improvement < 0 ? '📉' : '➡️';
+                const improvementClass = improvement > 0 ? 'positive' : improvement < 0 ? 'negative' : '';
+                const improvementText = improvement > 0 ? `+${improvement}점` : `${improvement}점`;
+                
+                // 수준 변화 표시
+                let levelChange = '';
+                if (item.diagnosticLevel !== item.growthLevel) {
+                    levelChange = `${item.diagnosticLevel} → ${item.growthLevel}`;
+                } else {
+                    levelChange = item.growthLevel;
+                }
+                
+                // 과목별 변화 계산
+                const subjects = ['수학', '영어', '국어', '사회', '과학'];
+                const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+                let subjectChanges = subjects.map(subject => {
+                    const beforeScore = item.diagnosticSubjects?.[subject]?.score || 0;
+                    const afterScore = item.growthSubjects?.[subject]?.score || 0;
+                    const diff = afterScore - beforeScore;
+                    const diffSymbol = diff > 0 ? '↑' : diff < 0 ? '↓' : '−';
+                    const diffColor = diff > 0 ? '#10b981' : diff < 0 ? '#ef4444' : '#94a3b8';
+                    return `<span style="color: ${diffColor};">${subjectEmojis[subject]}${diffSymbol}${Math.abs(diff)}</span>`;
+                }).join(' ');
+                
+                // 테스트 일자 포맷
+                const testDate = new Date(item.testDate);
+                const dateStr = `${testDate.getMonth() + 1}/${testDate.getDate()}`;
+                
+                return `
+                    <tr>
+                        <td>중${item.grade}</td>
+                        <td style="font-weight: 600;">${item.studentName}</td>
+                        <td>${item.diagnosticScore}점</td>
+                        <td>${item.growthScore}점</td>
+                        <td>
+                            <span class="stat-change ${improvementClass}" style="display: inline-block;">
+                                ${improvementSymbol} ${improvementText}
+                            </span>
+                        </td>
+                        <td>${levelChange}</td>
+                        <td style="font-size: 0.875rem;">${subjectChanges}</td>
+                        <td style="color: var(--text-muted); font-size: 0.875rem;">${dateStr}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
     </script>
 
     <!-- 보고서 관리 섹션 -->
