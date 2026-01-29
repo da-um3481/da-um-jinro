@@ -918,6 +918,9 @@
                 <button class="nav-tab" onclick="showSection('diagnostic')" id="tab-diagnostic">
                     📝 진단평가 결과
                 </button>
+                <button class="nav-tab" onclick="showSection('growth-test')" id="tab-growth-test">
+                    🌱 성장테스트 결과
+                </button>
                 <button class="nav-tab" onclick="showSection('students')" id="tab-students">
                     👨‍🎓 학생 목록
                 </button>
@@ -2095,6 +2098,8 @@
             // 섹션별 데이터 로드
             if (sectionName === 'diagnostic') {
                 loadDiagnosticData();
+            } else if (sectionName === 'growth-test') {
+                loadGrowthTestData();
             } else if (sectionName === 'study-management') {
                 // ✅ 학습 관리 섹션: 진단평가 완료 학생 목록 로드
                 loadStudyManagementDropdown();
