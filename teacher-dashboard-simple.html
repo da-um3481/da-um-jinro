@@ -713,6 +713,11 @@
             const version = document.querySelector('meta[name="version"]')?.content || 'unknown';
             const buildDate = document.querySelector('meta[name="build-date"]')?.content || 'unknown';
             console.log(`🎯 교사 대시보드 v${version} (빌드: ${buildDate})`);
+            console.log('✅ 성장테스트 기능 활성화됨');
+            
+            // 탭 버튼 확인
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            console.log('📋 탭 버튼 개수:', tabButtons.length);
             
             loadFeedbacks();
             loadData(); // 데이터 로드 (processData에서 날짜 자동 설정)
