@@ -463,8 +463,8 @@
         </div>
 
         <!-- 탭 네비게이션 -->
-        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
-            <button class="tab-btn active" onclick="showTab('study-records')" id="tab-study-records" style="flex: 1; min-width: 150px; padding: 1rem 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; position: relative; z-index: 100;">
+            <button class="tab-btn active" onclick="showTab('study-records')" id="tab-study-records" style="flex: 1; min-width: 150px; padding: 1rem 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
                 <i class="fas fa-book"></i> 학습 기록
             </button>
             <button class="tab-btn" onclick="showTab('diagnostic')" id="tab-diagnostic" style="flex: 1; min-width: 150px; padding: 1rem 1.5rem; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
@@ -718,6 +718,26 @@
             // 탭 버튼 확인
             const tabButtons = document.querySelectorAll('.tab-btn');
             console.log('📋 탭 버튼 개수:', tabButtons.length);
+            
+            // 탭 컨테이너 확인
+            const tabContainer = tabButtons[0]?.parentElement;
+            if (tabContainer) {
+                console.log('📦 탭 컨테이너 정보:', {
+                    display: window.getComputedStyle(tabContainer).display,
+                    visibility: window.getComputedStyle(tabContainer).visibility,
+                    height: tabContainer.offsetHeight + 'px',
+                    width: tabContainer.offsetWidth + 'px'
+                });
+            }
+            
+            // 각 버튼 확인
+            tabButtons.forEach((btn, index) => {
+                console.log(`🔘 버튼 ${index + 1}:`, {
+                    text: btn.textContent.trim(),
+                    display: window.getComputedStyle(btn).display,
+                    visibility: window.getComputedStyle(btn).visibility
+                });
+            });
             
             loadFeedbacks();
             loadData(); // 데이터 로드 (processData에서 날짜 자동 설정)
