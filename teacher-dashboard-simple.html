@@ -462,7 +462,22 @@
             <p>학생 학습 기록 - 실시간 Google Sheets 연동</p>
         </div>
 
-        <div class="controls">
+        <!-- 탭 네비게이션 -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+            <button class="tab-btn active" onclick="showTab('study-records')" id="tab-study-records" style="flex: 1; min-width: 150px; padding: 1rem 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                <i class="fas fa-book"></i> 학습 기록
+            </button>
+            <button class="tab-btn" onclick="showTab('diagnostic')" id="tab-diagnostic" style="flex: 1; min-width: 150px; padding: 1rem 1.5rem; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                <i class="fas fa-clipboard-check"></i> 진단평가
+            </button>
+            <button class="tab-btn" onclick="showTab('growth-test')" id="tab-growth-test" style="flex: 1; min-width: 150px; padding: 1rem 1.5rem; background: rgba(255,255,255,0.1); color: var(--text); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                <i class="fas fa-seedling"></i> 성장테스트
+            </button>
+        </div>
+
+        <!-- 학습 기록 섹션 -->
+        <div id="section-study-records">
+            <div class="controls">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 학생 이름으로 검색...">
             </div>
@@ -485,6 +500,90 @@
 
         <div id="statsContainer"></div>
         <div id="contentContainer"></div>
+        </div>
+        <!-- /학습 기록 섹션 끝 -->
+
+        <!-- 진단평가 섹션 -->
+        <div id="section-diagnostic" style="display: none;">
+            <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(240, 147, 251, 0.1) 100%); border-left: 4px solid var(--primary); padding: 1.5rem; margin-bottom: 2rem; border-radius: 12px;">
+                <h3 style="margin-bottom: 0.5rem;">📝 진단평가 안내</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">학생 포털에서 완료한 진단평가 결과가 표시됩니다.</p>
+            </div>
+            <div id="diagnosticContent"></div>
+        </div>
+
+        <!-- 성장테스트 섹션 -->
+        <div id="section-growth-test" style="display: none;">
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border-left: 4px solid #10b981; padding: 1.5rem; margin-bottom: 2rem; border-radius: 12px;">
+                <h3 style="margin-bottom: 0.5rem;">🌱 성장테스트 안내</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    성장테스트는 진단평가와 동일한 문제로 진행되며, 30일간의 학습 성과를 측정합니다.<br>
+                    진단평가 점수와 비교하여 학생들의 실력 향상도를 확인할 수 있습니다.
+                </p>
+            </div>
+            
+            <!-- 통계 카드 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="stats-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">성장테스트 완료</span>
+                        <span style="font-size: 1.5rem;">🌱</span>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--accent);" id="growthCompletedCount">0명</div>
+                </div>
+                
+                <div class="stats-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">평균 점수 향상</span>
+                        <span style="font-size: 1.5rem;">📈</span>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--success);" id="avgImprovement">0점</div>
+                </div>
+                
+                <div class="stats-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">향상 학생 수</span>
+                        <span style="font-size: 1.5rem;">🎉</span>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="improvedCount">0명</div>
+                </div>
+                
+                <div class="stats-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">최고 향상</span>
+                        <span style="font-size: 1.5rem;">🏆</span>
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: #f59e0b;" id="topImprovement">-</div>
+                </div>
+            </div>
+
+            <!-- 성장 비교 테이블 -->
+            <div style="background: var(--bg-card); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); overflow-x: auto;">
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-chart-line"></i> 학생별 성장 비교</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">
+                            <th style="padding: 1rem; text-align: left;">학년</th>
+                            <th style="padding: 1rem; text-align: left;">학생명</th>
+                            <th style="padding: 1rem; text-align: center;">진단평가</th>
+                            <th style="padding: 1rem; text-align: center;">성장테스트</th>
+                            <th style="padding: 1rem; text-align: center;">점수 변화</th>
+                            <th style="padding: 1rem; text-align: center;">수준 변화</th>
+                            <th style="padding: 1rem; text-align: left;">과목별 변화</th>
+                            <th style="padding: 1rem; text-align: center;">테스트 일자</th>
+                        </tr>
+                    </thead>
+                    <tbody id="growthTableBody">
+                        <tr>
+                            <td colspan="8" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                                📝 성장테스트를 완료한 학생이 없습니다
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -1414,6 +1513,206 @@
             
             // 안내 메시지
             alert('🤖 AI 피드백이 생성되었습니다!\n\n수정 후 [저장] 버튼을 눌러주세요.');
+        }
+        
+        // 🌱 탭 전환 함수
+        function showTab(tabName) {
+            // 모든 섹션 숨기기
+            document.getElementById('section-study-records').style.display = 'none';
+            document.getElementById('section-diagnostic').style.display = 'none';
+            document.getElementById('section-growth-test').style.display = 'none';
+            
+            // 모든 탭 버튼 비활성화
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.style.background = 'rgba(255,255,255,0.1)';
+                btn.style.color = 'var(--text)';
+                btn.style.border = '2px solid rgba(255,255,255,0.2)';
+            });
+            
+            // 선택된 섹션 표시
+            document.getElementById(`section-${tabName}`).style.display = 'block';
+            
+            // 선택된 탭 버튼 활성화
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            if (activeBtn) {
+                activeBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
+                activeBtn.style.color = 'white';
+                activeBtn.style.border = 'none';
+            }
+            
+            // 섹션별 데이터 로드
+            if (tabName === 'diagnostic') {
+                loadDiagnosticData();
+            } else if (tabName === 'growth-test') {
+                loadGrowthTestData();
+            }
+        }
+        
+        // 📝 진단평가 데이터 로드
+        function loadDiagnosticData() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const container = document.getElementById('diagnosticContent');
+            
+            if (diagnosticResults.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-muted);">📝 진단평가를 완료한 학생이 없습니다</div>';
+                return;
+            }
+            
+            let html = '<div style="background: var(--bg-card); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); overflow-x: auto;">';
+            html += '<h3 style="margin-bottom: 1.5rem;"><i class="fas fa-clipboard-check"></i> 진단평가 결과</h3>';
+            html += '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<thead><tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">';
+            html += '<th style="padding: 1rem; text-align: left;">학년</th>';
+            html += '<th style="padding: 1rem; text-align: left;">학생명</th>';
+            html += '<th style="padding: 1rem; text-align: center;">총점</th>';
+            html += '<th style="padding: 1rem; text-align: center;">수준</th>';
+            html += '<th style="padding: 1rem; text-align: left;">과목별 점수</th>';
+            html += '<th style="padding: 1rem; text-align: center;">진단일</th>';
+            html += '</tr></thead><tbody>';
+            
+            diagnosticResults.forEach(result => {
+                const level = result.totalScore >= 360 ? '심화' : result.totalScore >= 240 ? '표준' : '기초';
+                const levelColor = result.totalScore >= 360 ? '#10b981' : result.totalScore >= 240 ? '#f59e0b' : '#ef4444';
+                const date = new Date(result.testDate);
+                const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+                
+                let subjectScores = '';
+                if (result.subjectScores) {
+                    const subjects = ['수학', '영어', '국어', '사회', '과학'];
+                    const emojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+                    subjectScores = subjects.map(s => {
+                        const score = result.subjectScores[s]?.score || 0;
+                        return `${emojis[s]}${score}`;
+                    }).join(' ');
+                }
+                
+                html += `<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">`;
+                html += `<td style="padding: 1rem;">중${result.grade}</td>`;
+                html += `<td style="padding: 1rem; font-weight: 600;">${result.studentName}</td>`;
+                html += `<td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--accent);">${result.totalScore}점</td>`;
+                html += `<td style="padding: 1rem; text-align: center;"><span style="background: ${levelColor}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">${level}</span></td>`;
+                html += `<td style="padding: 1rem; font-size: 0.9rem;">${subjectScores}</td>`;
+                html += `<td style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">${dateStr}</td>`;
+                html += `</tr>`;
+            });
+            
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+        
+        // 🌱 성장테스트 데이터 로드
+        function loadGrowthTestData() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            
+            console.log('🌱 성장테스트 데이터 로드:', {
+                진단평가: diagnosticResults.length,
+                성장테스트: growthTestResults.length
+            });
+            
+            if (growthTestResults.length === 0) {
+                return;
+            }
+            
+            // 통계 계산
+            let totalImprovement = 0;
+            let improvedCount = 0;
+            let topImprovement = 0;
+            let topStudent = '';
+            
+            const comparisonData = growthTestResults.map(growth => {
+                const diagnostic = diagnosticResults.find(d => d.studentId === growth.studentId);
+                if (!diagnostic) return null;
+                
+                const improvement = growth.totalScore - diagnostic.totalScore;
+                totalImprovement += improvement;
+                
+                if (improvement > 0) improvedCount++;
+                if (improvement > topImprovement) {
+                    topImprovement = improvement;
+                    topStudent = growth.studentName;
+                }
+                
+                return {
+                    studentId: growth.studentId,
+                    studentName: growth.studentName || diagnostic.studentName,
+                    grade: growth.grade || diagnostic.grade,
+                    diagnosticScore: diagnostic.totalScore,
+                    growthScore: growth.totalScore,
+                    improvement: improvement,
+                    diagnosticLevel: getLevelLabel(diagnostic.totalScore),
+                    growthLevel: getLevelLabel(growth.totalScore),
+                    diagnosticSubjects: diagnostic.subjectScores,
+                    growthSubjects: growth.subjectScores,
+                    testDate: growth.testDate || growth.completedAt
+                };
+            }).filter(item => item !== null);
+            
+            // 통계 업데이트
+            const avgImprovement = comparisonData.length > 0 ? Math.round(totalImprovement / comparisonData.length) : 0;
+            
+            document.getElementById('growthCompletedCount').textContent = `${comparisonData.length}명`;
+            document.getElementById('avgImprovement').textContent = avgImprovement > 0 ? `+${avgImprovement}점` : `${avgImprovement}점`;
+            document.getElementById('improvedCount').textContent = `${improvedCount}명`;
+            document.getElementById('topImprovement').textContent = topImprovement > 0 ? `+${topImprovement}점 (${topStudent})` : '-';
+            
+            // 테이블 렌더링
+            displayGrowthTestTable(comparisonData);
+        }
+        
+        function getLevelLabel(score) {
+            if (score >= 360) return '심화';
+            if (score >= 240) return '표준';
+            return '기초';
+        }
+        
+        function displayGrowthTestTable(data) {
+            const tbody = document.getElementById('growthTableBody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="padding: 3rem; text-align: center; color: var(--text-muted);">📝 성장테스트를 완료한 학생이 없습니다</td></tr>';
+                return;
+            }
+            
+            const subjects = ['수학', '영어', '국어', '사회', '과학'];
+            const emojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+            
+            tbody.innerHTML = data.map(item => {
+                const improvement = item.improvement;
+                const improvementSymbol = improvement > 0 ? '📈' : improvement < 0 ? '📉' : '➡️';
+                const improvementColor = improvement > 0 ? '#10b981' : improvement < 0 ? '#ef4444' : '#94a3b8';
+                const improvementText = improvement > 0 ? `+${improvement}점` : `${improvement}점`;
+                
+                const levelChange = item.diagnosticLevel !== item.growthLevel ? 
+                    `${item.diagnosticLevel} → ${item.growthLevel}` : item.growthLevel;
+                
+                const subjectChanges = subjects.map(subject => {
+                    const beforeScore = item.diagnosticSubjects?.[subject]?.score || 0;
+                    const afterScore = item.growthSubjects?.[subject]?.score || 0;
+                    const diff = afterScore - beforeScore;
+                    const diffSymbol = diff > 0 ? '↑' : diff < 0 ? '↓' : '−';
+                    const diffColor = diff > 0 ? '#10b981' : diff < 0 ? '#ef4444' : '#94a3b8';
+                    return `<span style="color: ${diffColor};">${emojis[subject]}${diffSymbol}${Math.abs(diff)}</span>`;
+                }).join(' ');
+                
+                const testDate = new Date(item.testDate);
+                const dateStr = `${testDate.getMonth() + 1}/${testDate.getDate()}`;
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 1rem;">중${item.grade}</td>
+                        <td style="padding: 1rem; font-weight: 600;">${item.studentName}</td>
+                        <td style="padding: 1rem; text-align: center;">${item.diagnosticScore}점</td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--accent);">${item.growthScore}점</td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <span style="color: ${improvementColor}; font-weight: 600;">${improvementSymbol} ${improvementText}</span>
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-size: 0.9rem;">${levelChange}</td>
+                        <td style="padding: 1rem; font-size: 0.85rem;">${subjectChanges}</td>
+                        <td style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">${dateStr}</td>
+                    </tr>
+                `;
+            }).join('');
         }
     </script>
 </body>
