@@ -30,7 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+      - name: Remove large directories
+        run: |
+          rm -rf daum-admission-counseling
+          rm -rf node_modules
+          rm -rf backups
+          rm -rf temp_upload2
+          rm -rf hwpx_extract
+          echo "Cleaned up large directories"
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
