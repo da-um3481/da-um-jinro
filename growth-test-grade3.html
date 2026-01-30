@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 중3 성장테스트 - 2026년 1월 30일 (금)</title>
+    
+    <!-- 캐시 방지 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        }
+        
+        .test-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 20px 60px rgba(79, 172, 254, 0.3);
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .start-btn {
+            background: white;
+            color: #4facfe;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-cyan-50 min-h-screen flex items-center justify-center p-4">
+    
+    <div class="max-w-2xl w-full">
+        <div class="test-card">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-4">
+                    🌱 중3 성장테스트
+                </h1>
+                <p class="text-2xl font-semibold opacity-90">
+                    📅 2026년 1월 30일 (금) 오픈
+                </p>
+            </div>
+            
+            <div class="info-box">
+                <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                    <i class="fas fa-chart-line"></i>
+                    30일간의 성장을 확인하세요!
+                </h3>
+                <ul class="space-y-2 text-lg">
+                    <li>✅ 진단평가와 동일한 50문제</li>
+                    <li>✅ 5개 과목 (수학, 영어, 국어, 사회, 과학)</li>
+                    <li>✅ 각 과목 10문제씩</li>
+                    <li>✅ 30일간의 학습 성과 측정</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                    <i class="fas fa-clock"></i>
+                    시험 정보
+                </h3>
+                <ul class="space-y-2 text-lg">
+                    <li>⏱️ 제한 시간: 없음 (충분히 생각하고 풀기)</li>
+                    <li>📊 총점: 475점 (과목당 95점)</li>
+                    <li>🎯 난이도: 기초 2문항, 표준 5문항, 심화 3문항</li>
+                </ul>
+            </div>
+            
+            <div class="info-box bg-yellow-500 bg-opacity-20">
+                <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                    <i class="fas fa-lightbulb"></i>
+                    안내사항
+                </h3>
+                <ul class="space-y-2 text-lg">
+                    <li>💡 진단평가를 먼저 완료해야 합니다</li>
+                    <li>📈 진단평가 결과와 비교 분석 제공</li>
+                    <li>🎓 개인별 성장 리포트 자동 생성</li>
+                </ul>
+            </div>
+            
+            <div class="text-center mt-8">
+                <button onclick="startTest()" class="start-btn">
+                    <i class="fas fa-play mr-2"></i>
+                    성장테스트 시작하기
+                </button>
+                <p class="mt-4 text-sm opacity-75">
+                    준비되면 위 버튼을 눌러 시작하세요!
+                </p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-8">
+            <a href="geunhwa-student-portal.html" class="text-blue-600 hover:text-blue-800 font-semibold">
+                ← 학생 포털로 돌아가기
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // 성장테스트 날짜
+        const GROWTH_TEST_DATE = new Date('2026-01-30');
+        const today = new Date();
+        
+        function startTest() {
+            // 날짜 확인
+            if (today < GROWTH_TEST_DATE) {
+                alert('성장테스트는 2026년 1월 30일 (금)부터 시작할 수 있습니다!');
+                return;
+            }
+            
+            // 로그인 확인
+            const studentId = localStorage.getItem('currentStudentId');
+            if (!studentId) {
+                alert('먼저 학생 포털에서 로그인해주세요!');
+                window.location.href = 'geunhwa-student-portal.html';
+                return;
+            }
+            
+            // 진단평가 완료 여부 확인
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results') || '[]');
+            const myDiagnostic = diagnosticResults.find(r => r.studentId === studentId);
+            
+            if (!myDiagnostic) {
+                alert('진단평가를 먼저 완료해주세요!');
+                window.location.href = 'geunhwa-student-portal.html';
+                return;
+            }
+            
+            // 성장테스트 시작
+            if (confirm('중3 성장테스트를 시작하시겠습니까?\n\n진단평가와 동일한 50문제입니다.\n시간 제한은 없으니 충분히 생각하고 풀어주세요!')) {
+                // 성장테스트 플래그 설정
+                sessionStorage.setItem('isGrowthTest', 'true');
+                sessionStorage.setItem('growthTestGrade', '중3');
+                
+                // 학생 포털로 이동 (진단평가 모달 자동 오픈)
+                window.location.href = 'geunhwa-student-portal.html#start-growth-test';
+            }
+        }
+        
+        // 페이지 로드 시 날짜 확인
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('중3 성장테스트 페이지 로드');
+            console.log('오늘:', today.toLocaleDateString('ko-KR'));
+            console.log('오픈일:', GROWTH_TEST_DATE.toLocaleDateString('ko-KR'));
+            
+            if (today >= GROWTH_TEST_DATE) {
+                console.log('✅ 성장테스트 활성화됨!');
+            } else {
+                console.log('⏳ 성장테스트 대기 중...');
+            }
+        });
+    </script>
+</body>
+</html>
