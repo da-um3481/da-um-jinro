@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>성장테스트 문제지 생성기</title>
+    <script src="js/diagnostic-test-db.js"></script>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .controls { background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        button { background: #4299e1; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin: 5px; }
+        button:hover { background: #3182ce; }
+        .output { margin-top: 20px; }
+        iframe { width: 100%; height: 800px; border: 1px solid #cbd5e0; }
+    </style>
+</head>
+<body>
+    <h1>🌱 성장테스트 문제지 생성기</h1>
+    
+    <div class="controls">
+        <h3>학년 선택:</h3>
+        <button onclick="generatePDF(1)">중1 문제지 생성</button>
+        <button onclick="generatePDF(2)">중2 문제지 생성</button>
+        <button onclick="generatePDF(3)">중3 문제지 생성</button>
+        <button onclick="generateAll()">전체 생성 (3개 파일)</button>
+    </div>
+    
+    <div class="output" id="output"></div>
+    
+    <script>
+        function generatePDF(grade) {
+            const data = diagnosticTestDB[grade];
+            const subjects = ['수학', '영어', '국어', '사회', '과학'];
+            
+            let html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>중${grade} 성장테스트 문제지 - 2026-01-30(금)</title>
+    <style>
+        @media print {
+            @page { margin: 1.5cm; }
+            body { margin: 0; }
+            .question { page-break-inside: avoid; }
+        }
+        body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        .header { text-align: center; border-bottom: 3px solid #2d3748; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin: 10px 0; color: #2d3748; }
+        .info { color: #4a5568; margin: 10px 0; }
+        .info p { margin: 5px 0; }
+        .subject-section { margin: 40px 0; }
+        .subject-title { background: #4a5568; color: white; padding: 12px 16px; font-size: 20px; font-weight: bold; margin-bottom: 20px; border-radius: 4px; }
+        .question { margin-bottom: 25px; padding: 15px; border: 1px solid #e2e8f0; border-left: 4px solid #667eea; background: #f7fafc; border-radius: 4px; }
+        .q-header { margin-bottom: 12px; }
+        .q-num { background: #667eea; color: white; padding: 5px 12px; border-radius: 3px; font-weight: bold; margin-right: 8px; }
+        .difficulty { padding: 3px 8px; border-radius: 3px; font-size: 12px; margin-left: 8px; font-weight: bold; }
+        .diff-1 { background: #c6f6d5; color: #22543d; }
+        .diff-2 { background: #fed7d7; color: #742a2a; }
+        .diff-3 { background: #fbd38d; color: #7c2d12; }
+        .q-text { font-size: 16px; font-weight: 500; margin: 12px 0; color: #2d3748; }
+        .options { margin: 12px 0 0 20px; }
+        .option { margin: 8px 0; font-size: 15px; color: #4a5568; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌱 중학교 ${grade}학년 성장테스트 문제지</h1>
+        <div class="info">
+            <p><strong>📅 오픈일:</strong> 2026년 1월 30일 (금요일)</p>
+            <p><strong>📊 문제 수:</strong> 총 50문제 (과목당 10문제)</p>
+            <p><strong>🎯 배점:</strong> 총 475점</p>
+            <p><strong>⏱️ 제한 시간:</strong> 없음 (충분히 생각하고 풀기)</p>
+        </div>
+    </div>
+`;
+            
+            let qNum = 1;
+            subjects.forEach(subject => {
+                const questions = data[subject] || [];
+                html += `    <div class="subject-section">
+        <div class="subject-title">📚 ${subject} (10문제)</div>
+`;
+                
+                questions.forEach(q => {
+                    const diffText = q.difficulty === 1 ? '기초' : q.difficulty === 2 ? '표준' : '심화';
+                    html += `        <div class="question">
+            <div class="q-header">
+                <span class="q-num">${qNum}</span>
+                <span class="difficulty diff-${q.difficulty}">${diffText}</span>
+                <span style="color: #4a5568; margin-left: 8px;">(${q.points}점)</span>
+            </div>
+            <div class="q-text">${q.question}</div>
+            <div class="options">
+`;
+                    
+                    q.options.forEach((opt, i) => {
+                        html += `                <div class="option">① ${opt}</div>\n`;
+                    });
+                    
+                    html += `            </div>
+        </div>
+`;
+                    qNum++;
+                });
+                
+                html += `    </div>
+`;
+            });
+            
+            html += `</body>
+</html>`;
+            
+            // 새 창에서 열기
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(html);
+            newWindow.document.close();
+            
+            // 다운로드 링크 생성
+            const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `중${grade}_성장테스트_문제지_2026-01-30.html`;
+            a.click();
+            
+            alert(`중${grade} 문제지가 새 창에서 열렸습니다!\\n\\n브라우저에서 Ctrl+P (또는 Cmd+P) 를 누르고\\n"PDF로 저장"을 선택하세요.`);
+        }
+        
+        function generateAll() {
+            if (confirm('중1, 중2, 중3 문제지를 모두 생성하시겠습니까?')) {
+                generatePDF(1);
+                setTimeout(() => generatePDF(2), 500);
+                setTimeout(() => generatePDF(3), 1000);
+            }
+        }
+    </script>
+</body>
+</html>
