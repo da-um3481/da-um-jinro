@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테스트 학생 삭제</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        .info {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+        .student-list {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .student-item {
+            padding: 0.75rem;
+            background: white;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .student-item.to-delete {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .result.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .result.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ 테스트 학생 데이터 삭제</h1>
+        
+        <div class="info">
+            <strong>⚠️ 삭제 대상:</strong> "정라미", "테스트" 이름을 가진 학생들의 진단평가 결과를 삭제합니다.
+        </div>
+
+        <div class="student-list" id="studentList">
+            <p style="color: #6b7280;">로딩 중...</p>
+        </div>
+
+        <button onclick="deleteTestStudents()" id="deleteBtn">삭제 실행</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 페이지 로드 시 현재 저장된 학생 목록 표시
+        window.addEventListener('DOMContentLoaded', () => {
+            displayCurrentStudents();
+        });
+
+        function displayCurrentStudents() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const studentListEl = document.getElementById('studentList');
+
+            if (diagnosticResults.length === 0) {
+                studentListEl.innerHTML = '<p style="color: #6b7280;">진단평가 결과가 없습니다.</p>';
+                document.getElementById('deleteBtn').disabled = true;
+                return;
+            }
+
+            const toDelete = diagnosticResults.filter(r => 
+                r.studentName === '정라미' || r.studentName === '테스트'
+            );
+
+            const others = diagnosticResults.filter(r => 
+                r.studentName !== '정라미' && r.studentName !== '테스트'
+            );
+
+            let html = '<div style="margin-bottom: 1rem;"><strong>삭제 대상 학생:</strong></div>';
+            
+            if (toDelete.length > 0) {
+                html += toDelete.map(r => `
+                    <div class="student-item to-delete">
+                        <span>${r.studentName} (중${r.grade}) - ${r.totalScore}점</span>
+                        <span style="color: #ef4444; font-weight: 600;">삭제 예정</span>
+                    </div>
+                `).join('');
+            } else {
+                html += '<p style="color: #6b7280; margin-left: 1rem;">삭제할 학생이 없습니다.</p>';
+                document.getElementById('deleteBtn').disabled = true;
+            }
+
+            html += '<div style="margin-top: 1.5rem; margin-bottom: 0.5rem;"><strong>유지될 학생:</strong></div>';
+            html += others.map(r => `
+                <div class="student-item">
+                    <span>${r.studentName} (중${r.grade}) - ${r.totalScore}점</span>
+                    <span style="color: #10b981; font-weight: 600;">✓ 유지</span>
+                </div>
+            `).join('');
+
+            studentListEl.innerHTML = html;
+        }
+
+        function deleteTestStudents() {
+            const confirmDelete = confirm('정말로 "정라미"와 "테스트" 학생의 진단평가 결과를 삭제하시겠습니까?');
+            
+            if (!confirmDelete) {
+                return;
+            }
+
+            try {
+                // localStorage에서 진단평가 결과 가져오기
+                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                
+                // "정라미"와 "테스트" 제외한 결과만 필터링
+                const filteredResults = diagnosticResults.filter(result => 
+                    result.studentName !== '정라미' && result.studentName !== '테스트'
+                );
+
+                const deletedCount = diagnosticResults.length - filteredResults.length;
+
+                // localStorage에 다시 저장
+                localStorage.setItem('diagnostic_results', JSON.stringify(filteredResults));
+
+                // 결과 표시
+                const resultEl = document.getElementById('result');
+                resultEl.className = 'result success';
+                resultEl.innerHTML = `
+                    ✅ <strong>${deletedCount}명</strong>의 테스트 학생 데이터가 삭제되었습니다.<br>
+                    남은 학생 수: <strong>${filteredResults.length}명</strong>
+                `;
+
+                // 버튼 비활성화
+                document.getElementById('deleteBtn').disabled = true;
+                document.getElementById('deleteBtn').textContent = '✓ 삭제 완료';
+
+                // 목록 갱신
+                displayCurrentStudents();
+
+                // 3초 후 성장테스트 결과 페이지로 이동
+                setTimeout(() => {
+                    if (confirm('성장테스트 결과 페이지로 이동하시겠습니까?')) {
+                        window.location.href = 'growth-test-results.html';
+                    }
+                }, 2000);
+
+            } catch (error) {
+                const resultEl = document.getElementById('result');
+                resultEl.className = 'result error';
+                resultEl.innerHTML = `❌ 오류가 발생했습니다: ${error.message}`;
+                console.error('삭제 오류:', error);
+            }
+        }
+    </script>
+</body>
+</html>
