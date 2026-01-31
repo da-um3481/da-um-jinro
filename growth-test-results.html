@@ -961,6 +961,618 @@
         </div>
     </div>
 
-    <script src="js/growth-comparison-dashboard.js"></script>
+    <script>
+        // XLSX 라이브러리 로드
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        document.head.appendChild(script);
+        
+        // 진단평가 결과 로드
+        function loadDiagnosticResults() {
+            console.log('🔍 진단평가 결과 로드 시작...');
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            console.log('📊 진단평가 결과:', diagnosticResults.length, '건');
+            
+            // 통계 계산
+            const completedCount = diagnosticResults.length;
+            const advancedCount = diagnosticResults.filter(r => {
+                const level = r.level || r.levelLabel || '';
+                return level === '심화' || level === 'advanced';
+            }).length;
+            const intermediateCount = diagnosticResults.filter(r => {
+                const level = r.level || r.levelLabel || '';
+                return level === '표준' || level === 'intermediate';
+            }).length;
+            const beginnerCount = diagnosticResults.filter(r => {
+                const level = r.level || r.levelLabel || '';
+                return level === '기초' || level === 'beginner';
+            }).length;
+            
+            // 통계 업데이트
+            document.getElementById('diagnosticCompletedCount').textContent = completedCount;
+            document.getElementById('advancedCount').textContent = advancedCount;
+            document.getElementById('intermediateCount').textContent = intermediateCount;
+            document.getElementById('beginnerCount').textContent = beginnerCount;
+            
+            // 테이블 업데이트
+            displayDiagnosticResults(diagnosticResults);
+        }
+        
+        // 진단평가 결과 표시
+        function displayDiagnosticResults(results, filter = 'all') {
+            const tbody = document.getElementById('diagnosticResultsTableBody');
+            
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">📝</div>
+                            <div class="empty-title">진단평가를 완료한 학생이 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 필터링
+            let filteredResults = results;
+            if (filter !== 'all') {
+                filteredResults = results.filter(r => {
+                    const level = r.level || r.levelLabel || '';
+                    if (filter === 'advanced') return level === '심화' || level === 'advanced';
+                    if (filter === 'intermediate') return level === '표준' || level === 'intermediate';
+                    if (filter === 'beginner') return level === '기초' || level === 'beginner';
+                    return true;
+                });
+            }
+            
+            if (filteredResults.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">🔍</div>
+                            <div class="empty-title">해당 조건의 학생이 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = filteredResults.map((result, index) => {
+                const levelInfo = getLevelInfo(result.level || result.levelLabel);
+                const subjectScores = result.subjectScores || {};
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 1rem; text-align: center; color: var(--text-muted);">${index + 1}</td>
+                        <td style="padding: 1rem; text-align: center;">중${result.grade || '-'}</td>
+                        <td style="padding: 1rem; font-weight: 600;">${result.studentName || '익명'}</td>
+                        <td style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                            ${new Date(result.testDate).toLocaleDateString('ko-KR')}
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--primary);">
+                            ${result.correctCount || result.totalScore || 0}/50
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; font-size: 1.1rem; color: ${levelInfo.color};">
+                            ${result.totalScore || 0}점
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <span style="padding: 0.4rem 0.8rem; background: ${levelInfo.bg}; color: ${levelInfo.color}; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">
+                                ${levelInfo.label}
+                            </span>
+                        </td>
+                        ${['수학', '영어', '국어', '사회', '과학'].map(subject => {
+                            const score = subjectScores[subject]?.score || 0;
+                            const scoreColor = score >= 8 ? '#10b981' : score >= 5 ? '#3b82f6' : '#f59e0b';
+                            return `
+                                <td style="padding: 1rem; text-align: center;">
+                                    <span style="font-weight: 700; color: ${scoreColor};">${score}</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">/10</span>
+                                </td>
+                            `;
+                        }).join('')}
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 수준 정보 반환
+        function getLevelInfo(level) {
+            const levelStr = String(level || '').toLowerCase();
+            if (levelStr.includes('심화') || levelStr === 'advanced') {
+                return { label: '심화', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.1)' };
+            } else if (levelStr.includes('표준') || levelStr === 'intermediate') {
+                return { label: '표준', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' };
+            } else {
+                return { label: '기초', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)' };
+            }
+        }
+        
+        // 성장테스트 결과 로드
+        function loadGrowthResults() {
+            console.log('🔍 성장테스트 결과 로드 시작...');
+            const growthResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            console.log('📊 성장테스트 결과:', growthResults.length, '건');
+            
+            const completedCount = growthResults.length;
+            const avgScore = completedCount > 0 
+                ? Math.round(growthResults.reduce((sum, r) => sum + (r.totalScore || 0), 0) / completedCount)
+                : 0;
+            const advancedCount = growthResults.filter(r => (r.totalScore || 0) >= 360).length;
+            const topScore = completedCount > 0 
+                ? Math.max(...growthResults.map(r => r.totalScore || 0))
+                : 0;
+            const topStudent = growthResults.find(r => r.totalScore === topScore);
+            
+            document.getElementById('growthCompletedCount').textContent = completedCount;
+            document.getElementById('growthAvgScore').textContent = avgScore;
+            document.getElementById('growthAdvancedCount').textContent = advancedCount;
+            document.getElementById('growthTopScore').textContent = topScore;
+            document.getElementById('growthTopStudent').textContent = topStudent ? topStudent.studentName : '-';
+            
+            displayGrowthResults(growthResults);
+        }
+        
+        // 성장테스트 결과 표시
+        function displayGrowthResults(results) {
+            const tbody = document.getElementById('growthResultsTableBody');
+            
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">🌱</div>
+                            <div class="empty-title">성장테스트를 완료한 학생이 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = results.map((result, index) => {
+                const levelInfo = getLevelInfo(result.level || result.levelLabel);
+                const subjectScores = result.subjectScores || {};
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 1rem; text-align: center; color: var(--text-muted);">${index + 1}</td>
+                        <td style="padding: 1rem; text-align: center;">중${result.grade || '-'}</td>
+                        <td style="padding: 1rem; font-weight: 600;">${result.studentName || '익명'}</td>
+                        <td style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                            ${new Date(result.testDate).toLocaleDateString('ko-KR')}
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--primary);">
+                            ${result.correctCount || result.totalScore || 0}/50
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; font-size: 1.1rem; color: ${levelInfo.color};">
+                            ${result.totalScore || 0}점
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <span style="padding: 0.4rem 0.8rem; background: ${levelInfo.bg}; color: ${levelInfo.color}; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">
+                                ${levelInfo.label}
+                            </span>
+                        </td>
+                        ${['수학', '영어', '국어', '사회', '과학'].map(subject => {
+                            const score = subjectScores[subject]?.score || 0;
+                            const scoreColor = score >= 8 ? '#10b981' : score >= 5 ? '#3b82f6' : '#f59e0b';
+                            return `
+                                <td style="padding: 1rem; text-align: center;">
+                                    <span style="font-weight: 700; color: ${scoreColor};">${score}</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">/10</span>
+                                </td>
+                            `;
+                        }).join('')}
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 비교 분석 로드  
+        function loadComparisonAnalysis() {
+            console.log('🔍 비교 분석 로드 시작...');
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const growthResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            
+            // 두 결과를 모두 가진 학생 찾기
+            const comparisons = [];
+            diagnosticResults.forEach(diagnostic => {
+                const growth = growthResults.find(g => g.studentId === diagnostic.studentId);
+                if (growth) {
+                    const diagnosticScore = diagnostic.totalScore || 0;
+                    const growthScore = growth.totalScore || 0;
+                    const improvement = growthScore - diagnosticScore;
+                    const improvementRate = diagnosticScore > 0 ? ((improvement / diagnosticScore) * 100).toFixed(1) : 0;
+                    
+                    comparisons.push({
+                        ...diagnostic,
+                        diagnosticScore,
+                        growthScore,
+                        improvement,
+                        improvementRate,
+                        growthData: growth
+                    });
+                }
+            });
+            
+            console.log('📊 비교 가능한 학생:', comparisons.length, '명');
+            
+            // 통계 계산
+            const completedCount = comparisons.length;
+            const avgImprovement = completedCount > 0 
+                ? Math.round(comparisons.reduce((sum, c) => sum + c.improvement, 0) / completedCount)
+                : 0;
+            const improvedCount = comparisons.filter(c => c.improvement > 0).length;
+            const improvementRate = completedCount > 0 
+                ? ((improvedCount / completedCount) * 100).toFixed(0)
+                : 0;
+            const maxImprovement = completedCount > 0 
+                ? Math.max(...comparisons.map(c => c.improvement))
+                : 0;
+            const maxStudent = comparisons.find(c => c.improvement === maxImprovement);
+            
+            document.getElementById('comparisonCompletedCount').textContent = completedCount;
+            document.getElementById('comparisonAvgImprovement').textContent = avgImprovement;
+            document.getElementById('comparisonImprovementRate').textContent = improvementRate + '%';
+            document.getElementById('comparisonMaxImprovement').textContent = maxImprovement;
+            document.getElementById('comparisonMaxStudent').textContent = maxStudent ? maxStudent.studentName : '-';
+            
+            displayComparisonResults(comparisons);
+        }
+        
+        // 비교 결과 표시
+        function displayComparisonResults(comparisons, filter = 'all') {
+            const tbody = document.getElementById('comparisonResultsTableBody');
+            
+            if (comparisons.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">📊</div>
+                            <div class="empty-title">비교할 수 있는 학생이 없습니다</div>
+                            <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">
+                                진단평가와 성장테스트를 모두 완료한 학생의 결과가 여기에 표시됩니다.
+                            </p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 필터링
+            let filteredComparisons = comparisons;
+            if (filter === 'improved') {
+                filteredComparisons = comparisons.filter(c => c.improvement > 0);
+            } else if (filter === 'same') {
+                filteredComparisons = comparisons.filter(c => c.improvement === 0);
+            } else if (filter === 'declined') {
+                filteredComparisons = comparisons.filter(c => c.improvement < 0);
+            }
+            
+            if (filteredComparisons.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="text-align: center; padding: 3rem;">
+                            <div class="empty-icon">🔍</div>
+                            <div class="empty-title">해당 조건의 학생이 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = filteredComparisons.map((comparison, index) => {
+                const improvementIcon = comparison.improvement > 0 ? '▲' : comparison.improvement < 0 ? '▼' : '➖';
+                const improvementColor = comparison.improvement > 0 ? '#10b981' : comparison.improvement < 0 ? '#ef4444' : '#94a3b8';
+                
+                const diagnosticSubjects = comparison.subjectScores || {};
+                const growthSubjects = comparison.growthData?.subjectScores || {};
+                
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 1rem; text-align: center; color: var(--text-muted);">${index + 1}</td>
+                        <td style="padding: 1rem; text-align: center;">중${comparison.grade || '-'}</td>
+                        <td style="padding: 1rem; font-weight: 600;">${comparison.studentName || '익명'}</td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; color: #3b82f6;">
+                            ${comparison.diagnosticScore}점
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; color: #10b981;">
+                            ${comparison.growthScore}점
+                        </td>
+                        <td style="padding: 1rem; text-align: center; font-weight: 700; color: ${improvementColor};">
+                            ${improvementIcon} ${Math.abs(comparison.improvement)}점
+                        </td>
+                        ${['수학', '영어', '국어', '사회', '과학'].map(subject => {
+                            const diagnosticScore = diagnosticSubjects[subject]?.score || 0;
+                            const growthScore = growthSubjects[subject]?.score || 0;
+                            const diff = growthScore - diagnosticScore;
+                            const diffIcon = diff > 0 ? '▲' : diff < 0 ? '▼' : '➖';
+                            const diffColor = diff > 0 ? '#10b981' : diff < 0 ? '#ef4444' : '#94a3b8';
+                            return `
+                                <td style="padding: 1rem; text-align: center; font-size: 0.9rem;">
+                                    <span style="color: ${diffColor}; font-weight: 600;">
+                                        ${diffIcon} ${Math.abs(diff)}
+                                    </span>
+                                </td>
+                            `;
+                        }).join('')}
+                        <td style="padding: 1rem; text-align: center;">
+                            <button onclick="showComparisonDetail('${comparison.studentId}')" 
+                                    style="padding: 0.5rem 1rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">
+                                <i class="fas fa-chart-line"></i> 상세
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 필터링 함수들
+        let currentDiagnosticFilter = 'all';
+        function filterDiagnosticResults(filter) {
+            currentDiagnosticFilter = filter;
+            const results = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            displayDiagnosticResults(results, filter);
+            
+            // 버튼 활성화 상태 업데이트
+            document.querySelectorAll('#section-diagnostic .btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        let currentComparisonFilter = 'all';
+        function filterComparisonResults(filter) {
+            currentComparisonFilter = filter;
+            loadComparisonAnalysis();
+            
+            // 버튼 활성화 상태 업데이트
+            document.querySelectorAll('#section-comparison .btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // 새로고침 함수들
+        function refreshDiagnosticData() {
+            loadDiagnosticResults();
+            showToast('진단평가 결과를 새로고침했습니다');
+        }
+        
+        function refreshGrowthData() {
+            loadGrowthResults();
+            showToast('성장테스트 결과를 새로고침했습니다');
+        }
+        
+        function refreshComparisonData() {
+            loadComparisonAnalysis();
+            showToast('비교 분석 결과를 새로고침했습니다');
+        }
+        
+        // Excel 다운로드 함수들
+        function exportDiagnosticToExcel() {
+            const results = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            if (results.length === 0) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+            
+            const data = results.map(r => ({
+                '학년': `중${r.grade}`,
+                '이름': r.studentName,
+                '진단일': new Date(r.testDate).toLocaleDateString('ko-KR'),
+                '정답수': r.correctCount || r.totalScore,
+                '총점': r.totalScore,
+                '수준': r.levelLabel || r.level,
+                '수학': r.subjectScores?.['수학']?.score || 0,
+                '영어': r.subjectScores?.['영어']?.score || 0,
+                '국어': r.subjectScores?.['국어']?.score || 0,
+                '사회': r.subjectScores?.['사회']?.score || 0,
+                '과학': r.subjectScores?.['과학']?.score || 0
+            }));
+            
+            downloadAsExcel(data, '진단평가_결과');
+        }
+        
+        function exportGrowthToExcel() {
+            const results = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            if (results.length === 0) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+            
+            const data = results.map(r => ({
+                '학년': `중${r.grade}`,
+                '이름': r.studentName,
+                '테스트일': new Date(r.testDate).toLocaleDateString('ko-KR'),
+                '정답수': r.correctCount || r.totalScore,
+                '총점': r.totalScore,
+                '수준': r.levelLabel || r.level,
+                '수학': r.subjectScores?.['수학']?.score || 0,
+                '영어': r.subjectScores?.['영어']?.score || 0,
+                '국어': r.subjectScores?.['국어']?.score || 0,
+                '사회': r.subjectScores?.['사회']?.score || 0,
+                '과학': r.subjectScores?.['과학']?.score || 0
+            }));
+            
+            downloadAsExcel(data, '성장테스트_결과');
+        }
+        
+        function exportComparisonToExcel() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const growthResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            
+            const comparisons = [];
+            diagnosticResults.forEach(diagnostic => {
+                const growth = growthResults.find(g => g.studentId === diagnostic.studentId);
+                if (growth) {
+                    comparisons.push({
+                        '학년': `중${diagnostic.grade}`,
+                        '이름': diagnostic.studentName,
+                        '진단평가_총점': diagnostic.totalScore,
+                        '성장테스트_총점': growth.totalScore,
+                        '변화량': growth.totalScore - diagnostic.totalScore,
+                        '향상률': `${(((growth.totalScore - diagnostic.totalScore) / diagnostic.totalScore) * 100).toFixed(1)}%`,
+                        '진단_수학': diagnostic.subjectScores?.['수학']?.score || 0,
+                        '성장_수학': growth.subjectScores?.['수학']?.score || 0,
+                        '진단_영어': diagnostic.subjectScores?.['영어']?.score || 0,
+                        '성장_영어': growth.subjectScores?.['영어']?.score || 0,
+                        '진단_국어': diagnostic.subjectScores?.['국어']?.score || 0,
+                        '성장_국어': growth.subjectScores?.['국어']?.score || 0,
+                        '진단_사회': diagnostic.subjectScores?.['사회']?.score || 0,
+                        '성장_사회': growth.subjectScores?.['사회']?.score || 0,
+                        '진단_과학': diagnostic.subjectScores?.['과학']?.score || 0,
+                        '성장_과학': growth.subjectScores?.['과학']?.score || 0
+                    });
+                }
+            });
+            
+            if (comparisons.length === 0) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+            
+            downloadAsExcel(comparisons, '성장_비교_분석');
+        }
+        
+        // Excel 다운로드 헬퍼
+        function downloadAsExcel(data, filename) {
+            if (!window.XLSX) {
+                alert('XLSX 라이브러리를 로딩 중입니다. 잠시 후 다시 시도해주세요.');
+                return;
+            }
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+            XLSX.writeFile(wb, `${filename}_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+        
+        // 토스트 메시지
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // 탭 전환
+        function switchTab(tab) {
+            // 탭 버튼 업데이트
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            
+            // 섹션 업데이트
+            document.querySelectorAll('.section-container').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(`section-${tab}`).style.display = 'block';
+        }
+        
+        // 상세 비교 모달
+        function showComparisonDetail(studentId) {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const growthResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            
+            const diagnostic = diagnosticResults.find(r => r.studentId === studentId);
+            const growth = growthResults.find(r => r.studentId === studentId);
+            
+            if (!diagnostic || !growth) {
+                alert('학생 데이터를 찾을 수 없습니다.');
+                return;
+            }
+            
+            const improvement = growth.totalScore - diagnostic.totalScore;
+            const improvementRate = ((improvement / diagnostic.totalScore) * 100).toFixed(1);
+            
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div style="padding: 2rem;">
+                    <h3 style="color: var(--primary); margin-bottom: 2rem; text-align: center;">
+                        ${diagnostic.studentName} (중${diagnostic.grade}) 학생 상세 비교
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div style="padding: 1.5rem; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border: 2px solid rgba(59, 130, 246, 0.3);">
+                            <h4 style="color: #3b82f6; margin-bottom: 1rem;">📝 진단평가</h4>
+                            <p style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin: 0;">${diagnostic.totalScore}점</p>
+                            <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                                ${new Date(diagnostic.testDate).toLocaleDateString('ko-KR')}
+                            </p>
+                        </div>
+                        
+                        <div style="padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border: 2px solid rgba(16, 185, 129, 0.3);">
+                            <h4 style="color: #10b981; margin-bottom: 1rem;">🌱 성장테스트</h4>
+                            <p style="font-size: 2rem; font-weight: 700; color: #10b981; margin: 0;">${growth.totalScore}점</p>
+                            <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                                ${new Date(growth.testDate).toLocaleDateString('ko-KR')}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: ${improvement >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'}; border-radius: 12px; text-align: center; margin-bottom: 2rem;">
+                        <h4 style="color: ${improvement >= 0 ? '#10b981' : '#ef4444'}; margin-bottom: 0.5rem;">
+                            ${improvement >= 0 ? '📈' : '📉'} 총점 변화
+                        </h4>
+                        <p style="font-size: 2.5rem; font-weight: 700; color: ${improvement >= 0 ? '#10b981' : '#ef4444'}; margin: 0;">
+                            ${improvement >= 0 ? '+' : ''}${improvement}점 (${improvementRate}%)
+                        </p>
+                    </div>
+                    
+                    <h4 style="color: var(--text); margin-bottom: 1rem;">📊 과목별 성장</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        ${['수학', '영어', '국어', '사회', '과학'].map(subject => {
+                            const diagnosticScore = diagnostic.subjectScores?.[subject]?.score || 0;
+                            const growthScore = growth.subjectScores?.[subject]?.score || 0;
+                            const diff = growthScore - diagnosticScore;
+                            const diffColor = diff > 0 ? '#10b981' : diff < 0 ? '#ef4444' : '#94a3b8';
+                            const icon = diff > 0 ? '▲' : diff < 0 ? '▼' : '➖';
+                            
+                            return `
+                                <div style="display: flex; align-items: center; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px;">
+                                    <span style="font-weight: 600; width: 4rem;">${subject}</span>
+                                    <div style="flex: 1; display: flex; align-items: center; gap: 1rem;">
+                                        <span style="color: #3b82f6; font-weight: 600;">${diagnosticScore}점</span>
+                                        <span style="color: var(--text-muted);">→</span>
+                                        <span style="color: #10b981; font-weight: 600;">${growthScore}점</span>
+                                        <span style="color: ${diffColor}; font-weight: 700; margin-left: auto;">
+                                            ${icon} ${Math.abs(diff)}점
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('comparisonModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('comparisonModal').style.display = 'none';
+        }
+        
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('📚 성장테스트 결과 대시보드 초기화...');
+            loadDiagnosticResults();
+            loadGrowthResults();
+            loadComparisonAnalysis();
+        });
+    </script>
 </body>
 </html>
