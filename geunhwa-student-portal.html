@@ -3403,13 +3403,14 @@
             // 내보낼 데이터 수집
             const exportData = {
                 exportDate: new Date().toISOString(),
-                exportType: 'student_diagnostic_data',
+                exportType: 'student_all_data',
                 studentInfo: {
                     id: currentStudentId,
                     name: currentStudentName,
                     grade: localStorage.getItem('currentStudentGrade')
                 },
                 diagnosticResults: JSON.parse(localStorage.getItem('diagnostic_results') || '[]').filter(r => r.studentId === currentStudentId),
+                growthTestResults: JSON.parse(localStorage.getItem('growth_test_results') || '[]').filter(r => r.studentId === currentStudentId),
                 postTestResults: (() => {
                     const allPostTests = JSON.parse(localStorage.getItem('post_test_results') || '{}');
                     return allPostTests[currentStudentId] || null;
@@ -3422,11 +3423,11 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `진단평가_${currentStudentName}_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `학습데이터_${currentStudentName}_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
             
-            alert(`📥 데이터 내보내기 완료!\n\n파일명: 진단평가_${currentStudentName}_${new Date().toISOString().split('T')[0]}.json\n\n이 파일을 선생님께 제출하거나\n다른 컴퓨터에서 가져오기할 수 있습니다.`);
+            alert(`📥 데이터 내보내기 완료!\n\n파일명: 학습데이터_${currentStudentName}_${new Date().toISOString().split('T')[0]}.json\n\n✅ 포함된 데이터:\n- 진단평가 결과\n- 성장테스트 결과\n- 학습 기록\n\n이 파일을 선생님께 제출해주세요!`);
             
             console.log('✅ 데이터 내보내기 완료:', exportData);
         }

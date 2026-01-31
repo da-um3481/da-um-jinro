@@ -1480,22 +1480,36 @@
                     try {
                         const data = JSON.parse(e.target.result);
                         
-                        // 성장테스트 데이터 확인
+                        let resultsToImport = [];
+                        
+                        // 형식 1: 자동 다운로드된 성장테스트 (exportType: 'growth_test')
                         if (data.exportType === 'growth_test' && data.growthTestResult) {
+                            resultsToImport = [data.growthTestResult];
+                        }
+                        // 형식 2: 데이터 내보내기 버튼 (exportType: 'student_all_data')
+                        else if (data.exportType === 'student_all_data' && data.growthTestResults) {
+                            resultsToImport = data.growthTestResults;
+                        }
+                        // 형식 3: 직접 배열
+                        else if (Array.isArray(data)) {
+                            resultsToImport = data;
+                        }
+                        
+                        if (resultsToImport.length > 0) {
                             let growthResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
                             
-                            // 중복 체크 (같은 studentId 제거)
-                            growthResults = growthResults.filter(r => r.studentId !== data.growthTestResult.studentId);
-                            
-                            // 새 결과 추가
-                            growthResults.push(data.growthTestResult);
+                            resultsToImport.forEach(result => {
+                                // 중복 체크 (같은 studentId 제거)
+                                growthResults = growthResults.filter(r => r.studentId !== result.studentId);
+                                // 새 결과 추가
+                                growthResults.push(result);
+                                importCount++;
+                                console.log('✅ 성장테스트 결과 import 성공:', result.studentName);
+                            });
                             
                             localStorage.setItem('growth_test_results', JSON.stringify(growthResults));
-                            importCount++;
-                            
-                            console.log('✅ 성장테스트 결과 import 성공:', data.studentName);
                         } else {
-                            console.warn('⚠️ 잘못된 데이터 형식:', file.name);
+                            console.warn('⚠️ 성장테스트 데이터를 찾을 수 없음:', file.name);
                             errorCount++;
                         }
                     } catch (error) {
