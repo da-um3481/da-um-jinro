@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>localStorage 확인</title>
+</head>
+<body>
+    <h1>localStorage 확인</h1>
+    <h3>growth_test_results:</h3>
+    <pre id="growth"></pre>
+    <h3>diagnostic_results:</h3>
+    <pre id="diagnostic"></pre>
+    
+    <script>
+        const growth = localStorage.getItem('growth_test_results');
+        const diagnostic = localStorage.getItem('diagnostic_results');
+        
+        document.getElementById('growth').textContent = growth || '없음';
+        document.getElementById('diagnostic').textContent = diagnostic ? JSON.stringify(JSON.parse(diagnostic), null, 2) : '없음';
+        
+        console.log('growth_test_results:', growth);
+        console.log('diagnostic_results:', diagnostic);
+    </script>
+</body>
+</html>
