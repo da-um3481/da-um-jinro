@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 성장테스트 결과 - 근화여중 자기주도학습UP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --dark: #0f172a;
+            --dark-lighter: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* 헤더 */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* 액션 버튼 */
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #ea580c 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* 테이블 */
+        .table-container {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* 점수 배지 */
+        .score-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .score-advanced {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+        }
+
+        .score-intermediate {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .score-beginner {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        /* 성장 표시 */
+        .growth-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 600;
+        }
+
+        .growth-up {
+            color: var(--success);
+        }
+
+        .growth-down {
+            color: var(--danger);
+        }
+
+        .growth-same {
+            color: var(--text-muted);
+        }
+
+        /* 비교 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark-lighter);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--text);
+        }
+
+        /* 비교 카드 */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .subject-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .subject-row:last-child {
+            border-bottom: none;
+        }
+
+        .subject-name {
+            font-weight: 600;
+        }
+
+        .subject-score {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 필터 */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.6);
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:hover {
+            border-color: var(--primary);
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1 class="title">🌱 성장테스트 결과 대시보드</h1>
+            <p class="subtitle">진단평가 대비 학생들의 성장을 한눈에 확인하세요</p>
+        </div>
+
+        <!-- 통계 카드 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="totalStudents">0</div>
+                <div class="stat-label">총 학생 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value" id="completedStudents">0</div>
+                <div class="stat-label">완료 학생</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-value" id="avgImprovement">0</div>
+                <div class="stat-label">평균 향상 점수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="improvementRate">0%</div>
+                <div class="stat-label">향상 비율</div>
+            </div>
+        </div>
+
+        <!-- 액션 버튼 -->
+        <div class="actions">
+            <button class="btn btn-primary" onclick="refreshData()">
+                <i class="fas fa-sync-alt"></i> 새로고침
+            </button>
+            <button class="btn btn-secondary" onclick="exportToExcel()">
+                <i class="fas fa-file-excel"></i> Excel 다운로드
+            </button>
+            <button class="btn btn-warning" onclick="showAllComparisons()">
+                <i class="fas fa-chart-line"></i> 전체 비교 보기
+            </button>
+        </div>
+
+        <!-- 필터 -->
+        <div class="filters">
+            <select class="filter-select" id="gradeFilter" onchange="filterResults()">
+                <option value="all">전체 학년</option>
+                <option value="1">중1</option>
+                <option value="2">중2</option>
+                <option value="3">중3</option>
+            </select>
+            <select class="filter-select" id="growthFilter" onchange="filterResults()">
+                <option value="all">전체 성장</option>
+                <option value="improved">향상</option>
+                <option value="same">동일</option>
+                <option value="declined">하락</option>
+            </select>
+        </div>
+
+        <!-- 결과 테이블 -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>순번</th>
+                        <th>이름</th>
+                        <th>학년</th>
+                        <th>진단평가</th>
+                        <th>성장테스트</th>
+                        <th>변화</th>
+                        <th>수학</th>
+                        <th>영어</th>
+                        <th>국어</th>
+                        <th>사회</th>
+                        <th>과학</th>
+                        <th>상세</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTable">
+                    <!-- JavaScript로 동적 생성 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 비교 모달 -->
+    <div class="modal" id="comparisonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">학생 상세 비교</h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalBody">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 로드 및 표시
+        let allResults = [];
+
+        function loadData() {
+            // localStorage에서 진단평가 결과 가져오기
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            
+            // localStorage에서 성장테스트 결과 가져오기
+            const growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || {};
+            
+            // 결합된 결과 생성
+            allResults = [];
+            
+            diagnosticResults.forEach(diagnostic => {
+                const growth = growthTestResults[diagnostic.studentId];
+                
+                if (growth) {
+                    const scoreDiff = growth.totalScore - diagnostic.totalScore;
+                    
+                    allResults.push({
+                        studentId: diagnostic.studentId,
+                        studentName: diagnostic.studentName,
+                        grade: diagnostic.grade,
+                        diagnostic: diagnostic,
+                        growth: growth,
+                        scoreDiff: scoreDiff,
+                        growthType: scoreDiff > 0 ? 'improved' : scoreDiff < 0 ? 'declined' : 'same'
+                    });
+                }
+            });
+            
+            console.log('📊 로드된 결과:', allResults.length);
+            updateStatistics();
+            displayResults(allResults);
+        }
+
+        function updateStatistics() {
+            const totalDiagnostic = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const totalGrowth = Object.keys(JSON.parse(localStorage.getItem('growth_test_results')) || {}).length;
+            
+            document.getElementById('totalStudents').textContent = totalDiagnostic.length;
+            document.getElementById('completedStudents').textContent = totalGrowth;
+            
+            if (allResults.length > 0) {
+                const avgImprovement = Math.round(
+                    allResults.reduce((sum, r) => sum + r.scoreDiff, 0) / allResults.length
+                );
+                const improvedCount = allResults.filter(r => r.scoreDiff > 0).length;
+                const improvementRate = Math.round((improvedCount / allResults.length) * 100);
+                
+                document.getElementById('avgImprovement').textContent = avgImprovement > 0 ? `+${avgImprovement}` : avgImprovement;
+                document.getElementById('improvementRate').textContent = `${improvementRate}%`;
+            }
+        }
+
+        function displayResults(results) {
+            const tbody = document.getElementById('resultsTable');
+            tbody.innerHTML = '';
+            
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                            성장테스트를 완료한 학생이 없습니다
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            results.forEach((result, index) => {
+                const row = document.createElement('tr');
+                
+                // 성장 표시
+                let growthIcon = '➡️';
+                let growthClass = 'growth-same';
+                if (result.scoreDiff > 0) {
+                    growthIcon = '📈';
+                    growthClass = 'growth-up';
+                } else if (result.scoreDiff < 0) {
+                    growthIcon = '📉';
+                    growthClass = 'growth-down';
+                }
+                
+                // 과목별 점수 변화
+                const subjects = ['수학', '영어', '국어', '사회', '과학'];
+                const subjectCells = subjects.map(subject => {
+                    const diagScore = result.diagnostic.subjectScores?.[subject]?.score || 0;
+                    const growthScore = result.growth.subjectScores?.[subject]?.score || 0;
+                    const diff = growthScore - diagScore;
+                    const diffText = diff > 0 ? `+${diff}` : diff < 0 ? diff : '0';
+                    const diffColor = diff > 0 ? 'var(--success)' : diff < 0 ? 'var(--danger)' : 'var(--text-muted)';
+                    
+                    return `<td style="text-align: center;">${growthScore}<br><small style="color: ${diffColor};">(${diffText})</small></td>`;
+                }).join('');
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${result.studentName}</strong></td>
+                    <td>중${result.grade}</td>
+                    <td style="text-align: center;"><strong>${result.diagnostic.totalScore}</strong></td>
+                    <td style="text-align: center;"><strong>${result.growth.totalScore}</strong></td>
+                    <td>
+                        <span class="growth-indicator ${growthClass}">
+                            ${growthIcon} ${result.scoreDiff > 0 ? '+' : ''}${result.scoreDiff}점
+                        </span>
+                    </td>
+                    ${subjectCells}
+                    <td style="text-align: center;">
+                        <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="showComparison('${result.studentId}')">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterResults() {
+            const gradeFilter = document.getElementById('gradeFilter').value;
+            const growthFilter = document.getElementById('growthFilter').value;
+            
+            let filtered = allResults;
+            
+            if (gradeFilter !== 'all') {
+                filtered = filtered.filter(r => r.grade == gradeFilter);
+            }
+            
+            if (growthFilter !== 'all') {
+                filtered = filtered.filter(r => r.growthType === growthFilter);
+            }
+            
+            displayResults(filtered);
+        }
+
+        function showComparison(studentId) {
+            const result = allResults.find(r => r.studentId === studentId);
+            if (!result) return;
+            
+            const modal = document.getElementById('comparisonModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = `${result.studentName} (중${result.grade}) - 상세 비교`;
+            
+            const subjects = ['수학', '영어', '국어', '사회', '과학'];
+            const subjectEmojis = { '수학': '🔢', '영어': '🔤', '국어': '✍️', '사회': '🌏', '과학': '🔬' };
+            
+            let subjectComparison = '';
+            subjects.forEach(subject => {
+                const diagScore = result.diagnostic.subjectScores?.[subject]?.score || 0;
+                const growthScore = result.growth.subjectScores?.[subject]?.score || 0;
+                const diff = growthScore - diagScore;
+                const diffText = diff > 0 ? `+${diff}` : diff < 0 ? diff : '0';
+                const diffColor = diff > 0 ? 'var(--success)' : diff < 0 ? 'var(--danger)' : 'var(--text-muted)';
+                
+                subjectComparison += `
+                    <div class="subject-row">
+                        <span class="subject-name">${subjectEmojis[subject]} ${subject}</span>
+                        <span class="subject-score">${diagScore}점 → ${growthScore}점 <span style="color: ${diffColor};">(${diffText})</span></span>
+                    </div>
+                `;
+            });
+            
+            modalBody.innerHTML = `
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3>📊 진단평가 (시작)</h3>
+                        <div class="subject-row">
+                            <span class="subject-name">총점</span>
+                            <span class="subject-score">${result.diagnostic.totalScore}점</span>
+                        </div>
+                        <div class="subject-row">
+                            <span class="subject-name">수준</span>
+                            <span class="subject-score">${result.diagnostic.levelLabel || result.diagnostic.level}</span>
+                        </div>
+                        <div class="subject-row">
+                            <span class="subject-name">정답 수</span>
+                            <span class="subject-score">${result.diagnostic.correctCount}/50</span>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <h3>🌱 성장테스트 (완료)</h3>
+                        <div class="subject-row">
+                            <span class="subject-name">총점</span>
+                            <span class="subject-score">${result.growth.totalScore}점</span>
+                        </div>
+                        <div class="subject-row">
+                            <span class="subject-name">수준</span>
+                            <span class="subject-score">${result.growth.levelLabel || result.growth.level}</span>
+                        </div>
+                        <div class="subject-row">
+                            <span class="subject-name">정답 수</span>
+                            <span class="subject-score">${result.growth.correctCount}/50</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison-card" style="margin-top: 1.5rem;">
+                    <h3>📝 과목별 성장 비교</h3>
+                    ${subjectComparison}
+                </div>
+                
+                <div class="comparison-card" style="margin-top: 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);">
+                    <h3>🎯 종합 평가</h3>
+                    <div class="subject-row">
+                        <span class="subject-name">총점 변화</span>
+                        <span class="subject-score" style="color: ${result.scoreDiff > 0 ? 'var(--success)' : result.scoreDiff < 0 ? 'var(--danger)' : 'var(--text-muted)'};">
+                            ${result.scoreDiff > 0 ? '+' : ''}${result.scoreDiff}점
+                        </span>
+                    </div>
+                    <div class="subject-row">
+                        <span class="subject-name">향상률</span>
+                        <span class="subject-score">
+                            ${Math.round((result.scoreDiff / result.diagnostic.totalScore) * 100)}%
+                        </span>
+                    </div>
+                    <div class="subject-row" style="border-bottom: none;">
+                        <span class="subject-name">평가</span>
+                        <span class="subject-score">
+                            ${result.scoreDiff > 0 ? '🎉 성장!' : result.scoreDiff < 0 ? '💪 재도전!' : '📝 유지'}
+                        </span>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('comparisonModal').classList.remove('active');
+        }
+
+        function refreshData() {
+            loadData();
+            alert('✅ 데이터를 새로고침했습니다!');
+        }
+
+        function exportToExcel() {
+            if (allResults.length === 0) {
+                alert('❌ 내보낼 데이터가 없습니다.');
+                return;
+            }
+            
+            const data = allResults.map((result, index) => {
+                const subjects = ['수학', '영어', '국어', '사회', '과학'];
+                const row = {
+                    '순번': index + 1,
+                    '이름': result.studentName,
+                    '학년': `중${result.grade}`,
+                    '진단평가_총점': result.diagnostic.totalScore,
+                    '성장테스트_총점': result.growth.totalScore,
+                    '변화': result.scoreDiff,
+                    '향상률': `${Math.round((result.scoreDiff / result.diagnostic.totalScore) * 100)}%`
+                };
+                
+                subjects.forEach(subject => {
+                    const diagScore = result.diagnostic.subjectScores?.[subject]?.score || 0;
+                    const growthScore = result.growth.subjectScores?.[subject]?.score || 0;
+                    row[`${subject}_진단`] = diagScore;
+                    row[`${subject}_성장`] = growthScore;
+                    row[`${subject}_변화`] = growthScore - diagScore;
+                });
+                
+                return row;
+            });
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '성장테스트결과');
+            
+            const fileName = `성장테스트_결과_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            
+            alert(`✅ ${fileName} 파일이 다운로드되었습니다!`);
+        }
+
+        function showAllComparisons() {
+            if (allResults.length === 0) {
+                alert('❌ 표시할 데이터가 없습니다.');
+                return;
+            }
+            
+            alert('🚧 전체 비교 보기 기능은 준비 중입니다.');
+        }
+
+        // 모달 외부 클릭 시 닫기
+        document.getElementById('comparisonModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // 페이지 로드 시 데이터 로드
+        window.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
