@@ -3848,10 +3848,15 @@
                 // 성장테스트 완료 처리
                 sessionStorage.removeItem('isGrowthTest');
                 
-                // 성장테스트 결과 저장
-                const growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || {};
+                // 성장테스트 결과 저장 (배열 형식)
+                const growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
                 const studentId = localStorage.getItem('currentStudentId');
-                growthTestResults[studentId] = {
+                
+                // 기존 결과 제거 (중복 방지)
+                const filteredResults = growthTestResults.filter(r => r.studentId !== studentId);
+                
+                // 새 결과 추가
+                filteredResults.push({
                     studentId: studentId,
                     studentName: localStorage.getItem('currentStudentName'),
                     grade: currentGrade,
@@ -3861,10 +3866,12 @@
                     levelLabel: levelInfo.label,
                     subjectScores: subjectScores,
                     subjectLevels: subjectLevels,
+                    testDate: new Date().toISOString(),
                     completedAt: new Date().toISOString(),
                     answers: studentAnswers
-                };
-                localStorage.setItem('growth_test_results', JSON.stringify(growthTestResults));
+                });
+                
+                localStorage.setItem('growth_test_results', JSON.stringify(filteredResults));
                 
                 // 🎉 프로그램 완료 메시지
                 showProgramCompletionMessage(totalScore, correctCount, subjectScores);
