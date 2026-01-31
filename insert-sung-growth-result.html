@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성유정 학생 성장테스트 결과 삽입</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .info {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .info h3 {
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 성유정 학생 성장테스트 결과 삽입</h1>
+
+        <div class="info">
+            <h3>📝 안내</h3>
+            <p>성유정 학생이 성장테스트를 완료했지만 결과가 저장되지 않은 경우, 이 페이지에서 수동으로 입력할 수 있습니다.</p>
+        </div>
+
+        <form id="resultForm">
+            <div class="form-group">
+                <label>학생 이름</label>
+                <input type="text" id="studentName" value="성유정" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>학년</label>
+                <select id="grade">
+                    <option value="1">중1</option>
+                    <option value="2">중2</option>
+                    <option value="3" selected>중3</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>총점 (500점 만점)</label>
+                <input type="number" id="totalScore" min="0" max="500" placeholder="예: 425" required>
+            </div>
+
+            <div class="form-group">
+                <label>정답 수 (50문제)</label>
+                <input type="number" id="correctCount" min="0" max="50" placeholder="예: 45" required>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 1rem 0; color: #374151;">과목별 점수 (100점 만점)</h3>
+            <div class="subject-grid">
+                <div class="form-group">
+                    <label>수학</label>
+                    <input type="number" id="math" min="0" max="100" placeholder="예: 85" required>
+                </div>
+                <div class="form-group">
+                    <label>영어</label>
+                    <input type="number" id="english" min="0" max="100" placeholder="예: 90" required>
+                </div>
+                <div class="form-group">
+                    <label>국어</label>
+                    <input type="number" id="korean" min="0" max="100" placeholder="예: 80" required>
+                </div>
+                <div class="form-group">
+                    <label>사회</label>
+                    <input type="number" id="social" min="0" max="100" placeholder="예: 85" required>
+                </div>
+                <div class="form-group">
+                    <label>과학</label>
+                    <input type="number" id="science" min="0" max="100" placeholder="예: 85" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">💾 성장테스트 결과 저장</button>
+        </form>
+
+        <div id="successMessage" style="display: none;" class="success"></div>
+
+        <button onclick="window.open('growth-test-results.html', '_blank')" class="btn-secondary">
+            📊 결과 대시보드 열기
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('resultForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const studentName = document.getElementById('studentName').value;
+            const grade = parseInt(document.getElementById('grade').value);
+            const totalScore = parseInt(document.getElementById('totalScore').value);
+            const correctCount = parseInt(document.getElementById('correctCount').value);
+            
+            const mathScore = parseInt(document.getElementById('math').value);
+            const englishScore = parseInt(document.getElementById('english').value);
+            const koreanScore = parseInt(document.getElementById('korean').value);
+            const socialScore = parseInt(document.getElementById('social').value);
+            const scienceScore = parseInt(document.getElementById('science').value);
+
+            // 수준 결정
+            let level, levelLabel;
+            if (totalScore >= 360) {
+                level = 'advanced';
+                levelLabel = '심화';
+            } else if (totalScore >= 240) {
+                level = 'intermediate';
+                levelLabel = '표준';
+            } else {
+                level = 'beginner';
+                levelLabel = '기초';
+            }
+
+            // 성장테스트 결과 객체 생성
+            const growthResult = {
+                studentId: 'student_sungyujeong_' + Date.now(),
+                studentName: studentName,
+                grade: grade,
+                correctCount: correctCount,
+                totalScore: totalScore,
+                level: level,
+                levelLabel: levelLabel,
+                subjectScores: {
+                    '수학': { score: mathScore },
+                    '영어': { score: englishScore },
+                    '국어': { score: koreanScore },
+                    '사회': { score: socialScore },
+                    '과학': { score: scienceScore }
+                },
+                subjectLevels: {
+                    '수학': mathScore >= 72 ? '심화' : mathScore >= 48 ? '표준' : '기초',
+                    '영어': englishScore >= 72 ? '심화' : englishScore >= 48 ? '표준' : '기초',
+                    '국어': koreanScore >= 72 ? '심화' : koreanScore >= 48 ? '표준' : '기초',
+                    '사회': socialScore >= 72 ? '심화' : socialScore >= 48 ? '표준' : '기초',
+                    '과학': scienceScore >= 72 ? '심화' : scienceScore >= 48 ? '표준' : '기초'
+                },
+                testDate: new Date().toISOString(),
+                completedAt: new Date().toISOString()
+            };
+
+            // localStorage에 저장
+            let growthTestResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+            
+            // 기존 성유정 학생 결과 제거 (중복 방지)
+            growthTestResults = growthTestResults.filter(r => r.studentName !== '성유정');
+            
+            // 새 결과 추가
+            growthTestResults.push(growthResult);
+            
+            localStorage.setItem('growth_test_results', JSON.stringify(growthTestResults));
+
+            console.log('✅ 성장테스트 결과 저장 완료:', growthResult);
+
+            // 성공 메시지 표시
+            const successDiv = document.getElementById('successMessage');
+            successDiv.innerHTML = `
+                ✅ 성유정 학생의 성장테스트 결과가 저장되었습니다!<br>
+                <strong>총점: ${totalScore}점 | 수준: ${levelLabel}</strong><br>
+                과목별: 수학 ${mathScore}, 영어 ${englishScore}, 국어 ${koreanScore}, 사회 ${socialScore}, 과학 ${scienceScore}<br>
+                이제 결과 대시보드에서 확인하실 수 있습니다!
+            `;
+            successDiv.style.display = 'block';
+
+            // 폼 비활성화
+            document.getElementById('resultForm').style.opacity = '0.5';
+            document.getElementById('resultForm').style.pointerEvents = 'none';
+        });
+    </script>
+</body>
+</html>
