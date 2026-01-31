@@ -63,6 +63,26 @@
             font-size: 1.1rem;
         }
 
+        .portal-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .portal-link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
         /* 탭 네비게이션 */
         .tabs {
             display: flex;
@@ -573,6 +593,12 @@
         <div class="header">
             <h1 class="title">📊 진단평가 & 성장테스트 결과 비교</h1>
             <p class="subtitle">학생들의 학습 전후 성장을 한눈에 확인하세요</p>
+            <div style="margin-top: 1.5rem;">
+                <a href="geunhwa-student-portal.html" target="_blank" class="portal-link-btn">
+                    <i class="fas fa-user-graduate"></i>
+                    학생 포털로 이동 (성장테스트 시작)
+                </a>
+            </div>
         </div>
 
         <!-- 탭 네비게이션 -->
