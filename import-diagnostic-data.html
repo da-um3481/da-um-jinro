@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진단평가 데이터 일괄 삽입</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .info {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        button.danger {
+            background: #ef4444;
+        }
+        button.danger:hover {
+            background: #dc2626;
+        }
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .result.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        pre {
+            background: #1f2937;
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 진단평가 데이터 일괄 삽입</h1>
+        
+        <div class="info">
+            <strong>⚠️ 주의:</strong> 이 페이지는 제공하신 진단평가 결과를 localStorage에 직접 삽입합니다.
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="currentCount">0</div>
+                <div class="stat-label">현재 저장된 학생 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="newCount">30</div>
+                <div class="stat-label">삽입할 학생 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalCount">30</div>
+                <div class="stat-label">삽입 후 총 학생 수</div>
+            </div>
+        </div>
+
+        <button onclick="insertDiagnosticData()">📥 진단평가 데이터 삽입</button>
+        <button class="danger" onclick="clearAllData()">🗑️ 모든 데이터 삭제</button>
+
+        <div id="result"></div>
+
+        <details style="margin-top: 2rem;">
+            <summary style="cursor: pointer; font-weight: 600; padding: 1rem; background: #f9fafb; border-radius: 8px;">
+                삽입될 데이터 미리보기 (30명)
+            </summary>
+            <pre id="dataPreview"></pre>
+        </details>
+    </div>
+
+    <script>
+        // 진단평가 데이터 (제공하신 데이터 기반)
+        const diagnosticData = [
+            {
+                studentName: "박수은",
+                grade: 1,
+                testDate: "2026-01-02",
+                correctCount: 35,
+                totalScore: 348,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { correct: 10, total: 10, score: 73 },
+                    "영어": { correct: 10, total: 10, score: 73 },
+                    "국어": { correct: 9, total: 10, score: 66 },
+                    "사회": { correct: 9, total: 10, score: 63 },
+                    "과학": { correct: 10, total: 10, score: 73 }
+                },
+                weaknessSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "김예서",
+                grade: 2,
+                testDate: "2026-01-03",
+                correctCount: 0,
+                totalScore: 0,
+                level: "기초",
+                levelLabel: "기초",
+                subjectScores: {
+                    "수학": { correct: 0, total: 10, score: 0 },
+                    "영어": { correct: 0, total: 10, score: 0 },
+                    "국어": { correct: 0, total: 10, score: 0 },
+                    "사회": { correct: 0, total: 10, score: 0 },
+                    "과학": { correct: 0, total: 10, score: 0 }
+                },
+                weaknessSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "성유정",
+                grade: 3,
+                testDate: "2026-01-03",
+                correctCount: 35,
+                totalScore: 354,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 64 },
+                    "영어": { score: 42 },
+                    "국어": { score: 79 },
+                    "사회": { score: 87 },
+                    "과학": { score: 82 }
+                },
+                strengthSubjects: "국어, 사회, 과학",
+                weaknessSubjects: "영어"
+            },
+            {
+                studentName: "김태연",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 48,
+                totalScore: 475,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 95 },
+                    "사회": { score: 95 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "신해림",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 44,
+                totalScore: 444,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 95 },
+                    "사회": { score: 87 },
+                    "과학": { score: 72 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "강예림",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 33,
+                totalScore: 325,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 79 },
+                    "영어": { score: 72 },
+                    "국어": { score: 51 },
+                    "사회": { score: 64 },
+                    "과학": { score: 59 }
+                },
+                strengthSubjects: "수학, 영어"
+            },
+            {
+                studentName: "이윤주",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 30,
+                totalScore: 303,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 13 },
+                    "영어": { score: 95 },
+                    "국어": { score: 13 },
+                    "사회": { score: 87 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "영어, 사회, 과학",
+                weaknessSubjects: "수학, 국어"
+            },
+            {
+                studentName: "박서연",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 37,
+                totalScore: 372,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 87 },
+                    "국어": { score: 62 },
+                    "사회": { score: 49 },
+                    "과학": { score: 79 }
+                },
+                strengthSubjects: "수학, 영어, 과학"
+            },
+            {
+                studentName: "주은성",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 34,
+                totalScore: 340,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 64 },
+                    "영어": { score: 64 },
+                    "국어": { score: 59 },
+                    "사회": { score: 79 },
+                    "과학": { score: 74 }
+                },
+                strengthSubjects: "사회, 과학"
+            },
+            {
+                studentName: "김유진",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 44,
+                totalScore: 442,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 62 },
+                    "사회": { score: 95 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "수학, 영어, 사회, 과학"
+            },
+            {
+                studentName: "백효림",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 38,
+                totalScore: 383,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 80 },
+                    "영어": { score: 57 },
+                    "국어": { score: 79 },
+                    "사회": { score: 87 },
+                    "과학": { score: 80 }
+                },
+                strengthSubjects: "수학, 국어, 사회, 과학"
+            },
+            {
+                studentName: "김.소민",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 23,
+                totalScore: 229,
+                level: "기초",
+                levelLabel: "기초",
+                subjectScores: {
+                    "수학": { score: 49 },
+                    "영어": { score: 57 },
+                    "국어": { score: 59 },
+                    "사회": { score: 28 },
+                    "과학": { score: 36 }
+                },
+                weaknessSubjects: "사회, 과학"
+            },
+            {
+                studentName: "주가윤",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 30,
+                totalScore: 300,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 43 },
+                    "영어": { score: 18 },
+                    "국어": { score: 80 },
+                    "사회": { score: 95 },
+                    "과학": { score: 64 }
+                },
+                strengthSubjects: "국어, 사회",
+                weaknessSubjects: "수학, 영어"
+            },
+            {
+                studentName: "손희윤",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 25,
+                totalScore: 252,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 75 },
+                    "영어": { score: 80 },
+                    "국어": { score: 28 },
+                    "사회": { score: 26 },
+                    "과학": { score: 43 }
+                },
+                strengthSubjects: "수학, 영어",
+                weaknessSubjects: "국어, 사회, 과학"
+            },
+            {
+                studentName: "최지현",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 48,
+                totalScore: 475,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 95 },
+                    "사회": { score: 95 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "고은채",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 46,
+                totalScore: 460,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 80 },
+                    "국어": { score: 95 },
+                    "사회": { score: 95 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "김다현",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 48,
+                totalScore: 475,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 95 },
+                    "사회": { score: 95 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "정예빈",
+                grade: 3,
+                testDate: "2026-01-04",
+                correctCount: 46,
+                totalScore: 462,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 87 },
+                    "영어": { score: 95 },
+                    "국어": { score: 95 },
+                    "사회": { score: 95 },
+                    "과학": { score: 90 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "조해인",
+                grade: 1,
+                testDate: "2026-01-04",
+                correctCount: 15,
+                totalScore: 149,
+                level: "기초",
+                levelLabel: "기초",
+                subjectScores: {
+                    "수학": { score: 33 },
+                    "영어": { score: 49 },
+                    "국어": { score: 51 },
+                    "사회": { score: 8 },
+                    "과학": { score: 8 }
+                },
+                weaknessSubjects: "수학, 사회, 과학"
+            },
+            {
+                studentName: "조예하",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 32,
+                totalScore: 323,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 64 },
+                    "영어": { score: 59 },
+                    "국어": { score: 64 },
+                    "사회": { score: 72 },
+                    "과학": { score: 64 }
+                },
+                strengthSubjects: "사회"
+            },
+            {
+                studentName: "이나연",
+                grade: 2,
+                testDate: "2026-01-04",
+                correctCount: 33,
+                totalScore: 329,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 44 },
+                    "사회": { score: 61 },
+                    "과학": { score: 34 }
+                },
+                strengthSubjects: "수학, 영어",
+                weaknessSubjects: "국어, 과학"
+            },
+            {
+                studentName: "최정경",
+                grade: 3,
+                testDate: "2026-01-04",
+                correctCount: 37,
+                totalScore: 372,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 49 },
+                    "영어": { score: 64 },
+                    "국어": { score: 95 },
+                    "사회": { score: 82 },
+                    "과학": { score: 82 }
+                },
+                strengthSubjects: "국어, 사회, 과학"
+            },
+            {
+                studentName: "백시연",
+                grade: 1,
+                testDate: "2026-01-05",
+                correctCount: 31,
+                totalScore: 314,
+                level: "표준",
+                levelLabel: "표준",
+                subjectScores: {
+                    "수학": { score: 41 },
+                    "영어": { score: 95 },
+                    "국어": { score: 41 },
+                    "사회": { score: 72 },
+                    "과학": { score: 65 }
+                },
+                strengthSubjects: "영어, 사회",
+                weaknessSubjects: "수학, 국어"
+            },
+            {
+                studentName: "도연주",
+                grade: 1,
+                testDate: "2026-01-05",
+                correctCount: 23,
+                totalScore: 229,
+                level: "기초",
+                levelLabel: "기초",
+                subjectScores: {
+                    "수학": { score: 41 },
+                    "영어": { score: 26 },
+                    "국어": { score: 46 },
+                    "사회": { score: 52 },
+                    "과학": { score: 64 }
+                },
+                weaknessSubjects: "수학, 영어, 국어"
+            },
+            {
+                studentName: "김유진",
+                grade: 2,
+                testDate: "2026-01-08",
+                correctCount: 45,
+                totalScore: 452,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 80 },
+                    "사회": { score: 95 },
+                    "과학": { score: 87 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            },
+            {
+                studentName: "김지호",
+                grade: 2,
+                testDate: "2026-01-09",
+                correctCount: 48,
+                totalScore: 475,
+                level: "심화",
+                levelLabel: "심화",
+                subjectScores: {
+                    "수학": { score: 95 },
+                    "영어": { score: 95 },
+                    "국어": { score: 95 },
+                    "사회": { score: 95 },
+                    "과학": { score: 95 }
+                },
+                strengthSubjects: "수학, 영어, 국어, 사회, 과학"
+            }
+        ];
+
+        // studentId 생성
+        diagnosticData.forEach((data, index) => {
+            data.studentId = `student_${Date.now()}_${index}`;
+        });
+
+        // 페이지 로드 시 현재 상태 표시
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            document.getElementById('dataPreview').textContent = JSON.stringify(diagnosticData, null, 2);
+        });
+
+        function updateStats() {
+            const currentData = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            document.getElementById('currentCount').textContent = currentData.length;
+            document.getElementById('newCount').textContent = diagnosticData.length;
+            document.getElementById('totalCount').textContent = currentData.length + diagnosticData.length;
+        }
+
+        function insertDiagnosticData() {
+            const confirm = window.confirm(`${diagnosticData.length}명의 진단평가 데이터를 삽입하시겠습니까?`);
+            if (!confirm) return;
+
+            try {
+                // 기존 데이터 가져오기
+                const existingData = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                
+                // 새 데이터 추가
+                const mergedData = [...existingData, ...diagnosticData];
+                
+                // localStorage에 저장
+                localStorage.setItem('diagnostic_results', JSON.stringify(mergedData));
+                
+                // 결과 표시
+                const resultEl = document.getElementById('result');
+                resultEl.className = 'result success';
+                resultEl.innerHTML = `
+                    ✅ <strong>${diagnosticData.length}명</strong>의 진단평가 데이터가 성공적으로 삽입되었습니다!<br>
+                    총 학생 수: <strong>${mergedData.length}명</strong><br><br>
+                    <button onclick="window.location.href='growth-test-results.html'" style="width: auto; padding: 0.75rem 1.5rem;">
+                        📊 결과 페이지로 이동
+                    </button>
+                `;
+                
+                updateStats();
+                
+            } catch (error) {
+                const resultEl = document.getElementById('result');
+                resultEl.className = 'result error';
+                resultEl.innerHTML = `❌ 오류 발생: ${error.message}`;
+                console.error('삽입 오류:', error);
+            }
+        }
+
+        function clearAllData() {
+            const confirm = window.confirm('⚠️ 정말로 모든 진단평가 데이터를 삭제하시겠습니까?');
+            if (!confirm) return;
+
+            localStorage.removeItem('diagnostic_results');
+            
+            const resultEl = document.getElementById('result');
+            resultEl.className = 'result success';
+            resultEl.innerHTML = '🗑️ 모든 데이터가 삭제되었습니다.';
+            
+            updateStats();
+        }
+    </script>
+</body>
+</html>
