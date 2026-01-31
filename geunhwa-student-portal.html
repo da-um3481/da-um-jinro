@@ -3873,6 +3873,24 @@
                 
                 localStorage.setItem('growth_test_results', JSON.stringify(filteredResults));
                 
+                // 🚨 성장테스트 결과 자동 다운로드 (선생님께 제출용)
+                const growthExportData = {
+                    exportType: 'growth_test',
+                    exportDate: new Date().toISOString(),
+                    studentName: localStorage.getItem('currentStudentName'),
+                    grade: currentGrade,
+                    growthTestResult: filteredResults[filteredResults.length - 1] // 방금 추가한 결과
+                };
+                
+                const growthBlob = new Blob([JSON.stringify(growthExportData, null, 2)], {type: 'application/json'});
+                const growthUrl = URL.createObjectURL(growthBlob);
+                const growthLink = document.createElement('a');
+                growthLink.href = growthUrl;
+                growthLink.download = `성장테스트_${localStorage.getItem('currentStudentName')}_${new Date().toISOString().split('T')[0]}.json`;
+                growthLink.click();
+                
+                console.log('✅ 성장테스트 결과 자동 다운로드 완료');
+                
                 // 🎉 프로그램 완료 메시지
                 showProgramCompletionMessage(totalScore, correctCount, subjectScores);
                 

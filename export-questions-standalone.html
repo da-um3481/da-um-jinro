@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>성장테스트 문항 다운로드</title>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        h1 { text-align: center; color: #2d3748; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
+        button { padding: 15px 30px; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; color: white; }
+        .g1 { background: #4299e1; } .g2 { background: #48bb78; } .g3 { background: #ed8936; } .all { background: #9f7aea; }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+        .info { background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>📊 성장테스트 문항 다운로드</h1>
+    
+    <div class="info">
+        <strong>⚠️ 사용 방법:</strong><br>
+        1. 원하는 학년 버튼 클릭<br>
+        2. JSON 파일 자동 다운로드<br>
+        3. 다운로드한 파일을 Excel/Word로 가공 가능
+    </div>
+
+    <div class="btn-group">
+        <button class="g1" onclick="download(1)">중1 문항 다운로드</button>
+        <button class="g2" onclick="download(2)">중2 문항 다운로드</button>
+        <button class="g3" onclick="download(3)">중3 문항 다운로드</button>
+        <button class="all" onclick="downloadAll()">전체 다운로드</button>
+    </div>
+
+    <script>
+        // 진단평가 데이터 (간소화 버전)
+        const data = {
+            1: { 수학: [], 영어: [], 국어: [], 사회: [], 과학: [] },
+            2: { 수학: [], 영어: [], 국어: [], 사회: [], 과학: [] },
+            3: { 수학: [], 영어: [], 국어: [], 사회: [], 과학: [] }
+        };
+
+        // 실제 데이터는 diagnostic-test-db.js에서 로드
+        // 여기서는 구조만 제공
+
+        function download(grade) {
+            alert('이 파일은 diagnostic-test-db.js와 함께 사용해야 합니다.\n\n대신 아래 방법을 사용하세요:\n\n1. GitHub Pages 활성화\n2. 또는 Netlify 재배포');
+        }
+
+        function downloadAll() {
+            alert('GitHub Pages를 활성화하면 즉시 사용 가능합니다!');
+        }
+    </script>
+</body>
+</html>

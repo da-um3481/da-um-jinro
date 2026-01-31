@@ -309,6 +309,11 @@
             color: white;
         }
 
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            color: white;
+        }
+
         .btn-warning {
             background: linear-gradient(135deg, var(--warning) 0%, #ea580c 100%);
             color: white;
@@ -804,6 +809,10 @@
                 <button class="btn btn-primary" onclick="refreshGrowthData()">
                     <i class="fas fa-sync-alt"></i> 새로고침
                 </button>
+                <button class="btn btn-success" onclick="document.getElementById('growthFileInput').click()">
+                    <i class="fas fa-file-import"></i> 성장테스트 결과 가져오기
+                </button>
+                <input type="file" id="growthFileInput" accept=".json" multiple style="display: none;" onchange="importGrowthResults(event)">
                 <button class="btn btn-secondary" onclick="exportGrowthToExcel()">
                     <i class="fas fa-file-excel"></i> Excel 다운로드
                 </button>
@@ -1455,6 +1464,62 @@
         function refreshGrowthData() {
             loadGrowthResults();
             showToast('성장테스트 결과를 새로고침했습니다');
+        }
+        
+        // 성장테스트 결과 가져오기 (JSON 파일 import)
+        function importGrowthResults(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            
+            let importCount = 0;
+            let errorCount = 0;
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        // 성장테스트 데이터 확인
+                        if (data.exportType === 'growth_test' && data.growthTestResult) {
+                            let growthResults = JSON.parse(localStorage.getItem('growth_test_results')) || [];
+                            
+                            // 중복 체크 (같은 studentId 제거)
+                            growthResults = growthResults.filter(r => r.studentId !== data.growthTestResult.studentId);
+                            
+                            // 새 결과 추가
+                            growthResults.push(data.growthTestResult);
+                            
+                            localStorage.setItem('growth_test_results', JSON.stringify(growthResults));
+                            importCount++;
+                            
+                            console.log('✅ 성장테스트 결과 import 성공:', data.studentName);
+                        } else {
+                            console.warn('⚠️ 잘못된 데이터 형식:', file.name);
+                            errorCount++;
+                        }
+                    } catch (error) {
+                        console.error('❌ 파일 읽기 오류:', file.name, error);
+                        errorCount++;
+                    }
+                    
+                    // 모든 파일 처리 완료 확인
+                    if (importCount + errorCount === files.length) {
+                        if (importCount > 0) {
+                            showToast(`✅ ${importCount}개의 성장테스트 결과를 가져왔습니다!`);
+                            loadGrowthResults();
+                            loadComparisonAnalysis();
+                        }
+                        if (errorCount > 0) {
+                            alert(`⚠️ ${errorCount}개의 파일을 가져오는데 실패했습니다.`);
+                        }
+                        
+                        // 파일 input 초기화
+                        event.target.value = '';
+                    }
+                };
+                reader.readAsText(file);
+            });
         }
         
         function refreshComparisonData() {
