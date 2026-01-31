@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>특정 학생 삭제</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .info {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+        }
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .result.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ 특정 학생 삭제</h1>
+        
+        <div class="info">
+            <strong>⚠️ 주의:</strong> 순번 1번 박수은 학생의 진단평가 결과를 삭제합니다.
+        </div>
+
+        <h3>진단평가 결과 목록</h3>
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>순번</th>
+                    <th>학년</th>
+                    <th>학생명</th>
+                    <th>진단일</th>
+                    <th>정답수</th>
+                    <th>총점</th>
+                    <th>작업</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem;">로딩 중...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStudents();
+        });
+
+        function loadStudents() {
+            const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+            const tbody = document.getElementById('tableBody');
+
+            if (diagnosticResults.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">진단평가 결과가 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = diagnosticResults.map((result, index) => {
+                const isFirstParkSuEun = index === 0 && result.studentName === '박수은';
+                const rowStyle = isFirstParkSuEun ? 'background: #fee2e2;' : '';
+                
+                return `
+                    <tr style="${rowStyle}">
+                        <td>${index + 1}</td>
+                        <td>중${result.grade}</td>
+                        <td>${result.studentName}</td>
+                        <td>${new Date(result.testDate).toLocaleDateString('ko-KR')}</td>
+                        <td>${result.correctCount}/50</td>
+                        <td>${result.totalScore}점</td>
+                        <td>
+                            ${isFirstParkSuEun ? 
+                                `<button class="delete-btn" onclick="deleteStudent(${index})">삭제</button>` : 
+                                '-'
+                            }
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function deleteStudent(index) {
+            const confirm = window.confirm('순번 1번 박수은 학생의 진단평가 결과를 삭제하시겠습니까?');
+            if (!confirm) return;
+
+            try {
+                const diagnosticResults = JSON.parse(localStorage.getItem('diagnostic_results')) || [];
+                
+                // 해당 인덱스 제거
+                diagnosticResults.splice(index, 1);
+                
+                // 다시 저장
+                localStorage.setItem('diagnostic_results', JSON.stringify(diagnosticResults));
+                
+                // 결과 표시
+                const resultEl = document.getElementById('result');
+                resultEl.className = 'result success';
+                resultEl.innerHTML = `
+                    ✅ 순번 1번 박수은 학생의 데이터가 삭제되었습니다!<br>
+                    남은 학생 수: <strong>${diagnosticResults.length}명</strong><br><br>
+                    <button onclick="window.location.href='growth-test-results.html'" style="padding: 0.75rem 1.5rem; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        📊 결과 페이지로 이동
+                    </button>
+                `;
+                
+                // 테이블 갱신
+                loadStudents();
+                
+            } catch (error) {
+                alert('오류 발생: ' + error.message);
+                console.error('삭제 오류:', error);
+            }
+        }
+    </script>
+</body>
+</html>
