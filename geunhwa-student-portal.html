@@ -1083,7 +1083,7 @@
                             <div>
                                 <h4 class="font-bold text-gray-800 text-sm sm:text-base">성장테스트 ⭐</h4>
                                 <p class="text-xs text-gray-600">진단평가와 동일한 문제로 성장 측정</p>
-                                <p class="text-xs text-green-600 font-semibold mt-1">📅 2026-01-30 (금) 오픈</p>
+                                <p class="text-xs text-green-600 font-semibold mt-1">📅 진단평가 완료 후 언제든지</p>
                             </div>
                         </div>
                         <button 
@@ -8258,7 +8258,7 @@
         const ASSESSMENT_SCHEDULE = {
             MID_TEST_DATE: new Date('2026-01-16'),      // 중간평가
             POST_TEST_DATE: new Date('2026-01-30'),     // 최종평가
-            GROWTH_TEST_DATE: new Date('2026-01-30')    // 성장테스트
+            GROWTH_TEST_DATE: new Date('2026-01-10')    // 성장테스트 (진단평가 완료 후 언제든지)
         };
         
         // 평가 일정 체크 및 UI 업데이트
@@ -8306,8 +8306,8 @@
             // 최종평가 상태 (중간평가 완료 필요)
             updateAssessmentCard('postTest', ASSESSMENT_SCHEDULE.POST_TEST_DATE, hasPostTest, hasMidTest);
             
-            // 성장테스트 상태 (최종평가 완료 필요)
-            updateAssessmentCard('growthTest', ASSESSMENT_SCHEDULE.GROWTH_TEST_DATE, hasGrowthTest, hasPostTest);
+            // 성장테스트 상태 (진단평가 완료 필요)
+            updateAssessmentCard('growthTest', ASSESSMENT_SCHEDULE.GROWTH_TEST_DATE, hasGrowthTest, hasPreTest);
         }
         
         // 개별 평가 카드 업데이트
