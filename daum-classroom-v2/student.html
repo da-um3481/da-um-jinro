@@ -265,6 +265,12 @@
                 </div>
             </a>
             <div class="flex items-center gap-2 md:gap-3">
+                <!-- 동기화 상태 표시 -->
+                <div id="syncStatus" class="hidden text-xs font-bold px-2 py-1 rounded-full" title="클릭하여 동기화 상태 확인" onclick="checkSyncStatusManually()" style="cursor: pointer;">
+                    <span id="syncIcon">☁️</span>
+                    <span id="syncText" class="hidden md:inline ml-1">동기화</span>
+                </div>
+                
                 <!-- 학습 중 버튼 (타이머 진행 중일 때만 표시) -->
                 <button id="studyingBadge" onclick="goToStudying()" class="hidden bg-gradient-to-r from-green-500 to-cyan-500 text-white px-3 py-2 md:px-4 md:py-3 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn font-black shadow-xl text-xs md:text-sm pulse-animation">
                     <span class="text-base md:text-xl mr-1">🔥</span><span class="hidden md:inline">학습 중</span><span class="md:hidden">학습중</span>
@@ -856,6 +862,10 @@
         </div>
     </div>
 
+    <!-- Google Sheets API -->
+    <script src="js/google-sheets-api.js"></script>
+    <script src="js/sync-status.js"></script>
+    
     <!-- UX 시스템 -->
     <script src="js/ux-improvements.js"></script>
     

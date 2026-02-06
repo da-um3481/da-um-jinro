@@ -25,8 +25,44 @@
 - 학습 시간 측정
 - 사진 첨부 (문제, 노트 등)
 - 메모 & 느낀 점
+- ✨ **클라우드 자동 동기화** (Google Sheets)
 
 **차별점**: Google Classroom은 과제 제출만 가능하지만, DA.UM은 학생이 자유롭게 학습을 기록할 수 있습니다.
+
+---
+
+### ☁️ Google Sheets 연동 설정 (선택)
+
+**1단계: Google Sheets 생성**
+```
+1. Google Sheets 새로 만들기
+2. 이름: "DA.UM Classroom V2 데이터"
+```
+
+**2단계: Apps Script 배포**
+```
+1. 확장 프로그램 > Apps Script
+2. apps-script-code.gs 파일의 코드 복사
+3. 코드 붙여넣기
+4. 배포 > 새 배포
+5. 유형: 웹 앱
+6. 액세스 권한: "모든 사용자"
+7. 배포 URL 복사
+```
+
+**3단계: URL 설정**
+```javascript
+// js/google-sheets-api.js 파일 수정
+const WEB_APP_URL = '복사한_배포_URL_여기에_붙여넣기';
+```
+
+**4단계: 테스트**
+```
+1. 학생 포털 접속
+2. 우측 상단 동기화 상태 확인
+3. ☁️ 온라인 = 성공!
+4. 📱 오프라인 = LocalStorage만 사용
+```
 
 ---
 
