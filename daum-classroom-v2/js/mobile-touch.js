@@ -243,8 +243,12 @@ function createMobileNavBar() {
  */
 function updateMobileNavActive() {
     const currentTab = document.querySelector('.tab-active')?.id?.replace('tab-', '');
+    if (!currentTab) return;
     
-    document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+    const buttons = document.querySelectorAll('.mobile-nav-btn');
+    if (buttons.length === 0) return;
+    
+    buttons.forEach(btn => {
         if (btn.dataset.tab === currentTab) {
             btn.classList.add('text-blue-600');
             btn.classList.remove('text-gray-600');
@@ -304,29 +308,29 @@ function initPullToRefresh() {
 /**
  * 초기화
  */
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-        initTouchEvents();
-        createMobileNavBar();
-        initPullToRefresh();
-        
-        window.addEventListener('resize', handleResize);
-        
-        // showTab 함수에 훅 추가
-        const originalShowTab = window.showTab;
-        if (originalShowTab) {
-            window.showTab = function(tabName) {
-                originalShowTab(tabName);
-                updateMobileNavActive();
-            };
-        }
-    });
-} else {
+function initMobileTouchUX() {
     initTouchEvents();
     createMobileNavBar();
     initPullToRefresh();
     
     window.addEventListener('resize', handleResize);
+    
+    // showTab 함수에 훅 추가 (있는 경우에만)
+    if (window.showTab) {
+        const originalShowTab = window.showTab;
+        window.showTab = function(tabName) {
+            originalShowTab(tabName);
+            updateMobileNavActive();
+        };
+    }
+}
+
+// DOM이 완전히 로드된 후 실행
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileTouchUX);
+} else {
+    // 이미 로드된 경우
+    setTimeout(initMobileTouchUX, 100);
 }
 
 console.log('✅ 모바일 터치 UX 모듈 로드 완료');
