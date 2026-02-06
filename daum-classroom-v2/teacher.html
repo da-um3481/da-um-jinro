@@ -29,17 +29,20 @@
     <main class="container mx-auto px-4 py-8">
         <div class="max-w-6xl mx-auto">
             <!-- 탭 네비게이션 -->
-            <div class="bg-white rounded-2xl shadow-lg p-2 mb-6 flex gap-2">
-                <button onclick="showTab('assignments')" id="tab-assignments" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all bg-blue-600 text-white">
+            <div class="bg-white rounded-2xl shadow-lg p-2 mb-6 flex gap-2 overflow-x-auto">
+                <button onclick="showTab('assignments')" id="tab-assignments" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all bg-blue-600 text-white whitespace-nowrap">
                     <i class="fas fa-tasks mr-2"></i>과제 관리
                 </button>
-                <button onclick="showTab('students')" id="tab-students" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100">
+                <button onclick="showTab('students')" id="tab-students" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100 whitespace-nowrap">
                     <i class="fas fa-users mr-2"></i>학생 관리
                 </button>
-                <button onclick="showTab('analytics')" id="tab-analytics" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100">
+                <button onclick="showTab('analytics')" id="tab-analytics" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100 whitespace-nowrap">
                     <i class="fas fa-chart-line mr-2"></i>학습 현황
                 </button>
-                <button onclick="showTab('feedback')" id="tab-feedback" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100">
+                <button onclick="showTab('questions')" id="tab-questions" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100 whitespace-nowrap">
+                    <i class="fas fa-question-circle mr-2"></i>질문 답변
+                </button>
+                <button onclick="showTab('feedback')" id="tab-feedback" class="tab-btn flex-1 px-6 py-3 rounded-xl font-bold transition-all text-gray-600 hover:bg-gray-100 whitespace-nowrap">
                     <i class="fas fa-comments mr-2"></i>피드백
                 </button>
             </div>
@@ -153,6 +156,74 @@
                     <h2 class="text-xl font-bold text-gray-800 mb-4">과목별 평균 완료율</h2>
                     <div id="subjectStats" class="space-y-3">
                         <!-- 동적으로 추가될 영역 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 질문 답변 탭 -->
+            <div id="content-questions" class="tab-content hidden">
+                <!-- 통계 카드 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-bold text-gray-600 mb-1">전체 질문</p>
+                                <p class="text-3xl font-black text-gray-800" id="totalQuestions">0</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-question-circle text-blue-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-bold text-gray-600 mb-1">답변 대기</p>
+                                <p class="text-3xl font-black text-gray-800" id="pendingQuestions">0</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-lg">
+                                <i class="fas fa-clock text-yellow-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-bold text-gray-600 mb-1">답변 완료</p>
+                                <p class="text-3xl font-black text-gray-800" id="answeredQuestions">0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 필터 -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 mb-6">
+                    <div class="flex gap-2">
+                        <button onclick="filterQuestions('all')" class="filter-btn active flex-1 px-4 py-2 rounded-lg font-bold transition-all bg-blue-600 text-white">
+                            전체
+                        </button>
+                        <button onclick="filterQuestions('pending')" class="filter-btn flex-1 px-4 py-2 rounded-lg font-bold transition-all text-gray-600 hover:bg-gray-100">
+                            답변 대기
+                        </button>
+                        <button onclick="filterQuestions('answered')" class="filter-btn flex-1 px-4 py-2 rounded-lg font-bold transition-all text-gray-600 hover:bg-gray-100">
+                            답변 완료
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 질문 목록 -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-list text-indigo-600 mr-2"></i>
+                        학생 질문 목록
+                    </h2>
+                    <div id="allQuestionsList" class="space-y-4">
+                        <!-- 동적으로 생성됨 -->
                     </div>
                 </div>
             </div>
@@ -538,6 +609,29 @@
                 </div>
             `).join('');
         }
+    </script>
+    
+    <!-- Google Sheets API -->
+    <script src="js/google-sheets-api.js"></script>
+    <script src="js/sync-status.js"></script>
+    
+    <!-- 사진 업로드 -->
+    <script src="js/photo-upload.js"></script>
+    
+    <!-- 질문 답변 시스템 -->
+    <script src="js/questions.js"></script>
+    
+    <!-- 질문 탭 초기화 -->
+    <script>
+        // 질문 탭이 선택되면 자동 로드
+        const originalShowTab = window.showTab;
+        window.showTab = function(tabName) {
+            originalShowTab(tabName);
+            
+            if (tabName === 'questions') {
+                loadAllQuestions();
+            }
+        };
     </script>
 </body>
 </html>
