@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다움 클래스룸 - 간편 버전</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #EFF6FF 0%, #E0F2FE 50%, #ECFDF5 100%);
+            min-height: 100vh;
+        }
+        .cute-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.15);
+            transition: all 0.3s ease;
+        }
+        .cute-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(13, 148, 136, 0.2);
+        }
+        .cute-btn {
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+        }
+        .cute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="p-4">
+    <!-- 로그인 화면 -->
+    <div id="loginScreen" class="max-w-md mx-auto mt-20">
+        <div class="cute-card p-8">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-black mb-3">다움 클래스룸 ✨</h2>
+                <p class="text-lg font-semibold text-gray-600">환영합니다!</p>
+            </div>
+            <input 
+                type="text" 
+                id="nameInput" 
+                placeholder="이름을 입력하세요 😊" 
+                class="w-full px-6 py-4 border-2 border-gray-300 rounded-full mb-6 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 text-center text-lg font-semibold"
+                onkeypress="if(event.key === 'Enter') login()"
+            >
+            <button onclick="login()" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-4 rounded-full hover:from-blue-700 hover:to-blue-600 transition cute-btn font-black text-xl">
+                🚀 시작하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 메인 화면 -->
+    <div id="mainScreen" class="hidden max-w-4xl mx-auto">
+        <!-- 헤더 -->
+        <div class="cute-card p-6 mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black">다움 클래스룸</h1>
+                <p id="studentName" class="text-gray-600 font-semibold"></p>
+            </div>
+            <button onclick="logout()" class="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transition cute-btn">
+                <i class="fas fa-door-open mr-2"></i>로그아웃
+            </button>
+        </div>
+
+        <!-- 메뉴 카드 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 학습 일지 -->
+            <div class="cute-card p-6">
+                <h3 class="text-xl font-black mb-4 flex items-center">
+                    <span class="text-3xl mr-3">📖</span>
+                    학습 일지
+                </h3>
+                <textarea 
+                    id="journalContent" 
+                    rows="4" 
+                    placeholder="오늘 무엇을 공부했나요?"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl mb-4 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                ></textarea>
+                <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-green-500 to-cyan-500 text-white py-3 rounded-full hover:from-green-600 hover:to-cyan-600 transition cute-btn">
+                    <i class="fas fa-save mr-2"></i>저장하기
+                </button>
+            </div>
+
+            <!-- 질문하기 -->
+            <div class="cute-card p-6">
+                <h3 class="text-xl font-black mb-4 flex items-center">
+                    <span class="text-3xl mr-3">💬</span>
+                    질문하기
+                </h3>
+                <textarea 
+                    id="questionContent" 
+                    rows="4" 
+                    placeholder="선생님께 질문하세요"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl mb-4 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                ></textarea>
+                <button onclick="submitQuestion()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-full hover:from-purple-600 hover:to-pink-600 transition cute-btn">
+                    <i class="fas fa-paper-plane mr-2"></i>질문 제출
+                </button>
+            </div>
+        </div>
+
+        <!-- 학습 기록 목록 -->
+        <div class="cute-card p-6 mt-6">
+            <h3 class="text-xl font-black mb-4 flex items-center">
+                <span class="text-3xl mr-3">📚</span>
+                나의 학습 기록
+            </h3>
+            <div id="journalList" class="space-y-3">
+                <p class="text-center text-gray-500 py-8">아직 학습 기록이 없습니다</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 로그인
+        function login() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) {
+                alert('이름을 입력해주세요');
+                return;
+            }
+
+            localStorage.setItem('currentStudentName', name);
+            localStorage.setItem('daum_v2_current_student', JSON.stringify({
+                name: name,
+                loginTime: new Date().toISOString()
+            }));
+
+            document.getElementById('studentName').textContent = name + '님 환영합니다! 👋';
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+
+            loadJournals();
+        }
+
+        // 로그아웃
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                localStorage.removeItem('currentStudentName');
+                localStorage.removeItem('daum_v2_current_student');
+                location.reload();
+            }
+        }
+
+        // 학습 일지 저장
+        function saveJournal() {
+            const content = document.getElementById('journalContent').value.trim();
+            if (!content) {
+                alert('학습 내용을 입력해주세요');
+                return;
+            }
+
+            const studentName = localStorage.getItem('currentStudentName');
+            const journals = JSON.parse(localStorage.getItem('daum_v2_journals') || '[]');
+
+            journals.unshift({
+                id: Date.now(),
+                studentName: studentName,
+                content: content,
+                date: new Date().toISOString(),
+                dateText: new Date().toLocaleString('ko-KR')
+            });
+
+            localStorage.setItem('daum_v2_journals', JSON.stringify(journals));
+            document.getElementById('journalContent').value = '';
+            
+            alert('✅ 저장되었습니다!');
+            loadJournals();
+        }
+
+        // 질문 제출
+        function submitQuestion() {
+            const content = document.getElementById('questionContent').value.trim();
+            if (!content) {
+                alert('질문 내용을 입력해주세요');
+                return;
+            }
+
+            const studentName = localStorage.getItem('currentStudentName');
+            const questions = JSON.parse(localStorage.getItem('daum_v2_questions') || '[]');
+
+            questions.unshift({
+                id: Date.now(),
+                studentName: studentName,
+                question: content,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                createdAtText: new Date().toLocaleString('ko-KR')
+            });
+
+            localStorage.setItem('daum_v2_questions', JSON.stringify(questions));
+            document.getElementById('questionContent').value = '';
+            
+            alert('✅ 질문이 제출되었습니다!');
+        }
+
+        // 학습 기록 불러오기
+        function loadJournals() {
+            const studentName = localStorage.getItem('currentStudentName');
+            const journals = JSON.parse(localStorage.getItem('daum_v2_journals') || '[]');
+            const myJournals = journals.filter(j => j.studentName === studentName);
+
+            const container = document.getElementById('journalList');
+            
+            if (myJournals.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">아직 학습 기록이 없습니다</p>';
+                return;
+            }
+
+            container.innerHTML = myJournals.map(j => `
+                <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-200">
+                    <div class="text-sm text-gray-500 mb-2">${j.dateText}</div>
+                    <div class="text-gray-800 font-semibold">${j.content}</div>
+                </div>
+            `).join('');
+        }
+
+        // 페이지 로드 시 자동 로그인 체크
+        window.addEventListener('DOMContentLoaded', function() {
+            const saved = localStorage.getItem('daum_v2_current_student');
+            if (saved) {
+                try {
+                    const student = JSON.parse(saved);
+                    document.getElementById('studentName').textContent = student.name + '님 다시 오셨군요! 👋';
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('mainScreen').classList.remove('hidden');
+                    loadJournals();
+                } catch (e) {
+                    console.error('자동 로그인 실패:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
