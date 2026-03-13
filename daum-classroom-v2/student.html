@@ -1449,6 +1449,305 @@
         } else {
             displayTodayPlan();
         }
+        
+        // ==================== 타이머 기능 ====================
+        let timerInterval = null;
+        let timerStartTime = null;
+        let timerElapsedSeconds = 0;
+        let currentSubject = null;
+        let subjectStartTime = null;
+        const TIMER_KEY = 'daum_timer_data';
+        const SESSION_KEY = 'daum_study_sessions';
+        
+        // 타이머 시작
+        function startTimer() {
+            console.log('타이머 시작');
+            
+            timerStartTime = new Date();
+            timerElapsedSeconds = 0;
+            
+            // UI 업데이트
+            document.getElementById('timerIdle').classList.add('hidden');
+            document.getElementById('timerRunning').classList.remove('hidden');
+            
+            // 시작 시간 표시
+            const startTimeEl = document.getElementById('startTime');
+            if (startTimeEl) {
+                startTimeEl.textContent = formatTime(timerStartTime);
+            }
+            
+            // 타이머 시작
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // 상태 저장
+            saveTimerState();
+            
+            alert('자율학습을 시작합니다! 화이팅! 🔥');
+        }
+        
+        // 타이머 업데이트
+        function updateTimer() {
+            timerElapsedSeconds++;
+            
+            const hours = Math.floor(timerElapsedSeconds / 3600);
+            const minutes = Math.floor((timerElapsedSeconds % 3600) / 60);
+            const seconds = timerElapsedSeconds % 60;
+            
+            const elapsedTimeEl = document.getElementById('elapsedTime');
+            if (elapsedTimeEl) {
+                elapsedTimeEl.textContent = 
+                    String(hours).padStart(2, '0') + ':' + 
+                    String(minutes).padStart(2, '0') + ':' + 
+                    String(seconds).padStart(2, '0');
+            }
+            
+            // 과목별 시간 업데이트
+            if (currentSubject && subjectStartTime) {
+                const subjectElapsed = Math.floor((new Date() - subjectStartTime) / 60000);
+                const subjectTimeEl = document.getElementById('currentSubjectTime');
+                if (subjectTimeEl) {
+                    subjectTimeEl.textContent = subjectElapsed + '분';
+                }
+            }
+            
+            // 상태 저장
+            saveTimerState();
+        }
+        
+        // 타이머 일시정지
+        function pauseTimer() {
+            console.log('타이머 일시정지');
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            document.getElementById('timerRunning').classList.add('hidden');
+            document.getElementById('timerPaused').classList.remove('hidden');
+            
+            saveTimerState();
+            alert('타이머가 일시정지되었습니다. ⏸️');
+        }
+        
+        // 타이머 재개
+        function resumeTimer() {
+            console.log('타이머 재개');
+            
+            document.getElementById('timerPaused').classList.add('hidden');
+            document.getElementById('timerRunning').classList.remove('hidden');
+            
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            saveTimerState();
+            alert('타이머를 재개합니다! 💪');
+        }
+        
+        // 타이머 종료
+        function stopTimer() {
+            console.log('타이머 종료');
+            
+            if (!confirm('자율학습을 종료하시겠습니까?\n기록이 저장됩니다.')) {
+                return;
+            }
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // 세션 기록 저장
+            saveStudySession();
+            
+            // UI 초기화
+            document.getElementById('timerRunning').classList.add('hidden');
+            document.getElementById('timerPaused').classList.add('hidden');
+            document.getElementById('timerIdle').classList.remove('hidden');
+            
+            const elapsedTimeEl = document.getElementById('elapsedTime');
+            if (elapsedTimeEl) {
+                elapsedTimeEl.textContent = '00:00:00';
+            }
+            
+            // 변수 초기화
+            timerStartTime = null;
+            timerElapsedSeconds = 0;
+            currentSubject = null;
+            subjectStartTime = null;
+            
+            // 저장된 타이머 상태 삭제
+            localStorage.removeItem(TIMER_KEY);
+            
+            alert('수고하셨습니다! 🎉\n학습 기록이 저장되었습니다.');
+            
+            // 계획 업데이트
+            updatePlanProgress();
+        }
+        
+        // 과목 변경
+        function changeSubject() {
+            console.log('과목 변경');
+            const newSubject = prompt('공부할 과목을 입력하세요:', currentSubject || '');
+            
+            if (newSubject && newSubject.trim()) {
+                currentSubject = newSubject.trim();
+                subjectStartTime = new Date();
+                
+                const subjectEl = document.getElementById('currentStudySubject');
+                if (subjectEl) {
+                    subjectEl.textContent = currentSubject;
+                }
+                
+                const subjectTimeEl = document.getElementById('currentSubjectTime');
+                if (subjectTimeEl) {
+                    subjectTimeEl.textContent = '0분';
+                }
+                
+                saveTimerState();
+            }
+        }
+        
+        // 타이머 상태 저장
+        function saveTimerState() {
+            const state = {
+                startTime: timerStartTime ? timerStartTime.toISOString() : null,
+                elapsedSeconds: timerElapsedSeconds,
+                currentSubject: currentSubject,
+                subjectStartTime: subjectStartTime ? subjectStartTime.toISOString() : null,
+                isRunning: timerInterval !== null
+            };
+            
+            localStorage.setItem(TIMER_KEY, JSON.stringify(state));
+        }
+        
+        // 타이머 상태 복원
+        function restoreTimerState() {
+            try {
+                const saved = localStorage.getItem(TIMER_KEY);
+                if (!saved) return;
+                
+                const state = JSON.parse(saved);
+                
+                if (state.startTime) {
+                    timerStartTime = new Date(state.startTime);
+                    timerElapsedSeconds = state.elapsedSeconds || 0;
+                    currentSubject = state.currentSubject;
+                    
+                    if (state.subjectStartTime) {
+                        subjectStartTime = new Date(state.subjectStartTime);
+                    }
+                    
+                    // UI 복원
+                    document.getElementById('timerIdle').classList.add('hidden');
+                    
+                    if (state.isRunning) {
+                        document.getElementById('timerRunning').classList.remove('hidden');
+                        timerInterval = setInterval(updateTimer, 1000);
+                    } else {
+                        document.getElementById('timerPaused').classList.remove('hidden');
+                    }
+                    
+                    // 시간 표시 업데이트
+                    updateTimer();
+                }
+            } catch (e) {
+                console.error('타이머 상태 복원 실패:', e);
+            }
+        }
+        
+        // 학습 세션 저장
+        function saveStudySession() {
+            if (!timerStartTime || timerElapsedSeconds === 0) return;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const session = {
+                date: today,
+                startTime: timerStartTime.toISOString(),
+                endTime: new Date().toISOString(),
+                duration: timerElapsedSeconds,
+                subject: currentSubject || '일반 학습'
+            };
+            
+            // 세션 목록 로드
+            let sessions = [];
+            try {
+                const saved = localStorage.getItem(SESSION_KEY);
+                if (saved) {
+                    sessions = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('세션 로드 실패:', e);
+            }
+            
+            sessions.push(session);
+            localStorage.setItem(SESSION_KEY, JSON.stringify(sessions));
+        }
+        
+        // 계획 진행률 업데이트
+        function updatePlanProgress() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // 오늘 계획 확인
+            try {
+                const saved = localStorage.getItem(STUDY_PLAN_KEY);
+                if (!saved) return;
+                
+                const plans = JSON.parse(saved);
+                const todayPlan = plans[today];
+                if (!todayPlan) return;
+                
+                // 오늘 학습 시간 계산
+                const sessionsSaved = localStorage.getItem(SESSION_KEY);
+                if (!sessionsSaved) return;
+                
+                const sessions = JSON.parse(sessionsSaved);
+                const todaySessions = sessions.filter(s => s.date === today);
+                const totalMinutes = todaySessions.reduce((sum, s) => sum + Math.floor(s.duration / 60), 0);
+                const targetMinutes = todayPlan.hours * 60;
+                const percent = Math.min(100, Math.round((totalMinutes / targetMinutes) * 100));
+                
+                // UI 업데이트
+                const targetEl = document.getElementById('planTargetHours');
+                const progressEl = document.getElementById('planProgressMinutes');
+                const percentEl = document.getElementById('planProgressPercent');
+                const progressBar = document.getElementById('planProgressBar');
+                const remainingText = document.getElementById('planRemainingText');
+                
+                if (targetEl) targetEl.textContent = todayPlan.hours;
+                if (progressEl) progressEl.textContent = totalMinutes;
+                if (percentEl) percentEl.textContent = percent;
+                if (progressBar) progressBar.style.width = percent + '%';
+                
+                if (remainingText) {
+                    if (percent >= 100) {
+                        remainingText.textContent = '목표 달성! 완벽해요! 🎉';
+                    } else {
+                        const remaining = targetMinutes - totalMinutes;
+                        remainingText.textContent = `목표까지 ${remaining}분 남았어요! 💪`;
+                    }
+                }
+            } catch (e) {
+                console.error('진행률 업데이트 실패:', e);
+            }
+        }
+        
+        // 시간 포맷팅
+        function formatTime(date) {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return hours + ':' + minutes;
+        }
+        
+        // 페이지 로드 시 타이머 상태 복원
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                restoreTimerState();
+                updatePlanProgress();
+            });
+        } else {
+            restoreTimerState();
+            updatePlanProgress();
+        }
     </script>
 </body>
 </html>
