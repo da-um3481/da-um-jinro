@@ -1580,8 +1580,9 @@
             
             alert('수고하셨습니다! 🎉\n학습 기록이 저장되었습니다.');
             
-            // 계획 업데이트
+            // 계획 업데이트 및 학습 기록 표시
             updatePlanProgress();
+            displayStudySessions();
         }
         
         // 과목 변경
@@ -1738,15 +1739,145 @@
             return hours + ':' + minutes;
         }
         
+        // 학습 기록 표시
+        function displayStudySessions() {
+            console.log('학습 기록 표시');
+            const journalList = document.getElementById('journalList');
+            if (!journalList) return;
+            
+            try {
+                const saved = localStorage.getItem(SESSION_KEY);
+                if (!saved) {
+                    journalList.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="text-6xl mb-4">📝</div>
+                            <p class="text-lg text-gray-600 font-semibold">학습 기록을 작성해보세요!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const sessions = JSON.parse(saved);
+                
+                if (sessions.length === 0) {
+                    journalList.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="text-6xl mb-4">📝</div>
+                            <p class="text-lg text-gray-600 font-semibold">학습 기록을 작성해보세요!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 날짜별로 그룹화
+                const sessionsByDate = {};
+                sessions.forEach(session => {
+                    if (!sessionsByDate[session.date]) {
+                        sessionsByDate[session.date] = [];
+                    }
+                    sessionsByDate[session.date].push(session);
+                });
+                
+                // 최신순 정렬
+                const dates = Object.keys(sessionsByDate).sort().reverse();
+                
+                let html = '';
+                dates.forEach(date => {
+                    const dateSessions = sessionsByDate[date];
+                    const totalMinutes = dateSessions.reduce((sum, s) => sum + Math.floor(s.duration / 60), 0);
+                    const totalHours = Math.floor(totalMinutes / 60);
+                    const remainingMinutes = totalMinutes % 60;
+                    
+                    // 날짜 포맷팅
+                    const dateObj = new Date(date);
+                    const monthDay = `${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`;
+                    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                    const dayName = dayNames[dateObj.getDay()];
+                    
+                    html += `
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 md:p-6 border-2 border-blue-200">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="text-lg md:text-xl font-black text-blue-700">${monthDay} (${dayName})</h4>
+                                    <p class="text-sm md:text-base text-gray-600 font-bold mt-1">
+                                        총 ${totalHours > 0 ? totalHours + '시간 ' : ''}${remainingMinutes}분 학습
+                                    </p>
+                                </div>
+                                <button onclick="deleteSessionsByDate('${date}')" class="text-red-500 hover:text-red-700 text-sm font-bold">삭제</button>
+                            </div>
+                            <div class="space-y-2">
+                                ${dateSessions.map((session, idx) => {
+                                    const start = new Date(session.startTime);
+                                    const end = new Date(session.endTime);
+                                    const minutes = Math.floor(session.duration / 60);
+                                    
+                                    return `
+                                        <div class="bg-white p-3 rounded-xl border border-blue-200">
+                                            <div class="flex justify-between items-center">
+                                                <div class="flex-1">
+                                                    <div class="font-black text-sm md:text-base text-dark">${session.subject || '일반 학습'}</div>
+                                                    <div class="text-xs md:text-sm text-gray-600 mt-1">
+                                                        ${formatTime(start)} ~ ${formatTime(end)} (${minutes}분)
+                                                    </div>
+                                                </div>
+                                                <div class="text-2xl ml-2">✅</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                journalList.innerHTML = html;
+                
+            } catch (e) {
+                console.error('학습 기록 표시 실패:', e);
+                journalList.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-6xl mb-4">❌</div>
+                        <p class="text-lg text-gray-600 font-semibold">기록을 불러오는데 실패했습니다.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 날짜별 세션 삭제
+        function deleteSessionsByDate(date) {
+            if (!confirm('해당 날짜의 모든 학습 기록을 삭제하시겠습니까?')) {
+                return;
+            }
+            
+            try {
+                const saved = localStorage.getItem(SESSION_KEY);
+                if (!saved) return;
+                
+                let sessions = JSON.parse(saved);
+                sessions = sessions.filter(s => s.date !== date);
+                
+                localStorage.setItem(SESSION_KEY, JSON.stringify(sessions));
+                
+                alert('학습 기록이 삭제되었습니다.');
+                displayStudySessions();
+                updatePlanProgress();
+            } catch (e) {
+                console.error('기록 삭제 실패:', e);
+                alert('기록 삭제에 실패했습니다.');
+            }
+        }
+        
         // 페이지 로드 시 타이머 상태 복원
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 restoreTimerState();
                 updatePlanProgress();
+                displayStudySessions();
             });
         } else {
             restoreTimerState();
             updatePlanProgress();
+            displayStudySessions();
         }
     </script>
 </body>
