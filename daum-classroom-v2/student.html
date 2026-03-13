@@ -1523,8 +1523,11 @@
                 timerInterval = null;
             }
             
-            document.getElementById('timerRunning').classList.add('hidden');
-            document.getElementById('timerPaused').classList.remove('hidden');
+            const timerRunning = document.getElementById('timerRunning');
+            const timerPaused = document.getElementById('timerPaused');
+            
+            if (timerRunning) timerRunning.classList.add('hidden');
+            if (timerPaused) timerPaused.classList.remove('hidden');
             
             saveTimerState();
             alert('타이머가 일시정지되었습니다. ⏸️');
@@ -1534,8 +1537,11 @@
         function resumeTimer() {
             console.log('타이머 재개');
             
-            document.getElementById('timerPaused').classList.add('hidden');
-            document.getElementById('timerRunning').classList.remove('hidden');
+            const timerPaused = document.getElementById('timerPaused');
+            const timerRunning = document.getElementById('timerRunning');
+            
+            if (timerPaused) timerPaused.classList.add('hidden');
+            if (timerRunning) timerRunning.classList.remove('hidden');
             
             timerInterval = setInterval(updateTimer, 1000);
             
@@ -1551,32 +1557,53 @@
                 return;
             }
             
+            // 타이머 중지
             if (timerInterval) {
                 clearInterval(timerInterval);
                 timerInterval = null;
             }
             
-            // 세션 기록 저장
-            saveStudySession();
+            // 세션 기록 저장 (0초보다 클 때만)
+            if (timerElapsedSeconds > 0) {
+                saveStudySession();
+            }
             
-            // UI 초기화
-            document.getElementById('timerRunning').classList.add('hidden');
-            document.getElementById('timerPaused').classList.add('hidden');
-            document.getElementById('timerIdle').classList.remove('hidden');
+            // UI 완전 초기화
+            const timerIdle = document.getElementById('timerIdle');
+            const timerRunning = document.getElementById('timerRunning');
+            const timerPaused = document.getElementById('timerPaused');
             
+            if (timerRunning) timerRunning.classList.add('hidden');
+            if (timerPaused) timerPaused.classList.add('hidden');
+            if (timerIdle) timerIdle.classList.remove('hidden');
+            
+            // 시간 표시 초기화
             const elapsedTimeEl = document.getElementById('elapsedTime');
             if (elapsedTimeEl) {
                 elapsedTimeEl.textContent = '00:00:00';
             }
             
-            // 변수 초기화
+            const currentSubjectEl = document.getElementById('currentStudySubject');
+            if (currentSubjectEl) {
+                currentSubjectEl.textContent = '-';
+            }
+            
+            const currentSubjectTimeEl = document.getElementById('currentSubjectTime');
+            if (currentSubjectTimeEl) {
+                currentSubjectTimeEl.textContent = '0분';
+            }
+            
+            // 변수 완전 초기화
             timerStartTime = null;
             timerElapsedSeconds = 0;
             currentSubject = null;
             subjectStartTime = null;
+            timerInterval = null;
             
-            // 저장된 타이머 상태 삭제
+            // LocalStorage에서 타이머 상태 완전 삭제
             localStorage.removeItem(TIMER_KEY);
+            
+            console.log('타이머 상태 완전 초기화 완료');
             
             alert('수고하셨습니다! 🎉\n학습 기록이 저장되었습니다.');
             
@@ -1623,36 +1650,65 @@
         
         // 타이머 상태 복원
         function restoreTimerState() {
+            console.log('타이머 상태 복원 시도');
+            
             try {
                 const saved = localStorage.getItem(TIMER_KEY);
-                if (!saved) return;
+                if (!saved) {
+                    console.log('저장된 타이머 상태 없음');
+                    return;
+                }
                 
                 const state = JSON.parse(saved);
+                console.log('복원할 타이머 상태:', state);
                 
-                if (state.startTime) {
-                    timerStartTime = new Date(state.startTime);
-                    timerElapsedSeconds = state.elapsedSeconds || 0;
-                    currentSubject = state.currentSubject;
-                    
-                    if (state.subjectStartTime) {
-                        subjectStartTime = new Date(state.subjectStartTime);
-                    }
-                    
-                    // UI 복원
-                    document.getElementById('timerIdle').classList.add('hidden');
-                    
-                    if (state.isRunning) {
-                        document.getElementById('timerRunning').classList.remove('hidden');
-                        timerInterval = setInterval(updateTimer, 1000);
-                    } else {
-                        document.getElementById('timerPaused').classList.remove('hidden');
-                    }
-                    
-                    // 시간 표시 업데이트
-                    updateTimer();
+                // 상태 유효성 검사
+                if (!state.startTime || !state.elapsedSeconds) {
+                    console.log('유효하지 않은 타이머 상태, 삭제');
+                    localStorage.removeItem(TIMER_KEY);
+                    return;
                 }
+                
+                timerStartTime = new Date(state.startTime);
+                timerElapsedSeconds = state.elapsedSeconds || 0;
+                currentSubject = state.currentSubject;
+                
+                if (state.subjectStartTime) {
+                    subjectStartTime = new Date(state.subjectStartTime);
+                }
+                
+                // UI 복원
+                const timerIdle = document.getElementById('timerIdle');
+                const timerRunning = document.getElementById('timerRunning');
+                const timerPaused = document.getElementById('timerPaused');
+                
+                if (timerIdle) timerIdle.classList.add('hidden');
+                
+                if (state.isRunning) {
+                    if (timerRunning) timerRunning.classList.remove('hidden');
+                    timerInterval = setInterval(updateTimer, 1000);
+                    console.log('타이머 재개됨');
+                } else {
+                    if (timerPaused) timerPaused.classList.remove('hidden');
+                    console.log('타이머 일시정지 상태 복원');
+                }
+                
+                // 과목 표시 업데이트
+                if (currentSubject) {
+                    const subjectEl = document.getElementById('currentStudySubject');
+                    if (subjectEl) {
+                        subjectEl.textContent = currentSubject;
+                    }
+                }
+                
+                // 시간 표시 업데이트
+                updateTimer();
+                
+                console.log('타이머 상태 복원 완료');
             } catch (e) {
                 console.error('타이머 상태 복원 실패:', e);
+                // 오류 발생 시 타이머 상태 삭제
+                localStorage.removeItem(TIMER_KEY);
             }
         }
         
