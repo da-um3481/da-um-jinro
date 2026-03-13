@@ -657,6 +657,17 @@
                             </div>
                         </div>
 
+                        <!-- 오늘의 목표 입력 -->
+                        <div class="mb-4 md:mb-6">
+                            <label class="block text-base md:text-lg font-black mb-3 md:mb-4 text-dark">🎯 오늘의 목표</label>
+                            <textarea 
+                                id="dailyGoalInput" 
+                                rows="3" 
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl md:rounded-2xl font-semibold resize-none focus:border-purple-400 focus:outline-none" 
+                                placeholder="예: 수학 문제집 20페이지 풀기, 영어 단어 50개 외우기"></textarea>
+                            <p class="text-xs md:text-sm text-gray-600 mt-2 font-semibold">💡 구체적인 목표를 작성하면 더 집중할 수 있어요!</p>
+                        </div>
+
                         <div class="flex gap-2 md:gap-3">
                             <button onclick="saveDailyPlan()" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 md:py-4 rounded-full font-black text-base md:text-xl hover:from-purple-600 hover:to-pink-600 transition shadow-lg">
                                 <span class="text-xl md:text-2xl mr-2">💾</span>계획 저장
@@ -1290,6 +1301,15 @@
             
             if (noPlanYet) noPlanYet.classList.add('hidden');
             if (planForm) planForm.classList.remove('hidden');
+        }
+        
+        // 계획 폼 취소
+        function cancelPlanForm() {
+            console.log('계획 폼 취소');
+            const planForm = document.getElementById('planForm');
+            if (planForm) planForm.classList.add('hidden');
+            
+            displayTodayPlan();
         }
         
         // 일일 학습 시간 선택
