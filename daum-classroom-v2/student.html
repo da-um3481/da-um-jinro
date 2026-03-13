@@ -1012,5 +1012,270 @@
     
     <!-- 메인 로직 -->
     <script src="js/student.js?v=2.1"></script>
+    
+    <!-- 시간표 기능 긴급 수정 -->
+    <script>
+        // 시간표 관련 전역 변수
+        let currentEditingDay = null;
+        let timetableData = {};
+        const TIMETABLE_KEY = 'daum_timetable_data';
+        
+        // 시간표 입력 모달 열기
+        function showTimetableInputModal() {
+            console.log('시간표 입력 모달 열기');
+            const modal = document.getElementById('timetableModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                loadTimetableData();
+            }
+        }
+        
+        // 시간표 입력 모달 닫기
+        function closeTimetableModal() {
+            console.log('시간표 입력 모달 닫기');
+            const modal = document.getElementById('timetableModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+            currentEditingDay = null;
+            const form = document.getElementById('dayScheduleForm');
+            if (form) {
+                form.classList.add('hidden');
+            }
+        }
+        
+        // 요일 선택
+        function selectDay(day) {
+            console.log('요일 선택:', day);
+            currentEditingDay = day;
+            
+            // 모든 요일 버튼 비활성화
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('bg-white', 'text-dark');
+            });
+            
+            // 선택된 요일 버튼 활성화
+            event.target.classList.remove('bg-white', 'text-dark');
+            event.target.classList.add('bg-blue-500', 'text-white');
+            
+            // 폼 표시
+            const form = document.getElementById('dayScheduleForm');
+            if (form) {
+                form.classList.remove('hidden');
+            }
+            
+            // 요일 표시
+            const dayLabel = document.getElementById('selectedDayLabel');
+            if (dayLabel) {
+                dayLabel.textContent = day + '요일';
+            }
+            
+            // 해당 요일 시간표 로드
+            loadDaySchedule(day);
+        }
+        
+        // 교시 추가
+        function addPeriod() {
+            console.log('교시 추가');
+            const periodsList = document.getElementById('periodsList');
+            if (!periodsList) return;
+            
+            const periodNumber = periodsList.children.length + 1;
+            const periodDiv = document.createElement('div');
+            periodDiv.className = 'period-item bg-blue-50 p-4 rounded-xl mb-3 border-2 border-blue-200';
+            periodDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-black text-lg">${periodNumber}교시</span>
+                    <button type="button" onclick="removePeriod(this)" class="text-red-500 hover:text-red-700 font-bold">❌</button>
+                </div>
+                <input type="text" 
+                       class="period-subject w-full px-4 py-2 border-2 border-gray-300 rounded-lg mb-2 font-semibold" 
+                       placeholder="과목명 (예: 수학)">
+                <input type="text" 
+                       class="period-time w-full px-4 py-2 border-2 border-gray-300 rounded-lg font-semibold" 
+                       placeholder="시간 (예: 09:00-10:00)">
+            `;
+            periodsList.appendChild(periodDiv);
+        }
+        
+        // 교시 삭제
+        function removePeriod(button) {
+            console.log('교시 삭제');
+            button.closest('.period-item').remove();
+            
+            // 교시 번호 재정렬
+            const periodsList = document.getElementById('periodsList');
+            if (periodsList) {
+                const periods = periodsList.querySelectorAll('.period-item');
+                periods.forEach((period, index) => {
+                    const label = period.querySelector('span');
+                    if (label) {
+                        label.textContent = (index + 1) + '교시';
+                    }
+                });
+            }
+        }
+        
+        // 시간표 저장
+        function saveTimetable() {
+            console.log('시간표 저장');
+            if (!currentEditingDay) {
+                alert('요일을 먼저 선택해주세요.');
+                return;
+            }
+            
+            const periodsList = document.getElementById('periodsList');
+            if (!periodsList) return;
+            
+            const periods = [];
+            const periodItems = periodsList.querySelectorAll('.period-item');
+            
+            periodItems.forEach((item, index) => {
+                const subject = item.querySelector('.period-subject').value.trim();
+                const time = item.querySelector('.period-time').value.trim();
+                
+                if (subject || time) {
+                    periods.push({
+                        number: index + 1,
+                        subject: subject || '미정',
+                        time: time || '미정'
+                    });
+                }
+            });
+            
+            // 시간표 데이터 저장
+            timetableData[currentEditingDay] = periods;
+            localStorage.setItem(TIMETABLE_KEY, JSON.stringify(timetableData));
+            
+            alert(`${currentEditingDay}요일 시간표가 저장되었습니다! ✨`);
+            
+            // 시간표 표시 업데이트
+            displayTimetable();
+        }
+        
+        // 해당 요일 스케줄 초기화
+        function clearDaySchedule() {
+            console.log('요일 스케줄 초기화');
+            if (!currentEditingDay) {
+                alert('요일을 먼저 선택해주세요.');
+                return;
+            }
+            
+            if (confirm(`${currentEditingDay}요일 시간표를 초기화하시겠습니까?`)) {
+                const periodsList = document.getElementById('periodsList');
+                if (periodsList) {
+                    periodsList.innerHTML = '';
+                }
+                
+                delete timetableData[currentEditingDay];
+                localStorage.setItem(TIMETABLE_KEY, JSON.stringify(timetableData));
+                
+                alert(`${currentEditingDay}요일 시간표가 초기화되었습니다.`);
+                displayTimetable();
+            }
+        }
+        
+        // 요일별 시간표 로드
+        function loadDaySchedule(day) {
+            console.log('요일 스케줄 로드:', day);
+            const periodsList = document.getElementById('periodsList');
+            if (!periodsList) return;
+            
+            periodsList.innerHTML = '';
+            
+            if (timetableData[day] && timetableData[day].length > 0) {
+                timetableData[day].forEach(period => {
+                    const periodDiv = document.createElement('div');
+                    periodDiv.className = 'period-item bg-blue-50 p-4 rounded-xl mb-3 border-2 border-blue-200';
+                    periodDiv.innerHTML = `
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-black text-lg">${period.number}교시</span>
+                            <button type="button" onclick="removePeriod(this)" class="text-red-500 hover:text-red-700 font-bold">❌</button>
+                        </div>
+                        <input type="text" 
+                               class="period-subject w-full px-4 py-2 border-2 border-gray-300 rounded-lg mb-2 font-semibold" 
+                               placeholder="과목명 (예: 수학)"
+                               value="${period.subject}">
+                        <input type="text" 
+                               class="period-time w-full px-4 py-2 border-2 border-gray-300 rounded-lg font-semibold" 
+                               placeholder="시간 (예: 09:00-10:00)"
+                               value="${period.time}">
+                    `;
+                    periodsList.appendChild(periodDiv);
+                });
+            }
+        }
+        
+        // 시간표 데이터 로드
+        function loadTimetableData() {
+            console.log('시간표 데이터 로드');
+            try {
+                const saved = localStorage.getItem(TIMETABLE_KEY);
+                if (saved) {
+                    timetableData = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('시간표 로드 실패:', e);
+                timetableData = {};
+            }
+        }
+        
+        // 시간표 표시
+        function displayTimetable() {
+            console.log('시간표 표시');
+            const timetableView = document.getElementById('timetableView');
+            if (!timetableView) return;
+            
+            loadTimetableData();
+            
+            if (Object.keys(timetableData).length === 0) {
+                timetableView.innerHTML = `
+                    <div class="text-center py-20">
+                        <div class="text-6xl mb-4">📅</div>
+                        <p class="text-xl text-gray-600 font-semibold">아직 시간표가 없어요!</p>
+                        <p class="text-lg text-gray-500 mt-2">위의 버튼을 눌러 시간표를 입력해주세요 ✨</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const days = ['월', '화', '수', '목', '금', '토', '일'];
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
+            
+            days.forEach(day => {
+                if (timetableData[day] && timetableData[day].length > 0) {
+                    html += `
+                        <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-200">
+                            <h3 class="text-2xl font-black mb-4 text-blue-600">${day}요일</h3>
+                            <div class="space-y-2">
+                                ${timetableData[day].map(period => `
+                                    <div class="bg-blue-50 p-3 rounded-lg">
+                                        <div class="font-black text-sm text-blue-700">${period.number}교시</div>
+                                        <div class="font-bold text-lg">${period.subject}</div>
+                                        <div class="text-sm text-gray-600">${period.time}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div>';
+            timetableView.innerHTML = html;
+        }
+        
+        // 페이지 로드 시 시간표 표시
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                loadTimetableData();
+                displayTimetable();
+            });
+        } else {
+            loadTimetableData();
+            displayTimetable();
+        }
+    </script>
 </body>
 </html>
